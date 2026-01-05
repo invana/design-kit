@@ -2,7 +2,8 @@ import React from "react";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { AppLayoutV2 } from "@invana/themes/app-v2/layout";
 import { 
-  NavVerticalProps, Badge, Avatar, Input, Button,
+  NavVerticalProps, Badge, Avatar,   AvatarFallback,
+  AvatarImage,Input, Button,
   Menubar, MenubarMenu, MenubarTrigger, MenubarContent, 
   MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub,
   MenubarSubTrigger, MenubarSubContent, Separator, TabbedPanel
@@ -13,7 +14,8 @@ import {
   FileCode, GitBranch, Bug, Package,
   Terminal, AlertCircle, Info,
   PanelRight, ChevronRight, File, FolderOpen,
-  Menu, Plus, RefreshCw, X, Maximize2, Copy, Filter, Trash2
+  Menu, Plus, RefreshCw, X, Maximize2, Copy, Filter, Trash2,
+  Camera
 } from "lucide-react";
 
 const meta: Meta<typeof AppLayoutV2> = {
@@ -479,7 +481,9 @@ export const Default: Story = {
             <div className="flex items-center justify-center font-bold text-2xl">
               Invana Studio
             </div>
-            <Separator orientation="vertical" className="h-5 ml-1" />
+            <Separator orientation="vertical" className="h-5 my-2" />
+            <div>Explorer</div>
+            <Separator orientation="vertical" className="h-5 my-2" />
             <Menubar className="border-0 bg-transparent p-0 h-auto">
               <MenubarMenu>
                 <MenubarTrigger className="text-sm px-2 py-1">File</MenubarTrigger>
@@ -620,15 +624,40 @@ export const Default: Story = {
         </div>
       ),
       right: (
-        <div className="flex items-center gap-1 px-3">
+        <div className="flex items-center gap-4 px-3">
           <Button variant="ghost" size="icon" className="h-7 w-7">
             <Bell className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon" className="h-7 w-7">
             <Settings className="h-4 w-4" />
           </Button>
-          <Avatar className="h-6 w-6">
-            <img src="https://github.com/shadcn.png" alt="User" />
+           <Button variant="ghost" size="icon" className="h-7 w-7">
+            <Camera className="h-4 w-4" />
+          </Button>
+
+          <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <Avatar className="h-8 w-8">
+              <AvatarImage
+                src="https://github.com/maxleiter.png"
+                alt="@maxleiter"
+              />
+              <AvatarFallback>LR</AvatarFallback>
+            </Avatar>
+            <Avatar className="h-8 w-8">
+              <AvatarImage
+                src="https://github.com/evilrabbit.png"
+                alt="@evilrabbit"
+              />
+              <AvatarFallback>ER</AvatarFallback>
+            </Avatar>
+          </div>
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
       ),
