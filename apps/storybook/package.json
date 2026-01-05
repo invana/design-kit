@@ -37,7 +37,7 @@
   "license": "MIT",
   "author": "Ravi Raja Merugu",
   "scripts": {
-    "dev": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6009",
     "build": "tsup && npm run build:css",
     "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
     "build-storybook": "storybook build",

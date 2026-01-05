@@ -16,7 +16,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
     <TooltipProvider delayDuration={0}>
       <div className={cn("flex h-screen flex-col  bg-background text-foreground", props.className)}>
         <NavHorizontal 
-          className={`h-[45px] border-b border-border bg-background ${props.header.className}`} 
+          className={`h-[40px] border-b border-border bg-background ${props.header.className}`} 
           left={props.header.left}
           leftNavItems={props.header.leftNavItems}
           center={props.header.center}
@@ -24,7 +24,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
           right={props.header.right}
           rightNavItems={props.header.rightNavItems}
         />
-        <div className={`h-[calc(100vh-70px)]  w-full  ${props?.mainClassName}`}>     
+        <div className={`h-[calc(100vh-70px)]  w-full bg-background ${props?.mainClassName}`}>     
           {props.main}
         </div>
         <NavHorizontal 
