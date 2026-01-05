@@ -82,17 +82,17 @@ export function TabbedPanel({
     <ErrorBoundary>
       <TooltipProvider delayDuration={0}>
         <Tabs value={currentTab} onValueChange={handleTabChange} className={`h-full ${className || ''}`}>
-          <Card className="h-full border-none">
+          <Card className="h-full border rounded-none">
             {/* Header with tabs and actions */}
-            <CardHeader className={`flex flex-row items-center justify-between py-0 border-b h-[30px] px-2 ${headerClassName || ''}`}>
+            <CardHeader className={`flex flex-row items-center justify-between py-0 border-b h-[30px] px-0 space-y-0 ${headerClassName || ''}`}>
             {/* Left: Tabs */}
-            <TabsList className="h-full bg-transparent p-0 gap-1 rounded-none">
+            <TabsList className="h-full bg-transparent p-0 gap-0 rounded-none">
               {tabs.map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
                   disabled={tab.disabled}
-                  className="h-full data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-3 text-xs"
+                  className="h-full data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:mb-[-1px] rounded-none px-3 py-2 text-xs"
                 >
                   {tab.icon && <tab.icon className="h-3.5 w-3.5 mr-1.5" />}
                   {tab.label}
