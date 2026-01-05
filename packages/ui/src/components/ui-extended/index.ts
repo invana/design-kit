@@ -6,6 +6,7 @@ export * from './nav-horizontal';
 export * from './nav-vertical';
 export * from './nested-menu';
 export * from './panel-content';
+export * from './tabbed-panel';
 export * from './search-input';
 export * from './toolbar';
 export * from './tree-view';
