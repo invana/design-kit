@@ -37,6 +37,7 @@
   "license": "MIT",
   "author": "Ravi Raja Merugu",
   "scripts": {
+    "prepare": "pnpm run build",
     "build": "tsup && npm run build:css",
     "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
     "lint": "eslint . --ext ts,tsx",
