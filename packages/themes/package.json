@@ -47,6 +47,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@invana/styling": "workspace:*",
     "@invana/ui": "workspace:*",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
