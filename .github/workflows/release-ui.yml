@@ -33,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages/ui
-        run: pnpm --filter design-kit build
+        run: pnpm --filter @invana/ui build
 
       - name: Prepare release directory
         run: |
