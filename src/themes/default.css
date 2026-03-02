@@ -1,0 +1,96 @@
+/**
+ * Default Theme (Invana Brand Colors)
+ * Light and dark variants with green accent
+ */
+
+/* Light mode - Default theme */
+[data-theme="default-light"],
+.theme-default-light {
+  /* Raw HSL values for opacity modifiers */
+  --background: 0 0% 97%;
+  --foreground: 210 10% 20%;
+  --muted: 210 6% 90%;
+  --muted-foreground: 210 8% 45%;
+  --accent: 142 70% 43%;
+  --accent-foreground: 0 0% 100%;
+  --popover: 0 0% 98%;
+  --popover-foreground: 210 10% 20%;
+  --border: 210 6% 85%;
+  --input: 210 6% 92%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 10% 20%;
+  --primary: 142 70% 43%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 30% 95%;
+  --secondary-foreground: 142 25% 40%;
+  --destructive: 0 70% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 142 70% 43%;
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(0 0% 97%);
+  --color-foreground: hsl(210 10% 20%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(210 10% 20%);
+  --color-popover: hsl(0 0% 98%);
+  --color-popover-foreground: hsl(210 10% 20%);
+  --color-primary: hsl(142 70% 43%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(142 30% 95%);
+  --color-secondary-foreground: hsl(142 25% 40%);
+  --color-muted: hsl(210 6% 90%);
+  --color-muted-foreground: hsl(210 8% 45%);
+  --color-accent: hsl(142 70% 43%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 70% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(210 6% 85%);
+  --color-input: hsl(210 6% 92%);
+  --color-ring: hsl(142 70% 43%);
+}
+
+/* Dark mode - Default theme */
+[data-theme="default-dark"],
+.theme-default-dark {
+  /* Raw HSL values for opacity modifiers */
+  --background: 210 4% 10%;
+  --foreground: 0 0% 85%;
+  --muted: 210 6% 18%;
+  --muted-foreground: 210 8% 60%;
+  --accent: 142 70% 43%;
+  --accent-foreground: 210 4% 13%;
+  --popover: 210 4% 11%;
+  --popover-foreground: 0 0% 85%;
+  --border: 210 6% 22%;
+  --input: 210 6% 22%;
+  --card: 210 4% 14%;
+  --card-foreground: 0 0% 85%;
+  --primary: 142 70% 60%;
+  --primary-foreground: 210 4% 13%;
+  --secondary: 210 8% 28%;
+  --secondary-foreground: 0 0% 85%;
+  --destructive: 0 60% 45%;
+  --destructive-foreground: 0 0% 95%;
+  --ring: 142 70% 60%;
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(210 4% 10%);
+  --color-foreground: hsl(0 0% 85%);
+  --color-card: hsl(210 4% 14%);
+  --color-card-foreground: hsl(0 0% 85%);
+  --color-popover: hsl(210 4% 11%);
+  --color-popover-foreground: hsl(0 0% 85%);
+  --color-primary: hsl(142 70% 60%);
+  --color-primary-foreground: hsl(210 4% 13%);
+  --color-secondary: hsl(210 8% 28%);
+  --color-secondary-foreground: hsl(0 0% 85%);
+  --color-muted: hsl(210 6% 18%);
+  --color-muted-foreground: hsl(210 8% 60%);
+  --color-accent: hsl(142 70% 43%);
+  --color-accent-foreground: hsl(210 4% 13%);
+  --color-destructive: hsl(0 60% 45%);
+  --color-destructive-foreground: hsl(0 0% 95%);
+  --color-border: hsl(210 6% 22%);
+  --color-input: hsl(210 6% 22%);
+  --color-ring: hsl(142 70% 60%);
+}

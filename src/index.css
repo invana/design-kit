@@ -1,0 +1,114 @@
+/* 
+ * @invana/styling - Shared Design System Theme
+ * 
+ * This file contains ONLY theme configuration.
+ * Each consuming app must:
+ * 1. @import "tailwindcss" first
+ * 2. @import this file
+ * 3. Define their own @source paths
+ */
+
+@theme {
+  /* Container */
+  --container-center: true;
+  --container-padding: 2rem;
+  --container-screens-2xl: 1400px;
+
+  /* Font sizes */
+  --font-size-default: 1rem;
+  --font-size-xss: 0.6875rem;
+  --font-size-xs: 0.8125rem;
+  --font-size-base: 1rem;
+  --font-size-sm: 1.25rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 2rem;
+  --font-size-2xl: 2.5rem;
+  --font-size-3xl: 3.75rem;
+  --font-size-4xl: 4.375rem;
+  --font-size-5xl: 5.25rem;
+
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: bold;
+
+  /* Colors */
+  --color-border: hsl(210 6% 85%);
+  --color-input: hsl(210 6% 92%);
+  --color-ring: hsl(142 70% 43%);
+  --color-background: hsl(0 0% 97%);
+  --color-foreground: hsl(210 10% 20%);
+  
+  --color-primary: hsl(142 70% 43%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  
+  --color-secondary: hsl(142 30% 95%);
+  --color-secondary-foreground: hsl(142 25% 40%);
+  
+  --color-destructive: hsl(0 70% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  
+  --color-muted: hsl(210 6% 90%);
+  --color-muted-foreground: hsl(210 8% 45%);
+  
+  --color-accent: hsl(142 70% 43%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  
+  --color-popover: hsl(0 0% 98%);
+  --color-popover-foreground: hsl(210 10% 20%);
+  
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(210 10% 20%);
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --radius-2px: 2px;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 6px);
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/* 
+ * NOTE: Theme-specific color variables are defined in theme files:
+ * - themes/default.css
+ * - themes/tailwind.css  
+ * - themes/vite.css
+ * 
+ * These files use [data-theme="..."] selectors to apply theme-specific colors.
+ * Default fallbacks are handled by the first theme (default-light).
+ */
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+/* Base styles */
+html, body {
+  font-size: 13px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+button, a {
+  cursor: pointer;
+}

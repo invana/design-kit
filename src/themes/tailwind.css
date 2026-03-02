@@ -1,0 +1,105 @@
+/**
+ * Tailwind CSS Theme
+ * Inspired by tailwindcss.com design
+ * Features: Sky/cyan accents, dark buttons, docs use violet for example buttons
+ * Based on research from https://github.com/tailwindlabs/tailwindcss.com
+ * 
+ * Key colors from Tailwind website:
+ * - Primary buttons: bg-black (light mode), bg-gray-700 (dark mode) 
+ * - Accent/links: sky-400/sky-500 (#38bdf8/#0ea5e9)
+ * - Example buttons in docs: violet-500 (#8b5cf6)
+ * - Dark mode background: oklch(.13 .028 261.692) ≈ hsl(262 18% 13%)
+ */
+
+/* Light mode - Tailwind theme */
+[data-theme="tailwind-light"],
+.theme-tailwind-light {
+  /* Raw HSL values for opacity modifiers */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 199 89% 48%; /* sky-500: #0ea5e9 */
+  --accent-foreground: 0 0% 100%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --primary: 0 0% 0%; /* black - main buttons */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 199 89% 48%; /* sky-500 */
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(222 47% 11%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222 47% 11%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222 47% 11%);
+  --color-primary: hsl(0 0% 0%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(210 40% 96%);
+  --color-secondary-foreground: hsl(222 47% 11%);
+  --color-muted: hsl(210 40% 96%);
+  --color-muted-foreground: hsl(215 16% 47%);
+  --color-accent: hsl(199 89% 48%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(214 32% 91%);
+  --color-input: hsl(214 32% 91%);
+  --color-ring: hsl(199 89% 48%);
+}
+
+/* Dark mode - Tailwind theme */
+[data-theme="tailwind-dark"],
+.theme-tailwind-dark {
+  /* Raw HSL values for opacity modifiers */
+  /* Dark background from tailwindcss.com - very dark blue-gray, almost black */
+  --background: 222 47% 5%;
+  --foreground: 210 40% 98%;
+  --muted: 217 33% 12%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 198 93% 60%; /* sky-400: #38bdf8 */
+  --accent-foreground: 222 47% 11%;
+  --popover: 222 47% 7%;
+  --popover-foreground: 210 40% 98%;
+  --border: 217 19% 20%;
+  --input: 217 19% 20%;
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 98%;
+  --primary: 220 9% 46%; /* gray-700: #374151 - lighter button for dark mode */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 217 33% 12%;
+  --secondary-foreground: 210 40% 98%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 198 93% 60%; /* sky-400 */
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(222 47% 5%);
+  --color-foreground: hsl(210 40% 98%);
+  --color-card: hsl(222 47% 8%);
+  --color-card-foreground: hsl(210 40% 98%);
+  --color-popover: hsl(222 47% 7%);
+  --color-popover-foreground: hsl(210 40% 98%);
+  --color-primary: hsl(220 9% 46%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(217 33% 12%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-muted: hsl(217 33% 12%);
+  --color-muted-foreground: hsl(215 20% 65%);
+  --color-accent: hsl(198 93% 60%);
+  --color-accent-foreground: hsl(222 47% 11%);
+  --color-destructive: hsl(0 63% 31%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-border: hsl(217 19% 27%);
+  --color-input: hsl(217 19% 27%);
+  --color-ring: hsl(198 93% 60%);
+}

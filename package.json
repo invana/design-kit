@@ -1,0 +1,88 @@
+{
+  "name": "@invana/styling",
+  "version": "0.0.0",
+  "description": "Invana TailwindCSS 4 Design System - Reusable styling configuration",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./src/index.css",
+  "exports": {
+    ".": {
+      "style": "./src/index.css",
+      "default": "./src/index.css"
+    },
+    "./index.css": {
+      "style": "./src/index.css",
+      "default": "./src/index.css"
+    },
+    "./base": {
+      "style": "./src/base.css",
+      "default": "./src/base.css"
+    },
+    "./base.css": {
+      "style": "./src/base.css",
+      "default": "./src/base.css"
+    },
+    "./theme": {
+      "style": "./src/theme.css",
+      "default": "./src/theme.css"
+    },
+    "./theme.css": {
+      "style": "./src/theme.css",
+      "default": "./src/theme.css"
+    },
+    "./themes": "./src/themes/index.ts",
+    "./themes.config": "./src/themes.config.ts",
+    "./themes/default": {
+      "style": "./src/themes/default.css",
+      "default": "./src/themes/default.css"
+    },
+    "./themes/default.css": {
+      "style": "./src/themes/default.css",
+      "default": "./src/themes/default.css"
+    },
+    "./themes/tailwind": {
+      "style": "./src/themes/tailwind.css",
+      "default": "./src/themes/tailwind.css"
+    },
+    "./themes/tailwind.css": {
+      "style": "./src/themes/tailwind.css",
+      "default": "./src/themes/tailwind.css"
+    },
+    "./themes/vite": {
+      "style": "./src/themes/vite.css",
+      "default": "./src/themes/vite.css"
+    },
+    "./themes/vite.css": {
+      "style": "./src/themes/vite.css",
+      "default": "./src/themes/vite.css"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "design-system",
+    "tailwindcss",
+    "tailwindcss-v4",
+    "css",
+    "invana"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/styling"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "peerDependencies": {
+    "tailwindcss": "^4.1.18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {}
+}
