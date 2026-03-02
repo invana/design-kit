@@ -1,0 +1,67 @@
+name: Release Styling Package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/styling/**'
+      - '.github/workflows/release-styling.yml'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare release directory
+        run: |
+          mkdir -p /tmp/styling-release
+
+          # Copy source files (styling ships src/ directly, no build step)
+          cp -r packages/styling/src /tmp/styling-release/src
+
+          # Copy README if present
+          [ -f packages/styling/README.md ] && cp packages/styling/README.md /tmp/styling-release/README.md || true
+
+          # Strip devDependencies and prepare script from package.json
+          node -e "
+            const pkg = require('./packages/styling/package.json');
+            delete pkg.devDependencies;
+            pkg.scripts = Object.fromEntries(
+              Object.entries(pkg.scripts || {}).filter(([k]) => k !== 'prepare')
+            );
+            require('fs').writeFileSync('/tmp/styling-release/package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Deploy to releases/styling branch
+        run: |
+          cd /tmp/styling-release
+
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+          git checkout -b releases/styling
+          git add -A
+          git commit -m "release: styling package from ${{ github.sha }}"
+          git push origin releases/styling --force
