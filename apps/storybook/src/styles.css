@@ -10,11 +10,6 @@
 
 @import "tailwindcss";
 
-/* Define sources BEFORE importing theme */
-@source "../stories/**/*.{js,ts,jsx,tsx,mdx}";
-@source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
-@source "../../../packages/themes/src/**/*.{js,ts,jsx,tsx}";
-
 /* Import the shared design system theme */
 @import "@invana/styling/index.css";
 
@@ -22,3 +17,8 @@
 @import "@invana/styling/themes/default.css";
 @import "@invana/styling/themes/tailwind.css";
 @import "@invana/styling/themes/vite.css";
+
+/* Define sources AFTER all imports */
+@source "../stories/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../packages/themes/src/**/*.{js,ts,jsx,tsx}";

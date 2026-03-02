@@ -10,11 +10,23 @@
       "style": "./src/index.css",
       "default": "./src/index.css"
     },
+    "./index.css": {
+      "style": "./src/index.css",
+      "default": "./src/index.css"
+    },
     "./base": {
       "style": "./src/base.css",
       "default": "./src/base.css"
     },
+    "./base.css": {
+      "style": "./src/base.css",
+      "default": "./src/base.css"
+    },
     "./theme": {
+      "style": "./src/theme.css",
+      "default": "./src/theme.css"
+    },
+    "./theme.css": {
       "style": "./src/theme.css",
       "default": "./src/theme.css"
     },
@@ -24,11 +36,23 @@
       "style": "./src/themes/default.css",
       "default": "./src/themes/default.css"
     },
+    "./themes/default.css": {
+      "style": "./src/themes/default.css",
+      "default": "./src/themes/default.css"
+    },
     "./themes/tailwind": {
       "style": "./src/themes/tailwind.css",
       "default": "./src/themes/tailwind.css"
     },
+    "./themes/tailwind.css": {
+      "style": "./src/themes/tailwind.css",
+      "default": "./src/themes/tailwind.css"
+    },
     "./themes/vite": {
+      "style": "./src/themes/vite.css",
+      "default": "./src/themes/vite.css"
+    },
+    "./themes/vite.css": {
       "style": "./src/themes/vite.css",
       "default": "./src/themes/vite.css"
     }
