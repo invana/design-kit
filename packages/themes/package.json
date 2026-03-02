@@ -1,35 +1,77 @@
 {
   "name": "@invana/themes",
-  "private": true,
   "version": "0.0.0",
+  "description": "Invana Design System - App layout themes and components",
+  "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "tailwindcss",
+    "themes",
+    "invana/themes"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/themes"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsup && pnpm run build:css",
+    "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
-  "dependencies": {
-
+  "peerDependencies": {
+    "@invana/ui": "workspace:*",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@invana/styling": "workspace:*",
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
-    "@tailwindcss/vite": "^4.1.18",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
+    "tsup": "^8.3.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "vite": "^7.2.4"
   }
 }

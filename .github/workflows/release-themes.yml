@@ -1,0 +1,84 @@
+name: Release Themes Package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/themes/**'
+      - 'packages/ui/**'
+      - 'packages/styling/**'
+      - '.github/workflows/release-themes.yml'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages/ui (peer dependency)
+        run: pnpm --filter @invana/ui build
+
+      - name: Build packages/themes
+        run: pnpm --filter @invana/themes build
+
+      - name: Prepare release directory
+        run: |
+          mkdir -p /tmp/themes-release
+
+          # Copy built dist
+          cp -r packages/themes/dist /tmp/themes-release/dist
+
+          # Copy README if present
+          [ -f packages/themes/README.md ] && cp packages/themes/README.md /tmp/themes-release/README.md || true
+
+          # Strip devDependencies, prepare script, and resolve workspace peer deps from package.json
+          node -e "
+            const pkg = require('./packages/themes/package.json');
+            delete pkg.devDependencies;
+            pkg.scripts = Object.fromEntries(
+              Object.entries(pkg.scripts || {}).filter(([k]) => k !== 'prepare')
+            );
+            // Resolve workspace:* peer dependency to latest published version
+            if (pkg.peerDependencies) {
+              const uiPkg = require('./packages/ui/package.json');
+              for (const [name, ver] of Object.entries(pkg.peerDependencies)) {
+                if (ver === 'workspace:*') {
+                  pkg.peerDependencies[name] = uiPkg.version || '*';
+                }
+              }
+            }
+            require('fs').writeFileSync('/tmp/themes-release/package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Deploy to releases/themes branch
+        run: |
+          cd /tmp/themes-release
+
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+          git checkout -b releases/themes
+          git add -A
+          git commit -m "release: themes package from ${{ github.sha }}"
+          git push origin releases/themes --force
