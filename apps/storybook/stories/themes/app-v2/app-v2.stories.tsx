@@ -486,7 +486,7 @@ export const Default: Story = {
             <Separator orientation="vertical" className="h-5 my-2" />
             <Menubar className="border-0 bg-transparent p-0 h-auto">
               <MenubarMenu>
-                <MenubarTrigger className="text-sm px-2 py-1">File</MenubarTrigger>
+                <MenubarTrigger className="  px-2 py-1">File</MenubarTrigger>
                 <MenubarContent>
                   <MenubarItem>
                     New File <MenubarShortcut>⌘N</MenubarShortcut>
@@ -523,7 +523,7 @@ export const Default: Story = {
               </MenubarMenu>
 
               <MenubarMenu>
-                <MenubarTrigger className="text-sm px-2 py-1">Edit</MenubarTrigger>
+                <MenubarTrigger className=" px-2 py-1">Edit</MenubarTrigger>
                 <MenubarContent>
                   <MenubarItem>
                     Undo <MenubarShortcut>⌘Z</MenubarShortcut>
@@ -559,7 +559,7 @@ export const Default: Story = {
               </MenubarMenu>
 
               <MenubarMenu>
-                <MenubarTrigger className="text-sm px-2 py-1">Layout</MenubarTrigger>
+                <MenubarTrigger className=" px-2 py-1">Layout</MenubarTrigger>
                 <MenubarContent>
                   <MenubarSub>
                     <MenubarSubTrigger>Split Editor</MenubarSubTrigger>
@@ -590,7 +590,7 @@ export const Default: Story = {
               </MenubarMenu>
 
               <MenubarMenu>
-                <MenubarTrigger className="text-sm px-2 py-1">Help</MenubarTrigger>
+                <MenubarTrigger className=" px-2 py-1">Help</MenubarTrigger>
                 <MenubarContent>
                   <MenubarItem>Welcome</MenubarItem>
                   <MenubarItem>Show All Commands <MenubarShortcut>⇧⌘P</MenubarShortcut>

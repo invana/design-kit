@@ -39,7 +39,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
         // onClick={onClick}
         {...clickTrigger}
         className={cn(
-          "flex w-full items-center justify-between  px-4 py-2 text-sm",
+          "flex w-full items-center justify-between  px-4 py-2 ",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
           className,
