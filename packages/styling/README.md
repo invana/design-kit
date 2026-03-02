@@ -161,3 +161,5 @@ This package ships source CSS files directly. Your build tool (Vite, Next.js, et
 ## License
 
 MIT © Ravi Raja Merugu
+
+.
