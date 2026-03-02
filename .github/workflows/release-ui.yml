@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'packages/ui/**'
+      - 'packages/styling/**'
       - '.github/workflows/release-ui.yml'
   workflow_dispatch:
 

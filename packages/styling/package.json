@@ -6,14 +6,32 @@
   "type": "module",
   "main": "./src/index.css",
   "exports": {
-    ".": "./src/index.css",
-    "./base": "./src/base.css",
-    "./theme": "./src/theme.css",
+    ".": {
+      "style": "./src/index.css",
+      "default": "./src/index.css"
+    },
+    "./base": {
+      "style": "./src/base.css",
+      "default": "./src/base.css"
+    },
+    "./theme": {
+      "style": "./src/theme.css",
+      "default": "./src/theme.css"
+    },
     "./themes": "./src/themes/index.ts",
     "./themes.config": "./src/themes.config.ts",
-    "./themes/default": "./src/themes/default.css",
-    "./themes/tailwind": "./src/themes/tailwind.css",
-    "./themes/vite": "./src/themes/vite.css"
+    "./themes/default": {
+      "style": "./src/themes/default.css",
+      "default": "./src/themes/default.css"
+    },
+    "./themes/tailwind": {
+      "style": "./src/themes/tailwind.css",
+      "default": "./src/themes/tailwind.css"
+    },
+    "./themes/vite": {
+      "style": "./src/themes/vite.css",
+      "default": "./src/themes/vite.css"
+    }
   },
   "files": [
     "src",

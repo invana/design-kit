@@ -1,11 +1,11 @@
 /* 1. Import Tailwind first */
 @import "tailwindcss";
 
-/* 2. Define YOUR app's source paths */
-@source "../components/**/*.{js,ts,jsx,tsx}";
-
-/* 3. Import the shared theme */
+/* 2. Import the shared theme */
 @import "@invana/styling";
+
+/* 3. Define YOUR app's source paths */
+@source "../components/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
