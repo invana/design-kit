@@ -62,9 +62,9 @@ export function TabbedPanel({
   bodyClassName,
   footerClassName,
   footerContent,
-  showClose,
-  onClose,
-  closeIcon,
+  showClose: _showClose,
+  onClose: _onClose,
+  closeIcon: _closeIcon,
 }: TabbedPanelProps) {
   const [internalTab, setInternalTab] = React.useState(defaultTab || tabs[0]?.value)
   

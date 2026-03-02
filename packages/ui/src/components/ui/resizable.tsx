@@ -1,4 +1,4 @@
-import { GripHorizontal, GripVertical } from "lucide-react"
+import { GripHorizontal } from "lucide-react"
 import { Group, Panel, Separator } from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"

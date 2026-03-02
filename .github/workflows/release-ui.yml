@@ -1,0 +1,75 @@
+name: Release UI Package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/release-ui.yml'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages/ui
+        run: pnpm --filter design-kit build
+
+      - name: Prepare release directory
+        run: |
+          mkdir -p /tmp/ui-release
+
+          # Copy built dist
+          cp -r packages/ui/dist /tmp/ui-release/dist
+
+          # Copy README if present
+          [ -f packages/ui/README.md ] && cp packages/ui/README.md /tmp/ui-release/README.md || true
+
+          # Copy tailwind.config.js if present
+          [ -f packages/ui/tailwind.config.js ] && cp packages/ui/tailwind.config.js /tmp/ui-release/tailwind.config.js || true
+
+          # Strip devDependencies, prepare script, and workspace deps from package.json
+          node -e "
+            const pkg = require('./packages/ui/package.json');
+            delete pkg.devDependencies;
+            delete pkg.scripts?.prepare && (pkg.scripts = Object.fromEntries(
+              Object.entries(pkg.scripts || {}).filter(([k]) => k !== 'prepare')
+            ));
+            require('fs').writeFileSync('/tmp/ui-release/package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Deploy to releases/ui branch
+        run: |
+          cd /tmp/ui-release
+
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+          git checkout -b releases/ui
+          git add -A
+          git commit -m "release: ui package from ${{ github.sha }}"
+          git push origin releases/ui --force

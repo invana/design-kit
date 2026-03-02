@@ -5,7 +5,7 @@
 @source "../components/**/*.{js,ts,jsx,tsx}";
 
 /* 3. Import the shared theme */
-@import "@invana/styling/index.css";
+@import "@invana/styling";
 
 @custom-variant dark (&:is(.dark *));
 
