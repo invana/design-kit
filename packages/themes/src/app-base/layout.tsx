@@ -24,7 +24,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
           right={props.header.right}
           rightNavItems={props.header.rightNavItems}
         />
-        <div className={`h-[calc(100vh-70px)]  w-full bg-background ${props?.mainClassName}`}>     
+        <div className={`h-[calc(100vh-65px)]  w-full bg-background ${props?.mainClassName}`}>     
           {props.main}
         </div>
         <NavHorizontal 
