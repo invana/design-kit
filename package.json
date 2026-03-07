@@ -1,0 +1,55 @@
+{
+  "name": "@invana/themes",
+  "version": "0.0.0",
+  "description": "Invana Design System - App layout themes and components",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "tailwindcss",
+    "themes",
+    "invana/themes"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/themes"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsup && pnpm run build:css",
+    "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@invana/styling": "0.0.0",
+    "@invana/ui": "0.0.0",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}
