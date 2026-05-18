@@ -9,7 +9,7 @@ const ResizablePanelGroup = ({
 }: React.ComponentProps<typeof Group>) => (
   <Group
     className={cn(
-      "flex h-full w-full data-[orientation=vertical]:flex-col",
+      "flex h-full w-full data-[panel-group-direction=vertical]:flex-col",
       className
     )}
     {...props}
@@ -27,14 +27,14 @@ const ResizableHandle = ({
 }) => (
   <Separator
     className={cn(
-      "relative flex items-center justify-center  transition-colors",
-      "[aria-orientation=vertical]:h-2 [aria-orientation=vertical]:w-full [aria-orientation=vertical]:cursor-row-resize",
-      "[aria-orientation=horizontal]:w-2 [aria-orientation=horizontal]:h-full [aria-orientation=horizontal]:cursor-col-resize",
-      "hover:bg-ring/30 focus:bg-ring/30", 
+      "relative flex items-center justify-center transition-colors",
+      "data-[panel-group-direction=vertical]:h-2 data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:cursor-row-resize",
+      "data-[panel-group-direction=horizontal]:w-2 data-[panel-group-direction=horizontal]:h-full data-[panel-group-direction=horizontal]:cursor-col-resize",
+      "hover:bg-ring/30 focus:bg-ring/30",
       "focus-visible:outline-none \
       focus-visible:ring-ring \
       focus-visible:ring-offset-3",
-      "[&[aria-orientation=vertical]>div]:rotate-90",
+      "[&[data-panel-group-direction=vertical]>div]:rotate-90",
       className
     )}
     {...props}
