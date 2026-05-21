@@ -11,6 +11,8 @@ import {
   type ColumnOrderState,
   type ColumnPinningState,
   type Header,
+  type OnChangeFn,
+  type PaginationState,
   type RowData,
   type SortingState,
   type VisibilityState,
@@ -63,6 +65,22 @@ export interface DataTableProps<TData extends RowData> {
   toolbar?: React.ReactNode;
   className?: string;
   emptyState?: React.ReactNode;
+  /** Server-side mode: skip client pagination — `data` is already the current page. Requires `pageCount` (or `rowCount`). */
+  manualPagination?: boolean;
+  /** Server-side mode: skip client sorting — caller refetches when `sorting` changes. */
+  manualSorting?: boolean;
+  /** Total pages on server (for manualPagination). */
+  pageCount?: number;
+  /** Total rows on server (drives "Showing X–Y of Z" in manual mode). */
+  rowCount?: number;
+  /** Controlled pagination state. */
+  pagination?: PaginationState;
+  onPaginationChange?: OnChangeFn<PaginationState>;
+  /** Controlled sorting state. */
+  sorting?: SortingState;
+  onSortingChange?: OnChangeFn<SortingState>;
+  /** Show a loading overlay over the table body. */
+  loading?: boolean;
 }
 
 function getCommonPinStyles<TData>(header: Header<TData, unknown>): React.CSSProperties {
@@ -182,8 +200,33 @@ export function DataTable<TData extends RowData>({
   toolbar,
   className,
   emptyState,
+  manualPagination = false,
+  manualSorting = false,
+  pageCount,
+  rowCount,
+  pagination: paginationProp,
+  onPaginationChange,
+  sorting: sortingProp,
+  onSortingChange,
+  loading = false,
 }: DataTableProps<TData>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
+  const sorting = sortingProp ?? internalSorting;
+  const setSorting: OnChangeFn<SortingState> = (updater) => {
+    if (onSortingChange) onSortingChange(updater);
+    if (!sortingProp) setInternalSorting(updater);
+  };
+
+  const [internalPagination, setInternalPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize,
+  });
+  const pagination = paginationProp ?? internalPagination;
+  const setPagination: OnChangeFn<PaginationState> = (updater) => {
+    if (onPaginationChange) onPaginationChange(updater);
+    if (!paginationProp) setInternalPagination(updater);
+  };
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>({
@@ -220,27 +263,31 @@ export function DataTable<TData extends RowData>({
     columns: wrappedColumns,
     state: {
       sorting,
+      pagination,
       columnFilters,
       columnVisibility,
       columnPinning,
       columnOrder,
     },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
     onColumnOrderChange: setColumnOrder,
-    initialState: {
-      pagination: { pageIndex: 0, pageSize },
-    },
     enableSorting,
     enableColumnResizing,
     enableColumnPinning,
+    manualPagination,
+    manualSorting,
+    pageCount: pageCount ?? -1,
+    rowCount,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
+    getSortedRowModel: enableSorting && !manualSorting ? getSortedRowModel() : undefined,
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
+    getPaginationRowModel:
+      enablePagination && !manualPagination ? getPaginationRowModel() : undefined,
   });
 
   const sensors = useSensors(
@@ -279,7 +326,12 @@ export function DataTable<TData extends RowData>({
         modifiers={[restrictToHorizontalAxis]}
         onDragEnd={handleDragEnd}
       >
-        <div className="overflow-auto rounded-md border">
+        <div className="relative overflow-auto rounded-md border">
+          {loading && (
+            <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-12 text-sm text-muted-foreground">
+              Loading…
+            </div>
+          )}
           <Table
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
