@@ -1,6 +1,7 @@
 export {
   FormField,
   Field,
+  ObjectField,
   InputField,
   SelectField,
   BooleanField,

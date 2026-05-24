@@ -120,7 +120,7 @@ const defaultValues = {
 export const Complex: Story = {
   render: () => {
     const form = useForm({ defaultValues });
-    const [submitted, setSubmitted] = React.useState<unknown>(null);
+    const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 
     return (
       <Card className="flex w-[520px] flex-col">

@@ -22,3 +22,5 @@
 @source "../stories/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
 @source "../../../packages/themes/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../packages/forms/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../packages/tables/src/**/*.{js,ts,jsx,tsx}";

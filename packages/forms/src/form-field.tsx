@@ -420,15 +420,30 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
 /*  FormField — shadcn FormField augmented with Field.* and ObjectField        */
 /* -------------------------------------------------------------------------- */
 
-type FormFieldType = typeof FormFieldBase &
-  typeof Field & {
-    ObjectField: typeof ObjectField;
-  };
+interface FormFieldExtensions {
+  ObjectField: typeof ObjectField;
+  Input: typeof InputField;
+  Boolean: typeof BooleanField;
+  Color: typeof ColorField;
+  Number: typeof NumberField;
+  Select: typeof SelectField;
+  Icon: typeof IconField;
+}
 
-export const FormField: FormFieldType = Object.assign(FormFieldBase, {
-  ...Field,
+type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
+
+export const FormField = Object.assign(FormFieldBase, {
   ObjectField,
-});
+  Input: InputField,
+  Boolean: BooleanField,
+  Color: ColorField,
+  Number: NumberField,
+  Select: SelectField,
+  Icon: IconField,
+}) as FormFieldType;
+
+// Also export ObjectField directly for consumers who prefer a flat import.
+export { ObjectField };
 
 export type {
   FieldConfig,
