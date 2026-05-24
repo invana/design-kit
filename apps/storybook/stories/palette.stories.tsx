@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Badge, Separator } from '@invana/ui';
 import { themes, getThemeVariantById } from '@invana/styling/themes';
 import React, { useEffect, useState } from 'react';
-import { ThemeControls, useThemeControls } from '../../../src';
+import { ThemeControls, useThemeControls } from '../src';
 
 export default {
-  title: 'Others/Palette',
+  title: 'ColorPalette',
   parameters: {
     layout: 'fullscreen',
   },

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
-import { ThemeControls, useThemeControls } from '../../../src';
+import { ThemeControls, useThemeControls } from '../src';
 import type { ThemeVariant } from '@invana/styling/themes.config';
 import {
   Button,
@@ -106,7 +106,7 @@ import {
 } from 'lucide-react';
 
 const meta = {
-  title: 'Others/Showcase',
+  title: 'Showcase',
   parameters: {
     layout: 'fullscreen',
   },
