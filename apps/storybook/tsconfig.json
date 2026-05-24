@@ -26,9 +26,13 @@
       "@invana/ui": ["../../packages/ui/src"],
       "@invana/ui/*": ["../../packages/ui/src/*"],
       "@invana/themes": ["../../packages/themes/src"],
-      "@invana/themes/*": ["../../packages/themes/src/*"]
+      "@invana/themes/*": ["../../packages/themes/src/*"],
+      "@invana/forms": ["../../packages/forms/src"],
+      "@invana/forms/*": ["../../packages/forms/src/*"],
+      "@invana/tables": ["../../packages/tables/src"],
+      "@invana/tables/*": ["../../packages/tables/src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "stories"],
   "exclude": ["node_modules", "dist", "storybook-static"]
 }

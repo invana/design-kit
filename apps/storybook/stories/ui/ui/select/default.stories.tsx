@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Label } from '@invana/forms';
 
-const meta = {
+const meta: Meta<typeof Select> = {
   title: 'UI/UI/Select',
   component: Select,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Select>;
+};
 
 
 /**

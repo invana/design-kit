@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Slider, Label } from '@invana/forms';
 
-const meta = {
+const meta: Meta<typeof Slider> = {
   title: 'UI/UI/Slider',
   component: Slider,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Slider>;
+};
 
 
 /**

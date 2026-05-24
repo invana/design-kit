@@ -67,7 +67,7 @@ const menuItems: MenuItem[] = [
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 
-const meta = {
+const meta: Meta<typeof NestedMenu> = {
   title: 'UI/UI Extended/NestedMenu',
   component: NestedMenu,
   parameters: {
@@ -79,7 +79,7 @@ const meta = {
   args: {
     menuItems: menuItems
   },
-} satisfies Meta<typeof NestedMenu>;
+};
 
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args

@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs, TabsList, TabsTrigger, TabsContent, Card, CardHeader, CardTitle, CardContent } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Tabs> = {
   title: 'UI/UI/Tabs',
   component: Tabs,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Tabs>;
+};
 
 
 /**

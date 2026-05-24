@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Accordion> = {
   title: 'UI/UI/Accordion',
   component: Accordion,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Accordion>;
+};
 
 
 // ===== BASIC ACCORDION EXAMPLES =====

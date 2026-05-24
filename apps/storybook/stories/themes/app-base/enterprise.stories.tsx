@@ -16,14 +16,14 @@ import {
   Plus
 } from 'lucide-react';
 
-const meta = {
+const meta: Meta<typeof AppLayoutBase> = {
   title: 'Themes/AppBase',
   component: AppLayoutBase,
   parameters: {
     layout: 'fullscreen',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof AppLayoutBase>;
+};
 
 
 /**

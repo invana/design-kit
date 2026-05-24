@@ -9,7 +9,7 @@ const meta: Meta<typeof SearchInput> = {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof SearchInput>;
+};
 
 
 /**

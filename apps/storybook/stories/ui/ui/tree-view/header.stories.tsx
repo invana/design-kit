@@ -51,7 +51,7 @@ const exampleData: TreeItem[] = [
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 
-const meta = {
+const meta: Meta<typeof TreeView> = {
   title: 'UI/UI/TreeView',
   component: TreeView,
   parameters: {
@@ -65,7 +65,7 @@ const meta = {
     className: "w-[320px]",
     style: { width: "320px" }
   },
-} satisfies Meta<typeof TreeView>;
+};
 
 
 // // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args

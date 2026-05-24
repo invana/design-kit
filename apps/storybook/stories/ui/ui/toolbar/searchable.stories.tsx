@@ -5,7 +5,7 @@ import { Toolbar } from '@invana/ui';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 
-const meta = {
+const meta: Meta<typeof Toolbar> = {
   title: 'UI/UI/Toolbar',
   component: Toolbar,
   parameters: {
@@ -16,7 +16,7 @@ const meta = {
   // tags: ['autodocs'],
   args: {
   },
-} satisfies Meta<typeof Toolbar>;
+};
 
 
 // // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args

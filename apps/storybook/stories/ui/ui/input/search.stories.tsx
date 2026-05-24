@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Input, Label } from '@invana/forms';
 
-const meta = {
+const meta: Meta<typeof Input> = {
   title: 'UI/UI/Input',
   component: Input,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Input>;
+};
 
 
 /**

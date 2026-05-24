@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Typography } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Typography.H1> = {
   title: 'UI/Typography/Typography',
   component: Typography.H1,
   parameters: {
@@ -13,7 +13,7 @@ const meta = {
     },
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Typography.H1>;
+};
 
 
 /**

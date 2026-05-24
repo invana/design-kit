@@ -4,14 +4,14 @@ import { Card, CardContent, CardDescription, CardFooter,
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 
-const meta = {
+const meta: Meta<typeof Card> = {
   title: 'UI/UI/Card',
   component: Card,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Card>;
+};
 
 
 // ===== BASIC CARD EXAMPLES =====

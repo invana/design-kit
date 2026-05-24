@@ -8,14 +8,14 @@ import {
   FolderOpen, File, Clock
 } from 'lucide-react';
 
-const meta = {
+const meta: Meta<typeof TabbedPanel> = {
   title: 'UI/UI Extended/TabbedPanel',
   component: TabbedPanel,
   parameters: {
     layout: 'padded',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof TabbedPanel>;
+};
 
 
 // Sample content components

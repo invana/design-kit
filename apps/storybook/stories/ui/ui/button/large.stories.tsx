@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '@invana/ui'
 
-const meta = {
+const meta: Meta<typeof Button> = {
   title: 'UI/UI/Button',
   component: Button,
   parameters: {
@@ -28,7 +28,7 @@ const meta = {
       description: 'Whether the button is disabled',
     },
   },
-} satisfies Meta<typeof Button>
+}
 
 
 // Default Button

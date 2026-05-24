@@ -1,5 +1,4 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@invana/ui";
 
 const meta: Meta = {

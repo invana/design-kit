@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Alert, AlertTitle, AlertDescription } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Alert> = {
   title: 'UI/UI/Alert',
   component: Alert,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Alert>;
+};
 
 
 /**

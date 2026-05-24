@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar, AvatarImage, AvatarFallback } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Avatar> = {
   title: 'UI/UI/Avatar',
   component: Avatar,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Avatar>;
+};
 
 
 /**

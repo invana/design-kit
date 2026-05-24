@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Switch, Label } from '@invana/forms';
 
-const meta = {
+const meta: Meta<typeof Switch> = {
   title: 'UI/UI/Switch',
   component: Switch,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Switch>;
+};
 
 
 /**

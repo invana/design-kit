@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Textarea, Label } from '@invana/forms';
 
-const meta = {
+const meta: Meta<typeof Textarea> = {
   title: 'UI/UI/Textarea',
   component: Textarea,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Textarea>;
+};
 
 
 /**

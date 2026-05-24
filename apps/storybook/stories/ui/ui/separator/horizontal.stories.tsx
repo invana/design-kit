@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Separator } from '@invana/ui';
 
-const meta = {
+const meta: Meta<typeof Separator> = {
   title: 'UI/UI/Separator',
   component: Separator,
   parameters: {
     layout: 'centered',
   },
   // tags: ['autodocs'],
-} satisfies Meta<typeof Separator>;
+};
 
 
 /**
