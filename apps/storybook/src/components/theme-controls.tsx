@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { themes, applyTheme } from '@invana/styling/themes.config';
+import { Button, Separator } from '@invana/ui';
 import {
-  Button,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-  Separator,
-} from '@invana/ui';
+} from '@invana/forms';
 import { Sun, Moon } from 'lucide-react';
 
 export interface ThemeControlsProps {

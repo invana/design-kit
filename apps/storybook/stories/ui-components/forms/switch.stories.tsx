@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Switch, Label } from '@invana/ui';
+import { Switch, Label } from '@invana/forms';
 
 const meta = {
   title: 'ui-kit/form-inputs/Switch',

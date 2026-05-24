@@ -1,7 +1,8 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { AppLayoutV1 } from "@invana/themes/app-v1/layout";
-import { NavVerticalProps, Badge, Avatar, Input, Button } from "@invana/ui";
+import { NavVerticalProps, Badge, Avatar, Button } from "@invana/ui";
+import { Input } from "@invana/forms";
 import { Home, Folder, Search, Settings,
     Bell, HelpCircle, User, LogOut } from "lucide-react";
 

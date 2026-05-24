@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayoutBase } from '@invana/themes/app-base/layout';
-import { Button, Badge, Avatar, Input } from '@invana/ui';
+import { Button, Badge, Avatar } from '@invana/ui';
+import { Input } from '@invana/forms';
 import { 
   Home, 
   Settings, 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Label } from '@invana/ui';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Label } from '@invana/forms';
 
 const meta = {
   title: 'ui-kit/form-inputs/Select',

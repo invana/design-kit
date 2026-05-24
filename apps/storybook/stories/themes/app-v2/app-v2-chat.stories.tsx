@@ -12,10 +12,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
   Separator,
-  Switch,
   TabbedPanel,
-  Textarea,
 } from "@invana/ui";
+import { Switch, Textarea } from "@invana/forms";
 import {
   Bot,
   Boxes,

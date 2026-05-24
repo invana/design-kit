@@ -9,8 +9,8 @@ import {
   FormProvider,
   useFormContext,
 } from "react-hook-form"
-import { cn } from "../../lib/utils"
-import { Label } from "../../components/ui/label"
+import { cn } from "@invana/ui"
+import { Label } from "./label"
 
 const Form = FormProvider
 

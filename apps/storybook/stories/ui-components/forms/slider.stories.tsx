@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Slider, Label } from '@invana/ui';
+import { Slider, Label } from '@invana/forms';
 
 const meta = {
   title: 'ui-kit/form-inputs/Slider',

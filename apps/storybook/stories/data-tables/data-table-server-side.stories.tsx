@@ -2,7 +2,8 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { DataTable } from '@invana/tables';
 import type { ColumnDef, PaginationState, SortingState } from '@invana/tables';
-import { Badge, Input } from '@invana/ui';
+import { Badge } from '@invana/ui';
+import { Input } from '@invana/forms';
 import { Search } from 'lucide-react';
 
 type Product = {

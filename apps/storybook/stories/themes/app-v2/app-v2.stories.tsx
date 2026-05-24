@@ -1,13 +1,14 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { AppLayoutV2 } from "@invana/themes/app-v2/layout";
-import { 
-  NavVerticalProps, Badge, Avatar,   AvatarFallback,
-  AvatarImage,Input, Button,
-  Menubar, MenubarMenu, MenubarTrigger, MenubarContent, 
+import {
+  NavVerticalProps, Badge, Avatar, AvatarFallback,
+  AvatarImage, Button,
+  Menubar, MenubarMenu, MenubarTrigger, MenubarContent,
   MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub,
   MenubarSubTrigger, MenubarSubContent, Separator, TabbedPanel
 } from "@invana/ui";
+import { Input } from "@invana/forms";
 import { 
   Home, Folder, Search, Settings,
   Bell, HelpCircle, User, LogOut,

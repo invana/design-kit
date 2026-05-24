@@ -17,9 +17,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@invana/ui": ["../ui/src"],
-      "@invana/ui/*": ["../ui/src/*"],
-      "@invana/forms": ["../forms/src"],
-      "@invana/forms/*": ["../forms/src/*"]
+      "@invana/ui/*": ["../ui/src/*"]
     }
   },
   "include": ["src"],

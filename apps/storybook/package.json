@@ -76,6 +76,10 @@
     "vitest": "^4.0.16"
   },
   "dependencies": {
-    "react-resizable-panels": "^4.0.15"
+    "@invana/forms": "workspace:*",
+    "react-day-picker": "^9.5.0",
+    "react-hook-form": "^7.69.0",
+    "react-resizable-panels": "^4.0.15",
+    "zod": "^4.2.1"
   }
 }

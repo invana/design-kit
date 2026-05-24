@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { cn } from '@invana/ui';
 import {
   Input,
   Select,
@@ -6,8 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  cn,
-} from '@invana/ui';
+} from '@invana/forms';
 import type { CellContext } from '@tanstack/react-table';
 import type { CellEditHandler, EditOption, EditType } from './types';
 
