@@ -30,7 +30,9 @@
       "@invana/forms": ["../../packages/forms/src"],
       "@invana/forms/*": ["../../packages/forms/src/*"],
       "@invana/tables": ["../../packages/tables/src"],
-      "@invana/tables/*": ["../../packages/tables/src/*"]
+      "@invana/tables/*": ["../../packages/tables/src/*"],
+      "@invana/styling": ["../../packages/styling/src"],
+      "@invana/styling/*": ["../../packages/styling/src/*"]
     }
   },
   "include": ["src", "stories"],

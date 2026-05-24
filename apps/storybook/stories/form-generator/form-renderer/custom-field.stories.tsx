@@ -53,13 +53,14 @@ function StoryShell({
 }
 
 function RatingField({ field, control }: FieldComponentProps) {
+  const f = field as { name: string; label?: string };
   return (
     <Controller
       control={control}
-      name={field.name}
+      name={f.name}
       render={({ field: rhf }) => (
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">{field.label}</label>
+          <label className="text-sm font-medium">{f.label}</label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((n) => (
               <button

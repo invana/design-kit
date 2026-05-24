@@ -68,43 +68,6 @@ export const Default: Story = {
         </div>
       ),
     },
-    leftNav: {
-      topNavItems: [
-        {
-          name: 'Dashboard',
-          icon: Home,
-          onClick: () => console.log('Dashboard clicked'),
-        },
-        {
-          name: 'Users',
-          icon: Users,
-          onClick: () => console.log('Users clicked'),
-        },
-        {
-          name: 'Documents',
-          icon: FileText,
-          onClick: () => console.log('Documents clicked'),
-        },
-        {
-          name: 'Analytics',
-          icon: BarChart,
-          onClick: () => console.log('Analytics clicked'),
-          showSeperator: true,
-        },
-      ],
-      bottomNavItems: [
-        {
-          name: 'Settings',
-          icon: Settings,
-          onClick: () => console.log('Settings clicked'),
-        },
-        {
-          name: 'Logout',
-          icon: LogOut,
-          onClick: () => console.log('Logout clicked'),
-        },
-      ],
-    },
     main: (
       <div className="h-full overflow-auto p-6">
         <div className="space-y-6">

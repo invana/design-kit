@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@invana/ui';
 
-const meta: Meta<typeof Accordion> = {
+const meta: Meta = {
   title: 'UI/UI/Accordion',
   component: Accordion,
   parameters: {

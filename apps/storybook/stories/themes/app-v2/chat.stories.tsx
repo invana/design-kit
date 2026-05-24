@@ -56,14 +56,14 @@ const meta: Meta<typeof AppLayoutV2> = {
 const leftNav: NavVerticalProps = {
   className: "",
   topNavItems: [
-    { label: "Sessions", icon: MessageSquare, onClick: () => {}, tooltip: "Sessions" },
-    { label: "Inbox", icon: Inbox, onClick: () => {}, tooltip: "Inbox" },
-    { label: "History", icon: History, onClick: () => {}, tooltip: "History" },
-    { label: "Search", icon: Search, onClick: () => {}, tooltip: "Search" },
+    { name: "Sessions", icon: MessageSquare, onClick: () => {}, tooltip: "Sessions" },
+    { name: "Inbox", icon: Inbox, onClick: () => {}, tooltip: "Inbox" },
+    { name: "History", icon: History, onClick: () => {}, tooltip: "History" },
+    { name: "Search", icon: Search, onClick: () => {}, tooltip: "Search" },
   ],
   bottomNavItems: [
-    { label: "Settings", icon: Settings, onClick: () => {}, tooltip: "Settings" },
-    { label: "Account", icon: User, onClick: () => {}, tooltip: "Account" },
+    { name: "Settings", icon: Settings, onClick: () => {}, tooltip: "Settings" },
+    { name: "Account", icon: User, onClick: () => {}, tooltip: "Account" },
   ],
 };
 

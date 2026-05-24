@@ -33,15 +33,15 @@ const meta: Meta<typeof AppLayoutV2> = {
 const leftNav: NavVerticalProps = {
   className: "",
   topNavItems: [
-    { label: "Explorer", icon: Folder, onClick: () => console.log('Explorer clicked'), tooltip: "Explorer" },
-    { label: "Search", icon: Search, onClick: () => console.log('Search clicked'), tooltip: "Search" },
-    { label: "Source Control", icon: GitBranch, onClick: () => console.log('Git clicked'), tooltip: "Source Control" },
-    { label: "Debug", icon: Bug, onClick: () => console.log('Debug clicked'), tooltip: "Run and Debug" },
-    { label: "Extensions", icon: Package, onClick: () => console.log('Extensions clicked'), tooltip: "Extensions" },
+    { name: "Explorer", icon: Folder, onClick: () => console.log('Explorer clicked'), tooltip: "Explorer" },
+    { name: "Search", icon: Search, onClick: () => console.log('Search clicked'), tooltip: "Search" },
+    { name: "Source Control", icon: GitBranch, onClick: () => console.log('Git clicked'), tooltip: "Source Control" },
+    { name: "Debug", icon: Bug, onClick: () => console.log('Debug clicked'), tooltip: "Run and Debug" },
+    { name: "Extensions", icon: Package, onClick: () => console.log('Extensions clicked'), tooltip: "Extensions" },
   ],
   bottomNavItems: [
-    { label: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Settings" },
-    { label: "Account", icon: User, onClick: () => console.log('Account clicked'), tooltip: "Account" },
+    { name: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Settings" },
+    { name: "Account", icon: User, onClick: () => console.log('Account clicked'), tooltip: "Account" },
   ],
 };
 

@@ -20,15 +20,15 @@ const leftNav: NavVerticalProps = {
     className: "",
     // top: <div className=" font-bold">Brand</div>,
     topNavItems: [
-        { label: "Dashboard", icon: Home, onClick: () => console.log('Dashboard clicked'), tooltip: "Go to Dashboard" },
-        { label: "Projects", icon: Folder, onClick: () => console.log('Projects clicked'), tooltip: "View Projects" },
-        { label: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Adjust Settings" },
+        { name: "Dashboard", icon: Home, onClick: () => console.log('Dashboard clicked'), tooltip: "Go to Dashboard" },
+        { name: "Projects", icon: Folder, onClick: () => console.log('Projects clicked'), tooltip: "View Projects" },
+        { name: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Adjust Settings" },
     ],
     // middle: <div className="p-2 text-xs text-muted-foreground">Quick Links</div>,
     // bottom: <div className="p-4 text-xs">v1.0.0</div>,
     bottomNavItems: [
-        { label: "Profile", icon: User, onClick: () => console.log('Profile clicked'), tooltip: "View Profile" },
-        { label: "Logout", icon: LogOut, onClick: () => console.log('Logout clicked'), tooltip: "Log Out" },
+        { name: "Profile", icon: User, onClick: () => console.log('Profile clicked'), tooltip: "View Profile" },
+        { name: "Logout", icon: LogOut, onClick: () => console.log('Logout clicked'), tooltip: "Log Out" },
     ],
 };
 

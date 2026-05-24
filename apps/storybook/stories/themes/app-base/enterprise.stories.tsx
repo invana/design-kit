@@ -79,43 +79,6 @@ export const Enterprise: Story = {
         </div>
       ),
     },
-    leftNav: {
-      topNavItems: [
-        {
-          name: 'Dashboard',
-          icon: Home,
-          onClick: () => console.log('Dashboard'),
-        },
-        {
-          name: 'Users & Teams',
-          icon: Users,
-          onClick: () => console.log('Users'),
-        },
-        {
-          name: 'Documents',
-          icon: FileText,
-          onClick: () => console.log('Documents'),
-        },
-        {
-          name: 'Analytics',
-          icon: BarChart,
-          onClick: () => console.log('Analytics'),
-          showSeperator: true,
-        },
-      ],
-      bottomNavItems: [
-        {
-          name: 'Settings',
-          icon: Settings,
-          onClick: () => console.log('Settings'),
-        },
-        {
-          name: 'Sign Out',
-          icon: LogOut,
-          onClick: () => console.log('Logout'),
-        },
-      ],
-    },
     main: (
       <div className="h-full overflow-auto">
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

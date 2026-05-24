@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { StoryObj } from '@storybook/react-vite';
 import { Badge, Separator } from '@invana/ui';
 import { themes, getThemeVariantById } from '@invana/styling/themes';
 import React, { useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ export default {
 };
 
 
-const ColorSwatch = ({ name, cssVar, description, themeKey, containerRef, accentKey }: { name: string; cssVar: string; description: string; themeKey?: string; containerRef?: React.RefObject<HTMLDivElement>; accentKey?: string }) => {
+const ColorSwatch = ({ name, cssVar, description, themeKey, containerRef, accentKey }: { name: string; cssVar: string; description: string; themeKey?: string; containerRef?: React.RefObject<HTMLDivElement | null>; accentKey?: string }) => {
   const [color, setColor] = useState('');
   const swatchRef = React.useRef<HTMLDivElement>(null);
 

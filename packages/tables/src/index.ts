@@ -8,6 +8,7 @@ export type {
   ColumnFiltersState,
   ColumnOrderState,
   ColumnPinningState,
+  PaginationState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table';
