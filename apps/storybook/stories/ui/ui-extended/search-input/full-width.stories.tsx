@@ -10,3 +10,28 @@ const meta: Meta<typeof SearchInput> = {
   },
   // tags: ['autodocs'],
 };
+
+
+/**
+ * Default search input with placeholder text.
+ * Basic usage for simple search functionality.
+ */
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const FullWidth: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+    return (
+      <div className="w-[600px]">
+        <SearchInput value={value} onChange={setValue} />
+      </div>
+    );
+  }
+};
+
+/**
+ * Search with real-time filtering example.
+ * Demonstrates filtering a list based on search input.
+ */

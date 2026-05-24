@@ -10,3 +10,29 @@ const meta: Meta<typeof SearchInput> = {
   },
   // tags: ['autodocs'],
 };
+
+
+/**
+ * Default search input with placeholder text.
+ * Basic usage for simple search functionality.
+ */
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const WithInitialValue: Story = {
+  render: () => {
+    const [value, setValue] = useState('Initial search text');
+    return (
+      <div className="w-[400px]">
+        <SearchInput value={value} onChange={setValue} />
+        <p className="text-sm text-muted-foreground mt-2">Current value: {value}</p>
+      </div>
+    );
+  }
+};
+
+/**
+ * Compact search input for toolbars.
+ * Smaller size for use in headers or sidebars.
+ */
