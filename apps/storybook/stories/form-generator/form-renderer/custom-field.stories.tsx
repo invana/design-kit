@@ -8,7 +8,7 @@ import {
 } from '@invana/forms';
 
 const meta: Meta<typeof FormRenderer> = {
-  title: 'Form Builder/FormRenderer',
+  title: 'Form Generator/FormRenderer',
   component: FormRenderer,
   parameters: { layout: 'padded' },
 };

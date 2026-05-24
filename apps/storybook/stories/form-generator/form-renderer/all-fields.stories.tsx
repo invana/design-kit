@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { FormRenderer, type FormSchema } from '@invana/forms';
 
 const meta: Meta<typeof FormRenderer> = {
-  title: 'Form Builder/FormRenderer',
+  title: 'Form Generator/FormRenderer',
   component: FormRenderer,
   parameters: { layout: 'padded' },
 };

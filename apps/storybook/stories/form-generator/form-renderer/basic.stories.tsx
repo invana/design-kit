@@ -1,14 +1,51 @@
+import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { FormRenderer, type FormSchema } from '@invana/forms';
 
 const meta: Meta<typeof FormRenderer> = {
-  title: 'Form Builder/FormRenderer',
+  title: 'Form Generator/FormRenderer',
   component: FormRenderer,
   parameters: { layout: 'padded' },
 };
 export default meta;
 
 type Story = StoryObj<typeof FormRenderer>;
+
+function StoryShell({
+  schema,
+  defaultValues,
+  registry,
+}: {
+  schema: FormSchema;
+  defaultValues?: Record<string, unknown>;
+  registry?: Parameters<typeof FormRenderer>[0]['registry'];
+}) {
+  const [submitted, setSubmitted] = React.useState<unknown>(null);
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-4xl">
+      <FormRenderer
+        schema={schema}
+        defaultValues={defaultValues}
+        registry={registry}
+        onSubmit={(values) => setSubmitted(values)}
+      />
+      <div>
+        <h4 className="mb-2 text-sm font-medium text-muted-foreground">
+          Submitted payload
+        </h4>
+        <pre className="rounded-md border bg-muted/40 p-3 text-xs">
+          {submitted
+            ? JSON.stringify(
+                submitted,
+                (_, v) => (v instanceof Date ? v.toISOString() : v),
+                2
+              )
+            : '— submit the form —'}
+        </pre>
+      </div>
+    </div>
+  );
+}
 
 const basicSchema: FormSchema = {
   fields: [
@@ -55,12 +92,6 @@ const basicSchema: FormSchema = {
   ],
 };
 
-export const HorizontalLayout: Story = {
-  render: () => (
-    <FormRenderer
-      schema={basicSchema}
-      layout="horizontal"
-      onSubmit={(v) => console.log('submitted', v)}
-    />
-  ),
+export const Basic: Story = {
+  render: () => <StoryShell schema={basicSchema} />,
 };

@@ -22,7 +22,7 @@
     "react",
     "tailwindcss",
     "forms",
-    "form-builder",
+    "form-generator",
     "schema",
     "invana/forms"
   ],

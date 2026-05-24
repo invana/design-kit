@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { FormRenderer, type FormSchema } from '@invana/forms';
 
 const meta: Meta<typeof FormRenderer> = {
-  title: 'Form Builder/FormRenderer',
+  title: 'Form Generator/FormRenderer',
   component: FormRenderer,
   parameters: { layout: 'padded' },
 };
@@ -47,51 +47,35 @@ function StoryShell({
   );
 }
 
-const basicSchema: FormSchema = {
+const conditionalSchema: FormSchema = {
   fields: [
     {
-      type: 'text',
-      name: 'fullName',
-      label: 'Full name',
-      placeholder: 'Ada Lovelace',
-      required: true,
-      minLength: 2,
-    },
-    {
-      type: 'email',
-      name: 'email',
-      label: 'Email',
-      placeholder: 'you@invana.io',
-      required: true,
-    },
-    {
       type: 'select',
-      name: 'role',
-      label: 'Role',
+      name: 'country',
+      label: 'Country',
       required: true,
       options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'Editor', value: 'editor' },
-        { label: 'Viewer', value: 'viewer' },
+        { label: 'United States', value: 'us' },
+        { label: 'India', value: 'in' },
+        { label: 'Germany', value: 'de' },
       ],
     },
     {
-      type: 'textarea',
-      name: 'bio',
-      label: 'Bio',
-      placeholder: 'A short bio…',
-      description: 'Markdown is not supported here.',
-      rows: 3,
-    },
-    {
-      type: 'checkbox',
-      name: 'tos',
-      label: 'I agree to the terms of service',
+      type: 'select',
+      name: 'state',
+      label: 'State (US only)',
+      placeholder: 'Pick a state',
       required: true,
+      options: [
+        { label: 'California', value: 'ca' },
+        { label: 'New York', value: 'ny' },
+        { label: 'Texas', value: 'tx' },
+      ],
+      showIf: (v) => v.country === 'us',
     },
   ],
 };
 
-export const Basic: Story = {
-  render: () => <StoryShell schema={basicSchema} />,
+export const Conditional: Story = {
+  render: () => <StoryShell schema={conditionalSchema} />,
 };

@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { FormRenderer, type FormSchema } from '@invana/forms';
 
 const meta: Meta<typeof FormRenderer> = {
-  title: 'Form Builder/FormRenderer',
+  title: 'Form Generator/FormRenderer',
   component: FormRenderer,
   parameters: { layout: 'padded' },
 };
@@ -47,35 +47,45 @@ function StoryShell({
   );
 }
 
-const conditionalSchema: FormSchema = {
+const arraySchema: FormSchema = {
   fields: [
     {
-      type: 'select',
-      name: 'country',
-      label: 'Country',
+      type: 'text',
+      name: 'projectName',
+      label: 'Project name',
       required: true,
-      options: [
-        { label: 'United States', value: 'us' },
-        { label: 'India', value: 'in' },
-        { label: 'Germany', value: 'de' },
-      ],
     },
     {
-      type: 'select',
-      name: 'state',
-      label: 'State (US only)',
-      placeholder: 'Pick a state',
-      required: true,
-      options: [
-        { label: 'California', value: 'ca' },
-        { label: 'New York', value: 'ny' },
-        { label: 'Texas', value: 'tx' },
+      type: 'array',
+      name: 'members',
+      label: 'Team members',
+      addLabel: 'Add member',
+      min: 1,
+      itemFields: [
+        { type: 'text', name: 'name', label: 'Name', required: true },
+        { type: 'email', name: 'email', label: 'Email', required: true },
+        {
+          type: 'select',
+          name: 'role',
+          label: 'Role',
+          options: [
+            { label: 'Owner', value: 'owner' },
+            { label: 'Member', value: 'member' },
+          ],
+        },
       ],
-      showIf: (v) => v.country === 'us',
     },
   ],
 };
 
-export const Conditional: Story = {
-  render: () => <StoryShell schema={conditionalSchema} />,
+export const ArrayFields: Story = {
+  render: () => (
+    <StoryShell
+      schema={arraySchema}
+      defaultValues={{
+        projectName: 'Atlas',
+        members: [{ name: '', email: '', role: 'owner' }],
+      }}
+    />
+  ),
 };
