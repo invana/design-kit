@@ -1,38 +1,28 @@
-export * from './components';
-
-export { FormRenderer, type FormRendererProps } from './form-renderer';
-export { FieldResolver } from './field-resolver';
-export { defaultFieldRegistry, mergeRegistry } from './registry';
-export { zodFromSchema } from './schema/zod-from-schema';
+export {
+  FormField,
+  Field,
+  InputField,
+  SelectField,
+  BooleanField,
+  ColorField,
+  NumberField,
+  IconField,
+} from './form-field';
 
 export type {
-  FieldOption,
-  ShowIfFn,
-  FieldSchema,
+  FieldConfig,
+  RowConfig,
+  LabelPosition,
+  ObjectFieldProps,
+  ColorPreset,
   FieldType,
-  FormSchema,
-  FormLayout,
-  FieldComponent,
-  FieldComponentProps,
-  FieldRegistry,
-  TextFieldSchema,
-  NumberFieldSchema,
-  TextareaFieldSchema,
-  SelectFieldSchema,
-  MultiSelectFieldSchema,
-  CheckboxFieldSchema,
-  SliderFieldSchema,
-  DateFieldSchema,
-  DateRangeFieldSchema,
-  FileFieldSchema,
-  ColorFieldSchema,
-  RichTextFieldSchema,
-  CodeFieldSchema,
-  GroupFieldSchema,
-  ArrayFieldSchema,
-  RowFieldSchema,
-  CustomFieldSchema,
 } from './types';
+
+export { ColorSwatches } from './fields/color-swatches';
+export { SliderNumber } from './fields/slider-number';
+export { IconInput } from './fields/icon-input';
+
+export * from './components';
 
 export type {
   Control,
