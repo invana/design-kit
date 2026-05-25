@@ -17,6 +17,55 @@ export interface Theme {
   variants: ThemeVariant[];
 }
 
+/**
+ * Theme Presets contributed as first-class themes. Unlike the classic themes
+ * (which vary by light/dark/system), each preset is a single mode and its
+ * selectable accent swatches become the "variant" axis — e.g. theme `dark-gold`
+ * with variants `dark-gold-gold`, `dark-gold-ocean`, … The colours for every
+ * combination are plain CSS in `themes/presets.css`; only the ids/names/modes
+ * are listed here so they register with the toolbar and `applyTheme()`.
+ */
+const DARK_ACCENTS: [string, string][] = [
+  ['gold', 'Gold'], ['ocean', 'Ocean'], ['emerald', 'Emerald'], ['rose', 'Rose'],
+  ['purple', 'Purple'], ['amber', 'Amber'], ['teal', 'Teal'], ['silver', 'Silver'],
+];
+const LIGHT_ACCENTS: [string, string][] = [
+  ['indigo', 'Indigo'], ['ocean', 'Ocean'], ['emerald', 'Emerald'], ['rose', 'Rose'],
+  ['purple', 'Purple'], ['amber', 'Amber'], ['teal', 'Teal'], ['slate', 'Slate'],
+];
+
+// `default` is each preset's signature accent. It is
+// placed FIRST so it becomes the theme's default variant (variants[0]) — the value
+// consumers fall back to when no accent is specified.
+const PRESET_THEMES: { id: string; name: string; dark: boolean; accents: [string, string][]; default: string }[] = [
+  { id: 'dark-gold', name: 'Dark Gold', dark: true, accents: DARK_ACCENTS, default: 'gold' },
+  { id: 'dark-ocean', name: 'Dark Ocean', dark: true, accents: DARK_ACCENTS, default: 'ocean' },
+  { id: 'dark-forest', name: 'Dark Forest', dark: true, accents: DARK_ACCENTS, default: 'emerald' },
+  { id: 'dark-rose', name: 'Dark Rose', dark: true, accents: DARK_ACCENTS, default: 'rose' },
+  { id: 'light-minimal', name: 'Light Minimal', dark: false, accents: LIGHT_ACCENTS, default: 'indigo' },
+];
+
+function buildPresetThemes(): Theme[] {
+  return PRESET_THEMES.map((p) => {
+    // Signature accent first → it becomes variants[0] (the theme's default).
+    const ordered = [
+      ...p.accents.filter(([id]) => id === p.default),
+      ...p.accents.filter(([id]) => id !== p.default),
+    ];
+    return {
+      id: p.id,
+      name: p.name,
+      description: `${p.name} preset — pick an accent swatch (${p.dark ? 'dark' : 'light'} mode)`,
+      variants: ordered.map(([accentId, accentName]) => ({
+        id: `${p.id}-${accentId}`,
+        name: accentName,
+        mode: (p.dark ? 'dark' : 'light') as ThemeVariant['mode'],
+        icon: 'circle',
+      })),
+    };
+  });
+}
+
 export const themes: Theme[] = [
   {
     id: 'default',
@@ -47,7 +96,8 @@ export const themes: Theme[] = [
       { id: 'vite-dark', name: 'Vite Dark', mode: 'dark', icon: 'moon' },
       { id: 'vite-system', name: 'Vite System', mode: 'system', icon: 'circle' }
     ]
-  }
+  },
+  ...buildPresetThemes()
 ];
 
 /**

@@ -43,9 +43,9 @@ export interface ThemeControlsProps {
    */
   currentTheme?: string;
   /**
-   * Current accent (controlled)
+   * Current accent (controlled). `null` = no override.
    */
-  currentAccent?: string;
+  currentAccent?: string | null;
   /**
    * Is dark mode (controlled)
    */
@@ -67,12 +67,13 @@ export interface ThemeControlsProps {
 export interface UseThemeControlsResult {
   currentTheme: string;
   setCurrentTheme: (theme: string) => void;
-  currentAccent: string;
+  /** The chosen showcase accent, or null when none is picked (theme uses its own accent). */
+  currentAccent: string | null;
   setCurrentAccent: (accent: string) => void;
   isDarkMode: boolean;
   setIsDarkMode: (isDark: boolean) => void;
   currentVariant: string;
-  accentHsl: string;
+  accentHsl: string | undefined;
   accentStyles: React.CSSProperties;
 }
 
@@ -85,7 +86,8 @@ export const useThemeControls = (
 ): UseThemeControlsResult => {
   const [currentTheme, setCurrentTheme] = useState(storybookTheme);
   const [isDarkMode, setIsDarkMode] = useState(storybookVariant === 'dark');
-  const [currentAccent, setCurrentAccent] = useState('green');
+  // null = no override → the active theme shows its OWN accent. Picking a swatch overrides it.
+  const [currentAccent, setCurrentAccent] = useState<string | null>(null);
 
   // Accent color mappings (HSL values for light/dark modes)
   const accentColorMap: Record<string, { light: string; dark: string }> = {
@@ -112,18 +114,28 @@ export const useThemeControls = (
     setIsDarkMode(storybookVariant === 'dark');
   }, [storybookVariant]);
 
-  // Get current theme variant based on theme and mode
+  // Reset the accent override when the theme changes, so each theme starts on its own accent.
+  useEffect(() => {
+    setCurrentAccent(null);
+  }, [currentTheme]);
+
+  // Get current theme variant based on theme and mode.
+  // Classic themes (Invana/Tailwind/Vite) have light/dark/system variants, so we
+  // match on mode. Preset themes (Dark Gold, …) are single-mode and their variants
+  // are accent swatches — for those, mode never matches, so fall back to the
+  // theme's first (default) variant rather than reverting to 'default-light'.
   const currentVariant = useMemo(() => {
-    return (
-      themes
-        .find((t: any) => t.id === currentTheme)
-        ?.variants.find((v: any) => v.mode === (isDarkMode ? 'dark' : 'light'))?.id ||
-      'default-light'
+    const theme = themes.find((t: any) => t.id === currentTheme);
+    if (!theme) return 'default-light';
+    const byMode = theme.variants.find(
+      (v: any) => v.mode === (isDarkMode ? 'dark' : 'light')
     );
+    return (byMode ?? theme.variants[0])?.id ?? 'default-light';
   }, [currentTheme, isDarkMode]);
 
-  // Get accent color styles
+  // Get accent color styles (undefined when no accent is picked → no override)
   const accentHsl = useMemo(() => {
+    if (!currentAccent) return undefined;
     return isDarkMode
       ? accentColorMap[currentAccent]?.dark
       : accentColorMap[currentAccent]?.light;
@@ -135,11 +147,13 @@ export const useThemeControls = (
   }, [currentVariant]);
 
   const accentStyles = useMemo(() => {
+    // Only override once the user picks a swatch. Until then (currentAccent === null)
+    // every theme — classic AND preset — renders with its own accent.
     if (!accentHsl) return {};
-    
+
     // Extract HSL values without 'hsl()' wrapper for Tailwind
     const rawHsl = accentHsl.replace('hsl(', '').replace(')', '');
-    
+
     return {
       '--primary': rawHsl,
       '--primary-foreground': '0 0% 100%',
@@ -198,7 +212,7 @@ const AccentSelector = ({
   currentAccent,
   onAccentChange,
 }: {
-  currentAccent: string;
+  currentAccent: string | null;
   onAccentChange: (accent: string) => void;
 }) => {
   // Accent colors palette

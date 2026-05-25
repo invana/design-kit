@@ -17,6 +17,10 @@
 @import "@invana/styling/themes/default.css";
 @import "@invana/styling/themes/tailwind.css";
 @import "@invana/styling/themes/vite.css";
+/* presets-base.css registers preset tokens in @theme (generates utilities);
+   presets.css overrides their values per theme — base MUST come first. */
+@import "@invana/styling/themes/presets-base.css";
+@import "@invana/styling/themes/presets.css";
 
 /* Define sources AFTER all imports */
 @source "../stories/**/*.{js,ts,jsx,tsx,mdx}";

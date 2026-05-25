@@ -99,7 +99,6 @@ import {
   X,
   Sun,
   Moon,
-  Palette,
   Copy,
   MoreHorizontal,
   ArrowRight,

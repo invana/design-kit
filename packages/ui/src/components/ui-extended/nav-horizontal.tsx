@@ -72,8 +72,8 @@ export const NavHorizontalItems: React.FC<NavHorizontalItemsProps> = ({ items })
                   onClick={() => setActiveItem(item.name)}
                   className={`flex border-0 items-center justify-center gap-2
                     transition-colors rounded-md h-full whitespace-nowrap
-                    hover:bg-accent hover:text-accent-foreground ${item.label ? 'px-3' : 'px-2'} ${item.className || ''}
-                    ${activeItem === item.name ? 'bg-accent text-accent-foreground' : ''}`}
+                    hover:bg-muted hover:text-foreground ${item.label ? 'px-3' : 'px-2'} ${item.className || ''}
+                    ${activeItem === item.name ? 'bg-primary/15 text-primary ring-1 ring-primary/25' : ''}`}
                 >
                   <item.icon
                     strokeWidth={item.iconStroke || 2}
@@ -102,7 +102,7 @@ export const NavHorizontalItems: React.FC<NavHorizontalItemsProps> = ({ items })
                 <div
                   className={`flex border-0 items-center justify-center gap-2 h-full whitespace-nowrap
                     transition-colors rounded-md  ${item.label ? 'px-3' : 'px-2'} ${item.className || ''}
-                    ${activeItem === item.name ? 'bg-accent text-accent-foreground' : ''}`}
+                    ${activeItem === item.name ? 'bg-primary/15 text-primary ring-1 ring-primary/25' : ''}`}
                 >
                   <item.icon
                     strokeWidth={item.iconStroke || 2}

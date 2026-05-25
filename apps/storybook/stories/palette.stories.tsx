@@ -12,20 +12,24 @@ export default {
 };
 
 
-const ColorSwatch = ({ name, cssVar, description, themeKey, containerRef, accentKey }: { name: string; cssVar: string; description: string; themeKey?: string; containerRef?: React.RefObject<HTMLDivElement | null>; accentKey?: string }) => {
+const ColorSwatch = ({ name, cssVar, description, themeKey, containerRef, accentKey }: { name: string; cssVar: string; description: string; themeKey?: string; containerRef?: React.RefObject<HTMLDivElement | null>; accentKey?: string | null }) => {
   const [color, setColor] = useState('');
   const swatchRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    // Get the computed color value from CSS variables
     // Use the container ref if provided (to get inline style overrides), otherwise use root
     const element = containerRef?.current || swatchRef.current || document.documentElement;
-    const value = getComputedStyle(element).getPropertyValue(cssVar).trim();
-    if (value) {
-      // If it's HSL values without 'hsl()', wrap it
-      const colorValue = value.includes('hsl') ? value : `hsl(${value})`;
-      setColor(colorValue);
+    // Prefer the `--color-*` token: every theme defines it as a complete colour value
+    // (hsl(…) for classic themes, #hex for the presets). The raw `--<name>` HSL triple
+    // only exists on the classic themes, so reading it leaves preset swatches blank.
+    const colorVar = cssVar.startsWith('--color-') ? cssVar : cssVar.replace(/^--/, '--color-');
+    let value = getComputedStyle(element).getPropertyValue(colorVar).trim();
+    if (!value) {
+      // Fallback to the raw token (classic themes), wrapping a bare HSL triple.
+      const raw = getComputedStyle(element).getPropertyValue(cssVar).trim();
+      value = raw && !/^(#|rgb|hsl|oklch)/.test(raw) ? `hsl(${raw})` : raw;
     }
+    setColor(value || '');
   }, [cssVar, themeKey, containerRef, accentKey]); // Re-run when theme or accent changes
 
   return (
@@ -79,7 +83,7 @@ const colorGroups = [
 ];
 
 export const ColorPalette: StoryObj = {
-  render: (args, context) => {
+  render: (_args, context) => {
     const [currentThemeId, setCurrentThemeId] = useState<string>('');
     const [debugInfo, setDebugInfo] = useState<string>('');
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -107,8 +111,8 @@ export const ColorPalette: StoryObj = {
       // Debug: Check what's set on the root element
       const root = document.documentElement;
       const dataTheme = root.getAttribute('data-theme');
-      const bgColor = getComputedStyle(root).getPropertyValue('--background').trim();
-      setDebugInfo(`data-theme: ${dataTheme}, --background: ${bgColor}`);
+      const bgColor = getComputedStyle(root).getPropertyValue('--color-background').trim();
+      setDebugInfo(`data-theme: ${dataTheme}, --color-background: ${bgColor}`);
     }, [context.globals.theme, context.globals.variant]);
 
     const themeInfo = currentThemeId ? getThemeVariantById(currentThemeId) : null;

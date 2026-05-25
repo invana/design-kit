@@ -1,0 +1,97 @@
+/*
+ * Theme Presets — base layer.
+ *
+ * Registers the preset design tokens in `@theme` so Tailwind generates the matching
+ * utilities (`text-text-secondary`, `bg-surface`, `bg-elevated`, `text-accent-dim`,
+ * `border-border-subtle`, `font-heading`, …). The DEFAULT values below are the
+ * Dark Gold preset; the per-theme values are overridden by the `[data-theme]`
+ * blocks in presets.css. Import this BEFORE presets.css.
+ *
+ * Note: the brand accent maps to `--color-primary` (see tokens.ts) — shadcn's
+ * `--color-accent` stays the hover surface — so `.kbd` uses `--color-primary`.
+ */
+
+@theme {
+  /* Surfaces */
+  --color-root: #0a0a0a;
+  --color-surface: #111111;
+  --color-elevated: #1a1a1a;
+  --color-panel: #141414;
+
+  /* Text (text-primary tinted toward the Dark Gold signature accent — see tokens.ts) */
+  --color-text-primary: #eee1d3;
+  --color-text-secondary: #a39787;
+  --color-text-muted: #6b5f53;
+
+  /* Accent (brand lives in --color-primary; these are its companions) */
+  --color-accent-dim: #c9a96e;
+  --color-accent-bright: #e8c49a;
+
+  /* Borders */
+  --color-border-subtle: rgba(212, 165, 116, 0.12);
+  --color-border-medium: rgba(212, 165, 116, 0.25);
+
+  /* Edges / overlays */
+  --color-edge: rgba(212, 165, 116, 0.3);
+  --color-edge-dim: rgba(212, 165, 116, 0.08);
+  --color-edge-dot: rgba(212, 165, 116, 0.15);
+  --color-accent-overlay-bg: rgba(212, 165, 116, 0.05);
+  --color-accent-overlay-border: rgba(212, 165, 116, 0.25);
+
+  /* Typography */
+  --font-serif: 'DM Serif Display', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-heading: var(--font-serif);
+}
+
+/* Non-utility derived tokens — defaults; overridden per theme in presets.css. */
+:root {
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(212, 165, 116, 0.1);
+  --glass-border-heavy: rgba(212, 165, 116, 0.15);
+  --scrollbar-thumb: rgba(212, 165, 116, 0.2);
+  --scrollbar-thumb-hover: rgba(212, 165, 116, 0.35);
+  --glow-accent: rgba(212, 165, 116, 0.15);
+  --glow-accent-strong: rgba(212, 165, 116, 0.4);
+  --glow-accent-pulse: rgba(212, 165, 116, 0.6);
+  --kbd-bg: rgba(212, 165, 116, 0.1);
+}
+
+/* ── Utilities ported from the preset base styles ── */
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-heavy {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border-heavy);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--kbd-bg);
+  border: 1px solid var(--color-border-medium);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 0 var(--scrollbar-thumb);
+}

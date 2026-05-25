@@ -92,7 +92,7 @@ export function TabbedPanel({
                   key={tab.value}
                   value={tab.value}
                   disabled={tab.disabled}
-                  className="h-full data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:mb-[-1px] rounded-none px-3 py-2"
+                  className="h-full text-muted-foreground hover:text-foreground data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:mb-[-1px] rounded-none px-3 py-2"
                 >
                   {tab.icon && <tab.icon className="h-3.5 w-3.5 mr-1.5" />}
                   {tab.label}

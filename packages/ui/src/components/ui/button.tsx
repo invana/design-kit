@@ -15,25 +15,28 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow ring-2 ring-primary/40 \
-          hover:ring-primary/60 \
-          active:bg-primary hover:shadow-lg hover:brightness-110",
+          "bg-primary text-primary-foreground shadow ring-1 ring-primary/30 \
+          hover:ring-primary/50 hover:shadow-lg \
+          active:bg-primary",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm ring-2 ring-destructive/40 \
+          "bg-destructive text-destructive-foreground shadow-sm ring-1 ring-destructive/40 \
           hover:ring-destructive/60 \
           active:bg-destructive/70",
         outline:
-          "bg-background shadow-sm ring-2 ring-border \
-          hover:text-primary hover:ring-primary \
-          active:bg-primary",
+          "bg-background shadow-sm ring-1 ring-border \
+          hover:bg-primary/10 hover:text-primary hover:ring-primary/40 \
+          active:bg-primary/20",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm ring-2 ring-secondary-foreground/40 \
-          hover:ring-primary/60 \
+          "bg-secondary text-secondary-foreground shadow-sm ring-1 ring-border \
+          hover:bg-secondary/80 hover:ring-primary/40 \
           active:bg-secondary/60",
         ghost:
-          "hover:text-primary ring-2 ring-transparent \
-          hover:ring-primary \
-          active:bg-primary/40 active:text-primary/70 ",
+          "ring-1 ring-transparent \
+          hover:bg-primary/10 hover:text-primary hover:ring-primary/25 \
+          active:bg-primary/15 active:text-primary",
+        soft:
+          "bg-primary/10 text-primary ring-1 ring-primary/30 shadow-sm \
+          hover:bg-primary/20 active:bg-primary/25",
         link:
           "text-primary underline-offset-4 hover:underline \
           hover:text-primary/80 active:text-primary/60",

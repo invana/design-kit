@@ -55,6 +55,22 @@
     "./themes/vite.css": {
       "style": "./src/themes/vite.css",
       "default": "./src/themes/vite.css"
+    },
+    "./themes/presets": {
+      "style": "./src/themes/presets.css",
+      "default": "./src/themes/presets.css"
+    },
+    "./themes/presets.css": {
+      "style": "./src/themes/presets.css",
+      "default": "./src/themes/presets.css"
+    },
+    "./themes/presets-base": {
+      "style": "./src/themes/presets-base.css",
+      "default": "./src/themes/presets-base.css"
+    },
+    "./themes/presets-base.css": {
+      "style": "./src/themes/presets-base.css",
+      "default": "./src/themes/presets-base.css"
     }
   },
   "files": [
