@@ -9,5 +9,6 @@ export * from './panel-content';
 export * from './tabbed-panel';
 export * from './search-input';
 export * from './toolbar';
+export * from './tour';
 export * from './tree-view';
 export * from './under-development';
