@@ -1,6 +1,6 @@
 {
   "name": "@invana/forms",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Invana Design System - Composable form building blocks (FormField + ObjectField + leaf inputs)",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",

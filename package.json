@@ -10,6 +10,7 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18",
     "turbo": "^2.7.0",
