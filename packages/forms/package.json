@@ -41,6 +41,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "prepare": "pnpm run build",
     "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },

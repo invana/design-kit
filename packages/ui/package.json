@@ -43,6 +43,7 @@
   "scripts": {
     "build": "tsup && pnpm run build:css",
     "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
+    "prepare": "pnpm run build",
     "lint": "eslint . --ext ts,tsx",
     "type-check": "tsc --noEmit"
   },
