@@ -29,8 +29,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build all packages
-        run: pnpm build
+      - name: Build publishable packages
+        # Only build packages/* — the Storybook app (apps/*) is not published and
+        # its build is not part of the release.
+        run: pnpm exec turbo run build --filter="./packages/*"
 
       - name: Publish to npm
         # --no-git-checks: the tag is checked out in detached HEAD, which pnpm
