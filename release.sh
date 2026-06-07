@@ -44,7 +44,8 @@ echo "Bumping all packages/* to $VERSION ..."
 pnpm -r --filter "./packages/*" exec npm version "$VERSION" --no-git-tag-version
 
 git commit -am "release: v$VERSION"
-git tag "v$VERSION"
+# Annotated tag so `git push --follow-tags` will push it (lightweight tags are skipped).
+git tag -a "v$VERSION" -m "v$VERSION"
 
 echo
 echo "Created commit + tag v$VERSION."
