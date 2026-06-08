@@ -1,115 +1,36 @@
 import React from "react"
-import { Tooltip, TooltipTrigger, TooltipContent, Separator, Button } from "../ui"
-import { NavBase } from './nav-base';
-import type { LucideIcon } from "lucide-react"
+import { NavBase, NavItems, type NavItemConfig } from './nav-base';
 
 
 /**
  * NavVerticalItem - Configuration for a single navigation item
- * 
+ *
  * @example
  * ```tsx
  * const items: NavVerticalItem[] = [
- *   { 
- *     name: 'Dashboard', 
- *     icon: Home, 
- *     onClick: () => navigate('/dashboard') 
+ *   {
+ *     name: 'Dashboard',
+ *     icon: Home,
+ *     onClick: () => navigate('/dashboard')
  *   },
- *   { 
- *     name: 'Settings', 
- *     icon: Settings, 
+ *   {
+ *     name: 'Settings',
+ *     icon: Settings,
  *     href: '/settings',
- *     showSeperator: true 
+ *     showSeperator: true
  *   }
  * ];
  * ```
  */
-export interface NavVerticalItem {
-  /** Optional unique key for React rendering */
-  key?: string
-  /** Display name shown in tooltip */
-  name: string
-  /** Navigation URL (for anchor tag) */
-  href?: string
-  /** Click handler (for button behavior) */
-  onClick?: () => void
-  /** Additional CSS classes for the item wrapper */
-  className?: string;
-  /** CSS classes applied when item is active */
-  activeClass?: string
-  /** CSS classes for the icon */
-  iconClassName?: string;
-  /** Stroke width for the icon (default: 2) */
-  iconStroke?: number;
-  /** Tooltip position (default: 'right') */
-  tooltipSide?: 'top' | 'right' | 'bottom' | 'left'
-  /** Show a separator line after this item */
-  showSeperator?: boolean
-  /** Lucide icon component */
-  icon: React.ElementType | LucideIcon
-  /** Custom tooltip content (overrides name) */
-  tooltip?: React.ReactNode
-}
+export type NavVerticalItem = NavItemConfig;
 
 export interface NavVerticalItemsProps {
   items: NavVerticalItem[]
 }
 
-export const NavVerticalItems: React.FC<NavVerticalItemsProps> = ({ items }) => {
-
-  const [activeItem, setActiveItem] = React.useState<null | string>(null)
-
-  return <>{
-    items.map((item) => (
-      <React.Fragment key={item.name}>
-        <Tooltip key={item.name}>
-          <TooltipTrigger asChild>
-            {item.href ? (
-              <a
-                href={item.href}
-                onClick={() => setActiveItem(item.name)}
-                className={` flex border-0 items-center justify-center 
-              transition-colors rounded-md
-              hover:text-primary/80 px-2 py-2 ${item.className || ''}
-              ${activeItem === item.name ? 'bg-accent text-accent-foreground' : ''}`}
-              >
-                <item.icon strokeWidth={item.iconStroke ? item.iconStroke : 2} className={item.iconClassName ? item.iconClassName : "w-5 h-5"} />
-              </a>
-            ) : item.onClick ? (
-              <Button
-                size="nav-icon"
-                variant={"ghost"}
-                onClick={() => {
-                  if (item.onClick) item.onClick();
-                  setActiveItem(item.name === activeItem ? null : item.name)
-                }}
-                className={`${item.className || ''}
-          ${activeItem === item.name ? ` ${item?.activeClass || ''}` : ''}`}
-              >
-                <item.icon strokeWidth={item.iconStroke ? item.iconStroke : 2} className={item.iconClassName ? item.iconClassName : "w-5 h-5"} />
-              </Button>
-            ) : (
-              <div
-                className={` flex border-0  items-center justify-center 
-          transition-colors  rounded-md  px-2 py-2 ${item.className || ''}
-          ${activeItem === item.name ? 'bg-accent text-accent-foreground' : ''}`}
-              >
-                <item.icon strokeWidth={item.iconStroke ? item.iconStroke : 2} className={item.iconClassName ? item.iconClassName : "w-5 h-5"} />
-              </div>
-            )}
-          </TooltipTrigger>
-          <TooltipContent side={item.tooltipSide ? item.tooltipSide : 'right'}>
-            {item.tooltip || item.name}
-          </TooltipContent>
-        </Tooltip>
-        {item.showSeperator && <Separator />}
-      </React.Fragment>
-
-    ))
-  }
-  </>
-
-}
+export const NavVerticalItems: React.FC<NavVerticalItemsProps> = ({ items }) => (
+  <NavItems items={items} orientation="vertical" />
+)
 
 
 /**
