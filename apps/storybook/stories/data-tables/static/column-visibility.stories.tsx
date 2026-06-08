@@ -36,7 +36,7 @@ const seed: Person[] = Array.from({ length: 87 }).map((_, i) => ({
 }));
 
 const meta: Meta<typeof DataTable<Person>> = {
-  title: 'Data Tables/DataTable',
+  title: 'Data Tables/Static/DataTable',
   component: DataTable<Person>,
   parameters: { layout: 'padded' },
 };
@@ -150,6 +150,13 @@ function DataTableDemo(args: Partial<React.ComponentProps<typeof DataTable<Perso
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithPagination: Story = {
-  render: () => <DataTableDemo enablePagination pageSize={10} />,
+export const ColumnVisibility: Story = {
+  render: () => (
+    <DataTableDemo
+      enableSorting
+      enablePagination
+      enableColumnVisibility
+      pageSize={10}
+    />
+  ),
 };

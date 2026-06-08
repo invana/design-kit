@@ -36,10 +36,9 @@ function buildUrl({
   sorting: SortingState;
   query: string;
 }): string {
-  const skip = pageIndex * pageSize;
   const params = new URLSearchParams({
     limit: String(pageSize),
-    skip: String(skip),
+    skip: String(pageIndex * pageSize),
     select: 'title,brand,category,price,rating,stock',
   });
 
@@ -66,7 +65,7 @@ function useDebounced<T>(value: T, ms: number): T {
   return debounced;
 }
 
-function ServerSideDemo() {
+function DynamicPaginationDemo() {
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -81,11 +80,12 @@ function ServerSideDemo() {
   const [error, setError] = React.useState<string | null>(null);
   const [lastUrl, setLastUrl] = React.useState('');
 
-  // Reset to page 0 when search query changes.
+  // Reset to the first page whenever the search query changes.
   React.useEffect(() => {
     setPagination((p) => ({ ...p, pageIndex: 0 }));
   }, [debouncedQuery]);
 
+  // Refetch a fresh page on every page / sort / search change.
   React.useEffect(() => {
     const url = buildUrl({
       pageIndex: pagination.pageIndex,
@@ -178,6 +178,7 @@ function ServerSideDemo() {
         enableSorting
         enablePagination
         enableColumnVisibility
+        pageSizeOptions={[10, 20, 50]}
         loading={loading}
         emptyState={
           error ? (
@@ -208,13 +209,13 @@ function ServerSideDemo() {
 }
 
 const meta: Meta = {
-  title: 'Data Tables/DataTable',
+  title: 'Data Tables/Dynamic/DataTable',
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component:
-          'Server-side sorting, pagination, and search powered by https://dummyjson.com/products. Each sort / page change / debounced search triggers a fresh GET; the URL emitted by the table is shown below it.',
+          'Dynamic (server-side) pagination, sorting, and search powered by https://dummyjson.com/products. Each page change, sort, or debounced search triggers a fresh GET — only the current page of rows is held in memory. The emitted request URL is shown below the table.',
       },
     },
   },
@@ -223,6 +224,6 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const DummyJsonProducts: Story = {
-  render: () => <ServerSideDemo />,
+export const ServerPagination: Story = {
+  render: () => <DynamicPaginationDemo />,
 };
