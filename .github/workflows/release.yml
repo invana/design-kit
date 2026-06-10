@@ -1,0 +1,67 @@
+name: Release
+
+# Creates a GitHub Release whenever a version tag (vX.Y.Z) is pushed.
+# Release notes are generated from Conventional Commits with git-cliff,
+# using the repo's cliff.toml. Uses the built-in GITHUB_TOKEN — no secrets
+# or local `gh auth login` needed.
+#
+# Cut a release locally with ./release.sh <version>, then:
+#   git push origin main --follow-tags
+# The tag push triggers this workflow.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to (re)generate a release for, e.g. v0.0.6'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history + tags are required for git-cliff to diff releases.
+          fetch-depth: 0
+
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate release notes
+        uses: orhun/git-cliff-action@v4
+        id: cliff
+        with:
+          config: cliff.toml
+          # --current: notes for the tag at the checked-out commit.
+          # --strip all: drop the header/footer, keep just this version's section.
+          args: --current --strip all
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --notes-file "${{ steps.cliff.outputs.changelog }}"
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file "${{ steps.cliff.outputs.changelog }}" \
+              --verify-tag
+          fi
