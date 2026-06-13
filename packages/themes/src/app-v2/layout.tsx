@@ -78,12 +78,17 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
                 >
                   {leftSection ? (
                     <ResizablePanelGroup orientation="horizontal" id="editor-horizontal">
-                      <ResizablePanel 
+                      <ResizablePanel
                         id="sidebar-panel"
-                        defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize} 
-                        minSize={leftSection.minSize ?? DEFAULT_SIDEBAR.minSize} 
-                        maxSize={leftSection.maxSize ?? DEFAULT_SIDEBAR.maxSize} 
+                        defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize}
+                        minSize={leftSection.minSize ?? DEFAULT_SIDEBAR.minSize}
+                        maxSize={leftSection.maxSize ?? DEFAULT_SIDEBAR.maxSize}
                         collapsible={leftSection.collapsible ?? DEFAULT_SIDEBAR.collapsible}
+                        // Hold the sidebar's pixel width when the surrounding group
+                        // grows (e.g. the right/auxiliary section collapsing). The
+                        // editor panel keeps the default relative-size behaviour, so
+                        // it absorbs the freed space instead of the sidebar widening.
+                        groupResizeBehavior="preserve-pixel-size"
                       >
                         <div className="h-full overflow-auto bg-card">{leftSection.content}</div>
                       </ResizablePanel>
