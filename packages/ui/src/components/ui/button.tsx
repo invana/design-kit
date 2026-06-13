@@ -1,8 +1,8 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "../../lib/utils"
+import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap \
@@ -15,30 +15,28 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow ring-1 ring-primary/30 \
+          "bg-[hsl(var(--primary)_/_var(--surface-alpha))] glassable text-primary-foreground shadow ring-1 ring-primary/30 \
           hover:ring-primary/50 hover:shadow-lg \
-          active:bg-primary",
+          active:bg-[hsl(var(--primary)_/_var(--surface-alpha))]",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm ring-1 ring-destructive/40 \
+          "bg-[hsl(var(--destructive)_/_var(--surface-alpha))] glassable text-destructive-foreground shadow-sm ring-1 ring-destructive/40 \
           hover:ring-destructive/60 \
           active:bg-destructive/70",
         outline:
-          "bg-background shadow-sm ring-1 ring-border \
-          hover:bg-primary/10 hover:text-primary hover:ring-primary/40 \
-          active:bg-primary/20",
+          "bg-[hsl(var(--background)_/_var(--surface-alpha))] glassable shadow-sm ring-1 ring-border \
+          hover:bg-[hsl(var(--accent)_/_var(--surface-alpha))] hover:text-accent-foreground \
+          active:bg-[hsl(var(--accent)_/_var(--surface-alpha))]",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm ring-1 ring-border \
-          hover:bg-secondary/80 hover:ring-primary/40 \
+          "bg-[hsl(var(--secondary)_/_var(--surface-alpha))] glassable text-secondary-foreground shadow-sm ring-1 ring-border \
+          hover:bg-secondary/80 hover:ring-border \
           active:bg-secondary/60",
         ghost:
           "ring-1 ring-transparent \
-          hover:bg-primary/10 hover:text-primary hover:ring-primary/25 \
-          active:bg-primary/15 active:text-primary",
-        soft:
-          "bg-primary/10 text-primary ring-1 ring-primary/30 shadow-sm \
+          hover:bg-[hsl(var(--accent)_/_var(--surface-alpha))] hover:text-accent-foreground \
+          active:bg-[hsl(var(--accent)_/_var(--surface-alpha))]",
+        soft: "bg-primary/10 glassable text-primary ring-1 ring-primary/30 shadow-sm \
           hover:bg-primary/20 active:bg-primary/25",
-        link:
-          "text-primary underline-offset-4 hover:underline \
+        link: "text-primary underline-offset-4 hover:underline \
           hover:text-primary/80 active:text-primary/60",
       },
       size: {
@@ -53,27 +51,28 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+    const Comp = asChild ? Slot : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />
-    )
-  }
-)
-Button.displayName = "Button"
+    );
+  },
+);
+Button.displayName = "Button";
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
