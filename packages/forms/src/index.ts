@@ -3,6 +3,7 @@ export {
   Field,
   ObjectField,
   InputField,
+  PasswordField,
   TextareaField,
   SelectField,
   BooleanField,

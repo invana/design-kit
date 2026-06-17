@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from './components/form';
 import { Input } from './components/input';
+import { PasswordInput } from './components/password-input';
 import { Textarea } from './components/textarea';
 import { Switch } from './components/switch';
 import {
@@ -101,6 +102,35 @@ export const InputField: React.FC<BaseFieldProps> = ({
     <div className={inputWrapper(labelPosition)}>
       <FormControl>
         <Input
+          className={SIZE[size].input}
+          placeholder={placeholder}
+          value={value ?? ''}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+      </FormControl>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
+    </div>
+  </FormItem>
+);
+
+export const PasswordField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  placeholder,
+  value,
+  onChange,
+  labelPosition = 'side',
+  size = 'sm',
+  className,
+}) => (
+  <FormItem className={itemClasses(labelPosition, className)}>
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    <div className={inputWrapper(labelPosition)}>
+      <FormControl>
+        <PasswordInput
           className={SIZE[size].input}
           placeholder={placeholder}
           value={value ?? ''}
@@ -309,6 +339,7 @@ export const IconField: React.FC<BaseFieldProps> = ({
 
 export const Field = {
   Input: InputField,
+  Password: PasswordField,
   Textarea: TextareaField,
   Boolean: BooleanField,
   Color: ColorField,
@@ -365,6 +396,13 @@ function renderField(
           onChange: rhf.onChange,
         };
         switch (field.type) {
+          case 'password':
+            return (
+              <PasswordField
+                {...common}
+                placeholder={field.placeholder ?? `Enter ${field.name}`}
+              />
+            );
           case 'boolean':
             return <BooleanField {...common} />;
           case 'color':
@@ -505,6 +543,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
 interface FormFieldExtensions {
   ObjectField: typeof ObjectField;
   Input: typeof InputField;
+  Password: typeof PasswordField;
   Textarea: typeof TextareaField;
   Boolean: typeof BooleanField;
   Color: typeof ColorField;
@@ -518,6 +557,7 @@ type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
 export const FormField = Object.assign(FormFieldBase, {
   ObjectField,
   Input: InputField,
+  Password: PasswordField,
   Textarea: TextareaField,
   Boolean: BooleanField,
   Color: ColorField,

@@ -11,6 +11,7 @@ export type FieldSize = 'sm' | 'md';
 
 export type FieldType =
   | 'text'
+  | 'password'
   | 'textarea'
   | 'number'
   | 'boolean'
