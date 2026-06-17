@@ -2,8 +2,16 @@ import type { Control } from 'react-hook-form';
 
 export type LabelPosition = 'side' | 'top';
 
+/**
+ * Field density. `sm` is the compact look used by dense panels (e.g. the
+ * modeller property editor) and is the default for backward compatibility.
+ * `md` renders full-size fields for primary, page-level forms.
+ */
+export type FieldSize = 'sm' | 'md';
+
 export type FieldType =
   | 'text'
+  | 'textarea'
   | 'number'
   | 'boolean'
   | 'color'
@@ -30,6 +38,8 @@ export type FieldConfig = {
   row?: string;
   presetColors?: ColorPreset[];
   defaultValue?: string;
+  /** Number of visible rows for `textarea` fields. */
+  rows?: number;
 };
 
 export type RowConfig = {
@@ -44,4 +54,6 @@ export interface ObjectFieldProps {
   fields: FieldConfig[];
   rowConfig?: RowConfig[];
   labelPosition?: LabelPosition;
+  /** Field density. Defaults to `sm` (compact) for backward compatibility. */
+  size?: FieldSize;
 }

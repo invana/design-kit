@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from './components/form';
 import { Input } from './components/input';
+import { Textarea } from './components/textarea';
 import { Switch } from './components/switch';
 import {
   Select,
@@ -30,6 +31,7 @@ import { IconInput } from './fields/icon-input';
 import type {
   ColorPreset,
   FieldConfig,
+  FieldSize,
   LabelPosition,
   ObjectFieldProps,
   RowConfig,
@@ -54,9 +56,23 @@ interface BaseFieldProps {
   step?: number;
   presetColors?: ColorPreset[];
   defaultValue?: string;
+  rows?: number;
   className?: string;
   labelPosition?: LabelPosition;
+  size?: FieldSize;
 }
+
+/**
+ * Per-size class tokens. `sm` keeps the original compact look; `md` falls back
+ * to the underlying components' natural full-size defaults (empty strings).
+ */
+const SIZE: Record<
+  FieldSize,
+  { input: string; select: string; label: string; desc: string }
+> = {
+  sm: { input: 'h-8 text-sm', select: 'h-8', label: 'text-xs', desc: 'text-xs' },
+  md: { input: '', select: '', label: '', desc: '' },
+};
 
 function itemClasses(labelPosition: LabelPosition, className?: string) {
   return cn(
@@ -77,21 +93,55 @@ export const InputField: React.FC<BaseFieldProps> = ({
   value,
   onChange,
   labelPosition = 'side',
+  size = 'sm',
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, className)}>
-    {label && <FormLabel className="text-xs">{label}</FormLabel>}
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition)}>
       <FormControl>
         <Input
-          className="h-8 text-sm"
+          className={SIZE[size].input}
           placeholder={placeholder}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         />
       </FormControl>
-      {description && <FormDescription className="text-xs">{description}</FormDescription>}
-      <FormMessage className="text-xs" />
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
+    </div>
+  </FormItem>
+);
+
+export const TextareaField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  placeholder,
+  value,
+  onChange,
+  rows,
+  labelPosition = 'side',
+  size = 'sm',
+  className,
+}) => (
+  <FormItem className={itemClasses(labelPosition, className)}>
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    <div className={inputWrapper(labelPosition)}>
+      <FormControl>
+        <Textarea
+          className={size === 'sm' ? 'text-sm' : undefined}
+          rows={rows}
+          placeholder={placeholder}
+          value={value ?? ''}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+      </FormControl>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
     </div>
   </FormItem>
 );
@@ -104,14 +154,15 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   onChange,
   placeholder = 'Select type',
   labelPosition = 'side',
+  size = 'sm',
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, className)}>
-    {label && <FormLabel className="text-xs">{label}</FormLabel>}
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition)}>
       <Select value={value ?? ''} onValueChange={onChange}>
         <FormControl>
-          <SelectTrigger className="h-8">
+          <SelectTrigger className={SIZE[size].select}>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
         </FormControl>
@@ -123,8 +174,10 @@ export const SelectField: React.FC<BaseFieldProps> = ({
           ))}
         </SelectContent>
       </Select>
-      {description && <FormDescription className="text-xs">{description}</FormDescription>}
-      <FormMessage className="text-xs" />
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
     </div>
   </FormItem>
 );
@@ -135,13 +188,16 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   value,
   onChange,
   labelPosition = 'side',
+  size = 'sm',
 }) => {
   if (labelPosition === 'side') {
     return (
       <FormItem className="flex items-center justify-between rounded-md border p-2">
         <div>
-          {label && <FormLabel className="text-xs">{label}</FormLabel>}
-          {description && <FormDescription className="text-xs">{description}</FormDescription>}
+          {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+          {description && (
+            <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+          )}
         </div>
         <FormControl>
           <Switch checked={!!value} onCheckedChange={onChange} />
@@ -151,12 +207,16 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   return (
     <FormItem className="space-y-2">
-      {label && <FormLabel className="text-xs">{label}</FormLabel>}
+      {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
       <div className="flex items-center justify-between rounded-md border p-2">
         <FormControl>
           <Switch checked={!!value} onCheckedChange={onChange} />
         </FormControl>
-        {description && <FormDescription className="ml-2 text-xs">{description}</FormDescription>}
+        {description && (
+          <FormDescription className={cn('ml-2', SIZE[size].desc)}>
+            {description}
+          </FormDescription>
+        )}
       </div>
     </FormItem>
   );
@@ -170,10 +230,11 @@ export const ColorField: React.FC<BaseFieldProps> = ({
   presetColors,
   defaultValue,
   labelPosition = 'side',
+  size = 'sm',
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, className)}>
-    {label && <FormLabel className="text-xs">{label}</FormLabel>}
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition)}>
       <FormControl>
         <ColorSwatches
@@ -183,8 +244,10 @@ export const ColorField: React.FC<BaseFieldProps> = ({
           defaultValue={defaultValue}
         />
       </FormControl>
-      {description && <FormDescription className="text-xs">{description}</FormDescription>}
-      <FormMessage className="text-xs" />
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
     </div>
   </FormItem>
 );
@@ -198,10 +261,11 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   max,
   step,
   labelPosition = 'side',
+  size = 'sm',
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, className)}>
-    {label && <FormLabel className="text-xs">{label}</FormLabel>}
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition)}>
       <FormControl>
         <SliderNumber
@@ -212,8 +276,10 @@ export const NumberField: React.FC<BaseFieldProps> = ({
           step={step}
         />
       </FormControl>
-      {description && <FormDescription className="text-xs">{description}</FormDescription>}
-      <FormMessage className="text-xs" />
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
     </div>
   </FormItem>
 );
@@ -224,22 +290,26 @@ export const IconField: React.FC<BaseFieldProps> = ({
   value,
   onChange,
   labelPosition = 'side',
+  size = 'sm',
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, className)}>
-    {label && <FormLabel className="text-xs">{label}</FormLabel>}
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition)}>
       <FormControl>
         <IconInput value={value} onChange={onChange} />
       </FormControl>
-      {description && <FormDescription className="text-xs">{description}</FormDescription>}
-      <FormMessage className="text-xs" />
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
     </div>
   </FormItem>
 );
 
 export const Field = {
   Input: InputField,
+  Textarea: TextareaField,
   Boolean: BooleanField,
   Color: ColorField,
   Number: NumberField,
@@ -269,7 +339,8 @@ function renderField(
   parentName: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any,
-  labelPosition: LabelPosition
+  labelPosition: LabelPosition,
+  size: FieldSize
 ) {
   return (
     <FormFieldBase
@@ -287,7 +358,9 @@ function renderField(
           step: field.step,
           presetColors: field.presetColors,
           defaultValue: field.defaultValue,
+          rows: field.rows,
           labelPosition,
+          size,
           value: rhf.value,
           onChange: rhf.onChange,
         };
@@ -302,6 +375,13 @@ function renderField(
             return <SelectField {...common} />;
           case 'icon':
             return <IconField {...common} />;
+          case 'textarea':
+            return (
+              <TextareaField
+                {...common}
+                placeholder={field.placeholder ?? `Enter ${field.name}`}
+              />
+            );
           case 'text':
           default:
             return (
@@ -322,14 +402,15 @@ function renderRows(
   parentName: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any,
-  labelPosition: LabelPosition
+  labelPosition: LabelPosition,
+  size: FieldSize
 ) {
   if (!rowConfig || rowConfig.length === 0) {
     return (
       <div className="grid gap-4">
         {chunk(fields, 2).map((row, i) => (
           <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {row.map((f) => renderField(f, parentName, control, labelPosition))}
+            {row.map((f) => renderField(f, parentName, control, labelPosition, size))}
           </div>
         ))}
       </div>
@@ -350,7 +431,7 @@ function renderRows(
             key={`${row.id}-${idx}`}
             className="grid grid-cols-1 gap-4 md:grid-cols-2"
           >
-            {cnk.map((f) => renderField(f, parentName, control, labelPosition))}
+            {cnk.map((f) => renderField(f, parentName, control, labelPosition, size))}
           </div>
         ));
       })}
@@ -358,7 +439,7 @@ function renderRows(
         <div className="grid gap-4">
           {chunk(unassigned, 2).map((row, i) => (
             <div key={`u-${i}`} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {row.map((f) => renderField(f, parentName, control, labelPosition))}
+              {row.map((f) => renderField(f, parentName, control, labelPosition, size))}
             </div>
           ))}
         </div>
@@ -373,6 +454,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   fields,
   rowConfig,
   labelPosition = 'side',
+  size = 'sm',
 }) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
@@ -388,7 +470,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
     <div className="space-y-6">
       {ungrouped.length > 0 && (
         <div className="space-y-4">
-          {renderRows(ungrouped, rowConfig, name, control, labelPosition)}
+          {renderRows(ungrouped, rowConfig, name, control, labelPosition, size)}
         </div>
       )}
 
@@ -405,7 +487,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
               </AccordionTrigger>
               <AccordionContent className="px-3 pb-3">
                 <div className="space-y-4">
-                  {renderRows(gFields, rowConfig, name, control, labelPosition)}
+                  {renderRows(gFields, rowConfig, name, control, labelPosition, size)}
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -423,6 +505,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
 interface FormFieldExtensions {
   ObjectField: typeof ObjectField;
   Input: typeof InputField;
+  Textarea: typeof TextareaField;
   Boolean: typeof BooleanField;
   Color: typeof ColorField;
   Number: typeof NumberField;
@@ -435,6 +518,7 @@ type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
 export const FormField = Object.assign(FormFieldBase, {
   ObjectField,
   Input: InputField,
+  Textarea: TextareaField,
   Boolean: BooleanField,
   Color: ColorField,
   Number: NumberField,
@@ -447,6 +531,8 @@ export { ObjectField };
 
 export type {
   FieldConfig,
+  FieldSize,
+  FieldType,
   RowConfig,
   LabelPosition,
   ObjectFieldProps,

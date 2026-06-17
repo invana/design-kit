@@ -3,6 +3,7 @@ export {
   Field,
   ObjectField,
   InputField,
+  TextareaField,
   SelectField,
   BooleanField,
   ColorField,
@@ -12,6 +13,7 @@ export {
 
 export type {
   FieldConfig,
+  FieldSize,
   RowConfig,
   LabelPosition,
   ObjectFieldProps,
