@@ -41,6 +41,20 @@ export type FieldConfig = {
   defaultValue?: string;
   /** Number of visible rows for `textarea` fields. */
   rows?: number;
+  /**
+   * How many grid columns the field spans on `md+` screens. Defaults to `1`.
+   * The grid is two columns by default (see `ObjectField`'s `columns`), so
+   * `colSpan: 2` makes a full-width field (textarea, long URI, …). A span
+   * larger than the column count simply fills the row. Ignored below `md`,
+   * where every field stacks full width.
+   */
+  colSpan?: number;
+  /**
+   * Extra classes merged onto the field's grid cell. Escape hatch for
+   * per-field layout/spacing tweaks (custom width, ordering, margins, …)
+   * without adding a dedicated prop for every case.
+   */
+  className?: string;
 };
 
 export type RowConfig = {
@@ -57,4 +71,10 @@ export interface ObjectFieldProps {
   labelPosition?: LabelPosition;
   /** Field density. Defaults to `sm` (compact) for backward compatibility. */
   size?: FieldSize;
+  /**
+   * Number of columns in the field grid on `md+` screens. Defaults to `2`.
+   * Increase it to build wider layouts that fields can span via `colSpan`.
+   * Below `md` the grid always collapses to a single column.
+   */
+  columns?: number;
 }

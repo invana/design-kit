@@ -359,12 +359,6 @@ function humanize(name: string): string {
     .trim();
 }
 
-function chunk<T>(arr: T[], size: number): T[][] {
-  const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-}
-
 function renderField(
   field: FieldConfig,
   parentName: string,
@@ -434,6 +428,65 @@ function renderField(
   );
 }
 
+/**
+ * Render a set of fields into the field grid. The grid is `columns`-wide on
+ * `md+` (two by default) and collapses to a single column below `md`. A field
+ * spans multiple columns via `colSpan` and can carry extra cell classes via
+ * `className`.
+ *
+ * `colSpan` / `columns` drive the grid through CSS variables (`--ff-span` /
+ * `--ff-cols`) read by static `md:` utilities rather than per-number Tailwind
+ * classes — so any count works without the host app having to pre-generate
+ * `col-span-N` / `grid-cols-N`. The `md:` prefix keeps spans from leaking into
+ * the single-column mobile layout, where every field is already full width.
+ */
+function renderGrid(
+  fields: FieldConfig[],
+  parentName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any,
+  labelPosition: LabelPosition,
+  size: FieldSize,
+  columns: number,
+  key?: string
+) {
+  // Default 2-col layout keeps the plain `md:grid-cols-2` utility; custom
+  // counts drive the template from `--ff-cols`.
+  const customCols = columns !== 2;
+  return (
+    <div
+      key={key}
+      className={cn(
+        'grid grid-cols-1 gap-4',
+        customCols
+          ? 'md:[grid-template-columns:repeat(var(--ff-cols),minmax(0,1fr))]'
+          : 'md:grid-cols-2'
+      )}
+      style={
+        customCols
+          ? ({ '--ff-cols': columns } as React.CSSProperties)
+          : undefined
+      }
+    >
+      {fields.map((f) => {
+        const span = f.colSpan && f.colSpan > 1 ? f.colSpan : undefined;
+        return (
+          <div
+            key={f.name}
+            className={cn(
+              span && 'md:[grid-column:span_var(--ff-span)/span_var(--ff-span)]',
+              f.className
+            )}
+            style={span ? ({ '--ff-span': span } as React.CSSProperties) : undefined}
+          >
+            {renderField(f, parentName, control, labelPosition, size)}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function renderRows(
   fields: FieldConfig[],
   rowConfig: RowConfig[] | undefined,
@@ -441,18 +494,11 @@ function renderRows(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any,
   labelPosition: LabelPosition,
-  size: FieldSize
+  size: FieldSize,
+  columns: number
 ) {
   if (!rowConfig || rowConfig.length === 0) {
-    return (
-      <div className="grid gap-4">
-        {chunk(fields, 2).map((row, i) => (
-          <div key={i} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {row.map((f) => renderField(f, parentName, control, labelPosition, size))}
-          </div>
-        ))}
-      </div>
-    );
+    return renderGrid(fields, parentName, control, labelPosition, size, columns);
   }
   const used = new Set(rowConfig.flatMap((r) => r.fields));
   const unassigned = fields.filter((f) => !used.has(f.name));
@@ -464,24 +510,27 @@ function renderRows(
         const rowFields = row.fields
           .map((n) => byName.get(n))
           .filter((f): f is FieldConfig => !!f);
-        return chunk(rowFields, 2).map((cnk, idx) => (
-          <div
-            key={`${row.id}-${idx}`}
-            className="grid grid-cols-1 gap-4 md:grid-cols-2"
-          >
-            {cnk.map((f) => renderField(f, parentName, control, labelPosition, size))}
-          </div>
-        ));
+        if (rowFields.length === 0) return null;
+        return renderGrid(
+          rowFields,
+          parentName,
+          control,
+          labelPosition,
+          size,
+          columns,
+          row.id
+        );
       })}
-      {unassigned.length > 0 && (
-        <div className="grid gap-4">
-          {chunk(unassigned, 2).map((row, i) => (
-            <div key={`u-${i}`} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {row.map((f) => renderField(f, parentName, control, labelPosition, size))}
-            </div>
-          ))}
-        </div>
-      )}
+      {unassigned.length > 0 &&
+        renderGrid(
+          unassigned,
+          parentName,
+          control,
+          labelPosition,
+          size,
+          columns,
+          '_unassigned'
+        )}
     </div>
   );
 }
@@ -493,6 +542,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   rowConfig,
   labelPosition = 'side',
   size = 'sm',
+  columns = 2,
 }) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
@@ -508,7 +558,15 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
     <div className="space-y-6">
       {ungrouped.length > 0 && (
         <div className="space-y-4">
-          {renderRows(ungrouped, rowConfig, name, control, labelPosition, size)}
+          {renderRows(
+            ungrouped,
+            rowConfig,
+            name,
+            control,
+            labelPosition,
+            size,
+            columns
+          )}
         </div>
       )}
 
@@ -525,7 +583,15 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
               </AccordionTrigger>
               <AccordionContent className="px-3 pb-3">
                 <div className="space-y-4">
-                  {renderRows(gFields, rowConfig, name, control, labelPosition, size)}
+                  {renderRows(
+                    gFields,
+                    rowConfig,
+                    name,
+                    control,
+                    labelPosition,
+                    size,
+                    columns
+                  )}
                 </div>
               </AccordionContent>
             </AccordionItem>
