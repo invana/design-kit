@@ -8,35 +8,13 @@ import {
   getThemeVariantById,
 } from "@invana/styling/themes";
 
-// The "variant" axis carries two kinds of value:
-//   • light / dark / system  — for the classic themes (Invana, Tailwind, Vite)
-//   • an accent swatch id     — for the preset themes (Dark Gold, Dark Ocean, …)
-// A single shared dropdown lists both; the decorator applies whichever combo
-// actually exists and otherwise falls back to the theme's default variant.
-const MODES = ["light", "dark", "system"];
-
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-// Accent suffixes contributed by the preset themes, e.g. "gold", "ocean", …
-const accentSuffixes = Array.from(
-  new Set(
-    themes.flatMap((t) =>
-      t.variants
-        .map((v) => (v.id.startsWith(`${t.id}-`) ? v.id.slice(t.id.length + 1) : ""))
-        .filter((s) => s && !MODES.includes(s)),
-    ),
-  ),
-);
-
+// Every theme — classic (Invana, Tailwind, Vite) and colour preset (Gold, Ocean,
+// Forest, Rose, Minimal) — varies by light / dark / system. The decorator applies
+// `<theme>-<variant>` and falls back to the theme's default variant if it's missing.
 const variantItems = [
   { value: "light", title: "Light", icon: "sun" },
   { value: "dark", title: "Dark", icon: "moon" },
   { value: "system", title: "System", icon: "circle" },
-  ...accentSuffixes.map((accent) => ({
-    value: accent,
-    title: `Accent: ${cap(accent)}`,
-    icon: "paintbrush",
-  })),
 ];
 
 const preview: Preview = {
@@ -70,7 +48,7 @@ const preview: Preview = {
       },
     },
     variant: {
-      description: "Theme variant — mode (light/dark/system) or accent swatch",
+      description: "Theme variant — mode (light/dark/system)",
       defaultValue: "system",
       toolbar: {
         title: "Variant",

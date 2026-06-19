@@ -119,11 +119,10 @@ export const useThemeControls = (
     setCurrentAccent(null);
   }, [currentTheme]);
 
-  // Get current theme variant based on theme and mode.
-  // Classic themes (Invana/Tailwind/Vite) have light/dark/system variants, so we
-  // match on mode. Preset themes (Dark Gold, …) are single-mode and their variants
-  // are accent swatches — for those, mode never matches, so fall back to the
-  // theme's first (default) variant rather than reverting to 'default-light'.
+  // Get current theme variant based on theme and mode. Every theme — classic
+  // (Invana/Tailwind/Vite) and colour preset (Gold/Ocean/Forest/Rose/Minimal) —
+  // has light/dark/system variants, so we match on mode and fall back to the
+  // theme's first (default) variant only if no mode matches.
   const currentVariant = useMemo(() => {
     const theme = themes.find((t: any) => t.id === currentTheme);
     if (!theme) return 'default-light';

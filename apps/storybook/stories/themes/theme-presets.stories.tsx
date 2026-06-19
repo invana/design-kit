@@ -22,10 +22,10 @@ const meta = {
     docs: {
       description: {
         component:
-          'Static theme presets (Dark Gold/Ocean/Forest/Rose, Light Minimal). Pick a preset ' +
-          'in the toolbar **Theme** menu and an accent swatch in the **Variant** menu — just ' +
-          'like the Invana/Tailwind/Vite themes. Colours are plain CSS in ' +
-          '`@invana/styling/themes/presets.css`.',
+          'Colour-preset themes (Gold, Ocean, Forest, Rose, Minimal). Pick a preset in the ' +
+          'toolbar **Theme** menu and a mode (Light/Dark/System) in the **Variant** menu — ' +
+          'just like the Invana/Tailwind/Vite themes. Each preset ships both a light and a ' +
+          'dark palette as plain CSS in `@invana/styling/themes/presets.css`.',
       },
     },
   },
@@ -113,10 +113,10 @@ function Showcase() {
                 Tabs, borders and inputs all derive their colour from the active preset.
               </TabsContent>
               <TabsContent value="activity" className="pt-3 text-muted-foreground">
-                Compare Dark Gold, Ocean, Forest, Rose and Light Minimal from the toolbar.
+                Compare Gold, Ocean, Forest, Rose and Minimal from the toolbar.
               </TabsContent>
               <TabsContent value="settings" className="pt-3 text-muted-foreground">
-                Each preset carries its own palette of accent swatches (the Variant menu).
+                Each preset ships a light and a dark palette — switch with the Variant menu.
               </TabsContent>
             </Tabs>
           </CardContent>

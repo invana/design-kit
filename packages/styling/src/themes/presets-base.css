@@ -4,11 +4,11 @@
  * Registers the preset design tokens in `@theme` so Tailwind generates the matching
  * utilities (`text-text-secondary`, `bg-surface`, `bg-elevated`, `text-accent-dim`,
  * `border-border-subtle`, `font-heading`, …). The DEFAULT values below are the
- * Dark Gold preset; the per-theme values are overridden by the `[data-theme]`
+ * Gold (dark) preset; the per-theme values are overridden by the `[data-theme]`
  * blocks in presets.css. Import this BEFORE presets.css.
  *
- * Note: the brand accent maps to `--color-primary` (see tokens.ts) — shadcn's
- * `--color-accent` stays the hover surface — so `.kbd` uses `--color-primary`.
+ * Note: the brand accent maps to `--color-primary` — shadcn's `--color-accent`
+ * stays the hover surface — so `.kbd` uses `--color-primary`.
  */
 
 @theme {
@@ -18,7 +18,7 @@
   --color-elevated: #1a1a1a;
   --color-panel: #141414;
 
-  /* Text (text-primary tinted toward the Dark Gold signature accent — see tokens.ts) */
+  /* Text (text-primary tinted toward the Gold signature accent) */
   --color-text-primary: #eee1d3;
   --color-text-secondary: #a39787;
   --color-text-muted: #6b5f53;
