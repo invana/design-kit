@@ -1,6 +1,6 @@
 {
   "name": "@invana/tables",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Invana Design System - Data table components",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
