@@ -1,0 +1,711 @@
+/*
+ * Theme Presets — hand-maintained.
+ *
+ * @theme registration: src/themes/presets-base.css (import that BEFORE this file).
+ *
+ * Each colour preset (Gold, Ocean, Forest, Rose, Minimal) is a named palette that
+ * varies by light/dark — two blocks per preset, keyed on `[data-theme="<id>-<mode>"]`
+ * (and the matching `.theme-<id>-<mode>` class that `applyTheme()` toggles). The
+ * `<id>-system` variant resolves to `-light`/`-dark` at runtime, so it needs no block.
+ *
+ * The signature accent lives in `--color-primary`; shadcn's `--color-accent` stays the
+ * hover surface. Light blocks use white-based glass; dark blocks use dark-based glass.
+ */
+
+html[data-theme^="gold-"],
+html[data-theme^="ocean-"],
+html[data-theme^="forest-"],
+html[data-theme^="rose-"],
+html[data-theme^="minimal-"] {
+  font-family: var(--font-sans);
+}
+
+/* ── Gold — Dark ───────────────────────────────────────────────────── */
+[data-theme="gold-dark"],
+.theme-gold-dark {
+  --color-background: #0a0a0a;
+  --background: 0 0% 4%;
+  --color-foreground: #eee1d3;
+  --foreground: 31 44% 88%;
+  --color-card: #1a1a1a;
+  --card: 0 0% 10%;
+  --color-card-foreground: #eee1d3;
+  --card-foreground: 31 44% 88%;
+  --color-popover: #141414;
+  --popover: 0 0% 8%;
+  --color-popover-foreground: #eee1d3;
+  --popover-foreground: 31 44% 88%;
+  --color-muted: #111111;
+  --muted: 0 0% 7%;
+  --color-muted-foreground: #a39787;
+  --muted-foreground: 34 13% 58%;
+  --color-secondary: #111111;
+  --secondary: 0 0% 7%;
+  --color-secondary-foreground: #eee1d3;
+  --secondary-foreground: 31 44% 88%;
+  --color-accent: #1a1a1a;
+  --accent: 0 0% 10%;
+  --color-accent-foreground: #eee1d3;
+  --accent-foreground: 31 44% 88%;
+  --color-primary: #d4a574;
+  --primary: 31 53% 64%;
+  --color-primary-foreground: #0a0a0a;
+  --primary-foreground: 0 0% 4%;
+  --color-ring: #d4a574;
+  --ring: 31 53% 64%;
+  --color-border: #4c3d2f;
+  --border: 29 24% 24%;
+  --color-input: #4c3d2f;
+  --input: 29 24% 24%;
+  --color-destructive: #e06c75;
+  --destructive: 355 65% 65%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #0a0a0a;
+  --color-surface: #111111;
+  --color-elevated: #1a1a1a;
+  --color-panel: #141414;
+  --color-text-primary: #eee1d3;
+  --color-text-secondary: #a39787;
+  --color-text-muted: #6b5f53;
+  --color-accent-dim: #c9a96e;
+  --color-accent-bright: #e8c49a;
+  --color-border-subtle: rgba(212, 165, 116, 0.12);
+  --color-border-medium: rgba(212, 165, 116, 0.25);
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(212, 165, 116, 0.1);
+  --glass-border-heavy: rgba(212, 165, 116, 0.15);
+  --scrollbar-thumb: rgba(212, 165, 116, 0.2);
+  --scrollbar-thumb-hover: rgba(212, 165, 116, 0.35);
+  --glow-accent: rgba(212, 165, 116, 0.15);
+  --glow-accent-strong: rgba(212, 165, 116, 0.4);
+  --glow-accent-pulse: rgba(212, 165, 116, 0.6);
+  --color-edge: rgba(212, 165, 116, 0.3);
+  --color-edge-dim: rgba(212, 165, 116, 0.08);
+  --color-edge-dot: rgba(212, 165, 116, 0.15);
+  --color-accent-overlay-bg: rgba(212, 165, 116, 0.05);
+  --color-accent-overlay-border: rgba(212, 165, 116, 0.25);
+  --kbd-bg: rgba(212, 165, 116, 0.1);
+}
+
+/* ── Gold — Light ──────────────────────────────────────────────────── */
+[data-theme="gold-light"],
+.theme-gold-light {
+  --color-background: #f7f3ea;
+  --background: 41 47% 94%;
+  --color-foreground: #2a2417;
+  --foreground: 42 30% 13%;
+  --color-card: #fffdf7;
+  --card: 47 80% 98%;
+  --color-card-foreground: #2a2417;
+  --card-foreground: 42 30% 13%;
+  --color-popover: #f3eee2;
+  --popover: 42 43% 92%;
+  --color-popover-foreground: #2a2417;
+  --popover-foreground: 42 30% 13%;
+  --color-muted: #ece5d6;
+  --muted: 40 33% 88%;
+  --color-muted-foreground: #756a54;
+  --muted-foreground: 40 17% 39%;
+  --color-secondary: #ece5d6;
+  --secondary: 40 33% 88%;
+  --color-secondary-foreground: #2a2417;
+  --secondary-foreground: 42 30% 13%;
+  --color-accent: #fffdf7;
+  --accent: 47 80% 98%;
+  --color-accent-foreground: #2a2417;
+  --accent-foreground: 42 30% 13%;
+  --color-primary: #a16207;
+  --primary: 41 92% 33%;
+  --color-primary-foreground: #ffffff;
+  --primary-foreground: 0 0% 100%;
+  --color-ring: #a16207;
+  --ring: 41 92% 33%;
+  --color-border: #d9cdb0;
+  --border: 41 38% 77%;
+  --color-input: #d9cdb0;
+  --input: 41 38% 77%;
+  --color-destructive: #dc2626;
+  --destructive: 0 72% 51%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #f7f3ea;
+  --color-surface: #ece5d6;
+  --color-elevated: #fffdf7;
+  --color-panel: #f3eee2;
+  --color-text-primary: #2a2417;
+  --color-text-secondary: #756a54;
+  --color-text-muted: #a89c82;
+  --color-accent-dim: #854d0e;
+  --color-accent-bright: #ca8a04;
+  --color-border-subtle: rgba(161, 98, 7, 0.1);
+  --color-border-medium: rgba(161, 98, 7, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(161, 98, 7, 0.08);
+  --glass-border-heavy: rgba(161, 98, 7, 0.12);
+  --scrollbar-thumb: rgba(161, 98, 7, 0.2);
+  --scrollbar-thumb-hover: rgba(161, 98, 7, 0.35);
+  --glow-accent: rgba(161, 98, 7, 0.15);
+  --glow-accent-strong: rgba(161, 98, 7, 0.4);
+  --glow-accent-pulse: rgba(161, 98, 7, 0.6);
+  --color-edge: rgba(161, 98, 7, 0.3);
+  --color-edge-dim: rgba(161, 98, 7, 0.08);
+  --color-edge-dot: rgba(161, 98, 7, 0.15);
+  --color-accent-overlay-bg: rgba(161, 98, 7, 0.05);
+  --color-accent-overlay-border: rgba(161, 98, 7, 0.25);
+  --kbd-bg: rgba(161, 98, 7, 0.1);
+}
+
+/* ── Ocean — Dark ──────────────────────────────────────────────────── */
+[data-theme="ocean-dark"],
+.theme-ocean-dark {
+  --color-background: #0a0e14;
+  --background: 216 33% 6%;
+  --color-foreground: #ccdeeb;
+  --foreground: 205 44% 86%;
+  --color-card: #1a222c;
+  --card: 213 26% 14%;
+  --color-card-foreground: #ccdeeb;
+  --card-foreground: 205 44% 86%;
+  --color-popover: #141c24;
+  --popover: 210 29% 11%;
+  --color-popover-foreground: #ccdeeb;
+  --popover-foreground: 205 44% 86%;
+  --color-muted: #111820;
+  --muted: 212 31% 10%;
+  --color-muted-foreground: #87939f;
+  --muted-foreground: 210 11% 58%;
+  --color-secondary: #111820;
+  --secondary: 212 31% 10%;
+  --color-secondary-foreground: #ccdeeb;
+  --secondary-foreground: 205 44% 86%;
+  --color-accent: #1a222c;
+  --accent: 213 26% 14%;
+  --color-accent-foreground: #ccdeeb;
+  --accent-foreground: 205 44% 86%;
+  --color-primary: #5ba4cf;
+  --primary: 202 55% 58%;
+  --color-primary-foreground: #0a0a0a;
+  --primary-foreground: 0 0% 4%;
+  --color-ring: #5ba4cf;
+  --ring: 202 55% 58%;
+  --color-border: #274255;
+  --border: 205 37% 24%;
+  --color-input: #274255;
+  --input: 205 37% 24%;
+  --color-destructive: #e06c75;
+  --destructive: 355 65% 65%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #0a0e14;
+  --color-surface: #111820;
+  --color-elevated: #1a222c;
+  --color-panel: #141c24;
+  --color-text-primary: #ccdeeb;
+  --color-text-secondary: #87939f;
+  --color-text-muted: #536b7a;
+  --color-accent-dim: #4e93ba;
+  --color-accent-bright: #7abce0;
+  --color-border-subtle: rgba(91, 164, 207, 0.12);
+  --color-border-medium: rgba(91, 164, 207, 0.25);
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(91, 164, 207, 0.1);
+  --glass-border-heavy: rgba(91, 164, 207, 0.15);
+  --scrollbar-thumb: rgba(91, 164, 207, 0.2);
+  --scrollbar-thumb-hover: rgba(91, 164, 207, 0.35);
+  --glow-accent: rgba(91, 164, 207, 0.15);
+  --glow-accent-strong: rgba(91, 164, 207, 0.4);
+  --glow-accent-pulse: rgba(91, 164, 207, 0.6);
+  --color-edge: rgba(91, 164, 207, 0.3);
+  --color-edge-dim: rgba(91, 164, 207, 0.08);
+  --color-edge-dot: rgba(91, 164, 207, 0.15);
+  --color-accent-overlay-bg: rgba(91, 164, 207, 0.05);
+  --color-accent-overlay-border: rgba(91, 164, 207, 0.25);
+  --kbd-bg: rgba(91, 164, 207, 0.1);
+}
+
+/* ── Ocean — Light ─────────────────────────────────────────────────── */
+[data-theme="ocean-light"],
+.theme-ocean-light {
+  --color-background: #eef2f6;
+  --background: 210 29% 95%;
+  --color-foreground: #1a2733;
+  --foreground: 209 33% 15%;
+  --color-card: #ffffff;
+  --card: 0 0% 100%;
+  --color-card-foreground: #1a2733;
+  --card-foreground: 209 33% 15%;
+  --color-popover: #e7edf3;
+  --popover: 210 33% 93%;
+  --color-popover-foreground: #1a2733;
+  --popover-foreground: 209 33% 15%;
+  --color-muted: #dfe7ee;
+  --muted: 211 33% 90%;
+  --color-muted-foreground: #5d6b78;
+  --muted-foreground: 209 13% 42%;
+  --color-secondary: #dfe7ee;
+  --secondary: 211 33% 90%;
+  --color-secondary-foreground: #1a2733;
+  --secondary-foreground: 209 33% 15%;
+  --color-accent: #ffffff;
+  --accent: 0 0% 100%;
+  --color-accent-foreground: #1a2733;
+  --accent-foreground: 209 33% 15%;
+  --color-primary: #0c6ea0;
+  --primary: 201 86% 34%;
+  --color-primary-foreground: #ffffff;
+  --primary-foreground: 0 0% 100%;
+  --color-ring: #0c6ea0;
+  --ring: 201 86% 34%;
+  --color-border: #b9c8d6;
+  --border: 210 30% 78%;
+  --color-input: #b9c8d6;
+  --input: 210 30% 78%;
+  --color-destructive: #dc2626;
+  --destructive: 0 72% 51%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #eef2f6;
+  --color-surface: #dfe7ee;
+  --color-elevated: #ffffff;
+  --color-panel: #e7edf3;
+  --color-text-primary: #1a2733;
+  --color-text-secondary: #5d6b78;
+  --color-text-muted: #95a3b0;
+  --color-accent-dim: #075581;
+  --color-accent-bright: #1490c8;
+  --color-border-subtle: rgba(12, 110, 160, 0.1);
+  --color-border-medium: rgba(12, 110, 160, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(12, 110, 160, 0.08);
+  --glass-border-heavy: rgba(12, 110, 160, 0.12);
+  --scrollbar-thumb: rgba(12, 110, 160, 0.2);
+  --scrollbar-thumb-hover: rgba(12, 110, 160, 0.35);
+  --glow-accent: rgba(12, 110, 160, 0.15);
+  --glow-accent-strong: rgba(12, 110, 160, 0.4);
+  --glow-accent-pulse: rgba(12, 110, 160, 0.6);
+  --color-edge: rgba(12, 110, 160, 0.3);
+  --color-edge-dim: rgba(12, 110, 160, 0.08);
+  --color-edge-dot: rgba(12, 110, 160, 0.15);
+  --color-accent-overlay-bg: rgba(12, 110, 160, 0.05);
+  --color-accent-overlay-border: rgba(12, 110, 160, 0.25);
+  --kbd-bg: rgba(12, 110, 160, 0.1);
+}
+
+/* ── Forest — Dark ─────────────────────────────────────────────────── */
+[data-theme="forest-dark"],
+.theme-forest-dark {
+  --color-background: #0a100a;
+  --background: 120 23% 5%;
+  --color-foreground: #cfe1d4;
+  --foreground: 137 23% 85%;
+  --color-card: #1a241a;
+  --card: 120 16% 12%;
+  --color-card-foreground: #cfe1d4;
+  --card-foreground: 137 23% 85%;
+  --color-popover: #141c14;
+  --popover: 120 17% 9%;
+  --color-popover-foreground: #cfe1d4;
+  --popover-foreground: 137 23% 85%;
+  --color-muted: #111811;
+  --muted: 120 17% 8%;
+  --color-muted-foreground: #87a38f;
+  --muted-foreground: 137 13% 58%;
+  --color-secondary: #111811;
+  --secondary: 120 17% 8%;
+  --color-secondary-foreground: #cfe1d4;
+  --secondary-foreground: 137 23% 85%;
+  --color-accent: #1a241a;
+  --accent: 120 16% 12%;
+  --color-accent-foreground: #cfe1d4;
+  --accent-foreground: 137 23% 85%;
+  --color-primary: #5ea67a;
+  --primary: 143 29% 51%;
+  --color-primary-foreground: #0a0a0a;
+  --primary-foreground: 0 0% 4%;
+  --color-ring: #5ea67a;
+  --ring: 143 29% 51%;
+  --color-border: #284331;
+  --border: 140 25% 21%;
+  --color-input: #284331;
+  --input: 140 25% 21%;
+  --color-destructive: #e06c75;
+  --destructive: 355 65% 65%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #0a100a;
+  --color-surface: #111811;
+  --color-elevated: #1a241a;
+  --color-panel: #141c14;
+  --color-text-primary: #cfe1d4;
+  --color-text-secondary: #87a38f;
+  --color-text-muted: #536b5a;
+  --color-accent-dim: #4e9468;
+  --color-accent-bright: #78c492;
+  --color-border-subtle: rgba(94, 166, 122, 0.12);
+  --color-border-medium: rgba(94, 166, 122, 0.25);
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(94, 166, 122, 0.1);
+  --glass-border-heavy: rgba(94, 166, 122, 0.15);
+  --scrollbar-thumb: rgba(94, 166, 122, 0.2);
+  --scrollbar-thumb-hover: rgba(94, 166, 122, 0.35);
+  --glow-accent: rgba(94, 166, 122, 0.15);
+  --glow-accent-strong: rgba(94, 166, 122, 0.4);
+  --glow-accent-pulse: rgba(94, 166, 122, 0.6);
+  --color-edge: rgba(94, 166, 122, 0.3);
+  --color-edge-dim: rgba(94, 166, 122, 0.08);
+  --color-edge-dot: rgba(94, 166, 122, 0.15);
+  --color-accent-overlay-bg: rgba(94, 166, 122, 0.05);
+  --color-accent-overlay-border: rgba(94, 166, 122, 0.25);
+  --kbd-bg: rgba(94, 166, 122, 0.1);
+}
+
+/* ── Forest — Light ────────────────────────────────────────────────── */
+[data-theme="forest-light"],
+.theme-forest-light {
+  --color-background: #eef3ee;
+  --background: 120 16% 94%;
+  --color-foreground: #1f2a22;
+  --foreground: 133 16% 14%;
+  --color-card: #ffffff;
+  --card: 0 0% 100%;
+  --color-card-foreground: #1f2a22;
+  --card-foreground: 133 16% 14%;
+  --color-popover: #e7efe8;
+  --popover: 128 19% 92%;
+  --color-popover-foreground: #1f2a22;
+  --popover-foreground: 133 16% 14%;
+  --color-muted: #dfe9e1;
+  --muted: 129 17% 89%;
+  --color-muted-foreground: #5f6f63;
+  --muted-foreground: 140 8% 40%;
+  --color-secondary: #dfe9e1;
+  --secondary: 129 17% 89%;
+  --color-secondary-foreground: #1f2a22;
+  --secondary-foreground: 133 16% 14%;
+  --color-accent: #ffffff;
+  --accent: 0 0% 100%;
+  --color-accent-foreground: #1f2a22;
+  --accent-foreground: 133 16% 14%;
+  --color-primary: #2f8559;
+  --primary: 152 48% 35%;
+  --color-primary-foreground: #ffffff;
+  --primary-foreground: 0 0% 100%;
+  --color-ring: #2f8559;
+  --ring: 152 48% 35%;
+  --color-border: #bcd2c3;
+  --border: 137 24% 78%;
+  --color-input: #bcd2c3;
+  --input: 137 24% 78%;
+  --color-destructive: #dc2626;
+  --destructive: 0 72% 51%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #eef3ee;
+  --color-surface: #dfe9e1;
+  --color-elevated: #ffffff;
+  --color-panel: #e7efe8;
+  --color-text-primary: #1f2a22;
+  --color-text-secondary: #5f6f63;
+  --color-text-muted: #93a397;
+  --color-accent-dim: #20653f;
+  --color-accent-bright: #36a06b;
+  --color-border-subtle: rgba(47, 133, 89, 0.1);
+  --color-border-medium: rgba(47, 133, 89, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(47, 133, 89, 0.08);
+  --glass-border-heavy: rgba(47, 133, 89, 0.12);
+  --scrollbar-thumb: rgba(47, 133, 89, 0.2);
+  --scrollbar-thumb-hover: rgba(47, 133, 89, 0.35);
+  --glow-accent: rgba(47, 133, 89, 0.15);
+  --glow-accent-strong: rgba(47, 133, 89, 0.4);
+  --glow-accent-pulse: rgba(47, 133, 89, 0.6);
+  --color-edge: rgba(47, 133, 89, 0.3);
+  --color-edge-dim: rgba(47, 133, 89, 0.08);
+  --color-edge-dot: rgba(47, 133, 89, 0.15);
+  --color-accent-overlay-bg: rgba(47, 133, 89, 0.05);
+  --color-accent-overlay-border: rgba(47, 133, 89, 0.25);
+  --kbd-bg: rgba(47, 133, 89, 0.1);
+}
+
+/* ── Rose — Dark ───────────────────────────────────────────────────── */
+[data-theme="rose-dark"],
+.theme-rose-dark {
+  --color-background: #100a0a;
+  --background: 0 23% 5%;
+  --color-foreground: #ebd2d7;
+  --foreground: 348 38% 87%;
+  --color-card: #221a1a;
+  --card: 0 13% 12%;
+  --color-card-foreground: #ebd2d7;
+  --card-foreground: 348 38% 87%;
+  --color-popover: #1c1414;
+  --popover: 0 17% 9%;
+  --color-popover-foreground: #ebd2d7;
+  --popover-foreground: 348 38% 87%;
+  --color-muted: #181111;
+  --muted: 0 17% 8%;
+  --color-muted-foreground: #9f8790;
+  --muted-foreground: 338 11% 58%;
+  --color-secondary: #181111;
+  --secondary: 0 17% 8%;
+  --color-secondary-foreground: #ebd2d7;
+  --secondary-foreground: 348 38% 87%;
+  --color-accent: #221a1a;
+  --accent: 0 13% 12%;
+  --color-accent-foreground: #ebd2d7;
+  --accent-foreground: 348 38% 87%;
+  --color-primary: #cf7a8a;
+  --primary: 349 47% 65%;
+  --color-primary-foreground: #0a0a0a;
+  --primary-foreground: 0 0% 4%;
+  --color-ring: #cf7a8a;
+  --ring: 349 47% 65%;
+  --color-border: #4f3135;
+  --border: 352 23% 25%;
+  --color-input: #4f3135;
+  --input: 352 23% 25%;
+  --color-destructive: #e06c75;
+  --destructive: 355 65% 65%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #100a0a;
+  --color-surface: #181111;
+  --color-elevated: #221a1a;
+  --color-panel: #1c1414;
+  --color-text-primary: #ebd2d7;
+  --color-text-secondary: #9f8790;
+  --color-text-muted: #6b535a;
+  --color-accent-dim: #b96e7e;
+  --color-accent-bright: #e094a4;
+  --color-border-subtle: rgba(207, 122, 138, 0.12);
+  --color-border-medium: rgba(207, 122, 138, 0.25);
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(207, 122, 138, 0.1);
+  --glass-border-heavy: rgba(207, 122, 138, 0.15);
+  --scrollbar-thumb: rgba(207, 122, 138, 0.2);
+  --scrollbar-thumb-hover: rgba(207, 122, 138, 0.35);
+  --glow-accent: rgba(207, 122, 138, 0.15);
+  --glow-accent-strong: rgba(207, 122, 138, 0.4);
+  --glow-accent-pulse: rgba(207, 122, 138, 0.6);
+  --color-edge: rgba(207, 122, 138, 0.3);
+  --color-edge-dim: rgba(207, 122, 138, 0.08);
+  --color-edge-dot: rgba(207, 122, 138, 0.15);
+  --color-accent-overlay-bg: rgba(207, 122, 138, 0.05);
+  --color-accent-overlay-border: rgba(207, 122, 138, 0.25);
+  --kbd-bg: rgba(207, 122, 138, 0.1);
+}
+
+/* ── Rose — Light ──────────────────────────────────────────────────── */
+[data-theme="rose-light"],
+.theme-rose-light {
+  --color-background: #f9f0f1;
+  --background: 353 39% 96%;
+  --color-foreground: #332227;
+  --foreground: 337 21% 17%;
+  --color-card: #ffffff;
+  --card: 0 0% 100%;
+  --color-card-foreground: #332227;
+  --card-foreground: 337 21% 17%;
+  --color-popover: #f4e7e9;
+  --popover: 351 35% 93%;
+  --color-popover-foreground: #332227;
+  --popover-foreground: 337 21% 17%;
+  --color-muted: #efe0e2;
+  --muted: 353 30% 91%;
+  --color-muted-foreground: #7a6469;
+  --muted-foreground: 343 10% 43%;
+  --color-secondary: #efe0e2;
+  --secondary: 353 30% 91%;
+  --color-secondary-foreground: #332227;
+  --secondary-foreground: 337 21% 17%;
+  --color-accent: #ffffff;
+  --accent: 0 0% 100%;
+  --color-accent-foreground: #332227;
+  --accent-foreground: 337 21% 17%;
+  --color-primary: #b3475d;
+  --primary: 347 43% 49%;
+  --color-primary-foreground: #ffffff;
+  --primary-foreground: 0 0% 100%;
+  --color-ring: #b3475d;
+  --ring: 347 43% 49%;
+  --color-border: #e0c3c9;
+  --border: 349 35% 82%;
+  --color-input: #e0c3c9;
+  --input: 349 35% 82%;
+  --color-destructive: #dc2626;
+  --destructive: 0 72% 51%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #f9f0f1;
+  --color-surface: #efe0e2;
+  --color-elevated: #ffffff;
+  --color-panel: #f4e7e9;
+  --color-text-primary: #332227;
+  --color-text-secondary: #7a6469;
+  --color-text-muted: #b1969c;
+  --color-accent-dim: #93384b;
+  --color-accent-bright: #cc5870;
+  --color-border-subtle: rgba(179, 71, 93, 0.1);
+  --color-border-medium: rgba(179, 71, 93, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(179, 71, 93, 0.08);
+  --glass-border-heavy: rgba(179, 71, 93, 0.12);
+  --scrollbar-thumb: rgba(179, 71, 93, 0.2);
+  --scrollbar-thumb-hover: rgba(179, 71, 93, 0.35);
+  --glow-accent: rgba(179, 71, 93, 0.15);
+  --glow-accent-strong: rgba(179, 71, 93, 0.4);
+  --glow-accent-pulse: rgba(179, 71, 93, 0.6);
+  --color-edge: rgba(179, 71, 93, 0.3);
+  --color-edge-dim: rgba(179, 71, 93, 0.08);
+  --color-edge-dot: rgba(179, 71, 93, 0.15);
+  --color-accent-overlay-bg: rgba(179, 71, 93, 0.05);
+  --color-accent-overlay-border: rgba(179, 71, 93, 0.25);
+  --kbd-bg: rgba(179, 71, 93, 0.1);
+}
+
+/* ── Minimal — Dark ────────────────────────────────────────────────── */
+[data-theme="minimal-dark"],
+.theme-minimal-dark {
+  --color-background: #0e1014;
+  --background: 220 17% 6%;
+  --color-foreground: #d7dce4;
+  --foreground: 218 18% 87%;
+  --color-card: #1a1d23;
+  --card: 222 13% 12%;
+  --color-card-foreground: #d7dce4;
+  --card-foreground: 218 18% 87%;
+  --color-popover: #15171c;
+  --popover: 222 15% 10%;
+  --color-popover-foreground: #d7dce4;
+  --popover-foreground: 218 18% 87%;
+  --color-muted: #16181d;
+  --muted: 222 13% 10%;
+  --color-muted-foreground: #8b919c;
+  --muted-foreground: 220 8% 58%;
+  --color-secondary: #16181d;
+  --secondary: 222 13% 10%;
+  --color-secondary-foreground: #d7dce4;
+  --secondary-foreground: 218 18% 87%;
+  --color-accent: #1a1d23;
+  --accent: 222 13% 12%;
+  --color-accent-foreground: #d7dce4;
+  --accent-foreground: 218 18% 87%;
+  --color-primary: #7e9ad4;
+  --primary: 218 50% 66%;
+  --color-primary-foreground: #0a0a0a;
+  --primary-foreground: 0 0% 4%;
+  --color-ring: #7e9ad4;
+  --ring: 218 50% 66%;
+  --color-border: #343a45;
+  --border: 220 14% 24%;
+  --color-input: #343a45;
+  --input: 220 14% 24%;
+  --color-destructive: #e06c75;
+  --destructive: 355 65% 65%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #0e1014;
+  --color-surface: #16181d;
+  --color-elevated: #1a1d23;
+  --color-panel: #15171c;
+  --color-text-primary: #d7dce4;
+  --color-text-secondary: #8b919c;
+  --color-text-muted: #565d68;
+  --color-accent-dim: #6986c7;
+  --color-accent-bright: #97b0e0;
+  --color-border-subtle: rgba(126, 154, 212, 0.12);
+  --color-border-medium: rgba(126, 154, 212, 0.25);
+  --glass-bg: rgba(20, 20, 20, 0.8);
+  --glass-bg-heavy: rgba(20, 20, 20, 0.95);
+  --glass-border: rgba(126, 154, 212, 0.1);
+  --glass-border-heavy: rgba(126, 154, 212, 0.15);
+  --scrollbar-thumb: rgba(126, 154, 212, 0.2);
+  --scrollbar-thumb-hover: rgba(126, 154, 212, 0.35);
+  --glow-accent: rgba(126, 154, 212, 0.15);
+  --glow-accent-strong: rgba(126, 154, 212, 0.4);
+  --glow-accent-pulse: rgba(126, 154, 212, 0.6);
+  --color-edge: rgba(126, 154, 212, 0.3);
+  --color-edge-dim: rgba(126, 154, 212, 0.08);
+  --color-edge-dot: rgba(126, 154, 212, 0.15);
+  --color-accent-overlay-bg: rgba(126, 154, 212, 0.05);
+  --color-accent-overlay-border: rgba(126, 154, 212, 0.25);
+  --kbd-bg: rgba(126, 154, 212, 0.1);
+}
+
+/* ── Minimal — Light ───────────────────────────────────────────────── */
+[data-theme="minimal-light"],
+.theme-minimal-light {
+  --color-background: #f5f3f0;
+  --background: 36 20% 95%;
+  --color-foreground: #242b36;
+  --foreground: 217 20% 18%;
+  --color-card: #ffffff;
+  --card: 0 0% 100%;
+  --color-card-foreground: #242b36;
+  --card-foreground: 217 20% 18%;
+  --color-popover: #f0ede9;
+  --popover: 34 19% 93%;
+  --color-popover-foreground: #242b36;
+  --popover-foreground: 217 20% 18%;
+  --color-muted: #eae7e3;
+  --muted: 34 14% 90%;
+  --color-muted-foreground: #6b6b6b;
+  --muted-foreground: 0 0% 42%;
+  --color-secondary: #eae7e3;
+  --secondary: 34 14% 90%;
+  --color-secondary-foreground: #242b36;
+  --secondary-foreground: 217 20% 18%;
+  --color-accent: #ffffff;
+  --accent: 0 0% 100%;
+  --color-accent-foreground: #242b36;
+  --accent-foreground: 217 20% 18%;
+  --color-primary: #4a6fa5;
+  --primary: 216 38% 47%;
+  --color-primary-foreground: #ffffff;
+  --primary-foreground: 0 0% 100%;
+  --color-ring: #4a6fa5;
+  --ring: 216 38% 47%;
+  --color-border: #bac3d0;
+  --border: 215 19% 77%;
+  --color-input: #bac3d0;
+  --input: 215 19% 77%;
+  --color-destructive: #dc2626;
+  --destructive: 0 72% 51%;
+  --color-destructive-foreground: #ffffff;
+  --destructive-foreground: 0 0% 100%;
+  --color-root: #f5f3f0;
+  --color-surface: #eae7e3;
+  --color-elevated: #ffffff;
+  --color-panel: #f0ede9;
+  --color-text-primary: #242b36;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #a0a0a0;
+  --color-accent-dim: #3d5f8f;
+  --color-accent-bright: #6088bf;
+  --color-border-subtle: rgba(74, 111, 165, 0.1);
+  --color-border-medium: rgba(74, 111, 165, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(74, 111, 165, 0.08);
+  --glass-border-heavy: rgba(74, 111, 165, 0.12);
+  --scrollbar-thumb: rgba(74, 111, 165, 0.2);
+  --scrollbar-thumb-hover: rgba(74, 111, 165, 0.35);
+  --glow-accent: rgba(74, 111, 165, 0.15);
+  --glow-accent-strong: rgba(74, 111, 165, 0.4);
+  --glow-accent-pulse: rgba(74, 111, 165, 0.6);
+  --color-edge: rgba(74, 111, 165, 0.3);
+  --color-edge-dim: rgba(74, 111, 165, 0.08);
+  --color-edge-dot: rgba(74, 111, 165, 0.15);
+  --color-accent-overlay-bg: rgba(74, 111, 165, 0.05);
+  --color-accent-overlay-border: rgba(74, 111, 165, 0.25);
+  --kbd-bg: rgba(74, 111, 165, 0.1);
+}

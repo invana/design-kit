@@ -1,0 +1,107 @@
+/**
+ * Vite Theme
+ * Inspired by vite.dev design
+ * Based on research from https://github.com/vitejs/vite
+ * 
+ * Key colors from Vite website:
+ * - Brand primary: #646cff (indigo/violet)
+ * - Brand hover: #535bf2
+ * - Brand lighter: #747bff, #9499ff
+ * - Link color: #646cff (dark mode), #747bff (light mode hover)
+ * - Button gradient: radial-gradient with #bd34fe (purple) and #41d1ff (cyan)
+ * - Background dark: #242424
+ * - Glow effects: purple #bd34fe, cyan #41d1ff
+ */
+
+/* Light mode - Vite theme */
+[data-theme="vite-light"],
+.theme-vite-light {
+  /* Raw HSL values for opacity modifiers */
+  --background: 0 0% 100%;
+  --foreground: 213 27% 27%; /* #213547 - Vite's light mode text */
+  --muted: 240 5% 96%;
+  --muted-foreground: 0 0% 53%; /* #888 - .read-the-docs color */
+  --accent: 235 85% 70%; /* #646cff - Vite brand */
+  --accent-foreground: 0 0% 100%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 213 27% 27%;
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --card: 0 0% 100%;
+  --card-foreground: 213 27% 27%;
+  --primary: 235 85% 70%; /* #646cff - Vite brand */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 235 50% 95%;
+  --secondary-foreground: 235 85% 47%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 235 85% 70%;
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(213 27% 27%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(213 27% 27%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(213 27% 27%);
+  --color-primary: hsl(235 85% 70%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(235 50% 95%);
+  --color-secondary-foreground: hsl(235 85% 47%);
+  --color-muted: hsl(240 5% 96%);
+  --color-muted-foreground: hsl(0 0% 53%);
+  --color-accent: hsl(235 85% 70%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(240 6% 90%);
+  --color-input: hsl(240 6% 90%);
+  --color-ring: hsl(235 85% 70%);
+}
+
+/* Dark mode - Vite theme */
+[data-theme="vite-dark"],
+.theme-vite-dark {
+  /* Raw HSL values for opacity modifiers */
+  /* Background: #242424 */
+  --background: 0 0% 14%;
+  --foreground: 0 0% 100%; /* white text with 87% opacity visually */
+  --muted: 0 0% 20%; /* #1a1a1a - button bg */
+  --muted-foreground: 0 0% 53%; /* #888 */
+  --accent: 235 85% 70%; /* #646cff */
+  --accent-foreground: 0 0% 100%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 100%;
+  --border: 235 85% 70%; /* button hover border: #646cff */
+  --input: 0 0% 20%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 100%;
+  --primary: 235 85% 70%; /* #646cff - Vite brand */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 20%;
+  --secondary-foreground: 0 0% 100%;
+  --destructive: 0 63% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 235 85% 70%;
+
+  /* Full HSL colors for direct use */
+  --color-background: hsl(0 0% 14%);
+  --color-foreground: hsl(0 0% 100%);
+  --color-card: hsl(0 0% 10%);
+  --color-card-foreground: hsl(0 0% 100%);
+  --color-popover: hsl(0 0% 10%);
+  --color-popover-foreground: hsl(0 0% 100%);
+  --color-primary: hsl(235 85% 70%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(0 0% 20%);
+  --color-secondary-foreground: hsl(0 0% 100%);
+  --color-muted: hsl(0 0% 20%);
+  --color-muted-foreground: hsl(0 0% 53%);
+  --color-accent: hsl(235 85% 70%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 63% 50%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(0 0% 20%);
+  --color-input: hsl(0 0% 20%);
+  --color-ring: hsl(235 85% 70%);
+}
