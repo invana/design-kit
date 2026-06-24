@@ -55,6 +55,14 @@ export interface RichSelectProps {
   renderValue?: (selected: RichSelectOption[]) => React.ReactNode
   /** Menu alignment relative to the trigger. Default `'start'`. */
   align?: "start" | "center" | "end"
+  /**
+   * Side the menu opens toward, relative to the trigger. Default `'bottom'`.
+   * Use `'top'` when the trigger sits in a footer so options open upward.
+   * Radix still flips on collision if the chosen side lacks space.
+   */
+  side?: "top" | "right" | "bottom" | "left"
+  /** Gap in px between the trigger and the menu. Default `4`. */
+  sideOffset?: number
   /** Trigger tooltip content; omit to disable the tooltip. */
   tooltip?: React.ReactNode
   /** Side the trigger tooltip is placed on. Default `'top'`. */
@@ -101,6 +109,8 @@ export function RichSelect({
   renderOption,
   renderValue,
   align = "start",
+  side = "bottom",
+  sideOffset = 4,
   tooltip,
   tooltipSide = "top",
   disabled,
@@ -177,6 +187,8 @@ export function RichSelect({
           `bg-popover`, and any consumer `contentClassName` still wins. */}
       <DropdownMenuContent
         align={align}
+        side={side}
+        sideOffset={sideOffset}
         className={cn("min-w-[14rem] bg-popover", contentClassName)}
       >
         {label && (
