@@ -116,6 +116,6 @@ function Demo() {
 }
 
 export const ThemeSettingsCardStory: StoryObj = {
-  name: 'Settings Card',
+  name: 'Themes Settings Card',
   render: () => <Demo />,
 };
