@@ -60,6 +60,12 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
+      // Stories that manage their own theme (e.g. they render a <ThemeProvider>)
+      // opt out of the global toolbar decorator so it doesn't fight them.
+      if (context.parameters?.selfThemed) {
+        return <Story />;
+      }
+
       const themeId = context.globals.theme || themes[0].id;
       const variant = context.globals.variant || "system";
 

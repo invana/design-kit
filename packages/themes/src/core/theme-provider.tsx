@@ -7,6 +7,7 @@ import {
   type Theme,
   type ThemeVariant,
 } from '@invana/styling/themes.config';
+import { DEFAULT_ACCENTS, findAccent, accentVars, type AccentColor } from './accents';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -25,12 +26,29 @@ export interface ThemeContextValue {
   themes: Theme[];
   /** All available flat variants */
   variants: ThemeVariant[];
+  /** Active accent id, or `null` when the theme uses its own signature accent. */
+  accent: string | null;
+  /** Available accent colours offered to pickers. */
+  accents: AccentColor[];
+  /**
+   * CSS custom-property overrides for the active accent (empty when none).
+   * Spread onto a subtree's `style` — see `<ThemeScope>` — to re-tint it.
+   */
+  accentVars: React.CSSProperties;
   /** Switch to a different theme (keeps the current mode) */
   setTheme: (themeId: string) => void;
   /** Switch mode. "system" will follow prefers-color-scheme */
   setMode: (mode: ThemeMode) => void;
   /** Convenience toggle between light ↔ dark */
   toggleMode: () => void;
+  /** Override the accent, or pass `null` to fall back to the theme's own. */
+  setAccent: (accent: string | null) => void;
+  /**
+   * Persist the current selection now. Only needed with `persist="manual"` —
+   * where live changes apply but don't survive a reload until `commit()` is
+   * called (e.g. a "Save as default" button). A no-op when persistence is off.
+   */
+  commit: () => void;
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -41,19 +59,25 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const STORAGE_KEY = 'invana-theme';
 
-function readStorage(): { theme: string; mode: ThemeMode } | null {
+interface StoredState {
+  theme: string;
+  mode: ThemeMode;
+  accent?: string | null;
+}
+
+function readStorage(): StoredState | null {
   try {
     const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
     if (!raw) return null;
-    return JSON.parse(raw) as { theme: string; mode: ThemeMode };
+    return JSON.parse(raw) as StoredState;
   } catch {
     return null;
   }
 }
 
-function writeStorage(theme: string, mode: ThemeMode) {
+function writeStorage(theme: string, mode: ThemeMode, accent: string | null) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ theme, mode }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ theme, mode, accent }));
   } catch {
     // ignore
   }
@@ -84,6 +108,20 @@ export interface ThemeProviderProps {
   defaultTheme?: string;
   /** Default mode. @default "system" */
   defaultMode?: ThemeMode;
+  /** Default accent id, or `null` to use the theme's own. @default null */
+  defaultAccent?: string | null;
+  /** Accent palette offered by pickers. @default DEFAULT_ACCENTS */
+  accents?: AccentColor[];
+  /**
+   * When the selection is persisted to storage:
+   * - `"change"` — on every change (an app theme switcher that should stick).
+   * - `"manual"` — only when `commit()` is called, so live previews don't
+   *   survive a reload until explicitly saved (a settings panel with "Save").
+   *
+   * The last persisted selection is always restored on load, regardless of mode.
+   * @default "change"
+   */
+  persist?: 'change' | 'manual';
   /**
    * Storage key for persisting the selection.
    * Set to null to disable persistence.
@@ -96,6 +134,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   defaultTheme = 'default',
   defaultMode = 'system',
+  defaultAccent = null,
+  accents = DEFAULT_ACCENTS,
+  persist = 'change',
 }) => {
   const [theme, setThemeState] = useState<string>(() => {
     return readStorage()?.theme ?? defaultTheme;
@@ -103,6 +144,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   const [mode, setModeState] = useState<ThemeMode>(() => {
     return readStorage()?.mode ?? defaultMode;
+  });
+
+  const [accent, setAccentState] = useState<string | null>(() => {
+    return readStorage()?.accent ?? defaultAccent;
   });
 
   const [isDark, setIsDark] = useState<boolean>(() => resolveIsDark(mode));
@@ -137,21 +182,32 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   const setTheme = useCallback((themeId: string) => {
     setThemeState(themeId);
-    writeStorage(themeId, mode);
-  }, [mode]);
+    if (persist === 'change') writeStorage(themeId, mode, accent);
+  }, [mode, accent, persist]);
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
-    writeStorage(theme, newMode);
-  }, [theme]);
+    if (persist === 'change') writeStorage(theme, newMode, accent);
+  }, [theme, accent, persist]);
 
   const toggleMode = useCallback(() => {
     const next: ThemeMode = isDark ? 'light' : 'dark';
     setModeState(next);
-    writeStorage(theme, next);
-  }, [isDark, theme]);
+    if (persist === 'change') writeStorage(theme, next, accent);
+  }, [isDark, theme, accent, persist]);
+
+  const setAccent = useCallback((next: string | null) => {
+    setAccentState(next);
+    if (persist === 'change') writeStorage(theme, mode, next);
+  }, [theme, mode, persist]);
+
+  // Persist the current selection on demand (for `persist="manual"`).
+  const commit = useCallback(() => {
+    writeStorage(theme, mode, accent);
+  }, [theme, mode, accent]);
 
   const variantId = buildVariantId(theme, mode, isDark);
+  const resolvedAccentVars = accentVars(findAccent(accent, accents), isDark);
 
   const value: ThemeContextValue = {
     theme,
@@ -160,9 +216,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     isDark,
     themes,
     variants: getAllThemeVariants(),
+    accent,
+    accents,
+    accentVars: resolvedAccentVars,
     setTheme,
     setMode,
     toggleMode,
+    setAccent,
+    commit,
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
@@ -184,4 +245,13 @@ export function useTheme(): ThemeContextValue {
     throw new Error('useTheme must be used inside <ThemeProvider>');
   }
   return ctx;
+}
+
+/**
+ * Like {@link useTheme}, but returns `null` instead of throwing when there is no
+ * surrounding `<ThemeProvider>`. Lets a component bind to the provider when one
+ * exists and fall back to its own state otherwise.
+ */
+export function useThemeOptional(): ThemeContextValue | null {
+  return useContext(ThemeContext);
 }
