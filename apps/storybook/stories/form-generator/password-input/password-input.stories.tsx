@@ -9,16 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@invana/ui';
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  PasswordInput,
-} from '@invana/forms';
+import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
   title: 'Form Generator/PasswordInput',
@@ -27,12 +18,25 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-type Values = { password: string };
+/* A single `password` field — the generator renders the reveal-toggle input. */
+const passwordFields: FieldConfig[] = [
+  {
+    name: 'password',
+    type: 'password',
+    label: 'Password',
+    description: 'Click the eye icon to reveal the value.',
+    placeholder: 'Enter a password',
+  },
+];
+
+const defaultValues = {
+  account: { password: '' },
+};
 
 export const PasswordInputField: Story = {
   render: () => {
-    const form = useForm<Values>({ defaultValues: { password: '' }, mode: 'onTouched' });
-    const [submitted, setSubmitted] = React.useState<Values | null>(null);
+    const form = useForm({ defaultValues, mode: 'onTouched' });
+    const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 
     return (
       <Card className="w-[380px]">
@@ -43,25 +47,12 @@ export const PasswordInputField: Story = {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              <FormField
+              <FormField.ObjectField
                 control={form.control}
-                name="password"
-                rules={{
-                  required: 'Password is required',
-                  minLength: { value: 8, message: 'Use at least 8 characters' },
-                }}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <PasswordInput placeholder="Enter a password" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Click the eye icon to reveal the value.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                name="account"
+                fields={passwordFields}
+                labelPosition="top"
+                size="md"
               />
 
               {submitted && (

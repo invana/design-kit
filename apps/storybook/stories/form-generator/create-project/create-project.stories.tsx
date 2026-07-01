@@ -10,19 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@invana/ui';
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Textarea,
-  type FieldConfig,
-  type RowConfig,
-} from '@invana/forms';
+import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
   title: 'Form Generator/Create Project',
@@ -31,13 +19,28 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-/* Structured "settings" object rendered by FormField.ObjectField. */
-const settingsFields: FieldConfig[] = [
+/* The whole project form is described as JSON and rendered by ObjectField. */
+const projectFields: FieldConfig[] = [
+  {
+    name: 'name',
+    type: 'text',
+    label: 'Project name',
+    placeholder: 'my-awesome-project',
+    description: 'Lowercase letters, numbers and hyphens.',
+    colSpan: 2,
+  },
+  {
+    name: 'description',
+    type: 'textarea',
+    label: 'Description',
+    rows: 3,
+    placeholder: 'What is this project about?',
+    colSpan: 2,
+  },
   {
     name: 'visibility',
     type: 'select',
     label: 'Visibility',
-    row: 'meta',
     options: [
       { label: 'Private', value: 'private' },
       { label: 'Internal', value: 'internal' },
@@ -48,7 +51,6 @@ const settingsFields: FieldConfig[] = [
     name: 'template',
     type: 'select',
     label: 'Template',
-    row: 'meta',
     options: [
       { label: 'Empty', value: 'empty' },
       { label: 'React + Vite', value: 'react-vite' },
@@ -60,25 +62,14 @@ const settingsFields: FieldConfig[] = [
     name: 'initReadme',
     type: 'boolean',
     label: 'Initialize with a README',
+    colSpan: 2,
   },
 ];
 
-const settingsRowConfig: RowConfig[] = [{ id: 'meta', fields: ['visibility', 'template'] }];
-
-type CreateProjectValues = {
-  name: string;
-  description: string;
-  settings: {
-    visibility: string;
-    template: string;
-    initReadme: boolean;
-  };
-};
-
-const defaultValues: CreateProjectValues = {
-  name: '',
-  description: '',
-  settings: {
+const defaultValues = {
+  project: {
+    name: '',
+    description: '',
     visibility: 'private',
     template: 'react-vite',
     initReadme: true,
@@ -87,8 +78,8 @@ const defaultValues: CreateProjectValues = {
 
 export const CreateProject: Story = {
   render: () => {
-    const form = useForm<CreateProjectValues>({ defaultValues, mode: 'onTouched' });
-    const [submitted, setSubmitted] = React.useState<CreateProjectValues | null>(null);
+    const form = useForm({ defaultValues, mode: 'onTouched' });
+    const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 
     return (
       <Card className="w-[480px]">
@@ -100,53 +91,12 @@ export const CreateProject: Story = {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                rules={{
-                  required: 'Project name is required',
-                  pattern: {
-                    value: /^[a-z0-9-]+$/,
-                    message: 'Use lowercase letters, numbers and hyphens only',
-                  },
-                }}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Project name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="my-awesome-project" {...field} />
-                    </FormControl>
-                    <FormDescription>Lowercase letters, numbers and hyphens.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        rows={3}
-                        placeholder="What is this project about?"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Headline feature: a structured object rendered from a field config */}
               <FormField.ObjectField
                 control={form.control}
-                name="settings"
-                fields={settingsFields}
-                rowConfig={settingsRowConfig}
+                name="project"
+                fields={projectFields}
                 labelPosition="top"
+                size="md"
               />
 
               {submitted && (

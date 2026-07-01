@@ -10,16 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@invana/ui';
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Switch,
-} from '@invana/forms';
+import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
   title: 'Form Generator/Login',
@@ -28,27 +19,21 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-type LoginValues = {
-  email: string;
-  password: string;
-  remember: boolean;
-};
+/* The whole form is described as JSON and rendered by FormField.ObjectField. */
+const loginFields: FieldConfig[] = [
+  { name: 'email', type: 'text', label: 'Email', placeholder: 'you@example.com' },
+  { name: 'password', type: 'password', label: 'Password', placeholder: '••••••••' },
+  { name: 'remember', type: 'boolean', label: 'Remember me' },
+];
 
-const defaultValues: LoginValues = {
-  email: '',
-  password: '',
-  remember: true,
-};
-
-const emailPattern = {
-  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  message: 'Enter a valid email address',
+const defaultValues = {
+  login: { email: '', password: '', remember: true },
 };
 
 export const Login: Story = {
   render: () => {
-    const form = useForm<LoginValues>({ defaultValues, mode: 'onTouched' });
-    const [submitted, setSubmitted] = React.useState<LoginValues | null>(null);
+    const form = useForm({ defaultValues, mode: 'onTouched' });
+    const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 
     return (
       <Card className="w-[380px]">
@@ -60,57 +45,21 @@ export const Login: Story = {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              <FormField
+              <FormField.ObjectField
                 control={form.control}
-                name="email"
-                rules={{ required: 'Email is required', pattern: emailPattern }}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="you@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                name="login"
+                fields={loginFields}
+                labelPosition="top"
+                size="md"
               />
 
-              <FormField
-                control={form.control}
-                name="password"
-                rules={{ required: 'Password is required' }}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
-                      <a
-                        href="#"
-                        className="text-xs text-muted-foreground hover:text-foreground"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Forgot password?
-                      </a>
-                    </div>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="remember"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-md border p-2">
-                    <FormLabel className="text-xs">Remember me</FormLabel>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <a
+                href="#"
+                className="block text-right text-xs text-muted-foreground hover:text-foreground"
+                onClick={(e) => e.preventDefault()}
+              >
+                Forgot password?
+              </a>
 
               {submitted && (
                 <pre className="overflow-auto rounded-md border bg-muted/40 p-2 text-[10px]">
