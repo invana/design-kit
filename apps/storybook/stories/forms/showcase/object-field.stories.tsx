@@ -5,7 +5,7 @@ import { Button } from '@invana/ui';
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Basic/ObjectField',
+  title: 'Form Generator/Showcase/Object Field',
   parameters: { layout: 'padded' },
 };
 export default meta;

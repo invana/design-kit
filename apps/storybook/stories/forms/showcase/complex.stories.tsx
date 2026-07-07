@@ -14,7 +14,7 @@ import {
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/NodeDisplaySettings/Complex',
+  title: 'Form Generator/Showcase/Complex',
   parameters: { layout: 'centered' },
 };
 export default meta;

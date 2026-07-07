@@ -13,7 +13,7 @@ import {
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Registration',
+  title: 'Form Generator/Examples/Registration',
   parameters: { layout: 'centered' },
 };
 export default meta;

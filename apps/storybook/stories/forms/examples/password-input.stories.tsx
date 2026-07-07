@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,24 +12,28 @@ import {
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Login',
+  title: 'Form Generator/Examples/PasswordInput',
   parameters: { layout: 'centered' },
 };
 export default meta;
 type Story = StoryObj;
 
-/* The whole form is described as JSON and rendered by FormField.ObjectField. */
-const loginFields: FieldConfig[] = [
-  { name: 'email', type: 'text', label: 'Email', placeholder: 'you@example.com' },
-  { name: 'password', type: 'password', label: 'Password', placeholder: '••••••••' },
-  { name: 'remember', type: 'boolean', control: 'checkbox', label: 'Remember me' },
+/* A single `password` field — the generator renders the reveal-toggle input. */
+const passwordFields: FieldConfig[] = [
+  {
+    name: 'password',
+    type: 'password',
+    label: 'Password',
+    description: 'Click the eye icon to reveal the value.',
+    placeholder: 'Enter a password',
+  },
 ];
 
 const defaultValues = {
-  login: { email: '', password: '', remember: true },
+  account: { password: '' },
 };
 
-export const Login: Story = {
+export const PasswordInputField: Story = {
   render: () => {
     const form = useForm({ defaultValues, mode: 'onTouched' });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
@@ -40,26 +43,17 @@ export const Login: Story = {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(setSubmitted)}>
             <CardHeader>
-              <CardTitle>Sign in</CardTitle>
-              <CardDescription>Welcome back. Enter your credentials to continue.</CardDescription>
+              <CardTitle>Set a password</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4">
               <FormField.ObjectField
                 control={form.control}
-                name="login"
-                fields={loginFields}
+                name="account"
+                fields={passwordFields}
                 labelPosition="top"
                 size="md"
               />
-
-              <a
-                href="#"
-                className="block text-right text-xs text-muted-foreground hover:text-foreground"
-                onClick={(e) => e.preventDefault()}
-              >
-                Forgot password?
-              </a>
 
               {submitted && (
                 <pre className="overflow-auto rounded-md border bg-muted/40 p-2 text-[10px]">
@@ -68,16 +62,10 @@ export const Login: Story = {
               )}
             </CardContent>
 
-            <CardFooter className="flex-col gap-2">
+            <CardFooter>
               <Button type="submit" className="w-full">
-                Sign in
+                Save
               </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                Don&apos;t have an account?{' '}
-                <a href="#" className="text-foreground underline" onClick={(e) => e.preventDefault()}>
-                  Sign up
-                </a>
-              </p>
             </CardFooter>
           </form>
         </Form>

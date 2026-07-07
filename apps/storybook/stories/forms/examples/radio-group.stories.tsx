@@ -12,60 +12,45 @@ import {
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Checkbox Group',
+  title: 'Form Generator/Examples/Radio Group',
   parameters: { layout: 'centered' },
 };
 export default meta;
 type Story = StoryObj;
 
 /**
- * `type: 'checkbox'` with `options` binds to a `string[]` (multi-select). A
- * single on/off value is instead `type: 'boolean'` with `control: 'checkbox'`,
- * which renders a compact inline `☑ label`.
+ * `type: 'radio'` binds to a single string picked from `options` — the same
+ * value shape as `select`, rendered as a radio list. `orientation` switches
+ * between a vertical list (default) and a horizontal row.
  */
 const fields: FieldConfig[] = [
   {
-    name: 'notifications',
-    type: 'checkbox',
-    label: 'Notify me about',
+    name: 'plan',
+    type: 'radio',
+    label: 'Plan',
     options: [
-      { label: 'Comments', value: 'comments' },
-      { label: 'Mentions', value: 'mentions' },
-      { label: 'Deploys', value: 'deploys' },
-      { label: 'Weekly digest', value: 'digest' },
+      { label: 'Starter — free', value: 'starter' },
+      { label: 'Pro — $12 / mo', value: 'pro' },
+      { label: 'Enterprise — contact us', value: 'enterprise' },
     ],
     colSpan: 2,
   },
   {
-    name: 'scopes',
-    type: 'checkbox',
-    label: 'Token scopes',
+    name: 'billing',
+    type: 'radio',
+    label: 'Billing cycle',
     orientation: 'horizontal',
     options: [
-      { label: 'read', value: 'read' },
-      { label: 'write', value: 'write' },
-      { label: 'delete', value: 'delete' },
+      { label: 'Monthly', value: 'monthly' },
+      { label: 'Yearly', value: 'yearly' },
     ],
-    colSpan: 2,
-  },
-  {
-    name: 'subscribe',
-    type: 'boolean',
-    control: 'checkbox',
-    label: 'Subscribe to the product newsletter',
     colSpan: 2,
   },
 ];
 
-const defaultValues = {
-  prefs: {
-    notifications: ['comments', 'mentions'],
-    scopes: ['read'],
-    subscribe: true,
-  },
-};
+const defaultValues = { subscription: { plan: 'pro', billing: 'yearly' } };
 
-export const CheckboxGroup: Story = {
+export const RadioGroup: Story = {
   render: () => {
     const form = useForm({ defaultValues });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
@@ -75,13 +60,13 @@ export const CheckboxGroup: Story = {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(setSubmitted)}>
             <CardHeader>
-              <CardTitle>Notification preferences</CardTitle>
+              <CardTitle>Choose a plan</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4">
               <FormField.ObjectField
                 control={form.control}
-                name="prefs"
+                name="subscription"
                 fields={fields}
                 labelPosition="top"
                 size="md"
@@ -96,7 +81,7 @@ export const CheckboxGroup: Story = {
 
             <CardFooter>
               <Button type="submit" className="w-full">
-                Save preferences
+                Continue
               </Button>
             </CardFooter>
           </form>

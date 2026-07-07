@@ -10,7 +10,7 @@ import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms
  * collapsible section headers, all driven by the single `size` prop.
  */
 const meta: Meta = {
-  title: 'Form Generator/Properties Panel',
+  title: 'Form Generator/Showcase/Properties Panel',
   parameters: { layout: 'centered' },
 };
 export default meta;
