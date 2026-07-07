@@ -61,11 +61,15 @@ export type FieldConfig = {
   row?: string;
   presetColors?: ColorPreset[];
   /**
-   * Widget for a single `boolean` field: `switch` (default) renders a toggle in
-   * a bordered box; `checkbox` renders a compact inline `☑ label`. Ignored by
-   * non-boolean types.
+   * Widget for a single `boolean` field: `switch` (default) renders a toggle;
+   * `checkbox` renders a compact inline `☑ label`. Ignored by non-boolean types.
    */
   control?: BooleanControl;
+  /**
+   * Wrap a `switch` boolean in a bordered, padded box. Defaults to `false`
+   * (the switch renders inline). Ignored by non-boolean / `checkbox` fields.
+   */
+  boxed?: boolean;
   /**
    * Layout for `radio` and multi-select `checkbox` groups. Defaults to
    * `vertical`. Ignored by other types.

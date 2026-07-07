@@ -72,6 +72,8 @@ interface BaseFieldProps {
   size?: FieldSize;
   control?: BooleanControl;
   orientation?: FieldOrientation;
+  /** Wrap a `switch` boolean in a bordered, padded box. Defaults to `false`. */
+  boxed?: boolean;
 }
 
 /**
@@ -360,7 +362,10 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  boxed = false,
 }) => {
+  // Optional bordered/padded enclosure for the `switch` control (default off).
+  const boxClass = boxed ? 'rounded-md border p-2' : '';
   // `checkbox` control: a compact inline `☑ label` that packs into the grid,
   // independent of labelPosition (the label always sits beside the box).
   if (control === 'checkbox') {
@@ -387,7 +392,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   if (labelPosition === 'side') {
     return (
-      <FormItem className="flex items-center justify-between">
+      <FormItem className={cn('flex items-center justify-between', boxClass)}>
         <div>
           <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
           {description && (
@@ -407,7 +412,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   return (
     <FormItem className={SIZE[size].stack}>
       <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
-      <div className="flex items-center justify-between">
+      <div className={cn('flex items-center justify-between', boxClass)}>
         <FormControl>
           <Switch
             className={SIZE[size].switch || undefined}
@@ -666,6 +671,7 @@ function renderField(
           rows: field.rows,
           control: field.control,
           orientation: field.orientation,
+          boxed: field.boxed,
           labelClassName: field.labelClassName,
           badge: field.badge,
           labelPosition,
