@@ -29,7 +29,9 @@ const preview: Preview = {
       disable: true,
     },
     docs: {
-      // disable: true,
+      // Show a "Code" panel next to Controls/Actions/Interactions with the
+      // rendered source of the current story.
+      codePanel: true,
     },
   },
   globalTypes: {
