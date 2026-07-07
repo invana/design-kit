@@ -39,6 +39,7 @@ import type {
   FieldConfig,
   FieldOrientation,
   FieldSize,
+  GroupConfig,
   LabelPosition,
   ObjectFieldProps,
   RowConfig,
@@ -123,7 +124,7 @@ const SIZE: Record<
     outer: 'space-y-4',
     stack: 'space-y-2',
     sideGap: 'gap-x-2',
-    trigger: 'px-3 py-2 text-base',
+    trigger: 'py-1.5 text-base',
     box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
@@ -140,7 +141,7 @@ const SIZE: Record<
     outer: 'space-y-4',
     stack: 'space-y-1.5',
     sideGap: 'gap-x-2',
-    trigger: 'px-3 py-2 text-base',
+    trigger: 'py-1.5 text-base',
     box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
@@ -157,7 +158,7 @@ const SIZE: Record<
     outer: 'space-y-6',
     stack: 'space-y-2',
     sideGap: 'gap-2',
-    trigger: 'px-3 text-base',
+    trigger: 'py-1.5 text-base',
     box: 'p-2',
     switch: '',
     check: 'h-4 w-4',
@@ -182,6 +183,18 @@ function inputWrapper(labelPosition: LabelPosition, size: FieldSize) {
   return cn(labelPosition === 'side' && 'col-span-2', SIZE[size].stack);
 }
 
+/** A single status pill (field label / section header), styled consistently. */
+function StatusPill({ badge }: { badge: FieldBadge }) {
+  return (
+    <Badge
+      variant={badge.variant ?? 'secondary'}
+      className="rounded-full px-1.5 py-0 text-base font-medium"
+    >
+      {badge.label}
+    </Badge>
+  );
+}
+
 /**
  * A field's `<FormLabel>` plus an optional trailing status pill. `FormLabel` is
  * already a `flex items-center gap-2` row, so the badge lines up beside the text
@@ -203,14 +216,7 @@ function FieldLabel({
   return (
     <FormLabel className={cn(SIZE[size].label, className)}>
       {label}
-      {badge && (
-        <Badge
-          variant={badge.variant ?? 'secondary'}
-          className="rounded-full px-1.5 py-0 text-base font-medium"
-        >
-          {badge.label}
-        </Badge>
-      )}
+      {badge && <StatusPill badge={badge} />}
     </FormLabel>
   );
 }
@@ -838,6 +844,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   name,
   fields,
   rowConfig,
+  groupConfig,
   labelPosition = 'side',
   size = 'sm',
   columns = 2,
@@ -851,6 +858,9 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   const ungrouped = grouped['_ungrouped'] ?? [];
   delete grouped['_ungrouped'];
   const groupedEntries = Object.entries(grouped);
+  const groupConfigById = new Map<string, GroupConfig>(
+    (groupConfig ?? []).map((g) => [g.id, g])
+  );
 
   return (
     <div className={SIZE[size].outer}>
@@ -874,7 +884,9 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
           defaultValue={groupedEntries.map(([k]) => k)}
           className="w-full"
         >
-          {groupedEntries.map(([group, gFields]) => (
+          {groupedEntries.map(([group, gFields]) => {
+            const gc = groupConfigById.get(group);
+            return (
             <AccordionItem key={group} value={group} className="border-b">
               <AccordionTrigger
                 className={cn(
@@ -883,16 +895,21 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
                 )}
               >
                 <span className="flex items-center gap-2">
-                  {humanize(group)}
-                  <Badge
-                    variant="secondary"
-                    className="rounded-full px-1.5 py-0 text-base font-normal tabular-nums"
-                  >
-                    {gFields.length}
-                  </Badge>
+                  {gc?.label ?? humanize(group)}
+                  {(gc?.showCount ?? true) && (
+                    <Badge
+                      variant="secondary"
+                      className="rounded-full px-1.5 py-0 text-base font-normal tabular-nums"
+                    >
+                      {gFields.length}
+                    </Badge>
+                  )}
+                  {gc?.badges?.map((b, i) => (
+                    <StatusPill key={i} badge={b} />
+                  ))}
                 </span>
               </AccordionTrigger>
-              <AccordionContent className="px-3 pb-3 pt-1">
+              <AccordionContent className="pb-3 pt-1">
                 <div className={SIZE[size].section}>
                   {renderRows(
                     gFields,
@@ -906,7 +923,8 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
                 </div>
               </AccordionContent>
             </AccordionItem>
-          ))}
+            );
+          })}
         </Accordion>
       )}
     </div>

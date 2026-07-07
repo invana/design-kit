@@ -110,12 +110,33 @@ export type RowConfig = {
   fields: string[];
 };
 
+/**
+ * Per-group metadata for the section headers of a grouped `ObjectField`.
+ * Groups are still discovered from each field's `group` value; this only
+ * decorates the matching section header.
+ */
+export type GroupConfig = {
+  /** Matches the `group` value on fields. */
+  id: string;
+  /** Override the auto-humanized section label (e.g. `viewMode` → "View Mode"). */
+  label?: string;
+  /**
+   * Extra status pills rendered in the section header, after the automatic
+   * field-count badge. See {@link FieldBadge}.
+   */
+  badges?: FieldBadge[];
+  /** Show the automatic field-count badge. Defaults to `true`. */
+  showCount?: boolean;
+};
+
 export interface ObjectFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
   name: string;
   fields: FieldConfig[];
   rowConfig?: RowConfig[];
+  /** Optional per-group header decoration (extra badges, label override). */
+  groupConfig?: GroupConfig[];
   labelPosition?: LabelPosition;
   /** Field density. Defaults to `sm` (compact) for backward compatibility. */
   size?: FieldSize;

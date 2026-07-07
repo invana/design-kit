@@ -20,6 +20,7 @@ export type {
   FieldConfig,
   FieldOrientation,
   FieldSize,
+  GroupConfig,
   RowConfig,
   LabelPosition,
   ObjectFieldProps,

@@ -1,6 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import { SettingsPanel, type FieldConfig, type RowConfig } from '@invana/forms';
+import {
+  SettingsPanel,
+  type FieldConfig,
+  type GroupConfig,
+  type RowConfig,
+} from '@invana/forms';
 
 /**
  * Dense inspector / properties panel built from the reusable `SettingsPanel`
@@ -65,6 +70,14 @@ const rowConfig: RowConfig[] = [
   { id: 'gp-1', fields: ['disableZoom', 'showGrid'] },
 ];
 
+// Decorate the section headers with extra pills, alongside the auto count badge.
+const groupConfig: GroupConfig[] = [
+  { id: 'diagram', badges: [{ label: 'core', variant: 'default' }] },
+  { id: 'viewMode', badges: [{ label: 'edited' }] },
+  { id: 'globalPrefs', badges: [{ label: 'global', variant: 'outline' }] },
+  { id: 'description', badges: [{ label: 'optional' }] },
+];
+
 const defaultValues = {
   props: {
     subjectArea: 'root',
@@ -94,6 +107,7 @@ export const PropertiesPanel: Story = {
         name="props"
         fields={fields}
         rowConfig={rowConfig}
+        groupConfig={groupConfig}
         labelPosition="top"
         size="xs"
         className="w-[340px]"
