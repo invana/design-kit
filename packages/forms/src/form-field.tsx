@@ -64,27 +64,102 @@ interface BaseFieldProps {
 }
 
 /**
- * Per-size class tokens. `sm` keeps the original compact look; `md` falls back
- * to the underlying components' natural full-size defaults (empty strings).
+ * Per-size class tokens. Each size drives not just the control heights and text
+ * but the surrounding density — grid gaps, section rhythm, label stacking, the
+ * boolean box padding, the switch scale and the group accordion header — so a
+ * single `size` prop reshapes the whole form from airy (`md`) to a dense
+ * inspector panel (`xs`). `md` leaves the control tokens empty to fall back to
+ * the underlying components' natural full-size defaults.
  */
 const SIZE: Record<
   FieldSize,
-  { input: string; select: string; label: string; desc: string }
+  {
+    /** control text/height */
+    input: string;
+    select: string;
+    textarea: string;
+    label: string;
+    desc: string;
+    /** field-grid gaps */
+    gap: string;
+    /** rhythm between rows / accordion groups */
+    section: string;
+    /** rhythm between the ungrouped block and the group accordion */
+    outer: string;
+    /** vertical stacking inside a field (label→control, control→desc) */
+    stack: string;
+    /** column gap for `side` label layout */
+    sideGap: string;
+    /** group accordion header */
+    trigger: string;
+    /** boolean/switch enclosing box padding */
+    box: string;
+    /** switch scale (transform keeps the thumb proportions correct) */
+    switch: string;
+  }
 > = {
-  sm: { input: 'h-8 text-sm', select: 'h-8', label: 'text-xs', desc: 'text-xs' },
-  md: { input: '', select: '', label: '', desc: '' },
+  xs: {
+    input: 'h-7 text-xs',
+    select: 'h-7 text-xs',
+    textarea: 'text-xs',
+    label: 'text-[11px]',
+    desc: 'text-[11px]',
+    gap: 'gap-x-2 gap-y-1.5',
+    section: 'space-y-2',
+    outer: 'space-y-3',
+    stack: 'space-y-1',
+    sideGap: 'gap-x-1.5',
+    trigger: 'px-2 py-1.5 text-xs',
+    box: 'p-1.5',
+    switch: 'scale-[0.7] origin-right',
+  },
+  sm: {
+    input: 'h-8 text-sm',
+    select: 'h-8 text-sm',
+    textarea: 'text-sm',
+    label: 'text-xs',
+    desc: 'text-xs',
+    gap: 'gap-x-3 gap-y-2',
+    section: 'space-y-3',
+    outer: 'space-y-4',
+    stack: 'space-y-1.5',
+    sideGap: 'gap-x-2',
+    trigger: 'px-3 py-2 text-sm',
+    box: 'p-2',
+    switch: 'scale-90 origin-right',
+  },
+  md: {
+    input: '',
+    select: '',
+    textarea: '',
+    label: '',
+    desc: '',
+    gap: 'gap-4',
+    section: 'space-y-4',
+    outer: 'space-y-6',
+    stack: 'space-y-2',
+    sideGap: 'gap-2',
+    trigger: 'px-3 text-sm',
+    box: 'p-2',
+    switch: '',
+  },
 };
 
-function itemClasses(labelPosition: LabelPosition, className?: string) {
+function itemClasses(
+  labelPosition: LabelPosition,
+  size: FieldSize,
+  className?: string
+) {
   return cn(
-    labelPosition === 'side' && 'grid grid-cols-3 items-center gap-2',
-    labelPosition === 'top' && 'space-y-2',
+    labelPosition === 'side' &&
+      cn('grid grid-cols-3 items-center', SIZE[size].sideGap),
+    labelPosition === 'top' && SIZE[size].stack,
     className
   );
 }
 
-function inputWrapper(labelPosition: LabelPosition) {
-  return cn(labelPosition === 'side' && 'col-span-2', 'space-y-1');
+function inputWrapper(labelPosition: LabelPosition, size: FieldSize) {
+  return cn(labelPosition === 'side' && 'col-span-2', SIZE[size].stack);
 }
 
 export const InputField: React.FC<BaseFieldProps> = ({
@@ -97,9 +172,9 @@ export const InputField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Input
           className={SIZE[size].input}
@@ -126,9 +201,9 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <PasswordInput
           className={SIZE[size].input}
@@ -156,12 +231,12 @@ export const TextareaField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Textarea
-          className={size === 'sm' ? 'text-sm' : undefined}
+          className={SIZE[size].textarea || undefined}
           rows={rows}
           placeholder={placeholder}
           value={value ?? ''}
@@ -187,9 +262,9 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <Select value={value ?? ''} onValueChange={onChange}>
         <FormControl>
           <SelectTrigger className={SIZE[size].select}>
@@ -222,7 +297,12 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
 }) => {
   if (labelPosition === 'side') {
     return (
-      <FormItem className="flex items-center justify-between rounded-md border p-2">
+      <FormItem
+        className={cn(
+          'flex items-center justify-between rounded-md border',
+          SIZE[size].box
+        )}
+      >
         <div>
           {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
           {description && (
@@ -230,17 +310,30 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
           )}
         </div>
         <FormControl>
-          <Switch checked={!!value} onCheckedChange={onChange} />
+          <Switch
+            className={SIZE[size].switch || undefined}
+            checked={!!value}
+            onCheckedChange={onChange}
+          />
         </FormControl>
       </FormItem>
     );
   }
   return (
-    <FormItem className="space-y-2">
+    <FormItem className={SIZE[size].stack}>
       {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-      <div className="flex items-center justify-between rounded-md border p-2">
+      <div
+        className={cn(
+          'flex items-center justify-between rounded-md border',
+          SIZE[size].box
+        )}
+      >
         <FormControl>
-          <Switch checked={!!value} onCheckedChange={onChange} />
+          <Switch
+            className={SIZE[size].switch || undefined}
+            checked={!!value}
+            onCheckedChange={onChange}
+          />
         </FormControl>
         {description && (
           <FormDescription className={cn('ml-2', SIZE[size].desc)}>
@@ -263,9 +356,9 @@ export const ColorField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <ColorSwatches
           value={value}
@@ -294,9 +387,9 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <SliderNumber
           value={typeof value === 'number' ? value : 0}
@@ -323,9 +416,9 @@ export const IconField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   className,
 }) => (
-  <FormItem className={itemClasses(labelPosition, className)}>
+  <FormItem className={itemClasses(labelPosition, size, className)}>
     {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
-    <div className={inputWrapper(labelPosition)}>
+    <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <IconInput value={value} onChange={onChange} />
       </FormControl>
@@ -457,7 +550,8 @@ function renderGrid(
     <div
       key={key}
       className={cn(
-        'grid grid-cols-1 gap-4',
+        'grid grid-cols-1',
+        SIZE[size].gap,
         customCols
           ? 'md:[grid-template-columns:repeat(var(--ff-cols),minmax(0,1fr))]'
           : 'md:grid-cols-2'
@@ -505,7 +599,7 @@ function renderRows(
   const byName = new Map(fields.map((f) => [f.name, f]));
 
   return (
-    <div className="space-y-4">
+    <div className={SIZE[size].section}>
       {rowConfig.map((row) => {
         const rowFields = row.fields
           .map((n) => byName.get(n))
@@ -555,9 +649,9 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   const groupedEntries = Object.entries(grouped);
 
   return (
-    <div className="space-y-6">
+    <div className={SIZE[size].outer}>
       {ungrouped.length > 0 && (
-        <div className="space-y-4">
+        <div className={SIZE[size].section}>
           {renderRows(
             ungrouped,
             rowConfig,
@@ -578,11 +672,16 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
         >
           {groupedEntries.map(([group, gFields]) => (
             <AccordionItem key={group} value={group} className="rounded-md border">
-              <AccordionTrigger className="px-3 text-sm font-medium hover:no-underline">
+              <AccordionTrigger
+                className={cn(
+                  'font-medium hover:no-underline',
+                  SIZE[size].trigger
+                )}
+              >
                 {humanize(group)} Settings
               </AccordionTrigger>
               <AccordionContent className="px-3 pb-3">
-                <div className="space-y-4">
+                <div className={SIZE[size].section}>
                   {renderRows(
                     gFields,
                     rowConfig,

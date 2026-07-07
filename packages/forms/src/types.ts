@@ -3,11 +3,14 @@ import type { Control } from 'react-hook-form';
 export type LabelPosition = 'side' | 'top';
 
 /**
- * Field density. `sm` is the compact look used by dense panels (e.g. the
- * modeller property editor) and is the default for backward compatibility.
- * `md` renders full-size fields for primary, page-level forms.
+ * Field density.
+ * - `xs` — ultra-dense property-panel look (small controls, tight rows, compact
+ *   section headers). Use for inspector/side panels like the modeller diagram
+ *   properties editor.
+ * - `sm` — compact look, the default for backward compatibility.
+ * - `md` — full-size fields for primary, page-level forms.
  */
-export type FieldSize = 'sm' | 'md';
+export type FieldSize = 'xs' | 'sm' | 'md';
 
 export type FieldType =
   | 'text'
