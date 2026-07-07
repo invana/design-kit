@@ -103,8 +103,6 @@ const SIZE: Record<
     sideGap: string;
     /** group accordion header */
     trigger: string;
-    /** boolean/switch enclosing box padding */
-    box: string;
     /** switch scale (transform keeps the thumb proportions correct) */
     switch: string;
     /** checkbox control size (indicator icon scaled to match) */
@@ -125,7 +123,6 @@ const SIZE: Record<
     stack: 'space-y-2',
     sideGap: 'gap-x-2',
     trigger: 'py-1.5 text-base',
-    box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
     radio: 'h-4 w-4',
@@ -142,7 +139,6 @@ const SIZE: Record<
     stack: 'space-y-1.5',
     sideGap: 'gap-x-2',
     trigger: 'py-1.5 text-base',
-    box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
     radio: 'h-4 w-4',
@@ -159,7 +155,6 @@ const SIZE: Record<
     stack: 'space-y-2',
     sideGap: 'gap-2',
     trigger: 'py-1.5 text-base',
-    box: 'p-2',
     switch: '',
     check: 'h-4 w-4',
     radio: 'h-4 w-4',
@@ -392,12 +387,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   if (labelPosition === 'side') {
     return (
-      <FormItem
-        className={cn(
-          'flex items-center justify-between rounded-md border',
-          SIZE[size].box
-        )}
-      >
+      <FormItem className="flex items-center justify-between">
         <div>
           <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
           {description && (
@@ -417,12 +407,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   return (
     <FormItem className={SIZE[size].stack}>
       <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
-      <div
-        className={cn(
-          'flex items-center justify-between rounded-md border',
-          SIZE[size].box
-        )}
-      >
+      <div className="flex items-center justify-between">
         <FormControl>
           <Switch
             className={SIZE[size].switch || undefined}
