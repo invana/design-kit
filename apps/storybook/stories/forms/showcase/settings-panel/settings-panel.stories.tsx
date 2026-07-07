@@ -11,7 +11,7 @@ import { SettingsPanel, type FieldConfig } from '@invana/forms';
  * `secondary` for muted tags like "beta").
  */
 const meta: Meta = {
-  title: 'Form Generator/Showcase/Settings Panel',
+  title: 'Form Generator/Showcase/SettingsPanel',
   parameters: { layout: 'centered' },
 };
 export default meta;
