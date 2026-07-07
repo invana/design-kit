@@ -591,11 +591,14 @@ function EditorForm({ entry }: { entry: EditorEntry }) {
   const form = useForm({ defaultValues: { opts: deriveDefaults(base) } });
   const values = form.watch('opts');
 
-  // Keep the browser compact: drop per-field descriptions (they wrap to 2–4
-  // lines in this narrow panel and make the form very noisy).
+  // Render a plain, flat form when a row is expanded: drop per-field
+  // descriptions (noisy in this narrow panel) and drop `group` so ObjectField
+  // renders every field inline instead of wrapping them in collapsible
+  // sub-accordions (FILL / THEME / …).
   const fields = resolve(entry.fields, values ?? {}).map((f) => ({
     ...f,
     description: undefined,
+    group: undefined,
   }));
 
   if (fields.length === 0) {
@@ -606,17 +609,11 @@ function EditorForm({ entry }: { entry: EditorEntry }) {
     );
   }
 
-  // Hide the sub-group field-count badges (FILL 3 / THEME 2 …) — pure chrome.
-  const groupConfig = Array.from(
-    new Set(fields.map((f) => f.group).filter(Boolean)),
-  ).map((id) => ({ id: id as string, showCount: false }));
-
   return (
     <SettingsPanel
       form={form}
       name="opts"
       fields={fields}
-      groupConfig={groupConfig}
       labelPosition="top"
       size="sm"
       columns={2}
