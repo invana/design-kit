@@ -19,7 +19,17 @@ const profileFields: FieldConfig[] = [
     { label: 'Editor', value: 'editor' },
     { label: 'Viewer', value: 'viewer' },
   ]},
-  { name: 'notifications', type: 'boolean', label: 'Email me notifications', group: 'preferences' },
+  { name: 'plan', type: 'radio', label: 'Plan', colSpan: 2, options: [
+    { label: 'Free', value: 'free' },
+    { label: 'Pro', value: 'pro' },
+    { label: 'Team', value: 'team' },
+  ]},
+  { name: 'notifications', type: 'boolean', control: 'checkbox', label: 'Email me notifications', group: 'preferences', colSpan: 2 },
+  { name: 'channels', type: 'checkbox', label: 'Notify me about', group: 'preferences', colSpan: 2, options: [
+    { label: 'Comments', value: 'comments' },
+    { label: 'Mentions', value: 'mentions' },
+    { label: 'Deploys', value: 'deploys' },
+  ]},
   { name: 'theme', type: 'select', label: 'Theme', group: 'preferences', options: [
     { label: 'Light', value: 'light' },
     { label: 'Dark', value: 'dark' },
@@ -41,7 +51,9 @@ export const ObjectField: Story = {
           firstName: 'Ada',
           lastName: 'Lovelace',
           role: 'admin',
+          plan: 'pro',
           notifications: true,
+          channels: ['comments', 'deploys'],
           theme: 'system',
           accent: 'rgb(59, 130, 246)',
         },

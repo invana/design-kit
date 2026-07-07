@@ -39,13 +39,15 @@ const projectFields: FieldConfig[] = [
   },
   {
     name: 'visibility',
-    type: 'select',
+    type: 'radio',
     label: 'Visibility',
+    orientation: 'horizontal',
     options: [
       { label: 'Private', value: 'private' },
       { label: 'Internal', value: 'internal' },
       { label: 'Public', value: 'public' },
     ],
+    colSpan: 2,
   },
   {
     name: 'template',
@@ -61,6 +63,7 @@ const projectFields: FieldConfig[] = [
   {
     name: 'initReadme',
     type: 'boolean',
+    control: 'checkbox',
     label: 'Initialize with a README',
     colSpan: 2,
   },

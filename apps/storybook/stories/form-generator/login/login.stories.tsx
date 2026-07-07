@@ -23,7 +23,7 @@ type Story = StoryObj;
 const loginFields: FieldConfig[] = [
   { name: 'email', type: 'text', label: 'Email', placeholder: 'you@example.com' },
   { name: 'password', type: 'password', label: 'Password', placeholder: '••••••••' },
-  { name: 'remember', type: 'boolean', label: 'Remember me' },
+  { name: 'remember', type: 'boolean', control: 'checkbox', label: 'Remember me' },
 ];
 
 const defaultValues = {

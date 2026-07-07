@@ -51,6 +51,7 @@ const registrationFields: FieldConfig[] = [
   {
     name: 'acceptTerms',
     type: 'boolean',
+    control: 'checkbox',
     label: 'I agree to the Terms of Service and Privacy Policy.',
     colSpan: 2,
   },

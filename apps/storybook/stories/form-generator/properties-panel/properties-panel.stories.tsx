@@ -38,21 +38,21 @@ const fields: FieldConfig[] = [
   { name: 'subjectArea', type: 'select', label: 'Subject area', options: subjectAreas, group: 'diagram', colSpan: 2 },
   { name: 'diagram', type: 'text', label: 'Diagram', group: 'diagram', colSpan: 2 },
 
-  // View mode options
-  { name: 'fixedObjectHeight', type: 'boolean', label: 'Fixed object height', group: 'viewMode', row: 'vm-1' },
-  { name: 'dataType', type: 'boolean', label: 'Data type', group: 'viewMode', row: 'vm-1' },
-  { name: 'dataTypeForViews', type: 'boolean', label: 'Data type for views', group: 'viewMode', row: 'vm-2' },
-  { name: 'colorDataType', type: 'boolean', label: 'Color data type', group: 'viewMode', row: 'vm-2' },
-  { name: 'nullOption', type: 'boolean', label: 'Null option', group: 'viewMode', row: 'vm-3' },
-  { name: 'keys', type: 'boolean', label: 'Keys', group: 'viewMode', row: 'vm-3' },
-  { name: 'objectNameDisplay', type: 'select', label: 'Object name display', options: nameDisplayOptions, group: 'viewMode', colSpan: 2 },
+  // View mode options — inline checkboxes packed two-per-row
+  { name: 'fixedObjectHeight', type: 'boolean', control: 'checkbox', label: 'Fixed object height', group: 'viewMode', row: 'vm-1' },
+  { name: 'dataType', type: 'boolean', control: 'checkbox', label: 'Data type', group: 'viewMode', row: 'vm-1' },
+  { name: 'dataTypeForViews', type: 'boolean', control: 'checkbox', label: 'Data type for views', group: 'viewMode', row: 'vm-2' },
+  { name: 'colorDataType', type: 'boolean', control: 'checkbox', label: 'Color data type', group: 'viewMode', row: 'vm-2' },
+  { name: 'nullOption', type: 'boolean', control: 'checkbox', label: 'Null option', group: 'viewMode', row: 'vm-3' },
+  { name: 'keys', type: 'boolean', control: 'checkbox', label: 'Keys', group: 'viewMode', row: 'vm-3' },
+  { name: 'objectNameDisplay', type: 'radio', label: 'Object name display', options: nameDisplayOptions, group: 'viewMode', colSpan: 2 },
 
   // Global user preferences
-  { name: 'disableZoom', type: 'boolean', label: 'Disable zoom', group: 'globalPrefs', row: 'gp-1' },
-  { name: 'showGrid', type: 'boolean', label: 'Show grid', group: 'globalPrefs', row: 'gp-1' },
+  { name: 'disableZoom', type: 'boolean', control: 'checkbox', label: 'Disable zoom', group: 'globalPrefs', row: 'gp-1' },
+  { name: 'showGrid', type: 'boolean', control: 'checkbox', label: 'Show grid', group: 'globalPrefs', row: 'gp-1' },
 
-  // Notation
-  { name: 'notation', type: 'select', label: 'Notation', options: notationOptions, group: 'notation', colSpan: 2 },
+  // Notation — radio list
+  { name: 'notation', type: 'radio', label: 'Notation', options: notationOptions, group: 'notation', colSpan: 2 },
 
   // Description
   { name: 'comment', type: 'textarea', label: 'Comment', placeholder: 'Comment', rows: 3, group: 'description', colSpan: 2 },
@@ -88,8 +88,8 @@ export const PropertiesPanel: Story = {
     const form = useForm({ defaultValues });
 
     return (
-      <Card className="w-[300px]">
-        <CardContent className="max-h-[80vh] overflow-y-auto p-3">
+      <Card className="w-[340px]">
+        <CardContent className="max-h-[80vh] overflow-y-auto p-4">
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Diagram Properties
           </h2>

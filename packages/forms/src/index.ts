@@ -7,13 +7,17 @@ export {
   TextareaField,
   SelectField,
   BooleanField,
+  RadioField,
+  CheckboxGroupField,
   ColorField,
   NumberField,
   IconField,
 } from './form-field';
 
 export type {
+  BooleanControl,
   FieldConfig,
+  FieldOrientation,
   FieldSize,
   RowConfig,
   LabelPosition,

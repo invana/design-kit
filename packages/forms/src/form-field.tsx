@@ -19,6 +19,8 @@ import { Input } from './components/input';
 import { PasswordInput } from './components/password-input';
 import { Textarea } from './components/textarea';
 import { Switch } from './components/switch';
+import { Checkbox } from './components/checkbox';
+import { RadioGroup, RadioGroupItem } from './components/radio-group';
 import {
   Select,
   SelectContent,
@@ -30,8 +32,10 @@ import { ColorSwatches } from './fields/color-swatches';
 import { SliderNumber } from './fields/slider-number';
 import { IconInput } from './fields/icon-input';
 import type {
+  BooleanControl,
   ColorPreset,
   FieldConfig,
+  FieldOrientation,
   FieldSize,
   LabelPosition,
   ObjectFieldProps,
@@ -56,11 +60,13 @@ interface BaseFieldProps {
   max?: number;
   step?: number;
   presetColors?: ColorPreset[];
-  defaultValue?: string;
+  defaultValue?: AnyValue;
   rows?: number;
   className?: string;
   labelPosition?: LabelPosition;
   size?: FieldSize;
+  control?: BooleanControl;
+  orientation?: FieldOrientation;
 }
 
 /**
@@ -96,22 +102,28 @@ const SIZE: Record<
     box: string;
     /** switch scale (transform keeps the thumb proportions correct) */
     switch: string;
+    /** checkbox control size (indicator icon scaled to match) */
+    check: string;
+    /** radio item size */
+    radio: string;
   }
 > = {
   xs: {
-    input: 'h-7 text-xs',
-    select: 'h-7 text-xs',
-    textarea: 'text-xs',
-    label: 'text-[11px]',
-    desc: 'text-[11px]',
-    gap: 'gap-x-2 gap-y-1.5',
-    section: 'space-y-2',
-    outer: 'space-y-3',
-    stack: 'space-y-1',
-    sideGap: 'gap-x-1.5',
-    trigger: 'px-2 py-1.5 text-xs',
-    box: 'p-1.5',
-    switch: 'scale-[0.7] origin-right',
+    input: 'h-8 text-sm',
+    select: 'h-8 text-sm',
+    textarea: 'text-sm',
+    label: 'text-xs',
+    desc: 'text-xs',
+    gap: 'gap-x-3 gap-y-2.5',
+    section: 'space-y-3',
+    outer: 'space-y-4',
+    stack: 'space-y-2',
+    sideGap: 'gap-x-2',
+    trigger: 'px-3 py-2 text-sm',
+    box: 'p-2',
+    switch: 'scale-90 origin-right',
+    check: 'h-4 w-4',
+    radio: 'h-4 w-4',
   },
   sm: {
     input: 'h-8 text-sm',
@@ -127,6 +139,8 @@ const SIZE: Record<
     trigger: 'px-3 py-2 text-sm',
     box: 'p-2',
     switch: 'scale-90 origin-right',
+    check: 'h-4 w-4',
+    radio: 'h-4 w-4',
   },
   md: {
     input: '',
@@ -142,6 +156,8 @@ const SIZE: Record<
     trigger: 'px-3 text-sm',
     box: 'p-2',
     switch: '',
+    check: 'h-4 w-4',
+    radio: 'h-4 w-4',
   },
 };
 
@@ -294,7 +310,34 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   onChange,
   labelPosition = 'side',
   size = 'sm',
+  control = 'switch',
+  className,
 }) => {
+  // `checkbox` control: a compact inline `☑ label` that packs into the grid,
+  // independent of labelPosition (the label always sits beside the box).
+  if (control === 'checkbox') {
+    return (
+      <FormItem className={cn('flex items-center gap-2 space-y-0', className)}>
+        <FormControl>
+          <Checkbox
+            className={SIZE[size].check}
+            checked={!!value}
+            onCheckedChange={onChange}
+          />
+        </FormControl>
+        {label && (
+          <FormLabel
+            className={cn(
+              '!mt-0 cursor-pointer font-normal leading-none',
+              SIZE[size].label
+            )}
+          >
+            {label}
+          </FormLabel>
+        )}
+      </FormItem>
+    );
+  }
   if (labelPosition === 'side') {
     return (
       <FormItem
@@ -340,6 +383,101 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
             {description}
           </FormDescription>
         )}
+      </div>
+    </FormItem>
+  );
+};
+
+export const RadioField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  options = [],
+  value,
+  onChange,
+  labelPosition = 'side',
+  size = 'sm',
+  orientation = 'vertical',
+  className,
+}) => (
+  <FormItem className={itemClasses(labelPosition, size, className)}>
+    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    <div className={inputWrapper(labelPosition, size)}>
+      <FormControl>
+        <RadioGroup
+          value={value ?? ''}
+          onValueChange={onChange}
+          className={
+            orientation === 'horizontal'
+              ? 'flex flex-row items-center gap-x-4'
+              : cn('flex flex-col', SIZE[size].stack)
+          }
+        >
+          {options.map((o) => (
+            <label
+              key={o.value}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <RadioGroupItem
+                value={o.value}
+                className={cn('shrink-0', SIZE[size].radio)}
+              />
+              <span className={cn('leading-none', SIZE[size].label)}>{o.label}</span>
+            </label>
+          ))}
+        </RadioGroup>
+      </FormControl>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
+    </div>
+  </FormItem>
+);
+
+export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  options = [],
+  value,
+  onChange,
+  labelPosition = 'side',
+  size = 'sm',
+  orientation = 'vertical',
+  className,
+}) => {
+  const selected: string[] = Array.isArray(value) ? value : [];
+  const toggle = (v: string, checked: boolean) =>
+    onChange?.(checked ? [...selected, v] : selected.filter((x) => x !== v));
+
+  return (
+    <FormItem className={itemClasses(labelPosition, size, className)}>
+      {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+      <div className={inputWrapper(labelPosition, size)}>
+        <div
+          className={
+            orientation === 'horizontal'
+              ? 'flex flex-row items-center gap-x-4'
+              : cn('flex flex-col', SIZE[size].stack)
+          }
+        >
+          {options.map((o) => (
+            <label
+              key={o.value}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Checkbox
+                className={cn('shrink-0', SIZE[size].check)}
+                checked={selected.includes(o.value)}
+                onCheckedChange={(c) => toggle(o.value, c === true)}
+              />
+              <span className={cn('leading-none', SIZE[size].label)}>{o.label}</span>
+            </label>
+          ))}
+        </div>
+        {description && (
+          <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+        )}
+        <FormMessage className={SIZE[size].desc} />
       </div>
     </FormItem>
   );
@@ -435,6 +573,8 @@ export const Field = {
   Password: PasswordField,
   Textarea: TextareaField,
   Boolean: BooleanField,
+  Radio: RadioField,
+  CheckboxGroup: CheckboxGroupField,
   Color: ColorField,
   Number: NumberField,
   Select: SelectField,
@@ -477,6 +617,8 @@ function renderField(
           presetColors: field.presetColors,
           defaultValue: field.defaultValue,
           rows: field.rows,
+          control: field.control,
+          orientation: field.orientation,
           labelPosition,
           size,
           value: rhf.value,
@@ -492,6 +634,10 @@ function renderField(
             );
           case 'boolean':
             return <BooleanField {...common} />;
+          case 'radio':
+            return <RadioField {...common} />;
+          case 'checkbox':
+            return <CheckboxGroupField {...common} />;
           case 'color':
             return <ColorField {...common} />;
           case 'number':
@@ -711,6 +857,8 @@ interface FormFieldExtensions {
   Password: typeof PasswordField;
   Textarea: typeof TextareaField;
   Boolean: typeof BooleanField;
+  Radio: typeof RadioField;
+  CheckboxGroup: typeof CheckboxGroupField;
   Color: typeof ColorField;
   Number: typeof NumberField;
   Select: typeof SelectField;
@@ -725,6 +873,8 @@ export const FormField = Object.assign(FormFieldBase, {
   Password: PasswordField,
   Textarea: TextareaField,
   Boolean: BooleanField,
+  Radio: RadioField,
+  CheckboxGroup: CheckboxGroupField,
   Color: ColorField,
   Number: NumberField,
   Select: SelectField,
@@ -735,7 +885,9 @@ export const FormField = Object.assign(FormFieldBase, {
 export { ObjectField };
 
 export type {
+  BooleanControl,
   FieldConfig,
+  FieldOrientation,
   FieldSize,
   FieldType,
   RowConfig,

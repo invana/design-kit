@@ -18,9 +18,17 @@ export type FieldType =
   | 'textarea'
   | 'number'
   | 'boolean'
+  | 'checkbox'
+  | 'radio'
   | 'color'
   | 'select'
   | 'icon';
+
+/** Widget used to render a single `boolean` field. Defaults to `switch`. */
+export type BooleanControl = 'switch' | 'checkbox';
+
+/** Layout for the `radio` list and the multi-select `checkbox` group. */
+export type FieldOrientation = 'vertical' | 'horizontal';
 
 export type ColorPreset = {
   label: string;
@@ -41,7 +49,22 @@ export type FieldConfig = {
   group?: string;
   row?: string;
   presetColors?: ColorPreset[];
-  defaultValue?: string;
+  /**
+   * Widget for a single `boolean` field: `switch` (default) renders a toggle in
+   * a bordered box; `checkbox` renders a compact inline `☑ label`. Ignored by
+   * non-boolean types.
+   */
+  control?: BooleanControl;
+  /**
+   * Layout for `radio` and multi-select `checkbox` groups. Defaults to
+   * `vertical`. Ignored by other types.
+   */
+  orientation?: FieldOrientation;
+  /**
+   * Initial value. A `string` for most fields, `boolean` for `boolean`, or a
+   * `string[]` for a multi-select `checkbox` group.
+   */
+  defaultValue?: string | number | boolean | string[];
   /** Number of visible rows for `textarea` fields. */
   rows?: number;
   /**
