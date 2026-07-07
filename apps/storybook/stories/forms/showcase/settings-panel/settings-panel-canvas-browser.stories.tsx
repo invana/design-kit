@@ -581,6 +581,13 @@ function deriveDefaults(fields: FieldConfig[]): Record<string, unknown> {
 const ACTIVE_LAYOUT_ID = 'd3-force-layout';
 
 /**
+ * VS Code tree-style disclosure chevron: point right (▸) when collapsed, rotate
+ * down (⌄) when open. Merges through AccordionTrigger's `cn`, so the trailing
+ * `rotate-0` overrides the component's default `rotate-180` open state.
+ */
+const CHEVRON_RIGHT = '[&>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0';
+
+/**
  * The expanded row content: one editor's schema as a chrome-flattened
  * `SettingsPanel` rendered inline (its own form + dynamic recompute via
  * `form.watch`), so it sits cleanly inside the accordion instead of nesting a
@@ -642,7 +649,9 @@ export const CanvasBrowser: Story = {
             const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
             return (
               <AccordionItem key={section.id} value={section.id} className="border-b">
-                <AccordionTrigger className="px-1 py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline">
+                <AccordionTrigger
+                  className={`px-1 py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline ${CHEVRON_RIGHT}`}
+                >
                   {section.label}
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
@@ -652,7 +661,7 @@ export const CanvasBrowser: Story = {
                     <Accordion type="multiple">
                       {items.map((entry) => (
                       <AccordionItem key={entry.id} value={`${section.id}:${entry.id}`} className="last:border-b-0">
-                        <AccordionTrigger className="py-2 hover:no-underline">
+                        <AccordionTrigger className={`py-2 hover:no-underline ${CHEVRON_RIGHT}`}>
                           <span className="flex min-w-0 items-center gap-2">
                             <span className="truncate font-medium">{entry.id}</span>
                             <span className="truncate text-muted-foreground">
