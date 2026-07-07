@@ -632,7 +632,7 @@ export const CanvasBrowser: Story = {
           {SECTIONS.map((section) => {
             const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
             return (
-              <AccordionItem key={section.id} value={section.id} className="border-b-0">
+              <AccordionItem key={section.id} value={section.id} className="border-b">
                 <AccordionTrigger className="py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline">
                   {section.label}
                 </AccordionTrigger>
@@ -642,7 +642,7 @@ export const CanvasBrowser: Story = {
                   <div className="ml-2 border-l pl-2">
                     <Accordion type="multiple">
                       {items.map((entry) => (
-                      <AccordionItem key={entry.id} value={`${section.id}:${entry.id}`}>
+                      <AccordionItem key={entry.id} value={`${section.id}:${entry.id}`} className="last:border-b-0">
                         <AccordionTrigger className="py-2 hover:no-underline">
                           <span className="flex min-w-0 items-center gap-2">
                             <span className="truncate font-medium">{entry.id}</span>
