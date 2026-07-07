@@ -633,7 +633,7 @@ export const CanvasBrowser: Story = {
             const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
             return (
               <AccordionItem key={section.id} value={section.id} className="border-b">
-                <AccordionTrigger className="py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline">
+                <AccordionTrigger className="px-1 py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline">
                   {section.label}
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
