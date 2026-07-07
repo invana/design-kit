@@ -1,13 +1,13 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import { Card, CardContent } from '@invana/ui';
-import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
+import { SettingsPanel, type FieldConfig, type RowConfig } from '@invana/forms';
 
 /**
- * Dense inspector / properties panel built entirely from the form generator at
- * `size="xs"`. This is the ultra-compact density used by side panels like the
- * modeller "Diagram Properties" editor — small controls, tight rows and compact
- * collapsible section headers, all driven by the single `size` prop.
+ * Dense inspector / properties panel built from the reusable `SettingsPanel`
+ * component at `size="xs"`. This is the ultra-compact density used by side
+ * panels like the modeller "Diagram Properties" editor — small controls, tight
+ * rows and compact collapsible section headers, all driven by the single
+ * `size` prop.
  */
 const meta: Meta = {
   title: 'Form Generator/Showcase/Properties Panel',
@@ -88,23 +88,16 @@ export const PropertiesPanel: Story = {
     const form = useForm({ defaultValues });
 
     return (
-      <Card className="w-[340px]">
-        <CardContent className="max-h-[80vh] overflow-y-auto p-4">
-          <h2 className="mb-3 text-base font-semibold uppercase tracking-wide text-muted-foreground">
-            Diagram Properties
-          </h2>
-          <Form {...form}>
-            <FormField.ObjectField
-              control={form.control}
-              name="props"
-              fields={fields}
-              rowConfig={rowConfig}
-              labelPosition="top"
-              size="xs"
-            />
-          </Form>
-        </CardContent>
-      </Card>
+      <SettingsPanel
+        title="Diagram Properties"
+        form={form}
+        name="props"
+        fields={fields}
+        rowConfig={rowConfig}
+        labelPosition="top"
+        size="xs"
+        className="w-[340px]"
+      />
     );
   },
 };

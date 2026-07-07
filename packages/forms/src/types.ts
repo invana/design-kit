@@ -36,6 +36,17 @@ export type ColorPreset = {
   darkValue?: string;
 };
 
+/**
+ * Small status pill rendered next to a field's label — the "on" / "active" /
+ * "no editor" chips seen in inspector panels. `variant` maps to the `Badge`
+ * component's variants and defaults to `secondary` (neutral grey). Use
+ * `default` for the solid accent ("on") pill.
+ */
+export type FieldBadge = {
+  label: string;
+  variant?: 'default' | 'secondary' | 'destructive' | 'outline' | 'soft';
+};
+
 export type FieldConfig = {
   name: string;
   type: FieldType;
@@ -87,6 +98,11 @@ export type FieldConfig = {
    * gap via margin, …) on top of the size-driven defaults.
    */
   labelClassName?: string;
+  /**
+   * Optional status pill rendered next to the field's label (e.g. an "on" /
+   * "active" chip in an inspector row). See {@link FieldBadge}.
+   */
+  badge?: FieldBadge;
 };
 
 export type RowConfig = {

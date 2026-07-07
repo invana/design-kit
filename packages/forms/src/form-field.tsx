@@ -5,6 +5,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  Badge,
   cn,
 } from '@invana/ui';
 import {
@@ -34,6 +35,7 @@ import { IconInput } from './fields/icon-input';
 import type {
   BooleanControl,
   ColorPreset,
+  FieldBadge,
   FieldConfig,
   FieldOrientation,
   FieldSize,
@@ -64,6 +66,7 @@ interface BaseFieldProps {
   rows?: number;
   className?: string;
   labelClassName?: string;
+  badge?: FieldBadge;
   labelPosition?: LabelPosition;
   size?: FieldSize;
   control?: BooleanControl;
@@ -127,17 +130,17 @@ const SIZE: Record<
     radio: 'h-4 w-4',
   },
   sm: {
-    input: 'h-8 text-sm',
-    select: 'h-8 text-sm',
-    textarea: 'text-sm',
-    label: 'text-xs',
-    desc: 'text-xs',
+    input: 'h-9',
+    select: 'h-9',
+    textarea: '',
+    label: 'text-base',
+    desc: 'text-base',
     gap: 'gap-x-3 gap-y-2',
     section: 'space-y-3',
     outer: 'space-y-4',
     stack: 'space-y-1.5',
     sideGap: 'gap-x-2',
-    trigger: 'px-3 py-2 text-sm',
+    trigger: 'px-3 py-2 text-base',
     box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
@@ -147,14 +150,14 @@ const SIZE: Record<
     input: '',
     select: '',
     textarea: '',
-    label: '',
-    desc: '',
+    label: 'text-base',
+    desc: 'text-base',
     gap: 'gap-4',
     section: 'space-y-4',
     outer: 'space-y-6',
     stack: 'space-y-2',
     sideGap: 'gap-2',
-    trigger: 'px-3 text-sm',
+    trigger: 'px-3 text-base',
     box: 'p-2',
     switch: '',
     check: 'h-4 w-4',
@@ -179,6 +182,39 @@ function inputWrapper(labelPosition: LabelPosition, size: FieldSize) {
   return cn(labelPosition === 'side' && 'col-span-2', SIZE[size].stack);
 }
 
+/**
+ * A field's `<FormLabel>` plus an optional trailing status pill. `FormLabel` is
+ * already a `flex items-center gap-2` row, so the badge lines up beside the text
+ * with no extra wrapper. Renders nothing when there is neither a label nor a
+ * badge.
+ */
+function FieldLabel({
+  label,
+  badge,
+  size,
+  className,
+}: {
+  label?: React.ReactNode;
+  badge?: FieldBadge;
+  size: FieldSize;
+  className?: string;
+}) {
+  if (!label && !badge) return null;
+  return (
+    <FormLabel className={cn(SIZE[size].label, className)}>
+      {label}
+      {badge && (
+        <Badge
+          variant={badge.variant ?? 'secondary'}
+          className="rounded-full px-1.5 py-0 text-base font-medium"
+        >
+          {badge.label}
+        </Badge>
+      )}
+    </FormLabel>
+  );
+}
+
 export const InputField: React.FC<BaseFieldProps> = ({
   label,
   description,
@@ -188,10 +224,11 @@ export const InputField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Input
@@ -218,10 +255,11 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <PasswordInput
@@ -249,10 +287,11 @@ export const TextareaField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Textarea
@@ -281,10 +320,11 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <Select value={value ?? ''} onValueChange={onChange}>
         <FormControl>
@@ -317,6 +357,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   control = 'switch',
   labelClassName,
+  badge,
   className,
 }) => {
   // `checkbox` control: a compact inline `☑ label` that packs into the grid,
@@ -331,17 +372,15 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
             onCheckedChange={onChange}
           />
         </FormControl>
-        {label && (
-          <FormLabel
-            className={cn(
-              '!mt-0 cursor-pointer font-normal leading-none',
-              SIZE[size].label,
-              labelClassName
-            )}
-          >
-            {label}
-          </FormLabel>
-        )}
+        <FieldLabel
+          label={label}
+          badge={badge}
+          size={size}
+          className={cn(
+            '!mt-0 cursor-pointer font-normal leading-none',
+            labelClassName
+          )}
+        />
       </FormItem>
     );
   }
@@ -354,7 +393,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
         )}
       >
         <div>
-          {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+          <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
           {description && (
             <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
           )}
@@ -371,7 +410,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   return (
     <FormItem className={SIZE[size].stack}>
-      {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+      <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
       <div
         className={cn(
           'flex items-center justify-between rounded-md border',
@@ -405,10 +444,11 @@ export const RadioField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   orientation = 'vertical',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <RadioGroup
@@ -452,6 +492,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
   size = 'sm',
   orientation = 'vertical',
   labelClassName,
+  badge,
   className,
 }) => {
   const selected: string[] = Array.isArray(value) ? value : [];
@@ -460,7 +501,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
 
   return (
     <FormItem className={itemClasses(labelPosition, size, className)}>
-      {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+      <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
       <div className={inputWrapper(labelPosition, size)}>
         <div
           className={
@@ -502,10 +543,11 @@ export const ColorField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <ColorSwatches
@@ -534,10 +576,11 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <SliderNumber
@@ -564,10 +607,11 @@ export const IconField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
+  badge,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
+    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <IconInput value={value} onChange={onChange} />
@@ -632,6 +676,7 @@ function renderField(
           control: field.control,
           orientation: field.orientation,
           labelClassName: field.labelClassName,
+          badge: field.badge,
           labelPosition,
           size,
           value: rhf.value,
@@ -827,19 +872,27 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
         <Accordion
           type="multiple"
           defaultValue={groupedEntries.map(([k]) => k)}
-          className="w-full space-y-2"
+          className="w-full"
         >
           {groupedEntries.map(([group, gFields]) => (
-            <AccordionItem key={group} value={group} className="rounded-md border">
+            <AccordionItem key={group} value={group} className="border-b">
               <AccordionTrigger
                 className={cn(
-                  'font-medium hover:no-underline',
+                  'font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline',
                   SIZE[size].trigger
                 )}
               >
-                {humanize(group)} Settings
+                <span className="flex items-center gap-2">
+                  {humanize(group)}
+                  <Badge
+                    variant="secondary"
+                    className="rounded-full px-1.5 py-0 text-base font-normal tabular-nums"
+                  >
+                    {gFields.length}
+                  </Badge>
+                </span>
               </AccordionTrigger>
-              <AccordionContent className="px-3 pb-3">
+              <AccordionContent className="px-3 pb-3 pt-1">
                 <div className={SIZE[size].section}>
                   {renderRows(
                     gFields,

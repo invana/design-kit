@@ -16,6 +16,7 @@ export {
 
 export type {
   BooleanControl,
+  FieldBadge,
   FieldConfig,
   FieldOrientation,
   FieldSize,
@@ -25,6 +26,9 @@ export type {
   ColorPreset,
   FieldType,
 } from './types';
+
+export { SettingsPanel } from './settings-panel';
+export type { SettingsPanelProps } from './settings-panel';
 
 export { ColorSwatches } from './fields/color-swatches';
 export { SliderNumber } from './fields/slider-number';
