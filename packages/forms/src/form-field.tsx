@@ -63,6 +63,7 @@ interface BaseFieldProps {
   defaultValue?: AnyValue;
   rows?: number;
   className?: string;
+  labelClassName?: string;
   labelPosition?: LabelPosition;
   size?: FieldSize;
   control?: BooleanControl;
@@ -186,10 +187,11 @@ export const InputField: React.FC<BaseFieldProps> = ({
   onChange,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Input
@@ -215,10 +217,11 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
   onChange,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <PasswordInput
@@ -245,10 +248,11 @@ export const TextareaField: React.FC<BaseFieldProps> = ({
   rows,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Textarea
@@ -276,10 +280,11 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   placeholder = 'Select type',
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <Select value={value ?? ''} onValueChange={onChange}>
         <FormControl>
@@ -311,6 +316,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   control = 'switch',
+  labelClassName,
   className,
 }) => {
   // `checkbox` control: a compact inline `☑ label` that packs into the grid,
@@ -329,7 +335,8 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
           <FormLabel
             className={cn(
               '!mt-0 cursor-pointer font-normal leading-none',
-              SIZE[size].label
+              SIZE[size].label,
+              labelClassName
             )}
           >
             {label}
@@ -347,7 +354,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
         )}
       >
         <div>
-          {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+          {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
           {description && (
             <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
           )}
@@ -364,7 +371,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   return (
     <FormItem className={SIZE[size].stack}>
-      {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+      {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
       <div
         className={cn(
           'flex items-center justify-between rounded-md border',
@@ -397,10 +404,11 @@ export const RadioField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   orientation = 'vertical',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <RadioGroup
@@ -443,6 +451,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   orientation = 'vertical',
+  labelClassName,
   className,
 }) => {
   const selected: string[] = Array.isArray(value) ? value : [];
@@ -451,7 +460,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
 
   return (
     <FormItem className={itemClasses(labelPosition, size, className)}>
-      {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+      {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
       <div className={inputWrapper(labelPosition, size)}>
         <div
           className={
@@ -492,10 +501,11 @@ export const ColorField: React.FC<BaseFieldProps> = ({
   defaultValue,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <ColorSwatches
@@ -523,10 +533,11 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   step,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <SliderNumber
@@ -552,10 +563,11 @@ export const IconField: React.FC<BaseFieldProps> = ({
   onChange,
   labelPosition = 'side',
   size = 'sm',
+  labelClassName,
   className,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    {label && <FormLabel className={SIZE[size].label}>{label}</FormLabel>}
+    {label && <FormLabel className={cn(SIZE[size].label, labelClassName)}>{label}</FormLabel>}
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <IconInput value={value} onChange={onChange} />
@@ -619,6 +631,7 @@ function renderField(
           rows: field.rows,
           control: field.control,
           orientation: field.orientation,
+          labelClassName: field.labelClassName,
           labelPosition,
           size,
           value: rhf.value,

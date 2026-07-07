@@ -81,6 +81,12 @@ export type FieldConfig = {
    * without adding a dedicated prop for every case.
    */
   className?: string;
+  /**
+   * Extra classes merged onto the field's `<FormLabel>`. Escape hatch for
+   * per-field label styling (padding, colour, weight, casing, the label→control
+   * gap via margin, …) on top of the size-driven defaults.
+   */
+  labelClassName?: string;
 };
 
 export type RowConfig = {
