@@ -90,7 +90,7 @@ export const PropertiesPanel: Story = {
     return (
       <Card className="w-[340px]">
         <CardContent className="max-h-[80vh] overflow-y-auto p-4">
-          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="mb-3 text-base font-semibold uppercase tracking-wide text-muted-foreground">
             Diagram Properties
           </h2>
           <Form {...form}>

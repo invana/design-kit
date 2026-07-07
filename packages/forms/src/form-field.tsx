@@ -110,17 +110,17 @@ const SIZE: Record<
   }
 > = {
   xs: {
-    input: 'h-8 text-sm',
-    select: 'h-8 text-sm',
-    textarea: 'text-sm',
-    label: 'text-xs',
-    desc: 'text-xs',
+    input: 'h-9',
+    select: 'h-9',
+    textarea: '',
+    label: 'text-base',
+    desc: 'text-base',
     gap: 'gap-x-3 gap-y-2.5',
     section: 'space-y-3',
     outer: 'space-y-4',
     stack: 'space-y-2',
     sideGap: 'gap-x-2',
-    trigger: 'px-3 py-2 text-sm',
+    trigger: 'px-3 py-2 text-base',
     box: 'p-2',
     switch: 'scale-90 origin-right',
     check: 'h-4 w-4',
