@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
 import {
@@ -6,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   Badge,
+  Button,
   Card,
   CardContent,
 } from '@invana/ui';
@@ -588,20 +590,83 @@ const ACTIVE_LAYOUT_ID = 'd3-force-layout';
 const CHEVRON_RIGHT = '[&>svg]:-rotate-90 [&[data-state=open]>svg]:rotate-0';
 
 /**
- * The expanded row content: one editor's schema as a chrome-flattened
- * `SettingsPanel` rendered inline (its own form + dynamic recompute via
- * `form.watch`), so it sits cleanly inside the accordion instead of nesting a
- * card. Editors with no options show a muted note, like the studio browser.
+ * A JSON config that seeds the browser — shape mirrors the canvas `CanvasConfig`
+ * (`{ [section]: { [instanceId]: options } }`). Instances listed here load with
+ * these values; everything else falls back to synthesized defaults. This is the
+ * "load from JSON" entry point — swap it for a fetched/imported document.
  */
-function EditorForm({ entry }: { entry: EditorEntry }) {
-  const base = resolve(entry.fields, {});
-  const form = useForm({ defaultValues: { opts: deriveDefaults(base) } });
+type CanvasConfig = Record<string, Record<string, Record<string, unknown>>>;
+
+const INITIAL_CONFIG: CanvasConfig = {
+  layers: {
+    'background-layer': {
+      type: 'pattern',
+      backgroundColor: '#0f172a',
+      mode: 'dark',
+      patternType: 'dots',
+      color: '#334155',
+      size: 1.5,
+      spacing: 24,
+      alpha: 0.6,
+      followCamera: true,
+    },
+    'minimap-layer': { position: 'bottom-right', width: 240, height: 160, enableDrag: true },
+  },
+  behaviours: {
+    'wheel-zoom': { requireCtrl: true, percent: 0.15, smooth: true, smoothFrames: 24 },
+    'drag-node': { pinOnRelease: true, groupAware: true },
+  },
+  layouts: {
+    'd3-force-layout': { linkDistance: 90, chargeStrength: -300, animate: true },
+    'elk-layout': { algorithm: 'layered', direction: 'RIGHT', nodeSpacing: 40, layerSpacing: 60 },
+  },
+};
+
+/**
+ * The expanded row content: one editor's schema as a chrome-flattened
+ * `SettingsPanel` rendered inline, seeded from the loaded JSON (`saved`) merged
+ * over synthesized defaults.
+ *
+ * - `onLiveChange` fires on **every** edit with just the **single changed
+ *   field** (a minimal `{ [field]: value }` patch) — wire it to
+ *   `canvas.update({ [section]: { [id]: patch } })` for real-time, per-field
+ *   updates you can undo/discard individually.
+ * - A footer adds per-editor **Save** (persists the values to the config
+ *   document) and **Discard** (resets to the last-saved values); both disable
+ *   until the form is dirty.
+ */
+function EditorForm({
+  entry,
+  saved,
+  onSave,
+  onLiveChange,
+}: {
+  entry: EditorEntry;
+  saved?: Record<string, unknown>;
+  onSave: (values: Record<string, unknown>) => void;
+  onLiveChange?: (patch: Record<string, unknown>) => void;
+}) {
+  const initial = { ...deriveDefaults(resolve(entry.fields, {})), ...(saved ?? {}) };
+  const form = useForm({ defaultValues: { opts: initial } });
   const values = form.watch('opts');
 
-  // Render a plain, flat form when a row is expanded: drop per-field
-  // descriptions (noisy in this narrow panel) and drop `group` so ObjectField
-  // renders every field inline instead of wrapping them in collapsible
-  // sub-accordions (FILL / THEME / …).
+  // Emit only the single field that changed (RHF gives its path in `name`), not
+  // the whole object — a minimal patch the host can apply and undo per field. A
+  // ref keeps the subscription stable while always calling the latest callback.
+  const liveRef = useRef(onLiveChange);
+  liveRef.current = onLiveChange;
+  useEffect(() => {
+    const sub = form.watch((v, { name }) => {
+      if (!name) return; // skip whole-form events (reset on Save/Discard)
+      const key = name.replace(/^opts\./, '');
+      const opts = (v.opts ?? {}) as Record<string, unknown>;
+      liveRef.current?.({ [key]: opts[key] });
+    });
+    return () => sub.unsubscribe();
+  }, [form]);
+
+  // Flat form: drop per-field descriptions and `group` so ObjectField renders
+  // every field inline instead of in collapsible sub-accordions.
   const fields = resolve(entry.fields, values ?? {}).map((f) => ({
     ...f,
     description: undefined,
@@ -616,6 +681,7 @@ function EditorForm({ entry }: { entry: EditorEntry }) {
     );
   }
 
+  const dirty = form.formState.isDirty;
   return (
     <SettingsPanel
       form={form}
@@ -626,7 +692,28 @@ function EditorForm({ entry }: { entry: EditorEntry }) {
       columns={2}
       className="border-0 bg-transparent shadow-none"
       contentClassName="max-h-none overflow-visible p-3"
-    />
+    >
+      <div className="flex justify-end gap-2 px-3 pb-3">
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={!dirty}
+          onClick={() => form.reset({ opts: initial })}
+        >
+          Discard
+        </Button>
+        <Button
+          type="button"
+          disabled={!dirty}
+          onClick={form.handleSubmit((v) => {
+            onSave(v.opts);
+            form.reset(v); // clear dirty; new baseline = the saved values
+          })}
+        >
+          Save
+        </Button>
+      </div>
+    </SettingsPanel>
   );
 }
 
@@ -637,63 +724,121 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const CanvasBrowser: Story = {
-  render: () => (
-    <Card className="w-[380px]">
-      <CardContent className="flex flex-col gap-1 p-2">
-        <h2 className="px-1 py-1 text-base font-semibold">Canvas Settings</h2>
+function CanvasBrowserView() {
+  // The persisted config the browser loads from and Save writes back to.
+  const [config, setConfig] = useState<CanvasConfig>(INITIAL_CONFIG);
+  const saveInstance = (
+    section: string,
+    id: string,
+    values: Record<string, unknown>,
+  ) => setConfig((c) => ({ ...c, [section]: { ...(c[section] ?? {}), [id]: values } }));
 
-        {/* Folders: Layers / Behaviours / Layouts */}
-        <Accordion type="multiple" defaultValue={SECTIONS.map((s) => s.id)}>
-          {SECTIONS.map((section) => {
-            const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
-            return (
-              <AccordionItem key={section.id} value={section.id} className="border-b">
-                <AccordionTrigger
-                  className={`px-1 py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline ${CHEVRON_RIGHT}`}
-                >
-                  {section.label}
-                </AccordionTrigger>
-                <AccordionContent className="pb-1">
-                  {/* Files: one expandable instance per registered editor, with a
-                      tree-style indentation guide line (VS Code explorer). */}
-                  <div className="ml-2 border-l pl-2">
-                    <Accordion type="multiple">
-                      {items.map((entry) => (
-                      <AccordionItem key={entry.id} value={`${section.id}:${entry.id}`} className="last:border-b-0">
-                        <AccordionTrigger className={`py-2 hover:no-underline ${CHEVRON_RIGHT}`}>
-                          <span className="flex min-w-0 items-center gap-2">
-                            <span className="truncate font-medium">{entry.id}</span>
-                            <span className="truncate text-muted-foreground">
-                              {entry.typeLabel}
-                            </span>
-                            {section.id === 'behaviours' && (
-                              <Badge variant="default" className="px-1.5 py-0">
-                                on
-                              </Badge>
-                            )}
-                            {section.id === 'layouts' && entry.id === ACTIVE_LAYOUT_ID && (
-                              <Badge variant="secondary" className="px-1.5 py-0">
-                                active
-                              </Badge>
-                            )}
-                          </span>
-                        </AccordionTrigger>
-                        <AccordionContent className="p-0">
-                          <div className="ml-2 border-l pl-2">
-                            <EditorForm entry={entry} />
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                    </Accordion>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      </CardContent>
-    </Card>
-  ),
+  // The most recent live edit — a single-field patch a host pushes to the canvas.
+  const [livePatch, setLivePatch] = useState<{
+    section: string;
+    id: string;
+    patch: Record<string, unknown>;
+  } | null>(null);
+  const liveUpdate = (section: string, id: string, patch: Record<string, unknown>) => {
+    setLivePatch({ section, id, patch });
+    // In a real host: canvas.update({ [section]: { [id]: patch } });
+  };
+
+  return (
+    <div className="flex items-start gap-4">
+      <Card className="w-[380px]">
+        <CardContent className="flex flex-col gap-1 p-2">
+          <h2 className="px-1 py-1 text-base font-semibold">Canvas Settings</h2>
+
+          {/* Folders: Layers / Behaviours / Layouts */}
+          <Accordion type="multiple" defaultValue={SECTIONS.map((s) => s.id)}>
+            {SECTIONS.map((section) => {
+              const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
+              return (
+                <AccordionItem key={section.id} value={section.id} className="border-b">
+                  <AccordionTrigger
+                    className={`px-1 py-2 font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline ${CHEVRON_RIGHT}`}
+                  >
+                    {section.label}
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-1">
+                    {/* Files: one expandable instance per registered editor, with
+                        a tree-style indentation guide line (VS Code explorer). */}
+                    <div className="ml-2 border-l pl-2">
+                      <Accordion type="multiple">
+                        {items.map((entry) => (
+                          <AccordionItem
+                            key={entry.id}
+                            value={`${section.id}:${entry.id}`}
+                            className="last:border-b-0"
+                          >
+                            <AccordionTrigger className={`py-2 hover:no-underline ${CHEVRON_RIGHT}`}>
+                              <span className="flex min-w-0 items-center gap-2">
+                                <span className="truncate font-medium">{entry.id}</span>
+                                <span className="truncate text-muted-foreground">
+                                  {entry.typeLabel}
+                                </span>
+                                {section.id === 'behaviours' && (
+                                  <Badge variant="default" className="px-1.5 py-0">
+                                    on
+                                  </Badge>
+                                )}
+                                {section.id === 'layouts' && entry.id === ACTIVE_LAYOUT_ID && (
+                                  <Badge variant="secondary" className="px-1.5 py-0">
+                                    active
+                                  </Badge>
+                                )}
+                              </span>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-0">
+                              <div className="ml-2 border-l pl-2">
+                                <EditorForm
+                                  entry={entry}
+                                  saved={config[section.id]?.[entry.id]}
+                                  onSave={(v) => saveInstance(section.id, entry.id, v)}
+                                  onLiveChange={(v) => liveUpdate(section.id, entry.id, v)}
+                                />
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+        </CardContent>
+      </Card>
+
+      {/* Right column: the live patch (every edit) + the saved config (on Save). */}
+      <div className="flex w-[340px] flex-col gap-4">
+        <div>
+          <div className="mb-1 px-1 font-medium text-muted-foreground">
+            Live → canvas.update()
+          </div>
+          <pre className="max-h-[34vh] overflow-auto rounded-lg border bg-muted/30 p-3 font-mono leading-relaxed">
+            {livePatch
+              ? `canvas.update(${JSON.stringify(
+                  { [livePatch.section]: { [livePatch.id]: livePatch.patch } },
+                  null,
+                  2,
+                )})`
+              : '// edit any field to see the live patch'}
+          </pre>
+        </div>
+        <div>
+          <div className="mb-1 px-1 font-medium text-muted-foreground">Saved config</div>
+          <pre className="max-h-[44vh] overflow-auto rounded-lg border bg-muted/30 p-3 font-mono leading-relaxed">
+            {JSON.stringify(config, null, 2)}
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const CanvasBrowser: Story = {
+  render: () => <CanvasBrowserView />,
 };
