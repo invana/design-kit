@@ -63,6 +63,8 @@ export interface DataTableProps<TData extends RowData> {
   enableColumnPinning?: boolean;
   onCellEdit?: CellEditHandler<TData>;
   toolbar?: React.ReactNode;
+  /** Content rendered as a sticky summary bar inside the table's bordered container, below the rows. */
+  footer?: React.ReactNode;
   className?: string;
   emptyState?: React.ReactNode;
   /** Server-side mode: skip client pagination — `data` is already the current page. Requires `pageCount` (or `rowCount`). */
@@ -134,6 +136,7 @@ function DraggableHeader<TData>({
       className={cn(
         'group relative select-none bg-muted/40',
         isPinned && 'bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]',
+        column.columnDef.meta?.headerClassName,
       )}
       {...attributes}
     >
@@ -198,6 +201,7 @@ export function DataTable<TData extends RowData>({
   enableColumnPinning = false,
   onCellEdit,
   toolbar,
+  footer,
   className,
   emptyState,
   manualPagination = false,
@@ -400,6 +404,7 @@ export function DataTable<TData extends RowData>({
                             align === 'center' && 'text-center',
                             isPinned &&
                               'bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]',
+                            column.columnDef.meta?.cellClassName,
                           )}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -411,6 +416,11 @@ export function DataTable<TData extends RowData>({
               )}
             </TableBody>
           </Table>
+          {footer != null && (
+            <div className="sticky bottom-0 border-t bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+              {footer}
+            </div>
+          )}
         </div>
       </DndContext>
 

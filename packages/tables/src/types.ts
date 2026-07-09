@@ -11,6 +11,14 @@ declare module '@tanstack/react-table' {
     editType?: EditType;
     options?: EditOption[];
     align?: 'left' | 'center' | 'right';
+    /**
+     * Extra class(es) applied to this column's body `<td>`. Use to control
+     * padding, vertical alignment, or background when rendering your own
+     * always-on controls (Switch/Select/Input) inside `cell()`.
+     */
+    cellClassName?: string;
+    /** Extra class(es) applied to this column's header `<th>`. */
+    headerClassName?: string;
   }
 }
 
