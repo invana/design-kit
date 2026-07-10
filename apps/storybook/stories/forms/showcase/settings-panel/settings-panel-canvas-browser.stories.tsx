@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
   Badge,
-  Button,
   Card,
   CardContent,
 } from '@invana/ui';
@@ -630,20 +629,15 @@ const INITIAL_CONFIG: CanvasConfig = {
  * - `onLiveChange` fires on **every** edit with just the **single changed
  *   field** (a minimal `{ [field]: value }` patch) — wire it to
  *   `canvas.update({ [section]: { [id]: patch } })` for real-time, per-field
- *   updates you can undo/discard individually.
- * - A footer adds per-editor **Save** (persists the values to the config
- *   document) and **Discard** (resets to the last-saved values); both disable
- *   until the form is dirty.
+ *   updates. There is no Save/Discard step: every edit is applied immediately.
  */
 function EditorForm({
   entry,
   saved,
-  onSave,
   onLiveChange,
 }: {
   entry: EditorEntry;
   saved?: Record<string, unknown>;
-  onSave: (values: Record<string, unknown>) => void;
   onLiveChange?: (patch: Record<string, unknown>) => void;
 }) {
   const initial = { ...deriveDefaults(resolve(entry.fields, {})), ...(saved ?? {}) };
@@ -657,7 +651,7 @@ function EditorForm({
   liveRef.current = onLiveChange;
   useEffect(() => {
     const sub = form.watch((v, { name }) => {
-      if (!name) return; // skip whole-form events (reset on Save/Discard)
+      if (!name) return; // skip whole-form (non-field) events
       const key = name.replace(/^opts\./, '');
       const opts = (v.opts ?? {}) as Record<string, unknown>;
       liveRef.current?.({ [key]: opts[key] });
@@ -681,7 +675,6 @@ function EditorForm({
     );
   }
 
-  const dirty = form.formState.isDirty;
   return (
     <SettingsPanel
       form={form}
@@ -692,28 +685,7 @@ function EditorForm({
       columns={2}
       className="border-0 bg-transparent shadow-none"
       contentClassName="max-h-none overflow-visible p-3"
-    >
-      <div className="flex justify-end gap-2 px-3 pb-3">
-        <Button
-          type="button"
-          variant="ghost"
-          disabled={!dirty}
-          onClick={() => form.reset({ opts: initial })}
-        >
-          Discard
-        </Button>
-        <Button
-          type="button"
-          disabled={!dirty}
-          onClick={form.handleSubmit((v) => {
-            onSave(v.opts);
-            form.reset(v); // clear dirty; new baseline = the saved values
-          })}
-        >
-          Save
-        </Button>
-      </div>
-    </SettingsPanel>
+    />
   );
 }
 
@@ -725,13 +697,9 @@ export default meta;
 type Story = StoryObj;
 
 function CanvasBrowserView() {
-  // The persisted config the browser loads from and Save writes back to.
+  // The config document the browser loads from; every live edit is applied
+  // immediately (no Save step).
   const [config, setConfig] = useState<CanvasConfig>(INITIAL_CONFIG);
-  const saveInstance = (
-    section: string,
-    id: string,
-    values: Record<string, unknown>,
-  ) => setConfig((c) => ({ ...c, [section]: { ...(c[section] ?? {}), [id]: values } }));
 
   // The most recent live edit — a single-field patch a host pushes to the canvas.
   const [livePatch, setLivePatch] = useState<{
@@ -741,6 +709,10 @@ function CanvasBrowserView() {
   } | null>(null);
   const liveUpdate = (section: string, id: string, patch: Record<string, unknown>) => {
     setLivePatch({ section, id, patch });
+    setConfig((c) => ({
+      ...c,
+      [section]: { ...(c[section] ?? {}), [id]: { ...(c[section]?.[id] ?? {}), ...patch } },
+    }));
     // In a real host: canvas.update({ [section]: { [id]: patch } });
   };
 
@@ -795,7 +767,6 @@ function CanvasBrowserView() {
                                 <EditorForm
                                   entry={entry}
                                   saved={config[section.id]?.[entry.id]}
-                                  onSave={(v) => saveInstance(section.id, entry.id, v)}
                                   onLiveChange={(v) => liveUpdate(section.id, entry.id, v)}
                                 />
                               </div>
@@ -812,7 +783,7 @@ function CanvasBrowserView() {
         </CardContent>
       </Card>
 
-      {/* Right column: the live patch (every edit) + the saved config (on Save). */}
+      {/* Right column: the live patch (every edit) + the running config document. */}
       <div className="flex w-[340px] flex-col gap-4">
         <div>
           <div className="mb-1 px-1 font-medium text-muted-foreground">
@@ -829,7 +800,7 @@ function CanvasBrowserView() {
           </pre>
         </div>
         <div>
-          <div className="mb-1 px-1 font-medium text-muted-foreground">Saved config</div>
+          <div className="mb-1 px-1 font-medium text-muted-foreground">Config document</div>
           <pre className="max-h-[44vh] overflow-auto rounded-lg border bg-muted/30 p-3 font-mono leading-relaxed">
             {JSON.stringify(config, null, 2)}
           </pre>
