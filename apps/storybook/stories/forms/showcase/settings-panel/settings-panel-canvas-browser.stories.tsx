@@ -10,7 +10,14 @@ import {
   Card,
   CardContent,
 } from '@invana/ui';
-import { SettingsPanel, Switch, type ColorPreset, type FieldConfig } from '@invana/forms';
+import {
+  Input,
+  SettingsPanel,
+  Switch,
+  type ColorPreset,
+  type FieldConfig,
+} from '@invana/forms';
+import { Search } from 'lucide-react';
 
 /**
  * A faithful design-kit rebuild of the canvas studio's `CanvasSettingsBrowser`:
@@ -544,6 +551,20 @@ const resolve = (
 ): FieldConfig[] => (typeof fields === 'function' ? fields(values) : fields);
 
 /**
+ * Lowercased searchable text for an editor: its id + type label plus every
+ * field's name / label / description / group / option labels — so a query like
+ * "re-route connectors" surfaces the `drag-shape` behaviour that owns it.
+ */
+function entryHaystack(entry: EditorEntry): string {
+  const parts = [entry.id, entry.typeLabel];
+  for (const f of resolve(entry.fields, {})) {
+    parts.push(f.name, f.label ?? '', f.description ?? '', f.group ?? '');
+    for (const o of f.options ?? []) parts.push(o.label, String(o.value));
+  }
+  return parts.join(' ').toLowerCase();
+}
+
+/**
  * Reasonable standalone defaults derived from each field's schema — the canvas
  * app seeds these from a live engine instance; here we synthesize them so every
  * editor is interactive with no engine attached.
@@ -720,16 +741,43 @@ function CanvasBrowserView() {
   // can be force-collapsed when it is switched off.
   const [openRows, setOpenRows] = useState<Record<string, string[]>>({});
 
+  // Free-text filter across ids, type labels, and every editor's field text.
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const noMatches =
+    q !== '' &&
+    !SECTIONS.some(
+      (s) =>
+        s.label.toLowerCase().includes(q) ||
+        CANVAS_REGISTRY.some((e) => e.section === s.id && entryHaystack(e).includes(q)),
+    );
+
   return (
     <div className="flex items-start gap-4">
       <Card className="w-[380px]">
         <CardContent className="flex flex-col gap-1 p-2">
           <h2 className="px-1 py-1 text-base font-semibold">Canvas Settings</h2>
 
+          <div className="relative mb-1 px-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search settings…"
+              className="h-8 pl-8"
+            />
+          </div>
+
           {/* Folders: Layers / Behaviours / Layouts */}
           <Accordion type="multiple" defaultValue={SECTIONS.map((s) => s.id)}>
             {SECTIONS.map((section) => {
-              const items = CANVAS_REGISTRY.filter((e) => e.section === section.id);
+              // A matching section label surfaces all its rows; otherwise keep
+              // only the editors whose text matches the query.
+              const sectionMatches = q !== '' && section.label.toLowerCase().includes(q);
+              const items = CANVAS_REGISTRY.filter((e) => e.section === section.id).filter(
+                (e) => !q || sectionMatches || entryHaystack(e).includes(q),
+              );
+              if (q && items.length === 0) return null;
               return (
                 <AccordionItem key={section.id} value={section.id} className="border-b">
                   <AccordionTrigger
@@ -820,6 +868,12 @@ function CanvasBrowserView() {
               );
             })}
           </Accordion>
+
+          {noMatches && (
+            <p className="px-2 py-6 text-center text-sm italic text-muted-foreground">
+              No settings match “{query.trim()}”.
+            </p>
+          )}
         </CardContent>
       </Card>
 
