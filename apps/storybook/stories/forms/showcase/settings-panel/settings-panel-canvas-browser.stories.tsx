@@ -10,7 +10,7 @@ import {
   Card,
   CardContent,
 } from '@invana/ui';
-import { SettingsPanel, type ColorPreset, type FieldConfig } from '@invana/forms';
+import { SettingsPanel, Switch, type ColorPreset, type FieldConfig } from '@invana/forms';
 
 /**
  * A faithful design-kit rebuild of the canvas studio's `CanvasSettingsBrowser`:
@@ -716,6 +716,10 @@ function CanvasBrowserView() {
     // In a real host: canvas.update({ [section]: { [id]: patch } });
   };
 
+  // Which instance rows are expanded, per section — controlled so a behaviour
+  // can be force-collapsed when it is switched off.
+  const [openRows, setOpenRows] = useState<Record<string, string[]>>({});
+
   return (
     <div className="flex items-start gap-4">
       <Card className="w-[380px]">
@@ -737,31 +741,66 @@ function CanvasBrowserView() {
                     {/* Files: one expandable instance per registered editor, with
                         a tree-style indentation guide line (VS Code explorer). */}
                     <div className="ml-2 border-l pl-2">
-                      <Accordion type="multiple">
-                        {items.map((entry) => (
+                      <Accordion
+                        type="multiple"
+                        value={openRows[section.id] ?? []}
+                        onValueChange={(v) =>
+                          setOpenRows((s) => ({ ...s, [section.id]: v }))
+                        }
+                      >
+                        {items.map((entry) => {
+                          // Layers and behaviours can be enabled/disabled; layouts use
+                          // an "active" selection instead.
+                          const toggleable =
+                            section.id === 'layers' || section.id === 'behaviours';
+                          const rowOff =
+                            toggleable &&
+                            config[section.id]?.[entry.id]?.enabled === false;
+                          return (
                           <AccordionItem
                             key={entry.id}
                             value={`${section.id}:${entry.id}`}
                             className="last:border-b-0"
                           >
-                            <AccordionTrigger className={`py-2 hover:no-underline ${CHEVRON_RIGHT}`}>
-                              <span className="flex min-w-0 items-center gap-2">
-                                <span className="truncate font-medium">{entry.id}</span>
-                                <span className="truncate text-muted-foreground">
-                                  {entry.typeLabel}
-                                </span>
-                                {section.id === 'behaviours' && (
-                                  <Badge variant="default" className="px-1.5 py-0">
-                                    on
-                                  </Badge>
-                                )}
-                                {section.id === 'layouts' && entry.id === ACTIVE_LAYOUT_ID && (
-                                  <Badge variant="secondary" className="px-1.5 py-0">
-                                    active
-                                  </Badge>
-                                )}
-                              </span>
-                            </AccordionTrigger>
+                            <div className="flex items-center gap-2">
+                              {toggleable && (
+                                <Switch
+                                  checked={config[section.id]?.[entry.id]?.enabled !== false}
+                                  onCheckedChange={(v) => {
+                                    liveUpdate(section.id, entry.id, { enabled: v });
+                                    if (!v)
+                                      setOpenRows((s) => ({
+                                        ...s,
+                                        [section.id]: (s[section.id] ?? []).filter(
+                                          (val) => val !== `${section.id}:${entry.id}`,
+                                        ),
+                                      }));
+                                  }}
+                                  aria-label={`Toggle ${entry.id}`}
+                                  className="ml-1 shrink-0"
+                                />
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <AccordionTrigger
+                                  disabled={rowOff}
+                                  className={`py-2 hover:no-underline ${CHEVRON_RIGHT} ${
+                                    rowOff ? 'opacity-50' : ''
+                                  }`}
+                                >
+                                  <span className="flex min-w-0 items-center gap-2">
+                                    <span className="truncate font-medium">{entry.id}</span>
+                                    <span className="truncate text-muted-foreground">
+                                      {entry.typeLabel}
+                                    </span>
+                                    {section.id === 'layouts' && entry.id === ACTIVE_LAYOUT_ID && (
+                                      <Badge variant="secondary" className="px-1.5 py-0">
+                                        active
+                                      </Badge>
+                                    )}
+                                  </span>
+                                </AccordionTrigger>
+                              </div>
+                            </div>
                             <AccordionContent className="p-0">
                               <div className="ml-2 border-l pl-2">
                                 <EditorForm
@@ -772,7 +811,8 @@ function CanvasBrowserView() {
                               </div>
                             </AccordionContent>
                           </AccordionItem>
-                        ))}
+                          );
+                        })}
                       </Accordion>
                     </div>
                   </AccordionContent>
