@@ -1,4 +1,5 @@
 import React from "react"
+import { cn } from "../../lib/utils"
 import { Card, CardHeader, CardContent, CardFooter } from "../ui/card"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs"
 import { NavHorizontal, type NavHorizontalProps } from "./nav-horizontal"
@@ -81,8 +82,8 @@ export function TabbedPanel({
   return (
     <ErrorBoundary>
       <TooltipProvider delayDuration={0}>
-        <Tabs value={currentTab} onValueChange={handleTabChange} className={`h-full ${className || ''}`}>
-          <Card className="h-full border rounded-none">
+        <Tabs value={currentTab} onValueChange={handleTabChange} className="h-full">
+          <Card className={cn("h-full border rounded-none", className)}>
             {/* Header with tabs and actions */}
             <CardHeader className={`flex flex-row items-center justify-between py-0 border-b h-[30px] px-0 space-y-0 ${headerClassName || ''}`}>
             {/* Left: Tabs */}

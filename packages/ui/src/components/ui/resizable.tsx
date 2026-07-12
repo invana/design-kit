@@ -1,19 +1,13 @@
-import { GripHorizontal } from "lucide-react"
 import { Group, Panel, Separator } from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"
 
-const ResizablePanelGroup = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof Group>) => (
-  <Group
-    className={cn(
-      "flex h-full w-full data-[panel-group-direction=vertical]:flex-col",
-      className
-    )}
-    {...props}
-  />
+// The library already sets display:flex, flex-direction and 100% width/height on
+// the group, and stretches children across the cross-axis — so wrappers only add
+// theming. Orientation is read from the separator's aria-orientation attribute.
+
+const ResizablePanelGroup = (props: React.ComponentProps<typeof Group>) => (
+  <Group {...props} />
 )
 
 const ResizablePanel = Panel
@@ -27,22 +21,20 @@ const ResizableHandle = ({
 }) => (
   <Separator
     className={cn(
-      "relative flex items-center justify-center transition-colors",
-      "data-[panel-group-direction=vertical]:h-2 data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:cursor-row-resize",
-      "data-[panel-group-direction=horizontal]:w-2 data-[panel-group-direction=horizontal]:h-full data-[panel-group-direction=horizontal]:cursor-col-resize",
-      "hover:bg-ring/30 focus:bg-ring/30",
-      "focus-visible:outline-none \
-      focus-visible:ring-ring \
-      focus-visible:ring-offset-3",
-      "[&[data-panel-group-direction=vertical]>div]:rotate-90",
+      // A themed gap between panels. The separator has no intrinsic size, so give
+      // it an explicit one on the main axis or it collapses to 0.
+      "relative flex items-center justify-center bg-background transition-colors",
+      "aria-[orientation=vertical]:w-2 aria-[orientation=vertical]:cursor-col-resize",
+      "aria-[orientation=horizontal]:h-2 aria-[orientation=horizontal]:cursor-row-resize",
+      "data-[separator=hover]:bg-accent data-[separator=active]:bg-accent",
+      "[&[aria-orientation=horizontal]>div]:rotate-90",
       className
     )}
     {...props}
   >
     {withHandle && (
-      <div className="z-10 flex h-3 w-4 items-center justify-center rounded-sm border bg-border">
-        <GripHorizontal />
-      </div>
+      // A subtle pill grip centered in the gutter; rotate handles orientation.
+      <div className="z-10 h-6 w-[3px] rounded-full bg-muted-foreground/40" />
     )}
   </Separator>
 )
