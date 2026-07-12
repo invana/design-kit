@@ -92,8 +92,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
                       >
                         <div className="h-full overflow-auto bg-card">{leftSection.content}</div>
                       </ResizablePanel>
-                      <ResizableHandle withHandle className='w-1' />
-                      <ResizablePanel 
+                      <ResizableHandle withHandle />
+                      <ResizablePanel
                         id="editor-panel"
                         defaultSize={mainSection.defaultSize ?? DEFAULT_EDITOR.defaultSize} 
                         minSize={mainSection.minSize ?? DEFAULT_EDITOR.minSize}
@@ -109,8 +109,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
                 {/* Terminal Panel: Bottom section */}
                 {bottomSection && (
                   <>
-                    <ResizableHandle withHandle  className='h-1' />
-                    <ResizablePanel 
+                    <ResizableHandle withHandle />
+                    <ResizablePanel
                       id="terminal-panel"
                       defaultSize={bottomSection.defaultSize ?? DEFAULT_TERMINAL.defaultSize} 
                       minSize={bottomSection.minSize ?? DEFAULT_TERMINAL.minSize} 
@@ -127,8 +127,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
             {/* Auxiliary Panel: Right section (full height) */}
             {rightSection && (
               <>
-                <ResizableHandle withHandle className='w-1' />
-                <ResizablePanel 
+                <ResizableHandle withHandle />
+                <ResizablePanel
                   id="auxiliary-panel"
                   defaultSize={rightSection.defaultSize ?? DEFAULT_AUXILIARY.defaultSize} 
                   minSize={rightSection.minSize ?? DEFAULT_AUXILIARY.minSize} 
