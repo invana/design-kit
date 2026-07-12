@@ -1,12 +1,13 @@
 import * as React from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
-import { cn } from "../../lib/utils";
+} from "../../ui/tooltip";
+import { NavHorizontal } from "../nav-horizontal";
+import { cn } from "../../../lib/utils";
 
 /**
  * A single action in a message's option row. The library is icon-agnostic — pass
@@ -72,19 +73,17 @@ export function ChatSessionMessageOptions({
     </Tooltip>
   );
 
+  // Layout comes from NavHorizontal (start → left slot, end → right slot). The
+  // buttons themselves stay bespoke so momentary-action behaviour, controlled
+  // `active` votes, and `disabled` are preserved — NavItems' selection model
+  // isn't a fit for action toolbars.
   return (
     <TooltipProvider delayDuration={300}>
-      <div
-        className={cn(
-          "flex items-center justify-between gap-1 text-muted-foreground",
-          className,
-        )}
-      >
-        <div className="flex items-center gap-1">{start.map(renderAction)}</div>
-        {end.length > 0 && (
-          <div className="flex items-center gap-1">{end.map(renderAction)}</div>
-        )}
-      </div>
+      <NavHorizontal
+        className={cn("text-muted-foreground", className)}
+        left={start.length > 0 ? <>{start.map(renderAction)}</> : undefined}
+        right={end.length > 0 ? <>{end.map(renderAction)}</> : undefined}
+      />
     </TooltipProvider>
   );
 }

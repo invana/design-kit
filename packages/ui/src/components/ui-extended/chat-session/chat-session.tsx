@@ -1,6 +1,6 @@
 import * as React from "react";
-import { ScrollArea } from "../ui/scroll-area";
-import { cn } from "../../lib/utils";
+import { ScrollArea } from "../../ui/scroll-area";
+import { cn } from "../../../lib/utils";
 
 export interface ChatSessionProps {
   /** The message list — typically `<ChatSessionMessage />` nodes. */
