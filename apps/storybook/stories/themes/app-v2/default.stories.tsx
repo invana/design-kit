@@ -458,7 +458,7 @@ type Story = StoryObj<typeof meta>;
 
 type MaximizablePanel = 'left' | 'bottom' | 'right';
 
-const AppV2Demo = () => {
+const AppV2Demo = ({ bottomSpan }: Pick<AppLayoutV2Props, 'bottomSpan'>) => {
   const [showLeft, setShowLeft] = React.useState(true);
   const [showBottom, setShowBottom] = React.useState(true);
   const [showRight, setShowRight] = React.useState(true);
@@ -833,11 +833,23 @@ const AppV2Demo = () => {
       ],
     },
     mainClassName: "h-[calc(100vh-55px)] ",
+    bottomSpan,
   };
 
   return <AppLayoutV2 {...layoutProps} />;
 };
 
 export const Default: Story = {
-  render: () => <AppV2Demo />,
+  argTypes: {
+    bottomSpan: {
+      name: 'Bottom panel span',
+      control: 'inline-radio',
+      options: ['left-main', 'main-right', 'full'],
+      description: 'Which columns the bottom (terminal) panel stretches under.',
+    },
+  },
+  args: {
+    bottomSpan: 'left-main',
+  },
+  render: (args) => <AppV2Demo bottomSpan={args.bottomSpan} />,
 };
