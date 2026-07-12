@@ -24,8 +24,8 @@ const ResizableHandle = ({
       // A themed gap between panels. The separator has no intrinsic size, so give
       // it an explicit one on the main axis or it collapses to 0.
       "relative flex items-center justify-center bg-background transition-colors",
-      "aria-[orientation=vertical]:w-2 aria-[orientation=vertical]:cursor-col-resize",
-      "aria-[orientation=horizontal]:h-2 aria-[orientation=horizontal]:cursor-row-resize",
+      "aria-[orientation=vertical]:w-1 aria-[orientation=vertical]:cursor-col-resize",
+      "aria-[orientation=horizontal]:h-1 aria-[orientation=horizontal]:cursor-row-resize",
       "data-[separator=hover]:bg-accent data-[separator=active]:bg-accent",
       "[&[aria-orientation=horizontal]>div]:rotate-90",
       className
