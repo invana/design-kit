@@ -56,17 +56,17 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@tanstack/react-table": "^8.21.3",
-    "lucide-react": "^0.562.0"
+    "lucide-react": "^1.24.0"
   },
   "devDependencies": {
     "@invana/forms": "workspace:*",
     "@invana/styling": "workspace:*",
     "@invana/ui": "workspace:*",
-    "@types/react": "^19.2.5",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tsup": "^8.3.5",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsup": "^8.5.1",
     "typescript": "~5.9.3"
   }
 }
