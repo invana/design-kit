@@ -98,7 +98,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
                         defaultSize={mainSection.defaultSize ?? DEFAULT_EDITOR.defaultSize} 
                         minSize={mainSection.minSize ?? DEFAULT_EDITOR.minSize}
                       >
-                        <div className="h-full overflow-auto">{mainSection.content}</div>
+                        <div className="h-full overflow-auto bg-card">{mainSection.content}</div>
                       </ResizablePanel>
                     </ResizablePanelGroup>
                   ) : (
