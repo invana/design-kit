@@ -22,7 +22,7 @@ export const NestedNoHandle: Story = {
                 Top Left
               </div>
             </ResizablePanel>
-            <ResizableHandle className={"h-2"} />
+            <ResizableHandle />
             <ResizablePanel defaultSize={50} minSize={20}>
               <div className="h-full bg-blue-500 p-4 text-white">
                 Bottom Left

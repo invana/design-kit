@@ -326,6 +326,7 @@ const RightSection: React.FC = () => (
       { value: "files", label: "Files", icon: ListTree, content: <FilesContent /> },
     ]}
     defaultTab="files"
+    className="border-0"
     bodyClassName="p-0"
     headerClassName="bg-muted/10"
   />

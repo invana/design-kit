@@ -22,7 +22,7 @@ export const Nested: Story = {
                 Top Left
               </div>
             </ResizablePanel>
-            <ResizableHandle className={"h-1"} withHandle />
+            <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50} minSize={20}>
               <div className="h-full bg-blue-500 p-4 text-white">
                 Bottom Left
@@ -30,7 +30,7 @@ export const Nested: Story = {
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
-        <ResizableHandle className={"w-1"} withHandle />
+        <ResizableHandle withHandle />
         <ResizablePanel defaultSize={50} minSize={20}>
           <div className="h-full bg-green-500 p-4 text-white">
             Right Panel

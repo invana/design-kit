@@ -196,6 +196,7 @@ const LeftSectionPanel = ({ panelKey, isMaximized, onToggleMaximize, onClose }: 
         },
       ]}
       activeTab={panelKey}
+      className="border-0"
       headerActions={{
         rightNavItems: [
           {
@@ -343,6 +344,7 @@ const BottomSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChr
       },
     ]}
     defaultTab="problems"
+    className="border-0"
     headerActions={{
       rightNavItems: [
         {
@@ -433,6 +435,7 @@ const RightSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChro
       },
     ]}
     defaultTab="outline"
+    className="border-0"
     headerActions={{
       rightNavItems: [
         {
