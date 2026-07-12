@@ -13,7 +13,7 @@ import {
   Folder, Search, Settings,
   Bell, User,
   FileCode, GitBranch, Bug, Package,
-  AlertCircle,
+  AlertCircle, AlertTriangle,
   PanelRight, ChevronRight, File, FolderOpen,
   Menu, Plus, RefreshCw, X, Maximize2, Minimize2, Copy, Filter, Trash2,
   Camera
@@ -474,6 +474,9 @@ const AppV2Demo = () => {
     }
   };
 
+  // Compact styling shared by footer status-bar nav items (fits the 25px bar)
+  const STATUS_ITEM = { className: "!py-0 !px-2 !rounded-sm", iconClassName: "w-3.5 h-3.5" };
+
   const toggleMaximize = (panel: MaximizablePanel) =>
     setMaximized((cur) => (cur === panel ? null : panel));
 
@@ -695,18 +698,15 @@ const AppV2Demo = () => {
           </div>
         </div>
       ),
+      // Icon actions expressed as nav items; the avatar cluster stays as
+      // composed UI components (Avatar) rendered after the items.
+      rightNavItems: [
+        { name: "Notifications", icon: Bell, onClick: () => console.log('Notifications'), tooltip: "Notifications" },
+        { name: "Settings", icon: Settings, onClick: () => console.log('Settings'), tooltip: "Settings" },
+        { name: "Screenshot", icon: Camera, onClick: () => console.log('Screenshot'), tooltip: "Screenshot", showSeperator: true },
+      ],
       right: (
         <div className="flex items-center gap-4 px-3">
-          <Button variant="ghost" size="icon" className="h-7 w-7">
-            <Bell className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7">
-            <Settings className="h-4 w-4" />
-          </Button>
-           <Button variant="ghost" size="icon" className="h-7 w-7">
-            <Camera className="h-4 w-4" />
-          </Button>
-
           <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
             <Avatar className="h-8 w-8">
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -812,30 +812,22 @@ const AppV2Demo = () => {
             collapsible: true,
           }
         : undefined,
+    // Status bar expressed entirely as NavHorizontal items — no layout HTML.
+    // Left items carry icons; right items are label-only (icon is optional).
     footer: {
-      className: "!h-[25px]",
-      left: (
-        <div className="flex items-center gap-4 px-3">
-          <div className="flex items-center gap-1">
-            <GitBranch className="h-3 w-3" />
-            <span>main</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <AlertCircle className="h-3 w-3" />
-            <span>0</span>
-            <span className="text-yellow-500">⚠ 3</span>
-          </div>
-        </div>
-      ),
-      right: (
-        <div className="flex items-center gap-4 px-3 text-sm">
-          <span>Ln 12, Col 45</span>
-          <span>Spaces: 2</span>
-          <span>UTF-8</span>
-          <span>TypeScript React</span>
-          <span>Prettier</span>
-        </div>
-      ),
+      className: "!h-[25px] px-2 text-sm",
+      leftNavItems: [
+        { name: "Branch", icon: GitBranch, label: "main", ...STATUS_ITEM },
+        { name: "Errors", icon: AlertCircle, label: "0", ...STATUS_ITEM },
+        { name: "Warnings", icon: AlertTriangle, label: "3", ...STATUS_ITEM, iconClassName: "w-3.5 h-3.5 text-yellow-500" },
+      ],
+      rightNavItems: [
+        { name: "Cursor Position", label: "Ln 12, Col 45", ...STATUS_ITEM },
+        { name: "Indentation", label: "Spaces: 2", ...STATUS_ITEM },
+        { name: "Encoding", label: "UTF-8", ...STATUS_ITEM },
+        { name: "Language", label: "TypeScript React", ...STATUS_ITEM },
+        { name: "Formatter", label: "Prettier", ...STATUS_ITEM },
+      ],
     },
     mainClassName: "h-[calc(100vh-55px)] ",
   };

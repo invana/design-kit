@@ -30,8 +30,8 @@ export interface NavItemConfig {
   tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
   /** Show a separator line after this item */
   showSeperator?: boolean;
-  /** Lucide icon component */
-  icon: React.ElementType | LucideIcon;
+  /** Lucide icon component. Optional — items may be label-only (e.g. status-bar text). */
+  icon?: React.ElementType | LucideIcon;
   /** Custom tooltip content (overrides name) */
   tooltip?: React.ReactNode;
 }
@@ -65,16 +65,18 @@ export const NavItems: React.FC<NavItemsProps> = ({
       {items.map((item) => {
         const isActive = activeItem === item.name;
         const padding = item.label ? 'px-3 py-1.5' : 'px-2 py-2';
+        // Static items (no href/onClick) are plain text — no hover affordance.
+        const isInteractive = Boolean(item.href || item.onClick);
 
         const itemClass = `inline-flex border-0 items-center justify-center gap-2
-          whitespace-nowrap rounded-md cursor-pointer transition-colors
+          whitespace-nowrap rounded-md transition-colors
           ring-1 ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
           ${padding}
-          hover:bg-primary/10 hover:text-primary hover:ring-primary/25
+          ${isInteractive ? 'cursor-pointer hover:bg-primary/10 hover:text-primary hover:ring-primary/25' : ''}
           ${isActive ? `bg-primary/15 text-primary ring-primary/25 ${item.activeClass || ''}` : ''}
           ${item.className || ''}`;
 
-        const icon = (
+        const icon = item.icon && (
           <item.icon
             strokeWidth={item.iconStroke || 2}
             className={item.iconClassName || iconClassName}
