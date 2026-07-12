@@ -143,11 +143,38 @@ function ChatSessionStreamingDemo() {
     window.setTimeout(() => streamInto(replyId, reply), 60);
   };
 
-  const options = [
-    { icon: <RotateCw className="w-3 h-3" />, label: "Regenerate" },
-    { icon: <Code className="w-3 h-3" />, label: "View query" },
-    { icon: <Copy className="w-3 h-3" />, label: "Copy" },
-    { icon: <Info className="w-3 h-3" />, label: "View context" },
+  // Re-stream a settled reply in place — the "regenerate" affordance.
+  const regenerate = (m: ChatMessage) => {
+    if (isStreaming) return;
+    setMessages((prev) =>
+      prev.map((x) =>
+        x.id === m.id ? { ...x, streaming: true, meta: undefined } : x,
+      ),
+    );
+    window.setTimeout(() => streamInto(m.id, m.content), 60);
+  };
+
+  const options = (m: ChatMessage) => [
+    {
+      icon: <RotateCw className="w-3 h-3" />,
+      label: "Regenerate",
+      onClick: () => regenerate(m),
+    },
+    {
+      icon: <Code className="w-3 h-3" />,
+      label: "View query",
+      onClick: () => console.log("View query", m.id),
+    },
+    {
+      icon: <Copy className="w-3 h-3" />,
+      label: "Copy",
+      onClick: () => navigator.clipboard?.writeText(m.content),
+    },
+    {
+      icon: <Info className="w-3 h-3" />,
+      label: "View context",
+      onClick: () => console.log("View context", m.id),
+    },
   ];
 
   const composer = (
@@ -191,7 +218,7 @@ function ChatSessionStreamingDemo() {
               meta={m.meta}
               actions={
                 m.streaming ? undefined : (
-                  <ChatSessionMessageOptions actions={options} />
+                  <ChatSessionMessageOptions actions={options(m)} />
                 )
               }
             >
