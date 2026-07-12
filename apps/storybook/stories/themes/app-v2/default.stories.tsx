@@ -222,7 +222,7 @@ const LeftSectionPanel = ({ panelKey, isMaximized, onToggleMaximize, onClose }: 
 
 // Editor content for main section
 const EditorContent = () => (
-  <div className="h-full flex flex-col bg-background">
+  <div className="h-full flex flex-col bg-card">
     {/* Editor tabs */}
     <div className="flex border-b bg-card">
       <div className="flex items-center gap-2 px-4 py-2 border-r bg-background">
