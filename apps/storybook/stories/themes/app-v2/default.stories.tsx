@@ -1,21 +1,21 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react-vite";
-import { AppLayoutV2 } from "@invana/themes/app-v2/layout";
+import { AppLayoutV2, type AppLayoutV2Props } from "@invana/themes/app-v2/layout";
 import {
-  NavVerticalProps, Badge, Avatar, AvatarFallback,
+  NavVerticalProps, Avatar, AvatarFallback,
   AvatarImage, Button,
   Menubar, MenubarMenu, MenubarTrigger, MenubarContent,
   MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub,
   MenubarSubTrigger, MenubarSubContent, Separator, TabbedPanel
 } from "@invana/ui";
 import { Input } from "@invana/forms";
-import { 
-  Home, Folder, Search, Settings,
-  Bell, HelpCircle, User, LogOut,
+import {
+  Folder, Search, Settings,
+  Bell, User,
   FileCode, GitBranch, Bug, Package,
-  Terminal, AlertCircle, Info,
+  AlertCircle,
   PanelRight, ChevronRight, File, FolderOpen,
-  Menu, Plus, RefreshCw, X, Maximize2, Copy, Filter, Trash2,
+  Menu, Plus, RefreshCw, X, Maximize2, Minimize2, Copy, Filter, Trash2,
   Camera
 } from "lucide-react";
 
@@ -28,22 +28,6 @@ const meta: Meta<typeof AppLayoutV2> = {
 };
 
 
-
-// Activity Bar (Left Nav - icon only navigation)
-const leftNav: NavVerticalProps = {
-  className: "",
-  topNavItems: [
-    { name: "Explorer", icon: Folder, onClick: () => console.log('Explorer clicked'), tooltip: "Explorer" },
-    { name: "Search", icon: Search, onClick: () => console.log('Search clicked'), tooltip: "Search" },
-    { name: "Source Control", icon: GitBranch, onClick: () => console.log('Git clicked'), tooltip: "Source Control" },
-    { name: "Debug", icon: Bug, onClick: () => console.log('Debug clicked'), tooltip: "Run and Debug" },
-    { name: "Extensions", icon: Package, onClick: () => console.log('Extensions clicked'), tooltip: "Extensions" },
-  ],
-  bottomNavItems: [
-    { name: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Settings" },
-    { name: "Account", icon: User, onClick: () => console.log('Account clicked'), tooltip: "Account" },
-  ],
-};
 
 // File tree content for Explorer tab
 const FileTreeContent = () => (
@@ -130,56 +114,110 @@ const GitChangesContent = () => (
   </div>
 );
 
-// Left section with TabbedPanel
-const LeftSectionPanel = () => (
-  <TabbedPanel
-    tabs={[
-      {
-        value: 'explorer',
-        label: 'EXPLORER',
-        icon: Folder,
-        content: <FileTreeContent />,
-      },
-      // {
-      //   value: 'search',
-      //   label: 'SEARCH',
-      //   icon: Search,
-      //   content: <SearchResultsContent />,
-      // },
-      // {
-      //   value: 'git',
-      //   label: 'SOURCE CONTROL',
-      //   icon: GitBranch,
-      //   content: <GitChangesContent />,
-      // },
-    ]}
-    defaultTab="explorer"
-    headerActions={{
-      rightNavItems: [
-        {
-          name: 'new-file',
-          icon: Plus,
-          onClick: () => console.log('New file'),
-          tooltip: 'New File',
-        },
-        {
-          name: 'refresh',
-          icon: RefreshCw,
-          onClick: () => console.log('Refresh'),
-          tooltip: 'Refresh',
-        },
-        {
-          name: 'collapse',
-          icon: Maximize2,
-          onClick: () => console.log('Collapse'),
-          tooltip: 'Collapse All',
-        },
-      ],
-    }}
-    bodyClassName="p-0"
-    headerClassName="bg-muted/10"
-  />
+// Simple placeholder body for the lighter-weight sidebar panels
+const SimplePanelText = ({ title, lines }: { title: string; lines: string[] }) => (
+  <div className="p-3 space-y-2">
+    <div className="text-sm font-medium">{title}</div>
+    {lines.map((line, i) => (
+      <p key={i} className="text-xs text-muted-foreground">{line}</p>
+    ))}
+  </div>
 );
+
+// Each activity-bar item maps to a sidebar panel definition. The key matches
+// the nav item `name` so clicking an icon swaps the left panel content.
+type LeftPanelKey =
+  | 'Explorer' | 'Search' | 'Source Control' | 'Debug'
+  | 'Extensions' | 'Settings' | 'Account';
+
+const LEFT_PANELS: Record<LeftPanelKey, { label: string; icon: React.ElementType; content: React.ReactNode }> = {
+  'Explorer': { label: 'EXPLORER', icon: Folder, content: <FileTreeContent /> },
+  'Search': { label: 'SEARCH', icon: Search, content: <SearchResultsContent /> },
+  'Source Control': { label: 'SOURCE CONTROL', icon: GitBranch, content: <GitChangesContent /> },
+  'Debug': {
+    label: 'RUN AND DEBUG',
+    icon: Bug,
+    content: <SimplePanelText title="Run and Debug" lines={["No configurations found.", "Create a launch.json file to start debugging."]} />,
+  },
+  'Extensions': {
+    label: 'EXTENSIONS',
+    icon: Package,
+    content: <SimplePanelText title="Extensions" lines={["12 installed · 3 updates available.", "Search the marketplace to add more."]} />,
+  },
+  'Settings': {
+    label: 'SETTINGS',
+    icon: Settings,
+    content: <SimplePanelText title="Settings" lines={["Manage user and workspace preferences.", "Theme, editor, and keybindings."]} />,
+  },
+  'Account': {
+    label: 'ACCOUNT',
+    icon: User,
+    content: <SimplePanelText title="Account" lines={["Signed in as invana-user.", "Manage account and sync settings."]} />,
+  },
+};
+
+// Shared props for panels that support maximize + close in their header
+interface PanelChromeProps {
+  /** Whether this panel is currently filling the main area */
+  isMaximized: boolean;
+  /** Toggle this panel between maximized and normal size */
+  onToggleMaximize: () => void;
+  /** Close/hide this panel */
+  onClose: () => void;
+}
+
+// Maximize/restore toggle action for a panel header, followed by the close action
+const panelChromeActions = ({ isMaximized, onToggleMaximize, onClose }: PanelChromeProps) => [
+  {
+    name: 'maximize',
+    icon: isMaximized ? Minimize2 : Maximize2,
+    onClick: onToggleMaximize,
+    tooltip: isMaximized ? 'Restore Panel Size' : 'Maximize Panel',
+  },
+  {
+    name: 'close',
+    icon: X,
+    onClick: onClose,
+    tooltip: 'Close Panel',
+  },
+];
+
+// Left section with TabbedPanel — content is driven by the active nav item
+const LeftSectionPanel = ({ panelKey, isMaximized, onToggleMaximize, onClose }: PanelChromeProps & { panelKey: LeftPanelKey }) => {
+  const panel = LEFT_PANELS[panelKey] ?? LEFT_PANELS['Explorer'];
+  return (
+    <TabbedPanel
+      tabs={[
+        {
+          value: panelKey,
+          label: panel.label,
+          icon: panel.icon,
+          content: panel.content,
+        },
+      ]}
+      activeTab={panelKey}
+      headerActions={{
+        rightNavItems: [
+          {
+            name: 'new-file',
+            icon: Plus,
+            onClick: () => console.log('New file'),
+            tooltip: 'New File',
+          },
+          {
+            name: 'refresh',
+            icon: RefreshCw,
+            onClick: () => console.log('Refresh'),
+            tooltip: 'Refresh',
+          },
+          ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
+        ],
+      }}
+      bodyClassName="p-0"
+      headerClassName="bg-muted/10"
+    />
+  );
+};
 
 // Editor content for main section
 const EditorContent = () => (
@@ -285,7 +323,7 @@ const OutputTabContent = () => (
 );
 
 // Bottom section with TabbedPanel
-const BottomSectionPanel = () => (
+const BottomSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChromeProps) => (
   <TabbedPanel
     tabs={[
       {
@@ -324,14 +362,9 @@ const BottomSectionPanel = () => (
           icon: Filter,
           onClick: () => console.log('Filter'),
           tooltip: 'Filter',
-        },
-        {
-          name: 'close',
-          icon: X,
-          onClick: () => console.log('Close'),
-          tooltip: 'Close Panel',
           showSeperator: true,
         },
+        ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
       ],
     }}
     bodyClassName="p-0"
@@ -384,7 +417,7 @@ const TimelineTabContent = () => (
 );
 
 // Right section with TabbedPanel
-const RightSectionPanel = () => (
+const RightSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChromeProps) => (
   <TabbedPanel
     tabs={[
       {
@@ -407,19 +440,9 @@ const RightSectionPanel = () => (
           icon: RefreshCw,
           onClick: () => console.log('Refresh'),
           tooltip: 'Refresh',
+          showSeperator: true,
         },
-        {
-          name: 'collapse',
-          icon: Maximize2,
-          onClick: () => console.log('Collapse'),
-          tooltip: 'Collapse',
-        },
-        {
-          name: 'close',
-          icon: X,
-          onClick: () => console.log('Close'),
-          tooltip: 'Close',
-        },
+        ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
       ],
     }}
     bodyClassName="p-0"
@@ -430,8 +453,54 @@ const RightSectionPanel = () => (
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
+type MaximizablePanel = 'left' | 'bottom' | 'right';
+
+const AppV2Demo = () => {
+  const [showLeft, setShowLeft] = React.useState(true);
+  const [showBottom, setShowBottom] = React.useState(true);
+  const [showRight, setShowRight] = React.useState(true);
+  const [activePanel, setActivePanel] = React.useState<LeftPanelKey>('Explorer');
+  // Which panel (if any) is maximized to fill the whole main area
+  const [maximized, setMaximized] = React.useState<MaximizablePanel | null>(null);
+
+  // Clicking an activity-bar icon opens its panel. Clicking the already-active
+  // icon while the sidebar is open collapses it (VS Code behaviour).
+  const openPanel = (panel: LeftPanelKey) => {
+    if (showLeft && activePanel === panel) {
+      setShowLeft(false);
+    } else {
+      setActivePanel(panel);
+      setShowLeft(true);
+    }
+  };
+
+  const toggleMaximize = (panel: MaximizablePanel) =>
+    setMaximized((cur) => (cur === panel ? null : panel));
+
+  // Closing a panel also clears its maximized state
+  const closePanel = (panel: MaximizablePanel, hide: () => void) => {
+    setMaximized((cur) => (cur === panel ? null : cur));
+    hide();
+  };
+
+  // Activity Bar (Left Nav - icon only navigation). Each icon selects the
+  // matching sidebar panel; every item maps to an entry in LEFT_PANELS.
+  const leftNav: NavVerticalProps = {
+    className: "",
+    topNavItems: [
+      { name: "Explorer", icon: Folder, onClick: () => openPanel('Explorer'), tooltip: "Explorer" },
+      { name: "Search", icon: Search, onClick: () => openPanel('Search'), tooltip: "Search" },
+      { name: "Source Control", icon: GitBranch, onClick: () => openPanel('Source Control'), tooltip: "Source Control" },
+      { name: "Debug", icon: Bug, onClick: () => openPanel('Debug'), tooltip: "Run and Debug" },
+      { name: "Extensions", icon: Package, onClick: () => openPanel('Extensions'), tooltip: "Extensions" },
+    ],
+    bottomNavItems: [
+      { name: "Settings", icon: Settings, onClick: () => openPanel('Settings'), tooltip: "Settings" },
+      { name: "Account", icon: User, onClick: () => openPanel('Account'), tooltip: "Account" },
+    ],
+  };
+
+  const layoutProps: AppLayoutV2Props = {
     leftNav,
     header: {
       className: "!h-[35px] ",
@@ -485,7 +554,7 @@ export const Default: Story = {
               Invana Studio
             </div>
             <Separator orientation="vertical" className="h-5 my-2" />
-            <div>Explorer</div>
+            <div>{activePanel}</div>
             <Separator orientation="vertical" className="h-5 my-2" />
             <Menubar className="border-0 bg-transparent p-0 h-auto">
               <MenubarMenu>
@@ -573,13 +642,13 @@ export const Default: Story = {
                     </MenubarSubContent>
                   </MenubarSub>
                   <MenubarSeparator />
-                  <MenubarItem>
+                  <MenubarItem onClick={() => setShowLeft((v) => !v)}>
                     Toggle Sidebar <MenubarShortcut>⌘B</MenubarShortcut>
                   </MenubarItem>
-                  <MenubarItem>
+                  <MenubarItem onClick={() => setShowBottom((v) => !v)}>
                     Toggle Panel <MenubarShortcut>⌘J</MenubarShortcut>
                   </MenubarItem>
-                  <MenubarItem>
+                  <MenubarItem onClick={() => setShowRight((v) => !v)}>
                     Toggle Auxiliary Bar
                   </MenubarItem>
                   <MenubarSeparator />
@@ -665,32 +734,84 @@ export const Default: Story = {
         </div>
       ),
     },
-    leftSection: {
-      content: <LeftSectionPanel />,
-      defaultSize: "250px",
-      minSize: "150px",
-      maxSize: "500px",
-      collapsible: true,
-    },
+    // When a panel is maximized it takes over the main area and the other
+    // sections are hidden; otherwise sections render in their normal slots.
+    leftSection:
+      maximized === null && showLeft
+        ? {
+            content: (
+              <LeftSectionPanel
+                panelKey={activePanel}
+                isMaximized={false}
+                onToggleMaximize={() => toggleMaximize('left')}
+                onClose={() => closePanel('left', () => setShowLeft(false))}
+              />
+            ),
+            defaultSize: "250px",
+            minSize: "150px",
+            maxSize: "500px",
+            collapsible: true,
+          }
+        : undefined,
     mainSection: {
-      content: <EditorContent />,
+      content:
+        maximized === 'left' ? (
+          <LeftSectionPanel
+            panelKey={activePanel}
+            isMaximized
+            onToggleMaximize={() => toggleMaximize('left')}
+            onClose={() => closePanel('left', () => setShowLeft(false))}
+          />
+        ) : maximized === 'bottom' ? (
+          <BottomSectionPanel
+            isMaximized
+            onToggleMaximize={() => toggleMaximize('bottom')}
+            onClose={() => closePanel('bottom', () => setShowBottom(false))}
+          />
+        ) : maximized === 'right' ? (
+          <RightSectionPanel
+            isMaximized
+            onToggleMaximize={() => toggleMaximize('right')}
+            onClose={() => closePanel('right', () => setShowRight(false))}
+          />
+        ) : (
+          <EditorContent />
+        ),
       defaultSize: "600px",
       minSize: "400px",
     },
-    bottomSection: {
-      content: <BottomSectionPanel />,
-      defaultSize: "300px",
-      minSize: "100px",
-      maxSize: "600px",
-      collapsible: true,
-    },
-    rightSection: {
-      content: <RightSectionPanel />,
-      defaultSize: "300px",
-      minSize: "200px",
-      maxSize: "600px",
-      collapsible: true,
-    },
+    bottomSection:
+      maximized === null && showBottom
+        ? {
+            content: (
+              <BottomSectionPanel
+                isMaximized={false}
+                onToggleMaximize={() => toggleMaximize('bottom')}
+                onClose={() => closePanel('bottom', () => setShowBottom(false))}
+              />
+            ),
+            defaultSize: "300px",
+            minSize: "100px",
+            maxSize: "600px",
+            collapsible: true,
+          }
+        : undefined,
+    rightSection:
+      maximized === null && showRight
+        ? {
+            content: (
+              <RightSectionPanel
+                isMaximized={false}
+                onToggleMaximize={() => toggleMaximize('right')}
+                onClose={() => closePanel('right', () => setShowRight(false))}
+              />
+            ),
+            defaultSize: "300px",
+            minSize: "200px",
+            maxSize: "600px",
+            collapsible: true,
+          }
+        : undefined,
     footer: {
       className: "!h-[25px]",
       left: (
@@ -717,5 +838,11 @@ export const Default: Story = {
       ),
     },
     mainClassName: "h-[calc(100vh-55px)] ",
-  },
+  };
+
+  return <AppLayoutV2 {...layoutProps} />;
+};
+
+export const Default: Story = {
+  render: () => <AppV2Demo />,
 };
