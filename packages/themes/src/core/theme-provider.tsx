@@ -8,6 +8,7 @@ import {
   type ThemeVariant,
 } from '@invana/styling/themes.config';
 import { DEFAULT_ACCENTS, findAccent, accentVars, type AccentColor } from './accents';
+import { useSystemDark } from './use-system-dark';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -85,14 +86,6 @@ function writeStorage(theme: string, mode: ThemeMode, accent: string | null) {
 
 // ─── Resolve effective dark/light from "system" ───────────────────────────────
 
-function resolveIsDark(mode: ThemeMode): boolean {
-  if (mode === 'dark') return true;
-  if (mode === 'light') return false;
-  return typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-color-scheme: dark)').matches
-    : false;
-}
-
 function buildVariantId(themeId: string, mode: ThemeMode, isDark: boolean): string {
   if (mode === 'system') {
     return `${themeId}-${isDark ? 'dark' : 'light'}`;
@@ -150,22 +143,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     return readStorage()?.accent ?? defaultAccent;
   });
 
-  const [isDark, setIsDark] = useState<boolean>(() => resolveIsDark(mode));
-
-  // Keep isDark in sync when mode === 'system' and the OS preference changes.
-  useEffect(() => {
-    if (mode !== 'system') {
-      setIsDark(mode === 'dark');
-      return;
-    }
-
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDark(mq.matches);
-
-    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, [mode]);
+  // `isDark` is derived: it follows the OS preference only for "system" mode.
+  // Subscribing to that preference as an external store lets us compute the
+  // value during render — no effect, no cascading re-render.
+  const systemDark = useSystemDark();
+  const isDark = mode === 'system' ? systemDark : mode === 'dark';
 
   // Apply theme to DOM whenever theme / mode / isDark changes.
   useEffect(() => {

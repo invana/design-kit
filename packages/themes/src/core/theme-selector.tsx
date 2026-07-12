@@ -13,6 +13,7 @@ import {
 import { themes, applyTheme, getThemeVariantById, type Theme } from '@invana/styling/themes.config';
 import { useThemeOptional, type ThemeMode } from './theme-provider';
 import { DEFAULT_ACCENTS, type AccentColor } from './accents';
+import { useSystemDark } from './use-system-dark';
 
 /**
  * Icon components for the mode toggle, keyed by mode. Each is any component that
@@ -144,35 +145,13 @@ const MODES: { value: ThemeMode; label: string }[] = [
   { value: 'system', label: 'System' },
 ];
 
-function prefersDark(): boolean {
-  return typeof window !== 'undefined'
-    && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
 /** Resolve light/dark, following `prefers-color-scheme` for `"system"`. */
 function useResolvedDark(mode: ThemeMode, override: boolean | undefined): boolean {
-  const [isDark, setIsDark] = useState<boolean>(() =>
-    override ?? (mode === 'dark' ? true : mode === 'light' ? false : prefersDark())
-  );
-
-  useEffect(() => {
-    if (override !== undefined) {
-      setIsDark(override);
-      return;
-    }
-    if (mode !== 'system') {
-      setIsDark(mode === 'dark');
-      return;
-    }
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDark(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, [mode, override]);
-
-  return isDark;
+  const systemDark = useSystemDark();
+  if (override !== undefined) return override;
+  if (mode === 'dark') return true;
+  if (mode === 'light') return false;
+  return systemDark;
 }
 
 /**
