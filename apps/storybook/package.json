@@ -80,7 +80,7 @@
     "@invana/forms": "workspace:*",
     "react-day-picker": "^9.5.0",
     "react-hook-form": "^7.69.0",
-    "react-resizable-panels": "^4.0.15",
+    "react-resizable-panels": "^4.12.1",
     "sonner": "^2.0.7",
     "zod": "^4.2.1"
   }
