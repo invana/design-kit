@@ -18,18 +18,27 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // A labelled region so it's obvious which slot is which and how far the
-// bottom panel stretches.
+// bottom panel stretches. `span` shows the active bottomSpan value on the side.
 const Region = ({
   label,
   hint,
+  span,
   className,
 }: {
   label: string;
   hint?: string;
+  span?: string;
   className?: string;
 }) => (
   <div className={`h-full w-full p-4 ${className ?? ''}`}>
-    <div className="text-sm font-semibold">{label}</div>
+    <div className="flex items-center gap-2">
+      <div className="text-sm font-semibold">{label}</div>
+      {span && (
+        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+          bottomSpan=&quot;{span}&quot;
+        </span>
+      )}
+    </div>
     {hint && <div className="mt-1 text-sm text-muted-foreground">{hint}</div>}
   </div>
 );
@@ -73,6 +82,7 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Left sidebar"
+            span="main"
             hint="Full height — runs the whole way down beside the bottom panel."
           />
         ),
@@ -81,6 +91,7 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Main editor"
+            span="main"
             hint="Stacks above the bottom panel — not full height."
           />
         ),
@@ -89,6 +100,7 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Right / auxiliary"
+            span="main"
             hint="Full height — runs the whole way down beside the bottom panel."
           />
         ),
@@ -98,6 +110,7 @@ export const BottomSpanMain: Story = {
           <Region
             className="flex flex-col"
             label="Bottom panel (Terminal)"
+            span="main"
             hint="Spans only the main editor — between the left + right panels."
           />
         ),
