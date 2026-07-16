@@ -29,9 +29,11 @@ export interface MainSectionConfig {
  *   right/auxiliary panel is full height beside them.
  * - `main-right`: bottom spans the main editor + right/auxiliary panel; the
  *   left sidebar is full height beside them.
+ * - `main`: bottom spans only the main editor; both the left sidebar and the
+ *   right/auxiliary panel are full height beside it.
  * - `full`: bottom spans the entire width (left + main + right).
  */
-export type BottomSpan = 'left-main' | 'main-right' | 'full';
+export type BottomSpan = 'left-main' | 'main-right' | 'main' | 'full';
 
 export interface AppLayoutV2Props {
   className?: string;
@@ -187,6 +189,33 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
           {renderEditorRow(true, true)}
         </ResizablePanel>
         {bottomPanel}
+      </ResizablePanelGroup>
+    );
+  } else if (bottomSpan === 'main') {
+    // Bottom spans only the main editor: both the left sidebar and the
+    // right/auxiliary panel are full-height siblings around the center column,
+    // which stacks the editor above the bottom panel.
+    layout = (
+      <ResizablePanelGroup orientation="horizontal" id="main-layout">
+        {sidebarPanel && (
+          <>
+            {sidebarPanel}
+            <ResizableHandle withHandle />
+          </>
+        )}
+        <ResizablePanel
+          id="main-center-area"
+          defaultSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
+          minSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
+        >
+          {editorWithBottom(false, false, "main-center-vertical")}
+        </ResizablePanel>
+        {rightPanel && (
+          <>
+            <ResizableHandle withHandle />
+            {rightPanel}
+          </>
+        )}
       </ResizablePanelGroup>
     );
   } else if (bottomSpan === 'main-right') {

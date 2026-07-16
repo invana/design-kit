@@ -844,7 +844,7 @@ export const Default: Story = {
     bottomSpan: {
       name: 'Bottom panel span',
       control: 'inline-radio',
-      options: ['left-main', 'main-right', 'full'],
+      options: ['left-main', 'main-right', 'main', 'full'],
       description: 'Which columns the bottom (terminal) panel stretches under.',
     },
   },
