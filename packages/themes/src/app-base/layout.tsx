@@ -24,7 +24,13 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
           right={props.header.right}
           rightNavItems={props.header.rightNavItems}
         />
-        <div className={`h-[calc(100vh-65px)]  w-full bg-background ${props?.mainClassName}`}>     
+        {/* Fill the remaining column height (root minus the 40px header + 25px
+            footer) via flex, NOT a hardcoded `calc(100vh-…)`. That keeps the
+            shell embeddable: when a consumer overrides the root height (e.g.
+            `className="h-full"` for a bounded / sub-viewport container) the main
+            region tracks it instead of forcing the full viewport. `min-h-0` lets
+            it shrink below its content so inner scroll areas work. */}
+        <div className={`flex-1 min-h-0 w-full bg-background ${props?.mainClassName ?? ''}`}>
           {props.main}
         </div>
         <NavHorizontal 
