@@ -82,7 +82,6 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Left sidebar"
-            span="main"
             hint="Full height — runs the whole way down beside the bottom panel."
           />
         ),
@@ -91,7 +90,6 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Main editor"
-            span="main"
             hint="Stacks above the bottom panel — not full height."
           />
         ),
@@ -100,7 +98,6 @@ export const BottomSpanMain: Story = {
         content: (
           <Region
             label="Right / auxiliary"
-            span="main"
             hint="Full height — runs the whole way down beside the bottom panel."
           />
         ),

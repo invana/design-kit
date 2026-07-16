@@ -18,18 +18,27 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // A labelled region so it's obvious which slot is which and how far the
-// bottom panel stretches.
+// bottom panel stretches. `span` shows the active bottomSpan value.
 const Region = ({
   label,
   hint,
+  span,
   className,
 }: {
   label: string;
   hint?: string;
+  span?: string;
   className?: string;
 }) => (
   <div className={`h-full w-full p-4 ${className ?? ''}`}>
-    <div className="text-sm font-semibold">{label}</div>
+    <div className="flex items-center gap-2">
+      <div className="text-sm font-semibold">{label}</div>
+      {span && (
+        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+          bottomSpan=&quot;{span}&quot;
+        </span>
+      )}
+    </div>
     {hint && <div className="mt-1 text-sm text-muted-foreground">{hint}</div>}
   </div>
 );
@@ -98,6 +107,7 @@ export const BottomSpanLeftMain: Story = {
           <Region
             className="flex flex-col"
             label="Bottom panel (Terminal)"
+            span="left-main"
             hint="Spans left + main — stops at the right panel's edge."
           />
         ),
