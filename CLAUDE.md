@@ -74,7 +74,20 @@ Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` 
 
 ## Release pipeline
 
-`.github/workflows/release-{ui,styling,themes}.yml` build each package on pushes to `main` that touch the relevant package, then publish the built artifacts to branches `releases/ui`, `releases/styling`, `releases/themes`. Consumers install via `pnpm add github:invana/design-kit#releases/<package>` (see root `README.md`). There is no npm publish — distribution is git-branch based, so the contents of `dist/` for `ui` and `themes` are what ship. The `release-ui` workflow also triggers on changes to `packages/styling/**` because `ui`'s build embeds the compiled styles.
+**Always cut releases with `./release.sh <version>` — never hand-edit versions or push a `release:` commit manually.** All publishable packages are versioned in lockstep (one shared version). `release.sh` must be run from a clean `main`; it bumps every `packages/*/package.json` via `npm version`, commits `release: v<version>`, and creates the annotated tag `v<version>`. Then push with:
+
+```
+git push origin main --follow-tags
+```
+
+The **tag** (`v*`) is what completes a release — pushing the commit alone is not enough:
+
+- `.github/workflows/release.yml` runs git-cliff (`cliff.toml`) over the tag range to generate release notes and publishes/edits the **GitHub Release**. This is how the changelog is generated — do not run `git cliff` locally or commit `CHANGELOG.md` by hand as part of a release.
+- `.github/workflows/release-npm.yml` builds `packages/*` and publishes them to **npm** (`pnpm -r publish`, workspace deps rewritten to `^<version>`).
+
+Separately, on the release **commit** push, `.github/workflows/release-{ui,styling,themes}.yml` build each package whose files changed and publish the built artifacts to branches `releases/ui`, `releases/styling`, `releases/themes` (git-branch distribution: `pnpm add github:invana/design-kit#releases/<package>`, see root `README.md`; the `dist/` contents are what ship). `release-ui` also triggers on `packages/styling/**` changes because `ui`'s build embeds the compiled styles.
+
+If a `release:` commit ever lands without its tag (e.g. a manual push), recover by tagging that exact commit (`git tag -a v<version> -m "v<version>"`) and pushing with `--follow-tags` — do not re-run `release.sh`, which would fail on the already-bumped version.
 
 ## Conventions
 
@@ -82,7 +95,7 @@ Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` 
 - Use `cn` from `@invana/ui/lib/utils` (re-exported at the package root) for class merging — it wraps `clsx` + `tailwind-merge`.
 - Theme-aware colors come from CSS variables defined in `@invana/styling` (`background`, `foreground`, `primary`, `muted`, `accent`, `border`, etc.). Prefer these tokens over hardcoded Tailwind colors so themes (`default`, `tailwind`, `vite`) all work.
 - Do not create git commits unless the user explicitly asks for one. Stage and propose, but wait for an explicit "commit" instruction before running `git commit`.
-- Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/) — always prefix with a type and (where it applies) a package scope: `feat(ui): add DatePicker`, `fix(themes): correct header height`, `docs(readme): …`. The changelog is generated from these prefixes by git-cliff (`cliff.toml`), so commits without a valid prefix are dropped and never appear in `CHANGELOG.md`. Type → section: `feat` → Features, `fix` → Bug Fixes, `perf` → Performance, `refactor` → Refactors, `docs` → Documentation. `test`, `chore`, `ci`, `build`, `style` are valid prefixes but intentionally skipped from the changelog. Run `git cliff -o CHANGELOG.md` to regenerate.
+- Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/) — always prefix with a type and (where it applies) a package scope: `feat(ui): add DatePicker`, `fix(themes): correct header height`, `docs(readme): …`. The changelog is generated from these prefixes by git-cliff (`cliff.toml`), so commits without a valid prefix are dropped and never appear in `CHANGELOG.md`. Type → section: `feat` → Features, `fix` → Bug Fixes, `perf` → Performance, `refactor` → Refactors, `docs` → Documentation. `test`, `chore`, `ci`, `build`, `style` are valid prefixes but intentionally skipped from the changelog. The changelog/release notes are generated in CI from the release tag (see Release pipeline) — `pnpm changelog` (`git-cliff -o CHANGELOG.md`) is for local preview only, not part of cutting a release.
 - Form field placement: regular form fields (inputs, selects, checkboxes, textareas, radios, switches, etc. — anything buildable with React + Radix + existing deps) belong in `@invana/ui` alongside other primitives. Only specialised fields that require their own external JS library (e.g. rich text editor, heavy date picker, code editor, file uploader with a dep) get their own package or live in `@invana/forms`.
 - `@invana/forms` is an unopinionated composition library, NOT a one-shot form renderer. There is no `FormRenderer` / `FormSchema` tree. Consumers always own `useForm` (react-hook-form) and compose their own chrome (Card, Tabs, Accordion, footer, Submit). The library exposes: `FormField` (shadcn's RHF `FormField` augmented with `.ObjectField` and `.Color` / `.Number` / `.Select` / `.Boolean` / `.Input` / `.Icon`), the `Form` provider, and leaf shadcn inputs (`Input`, `Select`, `Switch`, …). The primary building block is `<FormField.ObjectField control={form.control} name="shape" fields={[…]} rowConfig={[…]} labelPosition="top" />` — fields render as `${name}.${field.name}` so multiple ObjectFields in the same `useForm` all write to a single shared data object. Fields with a `group` property are auto-wrapped in an Accordion; ungrouped fields render flat.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
