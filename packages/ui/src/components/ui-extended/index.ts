@@ -7,6 +7,7 @@ export * from './nav-horizontal';
 export * from './nav-vertical';
 export * from './nested-menu';
 export * from './panel-content';
+export * from './panel-stack';
 export * from './rich-select';
 export * from './tabbed-panel';
 export * from './search-input';
