@@ -38,7 +38,11 @@ export interface AppLayoutV2Props {
   header: NavHorizontalProps;
   footer?: NavHorizontalProps;
   mainClassName?: string;
-  leftNav: NavVerticalProps;
+  /**
+   * The left activity bar. Optional — when omitted (or empty) the vertical bar
+   * is hidden and the workspace stretches to the full width. See `AppLayoutV1`.
+   */
+  leftNav?: NavVerticalProps;
   leftSection?: SectionConfig;
   mainSection: MainSectionConfig;
   bottomSection?: SectionConfig;
