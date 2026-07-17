@@ -34,6 +34,7 @@ export const AppLayoutV1: React.FC<AppLayoutV1Props> = (props) => {
   const showLeftNav = hasNavContent(props.leftNav);
   return (
     <AppLayoutBase
+      className={props.className}
       header={props.header}
       mainClassName={props.mainClassName}
       main={
