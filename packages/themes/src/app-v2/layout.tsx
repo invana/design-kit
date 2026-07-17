@@ -133,13 +133,16 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // The horizontal editor row. `includeLeft` / `includeRight` decide which of
   // the side panels sit in the row (the ones that don't are hoisted out as
   // full-height siblings so the bottom panel can span across them).
+  //
+  // The editor is ALWAYS wrapped in the same `ResizablePanelGroup` /
+  // `ResizablePanel` (with stable `order`s) — even with no side panels — so
+  // toggling a side section on/off adds/removes a *sibling* panel rather than
+  // changing the editor's DOM ancestor. A bare-<div> fast-path for the no-side
+  // case would remount `mainSection.content` (e.g. a canvas / iframe / video)
+  // every time a side panel appears or disappears, destroying its state.
   const renderEditorRow = (includeLeft: boolean, includeRight: boolean) => {
     const withLeft = includeLeft && sidebarPanel;
     const withRight = includeRight && rightPanel;
-
-    if (!withLeft && !withRight) {
-      return <div className="h-full w-full overflow-auto bg-card">{mainSection.content}</div>;
-    }
 
     return (
       <ResizablePanelGroup orientation="horizontal" id="editor-horizontal">
