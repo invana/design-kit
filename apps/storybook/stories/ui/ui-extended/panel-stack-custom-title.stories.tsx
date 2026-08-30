@@ -11,7 +11,7 @@ import { GitBranch, Bug, Sparkles } from 'lucide-react';
  * Each section below passes a fully custom title node.
  */
 const meta: Meta<typeof PanelStack> = {
-  title: 'UI/UI Extended/PanelStack Custom Title',
+  title: 'UI/UI Extended/PanelStack',
   component: PanelStack,
   parameters: { layout: 'centered' },
 };
