@@ -49,6 +49,15 @@
   --color-destructive: hsl(0 70% 60%);
   --color-destructive-foreground: hsl(0 0% 100%);
 
+  /* Semantic status colors — agent/task state (activity markers, task dots,
+     votes). Distinct from destructive (which stays the action-danger color). */
+  --color-success: hsl(142 70% 38%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 92% 42%);
+  --color-warning-foreground: hsl(0 0% 100%);
+  --color-info: hsl(210 90% 45%);
+  --color-info-foreground: hsl(0 0% 100%);
+
   --color-muted: hsl(210 6% 90%);
   --color-muted-foreground: hsl(210 8% 45%);
 
@@ -102,6 +111,9 @@
   --destructive: 0 70% 60%;
   --background: 0 0% 97%;
   --accent: 210 6% 92%;
+  --success: 142 70% 38%;
+  --warning: 38 92% 42%;
+  --info: 210 90% 45%;
 
   --surface-alpha: 1; /* opaque → identical to current look */
   --glass-blur: none; /* no backdrop blur */

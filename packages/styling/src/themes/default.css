@@ -26,6 +26,12 @@
   --destructive: 0 70% 60%;
   --destructive-foreground: 0 0% 100%;
   --ring: 142 70% 43%;
+  --success: 142 70% 38%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 42%;
+  --warning-foreground: 0 0% 100%;
+  --info: 210 90% 45%;
+  --info-foreground: 0 0% 100%;
 
   /* Full HSL colors for direct use */
   --color-background: hsl(0 0% 97%);
@@ -47,6 +53,12 @@
   --color-border: hsl(210 6% 85%);
   --color-input: hsl(210 6% 92%);
   --color-ring: hsl(142 70% 43%);
+  --color-success: hsl(142 70% 38%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 92% 42%);
+  --color-warning-foreground: hsl(0 0% 100%);
+  --color-info: hsl(210 90% 45%);
+  --color-info-foreground: hsl(0 0% 100%);
 }
 
 /* Dark mode - Default theme */
@@ -72,6 +84,12 @@
   --destructive: 0 60% 45%;
   --destructive-foreground: 0 0% 95%;
   --ring: 142 70% 60%;
+  --success: 142 65% 55%;
+  --success-foreground: 210 4% 13%;
+  --warning: 45 90% 60%;
+  --warning-foreground: 210 4% 13%;
+  --info: 210 90% 65%;
+  --info-foreground: 210 4% 13%;
 
   /* Full HSL colors for direct use */
   --color-background: hsl(210 4% 10%);
@@ -93,4 +111,10 @@
   --color-border: hsl(210 6% 22%);
   --color-input: hsl(210 6% 22%);
   --color-ring: hsl(142 70% 60%);
+  --color-success: hsl(142 65% 55%);
+  --color-success-foreground: hsl(210 4% 13%);
+  --color-warning: hsl(45 90% 60%);
+  --color-warning-foreground: hsl(210 4% 13%);
+  --color-info: hsl(210 90% 65%);
+  --color-info-foreground: hsl(210 4% 13%);
 }

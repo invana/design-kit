@@ -34,6 +34,12 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
   --ring: 199 89% 48%; /* sky-500 */
+  --success: 142 72% 36%;
+  --success-foreground: 0 0% 100%;
+  --warning: 32 95% 44%;
+  --warning-foreground: 0 0% 100%;
+  --info: 199 89% 48%;
+  --info-foreground: 0 0% 100%;
 
   /* Full HSL colors for direct use */
   --color-background: hsl(0 0% 100%);
@@ -55,6 +61,12 @@
   --color-border: hsl(214 32% 91%);
   --color-input: hsl(214 32% 91%);
   --color-ring: hsl(199 89% 48%);
+  --color-success: hsl(142 72% 36%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(32 95% 44%);
+  --color-warning-foreground: hsl(0 0% 100%);
+  --color-info: hsl(199 89% 48%);
+  --color-info-foreground: hsl(0 0% 100%);
 }
 
 /* Dark mode - Tailwind theme */
@@ -81,6 +93,12 @@
   --destructive: 0 63% 31%;
   --destructive-foreground: 210 40% 98%;
   --ring: 198 93% 60%; /* sky-400 */
+  --success: 142 69% 58%;
+  --success-foreground: 222 47% 11%;
+  --warning: 45 96% 56%;
+  --warning-foreground: 222 47% 11%;
+  --info: 199 93% 60%;
+  --info-foreground: 222 47% 11%;
 
   /* Full HSL colors for direct use */
   --color-background: hsl(222 47% 5%);
@@ -102,4 +120,10 @@
   --color-border: hsl(217 19% 27%);
   --color-input: hsl(217 19% 27%);
   --color-ring: hsl(198 93% 60%);
+  --color-success: hsl(142 69% 58%);
+  --color-success-foreground: hsl(222 47% 11%);
+  --color-warning: hsl(45 96% 56%);
+  --color-warning-foreground: hsl(222 47% 11%);
+  --color-info: hsl(199 93% 60%);
+  --color-info-foreground: hsl(222 47% 11%);
 }
