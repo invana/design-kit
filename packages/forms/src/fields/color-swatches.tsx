@@ -47,7 +47,7 @@ export const ColorSwatches: React.FC<ColorSwatchesProps> = ({
           type="button"
           onClick={() => select(color.value)}
           className={cn(
-            'group relative h-8 w-8 overflow-hidden rounded-md border',
+            'group relative h-8 w-8 overflow-hidden rounded-control border',
             'ring-offset-background transition-all hover:scale-105',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
             !isCustom && value === color.value && 'ring-2 ring-ring ring-offset-2'
@@ -64,7 +64,7 @@ export const ColorSwatches: React.FC<ColorSwatchesProps> = ({
       ))}
       <div
         className={cn(
-          'group relative h-8 w-8 overflow-hidden rounded-md border',
+          'group relative h-8 w-8 overflow-hidden rounded-control border',
           'ring-offset-background transition-all hover:scale-105',
           isCustom && 'ring-2 ring-ring ring-offset-2'
         )}

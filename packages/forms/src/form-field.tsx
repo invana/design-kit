@@ -185,7 +185,7 @@ function StatusPill({ badge }: { badge: FieldBadge }) {
   return (
     <Badge
       variant={badge.variant ?? 'secondary'}
-      className="rounded-full px-1.5 py-0 text-base font-medium"
+      className="px-1.5 py-0 text-base font-medium"
     >
       {badge.label}
     </Badge>
@@ -890,7 +890,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
                   {(gc?.showCount ?? true) && (
                     <Badge
                       variant="secondary"
-                      className="rounded-full px-1.5 py-0 text-base font-normal tabular-nums"
+                      className="px-1.5 py-0 text-base font-normal tabular-nums"
                     >
                       {gFields.length}
                     </Badge>

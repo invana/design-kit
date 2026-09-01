@@ -72,12 +72,56 @@
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(210 10% 20%);
 
-  /* Border Radius */
-  --radius: 0.5rem;
+  /* ------------------------------------------------------------------------
+   * Border radius — the design language, decided 01-09-2026.
+   *
+   *   STRUCTURE is cut.      0      anything that CONTAINS
+   *   CONTROLS are pressed.  2px    anything you PRESS or TYPE INTO
+   *   SHAPE is not radius.   999px  only where round IS the object
+   *
+   * Structure: cards, panels, dialogs, popovers, menus, tables, ledger rows,
+   * chips, badges, tab panels, canvas surfaces, diagram nodes.
+   * Controls: buttons, inputs, selects, textareas, menu items, tab triggers,
+   * toggles — `rounded-control`, generated from `--radius-control` below.
+   * Shape: avatars, status dots, spinners, slider thumbs, switch capsules,
+   * scrollbar thumbs. These keep `rounded-full` because they are round
+   * objects, not rectangles with soft ends. A rectangle wearing round ends is
+   * a pill, and there are no pills.
+   *
+   * WHY 0 FOR STRUCTURE. The hairline grid is the house component: cells sit
+   * on a `bg-border` backdrop separated by `gap-px`, so the "border" is the
+   * backdrop showing through a one-pixel gap. Any radius on a cell lets that
+   * backdrop through at every corner as a grey notch — radii and hairline
+   * grids cannot both win. It also holds at application density: a radius
+   * that is invisible on a 44px button is loud on a 24px row, and nesting a
+   * chip in a row in a panel in a card stacks four of them into mush. Sharp
+   * nests at any size.
+   *
+   * WHY 2px FOR CONTROLS, not 0. At touch size a fully cut button reads as
+   * cut metal. 2px is invisible as decoration and legible as affordance: the
+   * difference between a surface and a thing you press is information, and in
+   * a dense application that does real work.
+   *
+   * The scale is deliberately flat. `rounded-sm` / `-md` / `-lg` / `-xl` /
+   * `-2xl` all resolve to 0, so the ~79 components already written against
+   * them need no edit, and a `rounded-lg` typed out of habit tomorrow cannot
+   * quietly reintroduce a radius.
+   * ---------------------------------------------------------------------- */
+  --radius: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
+  /* The only non-zero rectangle radius in the system. Generates
+     `rounded-control`, which every control component points at. */
+  --radius-control: 2px;
+
+  /* Retained: predates the decision, and is now the same value as
+     --radius-control. Prefer `rounded-control` — it says what it is for. */
   --radius-2px: 2px;
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 6px);
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;

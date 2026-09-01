@@ -65,7 +65,7 @@ export function ChatSessionMessage({
       <div className={cn("flex justify-end", className)}>
         <div
           className={cn(
-            "max-w-[85%] rounded-2xl rounded-br-sm bg-secondary px-3 py-2 text-secondary-foreground whitespace-pre-wrap break-words",
+            "max-w-[85%] bg-secondary px-3 py-2 text-secondary-foreground whitespace-pre-wrap break-words",
             icon && "flex items-center gap-1.5",
           )}
         >

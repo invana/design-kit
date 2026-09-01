@@ -33,11 +33,18 @@
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(222.2 84% 4.9%);
 
-  /* Border Radius */
-  --radius: 0.5rem;
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* Border Radius — see the full rationale in `index.css`.
+     Structure 0 · controls 2px (`rounded-control`) · round only where round
+     IS the object. The scale is flat on purpose so components already written
+     against rounded-sm/md/lg need no edit and cannot drift back. */
+  --radius: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-control: 2px;
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;

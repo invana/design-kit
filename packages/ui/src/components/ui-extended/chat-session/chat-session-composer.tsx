@@ -70,7 +70,7 @@ export function ChatSessionComposer({
 
   return (
     <div className={cn("p-3", className)}>
-      <div className="rounded-md border border-border bg-card shadow-sm overflow-hidden focus-within:border-ring transition-colors">
+      <div className="rounded-control border border-border bg-card shadow-sm overflow-hidden focus-within:border-ring transition-colors">
         {attachments && (
           <div className="px-2 py-1.5 border-b border-border max-h-24 overflow-y-auto flex items-start gap-1 flex-wrap">
             {attachments}
@@ -100,7 +100,7 @@ export function ChatSessionComposer({
           {isRunning ? (
             <Button
               size="icon"
-              className="h-7 w-7 shrink-0 rounded-full"
+              className="h-7 w-7 shrink-0 rounded-control"
               onClick={onStop}
               title="Stop"
               aria-label="Stop"
@@ -110,7 +110,7 @@ export function ChatSessionComposer({
           ) : (
             <Button
               size="icon"
-              className="h-7 w-7 shrink-0 rounded-full"
+              className="h-7 w-7 shrink-0 rounded-control"
               onClick={onSend}
               disabled={isSendDisabled}
               title="Send"

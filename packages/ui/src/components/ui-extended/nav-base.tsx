@@ -69,7 +69,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
         const isInteractive = Boolean(item.href || item.onClick);
 
         const itemClass = `inline-flex border-0 items-center justify-center gap-2
-          whitespace-nowrap rounded-md transition-colors
+          whitespace-nowrap rounded-control transition-colors
           ring-1 ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
           ${padding}
           ${isInteractive ? 'cursor-pointer hover:bg-primary/10 hover:text-primary hover:ring-primary/25' : ''}

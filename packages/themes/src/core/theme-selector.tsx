@@ -270,7 +270,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
                   value={t.id}
                   aria-label={t.name}
                   className={cn(
-                    'relative h-auto min-w-24 flex-col items-start gap-1.5 rounded-md border-2 p-2',
+                    'relative h-auto min-w-24 flex-col items-start gap-1.5 rounded-control border-2 p-2',
                     selected
                       ? 'border-primary bg-primary/10 text-foreground shadow-sm hover:bg-primary/10'
                       : 'border-border text-foreground hover:border-foreground/40 hover:bg-transparent'

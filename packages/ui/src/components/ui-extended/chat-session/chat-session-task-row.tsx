@@ -75,7 +75,7 @@ export function ChatSessionTaskRow({
   );
 
   const rowClass = cn(
-    "flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left",
+    "flex w-full items-center gap-2 rounded-control px-1.5 py-1 text-left",
     onClick && "hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring",
     className,
   );

@@ -112,7 +112,7 @@ export const TreeItem: React.FC<{ item: TreeItem }> = ({ item }) => {
           item.onClick?.(item.id, item.label);
         }}
         className={cn(
-          "flex items-center gap-2 w-full rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground",
+          "flex items-center gap-2 w-full rounded-control px-2 py-1 hover:bg-accent hover:text-accent-foreground",
           hasChildren && "cursor-pointer font-medium"
         )}
       >
