@@ -99,7 +99,14 @@ export function ChatSession({
 
   return (
     <div className={cn("flex flex-col h-full min-h-0", className)}>
-      <ScrollArea ref={rootRef} className="flex-1 min-h-0">
+      {/* Radix wraps viewport children in a `display: table` div that grows to
+          its content's max-content width, so any nowrap/truncating row would
+          widen the column past the panel. Force it to block so the message
+          column is exactly the viewport width and `truncate` can work. */}
+      <ScrollArea
+        ref={rootRef}
+        className="flex-1 min-h-0 [&_[data-radix-scroll-area-viewport]>div]:!block"
+      >
         {isEmpty && emptyState ? (
           emptyState
         ) : (
