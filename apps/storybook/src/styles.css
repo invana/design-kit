@@ -22,6 +22,11 @@
 @import "@invana/styling/themes/presets-base.css";
 @import "@invana/styling/themes/presets.css";
 
+/* The categorical data palette — `--color-data-1…8`, one scale for node/edge
+   type dots, chart series and legends. Light in @theme, dark per dark theme, so
+   it must come after the theme blocks it overrides nothing in. */
+@import "@invana/styling/themes/data-palette.css";
+
 /* Define sources AFTER all imports */
 @source "../stories/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
