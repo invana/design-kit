@@ -51,6 +51,21 @@ export interface AppLayoutV2Props {
   rightSection?: SectionConfig;
   /** Which columns the bottom panel spans. Defaults to `left-main`. */
   bottomSpan?: BottomSpan;
+  /**
+   * Namespace for the ids this shell gives its resizable groups and panels.
+   *
+   * `react-resizable-panels` keeps every live group in one process-wide registry
+   * and resolves a group by the **first** id that matches, so a group id is an
+   * application-global name: two shells alive at once with the same ids read each
+   * other's layout and the mismatched one throws `Invalid N panel layout`. That
+   * happens whenever a layout nests — an app whose main region embeds another
+   * `AppLayoutV2`-based app (e.g. a canvas app inside a Studio shell).
+   *
+   * Defaults to a per-instance value from `useId()`, so nesting just works. Pass
+   * your own only when the ids must be **stable** across mounts — a persisted
+   * layout, a CSS selector, an e2e locator — and then keep it unique per shell.
+   */
+  idPrefix?: string;
 }
 
 // Default section sizes
@@ -72,13 +87,22 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   bottomSection,
   rightSection,
   bottomSpan = 'left-main',
+  idPrefix,
 }) => {
+  // Every group and panel id below is namespaced per instance, because the
+  // library's registry is process-wide (see `idPrefix`). `useId()` returns a
+  // colon-wrapped token (`:r3:`); the ids reach the DOM `id` attribute, where a
+  // colon is legal but needs escaping in a selector — so strip them.
+  const generatedId = React.useId().replace(/:/g, '');
+  const ns = idPrefix ?? `app-v2-${generatedId}`;
+  const panelId = (name: string) => `${ns}-${name}`;
+
   // The sidebar (left) panel. `preserve-pixel-size` holds its width when the
   // surrounding group grows (e.g. the right/auxiliary or bottom collapsing), so
   // the editor absorbs the freed space instead of the sidebar widening.
   const sidebarPanel = leftSection ? (
     <ResizablePanel
-      id="sidebar-panel"
+      id={panelId("sidebar-panel")}
       defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize}
       minSize={leftSection.minSize ?? DEFAULT_SIDEBAR.minSize}
       maxSize={leftSection.maxSize ?? DEFAULT_SIDEBAR.maxSize}
@@ -93,7 +117,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // freed space when neighbours resize/collapse.
   const rightPanel = rightSection ? (
     <ResizablePanel
-      id="auxiliary-panel"
+      id={panelId("auxiliary-panel")}
       defaultSize={rightSection.defaultSize ?? DEFAULT_AUXILIARY.defaultSize}
       minSize={rightSection.minSize ?? DEFAULT_AUXILIARY.minSize}
       maxSize={rightSection.maxSize ?? DEFAULT_AUXILIARY.maxSize}
@@ -109,7 +133,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
     <>
       <ResizableHandle withHandle />
       <ResizablePanel
-        id="terminal-panel"
+        id={panelId("terminal-panel")}
         defaultSize={bottomSection.defaultSize ?? DEFAULT_TERMINAL.defaultSize}
         minSize={bottomSection.minSize ?? DEFAULT_TERMINAL.minSize}
         maxSize={bottomSection.maxSize ?? DEFAULT_TERMINAL.maxSize}
@@ -122,7 +146,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
 
   const editorPanel = (
     <ResizablePanel
-      id="editor-panel"
+      id={panelId("editor-panel")}
       defaultSize={mainSection.defaultSize ?? DEFAULT_EDITOR.defaultSize}
       minSize={mainSection.minSize ?? DEFAULT_EDITOR.minSize}
     >
@@ -145,7 +169,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
     const withRight = includeRight && rightPanel;
 
     return (
-      <ResizablePanelGroup orientation="horizontal" id="editor-horizontal">
+      <ResizablePanelGroup orientation="horizontal" id={panelId("editor-horizontal")}>
         {withLeft && (
           <>
             {sidebarPanel}
@@ -166,9 +190,9 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // A vertical stack of the editor row with the bottom panel underneath it.
   // Used wherever the bottom panel spans more than one column.
   const editorWithBottom = (includeLeft: boolean, includeRight: boolean, groupId: string) => (
-    <ResizablePanelGroup orientation="vertical" id={groupId}>
+    <ResizablePanelGroup orientation="vertical" id={panelId(groupId)}>
       <ResizablePanel
-        id="editor-area"
+        id={panelId("editor-area")}
         defaultSize={bottomSection ? DEFAULT_EDITOR_AREA.defaultSize : undefined}
         minSize={bottomSection ? DEFAULT_EDITOR_AREA.minSize : undefined}
       >
@@ -183,9 +207,9 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   if (bottomSpan === 'full') {
     // Bottom spans everything: the full left|main|right row stacks above it.
     layout = (
-      <ResizablePanelGroup orientation="vertical" id="main-layout">
+      <ResizablePanelGroup orientation="vertical" id={panelId("main-layout")}>
         <ResizablePanel
-          id="editor-area"
+          id={panelId("editor-area")}
           defaultSize={bottomSection ? DEFAULT_EDITOR_AREA.defaultSize : undefined}
           minSize={bottomSection ? DEFAULT_EDITOR_AREA.minSize : undefined}
         >
@@ -199,7 +223,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
     // right/auxiliary panel are full-height siblings around the center column,
     // which stacks the editor above the bottom panel.
     layout = (
-      <ResizablePanelGroup orientation="horizontal" id="main-layout">
+      <ResizablePanelGroup orientation="horizontal" id={panelId("main-layout")}>
         {sidebarPanel && (
           <>
             {sidebarPanel}
@@ -207,7 +231,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
           </>
         )}
         <ResizablePanel
-          id="main-center-area"
+          id={panelId("main-center-area")}
           defaultSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
@@ -224,7 +248,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   } else if (bottomSpan === 'main-right') {
     // Bottom spans main + right: the left sidebar is a full-height sibling.
     layout = (
-      <ResizablePanelGroup orientation="horizontal" id="main-layout">
+      <ResizablePanelGroup orientation="horizontal" id={panelId("main-layout")}>
         {sidebarPanel && (
           <>
             {sidebarPanel}
@@ -232,7 +256,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
           </>
         )}
         <ResizablePanel
-          id="main-right-area"
+          id={panelId("main-right-area")}
           defaultSize={leftSection ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={leftSection ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
@@ -243,9 +267,9 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   } else {
     // 'left-main' (default): bottom spans left + main; right is full height.
     layout = (
-      <ResizablePanelGroup orientation="horizontal" id="main-layout">
+      <ResizablePanelGroup orientation="horizontal" id={panelId("main-layout")}>
         <ResizablePanel
-          id="left-main-area"
+          id={panelId("left-main-area")}
           defaultSize={rightSection ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={rightSection ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
