@@ -9,9 +9,9 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
   Button,
-  ButtonWithTooltip,
   ContextBar,
   Kbd,
   Legend,
@@ -275,62 +275,70 @@ function ExplorerShellDemo() {
   });
 
   const layout: AppLayoutV2Props = {
-    // `relative` makes the bar a positioning context so the canvas toolbar can
-    // dead-centre against the full header width.
     header: {
-      className: '!h-[38px] relative',
+      className: '!h-[38px]',
+      // Brand, then the trail, in the header's `left` slot. The trail is a real
+      // Breadcrumb — it carries no nav state (no active latch, no tooltips), so
+      // it belongs to the breadcrumb primitive rather than to `leftNavItems`.
       left: (
-        <div className="flex min-w-0 items-center gap-2 px-2">
-          <span className="select-none text-xl font-bold">Invana Studio</span>
+        <div className="flex items-center gap-1">
+          <span className="select-none px-2 text-xl font-bold">Invana Studio</span>
           <Separator orientation="vertical" className="h-4" />
-          <Breadcrumb className='font-bold'>
-            <BreadcrumbList>
+          <Breadcrumb className="px-1.5">
+            <BreadcrumbList className="gap-1.5 font-bold text-foreground sm:gap-1.5">
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">ravi-merugu</BreadcrumbLink>
+                <BreadcrumbLink href="#" className="hover:text-primary">
+                  ravi-merugu
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="text-muted-foreground" />
               <BreadcrumbItem>
-                <BreadcrumbLink href="#">stock-market-graph</BreadcrumbLink>
+                <BreadcrumbLink href="#" className="hover:text-primary">
+                  stock-market-graph
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>Explorer</BreadcrumbItem>
+              <BreadcrumbSeparator className="text-muted-foreground" />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="font-bold">Explorer</BreadcrumbPage>
+              </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
       ),
       // The canvas toolbar reads the live camera, so it sits in the app header,
-      // directly above the canvas tabs.
-      center: (
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-0.5">
-          <ButtonWithTooltip variant="ghost" size="icon-xs" tooltip="Zoom out">
-            <ZoomOut />
-          </ButtonWithTooltip>
-          <span className="w-10 text-center text-meta tabular-nums text-muted-foreground">92%</span>
-          <ButtonWithTooltip variant="ghost" size="icon-xs" tooltip="Zoom in">
-            <ZoomIn />
-          </ButtonWithTooltip>
-          <Separator orientation="vertical" className="mx-1 h-4" />
-          <ButtonWithTooltip variant="ghost" size="icon-xs" tooltip="Fit to view">
-            <Maximize2 />
-          </ButtonWithTooltip>
-          <ButtonWithTooltip variant="ghost" size="icon-xs" tooltip="Centre on selection">
-            <Locate />
-          </ButtonWithTooltip>
-          <ButtonWithTooltip variant="ghost" size="icon-xs" tooltip="Magnet">
-            <Magnet />
-          </ButtonWithTooltip>
-        </div>
-      ),
-      right: (
-        <div className="flex items-center gap-3 px-2">
-          <span className="text-meta text-muted-foreground tabular-nums">1.2k</span>
-          <ThemeMenu />
-          {/* One assistant, reachable from every surface (AD1). */}
-          <Button size="xs" variant="soft">
-            <Sparkles /> Assistant
-          </Button>
-        </div>
-      ),
+      // directly above the canvas tabs. The nav centres its middle section, so
+      // the toolbar needs no positioning of its own.
+      centerNavItems: [
+        { name: 'Zoom out', icon: ZoomOut, iconClassName: 'size-4', onClick: () => {}, className: '!px-1.5' },
+        {
+          name: 'Zoom level',
+          label: <span className="w-10 text-center tabular-nums text-muted-foreground">92%</span>,
+          className: '!px-0',
+        },
+        { name: 'Zoom in', icon: ZoomIn, iconClassName: 'size-4', onClick: () => {}, className: '!px-1.5', showSeperator: true },
+        { name: 'Fit to view', icon: Maximize2, iconClassName: 'size-4', onClick: () => {}, className: '!px-1.5' },
+        { name: 'Centre on selection', icon: Locate, iconClassName: 'size-4', onClick: () => {}, className: '!px-1.5' },
+        { name: 'Magnet', icon: Magnet, iconClassName: 'size-4', onClick: () => {}, className: '!px-1.5' },
+      ],
+      rightNavItems: [
+        {
+          name: 'Nodes in view',
+          label: <span className="tabular-nums text-muted-foreground">1.2k</span>,
+          className: '!px-1.5',
+        },
+        // The theme picker opens a whole `ThemeSelector` card, not a row list,
+        // so it rides in as the item's label rather than as `menuItems`.
+        { name: 'Theme & appearance', label: <ThemeMenu />, className: '!p-0' },
+        // One assistant, reachable from every surface (AD1).
+        {
+          name: 'Assistant',
+          label: 'Assistant',
+          icon: Sparkles,
+          iconClassName: 'size-4',
+          onClick: () => {},
+          className: '!bg-primary/10 !text-primary !px-2 !py-1 hover:!bg-primary/15',
+        },
+      ],
     },
 
     leftNav: {
