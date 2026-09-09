@@ -1,10 +1,11 @@
 import React from 'react';
-import { AppLayoutBase } from '../app-base';
+import { AppLayoutBase, CHROME_SURFACE } from '../app-base';
 import { 
   NavVertical, 
   type NavVerticalProps, 
   type NavHorizontalProps }
 from "@invana/ui";
+import { cn } from '@invana/ui/lib/utils';
 
 export interface AppLayoutV1Props {
   /**
@@ -41,7 +42,7 @@ export const AppLayoutV1: React.FC<AppLayoutV1Props> = (props) => {
         <div className="relative h-full flex flex-1">
           {showLeftNav && (
             <NavVertical
-              className={`border-r bg-card text-card-foreground ${props.leftNav?.className ?? ''}`}
+              className={cn('border-r', CHROME_SURFACE, props.leftNav?.className)}
               top={props.leftNav?.top}
               topNavItems={props.leftNav?.topNavItems}
               middle={props.leftNav?.middle}
