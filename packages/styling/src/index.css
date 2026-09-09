@@ -174,6 +174,53 @@
   -webkit-backdrop-filter: var(--glass-blur, none);
 }
 
+/*
+ * Corner-bracket hover/focus affordance — drop `corner-hint` on a button,
+ * anchor, or list item directly (no wrapper element needed). Brackets float
+ * just outside the box and fade in on hover/focus, standing in for a solid
+ * highlight background.
+ */
+@utility corner-hint {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 150ms ease-out, transform 150ms ease-out;
+    background-repeat: no-repeat;
+    background-image:
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7));
+  }
+
+  &::before {
+    background-size: 10px 2px, 2px 10px, 10px 2px, 2px 10px;
+    background-position: top left, top left, top right, top right;
+  }
+
+  &::after {
+    background-size: 10px 2px, 2px 10px, 10px 2px, 2px 10px;
+    background-position: bottom left, bottom left, bottom right, bottom right;
+  }
+
+  &:hover::before,
+  &:hover::after,
+  &:focus-visible::before,
+  &:focus-visible::after,
+  &:focus-within::before,
+  &:focus-within::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes accordion-down {
   from {
     height: 0;
