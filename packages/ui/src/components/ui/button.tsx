@@ -39,10 +39,19 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline \
           hover:text-primary/80 active:text-primary/60",
       },
+      /*
+       * The scale runs 24 → 48. `xs` and `icon-xs` are the dense tier: a
+       * toolbar above a panel, an action inside a list row, a chip-height
+       * control beside 13px text. Below `sm` the icon has to come down with
+       * the box, so both xs sizes reset `[&_svg]:size-4` — the base class sets
+       * size-5, which at h-6 leaves no padding at all.
+       */
       size: {
+        xs: "h-6 rounded-control px-2 text-meta gap-1 [&_svg]:size-4",
         default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-control px-3 py-2 text-sm",
+        sm: "h-8 rounded-control px-3 py-2",
         lg: "h-12 rounded-control px-8 py-3",
+        "icon-xs": "h-6 w-6 rounded-control [&_svg]:size-4",
         icon: "h-8 w-8 rounded-control",
         "nav-icon": "h-11 w-11 rounded-control",
       },

@@ -188,5 +188,5 @@ export const WithIcons: Story = {
 
 /**
  * Panel with header actions.
- * Demonstrates adding action buttons to the header using NavHorizontal props.
+ * Demonstrates adding action buttons to the header using NavHorizontal items.
  */

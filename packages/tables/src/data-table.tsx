@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -16,7 +16,7 @@ import {
   type RowData,
   type SortingState,
   type VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   DndContext,
   KeyboardSensor,
@@ -26,15 +26,15 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-} from '@dnd-kit/core';
-import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+} from "@dnd-kit/core";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   arrayMove,
   horizontalListSortingStrategy,
   useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   Table,
   TableBody,
@@ -43,12 +43,12 @@ import {
   TableHeader,
   TableRow,
   cn,
-} from '@invana/ui';
-import { ArrowDown, ArrowUp, ChevronsUpDown, GripVertical } from 'lucide-react';
-import { DataTablePagination } from './data-table-pagination';
-import { DataTableToolbar } from './data-table-toolbar';
-import { EditableCell } from './editable-cell';
-import type { CellEditHandler } from './types';
+} from "@invana/ui";
+import { ArrowDown, ArrowUp, ChevronsUpDown, GripVertical } from "lucide-react";
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
+import { EditableCell } from "./editable-cell";
+import type { CellEditHandler } from "./types";
 
 export interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<TData, any>[];
@@ -83,15 +83,31 @@ export interface DataTableProps<TData extends RowData> {
   onSortingChange?: OnChangeFn<SortingState>;
   /** Show a loading overlay over the table body. */
   loading?: boolean;
+  /**
+   * Presentational row grouping — returns the group a row belongs to, or
+   * `null` for none. A full-width header row is emitted whenever the key
+   * changes from the previous row.
+   *
+   * Deliberately *not* TanStack's aggregating grouping model. This is for a
+   * list that already arrives in the right order and wants section headings in
+   * it — a story index, a queue split into questions/proposals/results. It
+   * sorts nothing and aggregates nothing, so it cannot disagree with the order
+   * the caller chose.
+   */
+  groupBy?: (row: TData) => string | null | undefined;
+  /** What a group header row contains. Defaults to the key. */
+  renderGroupHeader?: (key: string, rows: TData[]) => React.ReactNode;
 }
 
-function getCommonPinStyles<TData>(header: Header<TData, unknown>): React.CSSProperties {
+function getCommonPinStyles<TData>(
+  header: Header<TData, unknown>,
+): React.CSSProperties {
   const isPinned = header.column.getIsPinned();
   if (!isPinned) return {};
   return {
-    position: 'sticky',
-    left: isPinned === 'left' ? header.column.getStart('left') : undefined,
-    right: isPinned === 'right' ? header.column.getAfter('right') : undefined,
+    position: "sticky",
+    left: isPinned === "left" ? header.column.getStart("left") : undefined,
+    right: isPinned === "right" ? header.column.getAfter("right") : undefined,
     zIndex: 2,
   };
 }
@@ -111,15 +127,25 @@ function DraggableHeader<TData>({
 }: DraggableHeaderProps<TData>) {
   const column = header.column;
   const isPinned = column.getIsPinned();
-  const canDrag = enableReordering && !isPinned && column.id !== '__select';
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: column.id, disabled: !canDrag });
+  const canDrag = enableReordering && !isPinned && column.id !== "__select";
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: column.id, disabled: !canDrag });
 
   const sortDir = column.getIsSorted();
   const canSort = enableSorting && column.getCanSort();
-  const align = column.columnDef.meta?.align ?? 'left';
+  const align = column.columnDef.meta?.align ?? "left";
   const alignClass =
-    align === 'right' ? 'justify-end text-right' : align === 'center' ? 'justify-center text-center' : 'justify-start text-left';
+    align === "right"
+      ? "justify-end text-right"
+      : align === "center"
+        ? "justify-center text-center"
+        : "justify-start text-left";
 
   return (
     <TableHead
@@ -131,16 +157,17 @@ function DraggableHeader<TData>({
         transition,
         opacity: isDragging ? 0.6 : 1,
         ...getCommonPinStyles(header),
-        ...(isPinned ? { backgroundColor: 'hsl(var(--background))' } : {}),
+        ...(isPinned ? { backgroundColor: "hsl(var(--background))" } : {}),
       }}
       className={cn(
-        'group relative select-none bg-muted/40',
-        isPinned && 'bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]',
+        "group relative select-none bg-muted/40",
+        isPinned &&
+          "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
         column.columnDef.meta?.headerClassName,
       )}
       {...attributes}
     >
-      <div className={cn('flex items-center gap-1', alignClass)}>
+      <div className={cn("flex items-center gap-1", alignClass)}>
         {canDrag && (
           <button
             type="button"
@@ -158,9 +185,9 @@ function DraggableHeader<TData>({
             className="inline-flex items-center gap-1 font-medium hover:text-foreground"
           >
             {flexRender(column.columnDef.header, header.getContext())}
-            {sortDir === 'asc' ? (
+            {sortDir === "asc" ? (
               <ArrowUp className="h-3.5 w-3.5" />
-            ) : sortDir === 'desc' ? (
+            ) : sortDir === "desc" ? (
               <ArrowDown className="h-3.5 w-3.5" />
             ) : (
               <ChevronsUpDown className="h-3.5 w-3.5 opacity-50" />
@@ -178,8 +205,8 @@ function DraggableHeader<TData>({
           onMouseDown={header.getResizeHandler()}
           onTouchStart={header.getResizeHandler()}
           className={cn(
-            'absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none bg-transparent hover:bg-border',
-            column.getIsResizing() && 'bg-primary',
+            "absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none bg-transparent hover:bg-border",
+            column.getIsResizing() && "bg-primary",
           )}
           aria-label="Resize column"
         />
@@ -213,26 +240,34 @@ export function DataTable<TData extends RowData>({
   sorting: sortingProp,
   onSortingChange,
   loading = false,
+  groupBy,
+  renderGroupHeader,
 }: DataTableProps<TData>) {
-  const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
+  const [internalSorting, setInternalSorting] = React.useState<SortingState>(
+    [],
+  );
   const sorting = sortingProp ?? internalSorting;
   const setSorting: OnChangeFn<SortingState> = (updater) => {
     if (onSortingChange) onSortingChange(updater);
     if (!sortingProp) setInternalSorting(updater);
   };
 
-  const [internalPagination, setInternalPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize,
-  });
+  const [internalPagination, setInternalPagination] =
+    React.useState<PaginationState>({
+      pageIndex: 0,
+      pageSize,
+    });
   const pagination = paginationProp ?? internalPagination;
   const setPagination: OnChangeFn<PaginationState> = (updater) => {
     if (onPaginationChange) onPaginationChange(updater);
     if (!paginationProp) setInternalPagination(updater);
   };
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>({
     left: [],
     right: [],
@@ -286,17 +321,22 @@ export function DataTable<TData extends RowData>({
     manualSorting,
     pageCount: pageCount ?? -1,
     rowCount,
-    columnResizeMode: 'onChange',
+    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: enableSorting && !manualSorting ? getSortedRowModel() : undefined,
+    getSortedRowModel:
+      enableSorting && !manualSorting ? getSortedRowModel() : undefined,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel:
-      enablePagination && !manualPagination ? getPaginationRowModel() : undefined,
+      enablePagination && !manualPagination
+        ? getPaginationRowModel()
+        : undefined,
   });
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 8 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 8 },
+    }),
     useSensor(KeyboardSensor),
   );
 
@@ -304,7 +344,9 @@ export function DataTable<TData extends RowData>({
     const { active, over } = event;
     if (!over || active.id === over.id) return;
     setColumnOrder((prev) => {
-      const next = prev.length ? prev : table.getAllLeafColumns().map((c) => c.id);
+      const next = prev.length
+        ? prev
+        : table.getAllLeafColumns().map((c) => c.id);
       const oldIndex = next.indexOf(active.id as string);
       const newIndex = next.indexOf(over.id as string);
       if (oldIndex < 0 || newIndex < 0) return prev;
@@ -315,7 +357,7 @@ export function DataTable<TData extends RowData>({
   const visibleLeafColumnIds = table.getVisibleLeafColumns().map((c) => c.id);
 
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       <DataTableToolbar
         table={table}
         enableColumnVisibility={enableColumnVisibility}
@@ -332,7 +374,7 @@ export function DataTable<TData extends RowData>({
       >
         <div className="relative overflow-auto rounded-md border">
           {loading && (
-            <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-12 text-sm text-muted-foreground">
+            <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-12 text-muted-foreground">
               Loading…
             </div>
           )}
@@ -368,56 +410,89 @@ export function DataTable<TData extends RowData>({
                     colSpan={table.getAllLeafColumns().length}
                     className="h-24 text-center text-muted-foreground"
                   >
-                    {emptyState ?? 'No results.'}
+                    {emptyState ?? "No results."}
                   </TableCell>
                 </TableRow>
               ) : (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      const column = cell.column;
-                      const isPinned = column.getIsPinned();
-                      const align = column.columnDef.meta?.align ?? 'left';
-                      return (
-                        <TableCell
-                          key={cell.id}
-                          style={{
-                            width: cell.column.getSize(),
-                            ...(isPinned
-                              ? {
-                                  position: 'sticky',
-                                  left:
-                                    isPinned === 'left'
-                                      ? column.getStart('left')
-                                      : undefined,
-                                  right:
-                                    isPinned === 'right'
-                                      ? column.getAfter('right')
-                                      : undefined,
-                                  zIndex: 1,
-                                  backgroundColor: 'hsl(var(--background))',
-                                }
-                              : {}),
-                          }}
-                          className={cn(
-                            align === 'right' && 'text-right',
-                            align === 'center' && 'text-center',
-                            isPinned &&
-                              'bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]',
-                            column.columnDef.meta?.cellClassName,
-                          )}
-                        >
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))
+                table.getRowModel().rows.map((row, rowIndex, allRows) => {
+                  const groupKey = groupBy?.(row.original);
+                  const previousKey =
+                    rowIndex > 0
+                      ? groupBy?.(allRows[rowIndex - 1].original)
+                      : undefined;
+                  const startsGroup =
+                    groupKey != null && groupKey !== previousKey;
+                  return (
+                    <React.Fragment key={row.id}>
+                      {startsGroup ? (
+                        <TableRow className="bg-muted/50 hover:bg-muted/50">
+                          <TableCell
+                            colSpan={table.getAllLeafColumns().length}
+                            className="py-1 font-medium"
+                          >
+                            {renderGroupHeader
+                              ? renderGroupHeader(
+                                  groupKey,
+                                  allRows
+                                    .filter(
+                                      (r) => groupBy?.(r.original) === groupKey,
+                                    )
+                                    .map((r) => r.original),
+                                )
+                              : groupKey}
+                          </TableCell>
+                        </TableRow>
+                      ) : null}
+                      <TableRow>
+                        {row.getVisibleCells().map((cell) => {
+                          const column = cell.column;
+                          const isPinned = column.getIsPinned();
+                          const align = column.columnDef.meta?.align ?? "left";
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              style={{
+                                width: cell.column.getSize(),
+                                ...(isPinned
+                                  ? {
+                                      position: "sticky",
+                                      left:
+                                        isPinned === "left"
+                                          ? column.getStart("left")
+                                          : undefined,
+                                      right:
+                                        isPinned === "right"
+                                          ? column.getAfter("right")
+                                          : undefined,
+                                      zIndex: 1,
+                                      backgroundColor: "hsl(var(--background))",
+                                    }
+                                  : {}),
+                              }}
+                              className={cn(
+                                align === "right" && "text-right",
+                                align === "center" && "text-center",
+                                isPinned &&
+                                  "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
+                                column.columnDef.meta?.cellClassName,
+                              )}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    </React.Fragment>
+                  );
+                })
               )}
             </TableBody>
           </Table>
           {footer != null && (
-            <div className="sticky bottom-0 border-t bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+            <div className="sticky bottom-0 border-t bg-muted/40 px-3 py-2 text-muted-foreground">
               {footer}
             </div>
           )}

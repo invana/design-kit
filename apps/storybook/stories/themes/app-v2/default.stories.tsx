@@ -197,23 +197,21 @@ const LeftSectionPanel = ({ panelKey, isMaximized, onToggleMaximize, onClose }: 
       ]}
       activeTab={panelKey}
       className="border-0"
-      headerActions={{
-        rightNavItems: [
-          {
-            name: 'new-file',
-            icon: Plus,
-            onClick: () => console.log('New file'),
-            tooltip: 'New File',
-          },
-          {
-            name: 'refresh',
-            icon: RefreshCw,
-            onClick: () => console.log('Refresh'),
-            tooltip: 'Refresh',
-          },
-          ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
-        ],
-      }}
+      headerActions={[
+        {
+          name: 'new-file',
+          icon: Plus,
+          onClick: () => console.log('New file'),
+          tooltip: 'New File',
+        },
+        {
+          name: 'refresh',
+          icon: RefreshCw,
+          onClick: () => console.log('Refresh'),
+          tooltip: 'Refresh',
+        },
+        ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
+      ]}
       bodyClassName="p-0"
       headerClassName="bg-muted/10"
     />
@@ -345,30 +343,28 @@ const BottomSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChr
     ]}
     defaultTab="problems"
     className="border-0"
-    headerActions={{
-      rightNavItems: [
-        {
-          name: 'clear',
-          icon: Trash2,
-          onClick: () => console.log('Clear'),
-          tooltip: 'Clear All',
-        },
-        {
-          name: 'copy',
-          icon: Copy,
-          onClick: () => console.log('Copy'),
-          tooltip: 'Copy',
-        },
-        {
-          name: 'filter',
-          icon: Filter,
-          onClick: () => console.log('Filter'),
-          tooltip: 'Filter',
-          showSeperator: true,
-        },
-        ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
-      ],
-    }}
+    headerActions={[
+      {
+        name: 'clear',
+        icon: Trash2,
+        onClick: () => console.log('Clear'),
+        tooltip: 'Clear All',
+      },
+      {
+        name: 'copy',
+        icon: Copy,
+        onClick: () => console.log('Copy'),
+        tooltip: 'Copy',
+      },
+      {
+        name: 'filter',
+        icon: Filter,
+        onClick: () => console.log('Filter'),
+        tooltip: 'Filter',
+        showSeperator: true,
+      },
+      ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
+    ]}
     bodyClassName="p-0"
     headerClassName="bg-muted/10"
   />
@@ -436,18 +432,16 @@ const RightSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChro
     ]}
     defaultTab="outline"
     className="border-0"
-    headerActions={{
-      rightNavItems: [
-        {
-          name: 'refresh',
-          icon: RefreshCw,
-          onClick: () => console.log('Refresh'),
-          tooltip: 'Refresh',
-          showSeperator: true,
-        },
-        ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
-      ],
-    }}
+    headerActions={[
+      {
+        name: 'refresh',
+        icon: RefreshCw,
+        onClick: () => console.log('Refresh'),
+        tooltip: 'Refresh',
+        showSeperator: true,
+      },
+      ...panelChromeActions({ isMaximized, onToggleMaximize, onClose }),
+    ]}
     bodyClassName="p-0"
     headerClassName="bg-muted/10"
   />

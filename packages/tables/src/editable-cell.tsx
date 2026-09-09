@@ -58,7 +58,7 @@ export function EditableCell<TData>({
         type="button"
         onClick={() => setEditing(true)}
         className={cn(
-          'group flex w-full items-center rounded-control px-1.5 py-1 text-sm hover:bg-muted/60 focus:outline-none focus:ring-2 focus:ring-ring',
+          'group flex w-full items-center rounded-control px-1.5 py-1 hover:bg-muted/60 focus:outline-none focus:ring-2 focus:ring-ring',
           alignClass,
         )}
         title="Click to edit"

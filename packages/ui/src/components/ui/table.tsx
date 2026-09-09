@@ -4,12 +4,15 @@ import { cn } from "../../lib/utils"
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto border rounded-md">
+  React.HTMLAttributes<HTMLTableElement> & { density?: "default" | "compact" }
+>(({ className, density = "default", ...props }, ref) => (
+  <div
+    data-density={density}
+    className="group/table relative w-full overflow-auto border rounded-md"
+  >
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm", className)}
+      className={cn("w-full caption-bottom", className)}
       {...props}
     />
   </div>
@@ -74,6 +77,11 @@ const TableHead = React.forwardRef<
     ref={ref}
     className={cn(
       "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      // Compact density: `<Table density="compact">` marks the wrapper, and
+      // every cell follows from there. One prop on the table rather than a
+      // size on <TableHead> and <TableCell> individually — four places to
+      // forget, and a table with two densities in it is always a mistake.
+      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:text-meta",
       className
     )}
     {...props}
@@ -89,6 +97,7 @@ const TableCell = React.forwardRef<
     ref={ref}
     className={cn(
       "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "group-data-[density=compact]/table:px-2 group-data-[density=compact]/table:py-1",
       className
     )}
     {...props}

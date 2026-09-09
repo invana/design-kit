@@ -176,34 +176,32 @@ export const WithHeaderActions: Story = {
       },
     ],
     defaultTab: 'explorer',
-    headerActions: {
-      rightNavItems: [
-        {
-          name: 'refresh',
-          icon: RefreshCw,
-          onClick: () => console.log('Refresh'),
-          tooltip: 'Refresh',
-        },
-        {
-          name: 'filter',
-          icon: Filter,
-          onClick: () => console.log('Filter'),
-          tooltip: 'Filter',
-        },
-        {
-          name: 'expand',
-          icon: Maximize2,
-          onClick: () => console.log('Expand'),
-          tooltip: 'Expand',
-        },
-        {
-          name: 'close',
-          icon: X,
-          onClick: () => console.log('Close'),
-          tooltip: 'Close',
-        },
-      ],
-    },
+    headerActions: [
+      {
+        name: 'refresh',
+        icon: RefreshCw,
+        onClick: () => console.log('Refresh'),
+        tooltip: 'Refresh',
+      },
+      {
+        name: 'filter',
+        icon: Filter,
+        onClick: () => console.log('Filter'),
+        tooltip: 'Filter',
+      },
+      {
+        name: 'expand',
+        icon: Maximize2,
+        onClick: () => console.log('Expand'),
+        tooltip: 'Expand',
+      },
+      {
+        name: 'close',
+        icon: X,
+        onClick: () => console.log('Close'),
+        tooltip: 'Close',
+      },
+    ],
     className: 'w-[600px] h-[400px]',
   },
 };

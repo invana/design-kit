@@ -33,7 +33,7 @@ export function DataTablePagination<TData>({
   const end = Math.min((pageIndex + 1) * pageSize, total);
 
   return (
-    <div className="flex items-center justify-between gap-4 px-2 py-2 text-sm">
+    <div className="flex items-center justify-between gap-4 px-2 py-2">
       <div className="text-muted-foreground">
         {total === 0 ? 'No rows' : `Showing ${start}–${end} of ${total}`}
       </div>

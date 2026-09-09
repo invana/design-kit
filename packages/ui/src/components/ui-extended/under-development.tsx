@@ -39,7 +39,7 @@ export function UnderDevelopment({
       <Construction size={iconSize} className="text-primary" />
       <h1 className="text-2xl font-bold">{title}</h1>
       <p className="text-muted-foreground max-w-md">{description}</p>
-      <span className="mt-4 px-3 py-1 bg-yellow-100 text-yellow-800 text-sm">
+      <span className="mt-4 px-3 py-1 bg-yellow-100 text-yellow-800">
         Coming Soon
       </span>
     </div>

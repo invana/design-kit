@@ -8,3 +8,4 @@ export * from './chat-session-progress-line';
 export * from './chat-session-disclosure';
 export * from './chat-session-task-row';
 export * from './chat-session-status-bar';
+export * from './chat-session-context-chip';

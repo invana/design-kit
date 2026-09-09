@@ -2,7 +2,7 @@ import React from "react"
 import { cn } from "../../lib/utils"
 import { Card, CardHeader, CardContent, CardFooter } from "../ui/card"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs"
-import { NavHorizontal, type NavHorizontalProps } from "./nav-horizontal"
+import { NavHorizontalItems, type NavHorizontalItem } from "./nav-horizontal"
 import { ErrorBoundary } from "../ui-extended"
 import { TooltipProvider } from "../ui/tooltip"
 
@@ -29,8 +29,22 @@ export interface TabbedPanelProps {
   /** Callback when tab changes */
   onTabChange?: (value: string) => void
   
-  /** Full NavHorizontal props for header right-side actions */
-  headerActions?: NavHorizontalProps
+  /**
+   * Actions on the right of the tab bar, as `NavHorizontal` items. A panel
+   * header has one action area — the right — so this is the item list itself
+   * rather than full `NavHorizontal` props: the tabs already own the left.
+   *
+   * Give an item `menuItems` and it becomes a `…` overflow dropdown. Closing
+   * is one of these items and nothing more; there is no close prop.
+   *
+   * ```tsx
+   * headerActions={[
+   *   { name: "Split editor", icon: Columns2, onClick: split },
+   *   { name: "Close panel", icon: X, onClick: close },
+   * ]}
+   * ```
+   */
+  headerActions?: NavHorizontalItem[]
   
   /** Additional CSS classes for the container */
   className?: string
@@ -43,13 +57,6 @@ export interface TabbedPanelProps {
   
   /** Optional footer content */
   footerContent?: React.ReactNode
-  
-  /** Whether to show default close button */
-  showClose?: boolean
-  /** Callback when close button is clicked */
-  onClose?: () => void
-  /** Custom close icon component */
-  closeIcon?: React.ReactNode
 }
 
 export function TabbedPanel({
@@ -63,9 +70,6 @@ export function TabbedPanel({
   bodyClassName,
   footerClassName,
   footerContent,
-  showClose: _showClose,
-  onClose: _onClose,
-  closeIcon: _closeIcon,
 }: TabbedPanelProps) {
   const [internalTab, setInternalTab] = React.useState(defaultTab || tabs[0]?.value)
   
@@ -102,12 +106,9 @@ export function TabbedPanel({
             </TabsList>
 
             {/* Right: Actions */}
-            {headerActions && (
-              <div className="flex items-center h-full">
-                <NavHorizontal
-                  className="h-full"
-                  {...headerActions}
-                />
+            {headerActions && headerActions.length > 0 && (
+              <div className="ml-auto flex h-full shrink-0 items-center gap-1 pr-1">
+                <NavHorizontalItems items={headerActions} />
               </div>
             )}
           </CardHeader>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PanelContent, Button } from '@invana/ui';
+import { X } from 'lucide-react';
 
 const meta: Meta<typeof PanelContent> = {
   title: 'UI/UI Extended/PanelContent',
@@ -7,7 +8,6 @@ const meta: Meta<typeof PanelContent> = {
   parameters: {
     layout: 'padded',
   },
-  // tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,15 +15,16 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * A card-based panel shell with a titled header (optional close button),
- * a scrollable body, and an optional footer.
+ * a scrollable body, and an optional footer. The card is a flex column, so
+ * header and footer hold their height inside the panel's bounds and only the
+ * body scrolls.
  */
 export const Default: Story = {
   render: () => (
     <div className="h-[320px] w-[360px] rounded-md border">
       <PanelContent
         titleText="Panel title"
-        showClose
-        onClose={() => {}}
+        headerActions={[{ name: 'Close panel', icon: X, onClick: () => {} }]}
         footerContent={
           <div className="flex w-full justify-end gap-2">
             <Button variant="ghost" size="sm">Cancel</Button>
@@ -31,7 +32,7 @@ export const Default: Story = {
           </div>
         }
       >
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground">
           Panel body content goes here. The body scrolls independently while the
           header and footer stay fixed.
         </p>

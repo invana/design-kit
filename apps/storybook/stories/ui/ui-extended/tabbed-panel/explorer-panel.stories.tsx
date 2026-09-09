@@ -182,28 +182,26 @@ export const ExplorerPanel: Story = {
       },
     ],
     defaultTab: 'explorer',
-    headerActions: {
-      rightNavItems: [
-        {
-          name: 'new-file',
-          icon: Plus,
-          onClick: () => console.log('New file'),
-          tooltip: 'New File',
-        },
-        {
-          name: 'refresh',
-          icon: RefreshCw,
-          onClick: () => console.log('Refresh'),
-          tooltip: 'Refresh',
-        },
-        {
-          name: 'collapse',
-          icon: Maximize2,
-          onClick: () => console.log('Collapse'),
-          tooltip: 'Collapse All',
-        },
-      ],
-    },
+    headerActions: [
+      {
+        name: 'new-file',
+        icon: Plus,
+        onClick: () => console.log('New file'),
+        tooltip: 'New File',
+      },
+      {
+        name: 'refresh',
+        icon: RefreshCw,
+        onClick: () => console.log('Refresh'),
+        tooltip: 'Refresh',
+      },
+      {
+        name: 'collapse',
+        icon: Maximize2,
+        onClick: () => console.log('Collapse'),
+        tooltip: 'Collapse All',
+      },
+    ],
     className: 'w-[350px] h-[600px]',
     bodyClassName: 'p-0',
   },

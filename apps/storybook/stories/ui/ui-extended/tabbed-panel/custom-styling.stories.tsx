@@ -176,15 +176,13 @@ export const CustomStyling: Story = {
       },
     ],
     defaultTab: 'tab1',
-    headerActions: {
-      rightNavItems: [
-        {
-          name: 'action',
-          icon: Settings,
-          onClick: () => console.log('Action'),
-        },
-      ],
-    },
+    headerActions: [
+      {
+        name: 'action',
+        icon: Settings,
+        onClick: () => console.log('Action'),
+      },
+    ],
     className: 'w-[600px] h-[400px] border-2 border-primary/20 rounded-lg',
     headerClassName: 'bg-primary/5 border-b-2 border-primary/20',
     bodyClassName: 'bg-muted/20',

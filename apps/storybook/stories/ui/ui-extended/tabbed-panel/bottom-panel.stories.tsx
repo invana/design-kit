@@ -189,35 +189,33 @@ export const BottomPanel: Story = {
       },
     ],
     defaultTab: 'problems',
-    headerActions: {
-      rightNavItems: [
-        {
-          name: 'clear',
-          icon: Trash2,
-          onClick: () => console.log('Clear'),
-          tooltip: 'Clear All',
-        },
-        {
-          name: 'copy',
-          icon: Copy,
-          onClick: () => console.log('Copy'),
-          tooltip: 'Copy',
-        },
-        {
-          name: 'filter',
-          icon: Filter,
-          onClick: () => console.log('Filter'),
-          tooltip: 'Filter',
-        },
-        {
-          name: 'close',
-          icon: X,
-          onClick: () => console.log('Close'),
-          tooltip: 'Close Panel',
-          showSeperator: true,
-        },
-      ],
-    },
+    headerActions: [
+      {
+        name: 'clear',
+        icon: Trash2,
+        onClick: () => console.log('Clear'),
+        tooltip: 'Clear All',
+      },
+      {
+        name: 'copy',
+        icon: Copy,
+        onClick: () => console.log('Copy'),
+        tooltip: 'Copy',
+      },
+      {
+        name: 'filter',
+        icon: Filter,
+        onClick: () => console.log('Filter'),
+        tooltip: 'Filter',
+      },
+      {
+        name: 'close',
+        icon: X,
+        onClick: () => console.log('Close'),
+        tooltip: 'Close Panel',
+        showSeperator: true,
+      },
+    ],
     className: 'w-[1200px] h-[250px]',
     bodyClassName: 'p-0',
     headerClassName: 'bg-muted/20',

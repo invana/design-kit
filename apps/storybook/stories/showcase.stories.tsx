@@ -1467,8 +1467,7 @@ const ThemeShowcase = ({
             <div className="h-[320px] w-[360px] rounded-md border">
               <PanelContent
                 titleText="Panel title"
-                showClose
-                onClose={() => {}}
+                headerActions={[{ name: 'Close panel', icon: X, onClick: () => {} }]}
                 footerContent={
                   <div className="flex w-full justify-end gap-2">
                     <Button variant="ghost" size="sm">Cancel</Button>
@@ -1476,7 +1475,7 @@ const ThemeShowcase = ({
                   </div>
                 }
               >
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground">
                   Panel body content goes here. The header and footer stay fixed while the body scrolls.
                 </p>
               </PanelContent>

@@ -11,7 +11,7 @@ const TypographyMuted = React.forwardRef<HTMLParagraphElement, TypographyMutedPr
       <p
         ref={ref}
         className={cn(
-          "text-sm text-muted-foreground",
+          "text-muted-foreground",
           className
         )}
         {...props}

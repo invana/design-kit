@@ -1,0 +1,69 @@
+{
+  "name": "@invana/editor",
+  "version": "0.0.21",
+  "description": "Invana Design System - Code and markdown editing surfaces (CodeMirror 6)",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "codemirror",
+    "editor",
+    "invana/editor"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/editor"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepare": "pnpm run build",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@invana/styling": "workspace:*",
+    "@invana/ui": "workspace:*",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.10.3",
+    "@codemirror/language": "^6.12.3",
+    "@codemirror/legacy-modes": "^6.5.3",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.41.0"
+  },
+  "devDependencies": {
+    "@invana/styling": "workspace:*",
+    "@invana/ui": "workspace:*",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3"
+  }
+}

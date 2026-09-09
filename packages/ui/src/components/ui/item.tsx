@@ -31,7 +31,7 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  "group/item [a]:hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 [a]:transition-colors flex flex-wrap items-center rounded-md border border-transparent text-sm outline-none transition-colors duration-100 focus-visible:ring-[3px]",
+  "group/item [a]:hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 [a]:transition-colors flex flex-wrap items-center rounded-md border border-transparent outline-none transition-colors duration-100 focus-visible:ring-[3px]",
   {
     variants: {
       variant: {
@@ -42,11 +42,28 @@ const itemVariants = cva(
       size: {
         default: "gap-4 p-4 ",
         sm: "gap-2.5 px-4 py-3",
+        /**
+         * The application row — 30px, the height a dense list actually uses:
+         * an agent in a roster, a dataset, a schedule, a node type, a queue
+         * entry. `min-h` rather than `h`, so a row that wraps still contains
+         * its content instead of clipping it.
+         */
+        xs: "min-h-[30px] gap-2 px-2 py-1",
+      },
+      /**
+       * Selection, not hover. A row the user has chosen stays marked while
+       * they work elsewhere in the panel, which `:hover` cannot express.
+       * Drive it from the same state that drives `aria-selected`.
+       */
+      selected: {
+        true: "bg-accent",
+        false: "",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      selected: false,
     },
   }
 )
@@ -55,6 +72,7 @@ function Item({
   className,
   variant = "default",
   size = "default",
+  selected,
   asChild = false,
   ...props
 }: React.ComponentProps<"div"> &
@@ -65,7 +83,8 @@ function Item({
       data-slot="item"
       data-variant={variant}
       data-size={size}
-      className={cn(itemVariants({ variant, size, className }))}
+      data-selected={selected || undefined}
+      className={cn(itemVariants({ variant, size, selected, className }))}
       {...props}
     />
   )
@@ -121,7 +140,7 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-title"
       className={cn(
-        "flex w-fit items-center gap-2 text-sm font-medium leading-snug",
+        "flex w-fit items-center gap-2 font-medium leading-snug",
         className
       )}
       {...props}
@@ -134,7 +153,9 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "text-muted-foreground line-clamp-2 text-balance text-sm font-normal leading-normal",
+        "text-muted-foreground line-clamp-2 text-balance font-normal leading-normal",
+        // A dense row's subtitle is one line of meta, not a wrapped paragraph.
+        "group-data-[size=xs]/item:line-clamp-1 group-data-[size=xs]/item:text-meta",
         "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
         className
       )}

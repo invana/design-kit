@@ -63,7 +63,7 @@ export function DataTableToolbar<TData>({
                     return (
                       <div
                         key={col.id}
-                        className="flex items-center justify-between px-2 py-1 text-sm"
+                        className="flex items-center justify-between px-2 py-1"
                       >
                         <span className="capitalize truncate">
                           {String(col.columnDef.header ?? col.id)}
@@ -74,7 +74,7 @@ export function DataTableToolbar<TData>({
                             onClick={() =>
                               col.pin(pinned === 'left' ? false : 'left')
                             }
-                            className={`rounded px-1.5 py-0.5 text-xs ${
+                            className={`rounded px-1.5 py-0.5 text-meta ${
                               pinned === 'left'
                                 ? 'bg-primary text-primary-foreground'
                                 : 'bg-muted hover:bg-muted/70'
@@ -87,7 +87,7 @@ export function DataTableToolbar<TData>({
                             onClick={() =>
                               col.pin(pinned === 'right' ? false : 'right')
                             }
-                            className={`rounded px-1.5 py-0.5 text-xs ${
+                            className={`rounded px-1.5 py-0.5 text-meta ${
                               pinned === 'right'
                                 ? 'bg-primary text-primary-foreground'
                                 : 'bg-muted hover:bg-muted/70'

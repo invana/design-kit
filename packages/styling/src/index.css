@@ -14,18 +14,91 @@
   --container-padding: 2rem;
   --container-screens-2xl: 1400px;
 
-  /* Font sizes */
-  --font-size-default: 1rem;
-  --font-size-xss: 0.6875rem;
-  --font-size-xs: 0.8125rem;
-  --font-size-base: 1rem;
-  --font-size-sm: 1.25rem;
-  --font-size-lg: 1.5rem;
-  --font-size-xl: 2rem;
-  --font-size-2xl: 2.5rem;
-  --font-size-3xl: 3.75rem;
-  --font-size-4xl: 4.375rem;
-  --font-size-5xl: 5.25rem;
+  /*
+   * The type ladder.
+   *
+   * TWO content sizes, and a root that is the only dial.
+   *
+   *   base   1rem       the size of everything, by default
+   *   meta   0.923rem   the one step under it
+   *
+   * `html` below is 13px, so that reads 13px / 12px in an application. A
+   * marketing page setting a 16px root gets 16px / 14.8px from the same
+   * components — which is the point: every step here is a ratio of the root, so
+   * the root is what moves, not 49 class names.
+   *
+   * ── Why `sm` and `xs` are aliases, not rungs ──────────────────────────────
+   *
+   * A block declaring `--font-size-*` used to live here. Tailwind v4's type
+   * namespace is `--text-*`, so none of it generated a utility and `text-xs`,
+   * `text-sm` and friends silently resolved to Tailwind's rem defaults against
+   * a 13px root: xs 9.75px, sm 11.375px. Nobody chose those. They are what you
+   * get when shadcn's ladder — authored for a 16px root, where `text-sm` means
+   * "the UI size" — is dropped onto a 13px one.
+   *
+   * They are re-pointed rather than deleted because 300+ call sites across
+   * design-kit, canvas and invana already say `text-sm` meaning "normal UI
+   * text" and `text-xs` meaning "a step down". That is exactly `base` and
+   * `meta`, so the classes render what their authors meant — but ONLY in a
+   * build that has this @theme block in its source graph.
+   *
+   * That is the catch, and it is not obvious. A consumer importing the
+   * PRECOMPILED `@invana/ui/styles.css` gets plain `:root{--text-…}` custom
+   * properties, not theme tokens — and Tailwind emits a utility only for a
+   * class something uses, so `.text-sm` is not in that file at all now that no
+   * kit component writes it. Such a consumer's own Tailwind therefore generates
+   * `.text-sm` from ITS default (0.875rem) and lands back on 11.375px.
+   *
+   * For the aliases to reach a consumer, that consumer must
+   * `@import "@invana/styling"` (or `@invana/styling/index.css`) so this block
+   * is compiled as part of their build. Studio imports only the prebuilt
+   * `@invana/ui/styles.css` today, so it does NOT yet pick these up.
+   *
+   * New code should not reach for them. Default text declares no size at all
+   * and inherits the root; text that is deliberately subordinate — a count, a
+   * timing, a row's subtitle — says `text-meta`, which names the job. `sm` and
+   * `xs` are here so old code is correct, not so new code has options.
+   *
+   * `lg`, `xl` and up keep Tailwind's defaults: they are heading steps, nothing
+   * complained about them, and moving them would re-baseline every title in the
+   * system for no stated reason.
+   *
+   * When adding any `--text-*` token, register it in the `font-size` class
+   * group in `@invana/ui`'s `cn` as well. `text-*` is both the size and the
+   * colour scale, so tailwind-merge reads a size it does not recognise as a
+   * colour and silently strips the real colour class. (`xs` and `sm` are
+   * built-ins and already in that group; `meta` is registered.)
+   */
+
+  /*
+   * The meta step — the one size under the base.
+   *
+   * Stated as a ratio of the root (12/13) rather than the absolute `12px` it
+   * used to be. Absolute was the right call while the ladder around it was
+   * broken; it is the wrong one now, because a px step cannot follow a root
+   * that moves, and following the root is what lets these components render a
+   * website as well as an application.
+   *
+   * `rem`, not `em`: nested subordinate text should not compound down to 11px
+   * and then 10px. One step means one step, wherever it sits.
+   */
+  --text-meta: 0.923rem;
+  --text-meta--line-height: 1.5;
+
+  /*
+   * Compatibility aliases — see the ladder note above. Not for new code.
+   *
+   * The paired `--line-height` matters as much as the size. Tailwind ships one
+   * per step (sm 1.4286, xs 1.3333), and re-pointing only the size leaves two
+   * classes rendering 12px text in rows of different heights — the same
+   * inconsistency one level down. Both aliases take the base ratio, so
+   * `text-xs` and `text-meta` are the same line, and `text-sm` and `text-base`
+   * are the same line.
+   */
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5;
+  --text-xs: 0.923rem;
+  --text-xs--line-height: 1.5;
 
   /* Font weights */
   --font-weight-regular: 400;
@@ -71,6 +144,12 @@
 
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(210 10% 20%);
+
+  /* The line between two things on a canvas — a graph edge, a dependency
+     arrow, a connector. Deliberately NOT --color-border: a border separates
+     surfaces and may go invisible against them, while an edge is content and
+     has to stay legible on the canvas it is drawn on. */
+  --color-edge: hsl(210 6% 78%);
 
   /* ------------------------------------------------------------------------
    * Border radius — the design language, decided 01-09-2026.
@@ -161,6 +240,18 @@
 
   --surface-alpha: 1; /* opaque → identical to current look */
   --glass-blur: none; /* no backdrop blur */
+}
+
+/*
+ * Dark: the edge lifts, because the surface it is drawn on went dark. One rule
+ * for every dark theme, whatever its brand accent — an edge is content, and
+ * content does not change colour when the shell does (same reasoning as
+ * themes/data-palette.css). The suffix selector also catches a theme added
+ * after this was written.
+ */
+[data-theme$="-dark"],
+.dark {
+  --color-edge: hsl(210 6% 30%);
 }
 
 [data-glass="true"] {

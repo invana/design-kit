@@ -87,7 +87,7 @@ function OptionRow({ option }: { option: RichSelectOption }) {
         {option.badge != null && <span className="ml-auto pl-2">{option.badge}</span>}
       </span>
       {option.description != null && (
-        <span className="text-xs text-muted-foreground">{option.description}</span>
+        <span className="text-meta text-muted-foreground">{option.description}</span>
       )}
     </span>
   )

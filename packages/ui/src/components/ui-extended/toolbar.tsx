@@ -6,7 +6,7 @@ import { Separator } from '../ui/separator';
 const Toolbar: React.FC = () => {
   return (
 
-    <div className="flex h-5 items-center space-x-2 text-sm">
+    <div className="flex h-5 items-center space-x-2">
       {/* <div> */}
       <ButtonWithTooltip
         variant="ghost"

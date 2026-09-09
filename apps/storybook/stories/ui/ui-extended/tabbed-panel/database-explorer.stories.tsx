@@ -206,22 +206,20 @@ export const DatabaseExplorer: Story = {
       },
     ],
     defaultTab: 'tables',
-    headerActions: {
-      rightNavItems: [
-        {
-          name: 'refresh',
-          icon: RefreshCw,
-          onClick: () => console.log('Refresh'),
-          tooltip: 'Refresh',
-        },
-        {
-          name: 'settings',
-          icon: Settings,
-          onClick: () => console.log('Settings'),
-          tooltip: 'Settings',
-        },
-      ],
-    },
+    headerActions: [
+      {
+        name: 'refresh',
+        icon: RefreshCw,
+        onClick: () => console.log('Refresh'),
+        tooltip: 'Refresh',
+      },
+      {
+        name: 'settings',
+        icon: Settings,
+        onClick: () => console.log('Settings'),
+        tooltip: 'Settings',
+      },
+    ],
     className: 'w-[400px] h-[500px]',
   },
 };

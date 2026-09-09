@@ -66,9 +66,11 @@ interface StoredState {
   accent?: string | null;
 }
 
-function readStorage(): StoredState | null {
+/** `key === null` turns persistence off — nothing is read, nothing is written. */
+function readStorage(key: string | null): StoredState | null {
+  if (key === null) return null;
   try {
-    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
     if (!raw) return null;
     return JSON.parse(raw) as StoredState;
   } catch {
@@ -76,9 +78,15 @@ function readStorage(): StoredState | null {
   }
 }
 
-function writeStorage(theme: string, mode: ThemeMode, accent: string | null) {
+function writeStorage(
+  key: string | null,
+  theme: string,
+  mode: ThemeMode,
+  accent: string | null,
+) {
+  if (key === null) return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ theme, mode, accent }));
+    localStorage.setItem(key, JSON.stringify({ theme, mode, accent }));
   } catch {
     // ignore
   }
@@ -130,17 +138,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   defaultAccent = null,
   accents = DEFAULT_ACCENTS,
   persist = 'change',
+  storageKey = STORAGE_KEY,
 }) => {
   const [theme, setThemeState] = useState<string>(() => {
-    return readStorage()?.theme ?? defaultTheme;
+    return readStorage(storageKey)?.theme ?? defaultTheme;
   });
 
   const [mode, setModeState] = useState<ThemeMode>(() => {
-    return readStorage()?.mode ?? defaultMode;
+    return readStorage(storageKey)?.mode ?? defaultMode;
   });
 
   const [accent, setAccentState] = useState<string | null>(() => {
-    return readStorage()?.accent ?? defaultAccent;
+    return readStorage(storageKey)?.accent ?? defaultAccent;
   });
 
   // `isDark` is derived: it follows the OS preference only for "system" mode.
@@ -164,29 +173,29 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   const setTheme = useCallback((themeId: string) => {
     setThemeState(themeId);
-    if (persist === 'change') writeStorage(themeId, mode, accent);
-  }, [mode, accent, persist]);
+    if (persist === 'change') writeStorage(storageKey, themeId, mode, accent);
+  }, [mode, accent, persist, storageKey]);
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
-    if (persist === 'change') writeStorage(theme, newMode, accent);
-  }, [theme, accent, persist]);
+    if (persist === 'change') writeStorage(storageKey, theme, newMode, accent);
+  }, [theme, accent, persist, storageKey]);
 
   const toggleMode = useCallback(() => {
     const next: ThemeMode = isDark ? 'light' : 'dark';
     setModeState(next);
-    if (persist === 'change') writeStorage(theme, next, accent);
-  }, [isDark, theme, accent, persist]);
+    if (persist === 'change') writeStorage(storageKey, theme, next, accent);
+  }, [isDark, theme, accent, persist, storageKey]);
 
   const setAccent = useCallback((next: string | null) => {
     setAccentState(next);
-    if (persist === 'change') writeStorage(theme, mode, next);
-  }, [theme, mode, persist]);
+    if (persist === 'change') writeStorage(storageKey, theme, mode, next);
+  }, [theme, mode, persist, storageKey]);
 
   // Persist the current selection on demand (for `persist="manual"`).
   const commit = useCallback(() => {
-    writeStorage(theme, mode, accent);
-  }, [theme, mode, accent]);
+    writeStorage(storageKey, theme, mode, accent);
+  }, [theme, mode, accent, storageKey]);
 
   const variantId = buildVariantId(theme, mode, isDark);
   const resolvedAccentVars = accentVars(findAccent(accent, accents), isDark);

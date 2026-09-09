@@ -15,7 +15,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { hasError
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center h-full w-full text-sm">
+        <div className="flex flex-col items-center justify-center h-full w-full">
           <div className="inline-flex items-center">
             <Frown className="mr-1 h-4" />
             Oops ! something went wrong.
