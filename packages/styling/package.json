@@ -71,6 +71,14 @@
     "./themes/presets-base.css": {
       "style": "./src/themes/presets-base.css",
       "default": "./src/themes/presets-base.css"
+    },
+    "./themes/data-palette": {
+      "style": "./src/themes/data-palette.css",
+      "default": "./src/themes/data-palette.css"
+    },
+    "./themes/data-palette.css": {
+      "style": "./src/themes/data-palette.css",
+      "default": "./src/themes/data-palette.css"
     }
   },
   "files": [
