@@ -1,6 +1,6 @@
 {
   "name": "@invana/editor",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Invana Design System - Code and markdown editing surfaces (CodeMirror 6)",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
