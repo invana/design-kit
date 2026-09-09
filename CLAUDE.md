@@ -101,3 +101,22 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
 - Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (form generator stories, split into `forms/examples/` for full example forms — login, registration, create-project, … — and `forms/showcase/` for capability showcases — object-field, column-layout, complex, properties-panel), `data-tables/`, `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The one exception is the forms section: files live under `forms/examples/` and `forms/showcase/`, but their titles are grouped under `Form Generator/…` for the sidebar — e.g. `"Form Generator/Examples/Login"`, `"Form Generator/Showcase/Properties Panel"`.
+
+## Where demand comes from
+
+The kit's roadmap is driven by the **Invana hi-fi board** at
+`~/Projects/invana/invana/.design/` (43 artboards, `hi-fi-finance/`). Every hi-fi screen is
+composed only from `@invana/*` components — so a component the board needs and the kit lacks is a
+gap in the kit, not a one-off in the design.
+
+- `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
+  element → its design-kit component, what is missing, and the build order. Read it before adding
+  a component, and update it when you ship one.
+- New components land here **with a story** before the design or Studio uses them. A component
+  without a story is not done.
+- Invana-domain composites (emissions, thinkings, citations, charts) belong in
+  `@invana/ui/components/ui-extended/` — they need no external dep, and the whole kit is Invana's.
+  Only a component needing an external JS library gets its own package (see the placement rule
+  above); `@invana/editor` (CodeMirror 6) is the current example.
+- Density is a **token axis, not a prop**. `@invana/styling` ships `data-density="compact"`;
+  components read `--control-h*` / `--font-size-*` rather than hard-coding `h-8`/`h-9`.
