@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBase, NavItems, type NavItemConfig } from './nav-base';
+import { NavBase, NavItems, type NavItemConfig, type NavItemsProps } from './nav-base';
 
 /**
  * NavHorizontalItem - Configuration for a single horizontal navigation item
@@ -24,12 +24,17 @@ import { NavBase, NavItems, type NavItemConfig } from './nav-base';
  */
 export type NavHorizontalItem = NavItemConfig;
 
-export interface NavHorizontalItemsProps {
+/**
+ * Everything `NavItems` takes except the orientation, which this component
+ * fixes. Forwarding the whole surface is what lets a header opt into
+ * `overflow`, `variant` or tab semantics without reaching past the wrapper.
+ */
+export interface NavHorizontalItemsProps extends Omit<NavItemsProps, 'orientation' | 'items'> {
   items: NavHorizontalItem[];
 }
 
-export const NavHorizontalItems: React.FC<NavHorizontalItemsProps> = ({ items }) => (
-  <NavItems items={items} orientation="horizontal" />
+export const NavHorizontalItems: React.FC<NavHorizontalItemsProps> = (props) => (
+  <NavItems {...props} orientation="horizontal" />
 );
 
 /**

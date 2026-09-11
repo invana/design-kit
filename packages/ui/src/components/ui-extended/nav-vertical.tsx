@@ -1,5 +1,5 @@
 import React from "react"
-import { NavBase, NavItems, type NavItemConfig } from './nav-base';
+import { NavBase, NavItems, type NavItemConfig, type NavItemsProps } from './nav-base';
 
 
 /**
@@ -24,12 +24,18 @@ import { NavBase, NavItems, type NavItemConfig } from './nav-base';
  */
 export type NavVerticalItem = NavItemConfig;
 
-export interface NavVerticalItemsProps {
+/**
+ * Everything `NavItems` takes except the orientation, which this component
+ * fixes — so a rail can opt into `variant`, controlled selection or tab
+ * semantics without reaching past the wrapper. (`overflow` is ignored on a
+ * vertical strip: it grows downward, where there is always room.)
+ */
+export interface NavVerticalItemsProps extends Omit<NavItemsProps, 'orientation' | 'items'> {
   items: NavVerticalItem[]
 }
 
-export const NavVerticalItems: React.FC<NavVerticalItemsProps> = ({ items }) => (
-  <NavItems items={items} orientation="vertical" />
+export const NavVerticalItems: React.FC<NavVerticalItemsProps> = (props) => (
+  <NavItems {...props} orientation="vertical" />
 )
 
 
