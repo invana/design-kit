@@ -1,0 +1,390 @@
+/* 
+ * @invana/styling - Shared Design System Theme
+ * 
+ * This file contains ONLY theme configuration.
+ * Each consuming app must:
+ * 1. @import "tailwindcss" first
+ * 2. @import this file
+ * 3. Define their own @source paths
+ */
+
+@theme {
+  /* Container */
+  --container-center: true;
+  --container-padding: 2rem;
+  --container-screens-2xl: 1400px;
+
+  /*
+   * The type ladder.
+   *
+   * TWO content sizes, and a root that is the only dial.
+   *
+   *   base   1rem       the size of everything, by default
+   *   meta   0.923rem   the one step under it
+   *
+   * `html` below is 13px, so that reads 13px / 12px in an application. A
+   * marketing page setting a 16px root gets 16px / 14.8px from the same
+   * components — which is the point: every step here is a ratio of the root, so
+   * the root is what moves, not 49 class names.
+   *
+   * ── Why `sm` and `xs` are aliases, not rungs ──────────────────────────────
+   *
+   * A block declaring `--font-size-*` used to live here. Tailwind v4's type
+   * namespace is `--text-*`, so none of it generated a utility and `text-xs`,
+   * `text-sm` and friends silently resolved to Tailwind's rem defaults against
+   * a 13px root: xs 9.75px, sm 11.375px. Nobody chose those. They are what you
+   * get when shadcn's ladder — authored for a 16px root, where `text-sm` means
+   * "the UI size" — is dropped onto a 13px one.
+   *
+   * They are re-pointed rather than deleted because 300+ call sites across
+   * design-kit, canvas and invana already say `text-sm` meaning "normal UI
+   * text" and `text-xs` meaning "a step down". That is exactly `base` and
+   * `meta`, so the classes render what their authors meant — but ONLY in a
+   * build that has this @theme block in its source graph.
+   *
+   * That is the catch, and it is not obvious. A consumer importing the
+   * PRECOMPILED `@invana/ui/styles.css` gets plain `:root{--text-…}` custom
+   * properties, not theme tokens — and Tailwind emits a utility only for a
+   * class something uses, so `.text-sm` is not in that file at all now that no
+   * kit component writes it. Such a consumer's own Tailwind therefore generates
+   * `.text-sm` from ITS default (0.875rem) and lands back on 11.375px.
+   *
+   * For the aliases to reach a consumer, that consumer must
+   * `@import "@invana/styling"` (or `@invana/styling/index.css`) so this block
+   * is compiled as part of their build. Studio imports only the prebuilt
+   * `@invana/ui/styles.css` today, so it does NOT yet pick these up.
+   *
+   * New code should not reach for them. Default text declares no size at all
+   * and inherits the root; text that is deliberately subordinate — a count, a
+   * timing, a row's subtitle — says `text-meta`, which names the job. `sm` and
+   * `xs` are here so old code is correct, not so new code has options.
+   *
+   * `lg`, `xl` and up keep Tailwind's defaults: they are heading steps, nothing
+   * complained about them, and moving them would re-baseline every title in the
+   * system for no stated reason.
+   *
+   * When adding any `--text-*` token, register it in the `font-size` class
+   * group in `@invana/ui`'s `cn` as well. `text-*` is both the size and the
+   * colour scale, so tailwind-merge reads a size it does not recognise as a
+   * colour and silently strips the real colour class. (`xs` and `sm` are
+   * built-ins and already in that group; `meta` is registered.)
+   */
+
+  /*
+   * The meta step — the one size under the base.
+   *
+   * Stated as a ratio of the root (12/13) rather than the absolute `12px` it
+   * used to be. Absolute was the right call while the ladder around it was
+   * broken; it is the wrong one now, because a px step cannot follow a root
+   * that moves, and following the root is what lets these components render a
+   * website as well as an application.
+   *
+   * `rem`, not `em`: nested subordinate text should not compound down to 11px
+   * and then 10px. One step means one step, wherever it sits.
+   */
+  --text-meta: 0.923rem;
+  --text-meta--line-height: 1.5;
+
+  /*
+   * Compatibility aliases — see the ladder note above. Not for new code.
+   *
+   * The paired `--line-height` matters as much as the size. Tailwind ships one
+   * per step (sm 1.4286, xs 1.3333), and re-pointing only the size leaves two
+   * classes rendering 12px text in rows of different heights — the same
+   * inconsistency one level down. Both aliases take the base ratio, so
+   * `text-xs` and `text-meta` are the same line, and `text-sm` and `text-base`
+   * are the same line.
+   */
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5;
+  --text-xs: 0.923rem;
+  --text-xs--line-height: 1.5;
+
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: bold;
+
+  /* Colors */
+  --color-border: hsl(210 6% 85%);
+  --color-input: hsl(210 6% 92%);
+  --color-ring: hsl(142 70% 43%);
+  --color-background: hsl(0 0% 97%);
+  --color-foreground: hsl(210 10% 20%);
+
+  --color-primary: hsl(142 70% 43%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(142 30% 95%);
+  --color-secondary-foreground: hsl(142 25% 40%);
+
+  --color-destructive: hsl(0 70% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  /* Semantic status colors — agent/task state (activity markers, task dots,
+     votes). Distinct from destructive (which stays the action-danger color). */
+  --color-success: hsl(142 70% 38%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 92% 42%);
+  --color-warning-foreground: hsl(0 0% 100%);
+  --color-info: hsl(210 90% 45%);
+  --color-info-foreground: hsl(0 0% 100%);
+
+  --color-muted: hsl(210 6% 90%);
+  --color-muted-foreground: hsl(210 8% 45%);
+
+  /* accent = neutral interactive feedback (hover/focus), NOT brand green.
+     Kept a SOLID color so opacity modifiers (bg-accent/50) still work. */
+  --color-accent: hsl(210 6% 92%);
+  --color-accent-foreground: hsl(210 10% 20%);
+
+  --color-popover: hsl(0 0% 98%);
+  --color-popover-foreground: hsl(210 10% 20%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(210 10% 20%);
+
+  /* The line between two things on a canvas — a graph edge, a dependency
+     arrow, a connector. Deliberately NOT --color-border: a border separates
+     surfaces and may go invisible against them, while an edge is content and
+     has to stay legible on the canvas it is drawn on. */
+  --color-edge: hsl(210 6% 78%);
+
+  /* ------------------------------------------------------------------------
+   * Border radius — the design language, decided 01-09-2026.
+   *
+   *   STRUCTURE is cut.      0      anything that CONTAINS
+   *   CONTROLS are pressed.  2px    anything you PRESS or TYPE INTO
+   *   SHAPE is not radius.   999px  only where round IS the object
+   *
+   * Structure: cards, panels, dialogs, popovers, menus, tables, ledger rows,
+   * chips, badges, tab panels, canvas surfaces, diagram nodes.
+   * Controls: buttons, inputs, selects, textareas, menu items, tab triggers,
+   * toggles — `rounded-control`, generated from `--radius-control` below.
+   * Shape: avatars, status dots, spinners, slider thumbs, switch capsules,
+   * scrollbar thumbs. These keep `rounded-full` because they are round
+   * objects, not rectangles with soft ends. A rectangle wearing round ends is
+   * a pill, and there are no pills.
+   *
+   * WHY 0 FOR STRUCTURE. The hairline grid is the house component: cells sit
+   * on a `bg-border` backdrop separated by `gap-px`, so the "border" is the
+   * backdrop showing through a one-pixel gap. Any radius on a cell lets that
+   * backdrop through at every corner as a grey notch — radii and hairline
+   * grids cannot both win. It also holds at application density: a radius
+   * that is invisible on a 44px button is loud on a 24px row, and nesting a
+   * chip in a row in a panel in a card stacks four of them into mush. Sharp
+   * nests at any size.
+   *
+   * WHY 2px FOR CONTROLS, not 0. At touch size a fully cut button reads as
+   * cut metal. 2px is invisible as decoration and legible as affordance: the
+   * difference between a surface and a thing you press is information, and in
+   * a dense application that does real work.
+   *
+   * The scale is deliberately flat. `rounded-sm` / `-md` / `-lg` / `-xl` /
+   * `-2xl` all resolve to 0, so the ~79 components already written against
+   * them need no edit, and a `rounded-lg` typed out of habit tomorrow cannot
+   * quietly reintroduce a radius.
+   * ---------------------------------------------------------------------- */
+  --radius: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
+  /* The only non-zero rectangle radius in the system. Generates
+     `rounded-control`, which every control component points at. */
+  --radius-control: 2px;
+
+  /* Retained: predates the decision, and is now the same value as
+     --radius-control. Prefer `rounded-control` — it says what it is for. */
+  --radius-2px: 2px;
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/*
+ * NOTE: Theme-specific color variables are defined in theme files:
+ * - themes/default.css
+ * - themes/tailwind.css
+ * - themes/vite.css
+ *
+ * These files use [data-theme="..."] selectors to apply theme-specific colors.
+ * Default fallbacks are handled by the first theme (default-light).
+ */
+
+/*
+ * Interactive surface controls.
+ *
+ * Glass mode is opt-in: set `data-glass="true"` on any element (root, a panel
+ * subtree, or a single component) and every descendant that uses the
+ * `--surface-alpha` / `--glass-blur` tokens becomes translucent + blurred.
+ * Defaults below reproduce the current opaque, no-blur rendering exactly.
+ *
+ * The raw HSL triplets mirror default-light so `hsl(var(--token) / <alpha>)`
+ * resolves even when no [data-theme] is applied; theme files override them.
+ */
+:root {
+  --primary: 142 70% 43%;
+  --secondary: 142 30% 95%;
+  --destructive: 0 70% 60%;
+  --background: 0 0% 97%;
+  --accent: 210 6% 92%;
+  --success: 142 70% 38%;
+  --warning: 38 92% 42%;
+  --info: 210 90% 45%;
+
+  --surface-alpha: 1; /* opaque → identical to current look */
+  --glass-blur: none; /* no backdrop blur */
+}
+
+/*
+ * Dark: the edge lifts, because the surface it is drawn on went dark. One rule
+ * for every dark theme, whatever its brand accent — an edge is content, and
+ * content does not change colour when the shell does (same reasoning as
+ * themes/data-palette.css). The suffix selector also catches a theme added
+ * after this was written.
+ */
+[data-theme$="-dark"],
+.dark {
+  --color-edge: hsl(210 6% 30%);
+}
+
+[data-glass="true"] {
+  --surface-alpha: 0.6;
+  --glass-blur: blur(12px);
+}
+
+/* Apply on any surface that should frost in glass mode (no-op when off). */
+@utility glassable {
+  backdrop-filter: var(--glass-blur, none);
+  -webkit-backdrop-filter: var(--glass-blur, none);
+}
+
+/*
+ * Corner-bracket hover/focus affordance — drop `corner-hint` on a button,
+ * anchor, or list item directly (no wrapper element needed). Brackets float
+ * just outside the box and fade in on hover/focus, standing in for a solid
+ * highlight background.
+ */
+@utility corner-hint {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 150ms ease-out, transform 150ms ease-out;
+    background-repeat: no-repeat;
+    background-image:
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
+      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7));
+  }
+
+  &::before {
+    background-size: 10px 2px, 2px 10px, 10px 2px, 2px 10px;
+    background-position: top left, top left, top right, top right;
+  }
+
+  &::after {
+    background-size: 10px 2px, 2px 10px, 10px 2px, 2px 10px;
+    background-position: bottom left, bottom left, bottom right, bottom right;
+  }
+
+  &:hover::before,
+  &:hover::after,
+  &:focus-visible::before,
+  &:focus-visible::after,
+  &:focus-within::before,
+  &:focus-within::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* Base styles */
+html,
+body {
+  font-size: 13px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+/* Themed scrollbars — Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Themed scrollbars — WebKit / Chromium (incl. <textarea>) */
+*::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-muted-foreground);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner,
+textarea::-webkit-scrollbar-corner {
+  background: transparent;
+}
