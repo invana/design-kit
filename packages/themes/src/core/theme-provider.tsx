@@ -78,15 +78,16 @@ function readStorage(key: string | null): StoredState | null {
   }
 }
 
-function writeStorage(
-  key: string | null,
-  theme: string,
-  mode: ThemeMode,
-  accent: string | null,
-) {
+/**
+ * Merge a partial selection into what's already stored. Each setter only knows
+ * the field it changed — writing the whole blob from a setter's closure would
+ * let two calls in the same handler (e.g. `setTheme` then `setAccent`) clobber
+ * each other with stale values.
+ */
+function writeStorage(key: string | null, patch: Partial<StoredState>) {
   if (key === null) return;
   try {
-    localStorage.setItem(key, JSON.stringify({ theme, mode, accent }));
+    localStorage.setItem(key, JSON.stringify({ ...readStorage(key), ...patch }));
   } catch {
     // ignore
   }
@@ -173,28 +174,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   const setTheme = useCallback((themeId: string) => {
     setThemeState(themeId);
-    if (persist === 'change') writeStorage(storageKey, themeId, mode, accent);
-  }, [mode, accent, persist, storageKey]);
+    if (persist === 'change') writeStorage(storageKey, { theme: themeId });
+  }, [persist, storageKey]);
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
-    if (persist === 'change') writeStorage(storageKey, theme, newMode, accent);
-  }, [theme, accent, persist, storageKey]);
+    if (persist === 'change') writeStorage(storageKey, { mode: newMode });
+  }, [persist, storageKey]);
 
   const toggleMode = useCallback(() => {
     const next: ThemeMode = isDark ? 'light' : 'dark';
     setModeState(next);
-    if (persist === 'change') writeStorage(storageKey, theme, next, accent);
-  }, [isDark, theme, accent, persist, storageKey]);
+    if (persist === 'change') writeStorage(storageKey, { mode: next });
+  }, [isDark, persist, storageKey]);
 
   const setAccent = useCallback((next: string | null) => {
     setAccentState(next);
-    if (persist === 'change') writeStorage(storageKey, theme, mode, next);
-  }, [theme, mode, persist, storageKey]);
+    if (persist === 'change') writeStorage(storageKey, { accent: next });
+  }, [persist, storageKey]);
 
   // Persist the current selection on demand (for `persist="manual"`).
   const commit = useCallback(() => {
-    writeStorage(storageKey, theme, mode, accent);
+    writeStorage(storageKey, { theme, mode, accent });
   }, [theme, mode, accent, storageKey]);
 
   const variantId = buildVariantId(theme, mode, isDark);
