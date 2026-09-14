@@ -32,6 +32,7 @@ export * from './repair-note';
 export * from './retry-note';
 export * from './rich-select';
 export * from './search-input';
+export * from './eyebrow';
 export * from './section-header';
 export * from './sparkline';
 export * from './tabbed-panel';
