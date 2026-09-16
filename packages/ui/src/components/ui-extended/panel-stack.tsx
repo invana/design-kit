@@ -70,9 +70,50 @@ export interface PanelStackSection {
   minSize?: number | string
 }
 
+/**
+ * Drive a stack from outside — open the section a route just navigated to,
+ * close one a filter emptied.
+ *
+ * **Why this is a handle and not a `collapsed` prop.** The stack's geometry is
+ * owned by the resizable group: a drag past `minSize` collapses a section, and
+ * releasing it opens one again. A controlled `collapsed` map would be a second
+ * owner of that state and would fight every drag — the parent would re-assert
+ * a stale value the moment the user let go. So the stack stays the owner,
+ * reports every change through `onCollapsedChange`, and takes instructions
+ * through this handle.
+ */
+export interface PanelStackHandle {
+  /** Open a section, taking the room from the tallest expanded sibling. */
+  expand: (id: string) => void
+  /** Collapse a section to its header. */
+  collapse: (id: string) => void
+  /** Collapse it if open, open it if collapsed — what the header click does. */
+  toggle: (id: string) => void
+  /** Whether that section is currently collapsed. */
+  isCollapsed: (id: string) => boolean
+}
+
 export interface PanelStackProps {
   /** Ordered list of sections that make up the stack. */
   sections: PanelStackSection[]
+  /**
+   * Imperative access to the stack — see {@link PanelStackHandle}. Use it when
+   * something outside the stack decides a section should be open: a route, a
+   * drill-in, a search that landed in a collapsed list.
+   *
+   * ```tsx
+   * const stack = React.useRef<PanelStackHandle>(null)
+   * React.useEffect(() => stack.current?.expand(openDrawer), [openDrawer])
+   * <PanelStack stackRef={stack} sections={…} />
+   * ```
+   */
+  stackRef?: React.Ref<PanelStackHandle>
+  /**
+   * Called whenever a section opens or closes — by a header click, by a drag
+   * past `minSize`, or through {@link PanelStackHandle}. Receives the whole
+   * map, so a consumer can persist the shape of the column.
+   */
+  onCollapsedChange?: (collapsed: Record<string, boolean>) => void
   /**
    * Height of each section's title bar, in pixels. Doubles as the collapsed
    * size so a collapsed section shows only its header. Defaults to `35`.
@@ -112,6 +153,8 @@ export interface PanelStackProps {
  */
 export function PanelStack({
   sections,
+  stackRef,
+  onCollapsedChange,
   headerHeight = 35,
   withHandle = false,
   className,
@@ -182,13 +225,28 @@ export function PanelStack({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const toggle = (id: string) => {
+  // `onCollapsedChange` is read through a ref so `onResize` — which the
+  // resizable group calls with a stale closure — always reaches the current
+  // callback without re-subscribing every panel on each render.
+  const notify = React.useRef(onCollapsedChange)
+  React.useEffect(() => {
+    notify.current = onCollapsedChange
+  }, [onCollapsedChange])
+
+  // `collapsed` is read inside callbacks the group owns, which capture their
+  // closure; the ref keeps the donor search looking at the live map.
+  const collapsedRef = React.useRef(collapsed)
+  collapsedRef.current = collapsed
+
+  const collapsePanel = React.useCallback((id: string) => {
     const ref = refs.current[id]
-    if (!ref) return
-    if (!ref.isCollapsed()) {
-      ref.collapse()
-      return
-    }
+    if (!ref || ref.isCollapsed()) return
+    ref.collapse()
+  }, [])
+
+  const expandPanel = React.useCallback((id: string) => {
+    const ref = refs.current[id]
+    if (!ref || !ref.isCollapsed()) return
 
     ref.expand()
     if (!ref.isCollapsed()) return
@@ -201,8 +259,10 @@ export function PanelStack({
     if (!group) return
     const layout = group.getLayout()
     const donor = Object.entries(layout)
-      .filter(([panelId]) => panelId !== id && !collapsed[panelId])
+      .filter(([panelId]) => panelId !== id && !collapsedRef.current[panelId])
       .sort((a, b) => b[1] - a[1])[0]
+    // Every other section is collapsed too, so there is no room to take. The
+    // group keeps its shape rather than stealing from a header.
     if (!donor) return
     const [donorId, donorPct] = donor
     const share = donorPct / 2
@@ -211,7 +271,28 @@ export function PanelStack({
       [id]: (layout[id] ?? 0) + share,
       [donorId]: donorPct - share,
     })
-  }
+  }, [])
+
+  const toggle = React.useCallback(
+    (id: string) => {
+      const ref = refs.current[id]
+      if (!ref) return
+      if (ref.isCollapsed()) expandPanel(id)
+      else collapsePanel(id)
+    },
+    [expandPanel, collapsePanel],
+  )
+
+  React.useImperativeHandle(
+    stackRef,
+    () => ({
+      expand: expandPanel,
+      collapse: collapsePanel,
+      toggle,
+      isCollapsed: (id: string) => !!collapsedRef.current[id],
+    }),
+    [expandPanel, collapsePanel, toggle],
+  )
 
   return (
     // Header actions are nav items, and those carry tooltips — provide the
@@ -254,11 +335,14 @@ export function PanelStack({
                 }}
                 onResize={(size) => {
                   const next = size.inPixels <= headerHeight + 1
-                  setCollapsed((prev) =>
-                    prev[section.id] === next
-                      ? prev
-                      : { ...prev, [section.id]: next },
-                  )
+                  setCollapsed((prev) => {
+                    if (prev[section.id] === next) return prev
+                    const map = { ...prev, [section.id]: next }
+                    // Report from here rather than from `toggle`, so a drag
+                    // past `minSize` is announced exactly like a click.
+                    notify.current?.(map)
+                    return map
+                  })
                 }}
                 className="flex flex-col overflow-hidden"
               >
