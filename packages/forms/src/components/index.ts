@@ -8,5 +8,6 @@ export * from './radio-group';
 export * from './slider';
 export * from './label';
 export * from './field';
+export * from './param-row';
 export * from './form';
 export * from './input-group';

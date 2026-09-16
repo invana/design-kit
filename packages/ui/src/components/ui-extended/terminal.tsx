@@ -4,9 +4,43 @@ import { cn } from "../../lib/utils"
 
 export type TerminalLineKind = "prompt" | "output" | "comment"
 
+/**
+ * The severity a **log** line was emitted at, as the runtime recorded it.
+ *
+ * Distinct from `kind`, which says what part of a *transcript* a line is — a
+ * command you typed, what it printed, a comment. A run's log has no prompts and
+ * no comments; every line is output, and what varies is how loud it is.
+ */
+export type TerminalLevel = "info" | "warn" | "error" | "debug"
+
+const LEVEL: Record<TerminalLevel, string> = {
+  info: "text-success",
+  warn: "text-warning",
+  error: "text-destructive",
+  debug: "text-muted-foreground",
+}
+
 export interface TerminalLineProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   kind?: TerminalLineKind
+  /**
+   * How loud this line is. Tints **one** cell — the one named by
+   * `levelColumn` — and nothing else.
+   *
+   * Only the level word is coloured, never the message: a wall of amber
+   * sentences is unreadable, and what a reader scans is the column, not the
+   * prose. Setting this also drops the `kind` marker — a log line is not a
+   * transcript line and does not want a `→` in front of it.
+   *
+   * The level **word** stays in `columns`. Colour is never the carrier.
+   */
+  level?: TerminalLevel
+  /**
+   * Which cell of `columns` holds the level word. Defaults to `1`, because a
+   * log line reads `time · LEVEL · source · message` and the timestamp comes
+   * first in every log anyone has ever read.
+   */
+  levelColumn?: number
   /**
    * Columns, for the step-shaped output a run prints — name, detail, timing,
    * result. Given as cells so they align down the transcript instead of each
@@ -73,35 +107,50 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
 Terminal.displayName = "Terminal"
 
 export const TerminalLine = React.forwardRef<HTMLDivElement, TerminalLineProps>(
-  ({ kind = "output", columns, className, children, ...props }, ref) => (
+  (
+    { kind = "output", level, levelColumn = 1, columns, className, children, ...props },
+    ref,
+  ) => (
     <div
       ref={ref}
       className={cn(
         "items-baseline gap-2 whitespace-pre",
         columns
-          ? "grid [grid-template-columns:auto_var(--terminal-cols)]"
+          ? level
+            ? "grid [grid-template-columns:var(--terminal-cols)]"
+            : "grid [grid-template-columns:auto_var(--terminal-cols)]"
           : "flex",
         kind === "comment" && "text-muted-foreground",
         className,
       )}
       {...props}
     >
-      <span
-        aria-hidden
-        className={cn(
-          "w-3 shrink-0",
-          kind === "prompt" ? "text-primary" : "text-muted-foreground",
-        )}
-      >
-        {MARKER[kind]}
-      </span>
+      {level ? null : (
+        <span
+          aria-hidden
+          className={cn(
+            "w-3 shrink-0",
+            kind === "prompt" ? "text-primary" : "text-muted-foreground",
+          )}
+        >
+          {MARKER[kind]}
+        </span>
+      )}
       {columns ? (
         columns.map((c, i) => (
           <span
             key={i}
             className={cn(
               "min-w-0 truncate",
-              i === columns.length - 1 && "text-muted-foreground",
+              // A log tints its level cell and greys everything that is not the
+              // message; a transcript greys only its trailing cell.
+              level
+                ? i === levelColumn
+                  ? LEVEL[level]
+                  : i === columns.length - 1
+                    ? undefined
+                    : "text-muted-foreground"
+                : i === columns.length - 1 && "text-muted-foreground",
             )}
           >
             {c}

@@ -8,13 +8,19 @@ import {
 } from "@codemirror/language"
 import { python } from "@codemirror/legacy-modes/mode/python"
 import { shell } from "@codemirror/legacy-modes/mode/shell"
-import { javascript } from "@codemirror/legacy-modes/mode/javascript"
+import { javascript, json } from "@codemirror/legacy-modes/mode/javascript"
 import { cypher } from "@codemirror/legacy-modes/mode/cypher"
 import { cn } from "@invana/ui"
 
 import { useCodeMirror } from "./use-code-mirror"
 
-export type CodeLanguage = "python" | "shell" | "javascript" | "cypher" | "plain"
+export type CodeLanguage =
+  | "python"
+  | "shell"
+  | "javascript"
+  | "json"
+  | "cypher"
+  | "plain"
 
 export interface CodeBlockProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
@@ -22,12 +28,21 @@ export interface CodeBlockProps
   language?: CodeLanguage
   /** Line numbers are off by default — a five-line snippet does not need a gutter. */
   showLineNumbers?: boolean
+  /**
+   * Cap the block's height in px and let it scroll inside that, for a document
+   * whose length is not the point — a run's `result.json`, an exported model.
+   *
+   * Unset, the block is as tall as its content, which is right for a snippet
+   * and wrong for a record that grows as a run proceeds.
+   */
+  maxHeight?: number
 }
 
 const MODES = {
   python: () => StreamLanguage.define(python),
   shell: () => StreamLanguage.define(shell),
   javascript: () => StreamLanguage.define(javascript),
+  json: () => StreamLanguage.define(json),
   cypher: () => StreamLanguage.define(cypher),
   plain: () => null,
 }
@@ -43,7 +58,9 @@ export function CodeBlock({
   value,
   language = "plain",
   showLineNumbers,
+  maxHeight,
   className,
+  style,
   ...props
 }: CodeBlockProps) {
   const extensions = React.useMemo(() => {
@@ -57,8 +74,14 @@ export function CodeBlock({
       EditorView.lineWrapping,
       ...(showLineNumbers ? [lineNumbers()] : []),
       ...(mode ? [mode] : []),
+      // The scroller lives inside CodeMirror rather than on the wrapper, so the
+      // editor knows its own viewport and does not render every line of a long
+      // document into a box that then clips them.
+      ...(maxHeight != null
+        ? [EditorView.theme({ "&": { maxHeight: `${maxHeight}px` } })]
+        : []),
     ]
-  }, [language, showLineNumbers])
+  }, [language, showLineNumbers, maxHeight])
 
   const { ref } = useCodeMirror({ value, extensions })
 
@@ -71,6 +94,7 @@ export function CodeBlock({
         "[&_.cm-gutters]:border-none [&_.cm-gutters]:bg-transparent [&_.cm-gutters]:text-muted-foreground",
         className,
       )}
+      style={style}
       {...props}
     />
   )

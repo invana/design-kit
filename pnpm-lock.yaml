@@ -38,6 +38,9 @@ importers:
 
   apps/storybook:
     dependencies:
+      '@invana/dashboard':
+        specifier: workspace:*
+        version: link:../../packages/dashboard
       '@invana/editor':
         specifier: workspace:*
         version: link:../../packages/editor
@@ -147,6 +150,43 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(msw@2.15.0(@types/node@26.1.1)(typescript@5.9.3))(vite@8.1.4(@types/node@26.1.1)(esbuild@0.27.7)(jiti@2.7.0))
+
+  packages/dashboard:
+    dependencies:
+      lucide-react:
+        specifier: ^1.24.0
+        version: 1.24.0(react@19.2.7)
+    devDependencies:
+      '@invana/editor':
+        specifier: workspace:*
+        version: link:../editor
+      '@invana/forms':
+        specifier: workspace:*
+        version: link:../forms
+      '@invana/styling':
+        specifier: workspace:*
+        version: link:../styling
+      '@invana/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
 
   packages/editor:
     dependencies:
