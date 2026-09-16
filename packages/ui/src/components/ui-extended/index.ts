@@ -6,6 +6,7 @@ export * from './button-with-tooltip';
 export * from './cannot-answer-card';
 export * from './chat-session';
 export * from './citation-list';
+export * from './clamped-text';
 export * from './clarify-card';
 export * from './context-bar';
 export * from './diagnosis-card';
