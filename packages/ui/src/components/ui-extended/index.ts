@@ -37,6 +37,7 @@ export * from './eyebrow';
 export * from './section-header';
 export * from './sparkline';
 export * from './tabbed-panel';
+export * from './task-gantt';
 export * from './template-picker';
 export * from './terminal';
 export * from './timeline-list';
