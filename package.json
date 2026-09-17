@@ -1,0 +1,55 @@
+{
+  "name": "@invana/dashboard",
+  "version": "0.0.28",
+  "description": "Invana Design System - JSON-driven dashboards assembled from design-kit panels",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "dashboard",
+    "invana/dashboard"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/dashboard"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@invana/editor": "^0.0.28",
+    "@invana/forms": "^0.0.28",
+    "@invana/styling": "^0.0.28",
+    "@invana/ui": "^0.0.28",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "dependencies": {
+    "lucide-react": "^1.24.0"
+  }
+}
