@@ -1,13 +1,23 @@
 name: Release
 
-# Creates a GitHub Release whenever a version tag (vX.Y.Z) is pushed.
-# Release notes are generated from Conventional Commits with git-cliff,
-# using the repo's cliff.toml. Uses the built-in GITHUB_TOKEN — no secrets
-# or local `gh auth login` needed.
+# One workflow, one run per release. Cut a release locally with
 #
-# Cut a release locally with ./release.sh <version>, then:
-#   git push origin main --follow-tags
-# The tag push triggers this workflow.
+#   ./release.sh <version> && git push origin main --follow-tags
+#
+# and the tag push drives every stage below:
+#
+#   resolve ─┬─ publish ──── dist-branches (matrix: 7 packages)
+#            ├─ notes
+#            └─ storybook
+#
+# Everything is gated on the tag, so a plain commit to main deploys nothing.
+# To redeploy the docs site between releases, run this workflow manually with
+# an empty `tag` input — only the Storybook stage runs.
+#
+# NOTE: deploying Pages from a tag requires the `github-pages` environment to
+# allow it. GitHub creates that environment restricted to the default branch,
+# so add a tag rule `v*` under Settings → Environments → github-pages →
+# "Deployment branches and tags", or the storybook job fails the protection check.
 
 on:
   push:
@@ -16,30 +26,207 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to (re)generate a release for, e.g. v0.0.6'
-        required: true
+        description: 'Tag to (re)run the full release for, e.g. v0.0.27. Leave blank to redeploy Storybook only.'
+        required: false
+        default: ''
+
+# Releases must never be cancelled mid-publish.
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref }}
+  cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
+  # ── Stage 0 ─────────────────────────────────────────────────────────────
+  # Work out what we are releasing, so every later job shares one answer
+  # instead of re-deriving it from github.ref.
+  resolve:
+    name: Resolve target
     runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.target.outputs.ref }}
+      tag: ${{ steps.target.outputs.tag }}
+      release: ${{ steps.target.outputs.release }}
+    steps:
+      - id: target
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            printf 'ref=%s\ntag=%s\nrelease=true\n' "$INPUT_TAG" "$INPUT_TAG" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            printf 'ref=%s\ntag=%s\nrelease=true\n' "$GITHUB_REF_NAME" "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          else
+            printf 'ref=%s\ntag=\nrelease=false\n' "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Summary
+        run: |
+          echo "Target ref: ${{ steps.target.outputs.ref }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Full release: ${{ steps.target.outputs.release }}" >> "$GITHUB_STEP_SUMMARY"
+
+  # ── Stage 1 ─────────────────────────────────────────────────────────────
+  # Build once and publish to npm from the same job: `pnpm publish` runs each
+  # package's `prepare` (= build) anyway, so splitting them would only buy a
+  # second install. The built dist/ is handed to the branch stage as an artifact.
+  publish:
+    name: Build & publish to npm
+    needs: resolve
+    if: needs.resolve.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm provenance
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ needs.resolve.outputs.ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build publishable packages
+        # packages/* only — apps/* (Storybook) is not published.
+        run: pnpm exec turbo run build --filter="./packages/*"
+
+      - name: Publish to npm
+        # --no-git-checks: the tag is checked out in detached HEAD, which pnpm
+        # would otherwise reject. workspace:* deps are rewritten automatically,
+        # and already-published versions are skipped rather than failing.
+        run: pnpm -r publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Provenance links the published package to this workflow run for
+          # supply-chain trust. If it ever fails, remove this line and the
+          # `id-token: write` permission above.
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Upload built packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-dist
+          path: packages/*/dist
+          retention-days: 1
+
+  # ── Stage 2 ─────────────────────────────────────────────────────────────
+  # Git-branch distribution: force-push each package's shippable files to
+  # releases/<pkg> so consumers can `pnpm add github:invana/design-kit#releases/ui`.
+  dist-branches:
+    name: releases/${{ matrix.pkg }}
+    needs: [resolve, publish]
+    if: needs.resolve.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: [ui, styling, themes, dashboard, editor, forms, tables]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve.outputs.ref }}
+
+      - name: Download built packages
+        uses: actions/download-artifact@v4
+        with:
+          name: package-dist
+          path: packages
+
+      - name: Assemble release directory
+        env:
+          PKG: ${{ matrix.pkg }}
+        run: |
+          cat > /tmp/assemble.mjs <<'NODE'
+          import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+          import { join } from 'node:path'
+
+          const [pkgDir, outDir] = process.argv.slice(2)
+          const pkg = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf8'))
+
+          rmSync(outDir, { recursive: true, force: true })
+          mkdirSync(outDir, { recursive: true })
+
+          // Ship exactly what `files` declares, plus the docs npm always includes.
+          // styling declares ["src", "README.md"]; every built package, ["dist"].
+          const declared = pkg.files ?? ['dist']
+          for (const entry of new Set([...declared, 'README.md', 'LICENSE'])) {
+            const src = join(pkgDir, entry)
+            if (existsSync(src)) cpSync(src, join(outDir, entry), { recursive: true })
+            else if (declared.includes(entry)) console.log(`::warning::${pkg.name} declares files["${entry}"] but it does not exist`)
+          }
+
+          // An artifact that failed to download would otherwise push an empty
+          // package to the branch and break consumers silently.
+          if (declared.includes('dist') && !existsSync(join(outDir, 'dist')))
+            throw new Error(`${pkg.name}: dist/ is missing — the build artifact did not arrive`)
+
+          // A git dependency fires `prepare` on install, which would try to
+          // rebuild from source we do not ship. Drop the lifecycle hooks.
+          for (const hook of ['prepare', 'preinstall', 'install', 'postinstall', 'prepack', 'prepublishOnly'])
+            delete pkg.scripts?.[hook]
+          if (pkg.scripts && !Object.keys(pkg.scripts).length) delete pkg.scripts
+          delete pkg.devDependencies
+
+          // The rewrite `pnpm publish` does for npm, done here for the branch:
+          // workspace:* -> ^<version>. Every package shares one version.
+          for (const field of ['dependencies', 'peerDependencies', 'optionalDependencies'])
+            for (const [name, range] of Object.entries(pkg[field] ?? {}))
+              if (String(range).startsWith('workspace:')) pkg[field][name] = `^${pkg.version}`
+
+          writeFileSync(join(outDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
+          console.log(`${pkg.name}@${pkg.version} -> ${outDir}`)
+          NODE
+
+          node /tmp/assemble.mjs "packages/$PKG" "/tmp/release/$PKG"
+          ls -R "/tmp/release/$PKG" | head -50
+
+      - name: Push to releases/${{ matrix.pkg }}
+        env:
+          PKG: ${{ matrix.pkg }}
+          TAG: ${{ needs.resolve.outputs.tag }}
+        run: |
+          cd "/tmp/release/$PKG"
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git checkout -q -b "releases/$PKG"
+          git add -A
+          git commit -q -m "release: $PKG $TAG from ${{ github.sha }}"
+          git push -q --force origin "releases/$PKG"
+
+  # ── Stage 3 ─────────────────────────────────────────────────────────────
+  # The GitHub Release, with notes generated from Conventional Commits by
+  # git-cliff using cliff.toml — the same config release.sh uses for CHANGELOG.md.
+  notes:
+    name: GitHub Release
+    needs: resolve
+    if: needs.resolve.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve.outputs.ref }}
           # Full history + tags are required for git-cliff to diff releases.
           fetch-depth: 0
-
-      - name: Resolve tag
-        id: tag
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "name=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Generate release notes
         uses: orhun/git-cliff-action@v4
@@ -55,7 +242,7 @@ jobs:
       - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ steps.tag.outputs.name }}
+          TAG: ${{ needs.resolve.outputs.tag }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release edit "$TAG" --notes-file "${{ steps.cliff.outputs.changelog }}"
@@ -65,3 +252,47 @@ jobs:
               --notes-file "${{ steps.cliff.outputs.changelog }}" \
               --verify-tag
           fi
+
+  # ── Stage 4 ─────────────────────────────────────────────────────────────
+  # The docs site. Independent of the package stages — it builds from source
+  # via turbo (^build), so it needs no artifact.
+  storybook:
+    name: Deploy Storybook
+    needs: resolve
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve.outputs.ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm exec turbo run build-storybook --filter=@invana/stoybook
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./apps/storybook/storybook-static
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

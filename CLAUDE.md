@@ -80,13 +80,21 @@ Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` 
 git push origin main --follow-tags
 ```
 
-The **tag** (`v*`) is what completes a release — pushing the commit alone is not enough:
+The **tag** (`v*`) is what completes a release — pushing the commit alone does nothing. Everything CI does lives in **one workflow**, `.github/workflows/release.yml`, so a release is a single run whose stages are jobs:
 
-- `.github/workflows/release.yml` runs git-cliff (`cliff.toml`) over the tag range to generate release notes and publishes/edits the **GitHub Release**. It owns the GitHub Release — `release-npm.yml` deliberately does not create one, because both fire on the same tag push and the race could overwrite these notes with GitHub's auto-generated ones.
+| Job | Needs | Does |
+| --- | --- | --- |
+| `resolve` | — | Works out the target ref/tag once, so the rest share one answer |
+| `publish` | `resolve` | `turbo run build --filter="./packages/*"` then `pnpm -r publish` to **npm** with provenance (workspace deps rewritten to `^<version>`); uploads `packages/*/dist` as an artifact |
+| `dist-branches` | `publish` | Matrix over all 7 packages — force-pushes each to `releases/<pkg>` |
+| `notes` | `resolve` | git-cliff (`cliff.toml`) over the tag range → creates/edits the **GitHub Release** |
+| `storybook` | `resolve` | Builds and deploys the Storybook site to GitHub Pages |
+
+- Build and npm publish are deliberately the **same job**: `pnpm publish` runs each package's `prepare` (= build) anyway, so splitting them would only buy a second `pnpm install`.
 - `CHANGELOG.md` itself is written by `release.sh` on the release commit, not by CI — never hand-edit it, and never hand-write a version section. If an entry is wrong, fix the commit message convention and regenerate.
-- `.github/workflows/release-npm.yml` builds `packages/*` and publishes them to **npm** (`pnpm -r publish`, workspace deps rewritten to `^<version>`).
-
-Separately, on the release **commit** push, `.github/workflows/release-{ui,styling,themes}.yml` build each package whose files changed and publish the built artifacts to branches `releases/ui`, `releases/styling`, `releases/themes` (git-branch distribution: `pnpm add github:invana/design-kit#releases/<package>`, see root `README.md`; the `dist/` contents are what ship). `release-ui` also triggers on `packages/styling/**` changes because `ui`'s build embeds the compiled styles.
+- `dist-branches` ships git-branch distribution (`pnpm add github:invana/design-kit#releases/<package>`, see root `README.md`). It copies exactly what each `package.json` declares in `files` — `dist` for built packages, `src` for `styling` — strips `devDependencies` and the lifecycle hooks (`prepare` et al., which a git dependency would otherwise fire on install), and rewrites `workspace:*` to `^<version>`.
+- **Nothing runs on a plain push to `main`** — not even Storybook. To redeploy the docs site between releases, run the workflow manually (`workflow_dispatch`) with an empty `tag` input; only the `storybook` job runs.
+- Deploying Pages from a tag requires the `github-pages` environment to permit it. GitHub creates that environment restricted to the default branch, so a tag rule `v*` must exist under **Settings → Environments → github-pages → Deployment branches and tags**, or the `storybook` job fails its protection check.
 
 If a `release:` commit ever lands without its tag (e.g. a manual push), recover by tagging that exact commit (`git tag -a v<version> -m "v<version>"`) and pushing with `--follow-tags` — do not re-run `release.sh`, which would fail on the already-bumped version.
 

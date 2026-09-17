@@ -103,29 +103,38 @@ Two complementary pipelines, both driven from GitHub Actions:
 
 ### npm (version tags)
 
-Pushing a `v*` git tag triggers [`release-npm.yml`](.github/workflows/release-npm.yml):
-it builds every `packages/*` package and runs `pnpm -r publish` to npm (with provenance),
-then creates a GitHub Release with auto-generated notes. `workspace:*` dependencies are
-rewritten to real versions automatically on publish.
+Pushing a `v*` git tag runs [`release.yml`](.github/workflows/release.yml) — a single
+workflow whose jobs are the stages of a release:
 
-```bash
-# bump versions, then:
-git tag v0.0.5
-git push origin v0.0.5
+```
+resolve ─┬─ publish ──── dist-branches (matrix: all 7 packages)
+         ├─ notes
+         └─ storybook
 ```
 
-### GitHub release branches (push to main)
+`publish` builds every `packages/*` package and runs `pnpm -r publish` to npm (with
+provenance; `workspace:*` dependencies are rewritten to real versions automatically),
+`notes` creates the GitHub Release from git-cliff notes, and `storybook` deploys the
+showcase to GitHub Pages.
 
-Pushes to `main` that touch a package run its
-`release-{ui,styling,themes}.yml` workflow, which builds the package and force-pushes the
-artifacts (`dist/`, `README`, stripped `package.json`) to a `releases/<package>` branch.
-These branches provide an install-from-Git fallback
-(`pnpm add github:invana/design-kit#releases/<package>`) alongside the npm packages.
-Because `@invana/ui` embeds the compiled styles, the `release-ui` workflow also runs when
-`packages/styling/**` changes.
+```bash
+# bump versions with ./release.sh <version>, then:
+git push origin main --follow-tags
+```
 
-The Storybook showcase is built and deployed by
-[`storybook.yml`](.github/workflows/storybook.yml) on pushes to `main`.
+Nothing runs on a plain push to `main`. To redeploy the Storybook site between releases,
+run the workflow manually with an empty `tag` input — only the `storybook` job runs.
+
+### GitHub release branches
+
+The `dist-branches` stage force-pushes each package's shippable files (`dist/` or `src/`,
+`README`, a `package.json` with `devDependencies` and lifecycle scripts stripped) to a
+`releases/<package>` branch. These branches provide an install-from-Git fallback
+alongside the npm packages:
+
+```bash
+pnpm add github:invana/design-kit#releases/ui
+```
 
 ## License
 

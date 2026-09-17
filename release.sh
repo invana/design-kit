@@ -5,8 +5,9 @@
 # All publishable packages share ONE version. This script bumps every
 # package.json under packages/* to the given version, regenerates
 # CHANGELOG.md with git-cliff, commits both, and tags the commit. Pushing
-# the tag triggers the "Publish to npm" GitHub Action
-# (.github/workflows/release-npm.yml), which builds and publishes to npm.
+# the tag triggers the "Release" GitHub Action
+# (.github/workflows/release.yml), whose jobs publish to npm, push the
+# releases/* branches, create the GitHub Release, and deploy Storybook.
 #
 # Because the version is written into package.json *before* the tag is
 # created on that same commit, the git tag and the published version
@@ -63,4 +64,4 @@ echo "Push to publish:"
 echo
 echo "    git push origin main --follow-tags"
 echo
-echo "The tag push triggers the 'Publish to npm' workflow."
+echo "The tag push triggers the 'Release' workflow — one run, all stages."
