@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# @invana/themes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application shells for Invana products — the header / sidebar / panel layouts, and the theme
+provider that drives them.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm add @invana/themes
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Peer dependencies: `@invana/ui`, `@invana/styling`, `react`, `react-dom`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Styles
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```ts
+import '@invana/themes/styles.css';
 ```
+
+Or compile the tokens yourself with Tailwind v4 — see
+[`@invana/styling`](../styling/README.md) for the import order.
+
+## Theme provider
+
+`ThemeProvider` owns the theme id, the light/dark mode and the accent. It writes `data-theme`, the
+`theme-<id>` class and `light`/`dark` onto `document.documentElement`, and in `system` mode it
+follows `prefers-color-scheme`.
+
+```tsx
+import { ThemeProvider } from '@invana/themes';
+
+<ThemeProvider defaultTheme="default" defaultMode="system">
+  <App />
+</ThemeProvider>;
+```
+
+Also in `core`: `ThemeScope` (a theme applied to a subtree rather than the document),
+`ThemeSelector`, `ThemeSettingsCard` and `ThemeSettingsActions`.
+
+The theme variants themselves — `default`, `tailwind`, `vite` — are defined in
+`@invana/styling`'s `themes.config.ts`, which is the single source of truth.
+
+## Layouts
+
+Three shells, each self-contained and built from `@invana/ui` primitives:
+
+| Export | Shape |
+| --- | --- |
+| `AppLayoutBase` | The plain header / main / footer shell. |
+| `AppLayoutV1` | Header plus resizable side and bottom sections. |
+| `AppLayoutV2` | Adds a left activity bar; omit `leftNav` and the workspace stretches full width. |
+
+```tsx
+import { AppLayoutV2 } from '@invana/themes';
+
+<AppLayoutV2
+  header={{ left: <Logo />, centerNavItems: navItems, rightNavItems: accountItems }}
+  leftNav={{ topNavItems: activityItems, bottomNavItems: settingsItems }}
+  mainSection={{ content: <Workspace /> }}
+  rightSection={{ content: <Inspector />, defaultSize: '300px' }}
+  bottomSection={{ content: <Console />, collapsible: true }}
+/>;
+```
+
+Sections are resizable and collapsible, with sensible default sizes. `AppLayoutV2` derives its
+panel ids from `useId()`, so nesting one shell inside another works without configuration — pass
+`idPrefix` only when the ids must stay stable across mounts (a persisted layout, an e2e locator).
+
+## License
+
+MIT © Ravi Raja Merugu

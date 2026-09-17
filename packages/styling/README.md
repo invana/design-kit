@@ -124,35 +124,18 @@ You can override any variable by defining it after importing:
 }
 ```
 
-## Publishing to NPM
+## Releasing
+
+All `@invana/*` packages are versioned in lockstep and released from the repo root — never
+`npm publish` from this directory, and never hand-edit the version.
 
 ```bash
-# Make sure you're logged in to npm
-npm login
-
-# Publish the package
-cd packages/styling
-npm publish
+./release.sh <version>
+git push origin main --follow-tags
 ```
 
-### Updating Versions
-
-```bash
-# Update version in package.json
-cd packages/styling
-
-# For patch update (0.1.0 -> 0.1.1)
-npm version patch
-
-# For minor update (0.1.0 -> 0.2.0)
-npm version minor
-
-# For major update (0.1.0 -> 1.0.0)
-npm version major
-
-# Then publish
-npm publish
-```
+The tag push builds and publishes every package to npm and writes the GitHub Release notes. See
+the root `CLAUDE.md` for the full pipeline.
 
 ## Development
 
@@ -161,5 +144,3 @@ This package ships source CSS files directly. Your build tool (Vite, Next.js, et
 ## License
 
 MIT © Ravi Raja Merugu
-
-.
