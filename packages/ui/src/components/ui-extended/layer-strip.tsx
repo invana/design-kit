@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronRight } from "lucide-react"
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
@@ -96,6 +97,20 @@ export interface LayerStripProps
   onSelectItem?: (itemId: string) => void
   selectedItem?: string
   /**
+   * The bands whose participants are folded away, uncontrolled. Their tasks do
+   * not disappear with them: they drop onto the band's own line, which is the
+   * whole point of shutting one.
+   */
+  defaultCollapsed?: Layer[]
+  /** The same, controlled. Pass it with `onCollapsedChange`. */
+  collapsed?: Layer[]
+  onCollapsedChange?: (layers: Layer[]) => void
+  /**
+   * Offer the disclosures at all. Off, the bands render as given and a caller
+   * that wants an overview passes the bands it wants shut in `collapsed`.
+   */
+  collapsible?: boolean
+  /**
    * Keep the band labels in place while time scrolls. On by default: a run with
    * forty steps scrolls, and a band you cannot name is a row of marks.
    */
@@ -104,6 +119,12 @@ export interface LayerStripProps
   labelWidth?: number
   /** The narrowest the track is drawn before it scrolls, in `rem`. */
   minTrackWidth?: number
+  /**
+   * The narrowest one tick may be squeezed to, in `rem`. Past that the strip
+   * scrolls rather than shrinking: a bar too narrow to carry its task's name
+   * has stopped being a drawing of that task.
+   */
+  minSlotWidth?: number
 }
 
 const STATE_LABEL: Record<LayerItemState, string> = {
@@ -143,6 +164,14 @@ const formatElapsed = (ms: number): string => {
  * actually spends. The band alone cannot say which model a step will reach, and
  * that is the list a world is checked against.
  *
+ * **A band folds its participants away without losing its tasks.** Shut, the
+ * rows go and every task the layer spends drops onto the band's own line —
+ * which is the overview: six lines, every task placed in time, *what was this
+ * layer busy with* answered without reading twelve rows. Open, the same tasks
+ * sit on the participant that spends them. `collapse all` in the header does it
+ * to every band that has participants to fold, and nothing is hidden either
+ * way: folding moves a task up a row, it never drops it.
+ *
  * **Refusals are struck in place, not removed.** A refused engagement keeps its
  * bar and takes a struck label, because the gap it would otherwise leave is
  * indistinguishable from a stretch of time that never reached for that layer.
@@ -167,14 +196,35 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       brackets,
       onSelectItem,
       selectedItem,
+      defaultCollapsed,
+      collapsed,
+      onCollapsedChange,
+      collapsible = true,
       frozenLabels = true,
       labelWidth = 14,
       minTrackWidth = 26,
+      minSlotWidth = 6,
       className,
       ...props
     },
     ref,
   ) => {
+    const [ownCollapsed, setOwnCollapsed] = React.useState<Layer[]>(
+      defaultCollapsed ?? [],
+    )
+    const shut = collapsed ?? ownCollapsed
+    const setShut = (next: Layer[]) => {
+      if (collapsed == null) setOwnCollapsed(next)
+      onCollapsedChange?.(next)
+    }
+    const withParts = bands.filter((b) => (b.parts?.length ?? 0) > 0)
+    // *All* means every band that has anything to fold. A band with no parts is
+    // already its own overview, and counting it would leave the header control
+    // saying *expand all* over a strip that is fully open.
+    const allShut =
+      withParts.length > 0 &&
+      withParts.every((b) => shut.includes(b.layer))
+
     const ends = items.map((i) => i.end ?? i.start + (scale === "seq" ? 1 : 0))
     const starts = items.map((i) => i.start)
     const d0 = domain?.[0] ?? (starts.length ? Math.min(...starts) : 0)
@@ -211,6 +261,8 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       </div>
     )
 
+    const trackFloor = Math.max(minTrackWidth, axisTicks.length * minSlotWidth)
+
     const row = (
       key: string,
       head: React.ReactNode,
@@ -226,7 +278,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       >
         {head}
         <div
-          style={{ minWidth: `${minTrackWidth}rem` }}
+          style={{ minWidth: `${trackFloor}rem` }}
           className="relative min-w-0 flex-1"
         >
           {track}
@@ -234,9 +286,16 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       </div>
     )
 
-    const bar = (item: LayerItem) => {
+    /**
+     * `compact` is the collapsed reading: every task of a band on the band's
+     * own line. It drops the minimum width and the second line, because on one
+     * line the bars are answering *when was this layer busy* — the labels are
+     * what the band's participants say when it is open.
+     */
+    const bar = (item: LayerItem, compact = false) => {
       const state = item.state ?? "declared"
       const end = item.end ?? item.start + (scale === "seq" ? 1 : 0)
+      const min = compact ? "0.75rem" : "4.5rem"
       const Tag = onSelectItem ? "button" : "div"
       return (
         <Tag
@@ -260,15 +319,16 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             pct(item.start) > 50
               ? {
                   right: `${100 - pct(end)}%`,
-                  width: `max(4.5rem, calc(${pct(end) - pct(item.start)}% - 3px))`,
+                  width: `max(${min}, calc(${pct(end) - pct(item.start)}% - 3px))`,
                 }
               : {
                   left: `${pct(item.start)}%`,
-                  width: `max(4.5rem, calc(${pct(end) - pct(item.start)}% - 3px))`,
+                  width: `max(${min}, calc(${pct(end) - pct(item.start)}% - 3px))`,
                 }
           }
           className={cn(
-            "-translate-y-1/2 absolute top-1/2 flex min-w-0 items-stretch gap-1.5 overflow-hidden rounded-xs border py-0.5 pr-1.5 text-left",
+            "-translate-y-1/2 absolute top-1/2 flex min-w-0 items-stretch overflow-hidden rounded-xs border py-0.5 text-left",
+            compact ? "gap-1 pr-1" : "gap-1.5 pr-1.5",
             STATE_BAR[state],
             onSelectItem && "cursor-pointer hover:bg-accent",
             selectedItem === item.id && "ring-1 ring-ring",
@@ -288,9 +348,11 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             >
               {item.label}
             </span>
-            <span className="truncate text-meta text-muted-foreground">
-              {item.note ?? (state === "declared" ? null : STATE_LABEL[state])}
-            </span>
+            {compact ? null : (
+              <span className="truncate text-meta text-muted-foreground">
+                {item.note ?? (state === "declared" ? null : STATE_LABEL[state])}
+              </span>
+            )}
           </span>
         </Tag>
       )
@@ -300,6 +362,9 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       items.filter(
         (i) => i.layer === layer && (part ? i.part === part : !i.part),
       )
+
+    /** Everything the band owns, its participants' included — the shut reading. */
+    const allOf = (layer: Layer) => items.filter((i) => i.layer === layer)
 
     return (
       <div
@@ -316,7 +381,24 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             "axis",
             label(
               <>
-                <span className="text-meta text-muted-foreground">layer</span>
+                {collapsible && withParts.length > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShut(allShut ? [] : withParts.map((b) => b.layer))
+                    }
+                    className="-ml-1 flex items-center gap-0.5 rounded-xs px-1 text-meta text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    {allShut ? (
+                      <ChevronRight aria-hidden className="size-3 shrink-0" />
+                    ) : (
+                      <ChevronDown aria-hidden className="size-3 shrink-0" />
+                    )}
+                    {allShut ? "expand all" : "collapse all"}
+                  </button>
+                ) : (
+                  <span className="text-meta text-muted-foreground">layer</span>
+                )}
                 <span className="ml-auto text-meta text-muted-foreground/70">
                   {scale === "seq" ? "step" : "elapsed"}
                 </span>
@@ -374,10 +456,11 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
           {bands.map((band) => {
             const own = itemsOf(band.layer)
             const parts = band.parts ?? []
-            const dim =
-              own.length === 0 &&
-              parts.every((part) => itemsOf(band.layer, part.id).length === 0)
+            const dim = allOf(band.layer).length === 0
             const spine = band.layer === "agent"
+            const foldable = collapsible && parts.length > 0
+            const isShut = foldable && shut.includes(band.layer)
+            const onLine = isShut ? allOf(band.layer) : own
 
             return (
               <React.Fragment key={band.layer}>
@@ -387,11 +470,44 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     <>
                       {/* The layer's own name never shrinks: it is what the
                           row is, and the note is the count beside it. */}
-                      <span className="shrink-0">
-                        {band.label ?? (
-                          <LayerChip layer={band.layer} dim={dim} />
-                        )}
-                      </span>
+                      {foldable ? (
+                        <button
+                          type="button"
+                          aria-expanded={!isShut}
+                          aria-label={`${isShut ? "Show" : "Hide"} the ${
+                            parts.length
+                          } participants under ${band.layer}`}
+                          onClick={() =>
+                            setShut(
+                              isShut
+                                ? shut.filter((l) => l !== band.layer)
+                                : [...shut, band.layer],
+                            )
+                          }
+                          className="-ml-1 flex shrink-0 items-center gap-1 rounded-xs px-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        >
+                          {isShut ? (
+                            <ChevronRight
+                              aria-hidden
+                              className="size-3 shrink-0 text-muted-foreground"
+                            />
+                          ) : (
+                            <ChevronDown
+                              aria-hidden
+                              className="size-3 shrink-0 text-muted-foreground"
+                            />
+                          )}
+                          {band.label ?? (
+                            <LayerChip layer={band.layer} dim={dim} />
+                          )}
+                        </button>
+                      ) : (
+                        <span className="shrink-0 pl-4">
+                          {band.label ?? (
+                            <LayerChip layer={band.layer} dim={dim} />
+                          )}
+                        </span>
+                      )}
                       {band.note ? (
                         <span
                           title={band.note}
@@ -409,11 +525,11 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                         className="-translate-y-1/2 absolute inset-x-0 top-1/2 border-border border-t"
                       />
                     ) : null}
-                    {own.map(bar)}
+                    {onLine.map((item) => bar(item, isShut))}
                   </>,
                   dim && !spine,
                 )}
-                {parts.map((part) =>
+                {(isShut ? [] : parts).map((part) =>
                   row(
                     `${band.layer}-${part.id}`,
                     label(
@@ -430,7 +546,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                       undefined,
                       true,
                     ),
-                    itemsOf(band.layer, part.id).map(bar),
+                    itemsOf(band.layer, part.id).map((item) => bar(item)),
                   ),
                 )}
               </React.Fragment>

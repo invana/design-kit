@@ -24,7 +24,13 @@ once where it sits.
 - `scale` — `"seq"` reads a plan's order, `"elapsed"` a run's wall clock. One component, two
   tenses, so *declared versus touched* is a comparison rather than two vocabularies to learn.
 - `brackets` — a bounded repetition over the stretch of time it owns.
-- `domain` · `ticks` · `formatTick` · `labelWidth` · `minTrackWidth` for the axis and the gutter.
+- `collapsed` / `defaultCollapsed` / `onCollapsedChange` — the bands whose participants are folded
+  away. A shut band keeps its tasks: they drop onto its own line, so the folded strip is six lines
+  with every task still placed in time, and `collapse all` in the header does the lot. Folding moves
+  a task up a row, it never drops it.
+- `domain` · `ticks` · `formatTick` · `labelWidth` · `minTrackWidth` · `minSlotWidth` for the axis
+  and the gutter — past `minSlotWidth` the strip scrolls rather than squeezing a bar too narrow to
+  carry its task's name.
 
 **What is kept.** Refusals are struck in place and never filtered out; `skipped` stays a third state
 beside them; the `agent` spine is always drawn with its wire; the labels freeze while time scrolls.
@@ -33,5 +39,6 @@ beside them; the `agent` spine is always drawn with its wire; the labels freeze 
 types. A caller projects its ledger into `items` instead and picks a `scale`. `TouchDirection`
 survives as the run half of `LayerItemState`, which adds `declared`.
 
-Two stories, because one component with two tenses is not shown by one: `default` draws a plan on
-the step axis, `touched` draws a run on the wall clock with two refusals and a skip.
+Three stories, because one component with two tenses and two readings is not shown by one:
+`default` draws a plan on the step axis, `touched` draws a run on the wall clock with two refusals
+and a skip, and `collapsed` draws twelve participants folded into six lines.
