@@ -28,6 +28,10 @@ once where it sits.
   away. A shut band keeps its tasks: they drop onto its own line, so the folded strip is six lines
   with every task still placed in time, and `collapse all` in the header does the lot. Folding moves
   a task up a row, it never drops it.
+- `hoverDetail` / `itemDetail` — a hover card on each task, carrying what the bar cannot fit: the
+  participant it spends (the one the row truncates, or that folding took away), when it runs and
+  for how long, the note, and the rule that refused it. On by default; off falls back to the native
+  `title`. It is what lets a bar stay a bar instead of growing a second line per fact.
 - `domain` · `ticks` · `formatTick` · `labelWidth` · `minTrackWidth` · `minSlotWidth` for the axis
   and the gutter — past `minSlotWidth` the strip scrolls rather than squeezing a bar too narrow to
   carry its task's name.

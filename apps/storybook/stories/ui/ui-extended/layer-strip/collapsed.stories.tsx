@@ -66,7 +66,10 @@ const ITEMS: LayerItem[] = [
  * line always agree.
  *
  * Open one band (its chevron) to see **which** participant each of its tasks
- * spends; `collapse all` in the header does the whole strip. A band with no
+ * spends; `collapse all` in the header does the whole strip. Or hover a bar:
+ * the card names the participant folding took away — `load_lines` spends
+ * `model/OrderLines@v2` — with when it runs and what refused it, which is what
+ * makes folding safe rather than lossy. A band with no
  * participants has no chevron: it is already its own overview.
  */
 export const Collapsed: Story = {

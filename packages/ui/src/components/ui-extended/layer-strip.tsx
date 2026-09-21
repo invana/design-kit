@@ -1,6 +1,11 @@
 import { ChevronDown, ChevronRight } from "lucide-react"
 import * as React from "react"
 
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card"
 import { cn } from "../../lib/utils"
 import { LayerChip, type Layer, layerSwatch } from "./layer-chip"
 
@@ -111,6 +116,14 @@ export interface LayerStripProps
    */
   collapsible?: boolean
   /**
+   * A hover card on each task, saying what the bar cannot fit: the participant
+   * it spends, when it runs and for how long, and the rule that refused it. On
+   * by default; off falls back to the native `title`.
+   */
+  hoverDetail?: boolean
+  /** What that card says, when the default is not what this surface owes. */
+  itemDetail?: (item: LayerItem) => React.ReactNode
+  /**
    * Keep the band labels in place while time scrolls. On by default: a run with
    * forty steps scrolls, and a band you cannot name is a row of marks.
    */
@@ -172,6 +185,11 @@ const formatElapsed = (ms: number): string => {
  * to every band that has participants to fold, and nothing is hidden either
  * way: folding moves a task up a row, it never drops it.
  *
+ * **A bar says what it is; hovering it says what it cannot fit.** The card
+ * carries the participant the row truncates or folding took away, when the task
+ * runs and for how long, and the rule that refused it — so a bar can stay a bar
+ * rather than growing a second line for every fact somebody might want.
+ *
  * **Refusals are struck in place, not removed.** A refused engagement keeps its
  * bar and takes a struck label, because the gap it would otherwise leave is
  * indistinguishable from a stretch of time that never reached for that layer.
@@ -196,6 +214,8 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       brackets,
       onSelectItem,
       selectedItem,
+      hoverDetail = true,
+      itemDetail,
       defaultCollapsed,
       collapsed,
       onCollapsedChange,
@@ -286,6 +306,89 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       </div>
     )
 
+    const partOf = (item: LayerItem) =>
+      item.part
+        ? bands
+            .find((b) => b.layer === item.layer)
+            ?.parts?.find((p) => p.id === item.part)
+        : undefined
+
+    /** When a bar runs, in the axis's own words. */
+    const spanLabel = (item: LayerItem) => {
+      const end = item.end ?? item.start + (scale === "seq" ? 1 : 0)
+      if (scale === "seq") {
+        return end - item.start <= 1
+          ? `step ${item.start}`
+          : `steps ${item.start}\u2013${end - 1}`
+      }
+      return `${formatElapsed(item.start - d0)} \u2192 ${formatElapsed(
+        end - d0,
+      )} \u00b7 ${formatElapsed(end - item.start)}`
+    }
+
+    /**
+     * What the bar could not fit. A row per fact, in the order a reader asks
+     * them: *what ran* is the heading, then **which participant** — the answer
+     * the band alone cannot give — then when, then why it did not run.
+     */
+    const detail = (item: LayerItem) => {
+      if (itemDetail) return itemDetail(item)
+      const state = item.state ?? "declared"
+      const part = partOf(item)
+      return (
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-baseline gap-2">
+            <span
+              className={cn(
+                "min-w-0 flex-1 truncate font-mono text-sm",
+                state === "refused" && "text-destructive line-through",
+              )}
+            >
+              {item.label}
+            </span>
+            <span
+              className={cn(
+                "shrink-0 text-meta",
+                state === "refused"
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {STATE_LABEL[state]}
+            </span>
+          </div>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 text-meta">
+            <dt className="text-muted-foreground">layer</dt>
+            <dd className="min-w-0">
+              <LayerChip layer={item.layer} />
+            </dd>
+            {part ? (
+              <>
+                <dt className="text-muted-foreground">participant</dt>
+                <dd className="min-w-0 break-all font-mono">{part.label}</dd>
+              </>
+            ) : null}
+            <dt className="text-muted-foreground">when</dt>
+            <dd className="min-w-0 tabular-nums">{spanLabel(item)}</dd>
+            {item.note ? (
+              <>
+                <dt className="text-muted-foreground">what it does</dt>
+                <dd className="min-w-0 font-mono">{item.note}</dd>
+              </>
+            ) : null}
+            {item.ruleMatched ? (
+              <>
+                <dt className="text-muted-foreground">refused by</dt>
+                <dd className="min-w-0 break-all font-mono text-destructive">
+                  {item.ruleMatched}
+                </dd>
+              </>
+            ) : null}
+          </dl>
+        </div>
+      )
+    }
+
     /**
      * `compact` is the collapsed reading: every task of a band on the band's
      * own line. It drops the minimum width and the second line, because on one
@@ -297,20 +400,21 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       const end = item.end ?? item.start + (scale === "seq" ? 1 : 0)
       const min = compact ? "0.75rem" : "4.5rem"
       const Tag = onSelectItem ? "button" : "div"
-      return (
+      const drawn = (
         <Tag
           key={item.id}
           {...(onSelectItem
             ? { type: "button" as const, onClick: () => onSelectItem(item.id) }
             : {})}
-          title={[
-            item.label,
-            STATE_LABEL[state],
-            item.note,
-            item.ruleMatched,
-          ]
-            .filter(Boolean)
-            .join(" · ")}
+          // The native tooltip is the fallback, not a second copy: with the
+          // hover card on, two tooltips would open over one bar.
+          title={
+            hoverDetail
+              ? undefined
+              : [item.label, STATE_LABEL[state], item.note, item.ruleMatched]
+                  .filter(Boolean)
+                  .join(" · ")
+          }
           style={
             // A bar is at least readable-wide, and one near the end grows
             // inwards rather than off the track: anchor whichever edge is
@@ -355,6 +459,20 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             )}
           </span>
         </Tag>
+      )
+
+      if (!hoverDetail) return drawn
+      return (
+        <HoverCard key={item.id} openDelay={140} closeDelay={80}>
+          <HoverCardTrigger asChild>{drawn}</HoverCardTrigger>
+          <HoverCardContent
+            align="start"
+            side="top"
+            className="w-auto max-w-80 p-3"
+          >
+            {detail(item)}
+          </HoverCardContent>
+        </HoverCard>
       )
     }
 
