@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 import { StatusDot, type StatusDotProps } from "../ui/status-dot"
-import { BoundChip, type Bound } from "./bound-chip"
+import { BoundChip, type Bound, type BoundPalette } from "./bound-chip"
 
 export interface TaskNodeTag {
   /** `3 lanes`, `attempt 2`, `map_over: datasets`. */
@@ -17,6 +17,10 @@ export interface TaskNodeProps
   taskKey: React.ReactNode
   /** What it may spend. */
   bound: Bound
+  /** The bound's swatch class, given directly — `bg-data-7`. */
+  boundSwatch?: string
+  /** The bounds' palette, when a caller would rather state the map once. */
+  boundPalette?: BoundPalette
   /**
    * How it went, when this node is painting a **run**. Omit when the node is
    * painting a plan or a draft, which have no status of their own.
@@ -55,7 +59,21 @@ export interface TaskNodeProps
  */
 export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
   (
-    { taskKey, bound, status, tags, meta, selected, gate, dim, ghost, className, ...props },
+    {
+      taskKey,
+      bound,
+      boundSwatch,
+      boundPalette,
+      status,
+      tags,
+      meta,
+      selected,
+      gate,
+      dim,
+      ghost,
+      className,
+      ...props
+    },
     ref,
   ) => {
     if (ghost) {
@@ -113,7 +131,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
-          <BoundChip bound={bound} />
+          <BoundChip bound={bound} swatch={boundSwatch} palette={boundPalette} />
           {tags?.map((tag, i) => (
             <span
               key={i}

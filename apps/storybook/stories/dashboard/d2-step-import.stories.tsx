@@ -17,7 +17,7 @@ const SPEC: DashboardSpec = {
   header: {
     tone: 'success',
     crumbs: ['orders.csv → Brokerage.Order', 'import_dataset'],
-    chips: [{ bound: 'ingest', label: 'ingest' }, { label: 'succeeded', tone: 'success' }, { label: 'step dashboard' }],
+    chips: [{ bound: 'ingest', label: 'ingest', swatch: 'bg-info' }, { label: 'succeeded', tone: 'success' }, { label: 'step dashboard' }],
     actions: [
       { id: 'prev', icon: 'prev', variant: 'ghost' },
       { id: 'next', icon: 'next', variant: 'ghost' },

@@ -17,7 +17,7 @@ const SPEC: DashboardSpec = {
   header: {
     tone: 'info',
     crumbs: ['orders.csv → Brokerage.Order', 'execute_graph_query'],
-    chips: [{ bound: 'graph_read', label: 'graph_read' }, { label: 'running', tone: 'info' }, { label: 'step dashboard' }],
+    chips: [{ bound: 'graph_read', label: 'graph_read', swatch: 'bg-success' }, { label: 'running', tone: 'info' }, { label: 'step dashboard' }],
     actions: [
       { id: 'prev', icon: 'prev', variant: 'ghost' },
       { id: 'next', icon: 'next', variant: 'ghost' },

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import type { PanelRendererProps } from '@invana/dashboard';
-import { TaskNode, type Bound, type StatusDotProps } from '@invana/ui';
+import {
+  TaskNode,
+  type Bound,
+  type BoundPalette,
+  type StatusDotProps,
+} from '@invana/ui';
 import {
   Check,
   ChevronLeft,
@@ -34,6 +39,22 @@ export const ICONS = {
 // artboards draw. The point it proves is the seam, not the layout: a real
 // `@invana/canvas` panel registers exactly the same way.
 
+/**
+ * How these dashboards paint the bounds. `BoundChip` ships no hues, so every
+ * surface that draws one supplies its own map — `none` is left out and falls
+ * through to the neutral.
+ */
+export const BOUND_PALETTE: BoundPalette = {
+  network: 'bg-warning',
+  graph_read: 'bg-success',
+  graph_write: 'bg-data-2',
+  schema_write: 'bg-data-4',
+  ingest: 'bg-info',
+  llm: 'bg-data-7',
+  plan_write: 'bg-data-5',
+  work_write: 'bg-destructive',
+};
+
 export interface FlowNode {
   taskKey: string;
   bound: Bound;
@@ -62,7 +83,7 @@ export function FlowPanel({ options }: PanelRendererProps<FlowOptions>) {
     >
       {options.nodes.map((node) => (
         <div key={node.taskKey} style={{ gridColumn: node.col, gridRow: node.row }}>
-          <TaskNode {...node} />
+          <TaskNode {...node} boundPalette={BOUND_PALETTE} />
         </div>
       ))}
     </div>

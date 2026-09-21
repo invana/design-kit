@@ -5,7 +5,8 @@ import type { ActionContext, ActionSpec, ChipSpec } from "./types"
 
 /** A chip from its spec — a bound renders as a `BoundChip`, everything else as a `Badge`. */
 export function SpecChip({ chip }: { chip: ChipSpec }) {
-  if (chip.bound) return <BoundChip bound={chip.bound} />
+  if (chip.bound)
+    return <BoundChip bound={chip.bound} swatch={chip.swatch} />
   return (
     <Badge
       variant={chip.variant ?? "outline"}

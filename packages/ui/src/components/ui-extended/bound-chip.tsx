@@ -3,12 +3,16 @@ import * as React from "react"
 import { cn } from "../../lib/utils"
 
 /**
- * The closed set of capabilities a callable may spend.
+ * The capabilities Invana ships today — **suggestions, not a limit.**
  *
- * Nine values, fixed. The catalogue is grouped by these and an envelope
- * ceilings them, so this is a vocabulary rather than a list that grows.
+ * These are what {@link Bound} autocompletes to. They bind nothing: a product
+ * that adds a `vector_write` bound as it grows passes `"vector_write"` and the
+ * chip draws it. The catalogue groups by these and an envelope ceilings them,
+ * but that is the *runtime's* vocabulary to police — a chip that refused to
+ * render an unknown bound would make the design kit a release blocker for
+ * every new capability.
  */
-export type Bound =
+export type KnownBound =
   | "none"
   | "network"
   | "graph_read"
@@ -20,22 +24,35 @@ export type Bound =
   | "work_write"
 
 /**
- * One hue per bound, fixed — colour follows the bound, never its position in a
- * list. Five come from the status tokens because they already mean the right
- * thing; the other four take data-palette slots, which are chosen for being
- * distinguishable from each other rather than for meaning anything.
+ * What a callable may spend — any identifier at all.
+ *
+ * `(string & {})` keeps the known set autocompleting while accepting anything
+ * else without a cast. See {@link KnownBound}.
  */
-const SWATCH: Record<Bound, string> = {
-  none: "bg-muted-foreground",
-  network: "bg-warning",
-  graph_read: "bg-success",
-  graph_write: "bg-data-2",
-  schema_write: "bg-data-4",
-  ingest: "bg-info",
-  llm: "bg-data-7",
-  plan_write: "bg-data-5",
-  work_write: "bg-destructive",
-}
+export type Bound = KnownBound | (string & {})
+
+/**
+ * What each bound is painted with — **the kit ships no hues.**
+ *
+ * Which colour means `schema_write` is a product's decision. Four of the nine
+ * were only ever data-palette slots picked for being distinguishable from one
+ * another, which is exactly the kind of choice a component should not be
+ * making on a consumer's behalf; and holding the map forced every consumer
+ * onto a stylesheet that defines those slots, which is how `bg-data-*` came to
+ * be dead in the precompiled `@invana/ui/styles.css` without anyone noticing.
+ *
+ * Values are class strings, so a surface spends whatever its own Tailwind
+ * build has — a data-palette token, a status token, a brand colour. A bound
+ * left out draws in the neutral.
+ */
+export type BoundPalette = Partial<Record<Bound, string>>
+
+/**
+ * No paint given — a neutral, never a hue. Drawing an unpainted bound in some
+ * default colour would be the hard-coded map by another name: a consumer would
+ * inherit a colour it never chose and could not tell from one it did.
+ */
+const UNPAINTED = "bg-muted-foreground"
 
 export interface BoundChipProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
@@ -45,6 +62,19 @@ export interface BoundChipProps
    * it. Use sparingly — see the note on colour below.
    */
   swatchOnly?: boolean
+  /** What to call it, when the identifier is not what this surface says. */
+  label?: React.ReactNode
+  /**
+   * This chip's swatch class, given directly — `bg-data-7`, `bg-violet-500`.
+   * The shortest path when a call site draws one chip and knows its bound.
+   * Wins over {@link BoundChipProps.palette}.
+   */
+  swatch?: string
+  /**
+   * What the bounds are painted with, when a caller draws several and would
+   * rather state the map once. Only this chip's own bound is read.
+   */
+  palette?: BoundPalette
 }
 
 /**
@@ -64,7 +94,7 @@ export interface BoundChipProps
  * as "this went well" because it happens to be green.
  */
 export const BoundChip = React.forwardRef<HTMLSpanElement, BoundChipProps>(
-  ({ bound, swatchOnly, className, ...props }, ref) => (
+  ({ bound, swatchOnly, label, swatch, palette, className, ...props }, ref) => (
     <span
       ref={ref}
       className={cn(
@@ -74,11 +104,12 @@ export const BoundChip = React.forwardRef<HTMLSpanElement, BoundChipProps>(
       aria-label={swatchOnly ? `bound: ${bound}` : undefined}
       {...props}
     >
-      <span aria-hidden className={cn("size-1.5 shrink-0", SWATCH[bound])} />
-      {swatchOnly ? null : <span className="truncate">{bound}</span>}
+      <span
+        aria-hidden
+        className={cn("size-1.5 shrink-0", swatch ?? palette?.[bound] ?? UNPAINTED)}
+      />
+      {swatchOnly ? null : <span className="truncate">{label ?? bound}</span>}
     </span>
   ),
 )
 BoundChip.displayName = "BoundChip"
-
-export { SWATCH as boundSwatch }
