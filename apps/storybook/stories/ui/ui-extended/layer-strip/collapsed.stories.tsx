@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LayerStrip, type LayerBand, type LayerItem } from '@invana/ui';
 
+import { LAYER_PALETTE } from './_run';
+
 const meta: Meta<typeof LayerStrip> = {
   title: 'UI/UI Extended/LayerStrip',
   component: LayerStrip,
@@ -17,7 +19,7 @@ const BANDS: LayerBand[] = [
     note: '1 · on a failed check',
     parts: [{ id: 'triage', label: 'human/form/triage', note: 'a person decides' }],
   },
-  { layer: 'agent' },
+  { layer: 'agent', spine: true },
   {
     layer: 'cache',
     note: '1',
@@ -76,6 +78,7 @@ export const Collapsed: Story = {
   render: () => (
     <div className="w-[980px]">
       <LayerStrip
+        palette={LAYER_PALETTE}
         bands={BANDS}
         items={ITEMS}
         scale="seq"

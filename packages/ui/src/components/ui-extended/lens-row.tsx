@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
-import { LayerChip, type Layer } from "./layer-chip"
+import { LayerChip, type Layer, type LayerPalette } from "./layer-chip"
 
 /** The four roles a plan may name. Fixed — `tier` would not survive a re-cast. */
 export type CastRole = "extract" | "decide" | "judge" | "embed"
@@ -36,9 +36,14 @@ export interface LensRowProps
   usage?: LensUsage
   selected?: boolean
   onSelect?: (name: string) => void
+  /**
+   * What the layers of a `closes` narrowing are painted with. Omitted, those
+   * chips draw in the neutral.
+   */
+  palette?: LayerPalette
 }
 
-function describe(n: Narrowing): React.ReactNode {
+function describe(n: Narrowing, palette?: LayerPalette): React.ReactNode {
   switch (n.kind) {
     case "allow":
       return `${n.count} allow`
@@ -55,7 +60,7 @@ function describe(n: Narrowing): React.ReactNode {
         <span className="inline-flex items-center gap-1">
           closes
           {n.layers.map((layer) => (
-            <LayerChip key={layer} layer={layer} />
+            <LayerChip key={layer} layer={layer} palette={palette} />
           ))}
         </span>
       )
@@ -81,7 +86,7 @@ function describe(n: Narrowing): React.ReactNode {
  */
 export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
   (
-    { name, narrows = [], usage, selected, onSelect, className, ...props },
+    { name, narrows = [], usage, selected, onSelect, palette, className, ...props },
     ref,
   ) => {
     const interactive = Boolean(onSelect)
@@ -129,7 +134,7 @@ export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
             {narrows.map((n, i) => (
               <React.Fragment key={`${n.kind}-${i}`}>
                 {i > 0 ? <span aria-hidden className="opacity-40">·</span> : null}
-                <span className="inline-flex items-center">{describe(n)}</span>
+                <span className="inline-flex items-center">{describe(n, palette)}</span>
               </React.Fragment>
             ))}
           </div>

@@ -1,4 +1,52 @@
-import type { LayerBand, LayerBracket, LayerItem } from '@invana/ui';
+import type {
+  LayerBand,
+  LayerBracket,
+  LayerItem,
+  LayerPalette,
+} from '@invana/ui';
+
+/**
+ * How these stories paint the layers — passed to the component as `palette`,
+ * because the kit ships no hues of its own.
+ *
+ * Four are the data-palette slots `BoundChip` leaves free, so a layer and a
+ * bound can sit in one row without sharing a hue between two vocabularies. Two
+ * are deliberate:
+ *
+ * - `llm` takes `data-7`, the slot `BoundChip` gives the `llm` **bound**. Same
+ *   concept, same hue.
+ * - `agent` is left out. The spine is never governed and must not read as a
+ *   bound somebody could set, so it falls through to the neutral — the token
+ *   `BoundChip` spends on `none`, for the same reason: *nothing to set here*.
+ *
+ * `text` writes a participant's address in its layer's colour, so
+ * `model/Orders@v2` and the `graph data` dot above it read as one thing. It is
+ * the entry with a contrast floor to clear: `data-palette.css` carries a
+ * light-mode WARN on aqua, yellow and magenta, so `cache` is the slot to watch
+ * — and it is a layer that, here, declares nothing anyway.
+ */
+export const LAYER_PALETTE: LayerPalette = {
+  graph_data: {
+    swatch: 'bg-data-1',
+    text: 'text-data-1',
+  },
+  llm: {
+    swatch: 'bg-data-7',
+    text: 'text-data-7',
+  },
+  third_party: {
+    swatch: 'bg-data-8',
+    text: 'text-data-8',
+  },
+  cache: {
+    swatch: 'bg-data-3',
+    text: 'text-data-3',
+  },
+  human: {
+    swatch: 'bg-data-6',
+    text: 'text-data-6',
+  },
+};
 
 /**
  * `escalate-late-orders@7`, run twice — the same plan under two lenses.
@@ -27,7 +75,7 @@ export const RUN_BANDS: LayerBand[] = [
       },
     ],
   },
-  { layer: 'agent' },
+  { layer: 'agent', spine: true },
   { layer: 'cache', note: 'nothing declared' },
   {
     layer: 'llm',
@@ -244,7 +292,7 @@ export const UNATTENDED_BANDS: LayerBand[] = [
       },
     ],
   },
-  { layer: 'agent' },
+  { layer: 'agent', spine: true },
   { layer: 'cache', note: 'nothing declared' },
   {
     layer: 'llm',

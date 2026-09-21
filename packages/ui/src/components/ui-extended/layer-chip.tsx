@@ -3,14 +3,19 @@ import * as React from "react"
 import { cn } from "../../lib/utils"
 
 /**
- * The five governed classes of participant, plus the spine.
+ * The classes of participant Invana ships today — **suggestions, not a limit.**
  *
- * Fixed — a Graph does not add a layer. `agent` is the **spine**: the runtime
- * itself, which does the participating rather than being a participant, and is
- * never governed. It is addressed and drawn like the rest so the ledger has one
- * shape.
+ * These are what {@link Layer} autocompletes to. They bind nothing: a product
+ * that grows a `vector_store` layer next week passes `"vector_store"` and every
+ * component here draws it, because a component that had to be edited before a
+ * developer could name a new layer is a component that owns the product's
+ * vocabulary.
+ *
+ * `agent` is the **spine**: the runtime itself, which does the participating
+ * rather than being a participant, and is never governed. Nothing in this file
+ * knows that — a band says so with `spine`, see `LayerStrip`.
  */
-export type Layer =
+export type KnownLayer =
   | "graph_data"
   | "llm"
   | "third_party"
@@ -18,37 +23,100 @@ export type Layer =
   | "human"
   | "agent"
 
-/** What a reader calls the layer. The address segment is not the label. */
-const LABEL: Record<Layer, string> = {
-  graph_data: "graph data",
-  llm: "llm",
-  third_party: "third party",
-  cache: "cache",
-  human: "human",
-  agent: "agent",
+/**
+ * What a participant **is** — any identifier at all.
+ *
+ * `(string & {})` is what keeps both halves: the known set still autocompletes
+ * and still documents itself, while an unknown string is accepted without a
+ * cast. Widening this to plain `string` would silently drop the suggestions;
+ * narrowing it back to the union would make the kit the gatekeeper of a
+ * vocabulary it does not own.
+ */
+export type Layer = KnownLayer | (string & {})
+
+/**
+ * What a reader calls the layer: the identifier with its underscores opened up.
+ *
+ * Derived rather than looked up — a table would have to be edited for every
+ * layer a product adds, and for all six Invana ships today the table said
+ * exactly this anyway (`graph_data` → `graph data`). A layer that wants
+ * something else passes `label`.
+ */
+export const layerLabel = (layer: Layer): string => layer.replace(/_/g, " ")
+
+/**
+ * How one layer is painted. **The kit ships no hues** — a consumer supplies
+ * these, because which colour means `llm` is a product's decision and not a
+ * component's.
+ *
+ * Both are class strings rather than colours, so a surface spends whatever
+ * palette its own Tailwind build already has: `bg-data-7` from
+ * `@invana/styling`, a brand token, a plain `bg-violet-500`. A component that
+ * held the map would force every consumer onto the kit's palette *and* onto a
+ * stylesheet that defines it — which is how `bg-data-*` came to be dead in the
+ * precompiled `@invana/ui/styles.css` without anyone noticing.
+ *
+ * It is passed to the component that draws, as a prop, every time — never
+ * installed once for a tree. A caller restating its palette at four call sites
+ * is the honest cost: the alternative hides *which* colours a drawing is using
+ * behind a provider somebody else mounted.
+ *
+ * - `swatch` is the **solid mark**: the dot beside a name, the rail down a bar.
+ * - `tint` is the **wash**: a bar's ground and edge together. Keep it faint —
+ *   it sits *behind* text, so a hue dark enough to label in is a hue too dark
+ *   to wash with.
+ * - `text` is the hue **as type**: a participant address written in its layer's
+ *   colour, so `model/Orders@v2` and the `graph data` dot above it are visibly
+ *   the same thing. This is the one that has to clear a contrast floor, which
+ *   is why it is yours to choose and separate from `swatch` — the token that
+ *   makes a legible 6px dot is often not the one that makes legible 13px mono.
+ */
+export interface LayerPaint {
+  /** The solid mark — `bg-data-7`. */
+  swatch?: string
+  /** The wash, ground and edge — `border-data-7/35 bg-data-7/10`. */
+  tint?: string
+  /** The hue as type, for an address that should read as its layer — `text-data-7`. */
+  text?: string
 }
 
 /**
- * One hue per layer, fixed — colour follows the layer, never its position.
- *
- * Four are the data-palette slots `BoundChip` left free, so the two can sit in
- * one row on A2 without sharing a hue between different vocabularies. Two are
- * deliberate:
- *
- * - `llm` takes `data-7`, the slot `BoundChip` gives the `llm` **bound**. Same
- *   concept, same hue; two hues for one idea is the confusion worth avoiding.
- * - `agent` is `muted-foreground`, because the spine is never governed and must
- *   not read as a bound somebody could set. `BoundChip` spends the same token on
- *   `none` for the same reason — *nothing to set here*.
+ * What each layer is painted with. Partial on purpose: a layer left out falls
+ * back to the neutral, which is a legible answer rather than a blank one.
  */
-const SWATCH: Record<Layer, string> = {
-  graph_data: "bg-data-1",
-  llm: "bg-data-7",
-  third_party: "bg-data-8",
-  cache: "bg-data-3",
-  human: "bg-data-6",
-  agent: "bg-muted-foreground",
+export type LayerPalette = Partial<Record<Layer, LayerPaint>>
+
+/**
+ * No paint given — deliberately a neutral and not a hue.
+ *
+ * A layer nobody painted still has to draw, and drawing it in some default
+ * colour would be the hard-coded palette by another name: the consumer would
+ * inherit a hue it never chose and could not tell from one it did. The muted
+ * token says *unpainted* in the same voice the spine says *never governed*.
+ */
+const UNPAINTED: Required<LayerPaint> = {
+  swatch: "bg-muted-foreground",
+  // Edge only, no ground: a bar's identity is its rail and its address, and a
+  // wash under every bar turns a track into a stack of coloured blocks. A
+  // consumer that wants the ground says so in its own `tint`.
+  tint: "border-border",
+  // Unpainted type is ordinary type. A muted address would say *subordinate*,
+  // which is not what "nobody gave this layer a colour" means.
+  text: "text-foreground",
 }
+
+/**
+ * One layer's paint, with the neutral filled in for anything unsaid — so a
+ * caller never branches on `undefined` to draw a dot.
+ *
+ * There is no provider and no context. Colour arrives as the `palette` prop on
+ * the component that draws, every time: a chip painted from somewhere up the
+ * tree is a chip whose colour you cannot find by reading its call site.
+ */
+export const layerPaint = (
+  palette: LayerPalette | undefined,
+  layer: Layer,
+): Required<LayerPaint> => ({ ...UNPAINTED, ...palette?.[layer] })
 
 export interface LayerChipProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
@@ -59,12 +127,25 @@ export interface LayerChipProps
    * *nothing is configured* reads differently from *nothing matched*.
    */
   count?: number
+  /** What to call it, when {@link layerLabel} is not what this surface says. */
+  label?: React.ReactNode
   /**
    * The layer is closed, empty or out of view: the swatch drops to the muted
    * token and the label goes with it. The chip stays legible — this is *not
    * in play*, never *not there*.
    */
   dim?: boolean
+  /**
+   * This chip's swatch class, given directly — `bg-data-7`, `bg-violet-500`.
+   * The shortest path when a call site draws one chip and knows its layer.
+   * Wins over {@link LayerChipProps.palette}.
+   */
+  swatch?: string
+  /**
+   * What the layers are painted with, when a caller draws several and would
+   * rather state the map once. Only this chip's own layer is read.
+   */
+  palette?: LayerPalette
 }
 
 /**
@@ -84,30 +165,38 @@ export interface LayerChipProps
  * boards, which is why they never share a hue.
  */
 export const LayerChip = React.forwardRef<HTMLSpanElement, LayerChipProps>(
-  ({ layer, count, dim, className, ...props }, ref) => (
-    <span
-      ref={ref}
-      className={cn(
-        "inline-flex max-w-full shrink-0 items-center gap-1.5 font-mono text-sm",
-        dim ? "text-muted-foreground/70" : "text-muted-foreground",
-        className,
-      )}
-      {...props}
-    >
+  ({ layer, count, label, dim, swatch, palette, className, ...props }, ref) => {
+    const paint = layerPaint(palette, layer)
+    return (
       <span
-        aria-hidden
+        ref={ref}
         className={cn(
-          "size-1.5 shrink-0",
-          dim ? "bg-muted-foreground/50" : SWATCH[layer],
+          // A layer is a **name**, not an address. `graph data` has a space in
+          // it — it is already prose — so it takes the body face at the root
+          // size, and mono is reserved for the thing that really is an address
+          // (`model/Orders@v2` on the row below it). Small muted bold mono made
+          // a row heading look like a technical footnote.
+          "inline-flex max-w-full shrink-0 items-center gap-1.5",
+          dim ? "text-muted-foreground/70" : "text-foreground",
+          className,
         )}
-      />
-      <span className="truncate">{LABEL[layer]}</span>
-      {count != null ? (
-        <span className="shrink-0 tabular-nums opacity-70">{count}</span>
-      ) : null}
-    </span>
-  ),
+        {...props}
+      >
+        <span
+          aria-hidden
+          className={cn(
+            "size-1.5 shrink-0",
+            dim ? "bg-muted-foreground/50" : (swatch ?? paint.swatch),
+          )}
+        />
+        <span className="truncate">{label ?? layerLabel(layer)}</span>
+        {count != null ? (
+          <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
+            {count}
+          </span>
+        ) : null}
+      </span>
+    )
+  },
 )
 LayerChip.displayName = "LayerChip"
-
-export { SWATCH as layerSwatch, LABEL as layerLabel }

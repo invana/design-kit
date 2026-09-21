@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LayerStrip, type LayerBand, type LayerItem } from '@invana/ui';
 
+import { LAYER_PALETTE } from './_run';
+
 const meta: Meta<typeof LayerStrip> = {
   title: 'UI/UI Extended/LayerStrip',
   component: LayerStrip,
@@ -12,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 const BANDS: LayerBand[] = [
   { layer: 'human', note: 'never asked' },
-  { layer: 'agent' },
+  { layer: 'agent', spine: true },
   {
     layer: 'cache',
     note: '1 hit',
@@ -136,6 +138,7 @@ export const Touched: Story = {
   render: () => (
     <div className="w-[760px]">
       <LayerStrip
+        palette={LAYER_PALETTE}
         bands={BANDS}
         items={ITEMS}
         scale="elapsed"

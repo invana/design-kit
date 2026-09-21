@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
-import { LayerChip, type Layer } from "./layer-chip"
+import { LayerChip, type Layer, type LayerPalette } from "./layer-chip"
 
 export interface LayerSectionProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "title"> {
@@ -20,6 +20,11 @@ export interface LayerSectionProps
   children?: React.ReactNode
   /** How many participants the layer holds, shown on the chip. */
   count?: number
+  /**
+   * What the layer is painted with — only this band's own layer is read.
+   * Omitted, the chip draws in the neutral.
+   */
+  palette?: LayerPalette
   /** The layer is out of view for this lens: the whole band dims. */
   dim?: boolean
 }
@@ -44,7 +49,7 @@ export interface LayerSectionProps
  * headings under it would compete with it.
  */
 export const LayerSection = React.forwardRef<HTMLDivElement, LayerSectionProps>(
-  ({ layer, summary, count, dim, className, children, ...props }, ref) => {
+  ({ layer, summary, count, dim, palette, className, children, ...props }, ref) => {
     const empty = React.Children.count(children) === 0
 
     return (
@@ -54,7 +59,7 @@ export const LayerSection = React.forwardRef<HTMLDivElement, LayerSectionProps>(
         {...props}
       >
         <div className="flex min-w-0 items-baseline gap-2 border-b border-border pb-1">
-          <LayerChip layer={layer} count={count} dim={dim} />
+          <LayerChip layer={layer} count={count} dim={dim} palette={palette} />
           {summary != null ? (
             <span className="ml-auto min-w-0 shrink truncate text-sm text-muted-foreground">
               {summary}

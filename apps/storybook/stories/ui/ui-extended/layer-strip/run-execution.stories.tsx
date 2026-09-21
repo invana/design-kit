@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LayerStrip } from '@invana/ui';
 
-import { RUN_BANDS, RUN_BRACKETS, RUN_ITEMS } from './_run';
+import { RUN_BANDS, RUN_BRACKETS, RUN_ITEMS, LAYER_PALETTE } from './_run';
 
 const meta: Meta<typeof LayerStrip> = {
   title: 'UI/UI Extended/LayerStrip',
@@ -50,6 +50,7 @@ export const RunExecution: Story = {
   render: () => (
     <div className="w-[980px]">
       <LayerStrip
+        palette={LAYER_PALETTE}
         bands={RUN_BANDS}
         items={RUN_ITEMS}
         brackets={RUN_BRACKETS}

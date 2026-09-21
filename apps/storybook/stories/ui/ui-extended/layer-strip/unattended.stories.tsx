@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LayerStrip } from '@invana/ui';
 
-import { UNATTENDED_BANDS, UNATTENDED_ITEMS } from './_run';
+import { UNATTENDED_BANDS, UNATTENDED_ITEMS, LAYER_PALETTE } from './_run';
 
 const meta: Meta<typeof LayerStrip> = {
   title: 'UI/UI Extended/LayerStrip',
@@ -48,6 +48,7 @@ export const Unattended: Story = {
   render: () => (
     <div className="w-[980px]">
       <LayerStrip
+        palette={LAYER_PALETTE}
         bands={UNATTENDED_BANDS}
         items={UNATTENDED_ITEMS}
         scale="elapsed"

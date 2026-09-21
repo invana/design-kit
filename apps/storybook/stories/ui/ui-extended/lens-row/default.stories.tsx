@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LensRow, type Narrowing } from '@invana/ui';
+import { LensRow, type LayerPalette, type Narrowing } from '@invana/ui';
 
 const meta: Meta<typeof LensRow> = {
   title: 'UI/UI Extended/LensRow',
@@ -9,6 +9,16 @@ const meta: Meta<typeof LensRow> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+/** The hues are the caller's — these components ship none. */
+const PALETTE: LayerPalette = {
+  graph_data: { swatch: 'bg-data-1' },
+  llm: { swatch: 'bg-data-7' },
+  third_party: { swatch: 'bg-data-8' },
+  cache: { swatch: 'bg-data-3' },
+  human: { swatch: 'bg-data-6' },
+};
+
 
 const EU: Narrowing[] = [
   { kind: 'allow', count: 4 },
@@ -50,11 +60,13 @@ export const Default: Story = {
   render: () => (
     <div className="flex w-[520px] flex-col">
       <LensRow
+        palette={PALETTE}
         name="Everything"
         usage={{ runs: 128, lastUsed: '2h ago' }}
         onSelect={() => {}}
       />
       <LensRow
+        palette={PALETTE}
         name="EU · H1 2026"
         narrows={EU}
         usage={{ runs: 34, lastUsed: '2h ago' }}
@@ -62,12 +74,14 @@ export const Default: Story = {
         onSelect={() => {}}
       />
       <LensRow
+        palette={PALETTE}
         name="Price-blind"
         narrows={PRICE_BLIND}
         usage={{ runs: 7, lastUsed: '6d ago' }}
         onSelect={() => {}}
       />
       <LensRow
+        palette={PALETTE}
         name="Nothing leaves"
         narrows={NOTHING_LEAVES}
         usage={{ runs: 0 }}

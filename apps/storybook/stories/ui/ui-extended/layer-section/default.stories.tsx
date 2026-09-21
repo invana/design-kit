@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LayerSection, RuleRow } from '@invana/ui';
+import { LayerSection, RuleRow, type LayerPalette } from '@invana/ui';
 
 const meta: Meta<typeof LayerSection> = {
   title: 'UI/UI Extended/LayerSection',
@@ -9,6 +9,16 @@ const meta: Meta<typeof LayerSection> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+/** The hues are the caller's — these components ship none. */
+const PALETTE: LayerPalette = {
+  graph_data: { swatch: 'bg-data-1' },
+  llm: { swatch: 'bg-data-7' },
+  third_party: { swatch: 'bg-data-8' },
+  cache: { swatch: 'bg-data-3' },
+  human: { swatch: 'bg-data-6' },
+};
+
 
 /**
  * A lens reads as five of these stacked, so *what is shut* is answered by
@@ -32,6 +42,7 @@ export const Default: Story = {
   render: () => (
     <div className="flex w-[560px] flex-col gap-5">
       <LayerSection
+        palette={PALETTE}
         layer="graph_data"
         count={16}
         summary="closed · 4 models, 2 of them sliced"
@@ -55,7 +66,7 @@ export const Default: Story = {
         <RuleRow match="graph_data/model/Twitter@*" allow />
       </LayerSection>
 
-      <LayerSection layer="llm" count={1} summary="permitted whole">
+      <LayerSection layer="llm" count={1} summary="permitted whole" palette={PALETTE}>
         <RuleRow
           match="llm/**"
           allow
@@ -64,6 +75,7 @@ export const Default: Story = {
       </LayerSection>
 
       <LayerSection
+        palette={PALETTE}
         layer="third_party"
         count={0}
         summary="denied by a guardrail"
@@ -71,9 +83,9 @@ export const Default: Story = {
         <RuleRow match="third_party/**" allow={false} readOnly />
       </LayerSection>
 
-      <LayerSection layer="cache" count={3} summary="permitted whole" />
+      <LayerSection layer="cache" count={3} summary="permitted whole" palette={PALETTE} />
 
-      <LayerSection layer="human" count={3} summary="permitted whole" dim />
+      <LayerSection layer="human" count={3} summary="permitted whole" dim palette={PALETTE} />
     </div>
   ),
 };
