@@ -2,7 +2,14 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export type DiffOp = "add" | "remove" | "change"
+export type KnownDiffOp =
+  | "add" | "remove" | "change"
+
+/**
+ * The values the kit draws specially — **suggestions, not a limit.** Anything
+ * else renders with the neutral token and its own name.
+ */
+export type DiffOp = KnownDiffOp | (string & {})
 
 export interface DiffRowProps
   extends Omit<React.HTMLAttributes<HTMLLIElement>, "children"> {
@@ -18,7 +25,7 @@ export interface DiffListProps extends React.HTMLAttributes<HTMLUListElement> {
 
 const OP_SIGN: Record<DiffOp, string> = { add: "+", remove: "−", change: "~" }
 
-const OP_CLASS: Record<DiffOp, string> = {
+const OP_CLASS: Partial<Record<DiffOp, string>> = {
   add: "text-success",
   remove: "text-destructive",
   change: "text-warning",
@@ -49,7 +56,7 @@ export const DiffRow = React.forwardRef<HTMLLIElement, DiffRowProps>(
       className={cn("flex items-baseline gap-2 py-0.5 text-sm", className)}
       {...props}
     >
-      <span className={cn("w-3 shrink-0 text-center font-mono", OP_CLASS[op])}>
+      <span className={cn("w-3 shrink-0 text-center font-mono", (OP_CLASS[op] ?? "text-muted-foreground"))}>
         {OP_SIGN[op]}
       </span>
       {kind != null ? (

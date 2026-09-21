@@ -11,9 +11,16 @@ import { cn } from "../../lib/utils"
  * is an event, and collapsing them loses *the bound was there and nothing ever
  * tested it*.
  */
-export type AddressTone = "allowed" | "denied" | "refused" | "untouched"
+export type KnownAddressTone =
+  | "allowed" | "denied" | "refused" | "untouched"
 
-const TONE: Record<AddressTone, string> = {
+/**
+ * The values the kit draws specially — **suggestions, not a limit.** Anything
+ * else renders with the neutral token and its own name.
+ */
+export type AddressTone = KnownAddressTone | (string & {})
+
+const TONE: Partial<Record<AddressTone, string>> = {
   allowed: "text-foreground",
   denied: "text-destructive",
   refused: "text-destructive line-through decoration-destructive/50",
@@ -100,7 +107,7 @@ export const AddressChip = React.forwardRef<HTMLSpanElement, AddressChipProps>(
 
     const shell = cn(
       "inline-flex min-w-0 max-w-full items-baseline font-mono text-sm",
-      TONE[tone],
+      (TONE[tone] ?? "text-foreground"),
       className,
     )
 

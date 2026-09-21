@@ -9,9 +9,16 @@ import { cn } from "../../lib/utils"
  * Omit it for an ordinary measurement. A grid where every tile is coloured
  * carries no signal, and a number that is merely large is not a warning.
  */
-export type MetricTone = "running" | "success" | "warning" | "error" | "info"
+export type KnownMetricTone =
+  | "running" | "success" | "warning" | "error" | "info"
 
-const TONE: Record<MetricTone, string> = {
+/**
+ * The values the kit draws specially — **suggestions, not a limit.** Anything
+ * else renders with the neutral token and its own name.
+ */
+export type MetricTone = KnownMetricTone | (string & {})
+
+const TONE: Partial<Record<MetricTone, string>> = {
   running: "text-info",
   success: "text-success",
   warning: "text-warning",
@@ -87,7 +94,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           // `1,880` and `2 / 5` in adjacent tiles sit at different widths, and
           // a strip of six stops reading as one row of numbers.
           "font-mono text-lg font-semibold leading-tight",
-          tone ? TONE[tone] : undefined,
+          tone ? (TONE[tone] ?? "text-foreground") : undefined,
         )}
       >
         {value}
@@ -105,7 +112,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           aria-label={`${Math.round(Math.min(Math.max(meter, 0), 1) * 100)}% of the ceiling`}
         >
           <div
-            className={cn("h-full", tone ? TONE[tone] : "text-primary", "bg-current")}
+            className={cn("h-full", tone ? (TONE[tone] ?? "text-foreground") : "text-primary", "bg-current")}
             style={{ width: `${Math.min(Math.max(meter, 0), 1) * 100}%` }}
           />
         </div>

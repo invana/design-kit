@@ -11,9 +11,16 @@ export type TerminalLineKind = "prompt" | "output" | "comment"
  * command you typed, what it printed, a comment. A run's log has no prompts and
  * no comments; every line is output, and what varies is how loud it is.
  */
-export type TerminalLevel = "info" | "warn" | "error" | "debug"
+export type KnownTerminalLevel =
+  | "info" | "warn" | "error" | "debug"
 
-const LEVEL: Record<TerminalLevel, string> = {
+/**
+ * The values the kit draws specially — **suggestions, not a limit.** Anything
+ * else renders with the neutral token and its own name.
+ */
+export type TerminalLevel = KnownTerminalLevel | (string & {})
+
+const LEVEL: Partial<Record<TerminalLevel, string>> = {
   info: "text-success",
   warn: "text-warning",
   error: "text-destructive",
@@ -146,7 +153,7 @@ export const TerminalLine = React.forwardRef<HTMLDivElement, TerminalLineProps>(
               // message; a transcript greys only its trailing cell.
               level
                 ? i === levelColumn
-                  ? LEVEL[level]
+                  ? (LEVEL[level] ?? "text-muted-foreground")
                   : i === columns.length - 1
                     ? undefined
                     : "text-muted-foreground"
