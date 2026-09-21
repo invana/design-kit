@@ -46,7 +46,7 @@ export const StackedPanels: Story = {
             {problems.map((problem) => (
               <li key={problem} className="flex items-baseline gap-2 px-3 py-1.5">
                 <span className="truncate">{problem}</span>
-                <span className="ml-auto shrink-0 text-meta text-muted-foreground">warn</span>
+                <span className="ml-auto shrink-0 text-sm text-muted-foreground">warn</span>
               </li>
             ))}
           </ul>

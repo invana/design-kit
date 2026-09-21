@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { AppLayoutV1 } from "@invana/themes/app-v1/layout";
-import { NavVerticalProps, Badge, Avatar, Button } from "@invana/ui";
+import { Avatar, Badge, Button, NavVerticalProps, TypographyH1, TypographyH4 } from "@invana/ui";
 import { Input } from "@invana/forms";
 import { Home, Folder, Search, Settings,
     Bell, HelpCircle, User, LogOut } from "lucide-react";
@@ -24,8 +24,8 @@ const leftNav: NavVerticalProps = {
         { name: "Projects", icon: Folder, onClick: () => console.log('Projects clicked'), tooltip: "View Projects" },
         { name: "Settings", icon: Settings, onClick: () => console.log('Settings clicked'), tooltip: "Adjust Settings" },
     ],
-    // middle: <div className="p-2 text-xs text-muted-foreground">Quick Links</div>,
-    // bottom: <div className="p-4 text-xs">v1.0.0</div>,
+    // middle: <div className="p-2 text-sm text-muted-foreground">Quick Links</div>,
+    // bottom: <div className="p-4 text-sm">v1.0.0</div>,
     bottomNavItems: [
         { name: "Profile", icon: User, onClick: () => console.log('Profile clicked'), tooltip: "View Profile" },
         { name: "Logout", icon: LogOut, onClick: () => console.log('Logout clicked'), tooltip: "Log Out" },
@@ -35,7 +35,7 @@ const leftNav: NavVerticalProps = {
  
 
 const footer = {
-  children: <div className="px-4 py-2 text-xs">App Footer</div>,
+  children: <div className="px-4 py-2 text-sm">App Footer</div>,
   className: "border-t bg-card text-card-foreground",
 };
 
@@ -49,7 +49,7 @@ export const Default: Story = {
       left: (
         <div className="flex items-center gap-3 px-3">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
+            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-base">
               E
             </div>
             <div className="font-bold">Enterprise Suite</div>
@@ -80,7 +80,7 @@ export const Default: Story = {
           <Avatar className="h-8 w-8">
             <img src="https://github.com/shadcn.png" alt="Admin" />
           </Avatar>
-          <div className="text-sm">
+          <div className="text-base">
             <div className="font-medium">Admin User</div>
           </div>
         </div>
@@ -90,7 +90,7 @@ export const Default: Story = {
       <div className="h-full overflow-auto p-6">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+            <TypographyH1>Dashboard</TypographyH1>
             <p className="text-muted-foreground">Welcome to your application dashboard</p>
           </div>
           
@@ -102,17 +102,17 @@ export const Default: Story = {
               { title: 'Conversions', value: '573', change: '+5%' },
             ].map((stat, i) => (
               <div key={i} className="rounded-lg border bg-card p-6">
-                <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
+                <div className="text-base font-medium text-muted-foreground">{stat.title}</div>
                 <div className="mt-2 flex items-baseline gap-2">
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <Badge variant="secondary" className="text-xs">{stat.change}</Badge>
+                  <Badge variant="secondary" className="text-sm">{stat.change}</Badge>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="rounded-lg border bg-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+            <TypographyH4 className="mb-4">Recent Activity</TypographyH4>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4 p-3 rounded-md hover:bg-accent">
@@ -121,7 +121,7 @@ export const Default: Story = {
                   </Avatar>
                   <div className="flex-1">
                     <div className="font-medium">User {i} completed an action</div>
-                    <div className="text-sm text-muted-foreground">{i} minutes ago</div>
+                    <div className="text-base text-muted-foreground">{i} minutes ago</div>
                   </div>
                 </div>
               ))}

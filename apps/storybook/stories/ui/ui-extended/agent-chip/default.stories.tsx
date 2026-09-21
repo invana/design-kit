@@ -25,7 +25,7 @@ export const Default: Story = {
       </div>
       <div className="flex items-center gap-1.5">
         <AgentChip icon={<Bot />} name="Risk Checker" inactive />
-        <span className="text-meta text-muted-foreground">retired — still in lineage</span>
+        <span className="text-sm text-muted-foreground">retired — still in lineage</span>
       </div>
     </div>
   ),

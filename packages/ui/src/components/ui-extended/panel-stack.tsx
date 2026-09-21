@@ -369,7 +369,7 @@ export function PanelStack({
                     )}
                     {Icon && <Icon className="h-3.5 w-3.5 shrink-0" />}
                     {typeof section.title === "string" ? (
-                      <span className="truncate text-meta font-semibold uppercase tracking-wide">
+                      <span className="truncate text-sm font-semibold uppercase tracking-wide">
                         {section.title}
                       </span>
                     ) : (

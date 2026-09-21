@@ -41,7 +41,7 @@ export const Default: Story = {
       {BOUNDS.map((bound) => (
         <div key={bound} className="flex items-center gap-3">
           <BoundChip bound={bound} className="w-[104px]" />
-          <span className="text-meta text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             {bound === 'none' ? 'emit_table · read_artefact' : `what ${bound} spends`}
           </span>
         </div>

@@ -134,11 +134,11 @@ function SectionTitle({
 }) {
   return (
     <span className="flex w-full min-w-0 items-center justify-between gap-2">
-      <span className="truncate text-meta font-semibold uppercase tracking-wide">
+      <span className="truncate text-sm font-semibold uppercase tracking-wide">
         {children}
       </span>
       {meta != null && (
-        <span className="shrink-0 text-meta text-muted-foreground">{meta}</span>
+        <span className="shrink-0 text-sm text-muted-foreground">{meta}</span>
       )}
     </span>
   );
@@ -171,8 +171,8 @@ function TypeRow({
         style={{ color }}
         className={cn('size-2 shrink-0 rounded-full bg-current', hidden && 'opacity-40')}
       />
-      <span className={cn('truncate', mono && 'font-mono text-meta')}>{name}</span>
-      <span className="ml-auto flex items-center gap-2 text-meta text-muted-foreground tabular-nums">
+      <span className={cn('truncate', mono && 'font-mono text-sm')}>{name}</span>
+      <span className="ml-auto flex items-center gap-2 text-sm text-muted-foreground tabular-nums">
         {/* A vendor that cannot count still names its types — a dash, never a
             made-up zero (SP8). */}
         {count === null ? '—' : count.toLocaleString()}
@@ -465,7 +465,7 @@ function ExplorerShellDemo() {
                                         style={{ color: 'var(--color-data-3)' }}
                                         className="size-2 shrink-0 rounded-full bg-current"
                                       />
-                                      <span className="truncate font-mono text-meta">
+                                      <span className="truncate font-mono text-sm">
                                         obs_20260908_bpcl_01
                                       </span>
                                     </div>
@@ -477,7 +477,7 @@ function ExplorerShellDemo() {
                                         7e21
                                       </PropertyRow>
                                     </PropertyList>
-                                    <p className="text-meta text-muted-foreground">
+                                    <p className="text-sm text-muted-foreground">
                                       From dataset <span className="text-foreground">nse-daily</span> ·
                                       2026-09-08.csv
                                     </p>
@@ -488,7 +488,7 @@ function ExplorerShellDemo() {
                           ]}
                         />
                       </div>
-                      <div className="flex items-center justify-between gap-2 border-t px-3 py-1.5 text-meta text-muted-foreground">
+                      <div className="flex items-center justify-between gap-2 border-t px-3 py-1.5 text-sm text-muted-foreground">
                         <span className="tabular-nums">{shown} types · 24,463 nodes</span>
                         <span className="truncate">Defence theme — Sep 2026</span>
                       </div>
@@ -575,7 +575,7 @@ function ExplorerShellDemo() {
                 ))}
               </Legend>
             </div>
-            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 border border-border bg-card px-2 py-1 text-meta text-muted-foreground">
+            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 border border-border bg-card px-2 py-1 text-sm text-muted-foreground">
               <StatusDot tone="success" /> obs_20260908_bpcl_01 · added from task Setup check BPCL
             </div>
           </div>
@@ -609,14 +609,14 @@ function ExplorerShellDemo() {
                             </Badge>
                             <span className="font-semibold">Observation</span>
                           </div>
-                          <p className="break-all font-mono text-meta text-muted-foreground">
+                          <p className="break-all font-mono text-sm text-muted-foreground">
                             obs_20260908_bpcl_01
                           </p>
                         </div>
                         {/* Where it came from, before what it says — a value you
                             cannot trace is a value you cannot use (IW1). */}
                         <div className="flex flex-col gap-1">
-                          <p className="text-meta text-muted-foreground">From</p>
+                          <p className="text-sm text-muted-foreground">From</p>
                           <PropertyList>
                             <PropertyRow label="dataset">nse-daily</PropertyRow>
                             <PropertyRow label="file" mono>
@@ -628,7 +628,7 @@ function ExplorerShellDemo() {
                           </PropertyList>
                         </div>
                         <div className="flex flex-col gap-1">
-                          <p className="text-meta text-muted-foreground">Properties</p>
+                          <p className="text-sm text-muted-foreground">Properties</p>
                           <PropertyList>
                             <PropertyRow label="kind">thesis</PropertyRow>
                             <PropertyRow label="direction">long</PropertyRow>
@@ -650,7 +650,7 @@ function ExplorerShellDemo() {
                   content: (
                     <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
                       <Paintbrush className="size-8 opacity-20" />
-                      <p className="text-center text-meta">Style overrides — coming soon</p>
+                      <p className="text-center text-sm">Style overrides — coming soon</p>
                     </div>
                   ),
                 },
@@ -703,7 +703,7 @@ function ExplorerShellDemo() {
                             <TableBody>
                               {RESULT_ROWS.map(([id, type, summary, confidence]) => (
                                 <TableRow key={id}>
-                                  <TableCell className="font-mono text-meta">{id}</TableCell>
+                                  <TableCell className="font-mono text-sm">{id}</TableCell>
                                   <TableCell>{type}</TableCell>
                                   <TableCell className="text-muted-foreground">{summary}</TableCell>
                                   <TableCell className="text-right tabular-nums">{confidence}</TableCell>
@@ -720,7 +720,7 @@ function ExplorerShellDemo() {
                       icon: Terminal,
                       content: (
                         <ScrollArea className="h-full">
-                          <pre className="p-3 font-mono text-meta text-muted-foreground">
+                          <pre className="p-3 font-mono text-sm text-muted-foreground">
                             {'MATCH (s:Stock {ticker: "BPCL"})<-[:MENTIONS]-(a:Article)\nWHERE a.published_at > date("2026-09-01")\nRETURN a, s LIMIT 50'}
                           </pre>
                         </ScrollArea>
@@ -767,7 +767,7 @@ function ExplorerShellDemo() {
     footer: {
       className: '!h-[25px]',
       left: (
-        <div className="flex items-center gap-3 px-2 text-meta text-muted-foreground">
+        <div className="flex items-center gap-3 px-2 text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
             <StatusDot tone="success" />
             <span className="text-success">ACTIVE</span>
@@ -777,7 +777,7 @@ function ExplorerShellDemo() {
         </div>
       ),
       right: (
-        <div className="flex items-center gap-3 px-2 text-meta text-muted-foreground">
+        <div className="flex items-center gap-3 px-2 text-sm text-muted-foreground">
           <span>Explorer</span>
           <span>v0.9.0</span>
         </div>

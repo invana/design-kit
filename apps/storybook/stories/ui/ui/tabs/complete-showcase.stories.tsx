@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tabs, TabsList, TabsTrigger, TabsContent, Card, CardHeader, CardTitle, CardContent } from '@invana/ui';
+import { Card, CardContent, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger, TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Tabs> = {
   title: 'UI/UI/Tabs',
@@ -25,7 +25,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-4xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Basic Tabs</h3>
+        <TypographyH5 className="mb-4">Basic Tabs</TypographyH5>
         <Tabs defaultValue="tab1" className="w-full">
           <TabsList>
             <TabsTrigger value="tab1">Tab 1</TabsTrigger>
@@ -33,19 +33,19 @@ export const CompleteShowcase: Story = {
             <TabsTrigger value="tab3">Tab 3</TabsTrigger>
           </TabsList>
           <TabsContent value="tab1" className="mt-4">
-            <p className="text-sm">Content for Tab 1</p>
+            <p className="text-base">Content for Tab 1</p>
           </TabsContent>
           <TabsContent value="tab2" className="mt-4">
-            <p className="text-sm">Content for Tab 2</p>
+            <p className="text-base">Content for Tab 2</p>
           </TabsContent>
           <TabsContent value="tab3" className="mt-4">
-            <p className="text-sm">Content for Tab 3</p>
+            <p className="text-base">Content for Tab 3</p>
           </TabsContent>
         </Tabs>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Tabs with Cards</h3>
+        <TypographyH5 className="mb-4">Tabs with Cards</TypographyH5>
         <Tabs defaultValue="overview" className="w-full">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -59,7 +59,7 @@ export const CompleteShowcase: Story = {
                 <CardTitle>Overview</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">Dashboard overview with key metrics and recent activity.</p>
+                <p className="text-base">Dashboard overview with key metrics and recent activity.</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -69,7 +69,7 @@ export const CompleteShowcase: Story = {
                 <CardTitle>Analytics</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">Detailed analytics and performance data visualization.</p>
+                <p className="text-base">Detailed analytics and performance data visualization.</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -79,7 +79,7 @@ export const CompleteShowcase: Story = {
                 <CardTitle>Reports</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">Generate and download comprehensive reports.</p>
+                <p className="text-base">Generate and download comprehensive reports.</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -89,7 +89,7 @@ export const CompleteShowcase: Story = {
                 <CardTitle>Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">Configure your preferences and account settings.</p>
+                <p className="text-base">Configure your preferences and account settings.</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -97,7 +97,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Full Width Tabs</h3>
+        <TypographyH5 className="mb-4">Full Width Tabs</TypographyH5>
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="w-full">
             <TabsTrigger value="all" className="flex-1">All</TabsTrigger>
@@ -106,22 +106,22 @@ export const CompleteShowcase: Story = {
             <TabsTrigger value="archived" className="flex-1">Archived</TabsTrigger>
           </TabsList>
           <TabsContent value="all" className="mt-4">
-            <p className="text-sm text-muted-foreground">Showing all items</p>
+            <p className="text-base text-muted-foreground">Showing all items</p>
           </TabsContent>
           <TabsContent value="active" className="mt-4">
-            <p className="text-sm text-muted-foreground">Showing active items only</p>
+            <p className="text-base text-muted-foreground">Showing active items only</p>
           </TabsContent>
           <TabsContent value="completed" className="mt-4">
-            <p className="text-sm text-muted-foreground">Showing completed items</p>
+            <p className="text-base text-muted-foreground">Showing completed items</p>
           </TabsContent>
           <TabsContent value="archived" className="mt-4">
-            <p className="text-sm text-muted-foreground">Showing archived items</p>
+            <p className="text-base text-muted-foreground">Showing archived items</p>
           </TabsContent>
         </Tabs>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Navigation Tabs</h3>
+        <TypographyH5 className="mb-4">Navigation Tabs</TypographyH5>
         <Tabs defaultValue="home" className="w-full">
           <TabsList>
             <TabsTrigger value="home">🏠 Home</TabsTrigger>
@@ -132,28 +132,28 @@ export const CompleteShowcase: Story = {
           <TabsContent value="home" className="mt-4">
             <Card>
               <CardContent className="">
-                <p className="text-sm">Home feed and recent updates</p>
+                <p className="text-base">Home feed and recent updates</p>
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="profile" className="mt-4">
             <Card>
               <CardContent className="">
-                <p className="text-sm">Your profile information</p>
+                <p className="text-base">Your profile information</p>
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="messages" className="mt-4">
             <Card>
               <CardContent className="">
-                <p className="text-sm">Your conversations and messages</p>
+                <p className="text-base">Your conversations and messages</p>
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="notifications" className="mt-4">
             <Card>
               <CardContent className="">
-                <p className="text-sm">Recent notifications and alerts</p>
+                <p className="text-base">Recent notifications and alerts</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -161,7 +161,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Many Tabs</h3>
+        <TypographyH5 className="mb-4">Many Tabs</TypographyH5>
         <Tabs defaultValue="1" className="w-full">
           <TabsList>
             <TabsTrigger value="1">Tab 1</TabsTrigger>
@@ -172,22 +172,22 @@ export const CompleteShowcase: Story = {
             <TabsTrigger value="6">Tab 6</TabsTrigger>
           </TabsList>
           <TabsContent value="1" className="mt-4">
-            <p className="text-sm">Content 1</p>
+            <p className="text-base">Content 1</p>
           </TabsContent>
           <TabsContent value="2" className="mt-4">
-            <p className="text-sm">Content 2</p>
+            <p className="text-base">Content 2</p>
           </TabsContent>
           <TabsContent value="3" className="mt-4">
-            <p className="text-sm">Content 3</p>
+            <p className="text-base">Content 3</p>
           </TabsContent>
           <TabsContent value="4" className="mt-4">
-            <p className="text-sm">Content 4</p>
+            <p className="text-base">Content 4</p>
           </TabsContent>
           <TabsContent value="5" className="mt-4">
-            <p className="text-sm">Content 5</p>
+            <p className="text-base">Content 5</p>
           </TabsContent>
           <TabsContent value="6" className="mt-4">
-            <p className="text-sm">Content 6</p>
+            <p className="text-base">Content 6</p>
           </TabsContent>
         </Tabs>
       </div>

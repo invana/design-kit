@@ -88,7 +88,7 @@ export const LayerChip = React.forwardRef<HTMLSpanElement, LayerChipProps>(
     <span
       ref={ref}
       className={cn(
-        "inline-flex max-w-full shrink-0 items-center gap-1.5 font-mono text-meta",
+        "inline-flex max-w-full shrink-0 items-center gap-1.5 font-mono text-sm",
         dim ? "text-muted-foreground/70" : "text-muted-foreground",
         className,
       )}

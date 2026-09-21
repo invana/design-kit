@@ -91,8 +91,8 @@ export const InlineStyles: Story = {
       <section className="space-y-3">
         <Typography.H3>Font Size Inline</Typography.H3>
         <Typography.P>
-          Mix sizes within text: <span className="text-xs">extra small</span>, {' '}
-          <span className="text-sm">small</span>, {' '}
+          Mix sizes within text: <span className="text-sm">extra small</span>, {' '}
+          <span className="text-base">small</span>, {' '}
           <span className="text-base">base</span>, {' '}
           <span className="text-lg">large</span>, and {' '}
           <span className="text-xl">extra large</span> text.

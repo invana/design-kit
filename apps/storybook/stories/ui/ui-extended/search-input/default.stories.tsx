@@ -26,7 +26,7 @@ export const Default: Story = {
     return (
       <div className="w-[400px]">
         <SearchInput value={value} onChange={setValue} />
-        <p className="text-sm text-muted-foreground mt-2">Search value: {value || '(empty)'}</p>
+        <p className="text-base text-muted-foreground mt-2">Search value: {value || '(empty)'}</p>
       </div>
     );
   }

@@ -67,7 +67,7 @@ const PropertiesPanelDemo = () => {
             id: 'summary',
             title: (
               <span className="flex w-full min-w-0 items-center gap-2">
-                <span className="truncate text-meta font-semibold uppercase tracking-wide">
+                <span className="truncate text-sm font-semibold uppercase tracking-wide">
                   Summary
                 </span>
                 <Badge variant="secondary" className="rounded-full px-1.5 py-0">
@@ -85,7 +85,7 @@ const PropertiesPanelDemo = () => {
                     style={{ color: 'var(--color-data-3)' }}
                     className="size-2 shrink-0 rounded-full bg-current"
                   />
-                  <span className="truncate font-mono text-meta">
+                  <span className="truncate font-mono text-sm">
                     obs_20260908_bpcl_01
                   </span>
                 </div>
@@ -122,10 +122,10 @@ const PropertiesPanelDemo = () => {
             id: 'relations',
             title: (
               <span className="flex w-full min-w-0 items-center justify-between gap-2">
-                <span className="truncate text-meta font-semibold uppercase tracking-wide">
+                <span className="truncate text-sm font-semibold uppercase tracking-wide">
                   Relations
                 </span>
-                <span className="shrink-0 text-meta tabular-nums text-muted-foreground">
+                <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
                   {relations.length}
                 </span>
               </span>
@@ -138,16 +138,16 @@ const PropertiesPanelDemo = () => {
                     key={r.type}
                     className="flex items-center gap-2 px-3 py-1 hover:bg-accent/50"
                   >
-                    <span className="shrink-0 font-mono text-meta text-muted-foreground">
+                    <span className="shrink-0 font-mono text-sm text-muted-foreground">
                       {r.type}
                     </span>
-                    <span className="truncate font-mono text-meta text-foreground">
+                    <span className="truncate font-mono text-sm text-foreground">
                       {r.target}
                     </span>
                   </li>
                 ))}
                 {relations.length === 0 && (
-                  <li className="px-3 py-2 text-meta text-muted-foreground">
+                  <li className="px-3 py-2 text-sm text-muted-foreground">
                     All relation types hidden.
                   </li>
                 )}

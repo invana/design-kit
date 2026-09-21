@@ -1,19 +1,5 @@
 import type { StoryObj } from '@storybook/react-vite';
-import {
-  Button,
-  Badge,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  Separator,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from '@invana/ui';
+import { Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Separator, Tabs, TabsContent, TabsList, TabsTrigger, TypographyH4 } from '@invana/ui';
 
 const meta = {
   title: 'Themes/Theme Presets',
@@ -37,7 +23,7 @@ function Showcase() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-heading text-xl">Theme presets showcase</h1>
+        <TypographyH4>Theme presets showcase</TypographyH4>
         <p className="mt-1 text-muted-foreground">
           Switch theme + accent from the toolbar above. Headings are tinted toward each theme's
           signature accent; the brand colour tracks the selected accent.

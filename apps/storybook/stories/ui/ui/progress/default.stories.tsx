@@ -25,7 +25,7 @@ export const Default: Story = {
 
     return (
       <div className="flex w-[300px] flex-col gap-2">
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between text-base">
           <span className="text-muted-foreground">Uploading…</span>
           <span className="font-medium">{value}%</span>
         </div>

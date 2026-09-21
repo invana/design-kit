@@ -19,7 +19,7 @@ export const Default: Story = {
       <Spinner className="size-4" />
       <Spinner className="size-6" />
       <Spinner className="size-8" />
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex items-center gap-2 text-base text-muted-foreground">
         <Spinner className="size-4" />
         Loading…
       </div>

@@ -35,21 +35,21 @@ export const DiagnosisCard = React.forwardRef<
     className={cn("flex flex-col gap-2 border border-destructive/40 bg-card p-2", className)}
     {...props}
   >
-    <div className="flex items-center gap-2 text-meta">
+    <div className="flex items-center gap-2 text-sm">
       <span className="shrink-0 font-medium text-destructive">diagnosis</span>
       <span className="truncate font-mono text-muted-foreground">{code}</span>
     </div>
     {children != null ? <div>{children}</div> : null}
     {attempted != null || target != null ? (
       <div className="flex flex-col gap-1 border border-border bg-muted/40 p-1.5">
-        <span className="text-meta text-muted-foreground">what was tried</span>
+        <span className="text-sm text-muted-foreground">what was tried</span>
         {attempted != null ? (
-          <code className="whitespace-pre-wrap break-all font-mono text-meta">
+          <code className="whitespace-pre-wrap break-all font-mono text-sm">
             {attempted}
           </code>
         ) : null}
         {target != null ? (
-          <span className="text-meta text-muted-foreground">{target}</span>
+          <span className="text-sm text-muted-foreground">{target}</span>
         ) : null}
       </div>
     ) : null}

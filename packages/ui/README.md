@@ -33,7 +33,7 @@ import '@invana/ui/styles.css';
 ```
 
 The precompiled sheet gives you CSS custom properties but **not** the `@theme` tokens — your own
-Tailwind will regenerate `text-sm` at its stock `0.875rem` rather than the kit's alias. Prefer the
+Tailwind will regenerate `text-sm` at its stock `0.875rem` rather than the kit's value. Prefer the
 first form when you have a Tailwind build.
 
 ## Usage
@@ -83,10 +83,16 @@ Also exported: `cn` and the `useOverflowItems` hook.
 
 ## Type scale
 
-Components declare no font size. Default text inherits the root, and text that is deliberately
-subordinate — a count, a timing, a row's subtitle — uses `text-meta`. Setting `html` to 13px gives
-you an application; 16px gives you a site, and every component follows. Don't hard-code
-`text-sm` / `text-xs` in consuming code: they are compatibility aliases, not options.
+Three rungs — `base` · `sm` · `xs` — and the root is the only dial.
+
+Components declare no font size: default text inherits the root. Text that is deliberately
+subordinate — a count, a timing, a row's subtitle — uses `text-sm`, and the genuinely small uses
+`text-xs`. Setting `html` to 13px gives you an application (13 / 12 / 11); 16px gives you a site
+(16 / 14.8 / 13.5), and every component follows, because each step is a ratio of the root.
+
+There is no `text-meta`. It was a third name over the same 12px as `text-xs`, while `text-sm` was an
+alias of `base` — four class names over two sizes, with `text-sm` not meaning small. Retiring it was
+a 1:1 rename, so no pixel moved.
 
 ## Documentation
 

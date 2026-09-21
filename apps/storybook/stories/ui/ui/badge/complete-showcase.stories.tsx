@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Badge } from '@invana/ui';
+import { Badge, TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Badge> = {
   title: 'UI/UI/Badge',
@@ -25,7 +25,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="flex flex-col gap-8 p-6">
       <div>
-        <h3 className="mb-4 text-lg font-semibold">All Variants</h3>
+        <TypographyH5 className="mb-4">All Variants</TypographyH5>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="default">Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
@@ -35,7 +35,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Status Badges</h3>
+        <TypographyH5 className="mb-4">Status Badges</TypographyH5>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="default">Active</Badge>
           <Badge variant="secondary">Pending</Badge>
@@ -45,7 +45,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Priority Badges</h3>
+        <TypographyH5 className="mb-4">Priority Badges</TypographyH5>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="destructive">High</Badge>
           <Badge variant="default">Medium</Badge>
@@ -54,7 +54,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Category Tags</h3>
+        <TypographyH5 className="mb-4">Category Tags</TypographyH5>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="outline">Design</Badge>
           <Badge variant="outline">Development</Badge>
@@ -65,7 +65,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">With Counts</h3>
+        <TypographyH5 className="mb-4">With Counts</TypographyH5>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="default">New 3</Badge>
           <Badge variant="secondary">Updates 12</Badge>

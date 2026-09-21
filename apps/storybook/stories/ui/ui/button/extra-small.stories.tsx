@@ -38,7 +38,7 @@ export const ExtraSmall: Story = {
         <Button size="sm">sm</Button>
         <Button size="default">default</Button>
       </div>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-meta text-muted-foreground">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm text-muted-foreground">
         <dt>xs / icon-xs</dt>
         <dd>24px — the dense tier, new</dd>
         <dt>sm</dt>

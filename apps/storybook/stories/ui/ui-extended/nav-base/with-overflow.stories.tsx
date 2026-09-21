@@ -138,7 +138,7 @@ export const WithOverflow: Story = {
     return (
       <div className="flex flex-col gap-5">
         <label className="flex flex-col gap-1" htmlFor="nav-overflow-width">
-          <span className="text-meta text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             Strip width — <span className="font-mono tabular-nums">{width}px</span>
           </span>
           <input
@@ -156,8 +156,8 @@ export const WithOverflow: Story = {
           {rows.map((row) => (
             <div key={row.variant} className="flex flex-col gap-1">
               <div className="flex items-baseline gap-2">
-                <span className="font-mono text-meta">{row.title}</span>
-                <span className="text-meta text-muted-foreground">{row.note}</span>
+                <span className="font-mono text-sm">{row.title}</span>
+                <span className="text-sm text-muted-foreground">{row.note}</span>
               </div>
               {/* The strip needs a bounded width to measure against — here the
                   bordered box provides it. In an app that is the panel header. */}
@@ -178,7 +178,7 @@ export const WithOverflow: Story = {
           ))}
         </div>
 
-        <p className="max-w-[70ch] text-meta text-muted-foreground">
+        <p className="max-w-[70ch] text-sm text-muted-foreground">
           Every existing consumer is untouched: with neither{' '}
           <code className="font-mono">overflow</code> nor{' '}
           <code className="font-mono">selectionMode</code> set, <code className="font-mono">NavItems</code>{' '}

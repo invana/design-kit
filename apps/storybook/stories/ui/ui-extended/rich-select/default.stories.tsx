@@ -54,7 +54,7 @@ export const Default: Story = {
             },
           ]}
         />
-        <p className="text-sm text-muted-foreground mt-3">Selected: {value}</p>
+        <p className="text-base text-muted-foreground mt-3">Selected: {value}</p>
       </div>
     );
   },

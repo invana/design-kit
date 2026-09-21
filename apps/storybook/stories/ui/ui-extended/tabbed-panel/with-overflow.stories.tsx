@@ -55,7 +55,7 @@ const Body = ({ title, note }: { title: string; note: string }) => (
         </Badge>
         <span className="font-semibold">{title}</span>
       </div>
-      <p className="text-meta text-muted-foreground">{note}</p>
+      <p className="text-sm text-muted-foreground">{note}</p>
     </div>
     <PropertyList>
       <PropertyRow label="nodes">10</PropertyRow>
@@ -73,7 +73,7 @@ const FindBody = () => {
   return (
     <div className="flex flex-col gap-3 p-3">
       <label className="flex flex-col gap-1">
-        <span className="text-meta text-muted-foreground">Find in canvas</span>
+        <span className="text-sm text-muted-foreground">Find in canvas</span>
         <input
           id="overflow-story-find"
           value={q}
@@ -83,7 +83,7 @@ const FindBody = () => {
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </label>
-      <p className="text-meta text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         {q ? `Searching for “${q}” — this survives a tab switch.` : 'Nothing searched yet.'}
       </p>
     </div>
@@ -122,7 +122,7 @@ export const WithOverflow: Story = {
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-end gap-6">
           <label className="flex flex-col gap-1" htmlFor="overflow-story-width">
-            <span className="text-meta text-muted-foreground">
+            <span className="text-sm text-muted-foreground">
               Panel width — <span className="font-mono tabular-nums">{width}px</span>
             </span>
             <input
@@ -137,7 +137,7 @@ export const WithOverflow: Story = {
           </label>
 
           <label className="flex flex-col gap-1" htmlFor="overflow-story-count">
-            <span className="text-meta text-muted-foreground">
+            <span className="text-sm text-muted-foreground">
               Tabs — <span className="font-mono tabular-nums">{count}</span>
             </span>
             <input
@@ -168,7 +168,7 @@ export const WithOverflow: Story = {
           />
         </div>
 
-        <p className="max-w-[70ch] text-meta text-muted-foreground">
+        <p className="max-w-[70ch] text-sm text-muted-foreground">
           Without <code className="font-mono">overflow</code> the strip would set this panel's
           minimum width and the dashed box would scroll sideways instead of narrowing.
         </p>

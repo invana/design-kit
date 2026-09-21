@@ -46,7 +46,7 @@ export const DiffRow = React.forwardRef<HTMLLIElement, DiffRowProps>(
   ({ op = "add", kind, className, children, ...props }, ref) => (
     <li
       ref={ref}
-      className={cn("flex items-baseline gap-2 py-0.5 text-meta", className)}
+      className={cn("flex items-baseline gap-2 py-0.5 text-sm", className)}
       {...props}
     >
       <span className={cn("w-3 shrink-0 text-center font-mono", OP_CLASS[op])}>

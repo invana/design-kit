@@ -338,7 +338,7 @@ export const ThemeControls: React.FC<ThemeControlsProps> = ({
       {showThemeSelector && (
         <>
           <div className="hidden md:flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">Theme:</span>
+            <span className="text-base text-muted-foreground">Theme:</span>
             <ThemeSelector
               currentTheme={currentTheme}
               onThemeChange={handleThemeChange}
@@ -353,7 +353,7 @@ export const ThemeControls: React.FC<ThemeControlsProps> = ({
       {showAccentSelector && (
         <>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground hidden sm:inline">
+            <span className="text-base text-muted-foreground hidden sm:inline">
               Accent:
             </span>
             <AccentSelector

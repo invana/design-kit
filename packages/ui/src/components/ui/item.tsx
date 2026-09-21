@@ -155,7 +155,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
       className={cn(
         "text-muted-foreground line-clamp-2 text-balance font-normal leading-normal",
         // A dense row's subtitle is one line of meta, not a wrapped paragraph.
-        "group-data-[size=xs]/item:line-clamp-1 group-data-[size=xs]/item:text-meta",
+        "group-data-[size=xs]/item:line-clamp-1 group-data-[size=xs]/item:text-sm",
         "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
         className
       )}

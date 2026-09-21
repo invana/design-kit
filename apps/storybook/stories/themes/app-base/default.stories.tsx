@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayoutBase } from '@invana/themes/app-base/layout';
-import { Button, Badge, Avatar } from '@invana/ui';
+import { Avatar, Badge, Button, TypographyH1, TypographyH4 } from '@invana/ui';
 import { Input } from '@invana/forms';
 import { 
   Home, 
@@ -72,7 +72,7 @@ export const Default: Story = {
       <div className="h-full overflow-auto p-6">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+            <TypographyH1>Dashboard</TypographyH1>
             <p className="text-muted-foreground">Welcome to your application dashboard</p>
           </div>
           
@@ -84,17 +84,17 @@ export const Default: Story = {
               { title: 'Conversions', value: '573', change: '+5%' },
             ].map((stat, i) => (
               <div key={i} className="rounded-lg border bg-card p-6">
-                <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
+                <div className="text-base font-medium text-muted-foreground">{stat.title}</div>
                 <div className="mt-2 flex items-baseline gap-2">
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <Badge variant="secondary" className="text-xs">{stat.change}</Badge>
+                  <Badge variant="secondary" className="text-sm">{stat.change}</Badge>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="rounded-lg border bg-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+            <TypographyH4 className="mb-4">Recent Activity</TypographyH4>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4 p-3 rounded-md hover:bg-accent">
@@ -103,7 +103,7 @@ export const Default: Story = {
                   </Avatar>
                   <div className="flex-1">
                     <div className="font-medium">User {i} completed an action</div>
-                    <div className="text-sm text-muted-foreground">{i} minutes ago</div>
+                    <div className="text-base text-muted-foreground">{i} minutes ago</div>
                   </div>
                 </div>
               ))}
@@ -114,17 +114,17 @@ export const Default: Story = {
     ),
     footer: {
       left: (
-        <div className="text-xs text-muted-foreground px-3">
+        <div className="text-sm text-muted-foreground px-3">
           © 2025 InvanaApp
         </div>
       ),
       center: (
-        <div className="text-xs text-muted-foreground">
+        <div className="text-sm text-muted-foreground">
           v1.0.0
         </div>
       ),
       right: (
-        <div className="text-xs text-muted-foreground px-3">
+        <div className="text-sm text-muted-foreground px-3">
           Status: <span className="text-green-500">●</span> All systems operational
         </div>
       ),

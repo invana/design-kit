@@ -70,7 +70,7 @@ export const EmptyStateLock = React.forwardRef<
   <span
     ref={ref}
     className={cn(
-      "inline-flex h-6 items-center gap-1.5 border border-dashed border-border px-2 text-meta text-muted-foreground [&_svg]:size-3",
+      "inline-flex h-6 items-center gap-1.5 border border-dashed border-border px-2 text-sm text-muted-foreground [&_svg]:size-3",
       className,
     )}
     {...props}

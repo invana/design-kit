@@ -194,6 +194,17 @@ const formatElapsed = (ms: number): string => {
  * bar and takes a struck label, because the gap it would otherwise leave is
  * indistinguishable from a stretch of time that never reached for that layer.
  *
+ * **A row nothing spent is drawn muted, never dropped.** A band no task
+ * touched recedes to the muted ground with its chip and its note, and so does a
+ * participant row under an open band — `role: extract` declared and never
+ * reached reads as *this run did not get that far*, not as an ordinary empty
+ * row. A dropped row would say nothing at all, and *this plan never reaches for
+ * a cache* is a finding.
+ *
+ * **Refused is not unspent.** A row whose only task was refused keeps its full
+ * weight: being stopped from reaching a participant and never reaching for one
+ * are the two facts this drawing exists to separate.
+ *
  * **The spine band is always drawn**, with its wire running the whole axis: the
  * runtime's own dispatches are what the other bands are timed against, and it
  * is never governed.
@@ -340,7 +351,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
           <div className="flex items-baseline gap-2">
             <span
               className={cn(
-                "min-w-0 flex-1 truncate font-mono text-sm",
+                "min-w-0 flex-1 truncate font-mono text-base",
                 state === "refused" && "text-destructive line-through",
               )}
             >
@@ -348,7 +359,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             </span>
             <span
               className={cn(
-                "shrink-0 text-meta",
+                "shrink-0 text-sm",
                 state === "refused"
                   ? "text-destructive"
                   : "text-muted-foreground",
@@ -357,7 +368,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
               {STATE_LABEL[state]}
             </span>
           </div>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 text-meta">
+          <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 text-sm">
             <dt className="text-muted-foreground">layer</dt>
             <dd className="min-w-0">
               <LayerChip layer={item.layer} />
@@ -446,14 +457,14 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
           <span className="flex min-w-0 flex-col justify-center">
             <span
               className={cn(
-                "truncate font-mono text-meta",
+                "truncate font-mono text-sm",
                 state === "refused" && "text-destructive line-through",
               )}
             >
               {item.label}
             </span>
             {compact ? null : (
-              <span className="truncate text-meta text-muted-foreground">
+              <span className="truncate text-sm text-muted-foreground">
                 {item.note ?? (state === "declared" ? null : STATE_LABEL[state])}
               </span>
             )}
@@ -505,7 +516,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     onClick={() =>
                       setShut(allShut ? [] : withParts.map((b) => b.layer))
                     }
-                    className="-ml-1 flex items-center gap-0.5 rounded-xs px-1 text-meta text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    className="-ml-1 flex items-center gap-0.5 rounded-xs px-1 text-sm text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   >
                     {allShut ? (
                       <ChevronRight aria-hidden className="size-3 shrink-0" />
@@ -515,9 +526,9 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     {allShut ? "expand all" : "collapse all"}
                   </button>
                 ) : (
-                  <span className="text-meta text-muted-foreground">layer</span>
+                  <span className="text-sm text-muted-foreground">layer</span>
                 )}
-                <span className="ml-auto text-meta text-muted-foreground/70">
+                <span className="ml-auto text-sm text-muted-foreground/70">
                   {scale === "seq" ? "step" : "elapsed"}
                 </span>
               </>,
@@ -531,7 +542,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     key={value}
                     style={atEnd ? { right: 0 } : { left: `${pct(value)}%` }}
                     className={cn(
-                      "absolute inset-y-0 text-meta text-muted-foreground",
+                      "absolute inset-y-0 text-sm text-muted-foreground",
                       atEnd
                         ? "border-border/60 border-r pr-1"
                         : "border-border/60 border-l pl-1",
@@ -549,7 +560,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             ? row(
                 "brackets",
                 label(
-                  <span className="text-meta text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     its bound
                   </span>,
                   "min-h-0 py-1",
@@ -562,7 +573,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                         left: `${pct(bracket.start)}%`,
                         width: `${pct(bracket.end) - pct(bracket.start)}%`,
                       }}
-                      className="absolute inset-y-1 flex items-center justify-center truncate rounded-xs border border-border border-dashed px-1 text-meta text-muted-foreground"
+                      className="absolute inset-y-1 flex items-center justify-center truncate rounded-xs border border-border border-dashed px-1 text-sm text-muted-foreground"
                     >
                       {bracket.label}
                     </span>
@@ -629,7 +640,12 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                       {band.note ? (
                         <span
                           title={band.note}
-                          className="ml-auto min-w-0 truncate text-meta text-muted-foreground"
+                          className={cn(
+                            "ml-auto min-w-0 truncate text-sm",
+                            dim
+                              ? "text-muted-foreground/70"
+                              : "text-muted-foreground",
+                          )}
                         >
                           {band.note}
                         </span>
@@ -647,16 +663,34 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                   </>,
                   dim && !spine,
                 )}
-                {(isShut ? [] : parts).map((part) =>
-                  row(
+                {(isShut ? [] : parts).map((part) => {
+                  const spent = itemsOf(band.layer, part.id)
+                  // Unspent, not missing. A participant the run never reached
+                  // recedes exactly as far as a band nothing touched, and no
+                  // further: it is still named, and it is still in the list a
+                  // world is checked against.
+                  const unspent = spent.length === 0
+                  return row(
                     `${band.layer}-${part.id}`,
                     label(
                       <span className="flex min-w-0 flex-col" title={part.label}>
-                        <span className="truncate font-mono text-meta">
+                        <span
+                          className={cn(
+                            "truncate font-mono text-sm",
+                            unspent && "text-muted-foreground/70",
+                          )}
+                        >
                           {part.label}
                         </span>
                         {part.note ? (
-                          <span className="truncate text-meta text-muted-foreground">
+                          <span
+                            className={cn(
+                              "truncate text-sm",
+                              unspent
+                                ? "text-muted-foreground/70"
+                                : "text-muted-foreground",
+                            )}
+                          >
                             {part.note}
                           </span>
                         ) : null}
@@ -664,9 +698,10 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                       undefined,
                       true,
                     ),
-                    itemsOf(band.layer, part.id).map((item) => bar(item)),
-                  ),
-                )}
+                    spent.map((item) => bar(item)),
+                    unspent,
+                  )
+                })}
               </React.Fragment>
             )
           })}

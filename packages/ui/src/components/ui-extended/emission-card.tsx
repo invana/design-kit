@@ -58,7 +58,7 @@ export const EmissionHeader = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-meta",
+      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-sm",
       className,
     )}
     {...props}

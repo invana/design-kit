@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Card, CardContent, CardDescription, CardFooter, 
-  CardHeader, CardTitle, CardWithHeader, Button } from '@invana/ui';
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardWithHeader, TypographyH3, TypographyH5 } from '@invana/ui';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 
@@ -31,12 +30,12 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-6">Card Component Showcase</h2>
+        <TypographyH3 className="mb-6">Card Component Showcase</TypographyH3>
       </div>
 
       {/* Basic Structures */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Basic Structures</h3>
+        <TypographyH5 className="mb-4">Basic Structures</TypographyH5>
         <div className="grid grid-cols-3 gap-4">
           <Card className="w-full">
             <CardHeader>
@@ -68,7 +67,7 @@ export const CompleteShowcase: Story = {
 
       {/* Metrics Cards */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Metrics & Statistics</h3>
+        <TypographyH5 className="mb-4">Metrics & Statistics</TypographyH5>
         <div className="grid grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -77,7 +76,7 @@ export const CompleteShowcase: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">2,543</div>
-              <p className="text-xs text-green-600 mt-1">↑ 12.5%</p>
+              <p className="text-sm text-green-600 mt-1">↑ 12.5%</p>
             </CardContent>
           </Card>
           <Card>
@@ -87,7 +86,7 @@ export const CompleteShowcase: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$45.2K</div>
-              <p className="text-xs text-green-600 mt-1">↑ 8.3%</p>
+              <p className="text-sm text-green-600 mt-1">↑ 8.3%</p>
             </CardContent>
           </Card>
           <Card>
@@ -97,7 +96,7 @@ export const CompleteShowcase: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">3.24%</div>
-              <p className="text-xs text-red-600 mt-1">↓ 2.1%</p>
+              <p className="text-sm text-red-600 mt-1">↓ 2.1%</p>
             </CardContent>
           </Card>
           <Card>
@@ -107,7 +106,7 @@ export const CompleteShowcase: Story = {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">573</div>
-              <p className="text-xs text-muted-foreground mt-1">users online</p>
+              <p className="text-sm text-muted-foreground mt-1">users online</p>
             </CardContent>
           </Card>
         </div>
@@ -115,7 +114,7 @@ export const CompleteShowcase: Story = {
 
       {/* Feature Cards */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Feature Cards</h3>
+        <TypographyH5 className="mb-4">Feature Cards</TypographyH5>
         <div className="grid grid-cols-3 gap-4">
           <Card>
             <CardHeader>
@@ -158,7 +157,7 @@ export const CompleteShowcase: Story = {
 
       {/* User Cards */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">User Profile Cards</h3>
+        <TypographyH5 className="mb-4">User Profile Cards</TypographyH5>
         <div className="grid grid-cols-2 gap-4">
           <Card>
             <CardHeader>

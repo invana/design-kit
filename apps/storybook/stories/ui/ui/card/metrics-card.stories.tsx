@@ -35,7 +35,7 @@ export const MetricsCard: Story = {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">$45,231.89</div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             <span className="text-green-600">↑ 20.1%</span> from last month
           </p>
           <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">

@@ -24,7 +24,7 @@ export const ListAnchor: Story = {
           <a
             href="#"
             onClick={(e) => e.preventDefault()}
-            className="corner-hint block w-full rounded-control px-3 py-2 text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:text-foreground"
+            className="corner-hint block w-full rounded-control px-3 py-2 text-base text-muted-foreground outline-none hover:text-foreground focus-visible:text-foreground"
           >
             {item}
           </a>

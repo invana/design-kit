@@ -27,13 +27,13 @@ export const Default: Story = {
         <TabsTrigger value="tab3">Settings</TabsTrigger>
       </TabsList>
       <TabsContent value="tab1">
-        <p className="text-sm text-muted-foreground">Manage your account settings.</p>
+        <p className="text-base text-muted-foreground">Manage your account settings.</p>
       </TabsContent>
       <TabsContent value="tab2">
-        <p className="text-sm text-muted-foreground">Change your password here.</p>
+        <p className="text-base text-muted-foreground">Change your password here.</p>
       </TabsContent>
       <TabsContent value="tab3">
-        <p className="text-sm text-muted-foreground">Update your preferences.</p>
+        <p className="text-base text-muted-foreground">Update your preferences.</p>
       </TabsContent>
     </Tabs>
   ),

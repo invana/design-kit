@@ -32,7 +32,7 @@ export const Default: Story = {
               <li>
                 <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
                   <div className="font-medium">Graph Explorer</div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-base text-muted-foreground">
                     Visualize and traverse your graph data.
                   </p>
                 </NavigationMenuLink>
@@ -40,7 +40,7 @@ export const Default: Story = {
               <li>
                 <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
                   <div className="font-medium">Dashboards</div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-base text-muted-foreground">
                     Build interactive analytics views.
                   </p>
                 </NavigationMenuLink>

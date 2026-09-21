@@ -76,7 +76,7 @@ const PinnedActionsDemo = () => {
               {
                 name: `Page ${page + 1} of ${PAGES.length}`,
                 label: `${page + 1}/${PAGES.length}`,
-                className: 'text-meta tabular-nums',
+                className: 'text-sm tabular-nums',
               },
               {
                 name: 'Next page',
@@ -99,7 +99,7 @@ const PinnedActionsDemo = () => {
             title: 'Stream',
             actionsOnHover: false,
             content: (
-              <ul className="py-1 font-mono text-meta">
+              <ul className="py-1 font-mono text-sm">
                 {[
                   '12:04:11  tick  BPCL   328.40  +0.6%',
                   '12:04:09  tick  IOC    141.15  −0.2%',
@@ -134,7 +134,7 @@ const PinnedActionsDemo = () => {
                   (row) => (
                     <li
                       key={row}
-                      className="truncate px-2 py-1 font-mono text-meta text-muted-foreground"
+                      className="truncate px-2 py-1 font-mono text-sm text-muted-foreground"
                     >
                       {row}
                     </li>

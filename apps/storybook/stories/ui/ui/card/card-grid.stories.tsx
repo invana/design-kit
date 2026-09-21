@@ -33,7 +33,7 @@ export const CardGrid: Story = {
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">2,543</div>
-          <p className="text-xs text-green-600">↑ 12% vs last week</p>
+          <p className="text-sm text-green-600">↑ 12% vs last week</p>
         </CardContent>
       </Card>
       <Card>
@@ -42,7 +42,7 @@ export const CardGrid: Story = {
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">$12.4K</div>
-          <p className="text-xs text-green-600">↑ 8% vs last week</p>
+          <p className="text-sm text-green-600">↑ 8% vs last week</p>
         </CardContent>
       </Card>
       <Card>
@@ -51,7 +51,7 @@ export const CardGrid: Story = {
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">3.24%</div>
-          <p className="text-xs text-red-600">↓ 2% vs last week</p>
+          <p className="text-sm text-red-600">↓ 2% vs last week</p>
         </CardContent>
       </Card>
     </div>

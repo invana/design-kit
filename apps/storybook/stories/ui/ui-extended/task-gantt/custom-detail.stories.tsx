@@ -35,10 +35,10 @@ const TASKS: TaskGanttTask[] = [
     detail: (
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <span className="min-w-0 flex-1 truncate font-mono text-meta font-medium">
+          <span className="min-w-0 flex-1 truncate font-mono text-sm font-medium">
             execute_graph_query
           </span>
-          <span className="shrink-0 font-mono text-meta text-muted-foreground tabular-nums">3.4s</span>
+          <span className="shrink-0 font-mono text-sm text-muted-foreground tabular-nums">3.4s</span>
         </div>
         <BarChartH
           caption="rows per lane"
@@ -88,7 +88,7 @@ export const CustomDetail: Story = {
             task.detail ?? (
               <div className="flex flex-col gap-2">
                 <TaskGanttDetailCard task={task} />
-                <span className="border-t border-border pt-1.5 text-meta text-muted-foreground">
+                <span className="border-t border-border pt-1.5 text-sm text-muted-foreground">
                   part of <span className="font-mono">market-brief v1</span>
                 </span>
               </div>

@@ -25,8 +25,8 @@ export const Sizes: Story = {
           <span className="flex w-4 justify-center">
             <StatusDot tone="success" size={size} />
           </span>
-          <span className="w-6 text-meta text-muted-foreground">{size}</span>
-          <span className="text-xs">{why}</span>
+          <span className="w-6 text-sm text-muted-foreground">{size}</span>
+          <span className="text-sm">{why}</span>
         </div>
       ))}
     </div>

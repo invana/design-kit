@@ -54,7 +54,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
         <div className="flex items-baseline gap-2">
           <h4 className="font-medium">{title}</h4>
           {source != null ? (
-            <span className="text-meta text-muted-foreground">{source}</span>
+            <span className="text-sm text-muted-foreground">{source}</span>
           ) : null}
         </div>
         <div className="border border-border bg-muted/30 p-2">{children}</div>
@@ -65,7 +65,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
           <div className="flex items-baseline gap-2">
             <h4 className="font-medium">{evidenceTitle}</h4>
             {evidenceMeta != null ? (
-              <span className="text-meta text-muted-foreground">{evidenceMeta}</span>
+              <span className="text-sm text-muted-foreground">{evidenceMeta}</span>
             ) : null}
           </div>
           <div className="overflow-hidden border border-border">{evidence}</div>
@@ -73,7 +73,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
       ) : null}
 
       {consequence != null ? (
-        <p className="text-meta text-muted-foreground">{consequence}</p>
+        <p className="text-sm text-muted-foreground">{consequence}</p>
       ) : null}
       {actions ? <div className="flex flex-wrap items-center gap-1.5">{actions}</div> : null}
     </div>

@@ -28,7 +28,7 @@ export const PanelSearch: Story = {
     return (
       <div className="w-[320px] space-y-6">
         <div className="space-y-1.5">
-          <p className="text-meta text-muted-foreground">inputSize="sm" · 26px</p>
+          <p className="text-sm text-muted-foreground">inputSize="sm" · 26px</p>
           <div className="border border-border bg-card p-1.5">
             <SearchInput
               inputSize="sm"
@@ -39,7 +39,7 @@ export const PanelSearch: Story = {
           </div>
         </div>
         <div className="space-y-1.5">
-          <p className="text-meta text-muted-foreground">inputSize="default" · 40px</p>
+          <p className="text-sm text-muted-foreground">inputSize="default" · 40px</p>
           <SearchInput value={page} onChange={setPage} placeholder="Search graphs" />
         </div>
       </div>

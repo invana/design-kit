@@ -82,7 +82,7 @@ export const RuleRow = React.forwardRef<HTMLDivElement, RuleRowProps>(
       >
         <span
           className={cn(
-            "font-mono text-meta",
+            "font-mono text-sm",
             allow ? "text-muted-foreground" : "font-semibold text-destructive",
           )}
         >
@@ -97,13 +97,13 @@ export const RuleRow = React.forwardRef<HTMLDivElement, RuleRowProps>(
         {excluded.length || sliced || sends.length ? (
           <div className="col-start-2 flex min-w-0 flex-col gap-0.5">
             {excluded.length ? (
-              <span className="truncate text-meta text-muted-foreground">
+              <span className="truncate text-sm text-muted-foreground">
                 excludes {excluded.join(", ")}
               </span>
             ) : null}
             {sliced ? <SliceSummary select={select} variant="line" /> : null}
             {sends.length ? (
-              <span className="truncate text-meta text-muted-foreground">
+              <span className="truncate text-sm text-muted-foreground">
                 may send {sends.join(", ")}
               </span>
             ) : null}

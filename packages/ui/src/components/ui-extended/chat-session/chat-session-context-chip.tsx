@@ -35,7 +35,7 @@ export function ChatSessionContextChip({
   return (
     <div
       className={cn(
-        "flex min-h-[26px] items-center gap-1.5 border border-border bg-muted/40 px-1.5 text-meta",
+        "flex min-h-[26px] items-center gap-1.5 border border-border bg-muted/40 px-1.5 text-sm",
         className,
       )}
       {...props}

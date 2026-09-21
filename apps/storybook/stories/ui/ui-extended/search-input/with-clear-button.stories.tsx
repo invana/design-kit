@@ -37,7 +37,7 @@ export const WithClearButton: Story = {
             </button>
           )}
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-base text-muted-foreground mt-2">
           {value ? `Searching for: "${value}"` : 'Type to search...'}
         </p>
       </div>

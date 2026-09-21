@@ -99,7 +99,7 @@ export const AddressChip = React.forwardRef<HTMLSpanElement, AddressChipProps>(
     )
 
     const shell = cn(
-      "inline-flex min-w-0 max-w-full items-baseline font-mono text-meta",
+      "inline-flex min-w-0 max-w-full items-baseline font-mono text-sm",
       TONE[tone],
       className,
     )

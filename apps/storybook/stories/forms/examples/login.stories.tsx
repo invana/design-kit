@@ -1,15 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@invana/ui';
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Link } from '@invana/ui';
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
@@ -53,13 +45,14 @@ export const Login: Story = {
                 size="md"
               />
 
-              <a
+              <Link
                 href="#"
-                className="block text-right text-xs text-muted-foreground hover:text-foreground"
+                variant="quiet"
+                className="block text-right"
                 onClick={(e) => e.preventDefault()}
               >
                 Forgot password?
-              </a>
+              </Link>
 
               {submitted && (
                 <pre className="overflow-auto rounded-md border bg-muted/40 p-2 text-[10px]">
@@ -72,11 +65,11 @@ export const Login: Story = {
               <Button type="submit" className="w-full">
                 Sign in
               </Button>
-              <p className="text-center text-xs text-muted-foreground">
+              <p className="text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{' '}
-                <a href="#" className="text-foreground underline" onClick={(e) => e.preventDefault()}>
+                <Link href="#" variant="underlined" onClick={(e) => e.preventDefault()}>
                   Sign up
-                </a>
+                </Link>
               </p>
             </CardFooter>
           </form>

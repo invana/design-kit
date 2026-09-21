@@ -113,11 +113,11 @@ export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
         {...props}
       >
         <div className="flex min-w-0 items-baseline gap-2">
-          <span className="min-w-0 truncate text-sm font-medium text-foreground">
+          <span className="min-w-0 truncate text-base font-medium text-foreground">
             {name}
           </span>
           {usage ? (
-            <span className="ml-auto shrink-0 text-meta text-muted-foreground">
+            <span className="ml-auto shrink-0 text-sm text-muted-foreground">
               used in {usage.runs} run{usage.runs === 1 ? "" : "s"}
               {usage.lastUsed ? ` · last ${usage.lastUsed}` : ""}
             </span>
@@ -125,7 +125,7 @@ export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
         </div>
 
         {narrows.length ? (
-          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-meta text-muted-foreground">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
             {narrows.map((n, i) => (
               <React.Fragment key={`${n.kind}-${i}`}>
                 {i > 0 ? <span aria-hidden className="opacity-40">·</span> : null}
@@ -134,7 +134,7 @@ export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
             ))}
           </div>
         ) : (
-          <span className="text-meta text-muted-foreground/70">
+          <span className="text-sm text-muted-foreground/70">
             narrows nothing — the whole model, inside the guardrails
           </span>
         )}

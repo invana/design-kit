@@ -29,14 +29,14 @@ export const SettingsPanel: Story = {
         <AccordionContent>
           <div className="space-y-3">
             <div>
-              <label className="text-sm font-medium">Email Address</label>
+              <label className="text-base font-medium">Email Address</label>
               <input type="email" className="w-full mt-1 px-3 py-2 border rounded-md" defaultValue="user@example.com" />
             </div>
             <div>
-              <label className="text-sm font-medium">Username</label>
+              <label className="text-base font-medium">Username</label>
               <input type="text" className="w-full mt-1 px-3 py-2 border rounded-md" defaultValue="johndoe" />
             </div>
-            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm">Save Changes</button>
+            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-base">Save Changes</button>
           </div>
         </AccordionContent>
       </AccordionItem>
@@ -46,19 +46,19 @@ export const SettingsPanel: Story = {
           <div className="space-y-3">
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked />
-              <span className="text-sm">Email notifications</span>
+              <span className="text-base">Email notifications</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked />
-              <span className="text-sm">Push notifications</span>
+              <span className="text-base">Push notifications</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" />
-              <span className="text-sm">SMS notifications</span>
+              <span className="text-base">SMS notifications</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked />
-              <span className="text-sm">Weekly digest</span>
+              <span className="text-base">Weekly digest</span>
             </label>
           </div>
         </AccordionContent>
@@ -69,17 +69,17 @@ export const SettingsPanel: Story = {
           <div className="space-y-3">
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked />
-              <span className="text-sm">Make profile public</span>
+              <span className="text-base">Make profile public</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked />
-              <span className="text-sm">Two-factor authentication</span>
+              <span className="text-base">Two-factor authentication</span>
             </label>
             <label className="flex items-center gap-2">
               <input type="checkbox" />
-              <span className="text-sm">Share activity status</span>
+              <span className="text-base">Share activity status</span>
             </label>
-            <button className="text-sm text-destructive hover:underline">Delete Account</button>
+            <button className="text-base text-destructive hover:underline">Delete Account</button>
           </div>
         </AccordionContent>
       </AccordionItem>

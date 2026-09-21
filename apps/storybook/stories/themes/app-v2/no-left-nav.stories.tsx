@@ -25,8 +25,8 @@ const Region = ({
   className?: string;
 }) => (
   <div className={`h-full w-full p-4 ${className ?? ''}`}>
-    <div className="text-sm font-semibold">{label}</div>
-    {hint && <div className="mt-1 text-sm text-muted-foreground">{hint}</div>}
+    <div className="text-base font-semibold">{label}</div>
+    {hint && <div className="mt-1 text-base text-muted-foreground">{hint}</div>}
   </div>
 );
 
@@ -47,7 +47,7 @@ export const NoLeftNav: Story = {
           </div>
         ),
         center: (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-base text-muted-foreground">
             leftNav omitted — no activity bar
           </div>
         ),
@@ -80,7 +80,7 @@ export const NoLeftNav: Story = {
         ),
       },
       footer: {
-        className: "!h-[25px] px-2 text-sm",
+        className: "!h-[25px] px-2 text-base",
         leftNavItems: [
           { name: "Branch", icon: GitBranch, label: "main" },
         ],

@@ -42,23 +42,23 @@ export const Default: Story = {
         </SheetHeader>
         <div className="grid gap-4 py-6">
           <div className="grid gap-2">
-            <label htmlFor="workspace" className="text-sm font-medium">
+            <label htmlFor="workspace" className="text-base font-medium">
               Workspace name
             </label>
             <input
               id="workspace"
               defaultValue="Invana"
-              className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-9 rounded-md border border-input bg-transparent px-3 text-base shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
             />
           </div>
           <div className="grid gap-2">
-            <label htmlFor="slug" className="text-sm font-medium">
+            <label htmlFor="slug" className="text-base font-medium">
               URL slug
             </label>
             <input
               id="slug"
               defaultValue="invana"
-              className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-9 rounded-md border border-input bg-transparent px-3 text-base shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
             />
           </div>
         </div>

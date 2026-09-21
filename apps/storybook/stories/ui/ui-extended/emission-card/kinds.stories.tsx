@@ -20,8 +20,8 @@ export const Kinds: Story = {
       <EmissionCard kind="metric" template="stat-compact@1" citation="cite · 214 records">
         <div className="flex flex-col gap-0.5 p-2">
           <span className="text-base font-medium text-success">+4.8%</span>
-          <span className="text-meta text-muted-foreground">Defence theme · 5 sessions</span>
-          <span className="text-meta text-muted-foreground">Nifty +1.1% over the same window</span>
+          <span className="text-sm text-muted-foreground">Defence theme · 5 sessions</span>
+          <span className="text-sm text-muted-foreground">Nifty +1.1% over the same window</span>
         </div>
       </EmissionCard>
 

@@ -277,7 +277,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
                   )}
                 >
                   <ThemeSwatches themeId={t.id} isDark={isDark} />
-                  <span className="px-0.5 text-meta font-medium">{t.name}</span>
+                  <span className="px-0.5 text-sm font-medium">{t.name}</span>
                   {selected && (
                     <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
                       <CheckMark className="h-2.5 w-2.5" />
@@ -308,7 +308,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           <span className="flex min-w-0 flex-col">
             <span className="font-medium">{option.label}</span>
             {option.description != null && (
-              <span className="line-clamp-1 text-meta text-muted-foreground">{option.description}</span>
+              <span className="line-clamp-1 text-sm text-muted-foreground">{option.description}</span>
             )}
           </span>
         </span>
@@ -348,7 +348,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               <Tooltip key={value} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <ToggleGroupItem value={value} aria-label={label}>
-                    {Icon ? <Icon className="h-4 w-4" /> : <span className="px-1 text-meta">{label}</span>}
+                    {Icon ? <Icon className="h-4 w-4" /> : <span className="px-1 text-sm">{label}</span>}
                   </ToggleGroupItem>
                 </TooltipTrigger>
                 <TooltipContent>{label}</TooltipContent>

@@ -32,14 +32,14 @@ const Region = ({
 }) => (
   <div className={`h-full w-full p-4 ${className ?? ''}`}>
     <div className="flex items-center gap-2">
-      <div className="text-sm font-semibold">{label}</div>
+      <div className="text-base font-semibold">{label}</div>
       {span && (
-        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
+        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-muted-foreground">
           bottomSpan=&quot;{span}&quot;
         </span>
       )}
     </div>
-    {hint && <div className="mt-1 text-sm text-muted-foreground">{hint}</div>}
+    {hint && <div className="mt-1 text-base text-muted-foreground">{hint}</div>}
   </div>
 );
 
@@ -60,7 +60,7 @@ export const BottomSpanLeftMain: Story = {
           </div>
         ),
         center: (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-base text-muted-foreground">
             bottomSpan = &quot;left-main&quot;
           </div>
         ),
@@ -113,7 +113,7 @@ export const BottomSpanLeftMain: Story = {
         ),
       },
       footer: {
-        className: "!h-[25px] px-2 text-sm",
+        className: "!h-[25px] px-2 text-base",
         leftNavItems: [
           { name: "Terminal", icon: TerminalIcon, label: "left-main span" },
         ],

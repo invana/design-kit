@@ -32,7 +32,7 @@ export const WithCards: Story = {
             <CardTitle>Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm">View your dashboard overview and key metrics.</p>
+            <p className="text-base">View your dashboard overview and key metrics.</p>
           </CardContent>
         </Card>
       </TabsContent>
@@ -42,7 +42,7 @@ export const WithCards: Story = {
             <CardTitle>Analytics</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm">Detailed analytics and performance data.</p>
+            <p className="text-base">Detailed analytics and performance data.</p>
           </CardContent>
         </Card>
       </TabsContent>
@@ -52,7 +52,7 @@ export const WithCards: Story = {
             <CardTitle>Reports</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm">Generate and download reports.</p>
+            <p className="text-base">Generate and download reports.</p>
           </CardContent>
         </Card>
       </TabsContent>

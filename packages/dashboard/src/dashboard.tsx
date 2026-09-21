@@ -26,7 +26,7 @@ type AnyRow = RowSpec<Record<string, unknown>>
  */
 function UnknownPanel({ kind }: { kind: string }) {
   return (
-    <div className="border border-dashed border-border p-3 text-meta text-muted-foreground">
+    <div className="border border-dashed border-border p-3 text-sm text-muted-foreground">
       No renderer for panel kind <span className="font-mono">{kind}</span>. Register one, or
       remove it from the spec.
     </div>

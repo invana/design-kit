@@ -2,164 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ThemeControls, useThemeControls } from '../src';
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  Badge,
-  Separator,
-  Alert,
-  AlertTitle,
-  AlertDescription,
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-  Toggle,
-  ToggleGroup,
-  ToggleGroupItem,
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  SearchInput,
-  TreeView,
-  type TreeItem,
-  // Newly showcased primitives
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-  ButtonGroup,
-  ButtonGroupSeparator,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-  Command,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandSeparator,
-  CommandShortcut,
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-  Item,
-  ItemMedia,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-  ItemActions,
-  Kbd,
-  KbdGroup,
-  Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubTrigger,
-  MenubarSubContent,
-  MenubarCheckboxItem,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationEllipsis,
-  Progress,
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
-  SheetDescription,
-  SheetClose,
-  Skeleton,
-  Spinner,
-  Toaster,
-  Typography,
-  // ui-extended
-  ButtonWithTooltip,
-  ErrorBoundary,
-  MenuItem,
-  NavBase,
-  NavHorizontal,
-  NavVertical,
-  NestedMenu,
-  PanelContent,
-  RichSelect,
-  TabbedPanel,
-  Toolbar,
-  Tour,
-  useTour,
-  type TourStep,
-  UnderDevelopment,
-} from '@invana/ui';
+import { // Newly showcased primitives
+  AlertDialog, // ui-extended
+  ButtonWithTooltip, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarImage, Badge, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, ButtonGroupSeparator, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, ErrorBoundary, Eyebrow, HoverCard, HoverCardContent, HoverCardTrigger, Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle, Kbd, KbdGroup, Link, Menubar, MenubarCheckboxItem, MenubarContent, MenubarItem, MenubarMenu, MenubarRadioGroup, MenubarRadioItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger, MenuItem, NavBase, NavHorizontal, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle, NavVertical, NestedMenu, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PanelContent, Popover, PopoverContent, PopoverTrigger, Progress, ResizableHandle, ResizablePanel, ResizablePanelGroup, RichSelect, SearchInput, Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Spinner, TabbedPanel, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Toolbar, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Tour, TreeView, type TourStep, type TreeItem, Typography, TypographyH1, TypographyH3, TypographyH4, TypographyH5, TypographyH6, UnderDevelopment, useTour } from '@invana/ui';
 import {
   Input,
   Label,
@@ -413,8 +258,8 @@ const ShowcaseForm = () => {
         </form>
       </Form>
       <div>
-        <h4 className="mb-2 text-sm font-medium text-muted-foreground">Submitted payload</h4>
-        <pre className="rounded-md border bg-muted/40 p-3 text-xs overflow-auto">
+        <Eyebrow className="mb-2">Submitted payload</Eyebrow>
+        <pre className="rounded-md border bg-muted/40 p-3 text-sm overflow-auto">
           {submitted ? JSON.stringify(submitted, null, 2) : '— submit the form —'}
         </pre>
       </div>
@@ -471,7 +316,7 @@ const Section = ({
   <>
     <Separator />
     <section>
-      <h3 className="text-2xl font-bold mb-6">{title}</h3>
+      <TypographyH3 className="mb-6">{title}</TypographyH3>
       {children}
     </section>
   </>
@@ -479,7 +324,7 @@ const Section = ({
 
 const Sub = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div>
-    <h4 className="text-lg font-medium mb-4">{title}</h4>
+    <TypographyH5 className="mb-4">{title}</TypographyH5>
     {children}
   </div>
 );
@@ -515,7 +360,7 @@ const ThemeShowcase = ({
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
           <div className="container flex h-16 items-center justify-between px-4 max-w-7xl mx-auto">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold">@invana/ui</h1>
+              <TypographyH4>@invana/ui</TypographyH4>
               <Badge variant="secondary">v1.0</Badge>
             </div>
             <ThemeControls
@@ -534,9 +379,9 @@ const ThemeShowcase = ({
         <main className="container max-w-7xl mx-auto p-8 space-y-16">
           {/* Hero Section */}
           <section className="text-center py-12">
-            <h2 className="text-4xl font-bold tracking-tight mb-4">
+            <TypographyH1 className="mb-4">
               Every component, one page
-            </h2>
+            </TypographyH1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
               A complete visual review of the Invana Design Kit — UI primitives, composed
               components, typography, data tables, and forms. Switch themes from the header.
@@ -624,15 +469,15 @@ const ThemeShowcase = ({
                       <div className="flex items-center space-x-4 rounded-md border p-4">
                         <Bell className="h-5 w-5" />
                         <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium">Push Notifications</p>
-                          <p className="text-sm text-muted-foreground">Send notifications to device.</p>
+                          <p className="text-base font-medium">Push Notifications</p>
+                          <p className="text-base text-muted-foreground">Send notifications to device.</p>
                         </div>
                         <Switch />
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Label>Volume</Label>
-                          <span className="text-sm text-muted-foreground">50%</span>
+                          <span className="text-base text-muted-foreground">50%</span>
                         </div>
                         <Slider defaultValue={[50]} max={100} step={1} />
                       </div>
@@ -654,12 +499,12 @@ const ThemeShowcase = ({
                   ].map((stat) => (
                     <Card key={stat.title}>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                        <CardTitle className="text-base font-medium">{stat.title}</CardTitle>
                         <stat.icon className="h-4 w-4 text-muted-foreground" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">{stat.value}</div>
-                        <p className="text-xs text-muted-foreground">{stat.note}</p>
+                        <p className="text-sm text-muted-foreground">{stat.note}</p>
                       </CardContent>
                     </Card>
                   ))}
@@ -682,8 +527,8 @@ const ThemeShowcase = ({
                         <div key={index} className="flex items-start gap-4">
                           <span className="h-2 w-2 rounded-full bg-primary mt-2" />
                           <div className="space-y-1">
-                            <p className="text-sm font-medium">{notification.title}</p>
-                            <p className="text-sm text-muted-foreground">{notification.time}</p>
+                            <p className="text-base font-medium">{notification.title}</p>
+                            <p className="text-base text-muted-foreground">{notification.time}</p>
                           </div>
                         </div>
                       ))}
@@ -709,7 +554,7 @@ const ThemeShowcase = ({
                       </div>
                       <Separator />
                       <div className="space-y-4">
-                        <h4 className="text-sm font-medium">People with access</h4>
+                        <TypographyH6>People with access</TypographyH6>
                         {[
                           { name: 'Olivia Martin', email: 'm@example.com', access: 'can-edit' },
                           { name: 'Isabella Nguyen', email: 'b@example.com', access: 'can-view' },
@@ -720,8 +565,8 @@ const ThemeShowcase = ({
                                 <AvatarFallback>{person.name[0]}</AvatarFallback>
                               </Avatar>
                               <div>
-                                <p className="text-sm font-medium">{person.name}</p>
-                                <p className="text-sm text-muted-foreground">{person.email}</p>
+                                <p className="text-base font-medium">{person.name}</p>
+                                <p className="text-base text-muted-foreground">{person.email}</p>
                               </div>
                             </div>
                             <Select defaultValue={person.access}>
@@ -839,7 +684,7 @@ const ThemeShowcase = ({
           <Section title="Form Elements">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl">
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Input</h4>
+                <TypographyH5>Input</TypographyH5>
                 <div className="space-y-2">
                   <Label htmlFor="default-input">Default</Label>
                   <Input id="default-input" placeholder="Enter text..." />
@@ -855,7 +700,7 @@ const ThemeShowcase = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Textarea</h4>
+                <TypographyH5>Textarea</TypographyH5>
                 <div className="space-y-2">
                   <Label htmlFor="textarea">Message</Label>
                   <Textarea id="textarea" placeholder="Type your message here..." />
@@ -863,7 +708,7 @@ const ThemeShowcase = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Select</h4>
+                <TypographyH5>Select</TypographyH5>
                 <div className="space-y-2">
                   <Label>Framework</Label>
                   <Select>
@@ -881,7 +726,7 @@ const ThemeShowcase = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Checkbox &amp; Switch</h4>
+                <TypographyH5>Checkbox &amp; Switch</TypographyH5>
                 <div className="flex items-center space-x-2">
                   <Checkbox id="terms-form" />
                   <Label htmlFor="terms-form">Accept terms</Label>
@@ -898,7 +743,7 @@ const ThemeShowcase = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Slider</h4>
+                <TypographyH5>Slider</TypographyH5>
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <Label>Default</Label>
@@ -912,7 +757,7 @@ const ThemeShowcase = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-lg font-medium">Search Input</h4>
+                <TypographyH5>Search Input</TypographyH5>
                 <SearchInput value={searchValue} onChange={setSearchValue} />
               </div>
             </div>
@@ -1024,8 +869,8 @@ const ThemeShowcase = ({
                 <PopoverContent className="w-80">
                   <div className="grid gap-4">
                     <div className="space-y-2">
-                      <h4 className="font-medium leading-none">Dimensions</h4>
-                      <p className="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                      <TypographyH6>Dimensions</TypographyH6>
+                      <p className="text-base text-muted-foreground">Set the dimensions for the layer.</p>
                     </div>
                     <div className="grid grid-cols-3 items-center gap-4">
                       <Label htmlFor="width">Width</Label>
@@ -1049,11 +894,11 @@ const ThemeShowcase = ({
                   <Button variant="link">@invana</Button>
                 </HoverCardTrigger>
                 <HoverCardContent className="w-80">
-                  <h4 className="text-sm font-semibold">@invana</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <TypographyH6>@invana</TypographyH6>
+                  <p className="text-base text-muted-foreground">
                     The open-source graph visualization and analytics platform.
                   </p>
-                  <div className="flex items-center pt-2 text-xs text-muted-foreground">
+                  <div className="flex items-center pt-2 text-sm text-muted-foreground">
                     <CalendarDays className="mr-2 h-4 w-4" />
                     Joined December 2021
                   </div>
@@ -1121,13 +966,13 @@ const ThemeShowcase = ({
                           <li>
                             <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
                               <div className="font-medium">Graph Explorer</div>
-                              <p className="text-sm text-muted-foreground">Visualize and traverse your graph data.</p>
+                              <p className="text-base text-muted-foreground">Visualize and traverse your graph data.</p>
                             </NavigationMenuLink>
                           </li>
                           <li>
                             <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
                               <div className="font-medium">Dashboards</div>
-                              <p className="text-sm text-muted-foreground">Build and share live dashboards.</p>
+                              <p className="text-base text-muted-foreground">Build and share live dashboards.</p>
                             </NavigationMenuLink>
                           </li>
                         </ul>
@@ -1275,17 +1120,17 @@ const ThemeShowcase = ({
             <div className="h-72 w-full max-w-3xl">
               <ResizablePanelGroup orientation="horizontal" className="rounded-md border">
                 <ResizablePanel defaultSize={50} minSize={20}>
-                  <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">Left Panel</div>
+                  <div className="flex h-full items-center justify-center p-4 text-base text-muted-foreground">Left Panel</div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={50} minSize={20}>
                   <ResizablePanelGroup orientation="vertical">
                     <ResizablePanel defaultSize={50}>
-                      <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">Top</div>
+                      <div className="flex h-full items-center justify-center p-4 text-base text-muted-foreground">Top</div>
                     </ResizablePanel>
                     <ResizableHandle withHandle />
                     <ResizablePanel defaultSize={50}>
-                      <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">Bottom</div>
+                      <div className="flex h-full items-center justify-center p-4 text-base text-muted-foreground">Bottom</div>
                     </ResizablePanel>
                   </ResizablePanelGroup>
                 </ResizablePanel>
@@ -1417,8 +1262,8 @@ const ThemeShowcase = ({
                   className="h-12 rounded-md border bg-card px-3 text-card-foreground"
                   sections={{
                     start: { content: <span className="font-semibold">Invana</span> },
-                    center: { content: <span className="text-sm text-muted-foreground">Dashboard</span> },
-                    end: { content: <span className="text-sm">Sign out</span> },
+                    center: { content: <span className="text-base text-muted-foreground">Dashboard</span> },
+                    end: { content: <span className="text-base">Sign out</span> },
                   }}
                 />
               </Sub>
@@ -1456,9 +1301,9 @@ const ThemeShowcase = ({
               className="w-full max-w-2xl h-[320px]"
               defaultTab="tab1"
               tabs={[
-                { value: 'tab1', label: 'Overview', content: <div className="p-4 text-sm">Content for the Overview tab.</div> },
-                { value: 'tab2', label: 'Details', content: <div className="p-4 text-sm">Content for the Details tab.</div> },
-                { value: 'tab3', label: 'Activity', content: <div className="p-4 text-sm">Content for the Activity tab.</div> },
+                { value: 'tab1', label: 'Overview', content: <div className="p-4 text-base">Content for the Overview tab.</div> },
+                { value: 'tab2', label: 'Details', content: <div className="p-4 text-base">Content for the Details tab.</div> },
+                { value: 'tab3', label: 'Activity', content: <div className="p-4 text-base">Content for the Activity tab.</div> },
               ]}
             />
           </Section>
@@ -1517,14 +1362,14 @@ const ThemeShowcase = ({
           {/* ============================ PACKAGES ============================ */}
 
           <Section title="Data Tables (@invana/tables)">
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-base text-muted-foreground mb-4">
               Editable, paginated TanStack-based data table. Double-click a cell to edit.
             </p>
             <ShowcaseDataTable />
           </Section>
 
           <Section title="Forms (@invana/forms)">
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-base text-muted-foreground mb-4">
               <code>FormField.ObjectField</code> driven by a field config, with grouped fields
               auto-wrapped in an accordion. Consumers own <code>useForm</code>.
             </p>
@@ -1547,10 +1392,10 @@ const ThemeShowcase = ({
                 { name: 'Popover', class: 'bg-popover border', textClass: 'text-popover-foreground' },
               ].map((color) => (
                 <div key={color.name} className="space-y-2">
-                  <div className={`h-16 rounded-md flex items-center justify-center text-xs ${color.class} ${color.textClass}`}>
+                  <div className={`h-16 rounded-md flex items-center justify-center text-sm ${color.class} ${color.textClass}`}>
                     {color.name}
                   </div>
-                  <p className="text-xs text-center text-muted-foreground">{color.class}</p>
+                  <p className="text-sm text-center text-muted-foreground">{color.class}</p>
                 </div>
               ))}
             </div>
@@ -1558,19 +1403,14 @@ const ThemeShowcase = ({
 
           {/* Footer */}
           <footer className="border-t pt-8 pb-16 text-center text-muted-foreground">
-            <p className="text-sm">
+            <p className="text-base">
               Built with <Heart className="inline-block h-4 w-4 text-destructive" /> using @invana/ui components
             </p>
-            <p className="text-sm mt-2">
+            <p className="text-base mt-2">
               Inspired by{' '}
-              <a
-                href="https://ui.shadcn.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-4 hover:text-foreground"
-              >
+              <Link href="https://ui.shadcn.com" external variant="quiet">
                 shadcn/ui
-              </a>
+              </Link>
             </p>
           </footer>
         </main>

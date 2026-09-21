@@ -108,7 +108,7 @@ const SectionIconsDemo = () => {
                     >
                       {layer.name}
                     </span>
-                    <span className="ml-auto text-meta tabular-nums text-muted-foreground">
+                    <span className="ml-auto text-sm tabular-nums text-muted-foreground">
                       {layer.count.toLocaleString()}
                     </span>
                   </li>
@@ -140,7 +140,7 @@ const SectionIconsDemo = () => {
                 {FILTERS.map((f) => (
                   <li
                     key={f}
-                    className="truncate px-2 py-1 font-mono text-meta text-foreground hover:bg-accent/50"
+                    className="truncate px-2 py-1 font-mono text-sm text-foreground hover:bg-accent/50"
                   >
                     {f}
                   </li>

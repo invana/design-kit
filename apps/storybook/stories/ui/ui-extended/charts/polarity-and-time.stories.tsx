@@ -57,7 +57,7 @@ export const PolarityAndTime: Story = {
 
       <div className="flex items-center gap-2">
         <Sparkline values={[79, 81, 84, 83, 86, 88, 91]} label="accepted rate, 7 weeks" />
-        <span className="text-meta text-muted-foreground">91% accepted · 7 weeks</span>
+        <span className="text-sm text-muted-foreground">91% accepted · 7 weeks</span>
       </div>
     </div>
   ),

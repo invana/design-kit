@@ -19,7 +19,7 @@ export default meta;
 type Story = StoryObj<typeof PanelStack>;
 
 const Filler = ({ label }: { label: string }) => (
-  <ul className="p-2 text-sm text-muted-foreground">
+  <ul className="p-2 text-base text-muted-foreground">
     {Array.from({ length: 8 }).map((_, i) => (
       <li key={i} className="px-1 py-1">
         {label} item {i + 1}

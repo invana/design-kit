@@ -57,10 +57,10 @@ export const PropertyRow = React.forwardRef<HTMLDivElement, PropertyRowProps>(
       className={cn("flex items-baseline gap-2 py-1", className)}
       {...props}
     >
-      <dt className="shrink-0 truncate text-meta text-muted-foreground [width:var(--property-label-width,78px)]">
+      <dt className="shrink-0 truncate text-sm text-muted-foreground [width:var(--property-label-width,78px)]">
         {label}
       </dt>
-      <dd className={cn("min-w-0 flex-1", mono && "font-mono text-meta")}>
+      <dd className={cn("min-w-0 flex-1", mono && "font-mono text-sm")}>
         {children}
       </dd>
     </div>

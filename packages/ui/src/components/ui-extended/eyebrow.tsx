@@ -26,7 +26,7 @@ export interface EyebrowProps extends React.HTMLAttributes<HTMLDivElement> {
  * a {@link SectionHeader}, so several can sit in one scrolling column and still
  * read as subordinate to the panel's own title.
  *
- * Uppercase at `text-meta` with tracking, because at this size caps are what
+ * Uppercase at `text-sm` with tracking, because at this size caps are what
  * separate a label from the sentence under it; lowercase at 11px reads as body
  * copy set small. That is also why it is a component rather than four utility
  * classes: the treatment was being retyped, and a label that drifts a weight or
@@ -41,7 +41,7 @@ export const Eyebrow = React.forwardRef<HTMLDivElement, EyebrowProps>(
     <div
       ref={ref}
       className={cn(
-        "flex items-baseline gap-2 text-meta font-semibold uppercase tracking-wide",
+        "flex items-baseline gap-2 text-sm font-semibold uppercase tracking-wide",
         tone === "muted" && "text-muted-foreground",
         tone === "foreground" && "text-foreground",
         tone === "accent" && "text-primary",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPanel } from '@invana/ui';
+import { TabbedPanel, TypographyH5 } from '@invana/ui';
 import { 
   Folder, Search, GitBranch, FileCode, MessageSquare,
   Plus, Settings, MoreHorizontal, Maximize2, X,
@@ -24,51 +24,51 @@ const FileTree = () => (
     <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
       <ChevronRight className="h-3 w-3" />
       <FolderOpen className="h-4 w-4 text-yellow-500" />
-      <span className="text-sm">src</span>
+      <span className="text-base">src</span>
     </div>
     <div className="pl-4 space-y-1">
       <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
         <ChevronRight className="h-3 w-3" />
         <FolderOpen className="h-4 w-4 text-yellow-500" />
-        <span className="text-sm">components</span>
+        <span className="text-base">components</span>
       </div>
       <div className="pl-4 space-y-1">
         <div className="flex items-center gap-1 p-1 rounded bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Button.tsx</span>
+          <span className="text-base">Button.tsx</span>
         </div>
         <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Input.tsx</span>
+          <span className="text-base">Input.tsx</span>
         </div>
         <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Card.tsx</span>
+          <span className="text-base">Card.tsx</span>
         </div>
       </div>
     </div>
     <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
       <File className="h-4 w-4 text-gray-500" />
-      <span className="text-sm">package.json</span>
+      <span className="text-base">package.json</span>
     </div>
   </div>
 );
 
 const SearchResults = () => (
   <div className="p-2 space-y-2">
-    <div className="text-xs text-muted-foreground mb-2">3 results in 2 files</div>
+    <div className="text-sm text-muted-foreground mb-2">3 results in 2 files</div>
     <div className="space-y-1">
       <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-sm font-medium">Button.tsx</div>
-        <div className="text-xs text-muted-foreground">Line 12: const Button = ...</div>
+        <div className="text-base font-medium">Button.tsx</div>
+        <div className="text-sm text-muted-foreground">Line 12: const Button = ...</div>
       </div>
       <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-sm font-medium">Input.tsx</div>
-        <div className="text-xs text-muted-foreground">Line 8: const Input = ...</div>
+        <div className="text-base font-medium">Input.tsx</div>
+        <div className="text-sm text-muted-foreground">Line 8: const Input = ...</div>
       </div>
       <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-sm font-medium">Card.tsx</div>
-        <div className="text-xs text-muted-foreground">Line 5: const Card = ...</div>
+        <div className="text-base font-medium">Card.tsx</div>
+        <div className="text-sm text-muted-foreground">Line 5: const Card = ...</div>
       </div>
     </div>
   </div>
@@ -76,22 +76,22 @@ const SearchResults = () => (
 
 const GitChanges = () => (
   <div className="p-2">
-    <div className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
+    <div className="text-sm font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
     <div className="space-y-1">
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-green-500">M</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Button.tsx</span>
+        <span className="text-base">Button.tsx</span>
       </div>
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-green-500">M</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Input.tsx</span>
+        <span className="text-base">Input.tsx</span>
       </div>
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-blue-500">A</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Card.tsx</span>
+        <span className="text-base">Card.tsx</span>
       </div>
     </div>
   </div>
@@ -100,28 +100,28 @@ const GitChanges = () => (
 const ChatContent = () => (
   <div className="flex flex-col h-full">
     <div className="p-3 border-b">
-      <div className="text-xs font-semibold text-muted-foreground uppercase">Recent Sessions</div>
+      <div className="text-sm font-semibold text-muted-foreground uppercase">Recent Sessions</div>
     </div>
     <div className="flex-1 p-2 space-y-2">
       <div className="p-3 rounded-lg hover:bg-accent cursor-pointer">
         <div className="flex items-start gap-2">
           <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5" />
           <div className="flex-1">
-            <div className="text-sm font-medium">Running a Python script in Docker</div>
-            <div className="text-xs text-muted-foreground mt-1">Finished</div>
+            <div className="text-base font-medium">Running a Python script in Docker</div>
+            <div className="text-sm text-muted-foreground mt-1">Finished</div>
           </div>
-          <div className="text-xs text-muted-foreground">Local • 3 wks</div>
+          <div className="text-sm text-muted-foreground">Local • 3 wks</div>
         </div>
       </div>
-      <button className="w-full text-sm text-center py-2 hover:bg-accent rounded">
+      <button className="w-full text-base text-center py-2 hover:bg-accent rounded">
         Show All Sessions
       </button>
     </div>
     <div className="flex-1 flex items-center justify-center flex-col p-6 text-center">
       <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-      <h3 className="text-lg font-semibold mb-2">Build with Agent</h3>
-      <p className="text-sm text-muted-foreground mb-4">AI responses may be inaccurate.</p>
-      <button className="text-sm text-primary hover:underline">
+      <TypographyH5 className="mb-2">Build with Agent</TypographyH5>
+      <p className="text-base text-muted-foreground mb-4">AI responses may be inaccurate.</p>
+      <button className="text-base text-primary hover:underline">
         Generate Agent Instructions
       </button>
     </div>
@@ -130,14 +130,14 @@ const ChatContent = () => (
 
 const ProblemsContent = () => (
   <div className="p-4">
-    <div className="text-sm text-muted-foreground">
+    <div className="text-base text-muted-foreground">
       No problems have been detected in the workspace.
     </div>
   </div>
 );
 
 const TerminalContent = () => (
-  <div className="p-3 font-mono text-xs bg-black text-green-400 h-full">
+  <div className="p-3 font-mono text-sm bg-black text-green-400 h-full">
     <div>$ npm run dev</div>
     <div className="text-muted-foreground mt-1">&gt; design-kit@1.0.0 dev</div>
     <div className="text-muted-foreground">&gt; vite</div>
@@ -170,12 +170,12 @@ export const BottomPanel: Story = {
       {
         value: 'output',
         label: 'OUTPUT',
-        content: <div className="p-4 font-mono text-xs">Build output...</div>,
+        content: <div className="p-4 font-mono text-sm">Build output...</div>,
       },
       {
         value: 'debug',
         label: 'DEBUG CONSOLE',
-        content: <div className="p-4 font-mono text-xs">Debug console...</div>,
+        content: <div className="p-4 font-mono text-sm">Debug console...</div>,
       },
       {
         value: 'terminal',

@@ -1,10 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from '@invana/ui';
+import { Button, Popover, PopoverContent, PopoverTrigger, TypographyH6 } from '@invana/ui';
 import { Settings2 } from 'lucide-react';
 
 const meta: Meta<typeof Popover> = {
@@ -31,30 +26,30 @@ export const Default: Story = {
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-1">
-            <h4 className="font-medium leading-none">Dimensions</h4>
-            <p className="text-sm text-muted-foreground">
+            <TypographyH6>Dimensions</TypographyH6>
+            <p className="text-base text-muted-foreground">
               Set the dimensions for the layer.
             </p>
           </div>
           <div className="grid gap-2">
             <div className="grid grid-cols-3 items-center gap-4">
-              <label htmlFor="width" className="text-sm">
+              <label htmlFor="width" className="text-base">
                 Width
               </label>
               <input
                 id="width"
                 defaultValue="100%"
-                className="col-span-2 h-8 rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="col-span-2 h-8 rounded-md border border-input bg-transparent px-3 text-base outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <label htmlFor="height" className="text-sm">
+              <label htmlFor="height" className="text-base">
                 Height
               </label>
               <input
                 id="height"
                 defaultValue="25px"
-                className="col-span-2 h-8 rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="col-span-2 h-8 rounded-md border border-input bg-transparent px-3 text-base outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
             </div>
           </div>

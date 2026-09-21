@@ -29,18 +29,18 @@ export const MultipleSearchInputs: Story = {
     return (
       <div className="w-[500px] space-y-4">
         <div>
-          <label className="text-sm font-medium mb-1 block">Search by Name</label>
+          <label className="text-base font-medium mb-1 block">Search by Name</label>
           <SearchInput value={nameSearch} onChange={setNameSearch} />
         </div>
         <div>
-          <label className="text-sm font-medium mb-1 block">Search by Email</label>
+          <label className="text-base font-medium mb-1 block">Search by Email</label>
           <SearchInput value={emailSearch} onChange={setEmailSearch} />
         </div>
         <div>
-          <label className="text-sm font-medium mb-1 block">Search by Location</label>
+          <label className="text-base font-medium mb-1 block">Search by Location</label>
           <SearchInput value={locationSearch} onChange={setLocationSearch} />
         </div>
-        <div className="p-3 bg-muted rounded-md text-sm">
+        <div className="p-3 bg-muted rounded-md text-base">
           <p className="font-medium mb-2">Active Filters:</p>
           {!nameSearch && !emailSearch && !locationSearch ? (
             <p className="text-muted-foreground">No filters applied</p>

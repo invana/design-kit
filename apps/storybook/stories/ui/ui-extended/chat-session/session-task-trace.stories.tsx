@@ -1,27 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  Button,
-  ChatSession,
-  ChatSessionActivityRow,
-  type ChatSessionActivityStatus,
-  ChatSessionActivitySubLine,
-  ChatSessionComposer,
-  ChatSessionDisclosure,
-  ChatSessionMessageOptions,
-  ChatSessionProgressLine,
-  ChatSessionPromptRow,
-  ChatSessionStatusBar,
-  ChatSessionTaskGroup,
-  ChatSessionTaskRow,
-  type ChatSessionTaskStatus,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  cn,
-} from "@invana/ui";
+import { Button, ChatSession, ChatSessionActivityRow, ChatSessionActivitySubLine, ChatSessionComposer, ChatSessionDisclosure, ChatSessionMessageOptions, ChatSessionProgressLine, ChatSessionPromptRow, ChatSessionStatusBar, ChatSessionTaskGroup, ChatSessionTaskRow, cn, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, type ChatSessionActivityStatus, type ChatSessionTaskStatus, TypographyH3, TypographyH6 } from "@invana/ui";
 import {
   Select,
   SelectContent,
@@ -1253,9 +1231,9 @@ function SessionTaskTraceDemo() {
         <p className="mb-1.5 uppercase tracking-wider text-muted-foreground">
           RFC-055 · Explorer sessions
         </p>
-        <h1 className="mb-2.5 text-2xl font-semibold leading-tight tracking-tight text-balance">
+        <TypographyH3 className="mb-2.5">
           Every reply shows the tasks that produced it
-        </h1>
+        </TypographyH3>
         <p className="text-muted-foreground">
           An interactive mock of the Sessions rail. The panel on the left is
           live: send a question, or press{" "}
@@ -1338,9 +1316,9 @@ function SessionTaskTraceDemo() {
 
         {/* ── Walkthrough ── */}
         <div className="flex flex-col gap-5">
-          <h2 className="mt-2 -mb-1.5 font-semibold tracking-tight">
+          <TypographyH6 className="mt-2 mb-1.5">
             What the user sees
-          </h2>
+          </TypographyH6>
           <p className="max-w-[62ch] text-muted-foreground">
             One visual grammar for everything: your prompt is a caret row,
             every reply is a status-dotted row, and the tasks that produced it
@@ -1382,7 +1360,7 @@ function SessionTaskTraceDemo() {
                   {i + 1}
                 </div>
                 <div>
-                  <h3 className="mb-1 font-semibold">{s.title}</h3>
+                  <TypographyH6 className="mb-1">{s.title}</TypographyH6>
                   <p className="max-w-[60ch] text-muted-foreground">{s.body}</p>
                 </div>
                 <Button
@@ -1397,9 +1375,9 @@ function SessionTaskTraceDemo() {
             ))}
           </div>
 
-          <h2 className="mt-2 -mb-1.5 font-semibold tracking-tight">
+          <TypographyH6 className="mt-2 mb-1.5">
             What feeds it
-          </h2>
+          </TypographyH6>
           <p className="max-w-[62ch] text-muted-foreground">
             The rows are the same either way. The difference is whether they
             move while the reply is being produced.

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Alert, AlertTitle, AlertDescription } from '@invana/ui';
+import { Alert, AlertDescription, AlertTitle, TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Alert> = {
   title: 'UI/UI/Alert',
@@ -25,7 +25,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="flex flex-col gap-8 p-6 max-w-3xl">
       <div>
-        <h3 className="mb-4 text-lg font-semibold">All Variants</h3>
+        <TypographyH5 className="mb-4">All Variants</TypographyH5>
         <div className="flex flex-col gap-4">
           <Alert>
             <AlertTitle>Default Alert</AlertTitle>
@@ -43,7 +43,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Different Content Structures</h3>
+        <TypographyH5 className="mb-4">Different Content Structures</TypographyH5>
         <div className="flex flex-col gap-4">
           <Alert>
             <AlertTitle>Title Only</AlertTitle>
@@ -65,7 +65,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Common Use Cases</h3>
+        <TypographyH5 className="mb-4">Common Use Cases</TypographyH5>
         <div className="flex flex-col gap-4">
           <Alert>
             <AlertTitle>Success</AlertTitle>

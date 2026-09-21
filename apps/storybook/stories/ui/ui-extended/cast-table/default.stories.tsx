@@ -57,7 +57,7 @@ export const Default: Story = {
   render: () => (
     <div className="flex w-[620px] flex-col gap-6">
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">
+        <p className="pb-1 text-sm text-muted-foreground">
           what the lens says
         </p>
         <CastTable
@@ -69,7 +69,7 @@ export const Default: Story = {
         />
       </div>
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">
+        <p className="pb-1 text-sm text-muted-foreground">
           resolved under `Nothing leaves` — one refusal, naming its bound
         </p>
         <CastTable resolved={RESOLVED} readOnly />

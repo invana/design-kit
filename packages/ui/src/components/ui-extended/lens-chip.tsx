@@ -49,7 +49,7 @@ export const LensChip = React.forwardRef<HTMLSpanElement, LensChipProps>(
 
     const shell = cn(
       "inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-control",
-      "border border-border px-1.5 py-0.5 text-meta",
+      "border border-border px-1.5 py-0.5 text-sm",
       unset ? "text-muted-foreground" : "text-foreground",
       className,
     )

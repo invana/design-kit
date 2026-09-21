@@ -24,7 +24,7 @@ export const Sizes: Story = {
           <Badge variant="outline" tone="success" size={size}>
             staged
           </Badge>
-          <span className="text-meta text-muted-foreground">{why}</span>
+          <span className="text-sm text-muted-foreground">{why}</span>
         </div>
       ))}
     </div>

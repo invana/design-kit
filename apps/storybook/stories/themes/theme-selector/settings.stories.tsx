@@ -8,15 +8,7 @@ import {
   type ThemeSelection,
 } from '@invana/themes';
 import { Sun, Moon, Monitor } from 'lucide-react';
-import {
-  Button,
-  Badge,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@invana/ui';
+import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Link } from '@invana/ui';
 
 const meta = {
   title: 'Themes/Theme Selector',
@@ -59,7 +51,7 @@ function Preview() {
         <div className="flex flex-wrap items-center gap-2">
           <Badge>Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
-          <a href="#" className="text-sm text-primary underline underline-offset-4">A themed link</a>
+          <Link href="#" variant="underlined">A themed link</Link>
         </div>
       </CardContent>
     </Card>
@@ -88,7 +80,7 @@ function Demo() {
             // dropping in the ready-made Save / Reset actions.
             footer={(state) => (
               <div className="flex w-full items-center justify-between gap-3">
-                <span className="text-xs text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                   {state.isDirty ? 'Unsaved changes' : 'Saved'}
                 </span>
                 <ThemeSettingsActions state={state} />
@@ -101,9 +93,9 @@ function Demo() {
               <Preview />
             </ThemeScope>
             <Card>
-              <CardContent className="pt-6 text-sm text-muted-foreground">
+              <CardContent className="pt-6 text-base text-muted-foreground">
                 <p className="font-medium text-foreground">onSave payload</p>
-                <pre className="mt-2 overflow-auto rounded-md bg-muted p-3 text-xs">
+                <pre className="mt-2 overflow-auto rounded-md bg-muted p-3 text-sm">
                   {saved ? JSON.stringify(saved, null, 2) : '— click "Save as default" —'}
                 </pre>
               </CardContent>

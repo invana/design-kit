@@ -67,7 +67,7 @@ export const Multiple: Story = {
             },
           ]}
         />
-        <p className="text-sm text-muted-foreground mt-3">
+        <p className="text-base text-muted-foreground mt-3">
           Selected: {value.length ? value.join(', ') : '(none)'}
         </p>
       </div>

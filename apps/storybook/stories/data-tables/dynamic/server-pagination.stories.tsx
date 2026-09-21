@@ -201,7 +201,7 @@ function DynamicPaginationDemo() {
           </div>
         }
       />
-      <div className="rounded-md border bg-muted/30 px-3 py-2 font-mono text-xs text-muted-foreground break-all">
+      <div className="rounded-md border bg-muted/30 px-3 py-2 font-mono text-sm text-muted-foreground break-all">
         <span className="font-semibold text-foreground">GET</span> {lastUrl}
       </div>
     </div>

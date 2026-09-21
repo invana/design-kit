@@ -100,7 +100,7 @@ export function ListPanel({ panel, options, onAction, icons }: PanelRendererProp
             {item.meta || item.chip ? (
               <ItemActions className="min-w-0 shrink justify-end">
                 {item.meta ? (
-                  <span className="max-w-[16ch] truncate font-mono text-meta text-muted-foreground">
+                  <span className="max-w-[16ch] truncate font-mono text-sm text-muted-foreground">
                     {item.meta}
                   </span>
                 ) : null}
@@ -167,7 +167,7 @@ const TEXT_TONE: Record<string, string> = {
 
 export function TextPanel({ panel, options, onAction, icons }: PanelRendererProps<TextOptions>) {
   const body = (
-    <p className={cn("text-meta", TEXT_TONE[options.tone ?? "muted"])}>{options.text}</p>
+    <p className={cn("text-sm", TEXT_TONE[options.tone ?? "muted"])}>{options.text}</p>
   )
 
   const content = options.callout ? (

@@ -40,10 +40,10 @@ export const CannotAnswerCard = React.forwardRef<
     )}
     {...props}
   >
-    <span className="text-meta font-medium text-muted-foreground">{label}</span>
+    <span className="text-sm font-medium text-muted-foreground">{label}</span>
     <span>{children}</span>
     {remedy != null ? (
-      <span className="text-meta text-muted-foreground">{remedy}</span>
+      <span className="text-sm text-muted-foreground">{remedy}</span>
     ) : null}
   </div>
 ))

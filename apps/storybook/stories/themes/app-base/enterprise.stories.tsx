@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayoutBase } from '@invana/themes/app-base/layout';
-import { Button, Badge, Avatar } from '@invana/ui';
+import { Avatar, Badge, Button, Link, TypographyH4, TypographyH5 } from '@invana/ui';
 import { Input } from '@invana/forms';
 import { 
   Home, 
@@ -42,7 +42,7 @@ export const Enterprise: Story = {
       left: (
         <div className="flex items-center gap-3 px-3">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
+            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-base">
               E
             </div>
             <div className="font-bold">Enterprise Suite</div>
@@ -73,7 +73,7 @@ export const Enterprise: Story = {
           <Avatar className="h-8 w-8">
             <img src="https://github.com/shadcn.png" alt="Admin" />
           </Avatar>
-          <div className="text-sm">
+          <div className="text-base">
             <div className="font-medium">Admin User</div>
           </div>
         </div>
@@ -84,7 +84,7 @@ export const Enterprise: Story = {
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="flex h-14 items-center px-6">
             <div className="flex-1">
-              <h1 className="text-xl font-semibold">Enterprise Dashboard</h1>
+              <TypographyH4>Enterprise Dashboard</TypographyH4>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">Export</Button>
@@ -105,8 +105,8 @@ export const Enterprise: Story = {
             ].map((stat, i) => (
               <div key={i} className="rounded-lg border bg-card p-6 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
-                  <Badge variant={stat.trend === 'up' ? 'default' : 'secondary'} className="text-xs">
+                  <div className="text-base font-medium text-muted-foreground">{stat.title}</div>
+                  <Badge variant={stat.trend === 'up' ? 'default' : 'secondary'} className="text-sm">
                     {stat.change}
                   </Badge>
                 </div>
@@ -117,7 +117,7 @@ export const Enterprise: Story = {
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-lg border bg-card p-6 shadow-sm">
-              <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
+              <TypographyH5 className="mb-4">Recent Activity</TypographyH5>
               <div className="space-y-3">
                 {[
                   { user: 'Sarah Chen', action: 'created a new project', time: '2m ago' },
@@ -130,11 +130,11 @@ export const Enterprise: Story = {
                       <img src={`https://i.pravatar.cc/150?img=${i + 10}`} alt={activity.user} />
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm">
+                      <div className="text-base">
                         <span className="font-medium">{activity.user}</span>{' '}
                         <span className="text-muted-foreground">{activity.action}</span>
                       </div>
-                      <div className="text-xs text-muted-foreground">{activity.time}</div>
+                      <div className="text-sm text-muted-foreground">{activity.time}</div>
                     </div>
                   </div>
                 ))}
@@ -142,7 +142,7 @@ export const Enterprise: Story = {
             </div>
 
             <div className="rounded-lg border bg-card p-6 shadow-sm">
-              <h2 className="text-lg font-semibold mb-4">System Status</h2>
+              <TypographyH5 className="mb-4">System Status</TypographyH5>
               <div className="space-y-4">
                 {[
                   { service: 'API Server', status: 'operational', uptime: '99.99%' },
@@ -153,9 +153,9 @@ export const Enterprise: Story = {
                   <div key={i} className="flex items-center justify-between p-3 rounded bg-accent/50">
                     <div className="flex items-center gap-2">
                       <div className="h-2 w-2 rounded-full bg-green-500" />
-                      <div className="font-medium text-sm">{service.service}</div>
+                      <div className="font-medium text-base">{service.service}</div>
                     </div>
-                    <div className="text-xs text-muted-foreground">{service.uptime}</div>
+                    <div className="text-sm text-muted-foreground">{service.uptime}</div>
                   </div>
                 ))}
               </div>
@@ -166,20 +166,20 @@ export const Enterprise: Story = {
     ),
     footer: {
       left: (
-        <div className="text-xs text-muted-foreground px-3 flex items-center gap-4">
+        <div className="text-sm text-muted-foreground px-3 flex items-center gap-4">
           <span>© 2025 Enterprise Suite</span>
           <span className="text-muted-foreground/50">|</span>
-          <a href="#" className="hover:text-foreground">Privacy</a>
-          <a href="#" className="hover:text-foreground">Terms</a>
+          <Link href="#" variant="quiet">Privacy</Link>
+          <Link href="#" variant="quiet">Terms</Link>
         </div>
       ),
       center: (
-        <div className="text-xs text-muted-foreground">
+        <div className="text-sm text-muted-foreground">
           v2.4.1 • Build 2025.12.23
         </div>
       ),
       right: (
-        <div className="text-xs px-3 flex items-center gap-2">
+        <div className="text-sm px-3 flex items-center gap-2">
           <span className="text-green-500">●</span>
           <span className="text-muted-foreground">All systems operational</span>
         </div>

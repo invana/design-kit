@@ -172,7 +172,7 @@ function renderResult(
   if (result == null) return null
   if (React.isValidElement(result)) return result
   if (typeof result !== "object") {
-    return <span className="font-mono text-meta">{String(result)}</span>
+    return <span className="font-mono text-sm">{String(result)}</span>
   }
 
   const entries = Object.entries(result as Record<string, unknown>)
@@ -191,8 +191,8 @@ function renderResult(
       ) : null}
       {nested.map(([k, v]) => (
         <div key={k} className="flex flex-col gap-0.5">
-          <span className="text-meta text-muted-foreground">{k}</span>
-          <pre className="max-h-40 overflow-auto border border-border bg-muted/40 p-1.5 font-mono text-meta">
+          <span className="text-sm text-muted-foreground">{k}</span>
+          <pre className="max-h-40 overflow-auto border border-border bg-muted/40 p-1.5 font-mono text-sm">
             {JSON.stringify(v, null, 2)}
           </pre>
         </div>
@@ -225,15 +225,15 @@ export const TaskGanttDetailCard = React.forwardRef<
     <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props}>
       <div className="flex items-baseline gap-2">
         <StatusDot tone={DOT[status]} size="md" className="translate-y-px" />
-        <span className="min-w-0 flex-1 truncate font-mono text-meta font-medium">
+        <span className="min-w-0 flex-1 truncate font-mono text-sm font-medium">
           {task.key}
         </span>
-        <span className="shrink-0 font-mono text-meta text-muted-foreground tabular-nums">
+        <span className="shrink-0 font-mono text-sm text-muted-foreground tabular-nums">
           {duration}
         </span>
       </div>
 
-      <div className="text-meta text-muted-foreground">
+      <div className="text-sm text-muted-foreground">
         {STATUS_LABEL[status]}
         {task.summary != null ? <> · {task.summary}</> : null}
       </div>
@@ -241,7 +241,7 @@ export const TaskGanttDetailCard = React.forwardRef<
       {attempts.length ? (
         <div className="flex flex-col gap-0.5">
           {attempts.map((a, i) => (
-            <span key={i} className="text-meta text-muted-foreground">
+            <span key={i} className="text-sm text-muted-foreground">
               <span className="font-medium text-warning">attempt {i + 1}</span>{" "}
               {a.title ??
                 `${a.status ?? "failed"}${
@@ -260,15 +260,15 @@ export const TaskGanttDetailCard = React.forwardRef<
           className="border-l-2 bg-destructive/10 px-2 py-1.5"
         >
           {task.error.code != null ? (
-            <div className="font-mono text-meta font-medium text-destructive">
+            <div className="font-mono text-sm font-medium text-destructive">
               {task.error.code}
             </div>
           ) : null}
           {task.error.message != null ? (
-            <div className="text-meta">{task.error.message}</div>
+            <div className="text-sm">{task.error.message}</div>
           ) : null}
           {task.error.detail != null ? (
-            <pre className="mt-1 max-h-32 overflow-auto whitespace-pre-wrap font-mono text-meta text-muted-foreground">
+            <pre className="mt-1 max-h-32 overflow-auto whitespace-pre-wrap font-mono text-sm text-muted-foreground">
               {task.error.detail}
             </pre>
           ) : null}
@@ -278,7 +278,7 @@ export const TaskGanttDetailCard = React.forwardRef<
       {task.result != null ? renderResult(task.result) : null}
 
       {task.log != null ? (
-        <div className="border-t border-border pt-1.5 font-mono text-meta text-muted-foreground">
+        <div className="border-t border-border pt-1.5 font-mono text-sm text-muted-foreground">
           {task.log}
         </div>
       ) : null}
@@ -431,14 +431,14 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
             {axis.slice(0, -1).map((label, i) => (
               <span
                 key={i}
-                className="flex-1 border-l border-border pl-1 text-meta text-muted-foreground tabular-nums"
+                className="flex-1 border-l border-border pl-1 text-sm text-muted-foreground tabular-nums"
               >
                 {label}
               </span>
             ))}
           </span>
           <span
-            className="shrink-0 text-right text-meta text-muted-foreground tabular-nums"
+            className="shrink-0 text-right text-sm text-muted-foreground tabular-nums"
             style={{ width: durationWidth }}
           >
             {lastLabel}
@@ -462,7 +462,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
               <div className="flex items-center gap-2 py-[3px]">
                 <span
                   className={cn(
-                    "shrink-0 truncate font-mono text-meta",
+                    "shrink-0 truncate font-mono text-sm",
                     neverRan && "text-muted-foreground",
                   )}
                   style={{ width: labelWidth }}
@@ -505,7 +505,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                 </span>
 
                 <span
-                  className="shrink-0 text-right font-mono text-meta text-muted-foreground tabular-nums"
+                  className="shrink-0 text-right font-mono text-sm text-muted-foreground tabular-nums"
                   style={{ width: durationWidth }}
                 >
                   {duration}

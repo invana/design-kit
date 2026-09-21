@@ -78,7 +78,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           `Eyebrow`. A tile's label is a heading over a number, and left in
           sentence case it reads as the first line of a sentence the number then
           interrupts. */}
-      <span className="truncate text-meta font-semibold uppercase tracking-wide text-muted-foreground">
+      <span className="truncate text-sm font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
       <span
@@ -93,7 +93,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
         {value}
       </span>
       {caption != null ? (
-        <span className="text-meta text-muted-foreground">{caption}</span>
+        <span className="text-sm text-muted-foreground">{caption}</span>
       ) : null}
       {meter != null ? (
         // Not a <Progress>: that is a control-sized, rounded, animated bar for

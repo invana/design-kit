@@ -67,12 +67,12 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
     return (
       <div ref={ref} className={cn("flex flex-col gap-1", className)} {...props}>
         {caption != null ? (
-          <span className="text-meta text-muted-foreground">{caption}</span>
+          <span className="text-sm text-muted-foreground">{caption}</span>
         ) : null}
         {data.map((d, i) => (
           <div key={i} className="flex h-4 items-center gap-2">
             <span
-              className="shrink-0 truncate text-meta text-muted-foreground"
+              className="shrink-0 truncate text-sm text-muted-foreground"
               style={{ width: labelWidth }}
             >
               {d.label}
@@ -86,7 +86,7 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
                   background: d.color ?? color,
                 }}
               />
-              <span className="shrink-0 text-meta tabular-nums">
+              <span className="shrink-0 text-sm tabular-nums">
                 {d.display ?? d.value}
               </span>
             </span>

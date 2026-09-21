@@ -23,7 +23,7 @@ export const Default: Story = {
   render: () => (
     <div className="flex w-[360px] flex-col gap-6">
       <section className="flex flex-col gap-1">
-        <div className="text-meta text-muted-foreground">Purpose</div>
+        <div className="text-sm text-muted-foreground">Purpose</div>
         <ClampedText>
           Map the exposure of the refinery supply chain, end to end: which
           terminals feed which depots, which carriers move between them, and
@@ -35,7 +35,7 @@ export const Default: Story = {
       </section>
 
       <section className="flex flex-col gap-1">
-        <div className="text-meta text-muted-foreground">Purpose</div>
+        <div className="text-sm text-muted-foreground">Purpose</div>
         <ClampedText>Weekly intraday scan.</ClampedText>
       </section>
     </div>

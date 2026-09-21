@@ -81,7 +81,7 @@ const TableHead = React.forwardRef<
       // every cell follows from there. One prop on the table rather than a
       // size on <TableHead> and <TableCell> individually — four places to
       // forget, and a table with two densities in it is always a mistake.
-      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:text-meta",
+      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:text-sm",
       className
     )}
     {...props}

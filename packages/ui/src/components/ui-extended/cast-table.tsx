@@ -93,7 +93,7 @@ export const CastTable = React.forwardRef<HTMLDivElement, CastTableProps>(
 
               return (
                 <TableRow key={role} data-role={role}>
-                  <TableCell className="font-mono text-meta text-muted-foreground">
+                  <TableCell className="font-mono text-sm text-muted-foreground">
                     {role}
                   </TableCell>
                   <TableCell className="min-w-0">
@@ -103,12 +103,12 @@ export const CastTable = React.forwardRef<HTMLDivElement, CastTableProps>(
                         tone={denied ? "denied" : "allowed"}
                       />
                     ) : (
-                      <span className="text-meta text-muted-foreground/70">
+                      <span className="text-sm text-muted-foreground/70">
                         nothing casts it
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="text-meta text-muted-foreground">
+                  <TableCell className="text-sm text-muted-foreground">
                     {denied ? (
                       <span className="text-destructive">
                         denied by {hit?.ruleMatched ?? "this world"}
@@ -134,7 +134,7 @@ export const CastTable = React.forwardRef<HTMLDivElement, CastTableProps>(
           </TableBody>
         </Table>
         {readOnly ? null : (
-          <p className="px-2 pt-1 text-meta text-muted-foreground/70">
+          <p className="px-2 pt-1 text-sm text-muted-foreground/70">
             A cast picks within the rules — it never widens them.
           </p>
         )}

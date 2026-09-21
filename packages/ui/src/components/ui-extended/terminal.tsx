@@ -89,7 +89,7 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
       ref={ref}
       style={{ "--terminal-cols": columnTemplate } as React.CSSProperties}
       className={cn(
-        "overflow-x-auto border border-border bg-muted/40 p-2 font-mono text-meta",
+        "overflow-x-auto border border-border bg-muted/40 p-2 font-mono text-sm",
         className,
       )}
       {...props}

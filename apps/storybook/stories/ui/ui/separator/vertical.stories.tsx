@@ -21,11 +21,11 @@ type Story = StoryObj<typeof meta>;
 export const Vertical: Story = {
   render: () => (
     <div className="flex h-20 items-center gap-4">
-      <div className="text-sm">Item 1</div>
+      <div className="text-base">Item 1</div>
       <Separator orientation="vertical" />
-      <div className="text-sm">Item 2</div>
+      <div className="text-base">Item 2</div>
       <Separator orientation="vertical" />
-      <div className="text-sm">Item 3</div>
+      <div className="text-base">Item 3</div>
     </div>
   ),
 };

@@ -40,7 +40,7 @@ export const ProductCard: Story = {
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">$299</span>
             <span className=" text-muted-foreground line-through">$399</span>
-            <span className="text-xs bg-destructive/10 text-destructive px-2 py-1 rounded">25% OFF</span>
+            <span className="text-sm bg-destructive/10 text-destructive px-2 py-1 rounded">25% OFF</span>
           </div>
           <div className="mt-3 flex gap-1">
             <span>⭐⭐⭐⭐⭐</span>

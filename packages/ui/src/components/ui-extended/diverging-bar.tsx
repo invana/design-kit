@@ -68,7 +68,7 @@ export const DivergingBar = React.forwardRef<
     return (
       <div ref={ref} className={cn("flex flex-col gap-1", className)} {...props}>
         {caption != null ? (
-          <span className="text-meta text-muted-foreground">{caption}</span>
+          <span className="text-sm text-muted-foreground">{caption}</span>
         ) : null}
         {data.map((d, i) => {
           const positive = d.value >= 0
@@ -76,7 +76,7 @@ export const DivergingBar = React.forwardRef<
           return (
             <div key={i} className="flex h-4 items-center gap-2">
               <span
-                className="shrink-0 truncate text-meta text-muted-foreground"
+                className="shrink-0 truncate text-sm text-muted-foreground"
                 style={{ width: labelWidth }}
               >
                 {d.label}
@@ -109,7 +109,7 @@ export const DivergingBar = React.forwardRef<
               {/* One gutter for every value, not one per side. Flipping the
                   column with the sign puts a negative number immediately after
                   the row's name, where it reads as part of the label. */}
-              <span className="w-8 shrink-0 text-right text-meta tabular-nums">
+              <span className="w-8 shrink-0 text-right text-sm tabular-nums">
                 {d.display ?? (d.value > 0 ? `+${d.value}` : d.value)}
               </span>
             </div>

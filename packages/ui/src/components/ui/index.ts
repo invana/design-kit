@@ -14,6 +14,7 @@ export * from './dropdown-menu';
 export * from './hover-card';
 export * from './item';
 export * from './kbd';
+export * from './link';
 export * from './menubar';
 export * from './navigation-menu';
 export * from './pagination';

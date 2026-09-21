@@ -51,7 +51,7 @@ export const TemplatePicker = React.forwardRef<
     {...props}
   >
     {heading != null ? (
-      <div className="flex h-6 shrink-0 items-center border-b border-border px-2 text-meta text-muted-foreground">
+      <div className="flex h-6 shrink-0 items-center border-b border-border px-2 text-sm text-muted-foreground">
         {heading}
       </div>
     ) : null}
@@ -74,10 +74,10 @@ export const TemplatePicker = React.forwardRef<
             )}
           >
             <span className="w-3 shrink-0 text-primary">{selected ? "•" : ""}</span>
-            <span className="truncate font-mono text-meta">{o.id}</span>
-            <span className="shrink-0 text-meta text-muted-foreground">{o.kind}</span>
+            <span className="truncate font-mono text-sm">{o.id}</span>
+            <span className="shrink-0 text-sm text-muted-foreground">{o.kind}</span>
             <span className="flex-1" />
-            <span className="shrink-0 truncate text-meta text-muted-foreground">
+            <span className="shrink-0 truncate text-sm text-muted-foreground">
               {o.unavailable ?? o.note}
             </span>
           </button>
@@ -85,7 +85,7 @@ export const TemplatePicker = React.forwardRef<
       })}
     </div>
     {footnote != null ? (
-      <div className="border-t border-border px-2 py-1 text-meta text-muted-foreground">
+      <div className="border-t border-border px-2 py-1 text-sm text-muted-foreground">
         {footnote}
       </div>
     ) : null}

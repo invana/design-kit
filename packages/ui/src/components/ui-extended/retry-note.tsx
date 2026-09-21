@@ -25,7 +25,7 @@ export const RetryNote = React.forwardRef<HTMLDivElement, RetryNoteProps>(
     <div
       ref={ref}
       className={cn(
-        "flex flex-wrap items-baseline gap-1.5 py-0.5 pl-4 text-meta text-muted-foreground",
+        "flex flex-wrap items-baseline gap-1.5 py-0.5 pl-4 text-sm text-muted-foreground",
         className,
       )}
       {...props}

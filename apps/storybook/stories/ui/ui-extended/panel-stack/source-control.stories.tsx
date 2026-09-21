@@ -112,7 +112,7 @@ const RepositoriesBody = () => (
       >
         <FolderGit2 className="h-4 w-4 shrink-0 text-muted-foreground" />
         <span className="truncate text-foreground">{r.name}</span>
-        <span className="truncate text-meta text-muted-foreground">{r.branch}</span>
+        <span className="truncate text-sm text-muted-foreground">{r.branch}</span>
         {r.changes > 0 && (
           <Badge variant="secondary" className="ml-auto rounded-full px-1.5 py-0">
             {r.changes}
@@ -141,8 +141,8 @@ const ChangesBody = () => (
         >
           <f.icon className="h-4 w-4 shrink-0 text-muted-foreground" />
           <span className="truncate text-foreground">{f.name}</span>
-          <span className="truncate text-meta text-muted-foreground">{f.dir}</span>
-          <span className="ml-auto text-meta font-medium text-muted-foreground">
+          <span className="truncate text-sm text-muted-foreground">{f.dir}</span>
+          <span className="ml-auto text-sm font-medium text-muted-foreground">
             {f.status}
           </span>
         </li>
@@ -201,7 +201,7 @@ const BranchesBody = ({ showRemotes }: { showRemotes: boolean }) => (
           {b.name}
         </span>
         {b.ahead && (
-          <span className="ml-auto shrink-0 text-meta text-muted-foreground">
+          <span className="ml-auto shrink-0 text-sm text-muted-foreground">
             {b.ahead}
           </span>
         )}
@@ -212,7 +212,7 @@ const BranchesBody = ({ showRemotes }: { showRemotes: boolean }) => (
 
 const StashesBody = ({ stashes }: { stashes: typeof initialStashes }) =>
   stashes.length === 0 ? (
-    <p className="px-2 py-3 text-meta text-muted-foreground">
+    <p className="px-2 py-3 text-sm text-muted-foreground">
       No stashes. Use the header menu to stash the current changes.
     </p>
   ) : (
@@ -224,7 +224,7 @@ const StashesBody = ({ stashes }: { stashes: typeof initialStashes }) =>
         >
           <Archive className="h-4 w-4 shrink-0 text-muted-foreground" />
           <span className="truncate text-foreground">{s.message}</span>
-          <span className="ml-auto shrink-0 text-meta text-muted-foreground">
+          <span className="ml-auto shrink-0 text-sm text-muted-foreground">
             {s.when}
           </span>
         </li>
@@ -236,7 +236,7 @@ const StashesBody = ({ stashes }: { stashes: typeof initialStashes }) =>
 // stay legible — so it belongs in `title`, not in the hover-revealed actions.
 const Title = ({ children, count }: { children: string; count?: number }) => (
   <span className="flex min-w-0 items-center gap-2">
-    <span className="truncate text-meta font-semibold uppercase tracking-wide">
+    <span className="truncate text-sm font-semibold uppercase tracking-wide">
       {children}
     </span>
     {count != null && (

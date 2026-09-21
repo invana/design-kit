@@ -243,7 +243,7 @@ export function Tour({
               {badgeLabel}
             </Badge>
             {showCounter && (
-              <span className="text-meta text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {current + 1} / {total}
               </span>
             )}
@@ -252,7 +252,7 @@ export function Tour({
             <Button
               variant="ghost"
               size="sm"
-              className="-mr-1 h-7 gap-1 px-2 text-meta text-muted-foreground [&_svg]:size-3.5"
+              className="-mr-1 h-7 gap-1 px-2 text-sm text-muted-foreground [&_svg]:size-3.5"
               onClick={ctrl.exit}
             >
               <X />

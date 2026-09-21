@@ -62,13 +62,13 @@ export const Default: Story = {
         {TONES.map(({ tone, address, note }) => (
           <div key={tone} className="flex items-baseline gap-3">
             <AddressChip address={address} tone={tone} className="w-[240px]" />
-            <span className="text-meta text-muted-foreground">{note}</span>
+            <span className="text-sm text-muted-foreground">{note}</span>
           </div>
         ))}
       </div>
 
       <div className="flex w-[200px] flex-col gap-1 rounded-control border border-border p-2">
-        <span className="text-meta text-muted-foreground">
+        <span className="text-sm text-muted-foreground">
           200px — the kind gives way first
         </span>
         <AddressChip address="graph_data/model/NewsArticles@1.0.1" />

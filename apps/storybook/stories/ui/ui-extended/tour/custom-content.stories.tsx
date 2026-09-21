@@ -26,18 +26,18 @@ const steps: TourStep[] = [
     // `content` is an escape hatch: it replaces the typed body/callout/references region.
     content: (
       <div className="space-y-3">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Use the <code className="rounded bg-muted px-1">content</code> prop to render
           anything you like inside a step.
         </p>
         <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-md border border-border p-3 text-center text-sm">
+          <div className="rounded-md border border-border p-3 text-center text-base">
             12.4k
-            <div className="text-xs text-muted-foreground">requests</div>
+            <div className="text-sm text-muted-foreground">requests</div>
           </div>
-          <div className="rounded-md border border-border p-3 text-center text-sm">
+          <div className="rounded-md border border-border p-3 text-center text-base">
             99.98%
-            <div className="text-xs text-muted-foreground">uptime</div>
+            <div className="text-sm text-muted-foreground">uptime</div>
           </div>
         </div>
       </div>

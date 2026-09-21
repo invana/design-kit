@@ -33,7 +33,7 @@ export const Default: Story = {
   render: () => (
     <div className="flex w-[560px] flex-col gap-5">
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">line — under a rule</p>
+        <p className="pb-1 text-sm text-muted-foreground">line — under a rule</p>
         <SliceSummary
           select={{
             time: { axis: 'signed_at', from: '2026-01-01', to: '2026-06-30' },
@@ -53,7 +53,7 @@ export const Default: Story = {
       </div>
 
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">block — W3 and R2</p>
+        <p className="pb-1 text-sm text-muted-foreground">block — W3 and R2</p>
         <SliceSummary
           variant="block"
           select={{
@@ -64,7 +64,7 @@ export const Default: Story = {
       </div>
 
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">
+        <p className="pb-1 text-sm text-muted-foreground">
           the refusal — an axis the model never declared
         </p>
         <SliceSummary
@@ -81,7 +81,7 @@ export const Default: Story = {
       </div>
 
       <div>
-        <p className="pb-1 text-meta text-muted-foreground">not sliced</p>
+        <p className="pb-1 text-sm text-muted-foreground">not sliced</p>
         <SliceSummary />
       </div>
     </div>

@@ -61,10 +61,10 @@ export const MatchPreview = React.forwardRef<HTMLDivElement, MatchPreviewProps>(
         {...props}
       >
         <div className="flex min-w-0 items-baseline gap-2">
-          <span className="text-meta text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             what this matches
           </span>
-          <span className="ml-auto shrink-0 text-meta tabular-nums text-muted-foreground">
+          <span className="ml-auto shrink-0 text-sm tabular-nums text-muted-foreground">
             {loading ? "…" : `${hits.length} of ${matches.length}`}
           </span>
         </div>
@@ -76,11 +76,11 @@ export const MatchPreview = React.forwardRef<HTMLDivElement, MatchPreviewProps>(
             <Skeleton className="h-3 w-1/2" />
           </div>
         ) : matches.length === 0 ? (
-          <p className="text-meta text-muted-foreground/70">
+          <p className="text-sm text-muted-foreground/70">
             nothing in this Graph to match — the layer has no participants yet
           </p>
         ) : hits.length === 0 ? (
-          <p className="text-meta text-destructive">
+          <p className="text-sm text-destructive">
             <span className="font-mono">{pattern}</span> matches nothing here
           </p>
         ) : null}
@@ -95,7 +95,7 @@ export const MatchPreview = React.forwardRef<HTMLDivElement, MatchPreviewProps>(
               />
             ))}
             {hidden > 0 ? (
-              <span className="pt-0.5 text-meta text-muted-foreground/70">
+              <span className="pt-0.5 text-sm text-muted-foreground/70">
                 and {hidden} more
               </span>
             ) : null}

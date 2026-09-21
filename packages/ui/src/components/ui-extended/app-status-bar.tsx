@@ -46,7 +46,7 @@ export const AppStatusBar = React.forwardRef<HTMLDivElement, AppStatusBarProps>(
     <div
       ref={ref}
       className={cn(
-        "flex h-[25px] shrink-0 items-center gap-2 border-t border-border px-2 text-meta text-muted-foreground",
+        "flex h-[25px] shrink-0 items-center gap-2 border-t border-border px-2 text-sm text-muted-foreground",
         className,
       )}
       {...props}

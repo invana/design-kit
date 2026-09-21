@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import { Button } from '@invana/ui';
+import { Button, Eyebrow } from '@invana/ui';
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
@@ -76,8 +76,8 @@ export const ObjectField: Story = {
           </form>
         </Form>
         <div>
-          <h4 className="mb-2 text-sm font-medium text-muted-foreground">Submitted payload</h4>
-          <pre className="rounded-md border bg-muted/40 p-3 text-xs">
+          <Eyebrow className="mb-2">Submitted payload</Eyebrow>
+          <pre className="rounded-md border bg-muted/40 p-3 text-sm">
             {submitted ? JSON.stringify(submitted, null, 2) : '— submit the form —'}
           </pre>
         </div>

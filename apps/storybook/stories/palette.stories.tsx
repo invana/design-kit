@@ -1,5 +1,5 @@
 import type { StoryObj } from '@storybook/react-vite';
-import { Badge, Separator } from '@invana/ui';
+import { Badge, Separator, TypographyH3, TypographyH4 } from '@invana/ui';
 import { themes, getThemeVariantById } from '@invana/styling/themes';
 import React, { useEffect, useState } from 'react';
 import { ThemeControls, useThemeControls } from '../src';
@@ -39,9 +39,9 @@ const ColorSwatch = ({ name, cssVar, description, themeKey, containerRef, accent
         style={{ backgroundColor: color }}
       />
       <div>
-        <p className="font-semibold text-sm text-foreground">{name}</p>
-        <p className="text-xs text-muted-foreground font-mono">{cssVar}</p>
-        <p className="text-xs text-muted-foreground mt-1">{description}</p>
+        <p className="font-semibold text-base text-foreground">{name}</p>
+        <p className="text-sm text-muted-foreground font-mono">{cssVar}</p>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
       </div>
     </div>
   );
@@ -123,10 +123,10 @@ export const ColorPalette: StoryObj = {
         <div className="sticky top-0 z-50 backdrop-blur -mx-8 -mt-8 px-8 py-4 mb-8 border-b">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Color Palette</h2>
+              <TypographyH3 className="mb-2">Color Palette</TypographyH3>
               {themeInfo && (
                 <>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
+                  <div className="flex items-center gap-3 text-base text-muted-foreground mb-2">
                     <span>Current Theme:</span>
                     <Badge variant="secondary" className="font-semibold">
                       {themeInfo.theme.name}
@@ -134,9 +134,9 @@ export const ColorPalette: StoryObj = {
                     <Badge variant="outline">
                       {themeInfo.variant.mode === 'light' ? '☀️ Light' : '🌙 Dark'}
                     </Badge>
-                    <span className="text-xs">({currentThemeId})</span>
+                    <span className="text-sm">({currentThemeId})</span>
                   </div>
-                  <div className="text-xs text-muted-foreground font-mono">
+                  <div className="text-sm text-muted-foreground font-mono">
                     Debug: {debugInfo}
                   </div>
                 </>
@@ -157,7 +157,7 @@ export const ColorPalette: StoryObj = {
 
         {colorGroups.map((group) => (
           <section key={group.title} className="mb-10">
-            <h3 className="text-xl font-semibold mb-4">{group.title}</h3>
+            <TypographyH4 className="mb-4">{group.title}</TypographyH4>
             <Separator className="mb-6" />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {group.colors.map((color) => (

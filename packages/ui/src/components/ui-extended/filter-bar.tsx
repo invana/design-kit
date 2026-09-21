@@ -49,7 +49,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       {children}
       <span className="flex-1" />
       {summary != null ? (
-        <span className="shrink-0 text-meta text-muted-foreground">{summary}</span>
+        <span className="shrink-0 text-sm text-muted-foreground">{summary}</span>
       ) : null}
     </div>
   ),

@@ -35,40 +35,40 @@ const FileTreeContent = () => (
     <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
       <ChevronRight className="h-3 w-3" />
       <FolderOpen className="h-4 w-4 text-yellow-500" />
-      <span className="text-sm">src</span>
+      <span className="text-base">src</span>
     </div>
     <div className="pl-4 space-y-1">
       <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
         <ChevronRight className="h-3 w-3" />
         <FolderOpen className="h-4 w-4 text-yellow-500" />
-        <span className="text-sm">components</span>
+        <span className="text-base">components</span>
       </div>
       <div className="pl-4 space-y-1">
         <div className="flex items-center gap-1 p-1 rounded bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Button.tsx</span>
+          <span className="text-base">Button.tsx</span>
         </div>
         <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Input.tsx</span>
+          <span className="text-base">Input.tsx</span>
         </div>
         <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
           <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-sm">Card.tsx</span>
+          <span className="text-base">Card.tsx</span>
         </div>
       </div>
       <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
         <FileCode className="h-4 w-4 text-blue-500" />
-        <span className="text-sm">index.ts</span>
+        <span className="text-base">index.ts</span>
       </div>
     </div>
     <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
       <File className="h-4 w-4 text-gray-500" />
-      <span className="text-sm">package.json</span>
+      <span className="text-base">package.json</span>
     </div>
     <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
       <File className="h-4 w-4 text-gray-500" />
-      <span className="text-sm">tsconfig.json</span>
+      <span className="text-base">tsconfig.json</span>
     </div>
   </div>
 );
@@ -76,15 +76,15 @@ const FileTreeContent = () => (
 // Search results content
 const SearchResultsContent = () => (
   <div className="p-2 space-y-2">
-    <div className="text-xs text-muted-foreground mb-2">3 results in 2 files</div>
+    <div className="text-sm text-muted-foreground mb-2">3 results in 2 files</div>
     <div className="space-y-1">
       <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-sm font-medium">Button.tsx</div>
-        <div className="text-xs text-muted-foreground">Line 12: const Button = ...</div>
+        <div className="text-base font-medium">Button.tsx</div>
+        <div className="text-sm text-muted-foreground">Line 12: const Button = ...</div>
       </div>
       <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-sm font-medium">Input.tsx</div>
-        <div className="text-xs text-muted-foreground">Line 8: const Input = ...</div>
+        <div className="text-base font-medium">Input.tsx</div>
+        <div className="text-sm text-muted-foreground">Line 8: const Input = ...</div>
       </div>
     </div>
   </div>
@@ -93,22 +93,22 @@ const SearchResultsContent = () => (
 // Git changes content
 const GitChangesContent = () => (
   <div className="p-2">
-    <div className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
+    <div className="text-sm font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
     <div className="space-y-1">
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-green-500">M</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Button.tsx</span>
+        <span className="text-base">Button.tsx</span>
       </div>
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-green-500">M</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Input.tsx</span>
+        <span className="text-base">Input.tsx</span>
       </div>
       <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
         <span className="text-blue-500">A</span>
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Card.tsx</span>
+        <span className="text-base">Card.tsx</span>
       </div>
     </div>
   </div>
@@ -117,9 +117,9 @@ const GitChangesContent = () => (
 // Simple placeholder body for the lighter-weight sidebar panels
 const SimplePanelText = ({ title, lines }: { title: string; lines: string[] }) => (
   <div className="p-3 space-y-2">
-    <div className="text-sm font-medium">{title}</div>
+    <div className="text-base font-medium">{title}</div>
     {lines.map((line, i) => (
-      <p key={i} className="text-xs text-muted-foreground">{line}</p>
+      <p key={i} className="text-sm text-muted-foreground">{line}</p>
     ))}
   </div>
 );
@@ -225,19 +225,19 @@ const EditorContent = () => (
     <div className="flex border-b bg-card">
       <div className="flex items-center gap-2 px-4 py-2 border-r bg-background">
         <FileCode className="h-4 w-4 text-blue-500" />
-        <span className="text-sm">Button.tsx</span>
+        <span className="text-base">Button.tsx</span>
         <button className="ml-2 h-4 w-4 rounded hover:bg-accent flex items-center justify-center">
           ×
         </button>
       </div>
       <div className="flex items-center gap-2 px-4 py-2 border-r text-muted-foreground hover:bg-accent cursor-pointer">
         <FileCode className="h-4 w-4" />
-        <span className="text-sm">Input.tsx</span>
+        <span className="text-base">Input.tsx</span>
       </div>
     </div>
     
     {/* Editor content */}
-    <div className="flex-1 overflow-auto p-4 font-mono text-sm">
+    <div className="flex-1 overflow-auto p-4 font-mono text-base">
       <pre className="text-muted-foreground">
 {`import React from 'react';
 import { cn } from '@/lib/utils';
@@ -254,7 +254,7 @@ ${''}export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(
           'inline-flex items-center justify-center rounded-md',
-          'text-sm font-medium transition-colors',
+          'text-base font-medium transition-colors',
           'focus-visible:outline-none focus-visible:ring-2',
           className
         )}
@@ -273,7 +273,7 @@ Button.displayName = 'Button';`}
 
 // Terminal content
 const TerminalTabContent = () => (
-  <div className="p-3 font-mono text-xs bg-black text-green-400 h-full">
+  <div className="p-3 font-mono text-sm bg-black text-green-400 h-full">
     <div>$ npm run dev</div>
     <div className="text-muted-foreground mt-1">&gt; design-kit@1.0.0 dev</div>
     <div className="text-muted-foreground">&gt; vite</div>
@@ -291,22 +291,22 @@ const ProblemsTabContent = () => (
     <div className="flex items-center gap-2 p-2 rounded hover:bg-accent cursor-pointer">
       <AlertCircle className="h-4 w-4 text-destructive" />
       <div>
-        <div className="text-sm">Unused variable 'variant'</div>
-        <div className="text-xs text-muted-foreground">Button.tsx [12, 5]</div>
+        <div className="text-base">Unused variable 'variant'</div>
+        <div className="text-sm text-muted-foreground">Button.tsx [12, 5]</div>
       </div>
     </div>
     <div className="flex items-center gap-2 p-2 rounded hover:bg-accent cursor-pointer">
       <AlertCircle className="h-4 w-4 text-yellow-500" />
       <div>
-        <div className="text-sm">Missing return type</div>
-        <div className="text-xs text-muted-foreground">Input.tsx [8, 10]</div>
+        <div className="text-base">Missing return type</div>
+        <div className="text-sm text-muted-foreground">Input.tsx [8, 10]</div>
       </div>
     </div>
     <div className="flex items-center gap-2 p-2 rounded hover:bg-accent cursor-pointer">
       <AlertCircle className="h-4 w-4 text-yellow-500" />
       <div>
-        <div className="text-sm">Implicit any type</div>
-        <div className="text-xs text-muted-foreground">Card.tsx [5, 3]</div>
+        <div className="text-base">Implicit any type</div>
+        <div className="text-sm text-muted-foreground">Card.tsx [5, 3]</div>
       </div>
     </div>
   </div>
@@ -314,7 +314,7 @@ const ProblemsTabContent = () => (
 
 // Output content
 const OutputTabContent = () => (
-  <div className="p-3 font-mono text-xs">
+  <div className="p-3 font-mono text-sm">
     <div>[12:34:56] Starting compilation...</div>
     <div className="text-muted-foreground">[12:34:57] File change detected. Starting incremental compilation...</div>
     <div className="text-green-500">[12:34:58] Compilation complete. Watching for file changes.</div>
@@ -373,7 +373,7 @@ const BottomSectionPanel = ({ isMaximized, onToggleMaximize, onClose }: PanelChr
 // Outline content
 const OutlineTabContent = () => (
   <div className="p-2">
-    <div className="space-y-1 text-sm">
+    <div className="space-y-1 text-base">
       <div className="flex items-center gap-2 p-1.5 rounded hover:bg-accent cursor-pointer">
         <span className="text-purple-500">I</span>
         <span>ButtonProps</span>
@@ -400,16 +400,16 @@ const OutlineTabContent = () => (
 const TimelineTabContent = () => (
   <div className="p-2 space-y-2">
     <div className="p-2 rounded hover:bg-accent cursor-pointer">
-      <div className="text-sm font-medium">Fixed button styling</div>
-      <div className="text-xs text-muted-foreground">2 minutes ago</div>
+      <div className="text-base font-medium">Fixed button styling</div>
+      <div className="text-sm text-muted-foreground">2 minutes ago</div>
     </div>
     <div className="p-2 rounded hover:bg-accent cursor-pointer">
-      <div className="text-sm font-medium">Added input validation</div>
-      <div className="text-xs text-muted-foreground">15 minutes ago</div>
+      <div className="text-base font-medium">Added input validation</div>
+      <div className="text-sm text-muted-foreground">15 minutes ago</div>
     </div>
     <div className="p-2 rounded hover:bg-accent cursor-pointer">
-      <div className="text-sm font-medium">Updated dependencies</div>
-      <div className="text-xs text-muted-foreground">1 hour ago</div>
+      <div className="text-base font-medium">Updated dependencies</div>
+      <div className="text-sm text-muted-foreground">1 hour ago</div>
     </div>
   </div>
 );
@@ -690,7 +690,7 @@ const AppV2Demo = ({ bottomSpan }: Pick<AppLayoutV2Props, 'bottomSpan'>) => {
           <div className="relative w-full">
             <Input 
               placeholder="design-kit - Button.tsx" 
-              className="h-7 text-center text-sm bg-muted/50"
+              className="h-7 text-center text-base bg-muted/50"
             />
           </div>
         </div>
@@ -812,7 +812,7 @@ const AppV2Demo = ({ bottomSpan }: Pick<AppLayoutV2Props, 'bottomSpan'>) => {
     // Status bar expressed entirely as NavHorizontal items — no layout HTML.
     // Left items carry icons; right items are label-only (icon is optional).
     footer: {
-      className: "!h-[25px] px-2 text-sm",
+      className: "!h-[25px] px-2 text-base",
       leftNavItems: [
         { name: "Branch", icon: GitBranch, label: "main", ...STATUS_ITEM },
         { name: "Errors", icon: AlertCircle, label: "0", ...STATUS_ITEM },

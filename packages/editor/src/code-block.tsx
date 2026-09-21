@@ -90,7 +90,7 @@ export function CodeBlock({
       ref={ref}
       className={cn(
         "overflow-hidden border border-border bg-muted/40 [&_.cm-editor]:bg-transparent",
-        "[&_.cm-content]:font-mono [&_.cm-content]:text-meta [&_.cm-focused]:outline-none",
+        "[&_.cm-content]:font-mono [&_.cm-content]:text-sm [&_.cm-focused]:outline-none",
         "[&_.cm-gutters]:border-none [&_.cm-gutters]:bg-transparent [&_.cm-gutters]:text-muted-foreground",
         className,
       )}

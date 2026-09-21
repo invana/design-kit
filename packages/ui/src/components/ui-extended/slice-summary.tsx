@@ -116,7 +116,7 @@ export const SliceSummary = React.forwardRef<HTMLDivElement, SliceSummaryProps>(
       return (
         <div
           ref={ref}
-          className={cn("text-meta text-muted-foreground/70", className)}
+          className={cn("text-sm text-muted-foreground/70", className)}
           {...props}
         >
           not sliced — the whole model
@@ -138,7 +138,7 @@ export const SliceSummary = React.forwardRef<HTMLDivElement, SliceSummaryProps>(
           <div key={line.axisKind} className="flex min-w-0 flex-col">
             <span
               className={cn(
-                "truncate text-meta",
+                "truncate text-sm",
                 line.undeclared
                   ? "text-destructive line-through decoration-destructive/50"
                   : "text-muted-foreground",
@@ -147,7 +147,7 @@ export const SliceSummary = React.forwardRef<HTMLDivElement, SliceSummaryProps>(
               {line.text}
             </span>
             {line.undeclared ? (
-              <span className="text-meta text-destructive">
+              <span className="text-sm text-destructive">
                 {modelLabel ?? "this model"} declares no {line.axisKind} axis, so
                 it cannot be sliced by one. Declaring one is a modelling act.
               </span>

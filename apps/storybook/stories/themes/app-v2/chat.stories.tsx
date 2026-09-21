@@ -132,7 +132,7 @@ const SessionsList: React.FC = () => (
                 }`}
               />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-sm leading-snug">{item.title}</div>
+                <div className="truncate text-base leading-snug">{item.title}</div>
                 <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
                   <SessionAvatars ids={item.avatars} />
                   <span>·</span>
@@ -176,12 +176,12 @@ const CustomizationsPanel: React.FC = () => (
       {CUSTOMIZATIONS.map(({ icon: Icon, label, count }) => (
         <li
           key={label}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm hover:bg-accent cursor-pointer"
+          className="flex items-center gap-2 px-3 py-1.5 text-base hover:bg-accent cursor-pointer"
         >
           <Icon className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">{label}</span>
           {count !== undefined && (
-            <span className="text-xs text-muted-foreground">{count}</span>
+            <span className="text-sm text-muted-foreground">{count}</span>
           )}
         </li>
       ))}
@@ -195,9 +195,9 @@ const LeftSection: React.FC = () => (
     <div className="flex items-center justify-between border-b px-3 py-2">
       <div className="flex items-center gap-1.5">
         <MessageSquare className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Sessions</span>
+        <span className="text-base font-medium">Sessions</span>
       </div>
-      <Button size="sm" variant="ghost" className="h-6 gap-1 px-2 text-xs">
+      <Button size="sm" variant="ghost" className="h-6 gap-1 px-2 text-sm">
         <Plus className="h-3 w-3" />
         New
       </Button>
@@ -213,7 +213,7 @@ const LeftSection: React.FC = () => (
 const ChatCanvas: React.FC = () => (
   <div className="flex h-full flex-col bg-background">
     {/* Top context bar */}
-    <div className="flex items-center gap-2 border-b px-4 py-2 text-sm">
+    <div className="flex items-center gap-2 border-b px-4 py-2 text-base">
       <span className="text-muted-foreground">Working in</span>
       <Badge variant="secondary" className="gap-1">
         <Folder className="h-3 w-3" />
@@ -237,20 +237,20 @@ const ChatCanvas: React.FC = () => (
             />
             <div className="flex items-center justify-between border-t px-3 py-2">
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" className="h-7 gap-1.5 px-2 text-xs">
+                <Button variant="ghost" size="sm" className="h-7 gap-1.5 px-2 text-sm">
                   <Sparkles className="h-3.5 w-3.5" />
                   Claude Sonnet 4.6
                   <span className="text-muted-foreground">· High</span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
                 <Separator orientation="vertical" className="h-4" />
-                <Button variant="ghost" size="sm" className="h-7 gap-1.5 px-2 text-xs">
+                <Button variant="ghost" size="sm" className="h-7 gap-1.5 px-2 text-sm">
                   <Wand2 className="h-3.5 w-3.5" />
                   Edit Automatically
                   <Switch className="ml-1 scale-75" defaultChecked />
                 </Button>
               </div>
-              <Button size="sm" className="h-7 gap-1.5 px-3 text-xs">
+              <Button size="sm" className="h-7 gap-1.5 px-3 text-sm">
                 <ImageIcon className="h-3.5 w-3.5" />
                 Attach
               </Button>
@@ -260,7 +260,7 @@ const ChatCanvas: React.FC = () => (
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={70} minSize={20} className="bg-muted/10">
-        <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+        <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
           Canvas
         </div>
       </ResizablePanel>
@@ -303,7 +303,7 @@ const FilesContent: React.FC = () => (
       return (
         <div
           key={i}
-          className="flex items-center gap-1.5 px-2 py-0.5 hover:bg-accent cursor-pointer text-sm"
+          className="flex items-center gap-1.5 px-2 py-0.5 hover:bg-accent cursor-pointer text-base"
           style={{ paddingLeft: `${(f.depth ?? 0) * 12 + 8}px` }}
         >
           {f.depth === 0 || f.icon === Folder || f.icon === FolderOpen ? (
@@ -338,7 +338,7 @@ const Header: React.FC = () => (
     <div className="flex items-center gap-2">
       <Home className="h-4 w-4 text-muted-foreground" />
       <Separator orientation="vertical" className="h-4" />
-      <span className="text-sm font-medium">design-kit</span>
+      <span className="text-base font-medium">design-kit</span>
       <Badge variant="outline" className="h-5 text-[10px]">
         agent
       </Badge>
@@ -392,7 +392,7 @@ export const Chat: Story = {
     footer: {
       className: "!h-[25px]",
       left: (
-        <div className="flex items-center gap-4 px-3 text-xs text-muted-foreground">
+        <div className="flex items-center gap-4 px-3 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <GitBranch className="h-3 w-3" /> main
           </span>
@@ -400,7 +400,7 @@ export const Chat: Story = {
         </div>
       ),
       right: (
-        <div className="flex items-center gap-3 px-3 text-xs text-muted-foreground">
+        <div className="flex items-center gap-3 px-3 text-sm text-muted-foreground">
           <span>Agent mode</span>
           <span>Ready</span>
         </div>

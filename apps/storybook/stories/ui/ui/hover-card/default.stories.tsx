@@ -1,10 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-  Button,
-} from '@invana/ui';
+import { Button, HoverCard, HoverCardContent, HoverCardTrigger, TypographyH6 } from '@invana/ui';
 import { CalendarDays } from 'lucide-react';
 
 const meta: Meta<typeof HoverCard> = {
@@ -31,11 +26,11 @@ export const Default: Story = {
             IN
           </div>
           <div className="space-y-1">
-            <h4 className="text-sm font-semibold">@invana</h4>
-            <p className="text-sm text-muted-foreground">
+            <TypographyH6>@invana</TypographyH6>
+            <p className="text-base text-muted-foreground">
               The open-source graph visualization and analytics platform.
             </p>
-            <div className="flex items-center pt-2 text-xs text-muted-foreground">
+            <div className="flex items-center pt-2 text-sm text-muted-foreground">
               <CalendarDays className="mr-2 h-4 w-4" />
               Joined December 2021
             </div>

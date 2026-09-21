@@ -11,7 +11,7 @@ const TypographySmall = React.forwardRef<HTMLElement, TypographySmallProps>(
       <small
         ref={ref}
         className={cn(
-          "text-meta font-medium leading-none",
+          "text-sm font-medium leading-none",
           className
         )}
         {...props}

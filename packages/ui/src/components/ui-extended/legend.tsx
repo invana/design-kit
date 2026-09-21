@@ -94,7 +94,7 @@ export const Legend = React.forwardRef<HTMLDivElement, LegendProps>(
       ref={ref}
       role="list"
       className={cn(
-        "flex gap-x-3 gap-y-1 text-meta",
+        "flex gap-x-3 gap-y-1 text-sm",
         orientation === "row" ? "flex-wrap items-center" : "flex-col",
         className,
       )}

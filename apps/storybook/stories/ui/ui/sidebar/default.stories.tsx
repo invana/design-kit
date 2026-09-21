@@ -46,10 +46,10 @@ export const Default: Story = {
         <Sidebar collapsible="icon">
           <SidebarHeader>
             <div className="flex items-center gap-2 px-2 py-1.5">
-              <div className="flex aspect-square size-7 items-center justify-center rounded-md bg-primary text-primary-foreground text-sm font-semibold">
+              <div className="flex aspect-square size-7 items-center justify-center rounded-md bg-primary text-primary-foreground text-base font-semibold">
                 I
               </div>
-              <span className="text-sm font-semibold">Invana</span>
+              <span className="text-base font-semibold">Invana</span>
             </div>
           </SidebarHeader>
           <SidebarContent>
@@ -84,9 +84,9 @@ export const Default: Story = {
         <main className="flex flex-1 flex-col bg-background">
           <header className="flex h-12 items-center gap-2 border-b px-4">
             <SidebarTrigger />
-            <span className="text-sm font-medium">Dashboard</span>
+            <span className="text-base font-medium">Dashboard</span>
           </header>
-          <div className="flex-1 p-4 text-sm text-muted-foreground">
+          <div className="flex-1 p-4 text-base text-muted-foreground">
             Main content area.
           </div>
         </main>

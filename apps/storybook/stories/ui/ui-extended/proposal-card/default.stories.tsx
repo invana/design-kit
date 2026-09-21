@@ -40,7 +40,7 @@ export const Default: Story = {
             </TableHeader>
             <TableBody>
               {ROWS.map((r) => (
-                <TableRow key={r[1]}>{r.map((c, i) => <TableCell key={i} className="font-mono text-meta">{c}</TableCell>)}</TableRow>
+                <TableRow key={r[1]}>{r.map((c, i) => <TableCell key={i} className="font-mono text-sm">{c}</TableCell>)}</TableRow>
               ))}
             </TableBody>
           </Table>

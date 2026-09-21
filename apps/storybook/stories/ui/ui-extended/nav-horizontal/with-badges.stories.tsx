@@ -71,7 +71,7 @@ export const WithBadges: Story = {
         ]}
         // Static: no href, onClick or menuItems — plain text, no hover state.
         center={
-          <span className="text-meta text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             Synced 2 minutes ago
           </span>
         }

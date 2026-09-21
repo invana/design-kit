@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Switch, Label } from '@invana/forms';
+import { TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Switch> = {
   title: 'UI/UI/Switch',
@@ -25,7 +26,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-2xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">All States</h3>
+        <TypographyH5 className="mb-4">All States</TypographyH5>
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
             <Switch id="off" />
@@ -47,26 +48,26 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Settings Panel</h3>
+        <TypographyH5 className="mb-4">Settings Panel</TypographyH5>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="notifications" className="font-medium">Notifications</Label>
-              <p className="text-sm text-muted-foreground">Receive push notifications</p>
+              <p className="text-base text-muted-foreground">Receive push notifications</p>
             </div>
             <Switch id="notifications" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="marketing" className="font-medium">Marketing Emails</Label>
-              <p className="text-sm text-muted-foreground">Receive marketing updates</p>
+              <p className="text-base text-muted-foreground">Receive marketing updates</p>
             </div>
             <Switch id="marketing" />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="security" className="font-medium">Security Alerts</Label>
-              <p className="text-sm text-muted-foreground">Get notified of security events</p>
+              <p className="text-base text-muted-foreground">Get notified of security events</p>
             </div>
             <Switch id="security" defaultChecked />
           </div>
@@ -74,7 +75,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Feature Toggles</h3>
+        <TypographyH5 className="mb-4">Feature Toggles</TypographyH5>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label htmlFor="dark-mode">🌙 Dark Mode</Label>
@@ -96,26 +97,26 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Privacy Settings</h3>
+        <TypographyH5 className="mb-4">Privacy Settings</TypographyH5>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="profile-public" className="font-medium">Public Profile</Label>
-              <p className="text-sm text-muted-foreground">Make your profile visible to everyone</p>
+              <p className="text-base text-muted-foreground">Make your profile visible to everyone</p>
             </div>
             <Switch id="profile-public" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="show-email" className="font-medium">Show Email</Label>
-              <p className="text-sm text-muted-foreground">Display email on your profile</p>
+              <p className="text-base text-muted-foreground">Display email on your profile</p>
             </div>
             <Switch id="show-email" />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="activity" className="font-medium">Activity Status</Label>
-              <p className="text-sm text-muted-foreground">Show when you're online</p>
+              <p className="text-base text-muted-foreground">Show when you're online</p>
             </div>
             <Switch id="activity" defaultChecked />
           </div>
@@ -123,18 +124,18 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Compact Layout</h3>
+        <TypographyH5 className="mb-4">Compact Layout</TypographyH5>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="c1" className="text-sm">Option 1</Label>
+            <Label htmlFor="c1" className="text-base">Option 1</Label>
             <Switch id="c1" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="c2" className="text-sm">Option 2</Label>
+            <Label htmlFor="c2" className="text-base">Option 2</Label>
             <Switch id="c2" />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="c3" className="text-sm">Option 3</Label>
+            <Label htmlFor="c3" className="text-base">Option 3</Label>
             <Switch id="c3" defaultChecked />
           </div>
         </div>

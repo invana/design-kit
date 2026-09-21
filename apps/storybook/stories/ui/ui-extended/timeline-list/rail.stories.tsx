@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TimelineList, TimelineEntry, TimelineFooter, StatusDot } from '@invana/ui';
+import { Link, StatusDot, TimelineEntry, TimelineFooter, TimelineList, TypographyH6 } from '@invana/ui';
 
 const meta: Meta<typeof TimelineList> = {
   title: 'UI/UI Extended/TimelineList',
@@ -24,7 +24,7 @@ const entries = [
 export const Rail: Story = {
   render: () => (
     <div className="w-[340px] rounded-lg border border-border bg-card p-4">
-      <h3 className="mb-3 font-medium">Latest from our changelog</h3>
+      <TypographyH6 className="mb-3">Latest from our changelog</TypographyH6>
       <TimelineList variant="rail">
         {entries.map((entry) => (
           <TimelineEntry
@@ -32,16 +32,16 @@ export const Rail: Story = {
             when={entry.when}
             marker={<StatusDot tone="muted" />}
             title={
-              <a href="#" className="hover:underline">
+              <Link href="#" variant="quiet">
                 {entry.title}
-              </a>
+              </Link>
             }
           />
         ))}
         <TimelineFooter>
-          <a href="#" className="text-meta text-muted-foreground hover:underline">
+          <Link href="#" variant="quiet">
             View changelog →
-          </a>
+          </Link>
         </TimelineFooter>
       </TimelineList>
     </div>

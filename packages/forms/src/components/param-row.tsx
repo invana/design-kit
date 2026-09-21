@@ -95,9 +95,9 @@ export const ParamRow = React.forwardRef<HTMLDivElement, ParamRowProps>(
       {...props}
     >
       <div className="w-[118px] shrink-0 pt-1">
-        <div className="truncate font-mono text-meta">{name}</div>
+        <div className="truncate font-mono text-sm">{name}</div>
         {type != null ? (
-          <div className="truncate text-meta text-muted-foreground">{type}</div>
+          <div className="truncate text-sm text-muted-foreground">{type}</div>
         ) : null}
       </div>
 
@@ -112,7 +112,7 @@ export const ParamRow = React.forwardRef<HTMLDivElement, ParamRowProps>(
               <SelectTrigger
                 triggerSize="sm"
                 aria-label={`${name} source`}
-                className="w-auto shrink-0 rounded-r-none border-r-0 text-meta text-muted-foreground"
+                className="w-auto shrink-0 rounded-r-none border-r-0 text-sm text-muted-foreground"
               >
                 <SelectValue />
               </SelectTrigger>
@@ -142,7 +142,7 @@ export const ParamRow = React.forwardRef<HTMLDivElement, ParamRowProps>(
         {note != null ? (
           <div
             className={cn(
-              "text-meta",
+              "text-sm",
               invalid ? "text-destructive" : "text-muted-foreground",
             )}
           >

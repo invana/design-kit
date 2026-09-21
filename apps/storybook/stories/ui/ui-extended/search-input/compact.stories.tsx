@@ -28,7 +28,7 @@ export const Compact: Story = {
         <SearchInput
           value={value}
           onChange={setValue}
-          className="h-8 text-sm"
+          className="h-8 text-base"
         />
       </div>
     );

@@ -31,7 +31,7 @@ export const Default: Story = {
           <Textarea
             rows={2}
             defaultValue="clean read of the crude move into OMCs"
-            className="text-meta"
+            className="text-sm"
           />
         </RatingControl>
       </div>

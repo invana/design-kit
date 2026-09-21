@@ -61,7 +61,7 @@ export const SizedSections: Story = {
             defaultSize: '200px',
             content: (
               <div className="p-2">
-                <div className="flex h-[140px] items-center justify-center rounded border border-dashed border-border bg-muted/30 text-meta text-muted-foreground">
+                <div className="flex h-[140px] items-center justify-center rounded border border-dashed border-border bg-muted/30 text-sm text-muted-foreground">
                   graph thumbnail
                 </div>
               </div>
@@ -91,7 +91,7 @@ export const SizedSections: Story = {
             icon: ScrollText,
             minSize: '120px',
             content: (
-              <ul className="py-1 font-mono text-meta">
+              <ul className="py-1 font-mono text-sm">
                 {LOG.map((line) => (
                   <li
                     key={line}

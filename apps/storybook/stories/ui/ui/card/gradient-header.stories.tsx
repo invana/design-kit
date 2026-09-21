@@ -36,8 +36,8 @@ export const GradientHeader: Story = {
     >
       <p className="">This card features a beautiful gradient header that draws attention and adds visual interest.</p>
       <div className="mt-4 flex gap-2">
-        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Feature</span>
-        <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">New</span>
+        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded">Feature</span>
+        <span className="px-2 py-1 bg-purple-100 text-purple-700 text-sm rounded">New</span>
       </div>
     </CardWithHeader>
   ),

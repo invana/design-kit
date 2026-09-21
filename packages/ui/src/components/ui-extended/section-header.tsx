@@ -52,7 +52,7 @@ export const SectionHeader = React.forwardRef<
     ) : null}
     <span className="flex-1 truncate font-medium">{title}</span>
     {count != null ? (
-      <span className="shrink-0 text-meta text-muted-foreground">{count}</span>
+      <span className="shrink-0 text-sm text-muted-foreground">{count}</span>
     ) : null}
     {actions ? (
       <span className="flex shrink-0 items-center gap-1">{actions}</span>

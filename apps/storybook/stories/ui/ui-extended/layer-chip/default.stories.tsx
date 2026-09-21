@@ -43,12 +43,12 @@ export const Default: Story = {
       {LAYERS.map(({ layer, note, count }) => (
         <div key={layer} className="flex items-center gap-3">
           <LayerChip layer={layer} count={count} className="w-[120px]" />
-          <span className="text-meta text-muted-foreground">{note}</span>
+          <span className="text-sm text-muted-foreground">{note}</span>
         </div>
       ))}
       <div className="mt-2 flex items-center gap-3 border-t border-border pt-2">
         <LayerChip layer="third_party" dim className="w-[120px]" />
-        <span className="text-meta text-muted-foreground">
+        <span className="text-sm text-muted-foreground">
           dim — closed by this lens
         </span>
       </div>

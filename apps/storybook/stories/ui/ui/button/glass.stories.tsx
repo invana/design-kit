@@ -57,7 +57,7 @@ export const Glass: Story = {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Normal (opaque) */}
         <div className="rounded-xl border border-border bg-card/80 p-6">
-          <p className="mb-4 text-sm font-medium text-muted-foreground">
+          <p className="mb-4 text-base font-medium text-muted-foreground">
             Normal — <code>data-glass</code> off (opaque)
           </p>
           <ButtonRow />
@@ -68,7 +68,7 @@ export const Glass: Story = {
           data-glass="true"
           className="rounded-xl border border-white/15 p-6"
         >
-          <p className="mb-4 text-sm font-medium text-white/80 [text-shadow:0_1px_2px_rgb(0_0_0/0.4)]">
+          <p className="mb-4 text-base font-medium text-white/80 [text-shadow:0_1px_2px_rgb(0_0_0/0.4)]">
             Glass — <code>data-glass=&quot;true&quot;</code> (translucent +
             blur)
           </p>
@@ -78,7 +78,7 @@ export const Glass: Story = {
 
       {/* Single-element scope: glass on just one button */}
       <div className="mt-8 rounded-xl border border-border bg-card/80 p-6">
-        <p className="mb-4 text-sm font-medium text-muted-foreground">
+        <p className="mb-4 text-base font-medium text-muted-foreground">
           Per-element scope — <code>data-glass</code> on a single button
         </p>
         <div className="flex flex-wrap gap-3">

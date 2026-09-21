@@ -47,7 +47,7 @@ export const DenseHeaders: Story = {
         headerHeight={28}
         className="bg-muted/20"
         headerClassName="bg-background/60"
-        bodyClassName="px-1 font-mono text-meta"
+        bodyClassName="px-1 font-mono text-sm"
         sections={[
           {
             id: 'variables',

@@ -71,14 +71,14 @@ export const DrivenFromOutside: Story = {
               key={id}
               type="button"
               onClick={() => drillInto(id, `a ${label.toLowerCase()} row`)}
-              className="rounded border border-border px-2 py-1 text-meta hover:bg-accent/50"
+              className="rounded border border-border px-2 py-1 text-sm hover:bg-accent/50"
             >
               Open {label}
             </button>
           ))}
         </div>
 
-        <p className="text-meta text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {shut.length ? `collapsed: ${shut.join(' · ')}` : 'all sections open'}
           {open ? ` — drilled into ${open}` : ''}
         </p>
@@ -124,7 +124,7 @@ function Rows({ rows }: { rows: string[] }) {
       {rows.map((row) => (
         <li
           key={row}
-          className="truncate px-2 py-1 text-meta text-muted-foreground hover:bg-accent/50"
+          className="truncate px-2 py-1 text-sm text-muted-foreground hover:bg-accent/50"
         >
           {row}
         </li>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Separator } from '@invana/ui';
+import { Separator, TypographyH6 } from '@invana/ui';
 
 const meta: Meta<typeof Separator> = {
   title: 'UI/UI/Separator',
@@ -22,13 +22,13 @@ export const Horizontal: Story = {
   render: () => (
     <div className="w-[400px] space-y-4">
       <div>
-        <h4 className="text-sm font-medium">Section 1</h4>
-        <p className="text-sm text-muted-foreground">Content for the first section.</p>
+        <TypographyH6>Section 1</TypographyH6>
+        <p className="text-base text-muted-foreground">Content for the first section.</p>
       </div>
       <Separator />
       <div>
-        <h4 className="text-sm font-medium">Section 2</h4>
-        <p className="text-sm text-muted-foreground">Content for the second section.</p>
+        <TypographyH6>Section 2</TypographyH6>
+        <p className="text-base text-muted-foreground">Content for the second section.</p>
       </div>
     </div>
   ),

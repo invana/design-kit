@@ -21,11 +21,11 @@ type Story = StoryObj<typeof meta>;
 export const InMenu: Story = {
   render: () => (
     <div className="w-[200px] border rounded-md p-2">
-      <div className="px-2 py-1.5 text-sm hover:bg-accent cursor-pointer rounded">Profile</div>
-      <div className="px-2 py-1.5 text-sm hover:bg-accent cursor-pointer rounded">Settings</div>
+      <div className="px-2 py-1.5 text-base hover:bg-accent cursor-pointer rounded">Profile</div>
+      <div className="px-2 py-1.5 text-base hover:bg-accent cursor-pointer rounded">Settings</div>
       <Separator className="my-1" />
-      <div className="px-2 py-1.5 text-sm hover:bg-accent cursor-pointer rounded">Help</div>
-      <div className="px-2 py-1.5 text-sm hover:bg-accent cursor-pointer rounded">Logout</div>
+      <div className="px-2 py-1.5 text-base hover:bg-accent cursor-pointer rounded">Help</div>
+      <div className="px-2 py-1.5 text-base hover:bg-accent cursor-pointer rounded">Logout</div>
     </div>
   ),
 };

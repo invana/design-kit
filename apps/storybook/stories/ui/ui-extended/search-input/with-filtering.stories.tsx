@@ -36,16 +36,16 @@ export const WithFiltering: Story = {
       <div className="w-[400px]">
         <SearchInput value={searchValue} onChange={setSearchValue} />
         <div className="mt-4 space-y-1">
-          <p className="text-sm font-medium">Results ({filteredItems.length}):</p>
+          <p className="text-base font-medium">Results ({filteredItems.length}):</p>
           <div className="border rounded-md p-2 max-h-[200px] overflow-auto">
             {filteredItems.length > 0 ? (
               filteredItems.map((item, idx) => (
-                <div key={idx} className="text-sm py-1 px-2 hover:bg-muted rounded">
+                <div key={idx} className="text-base py-1 px-2 hover:bg-muted rounded">
                   {item}
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No results found</p>
+              <p className="text-base text-muted-foreground">No results found</p>
             )}
           </div>
         </div>

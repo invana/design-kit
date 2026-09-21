@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ScrollArea } from '@invana/ui';
+import { ScrollArea, TypographyH6 } from '@invana/ui';
 
 const meta: Meta<typeof ScrollArea> = {
   title: 'UI/UI/ScrollArea',
@@ -19,10 +19,10 @@ export const Default: Story = {
   render: () => (
     <ScrollArea className="h-72 w-48 rounded-md border">
       <div className="p-4">
-        <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
+        <TypographyH6 className="mb-4">Tags</TypographyH6>
         {tags.map((tag) => (
           <div key={tag}>
-            <div className="text-sm">{tag}</div>
+            <div className="text-base">{tag}</div>
             <div className="my-2 h-px bg-border" />
           </div>
         ))}

@@ -151,7 +151,7 @@ export function Surface({
   return (
     <div className="flex h-screen flex-col">
       {children}
-      <div className="shrink-0 border-t border-border bg-card px-4 py-1.5 text-meta text-muted-foreground">
+      <div className="shrink-0 border-t border-border bg-card px-4 py-1.5 text-sm text-muted-foreground">
         last action: <span className="font-mono text-foreground">{last}</span>
       </div>
     </div>

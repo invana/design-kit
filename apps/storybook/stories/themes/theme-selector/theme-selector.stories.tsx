@@ -1,17 +1,7 @@
 import type { StoryObj } from '@storybook/react-vite';
 import { ThemeProvider, ThemeSelector, ThemeScope } from '@invana/themes';
 import { Sun, Moon, Monitor } from 'lucide-react';
-import {
-  Button,
-  Badge,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  Separator,
-} from '@invana/ui';
+import { Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Link, Separator } from '@invana/ui';
 
 const meta = {
   title: 'Themes/Theme Selector',
@@ -56,11 +46,11 @@ function Preview() {
           <Badge>Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
           <Badge variant="outline">Outline</Badge>
-          <a href="#" className="text-sm text-primary underline underline-offset-4">A themed link</a>
+          <Link href="#" variant="underlined">A themed link</Link>
         </div>
       </CardContent>
       <CardFooter>
-        <span className="text-sm text-muted-foreground">
+        <span className="text-base text-muted-foreground">
           Focus rings, links and the primary button follow the accent.
         </span>
       </CardFooter>
@@ -124,7 +114,7 @@ export const ThemeSelectorStory: StoryObj = {
         </div>
 
         <Separator />
-        <p className="mx-auto max-w-5xl px-6 py-4 text-sm text-muted-foreground">
+        <p className="mx-auto max-w-5xl px-6 py-4 text-base text-muted-foreground">
           The header selector and the settings form share the same provider state. Picking an
           accent recolours only the <strong>Live preview</strong> (wrapped in <code>ThemeScope</code>),
           leaving the rest of the page on the theme's own accent.

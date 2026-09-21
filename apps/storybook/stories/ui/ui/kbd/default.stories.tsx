@@ -20,14 +20,14 @@ export const Default: Story = {
         <Kbd>⌘</Kbd>
         <Kbd>K</Kbd>
       </KbdGroup>
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex items-center gap-2 text-base text-muted-foreground">
         <span>Save</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>S</Kbd>
         </KbdGroup>
       </div>
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex items-center gap-2 text-base text-muted-foreground">
         <span>Command palette</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>

@@ -18,7 +18,7 @@ export type TimelineVariant = "columns" | "rail"
 const TimelineVariantContext = React.createContext<TimelineVariant>("columns")
 
 /**
- * Half of a `text-meta` line box (0.923rem × 1.5), so the marker centres on
+ * Half of a `text-sm` line box (0.923rem × 1.5), so the marker centres on
  * the `when` line rather than on the middle of the entry.
  */
 const RAIL_MARKER_OFFSET = "h-[0.692rem]"
@@ -123,7 +123,7 @@ export const TimelineEntry = React.forwardRef<
       >
         <RailGutter marker={marker} />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5 pb-4 group-last/entry:pb-0">
-          <span className="text-meta text-muted-foreground">{when}</span>
+          <span className="text-sm text-muted-foreground">{when}</span>
           {title != null ? <span className="font-medium">{title}</span> : null}
           {children}
         </div>
@@ -137,7 +137,7 @@ export const TimelineEntry = React.forwardRef<
       className={cn("flex gap-2 border-b border-border py-1.5 last:border-b-0", className)}
       {...props}
     >
-      <span className="flex w-[72px] shrink-0 items-baseline gap-1.5 text-meta text-muted-foreground">
+      <span className="flex w-[72px] shrink-0 items-baseline gap-1.5 text-sm text-muted-foreground">
         {marker ? <span className="translate-y-1">{marker}</span> : null}
         <span className="truncate">{when}</span>
       </span>

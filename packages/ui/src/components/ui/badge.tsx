@@ -50,15 +50,15 @@ const badgeVariants = cva(
       },
       size: {
         /** 18px — inline in a title, or a count against a label. */
-        xs: "h-[18px] px-1.5 text-meta",
+        xs: "h-[18px] px-1.5 text-sm",
         /** 22px — the row chip: a status beside an entity name. */
-        sm: "h-[22px] px-2 text-meta",
+        sm: "h-[22px] px-2 text-sm",
         /**
          * Unchanged from before `size` existed: no explicit height, so it sizes
          * from its text. Every badge already written keeps rendering exactly as
          * it did — the two tiers above are additions, not a re-baseline.
          */
-        default: "px-2.5 py-0.5 text-meta",
+        default: "px-2.5 py-0.5 text-sm",
       },
     },
     defaultVariants: {

@@ -42,23 +42,23 @@ export const Default: Story = {
         </DialogHeader>
         <div className="grid gap-4 py-2">
           <div className="grid gap-2">
-            <label htmlFor="name" className="text-sm font-medium">
+            <label htmlFor="name" className="text-base font-medium">
               Name
             </label>
             <input
               id="name"
               defaultValue="Ada Lovelace"
-              className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-9 rounded-md border border-input bg-transparent px-3 text-base shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
             />
           </div>
           <div className="grid gap-2">
-            <label htmlFor="username" className="text-sm font-medium">
+            <label htmlFor="username" className="text-base font-medium">
               Username
             </label>
             <input
               id="username"
               defaultValue="@ada"
-              className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-9 rounded-md border border-input bg-transparent px-3 text-base shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
             />
           </div>
         </div>

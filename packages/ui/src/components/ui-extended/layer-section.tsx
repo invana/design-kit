@@ -56,14 +56,14 @@ export const LayerSection = React.forwardRef<HTMLDivElement, LayerSectionProps>(
         <div className="flex min-w-0 items-baseline gap-2 border-b border-border pb-1">
           <LayerChip layer={layer} count={count} dim={dim} />
           {summary != null ? (
-            <span className="ml-auto min-w-0 shrink truncate text-meta text-muted-foreground">
+            <span className="ml-auto min-w-0 shrink truncate text-sm text-muted-foreground">
               {summary}
             </span>
           ) : null}
         </div>
 
         {empty ? (
-          <p className="px-1 py-1 text-meta text-muted-foreground/70">
+          <p className="px-1 py-1 text-sm text-muted-foreground/70">
             no rules in this layer
           </p>
         ) : (

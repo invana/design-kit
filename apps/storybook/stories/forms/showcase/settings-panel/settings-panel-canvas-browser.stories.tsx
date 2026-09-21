@@ -1,15 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Badge,
-  Card,
-  CardContent,
-} from '@invana/ui';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Card, CardContent, TypographyH6 } from '@invana/ui';
 import {
   Input,
   SettingsPanel,
@@ -756,7 +748,7 @@ function CanvasBrowserView() {
     <div className="flex items-start gap-4">
       <Card className="w-[380px]">
         <CardContent className="flex flex-col gap-1 p-2">
-          <h2 className="px-1 py-1 text-base font-semibold">Canvas Settings</h2>
+          <TypographyH6>Canvas Settings</TypographyH6>
 
           <div className="relative mb-1 px-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -870,7 +862,7 @@ function CanvasBrowserView() {
           </Accordion>
 
           {noMatches && (
-            <p className="px-2 py-6 text-center text-sm italic text-muted-foreground">
+            <p className="px-2 py-6 text-center text-base italic text-muted-foreground">
               No settings match “{query.trim()}”.
             </p>
           )}

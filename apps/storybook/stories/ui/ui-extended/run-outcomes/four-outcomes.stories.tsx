@@ -1,8 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  CannotAnswerCard, DiagnosisCard, RepairNote, RetryNote,
-  ChatSessionTaskRow, Button,
-} from '@invana/ui';
+import { Button, CannotAnswerCard, ChatSessionTaskRow, DiagnosisCard, Eyebrow, RepairNote, RetryNote } from '@invana/ui';
 
 const meta: Meta<typeof CannotAnswerCard> = {
   title: 'UI/UI Extended/RunOutcomes',
@@ -24,7 +21,7 @@ export const FourOutcomes: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <section className="flex w-[330px] flex-col gap-1">
-        <h4 className="text-meta text-muted-foreground">repair · the query went back once</h4>
+        <Eyebrow>repair · the query went back once</Eyebrow>
         <div className="border border-border bg-card p-2">
           <ChatSessionTaskRow status="success" name="Validate" meta="repaired once" />
           <RepairNote from="Theme.velocity5d" to="Theme.velocity_5d" />
@@ -33,7 +30,7 @@ export const FourOutcomes: Story = {
       </section>
 
       <section className="flex w-[330px] flex-col gap-1">
-        <h4 className="text-meta text-muted-foreground">retry · the database was slow, not wrong</h4>
+        <Eyebrow>retry · the database was slow, not wrong</Eyebrow>
         <div className="border border-border bg-card p-2">
           <ChatSessionTaskRow status="success" name="Execute" meta="retry 1 of 2" />
           <RetryNote attempt="retry 1 of 2">
@@ -44,14 +41,14 @@ export const FourOutcomes: Story = {
       </section>
 
       <section className="flex w-[330px] flex-col gap-1">
-        <h4 className="text-meta text-muted-foreground">cannot answer · the graph does not hold it</h4>
+        <Eyebrow>cannot answer · the graph does not hold it</Eyebrow>
         <CannotAnswerCard remedy={<>What would change that: import the ticker into <code className="font-mono">market-data</code>.</>}>
           This graph holds no bars and no news for SUZLON-BE.
         </CannotAnswerCard>
       </section>
 
       <section className="flex w-[330px] flex-col gap-1">
-        <h4 className="text-meta text-muted-foreground">failure · something broke, and it is named</h4>
+        <Eyebrow>failure · something broke, and it is named</Eyebrow>
         <DiagnosisCard
           code="execute · connection_refused"
           attempted="MATCH (t:Theme)<-[:IN]-(s:Stock) WHERE t.velocity_5d < 2.0 RETURN s.symbol"

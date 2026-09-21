@@ -27,13 +27,13 @@ export const FullWidth: Story = {
         <TabsTrigger value="completed" className="flex-1">Completed</TabsTrigger>
       </TabsList>
       <TabsContent value="all">
-        <p className="text-sm text-muted-foreground">All items</p>
+        <p className="text-base text-muted-foreground">All items</p>
       </TabsContent>
       <TabsContent value="active">
-        <p className="text-sm text-muted-foreground">Active items only</p>
+        <p className="text-base text-muted-foreground">Active items only</p>
       </TabsContent>
       <TabsContent value="completed">
-        <p className="text-sm text-muted-foreground">Completed items only</p>
+        <p className="text-base text-muted-foreground">Completed items only</p>
       </TabsContent>
     </Tabs>
   ),

@@ -16,13 +16,13 @@ export const Default: Story = {
     <div className="w-[480px] border border-border bg-card p-2">
       <TimelineList>
         <TimelineEntry when="today 08:00" marker={<StatusDot tone="running" />} title="Trade day 8 Sep">
-          <span className="text-meta text-muted-foreground">3 sub-tasks · <Badge variant="outline" size="xs" tone="info">in progress</Badge></span>
+          <span className="text-sm text-muted-foreground">3 sub-tasks · <Badge variant="outline" size="xs" tone="info">in progress</Badge></span>
         </TimelineEntry>
         <TimelineEntry when="Fri 08:00" marker={<StatusDot tone="success" />} title="Trade day 5 Sep">
-          <span className="text-meta text-muted-foreground">accepted 15:52</span>
+          <span className="text-sm text-muted-foreground">accepted 15:52</span>
         </TimelineEntry>
         <TimelineEntry when="Wed 08:00" marker={<StatusDot tone="muted" />} title="Trade day 3 Sep">
-          <span className="text-meta text-muted-foreground">skipped — previous instance still open</span>
+          <span className="text-sm text-muted-foreground">skipped — previous instance still open</span>
         </TimelineEntry>
       </TimelineList>
     </div>

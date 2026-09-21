@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Input, Label } from '@invana/forms';
+import { TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Input> = {
   title: 'UI/UI/Input',
@@ -25,7 +26,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-2xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Input Types</h3>
+        <TypographyH5 className="mb-4">Input Types</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="text-input">Text</Label>
@@ -71,7 +72,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">States</h3>
+        <TypographyH5 className="mb-4">States</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="normal">Normal</Label>
@@ -97,7 +98,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Sizes & Widths</h3>
+        <TypographyH5 className="mb-4">Sizes & Widths</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Full Width</Label>
@@ -115,22 +116,22 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">With Helper Text</h3>
+        <TypographyH5 className="mb-4">With Helper Text</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="with-help">Email Address</Label>
             <Input id="with-help" type="email" placeholder="you@example.com" />
-            <p className="text-sm text-muted-foreground">We'll never share your email.</p>
+            <p className="text-base text-muted-foreground">We'll never share your email.</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="with-error">Password</Label>
             <Input id="with-error" type="password" placeholder="Enter password" className="border-destructive" />
-            <p className="text-sm text-destructive">Password must be at least 8 characters.</p>
+            <p className="text-base text-destructive">Password must be at least 8 characters.</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="with-success">Username</Label>
             <Input id="with-success" defaultValue="johndoe" className="border-green-500" />
-            <p className="text-sm text-green-600">Username is available!</p>
+            <p className="text-base text-green-600">Username is available!</p>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Label } from '@invana/forms';
+import { TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Select> = {
   title: 'UI/UI/Select',
@@ -25,7 +26,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-2xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Basic Selects</h3>
+        <TypographyH5 className="mb-4">Basic Selects</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Default</Label>
@@ -55,7 +56,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Different Widths</h3>
+        <TypographyH5 className="mb-4">Different Widths</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Small (180px)</Label>
@@ -94,7 +95,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Common Use Cases</h3>
+        <TypographyH5 className="mb-4">Common Use Cases</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="country">Country</Label>
@@ -163,7 +164,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">With Helper Text</h3>
+        <TypographyH5 className="mb-4">With Helper Text</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="language">Preferred Language</Label>
@@ -178,7 +179,7 @@ export const CompleteShowcase: Story = {
                 <SelectItem value="de">Deutsch</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               This will be used for all communications.
             </p>
           </div>

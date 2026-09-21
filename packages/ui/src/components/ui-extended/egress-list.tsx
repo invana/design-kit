@@ -65,11 +65,11 @@ export const EgressList = React.forwardRef<HTMLDivElement, EgressListProps>(
 
       <div className="flex min-w-0 flex-col gap-0.5 pl-3">
         {classes.length === 0 ? (
-          <span className="text-meta text-destructive">
+          <span className="text-sm text-destructive">
             nothing may be sent
           </span>
         ) : (
-          <span className="flex min-w-0 flex-wrap items-center gap-1 text-meta text-muted-foreground">
+          <span className="flex min-w-0 flex-wrap items-center gap-1 text-sm text-muted-foreground">
             <span className="shrink-0">may send</span>
             {classes.map((c) => (
               <span
@@ -83,7 +83,7 @@ export const EgressList = React.forwardRef<HTMLDivElement, EgressListProps>(
         )}
 
         {cut.length ? (
-          <span className="flex min-w-0 flex-wrap items-center gap-1 text-meta text-muted-foreground">
+          <span className="flex min-w-0 flex-wrap items-center gap-1 text-sm text-muted-foreground">
             <span className="shrink-0">cut</span>
             {cut.map((c) => (
               <span

@@ -30,9 +30,9 @@ export const Tones: Story = {
       {TONES.map(([tone, name, meta]) => (
         <div key={tone} className="flex items-center gap-2">
           <StatusDot tone={tone} />
-          <span className="flex-1 text-xs">{name}</span>
-          <span className="text-meta text-muted-foreground">{meta}</span>
-          <span className="w-16 text-meta text-muted-foreground/60">{tone}</span>
+          <span className="flex-1 text-sm">{name}</span>
+          <span className="text-sm text-muted-foreground">{meta}</span>
+          <span className="w-16 text-sm text-muted-foreground/60">{tone}</span>
         </div>
       ))}
     </div>

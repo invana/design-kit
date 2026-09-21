@@ -56,14 +56,14 @@ export function MarkdownEditorBlock({
   return (
     <div className={cn("relative border border-border bg-muted/40", className)} {...props}>
       {version != null ? (
-        <span className="absolute right-1 top-1 z-10 border border-border bg-card px-1 text-meta text-muted-foreground">
+        <span className="absolute right-1 top-1 z-10 border border-border bg-card px-1 text-sm text-muted-foreground">
           {version}
         </span>
       ) : null}
       <div
         ref={ref}
         className={cn(
-          "[&_.cm-editor]:bg-transparent [&_.cm-content]:font-mono [&_.cm-content]:text-meta",
+          "[&_.cm-editor]:bg-transparent [&_.cm-content]:font-mono [&_.cm-content]:text-sm",
           "[&_.cm-focused]:outline-none [&_.cm-cursor]:border-foreground",
         )}
       />

@@ -51,7 +51,7 @@ function AttachmentChip({
   onRemove?: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 max-w-[160px] rounded-md border border-border bg-muted/40 px-2 py-1 text-xs">
+    <span className="inline-flex items-center gap-1 max-w-[160px] rounded-md border border-border bg-muted/40 px-2 py-1 text-sm">
       <Paperclip className="w-3 h-3 shrink-0 text-muted-foreground" />
       <span className="truncate">{name}</span>
       {onRemove && (

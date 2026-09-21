@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checkbox, Label } from '@invana/forms';
+import { TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Checkbox> = {
   title: 'UI/UI/Checkbox',
@@ -25,7 +26,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-2xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">All States</h3>
+        <TypographyH5 className="mb-4">All States</TypographyH5>
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
             <Checkbox id="unchecked" />
@@ -47,7 +48,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Form Example</h3>
+        <TypographyH5 className="mb-4">Form Example</TypographyH5>
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
             <Checkbox id="terms" />
@@ -65,13 +66,13 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">With Descriptions</h3>
+        <TypographyH5 className="mb-4">With Descriptions</TypographyH5>
         <div className="space-y-4">
           <div className="flex items-start space-x-2">
             <Checkbox id="notifications" className="mt-1" />
             <div className="grid gap-1.5 leading-none">
               <Label htmlFor="notifications">Enable notifications</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Receive push notifications about updates and activity.
               </p>
             </div>
@@ -80,7 +81,7 @@ export const CompleteShowcase: Story = {
             <Checkbox id="analytics" className="mt-1" defaultChecked />
             <div className="grid gap-1.5 leading-none">
               <Label htmlFor="analytics">Share analytics</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Help us improve by sharing anonymous usage data.
               </p>
             </div>
@@ -89,7 +90,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Feature Selection</h3>
+        <TypographyH5 className="mb-4">Feature Selection</TypographyH5>
         <div className="space-y-3">
           <div className="flex items-center space-x-2">
             <Checkbox id="feature1" defaultChecked />
@@ -111,7 +112,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Task List</h3>
+        <TypographyH5 className="mb-4">Task List</TypographyH5>
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
             <Checkbox id="task1" defaultChecked />

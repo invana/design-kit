@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { AppLayoutV1 } from "@invana/themes/app-v1/layout";
-import { Badge, Avatar, Button } from "@invana/ui";
+import { Avatar, Badge, Button, TypographyH1, TypographyH4 } from "@invana/ui";
 import { Input } from "@invana/forms";
 import { Search, Bell, HelpCircle } from "lucide-react";
 
@@ -28,7 +28,7 @@ export const NoLeftNav: Story = {
       left: (
         <div className="flex items-center gap-3 px-3">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
+            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-base">
               E
             </div>
             <div className="font-bold">Enterprise Suite</div>
@@ -59,7 +59,7 @@ export const NoLeftNav: Story = {
           <Avatar className="h-8 w-8">
             <img src="https://github.com/shadcn.png" alt="Admin" />
           </Avatar>
-          <div className="text-sm">
+          <div className="text-base">
             <div className="font-medium">Admin User</div>
           </div>
         </div>
@@ -69,7 +69,7 @@ export const NoLeftNav: Story = {
       <div className="h-full overflow-auto p-6">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+            <TypographyH1>Dashboard</TypographyH1>
             <p className="text-muted-foreground">
               No left activity bar — content spans the full width.
             </p>
@@ -83,17 +83,17 @@ export const NoLeftNav: Story = {
               { title: 'Conversions', value: '573', change: '+5%' },
             ].map((stat, i) => (
               <div key={i} className="rounded-lg border bg-card p-6">
-                <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
+                <div className="text-base font-medium text-muted-foreground">{stat.title}</div>
                 <div className="mt-2 flex items-baseline gap-2">
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <Badge variant="secondary" className="text-xs">{stat.change}</Badge>
+                  <Badge variant="secondary" className="text-sm">{stat.change}</Badge>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="rounded-lg border bg-card p-6">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+            <TypographyH4 className="mb-4">Recent Activity</TypographyH4>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4 p-3 rounded-md hover:bg-accent">
@@ -102,7 +102,7 @@ export const NoLeftNav: Story = {
                   </Avatar>
                   <div className="flex-1">
                     <div className="font-medium">User {i} completed an action</div>
-                    <div className="text-sm text-muted-foreground">{i} minutes ago</div>
+                    <div className="text-base text-muted-foreground">{i} minutes ago</div>
                   </div>
                 </div>
               ))}
@@ -113,7 +113,7 @@ export const NoLeftNav: Story = {
     ),
     mainClassName: "bg-background",
     footer: {
-      left: <div className="px-4 py-2 text-xs">App Footer</div>,
+      left: <div className="px-4 py-2 text-sm">App Footer</div>,
       className: "border-t bg-card text-card-foreground",
     },
   },

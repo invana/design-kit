@@ -37,21 +37,21 @@ export const SettingsCard: Story = {
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium ">Marketing emails</div>
-              <div className="text-xs text-muted-foreground">Receive emails about new features</div>
+              <div className="text-sm text-muted-foreground">Receive emails about new features</div>
             </div>
             <input type="checkbox" className="w-4 h-4" />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium ">Security alerts</div>
-              <div className="text-xs text-muted-foreground">Get notified about account activity</div>
+              <div className="text-sm text-muted-foreground">Get notified about account activity</div>
             </div>
             <input type="checkbox" defaultChecked className="w-4 h-4" />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium ">Weekly digest</div>
-              <div className="text-xs text-muted-foreground">Summary of your weekly activity</div>
+              <div className="text-sm text-muted-foreground">Summary of your weekly activity</div>
             </div>
             <input type="checkbox" className="w-4 h-4" />
           </div>

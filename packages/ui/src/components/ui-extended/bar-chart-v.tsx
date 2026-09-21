@@ -80,7 +80,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
     return (
       <div ref={ref} className={cn("flex flex-col gap-1", className)} {...props}>
         {caption != null ? (
-          <span className="text-meta text-muted-foreground">{caption}</span>
+          <span className="text-sm text-muted-foreground">{caption}</span>
         ) : null}
 
         {/* `mt-2` is headroom: the topmost gridline's tick is centred on its
@@ -95,7 +95,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
               style={{ bottom: `${(g / ceiling) * 100}%` }}
             >
               <span className="h-px flex-1 bg-border" />
-              <span className="pl-1 text-meta tabular-nums text-muted-foreground">
+              <span className="pl-1 text-sm tabular-nums text-muted-foreground">
                 {g}
               </span>
             </div>
@@ -108,7 +108,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
                 className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1"
               >
                 {labelled(i) ? (
-                  <span className="text-meta tabular-nums">
+                  <span className="text-sm tabular-nums">
                     {d.display ?? d.value}
                   </span>
                 ) : null}
@@ -130,11 +130,11 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
         <div className="flex justify-between gap-2">
           {data.map((d, i) => (
             <div key={i} className="flex min-w-0 flex-1 flex-col items-center">
-              <span className="truncate text-meta text-muted-foreground">
+              <span className="truncate text-sm text-muted-foreground">
                 {d.label}
               </span>
               {d.sublabel != null ? (
-                <span className="truncate text-meta text-muted-foreground/70">
+                <span className="truncate text-sm text-muted-foreground/70">
                   {d.sublabel}
                 </span>
               ) : null}

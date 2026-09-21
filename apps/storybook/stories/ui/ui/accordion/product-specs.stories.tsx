@@ -50,7 +50,7 @@ export const ProductSpecs: Story = {
       <AccordionItem value="specs">
         <AccordionTrigger>Technical Specifications</AccordionTrigger>
         <AccordionContent>
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid grid-cols-2 gap-2 text-base">
             <div className="font-medium">Processor:</div>
             <div>Intel Core i7-12700H</div>
             <div className="font-medium">RAM:</div>

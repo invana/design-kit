@@ -22,7 +22,7 @@ export const RepairNote = React.forwardRef<HTMLDivElement, RepairNoteProps>(
     <div
       ref={ref}
       className={cn(
-        "flex flex-wrap items-center gap-1 py-0.5 pl-4 text-meta text-muted-foreground",
+        "flex flex-wrap items-center gap-1 py-0.5 pl-4 text-sm text-muted-foreground",
         className,
       )}
       {...props}

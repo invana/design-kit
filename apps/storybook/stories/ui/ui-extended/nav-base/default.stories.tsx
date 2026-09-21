@@ -24,8 +24,8 @@ export const Default: Story = {
       className="h-12 rounded-md border bg-card px-3 text-card-foreground"
       sections={{
         start: { content: <span className="font-semibold">Invana</span> },
-        center: { content: <span className="text-sm text-muted-foreground">Dashboard</span> },
-        end: { content: <span className="text-sm">Sign out</span> },
+        center: { content: <span className="text-base text-muted-foreground">Dashboard</span> },
+        end: { content: <span className="text-base">Sign out</span> },
       }}
     />
   ),

@@ -47,12 +47,12 @@ export const CitationRow = React.forwardRef<HTMLLIElement, CitationRowProps>(
       className={cn("flex min-h-[26px] items-center gap-2 py-0.5", className)}
       {...props}
     >
-      <span className="shrink-0 border border-border px-1 text-meta text-muted-foreground">
+      <span className="shrink-0 border border-border px-1 text-sm text-muted-foreground">
         {kind}
       </span>
       <span className="min-w-0 flex-1 truncate">{children}</span>
       {source != null ? (
-        <span className="shrink-0 text-meta text-muted-foreground">{source}</span>
+        <span className="shrink-0 text-sm text-muted-foreground">{source}</span>
       ) : null}
     </li>
   ),

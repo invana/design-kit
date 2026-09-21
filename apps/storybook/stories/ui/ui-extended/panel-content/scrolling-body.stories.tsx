@@ -38,7 +38,7 @@ export const ScrollingBody: Story = {
         bodyClassName="p-0"
         footerContent={
           <div className="flex w-full items-center justify-between">
-            <span className="text-meta text-muted-foreground">40 events</span>
+            <span className="text-sm text-muted-foreground">40 events</span>
             <Button variant="ghost" size="sm">Clear</Button>
           </div>
         }
@@ -50,7 +50,7 @@ export const ScrollingBody: Story = {
               className="flex items-baseline justify-between gap-3 border-b px-3 py-2 last:border-b-0"
             >
               <span className="truncate">{row.label}</span>
-              <span className="shrink-0 text-meta text-muted-foreground">{row.at}</span>
+              <span className="shrink-0 text-sm text-muted-foreground">{row.at}</span>
             </li>
           ))}
         </ul>

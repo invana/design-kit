@@ -86,7 +86,7 @@ export const HeatStrip = React.forwardRef<HTMLDivElement, HeatStripProps>(
               return (
                 <span
                   key={i}
-                  className="shrink-0 text-meta tabular-nums text-muted-foreground"
+                  className="shrink-0 text-sm tabular-nums text-muted-foreground"
                   style={{ width: cellSize }}
                 >
                   {tick ? tick.label : ""}
@@ -96,7 +96,7 @@ export const HeatStrip = React.forwardRef<HTMLDivElement, HeatStripProps>(
           </div>
         ) : null}
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-meta">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
           {states.map((s) => (
             <span key={s.key} className="flex items-center gap-1.5">
               <span

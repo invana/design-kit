@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import { Button } from '@invana/ui';
+import { Button, Eyebrow, TypographyH6 } from '@invana/ui';
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
@@ -91,8 +91,8 @@ function Section({
   return (
     <section className="space-y-3">
       <div>
-        <h3 className="text-sm font-semibold">{title}</h3>
-        <p className="text-xs text-muted-foreground">{hint}</p>
+        <TypographyH6>{title}</TypographyH6>
+        <p className="text-sm text-muted-foreground">{hint}</p>
       </div>
       {children}
     </section>
@@ -156,10 +156,10 @@ export const ColumnLayout: Story = {
         </Form>
 
         <div>
-          <h4 className="mb-2 text-sm font-medium text-muted-foreground">
+          <Eyebrow className="mb-2">
             Submitted payload
-          </h4>
-          <pre className="rounded-md border bg-muted/40 p-3 text-xs">
+          </Eyebrow>
+          <pre className="rounded-md border bg-muted/40 p-3 text-sm">
             {submitted
               ? JSON.stringify(submitted, null, 2)
               : '— submit the form —'}

@@ -79,7 +79,7 @@ export const Header: Story = {
     searchable: true,
     header: <div className=' mb-2 border-b pb-2'>
       <h1 className='text-xl font-bold'>Header</h1>
-      <p className='text-sm'>Here comes the descriiption for this header.</p>
+      <p className='text-base'>Here comes the descriiption for this header.</p>
     </div>
   },
 };

@@ -70,7 +70,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
         className={cn("flex flex-col overflow-hidden border border-border bg-card", className)}
         {...props}
       >
-        <div className="flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-meta">
+        <div className="flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-sm">
           <span className="shrink-0 font-medium">question</span>
           {step != null ? (
             <span className="truncate text-muted-foreground">{step}</span>
@@ -118,7 +118,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
                   </span>
                   <span className="flex-1 truncate">{o.label}</span>
                   {o.detail != null ? (
-                    <span className="shrink-0 font-mono text-meta text-muted-foreground">
+                    <span className="shrink-0 font-mono text-sm text-muted-foreground">
                       {o.detail}
                     </span>
                   ) : null}
@@ -131,7 +131,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
             <div className="flex flex-wrap items-center gap-2">
               {actions}
               {footnote != null ? (
-                <span className="flex-1 text-meta text-muted-foreground">{footnote}</span>
+                <span className="flex-1 text-sm text-muted-foreground">{footnote}</span>
               ) : null}
             </div>
           ) : null}

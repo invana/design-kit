@@ -64,7 +64,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
           ref={ref}
           className={cn(
             "flex w-[146px] flex-col gap-1 border border-dashed border-border p-2",
-            "text-meta text-muted-foreground",
+            "text-sm text-muted-foreground",
             className,
           )}
           {...props}
@@ -118,7 +118,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
             <span
               key={i}
               className={cn(
-                "shrink-0 border px-1 text-meta",
+                "shrink-0 border px-1 text-sm",
                 tag.tone === "warning"
                   ? "border-warning/40 text-warning"
                   : "border-border text-muted-foreground",
@@ -132,7 +132,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
         {meta != null ? (
           <div
             className={cn(
-              "truncate text-meta",
+              "truncate text-sm",
               gate ? "text-warning" : "text-muted-foreground",
             )}
           >

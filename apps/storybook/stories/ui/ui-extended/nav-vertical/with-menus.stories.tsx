@@ -121,7 +121,7 @@ const WithMenusDemo = () => {
             ]}
           />
         </div>
-        <div className="flex-1 p-6 text-meta text-muted-foreground">
+        <div className="flex-1 p-6 text-sm text-muted-foreground">
           {created
             ? `Created: ${created}`
             : 'Open the + menu at the top of the rail.'}

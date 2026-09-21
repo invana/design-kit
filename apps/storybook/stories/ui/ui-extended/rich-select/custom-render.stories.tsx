@@ -54,19 +54,19 @@ export const CustomRender: Story = {
             return (
               <span className="flex items-center gap-3">
                 <Avatar className="h-7 w-7">
-                  <AvatarFallback className={`${p.color} text-xs text-white`}>
+                  <AvatarFallback className={`${p.color} text-sm text-white`}>
                     {p.initials}
                   </AvatarFallback>
                 </Avatar>
                 <span className="flex flex-col">
-                  <span className="text-sm font-medium">{p.name}</span>
-                  <span className="text-xs text-muted-foreground">{p.role}</span>
+                  <span className="text-base font-medium">{p.name}</span>
+                  <span className="text-sm text-muted-foreground">{p.role}</span>
                 </span>
               </span>
             );
           }}
         />
-        <p className="text-sm text-muted-foreground mt-3">Assigned to: {value}</p>
+        <p className="text-base text-muted-foreground mt-3">Assigned to: {value}</p>
       </div>
     );
   },

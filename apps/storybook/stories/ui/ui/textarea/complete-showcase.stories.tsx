@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Textarea, Label } from '@invana/forms';
+import { TypographyH5 } from '@invana/ui';
 
 const meta: Meta<typeof Textarea> = {
   title: 'UI/UI/Textarea',
@@ -25,7 +26,7 @@ export const CompleteShowcase: Story = {
   render: () => (
     <div className="p-8 space-y-8 max-w-3xl">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Sizes</h3>
+        <TypographyH5 className="mb-4">Sizes</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="small">Small (default height)</Label>
@@ -43,7 +44,7 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">States</h3>
+        <TypographyH5 className="mb-4">States</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="normal">Normal</Label>
@@ -69,17 +70,17 @@ export const CompleteShowcase: Story = {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Common Use Cases</h3>
+        <TypographyH5 className="mb-4">Common Use Cases</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="comment">Comment</Label>
             <Textarea id="comment" placeholder="Leave a comment..." />
-            <p className="text-sm text-muted-foreground">Your comment will be visible to all members.</p>
+            <p className="text-base text-muted-foreground">Your comment will be visible to all members.</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="bio">Bio</Label>
             <Textarea id="bio" placeholder="Tell us about yourself..." className="min-h-[100px]" />
-            <p className="text-sm text-muted-foreground">Maximum 500 characters.</p>
+            <p className="text-base text-muted-foreground">Maximum 500 characters.</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Project Description</Label>
@@ -88,23 +89,23 @@ export const CompleteShowcase: Story = {
           <div className="space-y-2">
             <Label htmlFor="feedback">Feedback</Label>
             <Textarea id="feedback" placeholder="Share your feedback..." className="min-h-[120px]" />
-            <p className="text-sm text-muted-foreground">We appreciate your feedback!</p>
+            <p className="text-base text-muted-foreground">We appreciate your feedback!</p>
           </div>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">With Validation</h3>
+        <TypographyH5 className="mb-4">With Validation</TypographyH5>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="error">Message (Error)</Label>
             <Textarea id="error" placeholder="Type your message..." className="border-destructive" />
-            <p className="text-sm text-destructive">Message is required and must be at least 10 characters.</p>
+            <p className="text-base text-destructive">Message is required and must be at least 10 characters.</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="success">Message (Valid)</Label>
             <Textarea id="success" defaultValue="This is a valid message with enough content." className="border-green-500" />
-            <p className="text-sm text-green-600">✓ Looks good!</p>
+            <p className="text-base text-green-600">✓ Looks good!</p>
           </div>
         </div>
       </div>

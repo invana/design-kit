@@ -23,7 +23,7 @@ export const Tones: Story = {
     <div className="flex flex-col gap-3">
       {VARIANTS.map((variant) => (
         <div key={variant} className="flex items-center gap-2">
-          <span className="w-14 text-meta text-muted-foreground">{variant}</span>
+          <span className="w-14 text-sm text-muted-foreground">{variant}</span>
           {TONES.map((tone) => (
             <Badge key={tone} variant={variant} tone={tone} size="sm">
               {tone}

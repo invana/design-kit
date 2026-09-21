@@ -24,11 +24,11 @@ export const OpenUpward: Story = {
     const [value, setValue] = useState<string>('force');
     return (
       <div className="flex h-screen flex-col">
-        <div className="flex-1 p-4 text-sm text-muted-foreground">
+        <div className="flex-1 p-4 text-base text-muted-foreground">
           Footer-anchored RichSelect — opens upward via <code>side=&quot;top&quot;</code>.
         </div>
         <footer className="flex items-center justify-between border-t bg-background p-3">
-          <span className="text-sm text-muted-foreground">Selected: {value}</span>
+          <span className="text-base text-muted-foreground">Selected: {value}</span>
           <RichSelect
             label="Layout"
             side="top"

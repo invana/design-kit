@@ -54,11 +54,11 @@ export const Swatches: Story = {
               style={{ backgroundColor: `var(--color-data-${slot})` }}
             />
             <div>
-              <p className="text-sm font-medium text-foreground">Slot {slot}</p>
-              <p className="font-mono text-xs text-muted-foreground">
+              <p className="text-base font-medium text-foreground">Slot {slot}</p>
+              <p className="font-mono text-sm text-muted-foreground">
                 --color-data-{slot}
               </p>
-              <p className="text-xs text-muted-foreground">{hue}</p>
+              <p className="text-sm text-muted-foreground">{hue}</p>
             </div>
           </div>
         ))}

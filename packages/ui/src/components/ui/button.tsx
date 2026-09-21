@@ -47,7 +47,7 @@ const buttonVariants = cva(
        * size-5, which at h-6 leaves no padding at all.
        */
       size: {
-        xs: "h-6 rounded-control px-2 text-meta gap-1 [&_svg]:size-4",
+        xs: "h-6 rounded-control px-2 text-sm gap-1 [&_svg]:size-4",
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-control px-3 py-2",
         lg: "h-12 rounded-control px-8 py-3",

@@ -30,17 +30,17 @@ export const Default: Story = {
     <div className="flex w-[360px] flex-col gap-3">
       <div className="flex items-center gap-3">
         <LensChip onPick={() => {}} />
-        <span className="text-meta text-muted-foreground">
+        <span className="text-sm text-muted-foreground">
           no lens set — the default, and a real state
         </span>
       </div>
       <div className="flex items-center gap-3">
         <LensChip lens={{ name: 'EU · H1 2026' }} onPick={() => {}} />
-        <span className="text-meta text-muted-foreground">picked</span>
+        <span className="text-sm text-muted-foreground">picked</span>
       </div>
       <div className="flex items-center gap-3">
         <LensChip lens={{ name: 'Price-blind' }} />
-        <span className="text-meta text-muted-foreground">
+        <span className="text-sm text-muted-foreground">
           no picker — a statement, so it is not pressable
         </span>
       </div>

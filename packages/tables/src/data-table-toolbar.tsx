@@ -74,7 +74,7 @@ export function DataTableToolbar<TData>({
                             onClick={() =>
                               col.pin(pinned === 'left' ? false : 'left')
                             }
-                            className={`rounded px-1.5 py-0.5 text-meta ${
+                            className={`rounded px-1.5 py-0.5 text-sm ${
                               pinned === 'left'
                                 ? 'bg-primary text-primary-foreground'
                                 : 'bg-muted hover:bg-muted/70'
@@ -87,7 +87,7 @@ export function DataTableToolbar<TData>({
                             onClick={() =>
                               col.pin(pinned === 'right' ? false : 'right')
                             }
-                            className={`rounded px-1.5 py-0.5 text-meta ${
+                            className={`rounded px-1.5 py-0.5 text-sm ${
                               pinned === 'right'
                                 ? 'bg-primary text-primary-foreground'
                                 : 'bg-muted hover:bg-muted/70'

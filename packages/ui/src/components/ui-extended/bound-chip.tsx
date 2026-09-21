@@ -68,7 +68,7 @@ export const BoundChip = React.forwardRef<HTMLSpanElement, BoundChipProps>(
     <span
       ref={ref}
       className={cn(
-        "inline-flex max-w-full shrink-0 items-center gap-1.5 font-mono text-meta text-muted-foreground",
+        "inline-flex max-w-full shrink-0 items-center gap-1.5 font-mono text-sm text-muted-foreground",
         className,
       )}
       aria-label={swatchOnly ? `bound: ${bound}` : undefined}

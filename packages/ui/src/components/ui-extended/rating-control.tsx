@@ -121,7 +121,7 @@ export const RatingControl = React.forwardRef<
       className={cn("flex flex-col gap-2 border border-border bg-card p-2", className)}
       {...props}
     >
-      <div className="flex items-center gap-2 text-meta">
+      <div className="flex items-center gap-2 text-sm">
         <span className="font-medium">Your verdict</span>
         <span className="text-muted-foreground">becomes a Learning</span>
         <span className="flex-1" />
@@ -138,7 +138,7 @@ export const RatingControl = React.forwardRef<
               aria-checked={verdict === v}
               onClick={() => onVerdictChange?.(v)}
               className={cn(
-                "h-[22px] px-2 text-meta capitalize",
+                "h-[22px] px-2 text-sm capitalize",
                 verdict === v
                   ? v === "appreciate"
                     ? "bg-success text-success-foreground"
@@ -152,13 +152,13 @@ export const RatingControl = React.forwardRef<
         </div>
 
         <div className="flex items-center gap-1.5">
-          <span className="text-meta text-muted-foreground">weight</span>
+          <span className="text-sm text-muted-foreground">weight</span>
           <DotRating value={weight} max={maxWeight} onChange={onWeightChange} />
-          <span className="text-meta tabular-nums">{weight}</span>
+          <span className="text-sm tabular-nums">{weight}</span>
         </div>
 
         {refines != null ? (
-          <span className="text-meta text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             refines <span className="text-foreground">{refines}</span>
           </span>
         ) : null}
