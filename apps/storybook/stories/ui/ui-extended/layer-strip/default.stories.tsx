@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LayerStrip, type Band, type Step } from '@invana/ui';
+import { LayerStrip, type LayerBand, type LayerItem } from '@invana/ui';
 
 const meta: Meta<typeof LayerStrip> = {
   title: 'UI/UI Extended/LayerStrip',
@@ -10,113 +10,119 @@ const meta: Meta<typeof LayerStrip> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const BANDS: Band[] = [
-  { layer: 'graph_data' },
-  { layer: 'llm' },
-  { layer: 'third_party' },
-  { layer: 'cache' },
-  { layer: 'human' },
+/** `escalate-core@2` — chase a late order and hand it on. */
+const BANDS: LayerBand[] = [
+  { layer: 'human', note: 'declared · 1' },
   { layer: 'agent' },
+  { layer: 'cache', note: 'nothing declared' },
+  {
+    layer: 'llm',
+    note: '2 roles',
+    parts: [
+      { id: 'decide', label: 'role: decide', note: 'a caller may re-cast it' },
+      { id: 'extract', label: 'role: extract' },
+    ],
+  },
+  {
+    layer: 'graph_data',
+    note: '1 model',
+    parts: [
+      {
+        id: 'orders',
+        label: 'model/Orders@v2',
+        note: 'caller supplies the slice',
+      },
+    ],
+  },
+  {
+    layer: 'third_party',
+    note: '1 · a boundary crossing',
+    parts: [
+      {
+        id: 'email',
+        label: 'third_party/app/email',
+        note: 'egress: the note',
+      },
+    ],
+  },
 ];
 
-const STEPS: Step[] = [
+const ITEMS: LayerItem[] = [
   {
-    id: 's1',
-    label: 'plan',
-    seq: 1,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      { layer: 'llm', direction: 'out', address: 'llm/ollama-local/llama-3.1-8b' },
-    ],
+    id: 'fetch_orders',
+    label: 'fetch_orders',
+    layer: 'graph_data',
+    part: 'orders',
+    start: 1,
+    end: 2,
+    note: '${supplier_id}',
   },
   {
-    id: 's2',
-    label: 'read',
-    seq: 2,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      {
-        layer: 'graph_data',
-        direction: 'in',
-        address: 'graph_data/model/Deals@1.0.0',
-      },
-      { layer: 'cache', direction: 'in', address: 'cache/result/*' },
-    ],
+    id: 'rank_late',
+    label: 'rank_late',
+    layer: 'llm',
+    part: 'decide',
+    start: 2,
+    end: 3,
+    note: 'decide',
   },
   {
-    id: 's3',
-    label: 'link',
-    seq: 3,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      {
-        layer: 'graph_data',
-        direction: 'refused',
-        address: 'graph_data/stitch/tweet_article@about',
-        ruleMatched: 'graph_data/stitch/*',
-      },
-    ],
+    id: 'draft_note',
+    label: 'draft_note',
+    layer: 'llm',
+    part: 'extract',
+    start: 3,
+    end: 4,
+    note: 'extract',
   },
   {
-    id: 's4',
-    label: 'enrich',
-    seq: 4,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      {
-        layer: 'third_party',
-        direction: 'refused',
-        address: 'third_party/api/clearbit.com',
-        ruleMatched: 'third_party/**',
-      },
-    ],
+    id: 'send',
+    label: 'send',
+    layer: 'third_party',
+    part: 'email',
+    start: 4,
+    end: 5,
   },
   {
-    id: 's5',
-    label: 'decide',
-    seq: 5,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      { layer: 'llm', direction: 'out', address: 'llm/ollama-local/llama-3.1-8b' },
-      { layer: 'human', direction: 'skipped' },
-    ],
-  },
-  {
-    id: 's6',
-    label: 'answer',
-    seq: 6,
-    touches: [
-      { layer: 'agent', direction: 'out' },
-      { layer: 'cache', direction: 'out', address: 'cache/answer/*' },
-    ],
+    id: 'await_reply',
+    label: 'await_reply',
+    layer: 'human',
+    start: 5,
+    end: 6,
+    note: 'form: human',
   },
 ];
 
 /**
- * A run as six bands and one column per step — what it engaged, in `seq` order.
+ * A plan in the six layers it will touch — the **declared** tense.
  *
- * Layers are the bands and steps are the columns, so *what did this run touch,
- * and when* is one band read across, and *what did this step do* is one column
- * read down. The two questions the run dashboard is asked, in one drawing.
+ * **Time is the x axis, and a task is a bar on it.** A plan's time is its order,
+ * so the axis counts steps; a run's is the wall clock, and the same drawing is
+ * read in `elapsed` (see *Touched*). Task names were an axis once and are not:
+ * a name written along the top cannot say how long anything takes, and it
+ * forces one column per task whether or not the task engages anything.
  *
- * **Refusals are struck in place, not removed.** Steps 3 and 4 are the point:
- * a stitch the world denied and a third party the guardrail denied. An empty
- * cell there would be indistinguishable from a step that never reached for that
- * layer — and *the bound bit here* is the most important thing the drawing can
- * say. `skipped` is a third state again: step 5 never asked a person, which is
- * not the same as being refused one.
+ * **A band opens into its participants.** `llm` is the band; `role: decide` and
+ * `role: extract` are the rows under it, and `rank_late` sits on the role it
+ * actually spends. `model/Orders@v2` and `third_party/app/email` are the same
+ * move on their own bands — that list is what a world is checked against, and a
+ * band alone cannot say which model a step will reach.
  *
- * **The spine band is always drawn.** The runtime's own dispatches are what the
- * other bands are timed against, and it is never governed.
- *
- * DOM over a fixed grid, not canvas: it binds to no canvas store, it lives in
- * `mainSection` where no canvas exists, and frozen row labels plus text
- * selection are free here and expensive there.
+ * **A layer nothing declares stays drawn, dark.** `cache` is not hidden: *this
+ * plan never reaches for a cache* and *this drawing does not show caches* are
+ * different facts. The `agent` spine is always drawn with its wire, because the
+ * runtime's own dispatches are what the other bands are timed against.
  */
 export const Default: Story = {
   render: () => (
-    <div className="w-[640px]">
-      <LayerStrip bands={BANDS} steps={STEPS} selectedStep="s3" onSelectStep={() => {}} />
+    <div className="w-[760px]">
+      <LayerStrip
+        bands={BANDS}
+        items={ITEMS}
+        scale="seq"
+        selectedItem="send"
+        onSelectItem={() => {}}
+      />
     </div>
   ),
 };
