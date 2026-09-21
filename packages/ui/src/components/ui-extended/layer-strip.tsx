@@ -112,6 +112,42 @@ export interface LayerBracket {
   label: string;
 }
 
+/**
+ * A **seam** — a moment on the axis where everything stops at once.
+ *
+ * A gate belongs to no band. It is not dispatched, it holds no slot and it has
+ * no participant, so it cannot be a bar: it is a condition on the way into a
+ * step, and it stops every layer together. That makes it a **position on the
+ * axis**, drawn as a rule the bands are crossed by — which is also the only
+ * drawing left once task names stop being the axis, because there are no
+ * columns for it to sit between.
+ *
+ * **Which side of the line the label sits on is the price of saying no.**
+ * `before` means nothing has been spent yet; `after` means the work up to here
+ * is already paid for. A reader gets what declining costs from where the mark
+ * sits, before reading a word of it.
+ */
+export interface LayerSeam {
+  id: string;
+  /**
+   * Where it sits, in the axis's own unit. **Omitted, it has no position** —
+   * it can be raised at any dispatch, and it is drawn across the whole axis
+   * rather than at a point. Placing such a gate on one moment would be a guess.
+   */
+  at?: number;
+  /** What it is — `approval · before dispatch`, `verdict · after the pass`. */
+  label: string;
+  /** Which side of the line the cost falls on. Defaults to `before`. */
+  edge?: "before" | "after";
+  /**
+   * It is not on the plan: it resolves at dispatch, so the same plan is gated
+   * for one caller and not another. Drawn dashed — *this may appear*.
+   */
+  conditional?: boolean;
+  /** Under the label — `nothing spent · finance-approvers · 4h`. */
+  note?: string;
+}
+
 /** What the axis counts. */
 export type LayerScale = "seq" | "elapsed";
 
@@ -132,6 +168,12 @@ export interface LayerStripProps extends Omit<
   ticks?: number[];
   formatTick?: (value: number) => string;
   brackets?: LayerBracket[];
+  /**
+   * The gates — the moments the whole drawing stops at. They get a row of their
+   * own above the bands *and* a rule down the track, because a gate has to read
+   * both as a thing with a name and as something every band is stopped by.
+   */
+  seams?: LayerSeam[];
   onSelectItem?: (itemId: string) => void;
   selectedItem?: string;
   /**
@@ -271,6 +313,13 @@ const formatElapsed = (ms: number): string => {
  * weight: being stopped from reaching a participant and never reaching for one
  * are the two facts this drawing exists to separate.
  *
+ * **A gate is a seam, not a row.** Nothing is dispatched at a gate, so it has
+ * no participant and cannot be a bar; it stops every band at once, so it is a
+ * position on the axis and the bands are crossed by it. Which side of the line
+ * its label hangs on is what saying no costs — `before` and nothing is spent,
+ * `after` and the pass is already paid for. A gate that can be raised at any
+ * dispatch has no position and draws across the whole axis instead.
+ *
  * **The spine band is always drawn**, with its wire running the whole axis: the
  * runtime's own dispatches are what the other bands are timed against, and it
  * is never governed. A band declares itself the spine with `spine` — the strip
@@ -292,6 +341,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       ticks,
       formatTick,
       brackets,
+      seams,
       onSelectItem,
       selectedItem,
       hoverDetail = true,
@@ -601,6 +651,17 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       return lanes;
     }, [brackets]);
 
+    /**
+     * The gates that sit somewhere share one line; each gate that sits nowhere
+     * gets its own. A seam with no position runs the whole axis, and laying it
+     * across a seam it has nothing to do with puts two facts in one place.
+     */
+    const seamLines = React.useMemo(() => {
+      const placed = (seams ?? []).filter((seam) => seam.at != null);
+      const loose = (seams ?? []).filter((seam) => seam.at == null);
+      return [...(placed.length ? [placed] : []), ...loose.map((s2) => [s2])];
+    }, [seams]);
+
     const itemsOf = (layer: Layer, part?: string) =>
       items.filter(
         (i) => i.layer === layer && (part ? i.part === part : !i.part),
@@ -619,6 +680,35 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
         {...props}
       >
         <div className="relative min-w-max">
+          {/* A gate's rule, drawn down the whole track and under the bars: it
+              is first in the DOM so a bar's own label is never written over,
+              and it stops short of the label column, which is where a band is
+              named rather than where it spends time. A seam with no position
+              draws no rule — it is raised at any dispatch, and a rule
+              everywhere is a rule nowhere. */}
+          {seams?.length ? (
+            <div
+              aria-hidden
+              style={{ left: `${labelWidth}rem` }}
+              className="pointer-events-none absolute inset-y-0 right-0"
+            >
+              {seams.map((seam) =>
+                seam.at == null ? null : (
+                  <span
+                    key={seam.id}
+                    style={{ left: `${pct(seam.at)}%` }}
+                    className={cn(
+                      "absolute inset-y-0 border-l",
+                      seam.conditional
+                        ? "border-dashed border-muted-foreground/45"
+                        : "border-muted-foreground/60",
+                    )}
+                  />
+                ),
+              )}
+            </div>
+          ) : null}
+
           {/* The axis — time, in the tense the drawing is in. */}
           {row(
             "axis",
@@ -698,6 +788,90 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     {bracket.label}
                   </span>
                 ))}
+              </div>,
+            ),
+          )}
+
+          {/* The gates. A row of their own, because a gate has to read both as
+              a thing with a name and as the moment every band is stopped at —
+              and the side the label sits on is what declining costs. */}
+          {seamLines.map((line, lineIndex) =>
+            row(
+              `seams-${lineIndex}`,
+              label(
+                <span className="text-sm text-muted-foreground">
+                  {lineIndex === 0 ? "its gates" : ""}
+                </span>,
+              ),
+              <div className="absolute inset-0">
+                {line.map((seam) => {
+                  const named = (
+                    <span className="flex min-w-0 flex-col justify-center">
+                      <span className="truncate text-sm">{seam.label}</span>
+                      {seam.note ? (
+                        <span className="truncate text-xs text-muted-foreground">
+                          {seam.note}
+                        </span>
+                      ) : null}
+                    </span>
+                  );
+                  // No position, so no point to put it on: it runs the axis
+                  // and says so. Drawing it on one moment would be a guess.
+                  if (seam.at == null)
+                    return (
+                      <span
+                        key={seam.id}
+                        className="absolute inset-x-0 inset-y-1.5 flex items-center justify-center rounded-xs border border-dotted border-muted-foreground/45 px-1.5 text-muted-foreground"
+                      >
+                        {named}
+                      </span>
+                    );
+                  const after = seam.edge === "after";
+                  // A chip stops where the next gate starts: two seams a step
+                  // apart wrote over each other at a fixed width, and a
+                  // truncated gate is the one thing on this row that has to
+                  // stay readable.
+                  const neighbours = line
+                    .map((other) => other.at)
+                    .filter((value): value is number => value != null);
+                  const bound = after
+                    ? pct(seam.at) -
+                      Math.max(
+                        ...neighbours
+                          .filter((v) => v < (seam.at ?? 0))
+                          .map(pct),
+                        0,
+                      )
+                    : Math.min(
+                        ...neighbours
+                          .filter((v) => v > (seam.at ?? 0))
+                          .map(pct),
+                        100,
+                      ) - pct(seam.at);
+                  return (
+                    <span
+                      key={seam.id}
+                      style={{
+                        maxWidth: `${Math.max(bound, 12)}%`,
+                        ...(after
+                          ? { right: `${100 - pct(seam.at)}%` }
+                          : { left: `${pct(seam.at)}%` }),
+                      }}
+                      className={cn(
+                        // The label hangs off the side the cost falls on:
+                        // before the line, nothing is spent; after it, the
+                        // pass is already paid for.
+                        "absolute inset-y-1.5 flex items-center bg-card px-1.5 text-muted-foreground",
+                        after ? "border-r-2 text-right" : "border-l-2",
+                        seam.conditional
+                          ? "border-dashed border-muted-foreground/45"
+                          : "border-muted-foreground/70",
+                      )}
+                    >
+                      {named}
+                    </span>
+                  );
+                })}
               </div>,
             ),
           )}
