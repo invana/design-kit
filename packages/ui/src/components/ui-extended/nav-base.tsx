@@ -360,6 +360,13 @@ export const NavItems: React.FC<NavItemsProps> = ({
     const label = item.label && (
       <span className={item.labelClassName}>{item.label}</span>
     );
+    // An icon-only item has no text node, so its control has no accessible
+    // name: the name lives in a `TooltipContent` that is not rendered until
+    // hover and is never the button's label. `item.name` is required and is
+    // already what the tooltip shows, so it is the name — which is what makes
+    // an icon-only header action reachable assistively, and findable by
+    // role + name in a test instead of by position.
+    const a11y = label ? {} : { "aria-label": item.name };
     const badge = item.badge != null && (
       <span
         className="pointer-events-none absolute -right-0.5 -top-0.5 inline-flex h-3.5
@@ -417,6 +424,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
       <div
         ref={setNode}
         {...tabProps}
+        {...a11y}
         style={item.style}
         onClick={() => select(item)}
         className={itemClass}
@@ -427,6 +435,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
       <a
         ref={setNode as React.Ref<HTMLAnchorElement>}
         href={item.href}
+        {...a11y}
         style={item.style}
         onClick={() => select(item)}
         className={itemClass}
@@ -439,6 +448,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
         type="button"
         disabled={item.disabled}
         {...tabProps}
+        {...a11y}
         style={item.style}
         onClick={() => {
           // A menu trigger owns its own open state; don't also latch it into
