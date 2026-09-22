@@ -97,6 +97,29 @@ export interface DataTableProps<TData extends RowData> {
   groupBy?: (row: TData) => string | null | undefined;
   /** What a group header row contains. Defaults to the key. */
   renderGroupHeader?: (key: string, rows: TData[]) => React.ReactNode;
+  /**
+   * `compact` is the dense reading — 26px rows at `text-sm`, which is what a
+   * journal, a trace or a step's output table is drawn at. The primitive
+   * `Table` has carried it all along; this is the table that passes it on.
+   */
+  density?: "default" | "compact";
+  /**
+   * How deep this row sits under another — a child run under the run that
+   * spawned it. Indents the **first** cell only, so the shape of the list is
+   * carried by the column a reader is scanning and not by the whole row.
+   *
+   * Presentational, like `groupBy`: it nests nothing and sorts nothing, because
+   * the caller already has the rows in the order it wants them.
+   */
+  rowIndent?: (row: TData) => number | undefined;
+  /**
+   * Which row is the one being read elsewhere — the run open in the panel, the
+   * step open on its page. Drawn as an accent ground with a rule down its
+   * leading edge, so it is still findable after a scroll.
+   */
+  isRowSelected?: (row: TData) => boolean;
+  /** Makes rows activate — click, `Enter` or `Space`. */
+  onRowClick?: (row: TData) => void;
 }
 
 function getCommonPinStyles<TData>(
@@ -242,6 +265,10 @@ export function DataTable<TData extends RowData>({
   loading = false,
   groupBy,
   renderGroupHeader,
+  density = "default",
+  rowIndent,
+  isRowSelected,
+  onRowClick,
 }: DataTableProps<TData>) {
   const [internalSorting, setInternalSorting] = React.useState<SortingState>(
     [],
@@ -379,6 +406,7 @@ export function DataTable<TData extends RowData>({
             </div>
           )}
           <Table
+            density={density}
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
             }}
@@ -443,16 +471,50 @@ export function DataTable<TData extends RowData>({
                           </TableCell>
                         </TableRow>
                       ) : null}
-                      <TableRow>
-                        {row.getVisibleCells().map((cell) => {
+                      <TableRow
+                        data-selected={
+                          isRowSelected?.(row.original) || undefined
+                        }
+                        aria-selected={
+                          isRowSelected ? isRowSelected(row.original) : undefined
+                        }
+                        tabIndex={onRowClick ? 0 : undefined}
+                        onClick={
+                          onRowClick
+                            ? () => onRowClick(row.original)
+                            : undefined
+                        }
+                        onKeyDown={
+                          onRowClick
+                            ? (event) => {
+                                if (event.key !== "Enter" && event.key !== " ")
+                                  return;
+                                event.preventDefault();
+                                onRowClick(row.original);
+                              }
+                            : undefined
+                        }
+                        className={cn(
+                          isRowSelected?.(row.original) &&
+                            "bg-accent shadow-[inset_2px_0_0_var(--color-primary)] hover:bg-accent",
+                          onRowClick &&
+                            "cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
+                        )}
+                      >
+                        {row.getVisibleCells().map((cell, cellIndex) => {
                           const column = cell.column;
                           const isPinned = column.getIsPinned();
                           const align = column.columnDef.meta?.align ?? "left";
+                          const indent =
+                            cellIndex === 0 ? rowIndent?.(row.original) : undefined;
                           return (
                             <TableCell
                               key={cell.id}
                               style={{
                                 width: cell.column.getSize(),
+                                ...(indent
+                                  ? { paddingLeft: `${indent * 14 + 8}px` }
+                                  : {}),
                                 ...(isPinned
                                   ? {
                                       position: "sticky",
@@ -474,6 +536,7 @@ export function DataTable<TData extends RowData>({
                                 align === "center" && "text-center",
                                 isPinned &&
                                   "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
+                                column.columnDef.meta?.mono && "font-mono",
                                 column.columnDef.meta?.cellClassName,
                               )}
                             >

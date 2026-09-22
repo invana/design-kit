@@ -12,6 +12,13 @@ declare module '@tanstack/react-table' {
     options?: EditOption[];
     align?: 'left' | 'center' | 'right';
     /**
+     * Read this column as the record writes it — an id, a digest, a count, a
+     * duration. Mono is not decoration here: it is what makes a column of
+     * addresses scannable and a column of numbers comparable down its own
+     * length.
+     */
+    mono?: boolean;
+    /**
      * Extra class(es) applied to this column's body `<td>`. Use to control
      * padding, vertical alignment, or background when rendering your own
      * always-on controls (Switch/Select/Input) inside `cell()`.
