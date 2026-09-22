@@ -1,27 +1,33 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
-import { StatusDot, type StatusDotProps } from "../ui/status-dot"
+import { StatusIcon, type StatusIconState } from "../ui/status-icon"
 import { KindChip, type RunKind } from "./kind-chip"
-import { runStatusTones, type RunStatus } from "./run-status-text"
+import { runStatusIcons, type RunStatus } from "./run-status-text"
 
 export interface RunRowProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title" | "onSelect"> {
   status: RunStatus
-  /** Overrides the tone the status resolves to. */
-  tone?: StatusDotProps["tone"]
+  /** Overrides the glyph the status resolves to — `partial` on a run that succeeded. */
+  state?: StatusIconState
   kind?: RunKind
+  /**
+   * What it was about, in the words it was opened with — the question as typed,
+   * the query text, the dataset loaded. **Line one**, because it is what a
+   * reader scans the journal for.
+   */
+  title: React.ReactNode
+  /** The title is a query, not a sentence — drawn mono. */
+  titleMono?: boolean
   /**
    * The run's address — the last eight characters of its uuid, mono.
    *
-   * **First on the row, before anything measured.** A row a reader cannot
-   * quote into a log line, a support thread or `GET …/runs/{id}` has made them
-   * drill in to find out what they are looking at.
+   * **First on line two.** A row a reader cannot quote into a log line, a
+   * support thread or `GET …/runs/{id}` has made them drill in to find out what
+   * they are looking at.
    */
   address?: React.ReactNode
-  /** What it was about — the question asked, the dataset loaded, the stitch run. */
-  title: React.ReactNode
-  /** Under it — `2m 51s · 21.4k · 9/9 · 4 mins ago`. */
+  /** After the address — `nl-query@5 · 2m 51s · 21.4k · 9/9 · 4 mins ago`. */
   meta?: React.ReactNode
   /** Hard right — a badge, a count, an outcome. */
   aside?: React.ReactNode
@@ -40,10 +46,9 @@ export interface RunRowProps
  * and no panel per kind: the kind is a chip and a filter value, which is what
  * keeps one journal from becoming four lists that drift apart.
  *
- * The order on the row is addressed, then described, then measured: the id, the
- * kind, what it was about, and the numbers underneath. A reader scanning for
- * *the run I was just looking at* finds it by id; a reader scanning for *what
- * has this system been doing* reads the line under it.
+ * Line one is what it was about; line two is the id, then what it spent. The
+ * status is a glyph in the leading slot and **not a word** — the shape carries
+ * it, so the badge's column goes back to the prompt.
  *
  * With `onSelect` the whole row is one button, so the accessible name is the
  * whole row — the id, the kind and the summary in one string, which is exactly
@@ -53,10 +58,11 @@ export const RunRow = React.forwardRef<HTMLDivElement, RunRowProps>(
   (
     {
       status,
-      tone,
+      state,
       kind,
       address,
       title,
+      titleMono,
       meta,
       aside,
       depth = 0,
@@ -89,22 +95,25 @@ export const RunRow = React.forwardRef<HTMLDivElement, RunRowProps>(
               "cursor-pointer hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
           )}
         >
-          <StatusDot
-            tone={tone ?? runStatusTones[status] ?? "muted"}
-            size="md"
-            className="mt-1.5"
-            label={typeof status === "string" ? status : undefined}
+          <StatusIcon
+            state={state ?? runStatusIcons[status] ?? "queued"}
+            className="mt-0.5"
+            label={state === "alert" ? "partial" : status}
           />
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="flex min-w-0 items-center gap-1.5">
               {kind ? <KindChip kind={kind} /> : null}
-              {address != null ? (
-                <span className="shrink-0 font-mono">{address}</span>
-              ) : null}
-              <span className="min-w-0 truncate">{title}</span>
+              <span className={cn("min-w-0 truncate", titleMono && "font-mono")}>
+                {title}
+              </span>
             </span>
-            {meta != null ? (
-              <span className="truncate text-sm text-muted-foreground">{meta}</span>
+            {address != null || meta != null ? (
+              <span className="truncate text-sm text-muted-foreground">
+                {address != null ? (
+                  <span className="mr-1.5 font-mono">{address}</span>
+                ) : null}
+                {meta}
+              </span>
             ) : null}
           </span>
           {aside != null ? (

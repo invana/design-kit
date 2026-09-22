@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 import { StatusDot, type StatusDotProps } from "../ui/status-dot"
+import type { StatusIconState } from "../ui/status-icon"
 
 /**
  * How a run or a step ended, as the engine writes it — **suggestions, not a
@@ -16,6 +17,8 @@ export type KnownRunStatus =
   | "cancelled"
   | "cannot_answer"
   | "awaiting_approval"
+  | "awaiting_input"
+  | "partial"
   | "skipped"
   | "held"
   | "purged"
@@ -44,6 +47,8 @@ const TONE: Record<string, StatusDotProps["tone"]> = {
   cancelled: "muted",
   cannot_answer: "warning",
   awaiting_approval: "warning",
+  awaiting_input: "warning",
+  partial: "warning",
   skipped: "muted",
   held: "muted",
   purged: "muted",
@@ -112,4 +117,26 @@ export const RunStatusText = React.forwardRef<
 })
 RunStatusText.displayName = "RunStatusText"
 
-export { TONE as runStatusTones }
+/**
+ * Which glyph each status is drawn with, where the word is not beside it.
+ *
+ * The shape is the point: every state a reader acts on differently gets its own
+ * — done, broken, moving, not started, **waiting on you**, could not answer,
+ * answered in part, stopped. An unknown status reads as not started.
+ */
+const ICON: Record<string, StatusIconState> = {
+  queued: "queued",
+  running: "running",
+  succeeded: "success",
+  failed: "error",
+  cancelled: "cancelled",
+  cannot_answer: "question",
+  awaiting_approval: "waiting",
+  awaiting_input: "waiting",
+  held: "waiting",
+  partial: "alert",
+  skipped: "cancelled",
+  purged: "cancelled",
+}
+
+export { TONE as runStatusTones, ICON as runStatusIcons }
