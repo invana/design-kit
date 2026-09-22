@@ -1,0 +1,65 @@
+{
+  "name": "@invana/forms",
+  "version": "0.0.31",
+  "description": "Invana Design System - Composable form building blocks (FormField + ObjectField + leaf inputs)",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "tailwindcss",
+    "forms",
+    "form-generator",
+    "schema",
+    "invana/forms"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/forms"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@invana/styling": "^0.0.31",
+    "@invana/ui": "^0.0.31",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19",
+    "react-hook-form": "^7"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.3.7",
+    "@radix-ui/react-label": "^2.1.11",
+    "@radix-ui/react-radio-group": "^1.4.3",
+    "@radix-ui/react-select": "^2.3.3",
+    "@radix-ui/react-slider": "^1.4.3",
+    "@radix-ui/react-slot": "^1.3.0",
+    "@radix-ui/react-switch": "^1.3.3",
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "^1.24.0"
+  }
+}

@@ -1,0 +1,1698 @@
+'use strict';
+
+var ui = require('@invana/ui');
+var React2 = require('react');
+var reactSlot = require('@radix-ui/react-slot');
+var reactHookForm = require('react-hook-form');
+var LabelPrimitive = require('@radix-ui/react-label');
+var classVarianceAuthority = require('class-variance-authority');
+var jsxRuntime = require('react/jsx-runtime');
+var lucideReact = require('lucide-react');
+var SwitchPrimitives = require('@radix-ui/react-switch');
+var CheckboxPrimitive = require('@radix-ui/react-checkbox');
+var RadioGroupPrimitive = require('@radix-ui/react-radio-group');
+var SelectPrimitive = require('@radix-ui/react-select');
+var SliderPrimitive = require('@radix-ui/react-slider');
+
+function _interopNamespace(e) {
+  if (e && e.__esModule) return e;
+  var n = Object.create(null);
+  if (e) {
+    Object.keys(e).forEach(function (k) {
+      if (k !== 'default') {
+        var d = Object.getOwnPropertyDescriptor(e, k);
+        Object.defineProperty(n, k, d.get ? d : {
+          enumerable: true,
+          get: function () { return e[k]; }
+        });
+      }
+    });
+  }
+  n.default = e;
+  return Object.freeze(n);
+}
+
+var React2__namespace = /*#__PURE__*/_interopNamespace(React2);
+var LabelPrimitive__namespace = /*#__PURE__*/_interopNamespace(LabelPrimitive);
+var SwitchPrimitives__namespace = /*#__PURE__*/_interopNamespace(SwitchPrimitives);
+var CheckboxPrimitive__namespace = /*#__PURE__*/_interopNamespace(CheckboxPrimitive);
+var RadioGroupPrimitive__namespace = /*#__PURE__*/_interopNamespace(RadioGroupPrimitive);
+var SelectPrimitive__namespace = /*#__PURE__*/_interopNamespace(SelectPrimitive);
+var SliderPrimitive__namespace = /*#__PURE__*/_interopNamespace(SliderPrimitive);
+
+// src/form-field.tsx
+var labelVariants = classVarianceAuthority.cva(
+  "font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+);
+var Label = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  LabelPrimitive__namespace.Root,
+  {
+    ref,
+    className: ui.cn(labelVariants(), className),
+    ...props
+  }
+));
+Label.displayName = LabelPrimitive__namespace.Root.displayName;
+var Form = reactHookForm.FormProvider;
+var FormFieldContext = React2__namespace.createContext(
+  {}
+);
+var FormField = ({
+  ...props
+}) => {
+  return /* @__PURE__ */ jsxRuntime.jsx(FormFieldContext.Provider, { value: { name: props.name }, children: /* @__PURE__ */ jsxRuntime.jsx(reactHookForm.Controller, { ...props }) });
+};
+var useFormField = () => {
+  const fieldContext = React2__namespace.useContext(FormFieldContext);
+  const itemContext = React2__namespace.useContext(FormItemContext);
+  const { getFieldState, formState } = reactHookForm.useFormContext();
+  const fieldState = getFieldState(fieldContext.name, formState);
+  if (!fieldContext) {
+    throw new Error("useFormField should be used within <FormField>");
+  }
+  const { id } = itemContext;
+  return {
+    id,
+    name: fieldContext.name,
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    ...fieldState
+  };
+};
+var FormItemContext = React2__namespace.createContext(
+  {}
+);
+var FormItem = React2__namespace.forwardRef(({ className, ...props }, ref) => {
+  const id = React2__namespace.useId();
+  return /* @__PURE__ */ jsxRuntime.jsx(FormItemContext.Provider, { value: { id }, children: /* @__PURE__ */ jsxRuntime.jsx("div", { ref, className: ui.cn("space-y-2", className), ...props }) });
+});
+FormItem.displayName = "FormItem";
+var FormLabel = React2__namespace.forwardRef(({ className, ...props }, ref) => {
+  const { error, formItemId } = useFormField();
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Label,
+    {
+      ref,
+      className: ui.cn(error && "text-destructive", className),
+      htmlFor: formItemId,
+      ...props
+    }
+  );
+});
+FormLabel.displayName = "FormLabel";
+var FormControl = React2__namespace.forwardRef(({ ...props }, ref) => {
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    reactSlot.Slot,
+    {
+      ref,
+      id: formItemId,
+      "aria-describedby": !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
+      "aria-invalid": !!error,
+      ...props
+    }
+  );
+});
+FormControl.displayName = "FormControl";
+var FormDescription = React2__namespace.forwardRef(({ className, ...props }, ref) => {
+  const { formDescriptionId } = useFormField();
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "p",
+    {
+      ref,
+      id: formDescriptionId,
+      className: ui.cn("text-[0.8rem] text-muted-foreground", className),
+      ...props
+    }
+  );
+});
+FormDescription.displayName = "FormDescription";
+var FormMessage = React2__namespace.forwardRef(({ className, children, ...props }, ref) => {
+  const { error, formMessageId } = useFormField();
+  const body = error ? String(error?.message) : children;
+  if (!body) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "p",
+    {
+      ref,
+      id: formMessageId,
+      className: ui.cn("text-[0.8rem] font-medium text-destructive", className),
+      ...props,
+      children: body
+    }
+  );
+});
+FormMessage.displayName = "FormMessage";
+var Input = React2__namespace.forwardRef(
+  ({ className, type, inputSize = "default", ...props }, ref) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      "input",
+      {
+        type,
+        className: ui.cn(
+          inputSize === "sm" ? "h-[26px] px-2 py-0" : "h-10 px-3 py-2",
+          "flex w-full rounded-control border border-input bg-background text-base ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        ),
+        ref,
+        ...props
+      }
+    );
+  }
+);
+Input.displayName = "Input";
+var PasswordInput = React2__namespace.forwardRef(
+  ({ className, visible, onVisibleChange, disabled, ...props }, ref) => {
+    const [internalVisible, setInternalVisible] = React2__namespace.useState(false);
+    const isControlled = visible !== void 0;
+    const show = isControlled ? visible : internalVisible;
+    const toggle = () => {
+      const next = !show;
+      if (!isControlled) setInternalVisible(next);
+      onVisibleChange?.(next);
+    };
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "relative", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        Input,
+        {
+          type: show ? "text" : "password",
+          className: ui.cn("pr-10", className),
+          disabled,
+          ref,
+          ...props
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        "button",
+        {
+          type: "button",
+          onClick: toggle,
+          disabled,
+          tabIndex: -1,
+          "aria-label": show ? "Hide password" : "Show password",
+          "aria-pressed": show,
+          className: "absolute inset-y-0 right-0 flex items-center justify-center px-3 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          children: show ? /* @__PURE__ */ jsxRuntime.jsx(lucideReact.EyeOff, { className: "size-4", "aria-hidden": "true" }) : /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Eye, { className: "size-4", "aria-hidden": "true" })
+        }
+      )
+    ] });
+  }
+);
+PasswordInput.displayName = "PasswordInput";
+var Textarea = React2__namespace.forwardRef(({ className, inputSize = "default", ...props }, ref) => {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "textarea",
+    {
+      className: ui.cn(
+        inputSize === "sm" ? "min-h-[52px] px-2 py-1" : "min-h-[80px] px-3 py-2",
+        "flex w-full rounded-control border border-input bg-background text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ref,
+      ...props
+    }
+  );
+});
+Textarea.displayName = "Textarea";
+var Switch = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  SwitchPrimitives__namespace.Root,
+  {
+    className: ui.cn(
+      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-border shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:border-primary data-[state=unchecked]:bg-input",
+      className
+    ),
+    ...props,
+    ref,
+    children: /* @__PURE__ */ jsxRuntime.jsx(
+      SwitchPrimitives__namespace.Thumb,
+      {
+        className: ui.cn(
+          "pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-foreground"
+        )
+      }
+    )
+  }
+));
+Switch.displayName = SwitchPrimitives__namespace.Root.displayName;
+var Checkbox = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  CheckboxPrimitive__namespace.Root,
+  {
+    ref,
+    className: ui.cn(
+      "peer h-4 w-4 shrink-0 rounded-control border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+      className
+    ),
+    ...props,
+    children: /* @__PURE__ */ jsxRuntime.jsx(
+      CheckboxPrimitive__namespace.Indicator,
+      {
+        className: ui.cn("flex items-center justify-center text-current"),
+        children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Check, { className: "h-4 w-4" })
+      }
+    )
+  }
+));
+Checkbox.displayName = CheckboxPrimitive__namespace.Root.displayName;
+var RadioGroup = React2__namespace.forwardRef(({ className, ...props }, ref) => {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    RadioGroupPrimitive__namespace.Root,
+    {
+      className: ui.cn("grid gap-2", className),
+      ...props,
+      ref
+    }
+  );
+});
+RadioGroup.displayName = RadioGroupPrimitive__namespace.Root.displayName;
+var RadioGroupItem = React2__namespace.forwardRef(({ className, ...props }, ref) => {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    RadioGroupPrimitive__namespace.Item,
+    {
+      ref,
+      className: ui.cn(
+        "aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsxRuntime.jsx(RadioGroupPrimitive__namespace.Indicator, { className: "flex items-center justify-center", children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Circle, { className: "h-2.5 w-2.5 fill-current text-current" }) })
+    }
+  );
+});
+RadioGroupItem.displayName = RadioGroupPrimitive__namespace.Item.displayName;
+var Select = SelectPrimitive__namespace.Root;
+var SelectGroup = SelectPrimitive__namespace.Group;
+var SelectValue = SelectPrimitive__namespace.Value;
+var SelectTrigger = React2__namespace.forwardRef(({ className, children, triggerSize = "default", ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsxs(
+  SelectPrimitive__namespace.Trigger,
+  {
+    ref,
+    className: ui.cn(
+      triggerSize === "sm" ? "h-[26px] px-2 py-0" : "h-9 px-3 py-2",
+      "flex w-full items-center justify-between whitespace-nowrap rounded-control border border-input bg-transparent  shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      className
+    ),
+    ...props,
+    children: [
+      children,
+      /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.Icon, { asChild: true, children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.ChevronDown, { className: "h-4 w-4 opacity-50" }) })
+    ]
+  }
+));
+SelectTrigger.displayName = SelectPrimitive__namespace.Trigger.displayName;
+var SelectScrollUpButton = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  SelectPrimitive__namespace.ScrollUpButton,
+  {
+    ref,
+    className: ui.cn(
+      "flex cursor-default items-center justify-center py-1",
+      className
+    ),
+    ...props,
+    children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.ChevronUp, { className: "h-4 w-4" })
+  }
+));
+SelectScrollUpButton.displayName = SelectPrimitive__namespace.ScrollUpButton.displayName;
+var SelectScrollDownButton = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  SelectPrimitive__namespace.ScrollDownButton,
+  {
+    ref,
+    className: ui.cn(
+      "flex cursor-default items-center justify-center py-1",
+      className
+    ),
+    ...props,
+    children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.ChevronDown, { className: "h-4 w-4" })
+  }
+));
+SelectScrollDownButton.displayName = SelectPrimitive__namespace.ScrollDownButton.displayName;
+var SelectContent = React2__namespace.forwardRef(({ className, children, position = "popper", ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.Portal, { children: /* @__PURE__ */ jsxRuntime.jsxs(
+  SelectPrimitive__namespace.Content,
+  {
+    ref,
+    className: ui.cn(
+      "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+      className
+    ),
+    position,
+    ...props,
+    children: [
+      /* @__PURE__ */ jsxRuntime.jsx(SelectScrollUpButton, {}),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        SelectPrimitive__namespace.Viewport,
+        {
+          className: ui.cn(
+            "p-1",
+            position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+          ),
+          children
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(SelectScrollDownButton, {})
+    ]
+  }
+) }));
+SelectContent.displayName = SelectPrimitive__namespace.Content.displayName;
+var SelectLabel = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  SelectPrimitive__namespace.Label,
+  {
+    ref,
+    className: ui.cn("px-2 py-1.5 font-semibold", className),
+    ...props
+  }
+));
+SelectLabel.displayName = SelectPrimitive__namespace.Label.displayName;
+var SelectItem = React2__namespace.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsxs(
+  SelectPrimitive__namespace.Item,
+  {
+    ref,
+    className: ui.cn(
+      "relative flex w-full cursor-default select-none items-center rounded-control py-1.5 pl-2 pr-8 outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className
+    ),
+    ...props,
+    children: [
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute right-2 flex h-3.5 w-3.5 items-center justify-center", children: /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.ItemIndicator, { children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Check, { className: "h-4 w-4" }) }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.ItemText, { children })
+    ]
+  }
+));
+SelectItem.displayName = SelectPrimitive__namespace.Item.displayName;
+var SelectSeparator = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsx(
+  SelectPrimitive__namespace.Separator,
+  {
+    ref,
+    className: ui.cn("-mx-1 my-1 h-px bg-muted", className),
+    ...props
+  }
+));
+SelectSeparator.displayName = SelectPrimitive__namespace.Separator.displayName;
+var DEFAULT_PRESETS = [
+  { label: "Black", value: "rgb(0, 0, 0)", darkValue: "rgb(255, 255, 255)" },
+  { label: "Red", value: "rgb(239, 68, 68)" },
+  { label: "Blue", value: "rgb(59, 130, 246)" }
+];
+var ColorSwatches = ({
+  value,
+  onChange,
+  presetColors = DEFAULT_PRESETS,
+  defaultValue = "rgb(0, 0, 0)"
+}) => {
+  const [customColor, setCustomColor] = React2__namespace.useState(value || defaultValue);
+  const [isCustom, setIsCustom] = React2__namespace.useState(false);
+  React2__namespace.useEffect(() => {
+    if (!value) return;
+    const isPreset = presetColors.some((c) => c.value === value);
+    setIsCustom(!isPreset);
+    if (!isPreset) setCustomColor(value);
+  }, [value, presetColors]);
+  const select = (newColor, custom = false) => {
+    setIsCustom(custom);
+    if (custom) setCustomColor(newColor);
+    onChange?.(newColor);
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex gap-2", children: [
+    presetColors.map((color) => /* @__PURE__ */ jsxRuntime.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: () => select(color.value),
+        className: ui.cn(
+          "group relative h-8 w-8 overflow-hidden rounded-control border",
+          "ring-offset-background transition-all hover:scale-105",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          !isCustom && value === color.value && "ring-2 ring-ring ring-offset-2"
+        ),
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "h-full w-full", style: { backgroundColor: color.value } }),
+          !isCustom && value === color.value && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "absolute inset-0 flex items-center justify-center bg-black/30", children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Check, { className: "h-4 w-4 text-white" }) }),
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "sr-only", children: [
+            "Select ",
+            color.label
+          ] })
+        ]
+      },
+      color.label
+    )),
+    /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        className: ui.cn(
+          "group relative h-8 w-8 overflow-hidden rounded-control border",
+          "ring-offset-background transition-all hover:scale-105",
+          isCustom && "ring-2 ring-ring ring-offset-2"
+        ),
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(
+            "input",
+            {
+              type: "color",
+              value: customColor,
+              onChange: (e) => select(e.target.value, true),
+              className: "absolute inset-0 cursor-pointer opacity-0"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "h-full w-full", style: { backgroundColor: customColor } }),
+          isCustom && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "absolute inset-0 flex items-center justify-center bg-black/30", children: /* @__PURE__ */ jsxRuntime.jsx(lucideReact.Check, { className: "h-4 w-4 text-white" }) }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "sr-only", children: "Custom color" })
+        ]
+      }
+    )
+  ] });
+};
+var Slider = React2__namespace.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntime.jsxs(
+  SliderPrimitive__namespace.Root,
+  {
+    ref,
+    className: ui.cn(
+      "relative flex w-full touch-none select-none items-center",
+      className
+    ),
+    ...props,
+    children: [
+      /* @__PURE__ */ jsxRuntime.jsx(SliderPrimitive__namespace.Track, { className: "relative h-2 w-full grow overflow-hidden rounded-full bg-secondary", children: /* @__PURE__ */ jsxRuntime.jsx(SliderPrimitive__namespace.Range, { className: "absolute h-full bg-primary" }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(SliderPrimitive__namespace.Thumb, { className: "block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" })
+    ]
+  }
+));
+Slider.displayName = SliderPrimitive__namespace.Root.displayName;
+var SliderNumber = ({
+  value = 0,
+  onChange,
+  min = 0,
+  max = 100,
+  step = 1,
+  className
+}) => {
+  const [local, setLocal] = React2__namespace.useState(value);
+  React2__namespace.useEffect(() => {
+    setLocal(value);
+  }, [value]);
+  const set = (n) => {
+    setLocal(n);
+    onChange?.(n);
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: ui.cn("flex items-center gap-2", className), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(
+      Slider,
+      {
+        value: [local],
+        onValueChange: ([n]) => set(n),
+        min,
+        max,
+        step,
+        className: "flex-1"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      Input,
+      {
+        type: "number",
+        value: local,
+        onChange: (e) => set(Number(e.target.value)),
+        className: "h-8 w-16",
+        min,
+        max,
+        step
+      }
+    )
+  ] });
+};
+var IconInput = ({ value, onChange }) => {
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center gap-2", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-control border bg-muted", children: value ? value.slice(0, 2) : "\u2013" }),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      Input,
+      {
+        type: "text",
+        value: value ?? "",
+        onChange: (e) => onChange?.(e.target.value),
+        placeholder: "icon name",
+        className: "h-8"
+      }
+    )
+  ] });
+};
+var SIZE = {
+  xs: {
+    input: "h-9",
+    select: "h-9",
+    textarea: "",
+    label: "text-base",
+    desc: "text-base",
+    gap: "gap-x-3 gap-y-2.5",
+    section: "space-y-3",
+    outer: "space-y-4",
+    stack: "space-y-2",
+    sideGap: "gap-x-2",
+    trigger: "py-1.5 text-base",
+    switch: "scale-90 origin-right",
+    check: "h-4 w-4",
+    radio: "h-4 w-4"
+  },
+  sm: {
+    input: "h-9",
+    select: "h-9",
+    textarea: "",
+    label: "text-base",
+    desc: "text-base",
+    gap: "gap-x-3 gap-y-2",
+    section: "space-y-3",
+    outer: "space-y-4",
+    stack: "space-y-1.5",
+    sideGap: "gap-x-2",
+    trigger: "py-1.5 text-base",
+    switch: "scale-90 origin-right",
+    check: "h-4 w-4",
+    radio: "h-4 w-4"
+  },
+  md: {
+    input: "",
+    select: "",
+    textarea: "",
+    label: "text-base",
+    desc: "text-base",
+    gap: "gap-4",
+    section: "space-y-4",
+    outer: "space-y-6",
+    stack: "space-y-2",
+    sideGap: "gap-2",
+    trigger: "py-1.5 text-base",
+    switch: "",
+    check: "h-4 w-4",
+    radio: "h-4 w-4"
+  }
+};
+function itemClasses(labelPosition, size, className) {
+  return ui.cn(
+    labelPosition === "side" && ui.cn("grid grid-cols-3 items-center", SIZE[size].sideGap),
+    labelPosition === "top" && SIZE[size].stack,
+    className
+  );
+}
+function inputWrapper(labelPosition, size) {
+  return ui.cn(labelPosition === "side" && "col-span-2", SIZE[size].stack);
+}
+function StatusPill({ badge }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    ui.Badge,
+    {
+      variant: badge.variant ?? "secondary",
+      className: "px-1.5 py-0 text-base font-medium",
+      children: badge.label
+    }
+  );
+}
+function FieldLabel({
+  label,
+  badge,
+  size,
+  className
+}) {
+  if (!label && !badge) return null;
+  return /* @__PURE__ */ jsxRuntime.jsxs(FormLabel, { className: ui.cn(SIZE[size].label, className), children: [
+    label,
+    badge && /* @__PURE__ */ jsxRuntime.jsx(StatusPill, { badge })
+  ] });
+}
+var InputField = ({
+  label,
+  description,
+  placeholder,
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      Input,
+      {
+        className: SIZE[size].input,
+        placeholder,
+        value: value ?? "",
+        onChange: (e) => onChange?.(e.target.value)
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var PasswordField = ({
+  label,
+  description,
+  placeholder,
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      PasswordInput,
+      {
+        className: SIZE[size].input,
+        placeholder,
+        value: value ?? "",
+        onChange: (e) => onChange?.(e.target.value)
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var TextareaField = ({
+  label,
+  description,
+  placeholder,
+  value,
+  onChange,
+  rows,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      Textarea,
+      {
+        className: SIZE[size].textarea || void 0,
+        rows,
+        placeholder,
+        value: value ?? "",
+        onChange: (e) => onChange?.(e.target.value)
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var SelectField = ({
+  label,
+  description,
+  options = [],
+  value,
+  onChange,
+  placeholder = "Select type",
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsxs(Select, { value: value ?? "", onValueChange: onChange, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(SelectTrigger, { className: SIZE[size].select, children: /* @__PURE__ */ jsxRuntime.jsx(SelectValue, { placeholder }) }) }),
+      /* @__PURE__ */ jsxRuntime.jsx(SelectContent, { children: options.map((o) => /* @__PURE__ */ jsxRuntime.jsx(SelectItem, { value: o.value, children: o.label }, o.value)) })
+    ] }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var BooleanField = ({
+  label,
+  description,
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  control = "switch",
+  labelClassName,
+  badge,
+  className,
+  boxed = false
+}) => {
+  const boxClass = boxed ? "rounded-md border p-2" : "";
+  if (control === "checkbox") {
+    return /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: ui.cn("flex items-center gap-2 space-y-0", className), children: [
+      /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+        Checkbox,
+        {
+          className: SIZE[size].check,
+          checked: !!value,
+          onCheckedChange: onChange
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        FieldLabel,
+        {
+          label,
+          badge,
+          size,
+          className: ui.cn(
+            "!mt-0 cursor-pointer font-normal leading-none",
+            labelClassName
+          )
+        }
+      )
+    ] });
+  }
+  if (labelPosition === "side") {
+    return /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: ui.cn("flex items-center justify-between", boxClass), children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+        description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+        Switch,
+        {
+          className: SIZE[size].switch || void 0,
+          checked: !!value,
+          onCheckedChange: onChange
+        }
+      ) })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: SIZE[size].stack, children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: ui.cn("flex items-center justify-between", boxClass), children: [
+      /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+        Switch,
+        {
+          className: SIZE[size].switch || void 0,
+          checked: !!value,
+          onCheckedChange: onChange
+        }
+      ) }),
+      description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: ui.cn("ml-2", SIZE[size].desc), children: description })
+    ] })
+  ] });
+};
+var RadioField = ({
+  label,
+  description,
+  options = [],
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  orientation = "vertical",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      RadioGroup,
+      {
+        value: value ?? "",
+        onValueChange: onChange,
+        className: orientation === "horizontal" ? "flex flex-row items-center gap-x-4" : ui.cn("flex flex-col", SIZE[size].stack),
+        children: options.map((o) => /* @__PURE__ */ jsxRuntime.jsxs(
+          "label",
+          {
+            className: "flex cursor-pointer items-center gap-2",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx(
+                RadioGroupItem,
+                {
+                  value: o.value,
+                  className: ui.cn("shrink-0", SIZE[size].radio)
+                }
+              ),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: ui.cn("leading-none", SIZE[size].label), children: o.label })
+            ]
+          },
+          o.value
+        ))
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var CheckboxGroupField = ({
+  label,
+  description,
+  options = [],
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  orientation = "vertical",
+  labelClassName,
+  badge,
+  className
+}) => {
+  const selected = Array.isArray(value) ? value : [];
+  const toggle = (v, checked) => onChange?.(checked ? [...selected, v] : selected.filter((x) => x !== v));
+  return /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: orientation === "horizontal" ? "flex flex-row items-center gap-x-4" : ui.cn("flex flex-col", SIZE[size].stack),
+          children: options.map((o) => /* @__PURE__ */ jsxRuntime.jsxs(
+            "label",
+            {
+              className: "flex cursor-pointer items-center gap-2",
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx(
+                  Checkbox,
+                  {
+                    className: ui.cn("shrink-0", SIZE[size].check),
+                    checked: selected.includes(o.value),
+                    onCheckedChange: (c) => toggle(o.value, c === true)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: ui.cn("leading-none", SIZE[size].label), children: o.label })
+              ]
+            },
+            o.value
+          ))
+        }
+      ),
+      description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+      /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+    ] })
+  ] });
+};
+var ColorField = ({
+  label,
+  description,
+  value,
+  onChange,
+  presetColors,
+  defaultValue,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      ColorSwatches,
+      {
+        value,
+        onChange,
+        presetColors,
+        defaultValue
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var NumberField = ({
+  label,
+  description,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(
+      SliderNumber,
+      {
+        value: typeof value === "number" ? value : 0,
+        onChange,
+        min,
+        max,
+        step
+      }
+    ) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var IconField = ({
+  label,
+  description,
+  value,
+  onChange,
+  labelPosition = "side",
+  size = "sm",
+  labelClassName,
+  badge,
+  className
+}) => /* @__PURE__ */ jsxRuntime.jsxs(FormItem, { className: itemClasses(labelPosition, size, className), children: [
+  /* @__PURE__ */ jsxRuntime.jsx(FieldLabel, { label, badge, size, className: labelClassName }),
+  /* @__PURE__ */ jsxRuntime.jsxs("div", { className: inputWrapper(labelPosition, size), children: [
+    /* @__PURE__ */ jsxRuntime.jsx(FormControl, { children: /* @__PURE__ */ jsxRuntime.jsx(IconInput, { value, onChange }) }),
+    description && /* @__PURE__ */ jsxRuntime.jsx(FormDescription, { className: SIZE[size].desc, children: description }),
+    /* @__PURE__ */ jsxRuntime.jsx(FormMessage, { className: SIZE[size].desc })
+  ] })
+] });
+var Field = {
+  Input: InputField,
+  Password: PasswordField,
+  Textarea: TextareaField,
+  Boolean: BooleanField,
+  Radio: RadioField,
+  CheckboxGroup: CheckboxGroupField,
+  Color: ColorField,
+  Number: NumberField,
+  Select: SelectField,
+  Icon: IconField
+};
+function humanize(name) {
+  return name.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase()).trim();
+}
+function renderField(field, parentName, control, labelPosition, size) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    FormField,
+    {
+      control,
+      name: `${parentName}.${field.name}`,
+      defaultValue: field.defaultValue,
+      render: ({ field: rhf }) => {
+        const common = {
+          label: field.label ?? humanize(field.name),
+          description: field.description,
+          options: field.options,
+          min: field.min,
+          max: field.max,
+          step: field.step,
+          presetColors: field.presetColors,
+          defaultValue: field.defaultValue,
+          rows: field.rows,
+          control: field.control,
+          orientation: field.orientation,
+          boxed: field.boxed,
+          labelClassName: field.labelClassName,
+          badge: field.badge,
+          labelPosition,
+          size,
+          value: rhf.value,
+          onChange: rhf.onChange
+        };
+        switch (field.type) {
+          case "password":
+            return /* @__PURE__ */ jsxRuntime.jsx(
+              PasswordField,
+              {
+                ...common,
+                placeholder: field.placeholder ?? `Enter ${field.name}`
+              }
+            );
+          case "boolean":
+            return /* @__PURE__ */ jsxRuntime.jsx(BooleanField, { ...common });
+          case "radio":
+            return /* @__PURE__ */ jsxRuntime.jsx(RadioField, { ...common });
+          case "checkbox":
+            return /* @__PURE__ */ jsxRuntime.jsx(CheckboxGroupField, { ...common });
+          case "color":
+            return /* @__PURE__ */ jsxRuntime.jsx(ColorField, { ...common });
+          case "number":
+            return /* @__PURE__ */ jsxRuntime.jsx(NumberField, { ...common });
+          case "select":
+            return /* @__PURE__ */ jsxRuntime.jsx(SelectField, { ...common });
+          case "icon":
+            return /* @__PURE__ */ jsxRuntime.jsx(IconField, { ...common });
+          case "textarea":
+            return /* @__PURE__ */ jsxRuntime.jsx(
+              TextareaField,
+              {
+                ...common,
+                placeholder: field.placeholder ?? `Enter ${field.name}`
+              }
+            );
+          case "text":
+          default:
+            return /* @__PURE__ */ jsxRuntime.jsx(
+              InputField,
+              {
+                ...common,
+                placeholder: field.placeholder ?? `Enter ${field.name}`
+              }
+            );
+        }
+      }
+    },
+    field.name
+  );
+}
+function renderGrid(fields, parentName, control, labelPosition, size, columns, key) {
+  const customCols = columns !== 2;
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      className: ui.cn(
+        "grid grid-cols-1",
+        SIZE[size].gap,
+        customCols ? "md:[grid-template-columns:repeat(var(--ff-cols),minmax(0,1fr))]" : "md:grid-cols-2"
+      ),
+      style: customCols ? { "--ff-cols": columns } : void 0,
+      children: fields.map((f) => {
+        const span = f.colSpan && f.colSpan > 1 ? f.colSpan : void 0;
+        return /* @__PURE__ */ jsxRuntime.jsx(
+          "div",
+          {
+            className: ui.cn(
+              span && "md:[grid-column:span_var(--ff-span)/span_var(--ff-span)]",
+              f.className
+            ),
+            style: span ? { "--ff-span": span } : void 0,
+            children: renderField(f, parentName, control, labelPosition, size)
+          },
+          f.name
+        );
+      })
+    },
+    key
+  );
+}
+function renderRows(fields, rowConfig, parentName, control, labelPosition, size, columns) {
+  if (!rowConfig || rowConfig.length === 0) {
+    return renderGrid(fields, parentName, control, labelPosition, size, columns);
+  }
+  const used = new Set(rowConfig.flatMap((r) => r.fields));
+  const unassigned = fields.filter((f) => !used.has(f.name));
+  const byName = new Map(fields.map((f) => [f.name, f]));
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: SIZE[size].section, children: [
+    rowConfig.map((row) => {
+      const rowFields = row.fields.map((n) => byName.get(n)).filter((f) => !!f);
+      if (rowFields.length === 0) return null;
+      return renderGrid(
+        rowFields,
+        parentName,
+        control,
+        labelPosition,
+        size,
+        columns,
+        row.id
+      );
+    }),
+    unassigned.length > 0 && renderGrid(
+      unassigned,
+      parentName,
+      control,
+      labelPosition,
+      size,
+      columns,
+      "_unassigned"
+    )
+  ] });
+}
+var ObjectField = ({
+  control,
+  name,
+  fields,
+  rowConfig,
+  groupConfig,
+  labelPosition = "side",
+  size = "sm",
+  columns = 2
+}) => {
+  const grouped = fields.reduce((acc, f) => {
+    const key = f.group ?? "_ungrouped";
+    (acc[key] ??= []).push(f);
+    return acc;
+  }, {});
+  const ungrouped = grouped["_ungrouped"] ?? [];
+  delete grouped["_ungrouped"];
+  const groupedEntries = Object.entries(grouped);
+  const groupConfigById = new Map(
+    (groupConfig ?? []).map((g) => [g.id, g])
+  );
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: SIZE[size].outer, children: [
+    ungrouped.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: SIZE[size].section, children: renderRows(
+      ungrouped,
+      rowConfig,
+      name,
+      control,
+      labelPosition,
+      size,
+      columns
+    ) }),
+    groupedEntries.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+      ui.Accordion,
+      {
+        type: "multiple",
+        defaultValue: groupedEntries.map(([k]) => k),
+        className: "w-full",
+        children: groupedEntries.map(([group, gFields]) => {
+          const gc = groupConfigById.get(group);
+          return /* @__PURE__ */ jsxRuntime.jsxs(ui.AccordionItem, { value: group, className: "border-b", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(
+              ui.AccordionTrigger,
+              {
+                className: ui.cn(
+                  "font-semibold uppercase tracking-wide text-muted-foreground hover:no-underline",
+                  SIZE[size].trigger
+                ),
+                children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "flex items-center gap-2", children: [
+                  gc?.label ?? humanize(group),
+                  (gc?.showCount ?? true) && /* @__PURE__ */ jsxRuntime.jsx(
+                    ui.Badge,
+                    {
+                      variant: "secondary",
+                      className: "px-1.5 py-0 text-base font-normal tabular-nums",
+                      children: gFields.length
+                    }
+                  ),
+                  gc?.badges?.map((b, i) => /* @__PURE__ */ jsxRuntime.jsx(StatusPill, { badge: b }, i))
+                ] })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsx(ui.AccordionContent, { className: "pb-3 pt-1", children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: SIZE[size].section, children: renderRows(
+              gFields,
+              rowConfig,
+              name,
+              control,
+              labelPosition,
+              size,
+              columns
+            ) }) })
+          ] }, group);
+        })
+      }
+    )
+  ] });
+};
+var FormField2 = Object.assign(FormField, {
+  ObjectField,
+  Input: InputField,
+  Password: PasswordField,
+  Textarea: TextareaField,
+  Boolean: BooleanField,
+  Radio: RadioField,
+  CheckboxGroup: CheckboxGroupField,
+  Color: ColorField,
+  Number: NumberField,
+  Select: SelectField,
+  Icon: IconField
+});
+function SettingsPanel({
+  form,
+  title,
+  className,
+  contentClassName,
+  children,
+  ...objectField
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(ui.Card, { className, children: /* @__PURE__ */ jsxRuntime.jsxs(
+    ui.CardContent,
+    {
+      className: ui.cn("max-h-[80vh] overflow-y-auto p-4", contentClassName),
+      children: [
+        title && /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "mb-3 text-base font-semibold uppercase tracking-wide text-muted-foreground", children: title }),
+        /* @__PURE__ */ jsxRuntime.jsxs(Form, { ...form, children: [
+          /* @__PURE__ */ jsxRuntime.jsx(ObjectField, { control: form.control, ...objectField }),
+          children
+        ] })
+      ]
+    }
+  ) });
+}
+function FieldSet({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "fieldset",
+    {
+      "data-slot": "field-set",
+      className: ui.cn(
+        "flex flex-col gap-6",
+        "has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldLegend({
+  className,
+  variant = "legend",
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "legend",
+    {
+      "data-slot": "field-legend",
+      "data-variant": variant,
+      className: ui.cn(
+        "mb-3 font-medium",
+        "data-[variant=legend]:text-base",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldGroup({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      "data-slot": "field-group",
+      className: ui.cn(
+        "group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4",
+        className
+      ),
+      ...props
+    }
+  );
+}
+classVarianceAuthority.cva(
+  "group/field data-[invalid=true]:text-destructive flex w-full gap-3",
+  {
+    variants: {
+      orientation: {
+        vertical: ["flex-col [&>*]:w-full [&>.sr-only]:w-auto"],
+        horizontal: [
+          "flex-row items-center",
+          "[&>[data-slot=field-label]]:flex-auto",
+          "has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px has-[>[data-slot=field-content]]:items-start"
+        ],
+        responsive: [
+          "@md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto flex-col [&>*]:w-full [&>.sr-only]:w-auto",
+          "@md/field-group:[&>[data-slot=field-label]]:flex-auto",
+          "@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px"
+        ]
+      }
+    },
+    defaultVariants: {
+      orientation: "vertical"
+    }
+  }
+);
+function FieldContent({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      "data-slot": "field-content",
+      className: ui.cn(
+        "group/field-content flex flex-1 flex-col gap-1.5 leading-snug",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldLabel2({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Label,
+    {
+      "data-slot": "field-label",
+      className: ui.cn(
+        "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50",
+        "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>[data-slot=field]]:p-4",
+        "has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldTitle({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      "data-slot": "field-label",
+      className: ui.cn(
+        "flex w-fit items-center gap-2 font-medium leading-snug group-data-[disabled=true]/field:opacity-50",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldDescription({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "p",
+    {
+      "data-slot": "field-description",
+      className: ui.cn(
+        "text-muted-foreground font-normal leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance",
+        "nth-last-2:-mt-1 last:mt-0 [[data-variant=legend]+&]:-mt-1.5",
+        "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function FieldSeparator({
+  children,
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      "data-slot": "field-separator",
+      "data-content": !!children,
+      className: ui.cn(
+        "relative -my-2 h-5 group-data-[variant=outline]/field-group:-mb-2",
+        className
+      ),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsx(ui.Separator, { className: "absolute inset-0 top-1/2" }),
+        children && /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            className: "bg-background text-muted-foreground relative mx-auto block w-fit px-2",
+            "data-slot": "field-separator-content",
+            children
+          }
+        )
+      ]
+    }
+  );
+}
+function FieldError({
+  className,
+  children,
+  errors,
+  ...props
+}) {
+  const content = React2.useMemo(() => {
+    if (children) {
+      return children;
+    }
+    if (!errors) {
+      return null;
+    }
+    if (errors?.length === 1 && errors[0]?.message) {
+      return errors[0].message;
+    }
+    return /* @__PURE__ */ jsxRuntime.jsx("ul", { className: "ml-4 flex list-disc flex-col gap-1", children: errors.map(
+      (error, index) => error?.message && /* @__PURE__ */ jsxRuntime.jsx("li", { children: error.message }, index)
+    ) });
+  }, [children, errors]);
+  if (!content) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      role: "alert",
+      "data-slot": "field-error",
+      className: ui.cn("text-destructive font-normal", className),
+      ...props,
+      children: content
+    }
+  );
+}
+var PARAM_SOURCES = ["literal", "argument", "binding"];
+var ParamRow = React2__namespace.forwardRef(
+  ({
+    name,
+    type,
+    source,
+    onSourceChange,
+    value,
+    onValueChange,
+    note,
+    invalid,
+    disabled,
+    className,
+    children,
+    ...props
+  }, ref) => /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      ref,
+      "data-invalid": invalid || void 0,
+      "data-disabled": disabled || void 0,
+      className: ui.cn("flex items-start gap-3 py-1.5", className),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "w-[118px] shrink-0 pt-1", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "truncate font-mono text-sm", children: name }),
+          type != null ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "truncate text-sm text-muted-foreground", children: type }) : null
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex min-w-0 flex-1 flex-col gap-1", children: [
+          children ?? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex min-w-0", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs(
+              Select,
+              {
+                value: source,
+                onValueChange: (v) => onSourceChange?.(v),
+                disabled,
+                children: [
+                  /* @__PURE__ */ jsxRuntime.jsx(
+                    SelectTrigger,
+                    {
+                      triggerSize: "sm",
+                      "aria-label": `${name} source`,
+                      className: "w-auto shrink-0 rounded-r-none border-r-0 text-sm text-muted-foreground",
+                      children: /* @__PURE__ */ jsxRuntime.jsx(SelectValue, {})
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntime.jsx(SelectContent, { children: PARAM_SOURCES.map((s) => /* @__PURE__ */ jsxRuntime.jsx(SelectItem, { value: s, children: s }, s)) })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              Input,
+              {
+                inputSize: "sm",
+                value,
+                onChange: (e) => onValueChange?.(e.target.value),
+                disabled,
+                "aria-invalid": invalid || void 0,
+                "aria-label": name,
+                style: invalid ? { borderColor: "var(--color-destructive)" } : void 0,
+                className: "min-w-0 flex-1 rounded-l-none font-mono"
+              }
+            )
+          ] }),
+          note != null ? /* @__PURE__ */ jsxRuntime.jsx(
+            "div",
+            {
+              className: ui.cn(
+                "text-sm",
+                invalid ? "text-destructive" : "text-muted-foreground"
+              ),
+              children: note
+            }
+          ) : null
+        ] })
+      ]
+    }
+  )
+);
+ParamRow.displayName = "ParamRow";
+function InputGroup({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      "data-slot": "input-group",
+      role: "group",
+      className: ui.cn(
+        "group/input-group border-input dark:bg-input/30 shadow-xs relative flex w-full items-center rounded-control border outline-none transition-[color,box-shadow]",
+        "h-9 has-[>textarea]:h-auto",
+        // Variants based on alignment.
+        "has-[>[data-align=inline-start]]:[&>input]:pl-2",
+        "has-[>[data-align=inline-end]]:[&>input]:pr-2",
+        "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3",
+        "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3",
+        // Focus state.
+        "has-[[data-slot=input-group-control]:focus-visible]:ring-ring has-[[data-slot=input-group-control]:focus-visible]:ring-1",
+        // Error state.
+        "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
+        className
+      ),
+      ...props
+    }
+  );
+}
+var inputGroupAddonVariants = classVarianceAuthority.cva(
+  "text-muted-foreground flex h-auto cursor-text select-none items-center justify-center gap-2 py-1.5 font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-control [&>svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      align: {
+        "inline-start": "order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]",
+        "inline-end": "order-last pr-3 has-[>button]:mr-[-0.4rem] has-[>kbd]:mr-[-0.35rem]",
+        "block-start": "[.border-b]:pb-3 order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5",
+        "block-end": "[.border-t]:pt-3 order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5"
+      }
+    },
+    defaultVariants: {
+      align: "inline-start"
+    }
+  }
+);
+function InputGroupAddon({
+  className,
+  align = "inline-start",
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      role: "group",
+      "data-slot": "input-group-addon",
+      "data-align": align,
+      className: ui.cn(inputGroupAddonVariants({ align }), className),
+      onClick: (e) => {
+        if (e.target.closest("button")) {
+          return;
+        }
+        e.currentTarget.parentElement?.querySelector("input")?.focus();
+      },
+      ...props
+    }
+  );
+}
+var inputGroupButtonVariants = classVarianceAuthority.cva(
+  "flex items-center gap-2 shadow-none",
+  {
+    variants: {
+      size: {
+        xs: "h-6 gap-1 rounded-control px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
+        sm: "h-8 gap-1.5 rounded-control px-2.5 has-[>svg]:px-2.5",
+        "icon-xs": "size-6 rounded-control p-0 has-[>svg]:p-0",
+        "icon-sm": "size-8 p-0 has-[>svg]:p-0"
+      }
+    },
+    defaultVariants: {
+      size: "xs"
+    }
+  }
+);
+function InputGroupButton({
+  className,
+  type = "button",
+  variant = "ghost",
+  size = "xs",
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    ui.Button,
+    {
+      type,
+      "data-size": size,
+      variant,
+      className: ui.cn(inputGroupButtonVariants({ size }), className),
+      ...props
+    }
+  );
+}
+function InputGroupText({ className, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "span",
+    {
+      className: ui.cn(
+        "text-muted-foreground flex items-center gap-2 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function InputGroupInput({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Input,
+    {
+      "data-slot": "input-group-control",
+      className: ui.cn(
+        "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
+        className
+      ),
+      ...props
+    }
+  );
+}
+function InputGroupTextarea({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Textarea,
+    {
+      "data-slot": "input-group-control",
+      className: ui.cn(
+        "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent",
+        className
+      ),
+      ...props
+    }
+  );
+}
+
+exports.BooleanField = BooleanField;
+exports.Checkbox = Checkbox;
+exports.CheckboxGroupField = CheckboxGroupField;
+exports.ColorField = ColorField;
+exports.ColorSwatches = ColorSwatches;
+exports.Field = Field;
+exports.FieldContent = FieldContent;
+exports.FieldDescription = FieldDescription;
+exports.FieldError = FieldError;
+exports.FieldGroup = FieldGroup;
+exports.FieldLabel = FieldLabel2;
+exports.FieldLegend = FieldLegend;
+exports.FieldSeparator = FieldSeparator;
+exports.FieldSet = FieldSet;
+exports.FieldTitle = FieldTitle;
+exports.Form = Form;
+exports.FormControl = FormControl;
+exports.FormDescription = FormDescription;
+exports.FormField = FormField2;
+exports.FormItem = FormItem;
+exports.FormLabel = FormLabel;
+exports.FormMessage = FormMessage;
+exports.IconField = IconField;
+exports.IconInput = IconInput;
+exports.Input = Input;
+exports.InputField = InputField;
+exports.InputGroup = InputGroup;
+exports.InputGroupAddon = InputGroupAddon;
+exports.InputGroupButton = InputGroupButton;
+exports.InputGroupInput = InputGroupInput;
+exports.InputGroupText = InputGroupText;
+exports.InputGroupTextarea = InputGroupTextarea;
+exports.Label = Label;
+exports.NumberField = NumberField;
+exports.ObjectField = ObjectField;
+exports.PARAM_SOURCES = PARAM_SOURCES;
+exports.ParamRow = ParamRow;
+exports.PasswordField = PasswordField;
+exports.PasswordInput = PasswordInput;
+exports.RadioField = RadioField;
+exports.RadioGroup = RadioGroup;
+exports.RadioGroupItem = RadioGroupItem;
+exports.Select = Select;
+exports.SelectContent = SelectContent;
+exports.SelectField = SelectField;
+exports.SelectGroup = SelectGroup;
+exports.SelectItem = SelectItem;
+exports.SelectLabel = SelectLabel;
+exports.SelectScrollDownButton = SelectScrollDownButton;
+exports.SelectScrollUpButton = SelectScrollUpButton;
+exports.SelectSeparator = SelectSeparator;
+exports.SelectTrigger = SelectTrigger;
+exports.SelectValue = SelectValue;
+exports.SettingsPanel = SettingsPanel;
+exports.Slider = Slider;
+exports.SliderNumber = SliderNumber;
+exports.Switch = Switch;
+exports.Textarea = Textarea;
+exports.TextareaField = TextareaField;
+exports.useFormField = useFormField;
+//# sourceMappingURL=index.cjs.map
+//# sourceMappingURL=index.cjs.map
