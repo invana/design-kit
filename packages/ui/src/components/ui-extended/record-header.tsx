@@ -67,10 +67,15 @@ export const RecordHeader = React.forwardRef<HTMLDivElement, RecordHeaderProps>(
               ) : null}
               <span
                 className={cn(
-                  "min-w-0 truncate font-mono",
+                  "truncate font-mono",
+                  // The **last** crumb gives way first. It is the record's own
+                  // name and the longest of them, and the reader is already on
+                  // it; the parents are what say *which dashboard this is*, and
+                  // at four characters `runs` truncated to `ru…` leaves the one
+                  // question a crumb trail exists to answer unanswered.
                   last
-                    ? "text-base font-semibold text-foreground"
-                    : "text-muted-foreground",
+                    ? "min-w-[6ch] shrink-[999] text-base font-semibold text-foreground"
+                    : "min-w-[3ch] text-muted-foreground",
                 )}
               >
                 {crumb}

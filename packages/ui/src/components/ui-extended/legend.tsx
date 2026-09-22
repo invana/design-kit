@@ -2,7 +2,18 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export type LegendSwatchKind = "dot" | "line" | "dashed" | "arrow" | "ring"
+export type LegendSwatchKind =
+  | "dot"
+  | "line"
+  | "dashed"
+  | "arrow"
+  | "ring"
+  /** The rail down a row — how a trace says which layer a step spent. */
+  | "stripe"
+  /** A box around what it holds — a bounded repetition, drawn by containment. */
+  | "bracket"
+  /** A line the drawing is crossed by, with the mark that names it — a gate. */
+  | "rule"
 
 export interface LegendItemProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {
@@ -47,6 +58,27 @@ function Swatch({ kind = "dot", color }: { kind?: LegendSwatchKind; color?: stri
     )
   if (kind === "line")
     return <span aria-hidden style={style} className="h-0.5 w-4 shrink-0 bg-current" />
+  if (kind === "stripe")
+    return <span aria-hidden style={style} className="h-3 w-[3px] shrink-0 bg-current" />
+  if (kind === "bracket")
+    return (
+      <span
+        aria-hidden
+        style={style}
+        className="h-3 w-3.5 shrink-0 border-l-2 border-current bg-current/10"
+      />
+    )
+  if (kind === "rule")
+    // A gate is a rule *across* the drawing with its chip hung off it, so the
+    // swatch carries both: a plain line would be indistinguishable from `line`,
+    // which is the spine — the one thing a gate is not.
+    return (
+      <span
+        aria-hidden
+        style={style}
+        className="relative h-3 w-4 shrink-0 before:absolute before:inset-x-0 before:top-1.5 before:border-t-2 before:border-current after:absolute after:left-0.5 after:top-[3px] after:size-1.5 after:bg-current"
+      />
+    )
   if (kind === "dashed")
     return (
       <span

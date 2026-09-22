@@ -102,6 +102,30 @@ export interface LayerItem {
   note?: string;
   /** The rule that refused it, when one did. */
   ruleMatched?: string;
+  /** What this task usually takes — see {@link LayerForecast}. */
+  forecast?: LayerForecast;
+}
+
+/**
+ * What this task usually costs, drawn **on** the bar that says what it cost
+ * this time.
+ *
+ * `p50` is a **duration in the axis's own unit**, not a position: the median is
+ * a length of time a step takes, and placing it as an absolute moment would
+ * make the same forecast wrong for every run that started the step a second
+ * later. The strip turns it into a mark at `start + p50`, so the overrun is the
+ * gap between the mark and the bar's end — visible, rather than two numbers a
+ * reader has to subtract.
+ *
+ * Drawn for a task that came in **under** its median too. *Faster than usual*
+ * is a finding, and a forecast that only ever showed overruns would be a
+ * warning light rather than a comparison.
+ */
+export interface LayerForecast {
+  /** The median, as a duration in the axis's unit. */
+  p50: number;
+  /** The gap in the caller's words — `+11%`, `−33%`, `inside p95`. */
+  note?: React.ReactNode;
 }
 
 /** A bounded repetition over a stretch of the axis — `loop · max 3`. */
@@ -144,6 +168,17 @@ export interface LayerSeam {
    * for one caller and not another. Drawn dashed — *this may appear*.
    */
   conditional?: boolean;
+  /**
+   * **Nothing can forecast this one.** How long a person takes to say yes is
+   * not in the record, so a gate marked this way is drawn dashed like a
+   * conditional one and its note carries the actual instead of a comparison.
+   *
+   * It exists as its own flag rather than as a caller's choice of words because
+   * *there is no estimate* and *the estimate was met* must not look alike on a
+   * drawing whose whole subject is forecast against actual. Drawing a guess
+   * here would be the one dishonest mark on the strip.
+   */
+  noEstimate?: boolean;
   /** Under the label — `nothing spent · finance-approvers · 4h`. */
   note?: string;
 }
@@ -516,6 +551,17 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                 <dd className="min-w-0 font-mono">{item.note}</dd>
               </>
             ) : null}
+            {item.forecast ? (
+              <>
+                <dt className="text-muted-foreground">usually</dt>
+                <dd className="min-w-0 tabular-nums">
+                  {scale === "elapsed"
+                    ? formatElapsed(item.forecast.p50)
+                    : item.forecast.p50}
+                  {item.forecast.note ? ` \u00b7 ${item.forecast.note}` : ""}
+                </dd>
+              </>
+            ) : null}
             {item.ruleMatched ? (
               <>
                 <dt className="text-muted-foreground">refused by</dt>
@@ -608,15 +654,49 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
             {compact ? null : (
               <span className="truncate text-xs text-muted-foreground">
                 {item.note ??
-                  (state === "declared" ? null : stateLabel(state))}
+                  (item.forecast
+                    ? `p50 ${
+                        scale === "elapsed"
+                          ? formatElapsed(item.forecast.p50)
+                          : item.forecast.p50
+                      }${item.forecast.note ? ` \u00b7 ${item.forecast.note}` : ""}`
+                    : state === "declared"
+                      ? null
+                      : stateLabel(state))}
               </span>
             )}
           </span>
         </Tag>
       );
 
-      if (!hoverDetail) return drawn;
-      return (
+      // The median, as a mark on the track at `start + p50`. Outside the bar
+      // rather than inside it, so it reads the same whether the task ran long
+      // (the mark sits inside the bar's stretch) or came in early (it sits past
+      // its end) — one drawing for both findings.
+      const forecastMark = item.forecast ? (
+        <span
+          key={`${item.id}-p50`}
+          aria-hidden
+          style={{ left: `${pct(item.start + item.forecast.p50)}%` }}
+          // The tick alone, with no caption: the bar's own second line already
+          // reads `p50 1.9s · +11%`, and a word repeated at every mark is what
+          // turns a track of eight steps into a wall of type.
+          className="-translate-y-1/2 pointer-events-none absolute top-1/2 h-5 border-muted-foreground/70 border-l border-dashed"
+        />
+      ) : null;
+
+      const withMark = (node: React.ReactNode) =>
+        forecastMark ? (
+          <React.Fragment key={item.id}>
+            {forecastMark}
+            {node}
+          </React.Fragment>
+        ) : (
+          node
+        );
+
+      if (!hoverDetail) return withMark(drawn);
+      return withMark(
         <HoverCard key={item.id} openDelay={140} closeDelay={80}>
           <HoverCardTrigger asChild>{drawn}</HoverCardTrigger>
           <HoverCardContent
@@ -626,7 +706,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
           >
             {detail(item)}
           </HoverCardContent>
-        </HoverCard>
+        </HoverCard>,
       );
     };
 
@@ -699,7 +779,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                     style={{ left: `${pct(seam.at)}%` }}
                     className={cn(
                       "absolute inset-y-0 border-l",
-                      seam.conditional
+                      seam.conditional || seam.noEstimate
                         ? "border-dashed border-muted-foreground/45"
                         : "border-muted-foreground/60",
                     )}
@@ -863,7 +943,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
                         // pass is already paid for.
                         "absolute inset-y-1.5 flex items-center bg-card px-1.5 text-muted-foreground",
                         after ? "border-r-2 text-right" : "border-l-2",
-                        seam.conditional
+                        seam.conditional || seam.noEstimate
                           ? "border-dashed border-muted-foreground/45"
                           : "border-muted-foreground/70",
                       )}

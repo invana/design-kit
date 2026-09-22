@@ -22,6 +22,7 @@ export * from './popover';
 export * from './progress';
 export * from './resizable';
 export * from './scroll-area';
+export * from './segmented-control';
 export * from './separator';
 export * from './sheet';
 export * from './sidebar';

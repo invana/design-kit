@@ -25,6 +25,18 @@ export interface FilterChipProps
   value?: React.ReactNode
   /** Marks the chip as narrowing the list, so an active filter is visible while scrolling. */
   active?: boolean
+  /**
+   * Clear this one filter, without opening its menu.
+   *
+   * Only for a chip that **is** set: an unset chip has nothing to clear, and an
+   * × on it would offer to undo something nobody did. With it, the chip is a
+   * pair of controls rather than one — the label opens the picker, the × drops
+   * the value — so both are reachable by keyboard and the × carries its own
+   * name.
+   */
+  onRemove?: () => void
+  /** What the × is called, for a screen reader. Defaults to `Clear <label>`. */
+  removeLabel?: string
 }
 
 /**
@@ -63,26 +75,53 @@ FilterBar.displayName = "FilterBar"
  * one token — `status ▾` — instead of a control with an icon glued to it.
  */
 export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
-  ({ label, value, active, className, ...props }, ref) => (
-    <Button
-      ref={ref}
-      type="button"
-      variant="outline"
-      size="xs"
-      data-active={active || undefined}
-      className={cn(
-        "h-[22px] gap-1 px-1.5 font-normal",
-        active && "border-primary/40 text-primary",
-        className,
-      )}
-      {...props}
-    >
-      <span className={cn(value != null && "text-muted-foreground")}>{label}</span>
-      {value != null ? <span className="truncate">{value}</span> : null}
-      <span aria-hidden className="text-muted-foreground">
-        ▾
+  ({ label, value, active, onRemove, removeLabel, className, ...props }, ref) => {
+    const chip = (
+      <Button
+        ref={ref}
+        type="button"
+        variant="outline"
+        size="xs"
+        data-active={active || undefined}
+        className={cn(
+          "h-[22px] gap-1 px-1.5 font-normal",
+          active && "border-primary/40 text-primary",
+          onRemove && "rounded-r-none border-r-0",
+          className,
+        )}
+        {...props}
+      >
+        <span className={cn(value != null && "text-muted-foreground")}>{label}</span>
+        {value != null ? <span className="truncate">{value}</span> : null}
+        <span aria-hidden className="text-muted-foreground">
+          ▾
+        </span>
+      </Button>
+    )
+
+    if (!onRemove) return chip
+
+    return (
+      <span className="inline-flex min-w-0 items-center">
+        {chip}
+        <Button
+          type="button"
+          variant="outline"
+          size="xs"
+          onClick={onRemove}
+          aria-label={
+            removeLabel ??
+            `Clear ${typeof label === "string" ? label : "filter"}`
+          }
+          className={cn(
+            "h-[22px] rounded-l-none px-1 font-normal text-muted-foreground hover:text-foreground",
+            active && "border-primary/40",
+          )}
+        >
+          <span aria-hidden>×</span>
+        </Button>
       </span>
-    </Button>
-  ),
+    )
+  },
 )
 FilterChip.displayName = "FilterChip"

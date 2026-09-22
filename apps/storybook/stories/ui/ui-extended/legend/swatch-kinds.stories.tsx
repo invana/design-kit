@@ -23,6 +23,21 @@ export const SwatchKinds: Story = {
         <LegendItem kind="line" color="var(--color-primary)" label="runs on success" />
         <LegendItem kind="dashed" label="proposed — does not exist yet" />
         <LegendItem kind="arrow" color="var(--color-data-7)" label="delegation" />
+        <LegendItem
+          kind="stripe"
+          color="var(--color-data-1)"
+          label="the stripe is the layer — a step spends exactly one"
+        />
+        <LegendItem
+          kind="bracket"
+          color="var(--color-warning)"
+          label="a bounded repetition contains its rounds"
+        />
+        <LegendItem
+          kind="rule"
+          color="var(--color-destructive)"
+          label="a gate lies between rows — above it, nothing is spent"
+        />
       </Legend>
     </div>
   ),

@@ -34,6 +34,15 @@ export interface TaskNodeProps
    * (`p50 3.4s · 14/14`). One rendering, three readings.
    */
   meta?: React.ReactNode
+  /**
+   * The drawing is a **record**, not a draft: a picked node gets the ring and
+   * **no handles**.
+   *
+   * Handles are an offer to move something. A run paints status onto the plan
+   * it ran and nothing on it is editable, so a handle there is a control that
+   * does nothing — the one thing worse on a trace than a missing affordance.
+   */
+  readOnly?: boolean
   /** Picked — draws the ring and four corner handles. */
   selected?: boolean
   /** Needs an approval before it writes. Rings it in `warning`. */
@@ -68,6 +77,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
       tags,
       meta,
       selected,
+      readOnly,
       gate,
       dim,
       ghost,
@@ -113,7 +123,7 @@ export const TaskNode = React.forwardRef<HTMLDivElement, TaskNodeProps>(
         )}
         {...props}
       >
-        {selected
+        {selected && !readOnly
           ? ["-left-1 -top-1", "-right-1 -top-1", "-bottom-1 -left-1", "-bottom-1 -right-1"].map(
               (pos) => (
                 <span
