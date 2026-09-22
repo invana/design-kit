@@ -1,6 +1,6 @@
 {
   "name": "@invana/dashboard",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "Invana Design System - JSON-driven dashboards assembled from design-kit panels",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
