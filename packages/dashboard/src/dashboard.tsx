@@ -1,5 +1,5 @@
 import * as React from "react"
-import { PanelBox, RecordHeader, cn } from "@invana/ui"
+import { AbsenceNote, PanelBox, RecordHeader, cn } from "@invana/ui"
 
 import { SpecActions, SpecChip, SpecChips } from "./chips"
 import { resolveRegistry } from "./registry"
@@ -15,6 +15,19 @@ import type {
 /** Inside the renderer every spec is the widest one — the types guard authors, not the walk. */
 type AnyPanel = PanelSpec<Record<string, unknown>>
 type AnyRow = RowSpec<Record<string, unknown>>
+
+/**
+ * A band nobody recorded is **absent, not zero** (SR34).
+ *
+ * `unrecorded` is the one reason that removes the panel outright: an empty
+ * Artifacts box says the step produced no files, while no box at all says
+ * nobody wrote the record. The other two are facts worth drawing — `purged`
+ * means it existed and aged out (O6), `declared-none` that the step's contract
+ * has no such output — so those keep their band and say so inside it.
+ */
+function isDropped(panel: AnyPanel) {
+  return panel.absent?.reason === "unrecorded"
+}
 
 /**
  * A panel that names a kind nothing can draw.
@@ -48,7 +61,13 @@ function Panel({
 }) {
   const Renderer = registry[panel.kind]
 
-  const body = panel.render ?? (
+  // Absence outranks the renderer: a band nobody recorded says which kind of
+  // nothing it is, and never draws an empty one of itself.
+  const body = panel.absent ? (
+    <AbsenceNote reason={panel.absent.reason} label={panel.absent.label}>
+      {panel.absent.note}
+    </AbsenceNote>
+  ) : panel.render ?? (
     Renderer ? (
       <Renderer
         panel={panel}
@@ -80,7 +99,7 @@ function Panel({
     <PanelBox
       title={panel.title}
       aside={panel.asideChip ? <SpecChip chip={panel.asideChip} /> : panel.aside}
-      flush={panel.flush}
+      flush={panel.flush || panel.absent != null}
       style={style}
     >
       {body}
@@ -106,7 +125,7 @@ function Row({
       className="flex min-w-0 items-stretch"
       style={{ gap: row.gap ?? gap, height: row.height }}
     >
-      {row.panels.map((panel, i) => (
+      {row.panels.filter((panel) => !isDropped(panel as AnyPanel)).map((panel, i) => (
         <Panel
           key={panel.id ?? i}
           panel={panel}
@@ -170,7 +189,9 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
         className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3"
         style={{ gap }}
       >
-        {(spec.rows as AnyRow[]).map((row, i) => (
+        {(spec.rows as AnyRow[])
+          .filter((row) => row.panels.some((panel) => !isDropped(panel as AnyPanel)))
+          .map((row, i) => (
           <Row
             key={row.id ?? i}
             row={row}

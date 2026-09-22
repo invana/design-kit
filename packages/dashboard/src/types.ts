@@ -217,6 +217,26 @@ export interface PanelBase {
   /** Drop the box padding, so a table or a canvas meets the border. */
   flush?: boolean
   /**
+   * **Nobody recorded this band** — draw why, instead of the panel.
+   *
+   * A rule of the dashboard and not of each renderer, because every kind has
+   * the same three ways of having nothing to draw and they are three different
+   * facts: `unrecorded` (the document is written when the row settles),
+   * `purged` (it existed and aged out) and `declared-none` (the step's contract
+   * has no such output). A renderer left to decide for itself reaches for an
+   * empty table, which claims the step returned an empty result.
+   *
+   * A panel with **no title and no options** is better left out of the spec
+   * altogether — absence is for a band a reader expects to find.
+   */
+  absent?: {
+    reason: "unrecorded" | "purged" | "declared-none"
+    /** Overrides the word — the engine's own term where there is one. */
+    label?: string
+    /** Why, in the record's terms. */
+    note?: string
+  }
+  /**
    * The one escape from JSON: a node rendered in place of a registered kind.
    *
    * It exists because a real surface always has one panel the schema has not
@@ -291,6 +311,8 @@ export interface ActionContext {
   param?: { name: string; source: string; value: string }
   /** Set by a segmented action — which option was picked. */
   option?: string
+  /** Set by `trace`'s row select — the step a reader picked out of a run. */
+  stepId?: string
 }
 
 export interface PanelRendererProps<O = PanelOptions> {
