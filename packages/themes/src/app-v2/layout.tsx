@@ -109,7 +109,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       collapsible={leftSection.collapsible ?? DEFAULT_SIDEBAR.collapsible}
       groupResizeBehavior="preserve-pixel-size"
     >
-      <div className="h-full overflow-auto bg-card">{leftSection.content}</div>
+      <div className="h-full overflow-auto bg-card border-r">{leftSection.content}</div>
     </ResizablePanel>
   ) : null;
 
@@ -124,7 +124,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       collapsible={rightSection.collapsible ?? DEFAULT_AUXILIARY.collapsible}
       groupResizeBehavior="preserve-pixel-size"
     >
-      <div className="h-full overflow-auto bg-card">{rightSection.content}</div>
+      <div className="h-full overflow-auto bg-card border-l">{rightSection.content}</div>
     </ResizablePanel>
   ) : null;
 
@@ -150,7 +150,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       defaultSize={mainSection.defaultSize ?? DEFAULT_EDITOR.defaultSize}
       minSize={mainSection.minSize ?? DEFAULT_EDITOR.minSize}
     >
-      <div className="h-full overflow-auto bg-card">{mainSection.content}</div>
+      <div className="h-full overflow-auto bg-card border-l border-r">{mainSection.content}</div>
     </ResizablePanel>
   );
 
