@@ -143,6 +143,8 @@ export interface LayersOptions {
    * names.
    */
   minTrackWidth?: number
+  /** The overview reading — the whole axis in the panel's width. See `LayerStrip`'s `fit`. */
+  fit?: boolean
   selectedItem?: string | null
   /** Dispatched with `{ itemId }` when a bar is picked. */
   selectAction?: string
@@ -360,6 +362,7 @@ export function LayersPanel({
       palette={options.palette}
       labelWidth={options.labelWidth}
       minTrackWidth={options.minTrackWidth}
+      fit={options.fit}
       defaultCollapsed={options.defaultCollapsed}
       collapsible={false}
       selectedItem={options.selectedItem ?? undefined}

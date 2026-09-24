@@ -98,7 +98,23 @@ function Panel({
   return (
     <PanelBox
       title={panel.title}
-      aside={panel.asideChip ? <SpecChip chip={panel.asideChip} /> : panel.aside}
+      aside={
+        panel.actions?.length ? (
+          <span className="flex items-center gap-2">
+            {panel.asideChip ? <SpecChip chip={panel.asideChip} /> : panel.aside}
+            <SpecActions
+              actions={panel.actions}
+              onAction={onAction}
+              icons={icons}
+              ctx={{ panelId: panel.id }}
+            />
+          </span>
+        ) : panel.asideChip ? (
+          <SpecChip chip={panel.asideChip} />
+        ) : (
+          panel.aside
+        )
+      }
       flush={panel.flush || panel.absent != null}
       style={style}
     >

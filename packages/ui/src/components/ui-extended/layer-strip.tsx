@@ -252,12 +252,32 @@ export interface LayerStripProps extends Omit<
    */
   minSlotWidth?: number;
   /**
+   * The widest the unfitted track grows to give its shortest bar a readable
+   * width, in `rem`. A 100ms step in a nine-minute run would otherwise ask for
+   * a track a kilometre long; past this cap the shortest bars draw at their
+   * floor and the hover card carries them.
+   */
+  maxTrackWidth?: number;
+  /**
+   * The overview reading: the whole axis fits the strip's own width. The track
+   * keeps no floor and the label column gives up to 30% of the width, so every
+   * step stays in view as the panel is resized — a bar narrower than its name
+   * truncates, and its hover card still says the rest. Off, the strip is the
+   * expanded reading: the track is as wide as its shortest bar needs to be
+   * drawn at its readable width (up to `maxTrackWidth`), never narrower than
+   * `minTrackWidth` or `minSlotWidth` per tick, and it scrolls.
+   */
+  fit?: boolean;
+  /**
    * What the layers are painted with. The same map reaches the band chips and
    * the bars, so a strip never disagrees with its own labels; a layer left out
    * draws in the neutral.
    */
   palette?: LayerPalette;
 }
+
+/** The narrowest a bar is drawn — wide enough to carry a few characters of its name. */
+const BAR_MIN_REM = 4.5;
 
 const STATE_LABEL: Partial<Record<LayerItemState, string>> = {
   declared: "declared",
@@ -389,6 +409,8 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       labelWidth = 15.5,
       minTrackWidth = 26,
       minSlotWidth = 6,
+      maxTrackWidth = 240,
+      fit = false,
       palette,
       className,
       ...props
@@ -435,7 +457,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       dim?: boolean,
     ) => (
       <div
-        style={{ width: `${labelWidth}rem` }}
+        style={{ width: labelColumn }}
         className={cn(
           "flex shrink-0 items-center gap-2 border-border border-r px-2.5 py-1.5",
           // A frozen label is normally opaque, or the bars it is parked over
@@ -454,7 +476,31 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       </div>
     );
 
-    const trackFloor = Math.max(minTrackWidth, axisTicks.length * minSlotWidth);
+    // Fit gives the label column a share of the width rather than all of its
+    // rem, and the seam overlay reads the same string so a gate stays on the
+    // moment it names.
+    const labelColumn = fit
+      ? `min(${labelWidth}rem, 30%)`
+      : `${labelWidth}rem`;
+    // Unfitted, the track is sized from its shortest bar: wide enough that the
+    // briefest span is drawn at the bar's own readable width, so *expand*
+    // means every task can be read, rather than a floor that a long run with
+    // short steps clears without showing any of them.
+    const shortest = Math.min(
+      ...items
+        .map((i) => (i.end ?? i.start + (scale === "seq" ? 1 : 0)) - i.start)
+        .filter((d) => d > 0),
+    );
+    const readableTrack = Number.isFinite(shortest)
+      ? Math.min(maxTrackWidth, (BAR_MIN_REM * span) / shortest)
+      : 0;
+    const trackFloor = fit
+      ? 0
+      : Math.max(
+          minTrackWidth,
+          axisTicks.length * minSlotWidth,
+          readableTrack,
+        );
 
     const row = (
       key: string,
@@ -584,7 +630,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
     const bar = (item: LayerItem, compact = false) => {
       const state = item.state ?? "declared";
       const end = item.end ?? item.start + (scale === "seq" ? 1 : 0);
-      const min = compact ? "0.75rem" : "4.5rem";
+      const min = compact ? "0.75rem" : `${BAR_MIN_REM}rem`;
       const Tag = onSelectItem ? "button" : "div";
       const drawn = (
         <Tag
@@ -759,7 +805,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
         )}
         {...props}
       >
-        <div className="relative min-w-max">
+        <div className={cn("relative", !fit && "min-w-max")}>
           {/* A gate's rule, drawn down the whole track and under the bars: it
               is first in the DOM so a bar's own label is never written over,
               and it stops short of the label column, which is where a band is
@@ -769,7 +815,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
           {seams?.length ? (
             <div
               aria-hidden
-              style={{ left: `${labelWidth}rem` }}
+              style={{ left: labelColumn }}
               className="pointer-events-none absolute inset-y-0 right-0"
             >
               {seams.map((seam) =>
@@ -819,14 +865,26 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
               "min-h-0 py-1",
             ),
             <div className="absolute inset-0">
-              {axisTicks.map((value) => {
+              {axisTicks.map((value, index) => {
                 const atEnd = pct(value) > 99;
+                // Fitted, a tick owns only its own slot: forty steps in a
+                // narrow panel clip their numbers rather than write over each
+                // other.
+                const slot = fit
+                  ? pct(axisTicks[index + 1] ?? d1) - pct(value)
+                  : null;
                 return (
                   <span
                     key={value}
-                    style={atEnd ? { right: 0 } : { left: `${pct(value)}%` }}
+                    style={{
+                      ...(atEnd ? { right: 0 } : { left: `${pct(value)}%` }),
+                      ...(slot != null && !atEnd
+                        ? { maxWidth: `${slot}%` }
+                        : null),
+                    }}
                     className={cn(
                       "absolute inset-y-0 text-sm text-muted-foreground",
+                      fit && "overflow-hidden whitespace-nowrap",
                       atEnd
                         ? "border-border/60 border-r pr-1"
                         : "border-border/60 border-l pl-1",

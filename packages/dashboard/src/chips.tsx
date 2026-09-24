@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Label, Switch } from "@invana/forms"
 import { Badge, BoundChip, Button, ToggleGroup, ToggleGroupItem } from "@invana/ui"
 
 import type { ActionContext, ActionSpec, ChipSpec } from "./types"
@@ -47,6 +48,7 @@ export function SpecAction({
   icons: Record<string, React.ComponentType<{ className?: string }>>
   ctx?: ActionContext
 }) {
+  const switchId = React.useId()
   if (action.options?.length) {
     return (
       <ToggleGroup
@@ -66,6 +68,22 @@ export function SpecAction({
 
   const Icon = action.icon ? icons[action.icon] : undefined
   const iconOnly = !action.label && Icon
+
+  if (action.pressed != null) {
+    return (
+      <span className="flex items-center gap-1.5">
+        <Label htmlFor={switchId} className="font-normal">
+          {action.label ?? action.id}
+        </Label>
+        <Switch
+          id={switchId}
+          checked={action.pressed}
+          disabled={action.disabled}
+          onCheckedChange={(pressed: boolean) => onAction(action.id, { ...ctx, pressed })}
+        />
+      </span>
+    )
+  }
 
   return (
     <Button

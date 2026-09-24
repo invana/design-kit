@@ -44,6 +44,11 @@ export interface ActionSpec {
   options?: string[]
   /** Which option is active. Only with `options`. */
   value?: string
+  /**
+   * An on/off setting — `Fit`. Set, the action draws as a labelled `Switch` in
+   * this state and dispatches with `{ pressed }`, the state it is switched to.
+   */
+  pressed?: boolean
   disabled?: boolean
 }
 
@@ -210,6 +215,12 @@ export interface PanelBase {
   aside?: string
   /** A chip on the right of the box header, instead of `aside`. */
   asideChip?: ChipSpec
+  /**
+   * Controls on the right of the box header, after `aside` — a reading of this
+   * panel, such as a `Fit` toggle. Dispatched with `{ panelId }`.
+   * Ignored without a `title`.
+   */
+  actions?: ActionSpec[]
   /** Fixed column width in px. Without it the panel takes an equal share. */
   width?: number
   /** Relative share of the row when several panels grow. Default `1`. */
@@ -311,6 +322,8 @@ export interface ActionContext {
   param?: { name: string; source: string; value: string }
   /** Set by a segmented action — which option was picked. */
   option?: string
+  /** Set by a switch action — the state it was switched to. */
+  pressed?: boolean
   /** Set by `trace`'s row select — the step a reader picked out of a run. */
   stepId?: string
 }
