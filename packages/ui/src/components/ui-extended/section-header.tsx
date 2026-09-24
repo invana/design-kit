@@ -39,7 +39,7 @@ export const SectionHeader = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex h-[35px] shrink-0 items-center gap-2 px-2",
+      "flex h-[35px] shrink-0 items-center gap-2 px-3",
       !bare && "border-b border-border",
       className,
     )}

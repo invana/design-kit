@@ -4,11 +4,22 @@ import { cn } from "../../lib/utils"
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement> & { density?: "default" | "compact" }
->(({ className, density = "default", ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableElement> & {
+    density?: "default" | "compact"
+    /**
+     * Draw the box around the table. Off for a table that sits directly in a
+     * panel's column — the panel edge already frames it, and a second border a
+     * few pixels in reads as a box inside a box. The row rules stay.
+     */
+    bordered?: boolean
+  }
+>(({ className, density = "default", bordered = true, ...props }, ref) => (
   <div
     data-density={density}
-    className="group/table relative w-full overflow-auto border rounded-md"
+    className={cn(
+      "group/table relative w-full overflow-auto",
+      bordered && "border rounded-md",
+    )}
   >
     <table
       ref={ref}

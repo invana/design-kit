@@ -109,7 +109,7 @@ export const LensRow = React.forwardRef<HTMLDivElement, LensRowProps>(
             : undefined
         }
         className={cn(
-          "flex min-w-0 flex-col gap-0.5 rounded-control px-2 py-1.5",
+          "flex min-w-0 flex-col gap-0.5 rounded-control px-3 py-1.5",
           interactive && "cursor-pointer hover:bg-accent",
           selected && "bg-accent",
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",

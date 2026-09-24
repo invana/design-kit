@@ -88,9 +88,12 @@ export const RunRow = React.forwardRef<HTMLDivElement, RunRowProps>(
           type={onSelect ? "button" : undefined}
           onClick={onSelect}
           aria-current={onSelect && selected ? "true" : undefined}
-          style={{ paddingLeft: 12 + depth * 18 }}
+          // The inset is the panel's `px-3`; depth adds 18px a level on top
+          // of it, so a nested run still starts on the stack's left edge.
+          style={depth ? ({ "--row-indent": `${depth * 18}px` } as React.CSSProperties) : undefined}
           className={cn(
-            "flex w-full items-start gap-2 py-1.5 pr-3 text-left",
+            "flex w-full items-start gap-2 px-3 py-1.5 text-left",
+            depth > 0 && "ps-[calc(var(--spacing)*3+var(--row-indent))]",
             onSelect &&
               "cursor-pointer hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
           )}

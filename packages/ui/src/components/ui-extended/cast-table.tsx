@@ -50,6 +50,8 @@ export interface CastTableProps
    */
   resolved?: CastResolution[]
   readOnly?: boolean
+  /** Passed to the table: off when the cast sits straight in a panel's column. */
+  bordered?: boolean
 }
 
 /**
@@ -72,12 +74,12 @@ export interface CastTableProps
  * the reader has to know which.
  */
 export const CastTable = React.forwardRef<HTMLDivElement, CastTableProps>(
-  ({ cast = {}, resolved, readOnly, className, ...props }, ref) => {
+  ({ cast = {}, resolved, readOnly, bordered = true, className, ...props }, ref) => {
     const byRole = new Map((resolved ?? []).map((r) => [r.role, r]))
 
     return (
       <div ref={ref} className={cn("min-w-0", className)} {...props}>
-        <Table density="compact">
+        <Table density="compact" bordered={bordered}>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[5.5rem]">role</TableHead>
