@@ -1,11 +1,13 @@
 import * as React from "react"
 import { ChevronDown } from "lucide-react"
 
+import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -32,6 +34,35 @@ export interface RichSelectOption {
   /** Trailing content (e.g. a count or status badge), pushed to the right. */
   badge?: React.ReactNode
   disabled?: boolean
+  /**
+   * Why a disabled option cannot be picked, shown under it in the warning
+   * tone. A greyed-out row with no reason is a refusal nobody can act on.
+   */
+  disabledReason?: React.ReactNode
+}
+
+/**
+ * An on/off setting beside the choice — *Next ask only* on a world picker. It
+ * is not an option: it scopes the choice, so it sits below the options and
+ * toggling it keeps the menu open.
+ */
+export interface RichSelectToggle {
+  id: string
+  label: React.ReactNode
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+  disabled?: boolean
+}
+
+/**
+ * Something to do rather than something to pick — *Manage worlds…*. It sits
+ * last, below a separator, so it is never mistaken for a value.
+ */
+export interface RichSelectAction {
+  id: string
+  label: React.ReactNode
+  icon?: React.ElementType
+  onSelect: () => void
 }
 
 export interface RichSelectProps {
@@ -63,6 +94,20 @@ export interface RichSelectProps {
   side?: "top" | "right" | "bottom" | "left"
   /** Gap in px between the trigger and the menu. Default `4`. */
   sideOffset?: number
+  /**
+   * `field` (default) is an outlined control for a form. `inline` is the
+   * borderless, compact trigger a toolbar uses — every control in a chat
+   * composer is one, so the ask kind and the world read as one row.
+   */
+  appearance?: "field" | "inline"
+  /** Glyph before the selected value on the trigger — a globe for a world. */
+  triggerIcon?: React.ElementType
+  /** A short tag after the value on the trigger — `next ask only`. */
+  triggerTag?: React.ReactNode
+  /** Settings that scope the choice; rendered below the options. */
+  toggles?: RichSelectToggle[]
+  /** Acts, not values; rendered last. */
+  actions?: RichSelectAction[]
   /** Trigger tooltip content; omit to disable the tooltip. */
   tooltip?: React.ReactNode
   /** Side the trigger tooltip is placed on. Default `'top'`. */
@@ -89,6 +134,9 @@ function OptionRow({ option }: { option: RichSelectOption }) {
       {option.description != null && (
         <span className="text-sm text-muted-foreground">{option.description}</span>
       )}
+      {option.disabled && option.disabledReason != null && (
+        <span className="text-sm text-warning">{option.disabledReason}</span>
+      )}
     </span>
   )
 }
@@ -98,6 +146,11 @@ function OptionRow({ option }: { option: RichSelectOption }) {
  * rich content (`label`, `description`, `icon`, `badge`) and both the rows and
  * the trigger are fully customizable via `renderOption` / `renderValue`.
  * Supports single (radio) and multi (checkbox) selection via `multiple`.
+ *
+ * Beyond the choice it can carry **toggles** that scope it and **actions**
+ * below it, and an `inline` trigger for toolbars — which is what lets every
+ * control in a chat composer (ask kind, query language, world, timeout) be the
+ * same component rather than a `Select` beside a hand-rolled menu.
  */
 export function RichSelect({
   options,
@@ -114,6 +167,11 @@ export function RichSelect({
   tooltip,
   tooltipSide = "top",
   disabled,
+  appearance = "field",
+  triggerIcon: TriggerIcon,
+  triggerTag,
+  toggles,
+  actions,
   triggerClassName,
   contentClassName,
   className,
@@ -151,18 +209,26 @@ export function RichSelect({
   // `ring-offset-background`: the design-kit Button sets `ring-offset-2` but no
   // offset colour, so the focus ring's 2px offset falls back to white — a light
   // halo around the open trigger in dark mode. Pin it to the background token.
+  const inline = appearance === "inline"
   const trigger = (
     <Button
-      variant="outline"
-      size="sm"
+      variant={inline ? "ghost" : "outline"}
+      size={inline ? "xs" : "sm"}
       disabled={disabled}
       className={cn(
         "ring-offset-background justify-between gap-2",
+        inline && "min-w-0 gap-1 px-1.5 font-normal",
         triggerClassName,
         className
       )}
     >
+      {TriggerIcon && <TriggerIcon size={14} className="shrink-0 text-muted-foreground" />}
       <span className="flex min-w-0 items-center gap-2">{triggerLabel}</span>
+      {triggerTag != null && (
+        <Badge variant="outline" tone="warning" size="xs" className="shrink-0 font-normal">
+          {triggerTag}
+        </Badge>
+      )}
       <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
     </Button>
   )
@@ -232,6 +298,37 @@ export function RichSelect({
                 })}
               </DropdownMenuRadioGroup>
             )}
+        {toggles && toggles.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            {toggles.map((t) => (
+              <DropdownMenuCheckboxItem
+                key={t.id}
+                checked={t.checked}
+                disabled={t.disabled}
+                // A setting, not a pick — keep the menu open.
+                onSelect={(e) => e.preventDefault()}
+                onCheckedChange={(c) => t.onCheckedChange(c === true)}
+              >
+                {t.label}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </>
+        )}
+        {actions && actions.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            {actions.map((a) => {
+              const Icon = a.icon
+              return (
+                <DropdownMenuItem key={a.id} onSelect={a.onSelect} className="text-muted-foreground">
+                  {Icon && <Icon size={16} />}
+                  {a.label}
+                </DropdownMenuItem>
+              )
+            })}
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )
