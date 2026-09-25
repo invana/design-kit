@@ -50,6 +50,7 @@ export * from './proposal-card';
 export * from './rating-control';
 export * from './record-header';
 export * from './record-pager';
+export * from './refusal-card';
 export * from './repair-note';
 export * from './retry-note';
 export * from './rich-select';
