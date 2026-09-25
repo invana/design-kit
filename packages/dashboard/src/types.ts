@@ -57,8 +57,46 @@ export interface HeaderSpec {
   tone?: StatusDotProps["tone"]
   /** Outermost first; the last is the record this dashboard is about. */
   crumbs: string[]
+  /**
+   * An action per crumb, by index — a crumb with one is a link back to the
+   * record it names (`run:7d3184f1` above a step). `undefined` stays text.
+   */
+  crumbActions?: (string | undefined)[]
+  /**
+   * The last crumb opens a picker of its siblings — every step of a run. A
+   * pick dispatches `action` with `{ itemId }`.
+   */
+  crumbMenu?: CrumbMenuSpec
   chips?: ChipSpec[]
   actions?: ActionSpec[]
+}
+
+/** The siblings the last crumb can switch to. */
+export interface CrumbMenuSpec {
+  action: string
+  /** The field's placeholder over the list — `Jump to a step`. */
+  placeholder?: string
+  items: Array<{
+    id: string
+    label: string
+    /** Right-aligned, mono — a duration. */
+    aside?: string
+    tone?: StatusDotProps["tone"]
+  }>
+  /** The item the page is on. */
+  selected?: string
+}
+
+/**
+ * One tab of a dashboard — its own bands under the shared header.
+ *
+ * Tabs are readings of one record, never other records: a spec with tabs is
+ * still one document, which is why a saved report keeps every tab.
+ */
+export interface TabSpec<X extends ExtraPanels = Record<never, never>> {
+  id: string
+  label: string
+  rows: RowSpec<X>[]
 }
 
 // ── panel options, one shape per built-in kind ──────────────────────────────
@@ -306,7 +344,17 @@ export interface DashboardSpec<X extends ExtraPanels = Record<never, never>> {
   /** For the document title and nothing else; the header draws the crumbs. */
   title?: string
   header?: HeaderSpec
+  /** The bands. Ignored when `tabs` is set — each tab carries its own. */
   rows: RowSpec<X>[]
+  /** Readings of the record, as a tab strip under the header. */
+  tabs?: TabSpec<X>[]
+  /** The active tab's `id`. Absent reads the first. */
+  tab?: string
+  /**
+   * Dispatched with `{ option: <tab id> }` when a tab is picked. Absent, the
+   * dashboard keeps the tab itself — which is how a frozen report reads.
+   */
+  tabAction?: string
   /** Gap between rows and between panels, in px. Default `12`. */
   gap?: number
 }

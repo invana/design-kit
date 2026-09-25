@@ -1,5 +1,17 @@
 import * as React from "react"
-import { AbsenceNote, PanelBox, RecordHeader, cn } from "@invana/ui"
+import {
+  AbsenceNote,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  PanelBox,
+  RecordHeader,
+  StatusDot,
+  TabbedPanel,
+  cn,
+} from "@invana/ui"
+import { Check, ChevronDown } from "lucide-react"
 
 import { SpecActions, SpecChip, SpecChips } from "./chips"
 import { resolveRegistry } from "./registry"
@@ -7,6 +19,7 @@ import type {
   ActionContext,
   DashboardProps,
   ExtraPanels,
+  HeaderSpec,
   PanelRegistry,
   PanelSpec,
   RowSpec,
@@ -187,27 +200,17 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
     (id: string, ctx?: ActionContext) => onAction?.(id, ctx),
     [onAction],
   )
+  const tabs = spec.tabs?.length ? spec.tabs : null
+  // Uncontrolled unless the spec names an action — a frozen report still
+  // switches tabs, it just has nobody to tell.
+  const [ownTab, setOwnTab] = React.useState(spec.tab ?? tabs?.[0]?.id)
+  const activeTab = spec.tabAction ? (spec.tab ?? tabs?.[0]?.id) : ownTab
 
-  return (
-    <div className={cn("flex min-h-0 flex-col bg-background", className)} {...props}>
-      {spec.header ? (
-        <RecordHeader
-          tone={spec.header.tone}
-          crumbs={spec.header.crumbs}
-          chips={<SpecChips chips={spec.header.chips} />}
-          actions={
-            <SpecActions actions={spec.header.actions} onAction={emit} icons={icons} />
-          }
-        />
-      ) : null}
-
-      <div
-        className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3"
-        style={{ gap }}
-      >
-        {(spec.rows as AnyRow[])
-          .filter((row) => row.panels.some((panel) => !isDropped(panel as AnyPanel)))
-          .map((row, i) => (
+  const body = (rows: AnyRow[]) => (
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3" style={{ gap }}>
+      {rows
+        .filter((row) => row.panels.some((panel) => !isDropped(panel as AnyPanel)))
+        .map((row, i) => (
           <Row
             key={row.id ?? i}
             row={row}
@@ -217,7 +220,106 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
             icons={icons}
           />
         ))}
-      </div>
     </div>
+  )
+
+  return (
+    <div className={cn("flex min-h-0 flex-col bg-background", className)} {...props}>
+      {spec.header ? <SpecHeader header={spec.header} onAction={emit} icons={icons} /> : null}
+
+      {tabs ? (
+        <TabbedPanel
+          className="min-h-0 flex-1 border-0 bg-transparent shadow-none"
+          bodyClassName="flex min-h-0 flex-col"
+          activeTab={activeTab}
+          onTabChange={(value) =>
+            spec.tabAction ? emit(spec.tabAction, { option: value }) : setOwnTab(value)
+          }
+          tabs={tabs.map((tab) => ({
+            value: tab.id,
+            label: tab.label,
+            content: body(tab.rows as AnyRow[]),
+          }))}
+        />
+      ) : (
+        body(spec.rows as AnyRow[])
+      )}
+    </div>
+  )
+}
+
+/**
+ * The header, from its spec: a crumb with an action is a link back, and the
+ * last crumb can open a picker of its siblings.
+ */
+function SpecHeader({
+  header,
+  onAction,
+  icons,
+}: {
+  header: HeaderSpec
+  onAction: (id: string, ctx?: ActionContext) => void
+  icons: Record<string, React.ComponentType<{ className?: string }>>
+}) {
+  const last = header.crumbs.length - 1
+  const crumbs = header.crumbs.map((crumb, i): React.ReactNode => {
+    const action = header.crumbActions?.[i]
+    if (i === last && header.crumbMenu) {
+      const menu = header.crumbMenu
+      return (
+        <DropdownMenu key={i}>
+          <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-primary focus-visible:outline-none">
+            {crumb}
+            <ChevronDown className="size-3.5 text-muted-foreground" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="max-h-96 min-w-64 overflow-y-auto">
+            {menu.placeholder ? (
+              <div className="px-2 py-1 text-sm text-muted-foreground">{menu.placeholder}</div>
+            ) : null}
+            {menu.items.map((item) => (
+              <DropdownMenuItem
+                key={item.id}
+                onSelect={() => onAction(menu.action, { itemId: item.id })}
+                className={cn(item.id === menu.selected && "bg-accent")}
+              >
+                {item.tone ? <StatusDot tone={item.tone} /> : null}
+                <span className="min-w-0 flex-1 truncate font-mono">{item.label}</span>
+                {item.aside ? (
+                  <span className="font-mono text-sm text-muted-foreground tabular-nums">
+                    {item.aside}
+                  </span>
+                ) : null}
+                {item.id === menu.selected ? (
+                  <Check className="size-3.5 text-primary" />
+                ) : (
+                  <span className="size-3.5" />
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    }
+    return action ? (
+      <button
+        key={i}
+        type="button"
+        className="hover:text-primary hover:underline focus-visible:outline-none"
+        onClick={() => onAction(action)}
+      >
+        {crumb}
+      </button>
+    ) : (
+      crumb
+    )
+  })
+
+  return (
+    <RecordHeader
+      tone={header.tone}
+      crumbs={crumbs}
+      chips={<SpecChips chips={header.chips} />}
+      actions={<SpecActions actions={header.actions} onAction={onAction} icons={icons} />}
+    />
   )
 }

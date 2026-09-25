@@ -66,6 +66,35 @@ export interface TaskGanttTask extends TaskGanttSegment {
   detail?: React.ReactNode
 }
 
+/**
+ * A bounded repetition — a loop's rounds — drawn as a bracket over the rows
+ * it holds, with its label on a line of its own above them.
+ */
+export interface TaskGanttBracket {
+  /** The first row it holds, by `key`. */
+  from: string
+  /** The last row it holds, by `key`. Rows are matched in order, first hit. */
+  to: string
+  /** `↻ 2 of 3 rounds — understood on round 2`. */
+  label: React.ReactNode
+}
+
+/**
+ * A gate — a moment the run held and spent nothing — drawn as a rule across
+ * the stretch of the clock it held, between the rows it lies between.
+ */
+export interface TaskGanttSeam
+  extends Pick<TaskGanttSegment, "startMs" | "durationMs" | "startedAt" | "finishedAt"> {
+  /** The row it follows, by `key`. */
+  after: string
+  /** The label column's word — `approval`. */
+  label: React.ReactNode
+  /** What it was and how it resolved, written on the rule — `approved by ravi`. */
+  note?: React.ReactNode
+  /** Overrides the right-hand cell, which otherwise reads the time it held. */
+  duration?: React.ReactNode
+}
+
 export interface TaskGanttProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
   /** One entry per task, in plan order — the run's `steps`, grouped by task. */
@@ -82,8 +111,15 @@ export interface TaskGanttProps
   ticks?: number
   formatTick?: (ms: number) => string
   formatDuration?: (ms: number) => string
-  /** The key column, in px. 112 in the drawer, wider on a dashboard. */
+  /**
+   * The key column, in px. Omit it and the column takes its longest label,
+   * up to 40% of the width — the surface decides the width, never the chart.
+   */
   labelWidth?: number
+  /** Loops, bracketed over their rounds. */
+  brackets?: TaskGanttBracket[]
+  /** Gates, ruled across the time they held. */
+  seams?: TaskGanttSeam[]
   /**
    * `compact` in a drawer, `comfortable` on a dashboard. It moves the bar's
    * height, not the type scale — one component, three surfaces (SR14).
@@ -350,7 +386,9 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       ticks = 4,
       formatTick = defaultFormatTick,
       formatDuration = defaultFormatDuration,
-      labelWidth = 112,
+      labelWidth,
+      brackets = [],
+      seams = [],
       density = "comfortable",
       showDetail = true,
       renderDetail,
@@ -363,7 +401,6 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
     ref,
   ) => {
     const barHeight = density === "compact" ? 11 : 13
-    const durationWidth = 40
 
     const rows = React.useMemo(() => {
       const stamps: number[] = []
@@ -387,10 +424,38 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       })
     }, [tasks, origin])
 
+    const zero = React.useMemo(() => {
+      const stamps: number[] = []
+      for (const t of [...tasks, ...tasks.flatMap((t) => t.attempts ?? [])]) {
+        if (t.startedAt != null) stamps.push(toMs(t.startedAt))
+      }
+      return origin != null ? toMs(origin) : stamps.length ? Math.min(...stamps) : undefined
+    }, [tasks, origin])
+    const placedSeams = seams
+      .map((seam) => ({ seam, at: place(seam, zero) }))
+      .filter((s) => s.at !== null) as { seam: TaskGanttSeam; at: { start: number; duration: number } }[]
+
     const span = Math.max(
-      spanMs ?? Math.max(nowMs ?? 0, ...rows.map((r) => r.end)),
+      spanMs ??
+        Math.max(
+          nowMs ?? 0,
+          ...rows.map((r) => r.end),
+          ...placedSeams.map((s) => s.at.start + s.at.duration),
+        ),
       1,
     )
+
+    // Which rows a bracket holds, and which bracket opens on which row.
+    const inBracket = new Set<string>()
+    const opens = new Map<string, TaskGanttBracket>()
+    for (const b of brackets) {
+      const from = tasks.findIndex((t) => t.key === b.from)
+      const to = tasks.findIndex((t, i) => i >= from && t.key === b.to)
+      if (from < 0 || to < 0) continue
+      opens.set(tasks[from].key, b)
+      for (let i = from; i <= to; i++) inBracket.add(`${i}`)
+    }
+    const seamsAfter = (key: string) => placedSeams.filter((s) => s.seam.after === key)
     const pct = (ms: number) => `${Math.max(0, Math.min(100, (ms / span) * 100))}%`
 
     const axis = Array.from({ length: ticks + 1 }, (_, i) =>
@@ -423,11 +488,20 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
     }
 
     return (
-      <div ref={ref} className={cn("flex flex-col", className)} {...props}>
+      <div
+        ref={ref}
+        className={cn("grid gap-x-2", className)}
+        style={{
+          gridTemplateColumns: `${
+            labelWidth != null ? `${labelWidth}px` : "fit-content(40%)"
+          } minmax(0, 1fr) max-content`,
+        }}
+        {...props}
+      >
         {/* The axis — the run's clock, read once at the top. */}
-        <div className="flex items-center gap-2 pt-0.5 pb-1" aria-hidden>
-          <span className="shrink-0" style={{ width: labelWidth }} />
-          <span className="flex flex-1">
+        <div className="col-span-full grid grid-cols-subgrid items-center pt-0.5 pb-1" aria-hidden>
+          <span />
+          <span className="flex">
             {axis.slice(0, -1).map((label, i) => (
               <span
                 key={i}
@@ -437,17 +511,15 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
               </span>
             ))}
           </span>
-          <span
-            className="shrink-0 text-right text-sm text-muted-foreground tabular-nums"
-            style={{ width: durationWidth }}
-          >
+          <span className="text-right text-sm text-muted-foreground tabular-nums">
             {lastLabel}
           </span>
         </div>
 
-        {rows.map(({ task, segments }) => {
+        {rows.map(({ task, segments }, index) => {
           const neverRan = segments.length === 0
           const selected = selectedKey != null && selectedKey === task.key
+          const bracketed = inBracket.has(`${index}`)
           const pickable = onSelectTask != null
           // A running task has no `durationMs` of its own yet: what it has spent so
           // far is the segment drawn up to the *now* line.
@@ -459,13 +531,12 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
 
           const row = (
             <>
-              <div className="flex items-center gap-2 py-[3px]">
+              <div className="col-span-full grid grid-cols-subgrid items-center py-[3px]">
                 <span
                   className={cn(
-                    "shrink-0 truncate font-mono text-sm",
+                    "min-w-0 truncate font-mono text-sm",
                     neverRan && "text-muted-foreground",
                   )}
-                  style={{ width: labelWidth }}
                   title={task.key}
                 >
                   {task.label ?? task.key}
@@ -473,7 +544,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
 
                 {/* The track — the whole clock, so an empty stretch reads as waiting. */}
                 <span
-                  className="relative min-w-0 flex-1 bg-muted/55"
+                  className="relative min-w-0 bg-muted/55"
                   style={{ height: barHeight }}
                 >
                   {neverRan ? (
@@ -504,10 +575,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                   ) : null}
                 </span>
 
-                <span
-                  className="shrink-0 text-right font-mono text-sm text-muted-foreground tabular-nums"
-                  style={{ width: durationWidth }}
-                >
+                <span className="text-right font-mono text-sm text-muted-foreground tabular-nums">
                   {duration}
                 </span>
               </div>
@@ -520,22 +588,79 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
               aria-pressed={selected}
               onClick={() => onSelectTask(task.key)}
               className={cn(
-                "w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                "col-span-full grid cursor-pointer grid-cols-subgrid text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
                 "hover:bg-accent/60",
+                bracketed && !selected && "bg-warning/5",
                 selected && "bg-accent",
               )}
             >
               {row}
             </button>
           ) : (
-            <div className={cn(detail != null && "hover:bg-accent/60")}>{row}</div>
+            <div
+              className={cn(
+                "col-span-full grid grid-cols-subgrid",
+                bracketed && "bg-warning/5",
+                detail != null && "hover:bg-accent/60",
+              )}
+            >
+              {row}
+            </div>
           )
 
-          if (detail == null) return <div key={task.key}>{trigger}</div>
+          const bracket = opens.get(task.key)
+          const before = bracket ? (
+            <div
+              className="col-span-full truncate border-l-2 bg-warning/10 px-2 py-0.5 font-mono text-sm font-medium text-warning"
+              // The kit's build emits no `border-<colour>` utility (see the card).
+              style={{ borderColor: "var(--color-warning)" }}
+            >
+              {bracket.label}
+            </div>
+          ) : null
+          const after = seamsAfter(task.key).map(({ seam, at }, i) => (
+            <div
+              key={`seam-${i}`}
+              className="col-span-full grid grid-cols-subgrid items-center py-[3px]"
+            >
+              <span className="min-w-0 truncate font-mono text-sm font-medium text-destructive">
+                {seam.label}
+              </span>
+              <span className="relative min-w-0" style={{ height: barHeight }}>
+                <span
+                  className="absolute top-1/2 border-t-2 border-dashed"
+                  style={{
+                    left: pct(at.start),
+                    width: pct(at.duration),
+                    borderColor: "var(--color-destructive)",
+                  }}
+                />
+                {seam.note != null ? (
+                  <span
+                    className="absolute top-1/2 max-w-full -translate-x-1/2 -translate-y-1/2 truncate bg-card px-1.5 text-sm text-destructive"
+                    style={{ left: pct(at.start + at.duration / 2) }}
+                  >
+                    {seam.note}
+                  </span>
+                ) : null}
+              </span>
+              <span className="text-right font-mono text-sm text-destructive tabular-nums">
+                {seam.duration ?? formatDuration(at.duration)}
+              </span>
+            </div>
+          ))
+          const wrap = (node: React.ReactNode) => (
+            <React.Fragment key={task.key}>
+              {before}
+              {node}
+              {after}
+            </React.Fragment>
+          )
 
-          return (
+          if (detail == null) return wrap(trigger)
+
+          return wrap(
             <HoverCard
-              key={task.key}
               openDelay={detailProps?.openDelay ?? 200}
               closeDelay={detailProps?.closeDelay ?? 80}
             >
