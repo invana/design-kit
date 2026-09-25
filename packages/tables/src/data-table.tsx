@@ -104,6 +104,12 @@ export interface DataTableProps<TData extends RowData> {
    */
   density?: "default" | "compact";
   /**
+   * Draw the box around the table. Off for a table that sits directly in a
+   * card or a panel's column — the edge already frames it, and a second border
+   * a few pixels in reads as a box inside a box. The row rules stay.
+   */
+  bordered?: boolean;
+  /**
    * How deep this row sits under another — a child run under the run that
    * spawned it. Indents the **first** cell only, so the shape of the list is
    * carried by the column a reader is scanning and not by the whole row.
@@ -266,6 +272,7 @@ export function DataTable<TData extends RowData>({
   groupBy,
   renderGroupHeader,
   density = "default",
+  bordered = true,
   rowIndent,
   isRowSelected,
   onRowClick,
@@ -399,13 +406,14 @@ export function DataTable<TData extends RowData>({
         modifiers={[restrictToHorizontalAxis]}
         onDragEnd={handleDragEnd}
       >
-        <div className="relative overflow-auto rounded-md border">
+        <div className={cn("relative overflow-auto", bordered && "rounded-md border")}>
           {loading && (
             <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-12 text-muted-foreground">
               Loading…
             </div>
           )}
           <Table
+            bordered={false}
             density={density}
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
