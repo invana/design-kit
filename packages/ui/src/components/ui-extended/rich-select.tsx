@@ -108,6 +108,11 @@ export interface RichSelectProps {
   toggles?: RichSelectToggle[]
   /** Acts, not values; rendered last. */
   actions?: RichSelectAction[]
+  /**
+   * The trigger's accessible name — *Ask kind*, *World*. An inline trigger
+   * shows only the current value, which names the choice made, not the control.
+   */
+  triggerAriaLabel?: string
   /** Trigger tooltip content; omit to disable the tooltip. */
   tooltip?: React.ReactNode
   /** Side the trigger tooltip is placed on. Default `'top'`. */
@@ -170,6 +175,7 @@ export function RichSelect({
   appearance = "field",
   triggerIcon: TriggerIcon,
   triggerTag,
+  triggerAriaLabel,
   toggles,
   actions,
   triggerClassName,
@@ -215,6 +221,7 @@ export function RichSelect({
       variant={inline ? "ghost" : "outline"}
       size={inline ? "xs" : "sm"}
       disabled={disabled}
+      aria-label={triggerAriaLabel}
       className={cn(
         "ring-offset-background justify-between gap-2",
         inline && "min-w-0 gap-1 px-1.5 font-normal",

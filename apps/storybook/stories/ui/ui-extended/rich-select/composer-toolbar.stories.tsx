@@ -20,7 +20,8 @@ type Story = StoryObj<typeof meta>;
  * disabled world **with its reason**, a **toggle** that scopes the choice
  * (*Next ask only* — it keeps the menu open, and the trigger wears a tag while
  * it is on), and an **action** below the options (*Manage worlds…*), which is
- * never mistaken for a value.
+ * never mistaken for a value. An inline trigger shows only its value, so each
+ * carries `triggerAriaLabel` — the name of the control, not of the choice.
  */
 export const ComposerToolbar: Story = {
   render: () => {
@@ -40,6 +41,7 @@ export const ComposerToolbar: Story = {
             <RichSelect
               appearance="inline"
               side="top"
+              triggerAriaLabel="Ask kind"
               value={kind}
               onChange={(v) => setKind(v as string)}
               options={[
@@ -51,6 +53,7 @@ export const ComposerToolbar: Story = {
               appearance="inline"
               side="top"
               label="Ask in"
+              triggerAriaLabel="World"
               triggerIcon={Globe}
               triggerTag={nextOnly ? 'next ask only' : undefined}
               value={world}
