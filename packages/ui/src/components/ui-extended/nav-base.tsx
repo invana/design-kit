@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, MoreHorizontal, X } from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -102,6 +102,12 @@ export interface NavItemConfig {
    * is why a tab strip could not be built on nav items before.
    */
   menuTrigger?: "item" | "caret";
+  /**
+   * Draws an inline `×` inside the item — a tab that is closed rather than
+   * managed. The body still selects; only the `×` closes. Like the caret, it
+   * makes the item host a button, so the item itself renders as a `<div>`.
+   */
+  onClose?: () => void;
   /**
    * A count pinned to the item's top-right — unread reviews, waiting questions.
    *
@@ -331,6 +337,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
     const isActive = key === currentKey;
     const hasMenu = !item.href && Boolean(item.menuItems?.length);
     const asCaret = hasMenu && item.menuTrigger === "caret";
+    const hostsButton = asCaret || Boolean(item.onClose);
     // Static items (no href/onClick/menu) are plain text — no hover affordance.
     const isInteractive = Boolean(
       item.href || item.onClick || hasMenu || isTabs,
@@ -409,18 +416,35 @@ export const NavItems: React.FC<NavItemsProps> = ({
       </DropdownMenuTrigger>
     );
 
+    const close = item.onClose && (
+      <span
+        role="button"
+        tabIndex={-1}
+        aria-label={`Close ${item.name}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          item.onClose?.();
+        }}
+        className="ml-0.5 grid size-4 shrink-0 cursor-pointer place-items-center
+          rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
+      >
+        <X className="size-3" />
+      </span>
+    );
+
     const inner = (
       <>
         {icon}
         {label}
         {caret}
+        {close}
         {badge}
       </>
     );
 
-    // A caret item hosts a button, so it cannot itself be one — nested buttons
-    // are invalid, and the browser resolves the click to the outer control.
-    const control = asCaret ? (
+    // A caret or close item hosts a button, so it cannot itself be one — nested
+    // buttons are invalid, and the browser resolves the click to the outer control.
+    const control = hostsButton ? (
       <div
         ref={setNode}
         {...tabProps}
