@@ -23,7 +23,7 @@ const defaultValues = {
 };
 
 export const Login: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues, mode: 'onTouched' });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 

@@ -128,7 +128,7 @@ const SPEC: DashboardSpec = {
  * with different data. One kind swapped, not one screen rewritten.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

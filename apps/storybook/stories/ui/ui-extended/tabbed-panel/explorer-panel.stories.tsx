@@ -1,11 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPanel, TypographyH5 } from '@invana/ui';
-import { 
-  Folder, Search, GitBranch, FileCode, MessageSquare,
-  Plus, Settings, MoreHorizontal, Maximize2, X,
-  Terminal, AlertCircle, Bug, FileText, Database,
-  RefreshCw, Filter, Copy, Trash2, ChevronRight,
-  FolderOpen, File, Clock
+import { TabbedPanel } from '@invana/ui';
+import {
+  Folder,
+  Search,
+  GitBranch,
+  FileCode,
+  Plus,
+  Maximize2,
+  RefreshCw,
+  ChevronRight,
+  FolderOpen,
+  File,
 } from 'lucide-react';
 
 const meta: Meta<typeof TabbedPanel> = {
@@ -94,58 +99,6 @@ const GitChanges = () => (
         <span className="text-base">Card.tsx</span>
       </div>
     </div>
-  </div>
-);
-
-const ChatContent = () => (
-  <div className="flex flex-col h-full">
-    <div className="p-3 border-b">
-      <div className="text-sm font-semibold text-muted-foreground uppercase">Recent Sessions</div>
-    </div>
-    <div className="flex-1 p-2 space-y-2">
-      <div className="p-3 rounded-lg hover:bg-accent cursor-pointer">
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5" />
-          <div className="flex-1">
-            <div className="text-base font-medium">Running a Python script in Docker</div>
-            <div className="text-sm text-muted-foreground mt-1">Finished</div>
-          </div>
-          <div className="text-sm text-muted-foreground">Local • 3 wks</div>
-        </div>
-      </div>
-      <button className="w-full text-base text-center py-2 hover:bg-accent rounded">
-        Show All Sessions
-      </button>
-    </div>
-    <div className="flex-1 flex items-center justify-center flex-col p-6 text-center">
-      <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-      <TypographyH5 className="mb-2">Build with Agent</TypographyH5>
-      <p className="text-base text-muted-foreground mb-4">AI responses may be inaccurate.</p>
-      <button className="text-base text-primary hover:underline">
-        Generate Agent Instructions
-      </button>
-    </div>
-  </div>
-);
-
-const ProblemsContent = () => (
-  <div className="p-4">
-    <div className="text-base text-muted-foreground">
-      No problems have been detected in the workspace.
-    </div>
-  </div>
-);
-
-const TerminalContent = () => (
-  <div className="p-3 font-mono text-sm bg-black text-green-400 h-full">
-    <div>$ npm run dev</div>
-    <div className="text-muted-foreground mt-1">&gt; design-kit@1.0.0 dev</div>
-    <div className="text-muted-foreground">&gt; vite</div>
-    <div className="mt-2 text-blue-400">  VITE v5.0.0  ready in 234 ms</div>
-    <div className="mt-1">  ➜  Local:   http://localhost:5173/</div>
-    <div>  ➜  Network: http://192.168.1.100:5173/</div>
-    <div className="mt-2 text-yellow-400">  press h + enter to show help</div>
-    <div className="mt-2 animate-pulse">█</div>
   </div>
 );
 

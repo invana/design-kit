@@ -51,7 +51,7 @@ const fields: FieldConfig[] = [
 const defaultValues = { subscription: { plan: 'pro', billing: 'yearly' } };
 
 export const RadioGroup: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 

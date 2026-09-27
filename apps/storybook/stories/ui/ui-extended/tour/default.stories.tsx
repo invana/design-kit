@@ -54,7 +54,7 @@ const steps: TourStep[] = [
  * chips, with Prev / Next controls. Driven by the `useTour` controller.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const tour = useTour({
       steps,
       onExit: () => alert('Tour exited'),

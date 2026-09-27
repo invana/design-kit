@@ -29,7 +29,7 @@ const PAGES = [
 
 export const ClosableTabs: Story = {
   name: 'Closable tabs',
-  render: () => {
+  render: function Render() {
     const [open, setOpen] = React.useState<string[]>(PAGES.map((p) => p.key));
     const [active, setActive] = React.useState('run');
 

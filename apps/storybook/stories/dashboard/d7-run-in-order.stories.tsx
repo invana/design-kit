@@ -222,7 +222,7 @@ const SPEC: DashboardSpec<RunPanelOptions> = {
  * the adapter.
  */
 export const RunInOrder: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

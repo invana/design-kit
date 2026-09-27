@@ -52,7 +52,7 @@ function StaticDemo() {
     );
   }, [query]);
 
-  const columns = React.useMemo<ColumnDef<Person, any>[]>(
+  const columns = React.useMemo<ColumnDef<Person, unknown>[]>(
     () => [
       { id: 'name', accessorKey: 'name', header: 'Name', size: 220 },
       { id: 'email', accessorKey: 'email', header: 'Email', size: 240 },

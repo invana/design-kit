@@ -141,7 +141,7 @@ const people: Person[] = Array.from({ length: 8 }).map((_, i) => ({
 const ShowcaseDataTable = () => {
   const [data, setData] = useState<Person[]>(people);
 
-  const columns: ColumnDef<Person, any>[] = React.useMemo(
+  const columns: ColumnDef<Person, unknown>[] = React.useMemo(
     () => [
       { id: 'name', accessorKey: 'name', header: 'Name', size: 200, meta: { editable: true, editType: 'text' } },
       { id: 'email', accessorKey: 'email', header: 'Email', size: 220, meta: { editable: true, editType: 'text' } },

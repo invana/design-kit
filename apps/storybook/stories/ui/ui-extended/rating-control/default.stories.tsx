@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 /** The capture signal the learning loop runs on — so it states its consequence. */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [verdict, setVerdict] = useState<'appreciate' | 'depreciate'>('appreciate');
     const [weight, setWeight] = useState(2);
     return (

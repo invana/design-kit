@@ -24,7 +24,7 @@ const STEPS = ['resolve_schema', 'build_query', 'validate_query', 'execute_query
  * drops a button at the edges moves the other one under the cursor.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [index, setIndex] = React.useState(3);
     return (
       <div className="w-[860px] border border-border bg-card">

@@ -77,7 +77,7 @@ type Story = StoryObj<typeof meta>;
  * scannable and a column of durations comparable down its own length.
  */
 export const TheJournal: Story = {
-  render: () => {
+  render: function Render() {
     const [selected, setSelected] = React.useState('7d3184f1');
     return (
       <DataTable

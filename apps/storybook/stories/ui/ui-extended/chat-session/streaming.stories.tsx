@@ -115,6 +115,7 @@ function ChatSessionStreamingDemo() {
     streamInto("a0", REPLIES[0]);
     replyIndexRef.current = 1;
     return clearTimer;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount; listing streamInto (recreated every render) would rerun the cleanup and kill the live stream
   }, []);
 
   const stop = () => {

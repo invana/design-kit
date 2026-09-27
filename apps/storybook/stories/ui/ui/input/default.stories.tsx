@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Input, Label } from '@invana/forms';
+import { Input } from '@invana/forms';
 
 const meta: Meta<typeof Input> = {
   title: 'UI/UI/Input',

@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
  * order, so the shape of the run does not move under the reader.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [selected, setSelected] = React.useState('execute_query');
     const row = (step: (typeof ROUNDS)[number], mark?: React.ReactNode) => (
       <TraceStep

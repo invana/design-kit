@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Parked, not failed. Answering resumes *this* thinking. */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [v, setV] = useState('velocity');
     return (
       <div className="w-[330px]">

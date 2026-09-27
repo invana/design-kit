@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Checkbox, Label } from '@invana/forms';
+import { Checkbox } from '@invana/forms';
 
 const meta: Meta<typeof Checkbox> = {
   title: 'UI/UI/Checkbox',

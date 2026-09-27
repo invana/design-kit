@@ -185,7 +185,7 @@ const SPEC: DashboardSpec<RunPanelOptions> = {
  * table.
  */
 export const StepTouched: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

@@ -100,7 +100,7 @@ function Section({
 }
 
 export const ColumnLayout: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
     const [submitted, setSubmitted] = React.useState<unknown>(null);
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Alert, AlertTitle, AlertDescription } from '@invana/ui';
+import { Alert, AlertDescription } from '@invana/ui';
 
 const meta: Meta<typeof Alert> = {
   title: 'UI/UI/Alert',

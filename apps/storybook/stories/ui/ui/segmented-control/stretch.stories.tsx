@@ -27,7 +27,7 @@ const LINES = [
  * none, which is the fact.
  */
 export const Stretch: Story = {
-  render: () => {
+  render: function Render() {
     const [level, setLevel] = React.useState('all');
     return (
       <div className="w-[520px]">

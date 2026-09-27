@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
  * carries `triggerAriaLabel` — the name of the control, not of the choice.
  */
 export const ComposerToolbar: Story = {
-  render: () => {
+  render: function Render() {
     const [text, setText] = useState('');
     const [kind, setKind] = useState<string>('nl');
     const [world, setWorld] = useState<string>('eu-h1');

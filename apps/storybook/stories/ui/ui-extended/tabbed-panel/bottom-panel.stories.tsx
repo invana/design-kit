@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPanel, TypographyH5 } from '@invana/ui';
-import { 
-  Folder, Search, GitBranch, FileCode, MessageSquare,
-  Plus, Settings, MoreHorizontal, Maximize2, X,
-  Terminal, AlertCircle, Bug, FileText, Database,
-  RefreshCw, Filter, Copy, Trash2, ChevronRight,
-  FolderOpen, File, Clock
+import { TabbedPanel } from '@invana/ui';
+import {
+  X,
+  Filter,
+  Copy,
+  Trash2,
 } from 'lucide-react';
 
 const meta: Meta<typeof TabbedPanel> = {
@@ -17,116 +16,6 @@ const meta: Meta<typeof TabbedPanel> = {
   tags: ['autodocs'],
 };
 
-
-// Sample content components
-const FileTree = () => (
-  <div className="p-2 space-y-1">
-    <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-      <ChevronRight className="h-3 w-3" />
-      <FolderOpen className="h-4 w-4 text-yellow-500" />
-      <span className="text-base">src</span>
-    </div>
-    <div className="pl-4 space-y-1">
-      <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-        <ChevronRight className="h-3 w-3" />
-        <FolderOpen className="h-4 w-4 text-yellow-500" />
-        <span className="text-base">components</span>
-      </div>
-      <div className="pl-4 space-y-1">
-        <div className="flex items-center gap-1 p-1 rounded bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Button.tsx</span>
-        </div>
-        <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Input.tsx</span>
-        </div>
-        <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Card.tsx</span>
-        </div>
-      </div>
-    </div>
-    <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-      <File className="h-4 w-4 text-gray-500" />
-      <span className="text-base">package.json</span>
-    </div>
-  </div>
-);
-
-const SearchResults = () => (
-  <div className="p-2 space-y-2">
-    <div className="text-sm text-muted-foreground mb-2">3 results in 2 files</div>
-    <div className="space-y-1">
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Button.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 12: const Button = ...</div>
-      </div>
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Input.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 8: const Input = ...</div>
-      </div>
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Card.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 5: const Card = ...</div>
-      </div>
-    </div>
-  </div>
-);
-
-const GitChanges = () => (
-  <div className="p-2">
-    <div className="text-sm font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
-    <div className="space-y-1">
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-green-500">M</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Button.tsx</span>
-      </div>
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-green-500">M</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Input.tsx</span>
-      </div>
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-blue-500">A</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Card.tsx</span>
-      </div>
-    </div>
-  </div>
-);
-
-const ChatContent = () => (
-  <div className="flex flex-col h-full">
-    <div className="p-3 border-b">
-      <div className="text-sm font-semibold text-muted-foreground uppercase">Recent Sessions</div>
-    </div>
-    <div className="flex-1 p-2 space-y-2">
-      <div className="p-3 rounded-lg hover:bg-accent cursor-pointer">
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5" />
-          <div className="flex-1">
-            <div className="text-base font-medium">Running a Python script in Docker</div>
-            <div className="text-sm text-muted-foreground mt-1">Finished</div>
-          </div>
-          <div className="text-sm text-muted-foreground">Local • 3 wks</div>
-        </div>
-      </div>
-      <button className="w-full text-base text-center py-2 hover:bg-accent rounded">
-        Show All Sessions
-      </button>
-    </div>
-    <div className="flex-1 flex items-center justify-center flex-col p-6 text-center">
-      <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-      <TypographyH5 className="mb-2">Build with Agent</TypographyH5>
-      <p className="text-base text-muted-foreground mb-4">AI responses may be inaccurate.</p>
-      <button className="text-base text-primary hover:underline">
-        Generate Agent Instructions
-      </button>
-    </div>
-  </div>
-);
 
 const ProblemsContent = () => (
   <div className="p-4">

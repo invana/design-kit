@@ -77,6 +77,22 @@ export interface UseThemeControlsResult {
   accentStyles: React.CSSProperties;
 }
 
+// Accent color mappings (HSL values for light/dark modes)
+const accentColorMap: Record<string, { light: string; dark: string }> = {
+  green: { light: 'hsl(142 70% 43%)', dark: 'hsl(142 70% 60%)' },
+  emerald: { light: 'hsl(160 84% 39%)', dark: 'hsl(160 84% 55%)' },
+  teal: { light: 'hsl(172 66% 50%)', dark: 'hsl(172 66% 65%)' },
+  cyan: { light: 'hsl(199 89% 48%)', dark: 'hsl(198 93% 60%)' },
+  blue: { light: 'hsl(217 91% 60%)', dark: 'hsl(217 91% 70%)' },
+  indigo: { light: 'hsl(235 85% 70%)', dark: 'hsl(235 85% 75%)' },
+  purple: { light: 'hsl(271 81% 56%)', dark: 'hsl(271 81% 70%)' },
+  pink: { light: 'hsl(330 81% 60%)', dark: 'hsl(330 81% 70%)' },
+  red: { light: 'hsl(0 84% 60%)', dark: 'hsl(0 84% 70%)' },
+  orange: { light: 'hsl(24 95% 53%)', dark: 'hsl(24 95% 65%)' },
+  amber: { light: 'hsl(38 92% 50%)', dark: 'hsl(38 92% 60%)' },
+  slate: { light: 'hsl(215 16% 47%)', dark: 'hsl(215 16% 60%)' },
+};
+
 /**
  * Hook for managing theme state and applying themes
  */
@@ -89,45 +105,35 @@ export const useThemeControls = (
   // null = no override → the active theme shows its OWN accent. Picking a swatch overrides it.
   const [currentAccent, setCurrentAccent] = useState<string | null>(null);
 
-  // Accent color mappings (HSL values for light/dark modes)
-  const accentColorMap: Record<string, { light: string; dark: string }> = {
-    green: { light: 'hsl(142 70% 43%)', dark: 'hsl(142 70% 60%)' },
-    emerald: { light: 'hsl(160 84% 39%)', dark: 'hsl(160 84% 55%)' },
-    teal: { light: 'hsl(172 66% 50%)', dark: 'hsl(172 66% 65%)' },
-    cyan: { light: 'hsl(199 89% 48%)', dark: 'hsl(198 93% 60%)' },
-    blue: { light: 'hsl(217 91% 60%)', dark: 'hsl(217 91% 70%)' },
-    indigo: { light: 'hsl(235 85% 70%)', dark: 'hsl(235 85% 75%)' },
-    purple: { light: 'hsl(271 81% 56%)', dark: 'hsl(271 81% 70%)' },
-    pink: { light: 'hsl(330 81% 60%)', dark: 'hsl(330 81% 70%)' },
-    red: { light: 'hsl(0 84% 60%)', dark: 'hsl(0 84% 70%)' },
-    orange: { light: 'hsl(24 95% 53%)', dark: 'hsl(24 95% 65%)' },
-    amber: { light: 'hsl(38 92% 50%)', dark: 'hsl(38 92% 60%)' },
-    slate: { light: 'hsl(215 16% 47%)', dark: 'hsl(215 16% 60%)' },
-  };
-
-  // Sync with Storybook's global theme/variant selection
-  useEffect(() => {
+  // Sync with Storybook's global theme/variant selection (adjusted during render, not in an effect)
+  const [syncedTheme, setSyncedTheme] = useState(storybookTheme);
+  if (storybookTheme !== syncedTheme) {
+    setSyncedTheme(storybookTheme);
     setCurrentTheme(storybookTheme);
-  }, [storybookTheme]);
+  }
 
-  useEffect(() => {
+  const [syncedVariant, setSyncedVariant] = useState(storybookVariant);
+  if (storybookVariant !== syncedVariant) {
+    setSyncedVariant(storybookVariant);
     setIsDarkMode(storybookVariant === 'dark');
-  }, [storybookVariant]);
+  }
 
   // Reset the accent override when the theme changes, so each theme starts on its own accent.
-  useEffect(() => {
+  const [accentTheme, setAccentTheme] = useState(currentTheme);
+  if (currentTheme !== accentTheme) {
+    setAccentTheme(currentTheme);
     setCurrentAccent(null);
-  }, [currentTheme]);
+  }
 
   // Get current theme variant based on theme and mode. Every theme — classic
   // (Invana/Tailwind/Vite) and colour preset (Gold/Ocean/Forest/Rose/Minimal) —
   // has light/dark/system variants, so we match on mode and fall back to the
   // theme's first (default) variant only if no mode matches.
   const currentVariant = useMemo(() => {
-    const theme = themes.find((t: any) => t.id === currentTheme);
+    const theme = themes.find((t) => t.id === currentTheme);
     if (!theme) return 'default-light';
     const byMode = theme.variants.find(
-      (v: any) => v.mode === (isDarkMode ? 'dark' : 'light')
+      (v) => v.mode === (isDarkMode ? 'dark' : 'light')
     );
     return (byMode ?? theme.variants[0])?.id ?? 'default-light';
   }, [currentTheme, isDarkMode]);
@@ -188,7 +194,7 @@ const ThemeSelector = ({
   currentTheme: string;
   onThemeChange: (theme: string) => void;
 }) => {
-  const currentThemeObj = themes.find((t: any) => t.id === currentTheme);
+  const currentThemeObj = themes.find((t) => t.id === currentTheme);
 
   return (
     <Select value={currentTheme} onValueChange={onThemeChange}>
@@ -196,7 +202,7 @@ const ThemeSelector = ({
         <SelectValue>{currentThemeObj?.name || 'Select Theme'}</SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {themes.map((theme: any) => (
+        {themes.map((theme) => (
           <SelectItem key={theme.id} value={theme.id}>
             {theme.name}
           </SelectItem>

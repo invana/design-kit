@@ -41,7 +41,7 @@ const ENTRIES = ['import_dataset · writes', 'execute_query · reads'];
  * room even with no expanded sibling to take it from.
  */
 export const DrivenFromOutside: Story = {
-  render: () => {
+  render: function Render() {
     const stack = React.useRef<PanelStackHandle>(null);
     const [collapsed, setCollapsed] = React.useState<Record<string, boolean>>(
       {},

@@ -21,7 +21,7 @@ const RULES = `## Gap playbook
 
 /** Plain markdown in mono — what the author types is what the agent is offered. */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [v, setV] = useState(RULES);
     return (
       <div className="w-[560px]">

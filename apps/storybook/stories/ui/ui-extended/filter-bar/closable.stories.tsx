@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
  * than being an unlabelled glyph inside somebody else's button.
  */
 export const Closable: Story = {
-  render: () => {
+  render: function Render() {
     const [filters, setFilters] = React.useState<Record<string, string | undefined>>({
       kind: 'import · bulk',
       since: 'today',

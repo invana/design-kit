@@ -66,7 +66,7 @@ const defaultValues = {
 };
 
 export const CheckboxGroup: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 

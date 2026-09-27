@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tabs, TabsList, TabsTrigger, TabsContent, Card, CardHeader, CardTitle, CardContent } from '@invana/ui';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@invana/ui';
 
 const meta: Meta<typeof Tabs> = {
   title: 'UI/UI/Tabs',

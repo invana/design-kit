@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -17,13 +16,6 @@ const meta: Meta<typeof Table> = {
   },
 };
 
-
-const sampleData = [
-  { id: '1', name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-  { id: '3', name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
-  { id: '4', name: 'Alice Williams', email: 'alice@example.com', role: 'Moderator' },
-];
 
 export default meta;
 type Story = StoryObj<typeof meta>;

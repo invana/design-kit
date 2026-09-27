@@ -62,7 +62,7 @@ const PANELS = [
 
 export const WithOverflow: Story = {
   name: 'With overflow',
-  render: () => {
+  render: function Render() {
     const [width, setWidth] = React.useState(440);
     const [nav, setNav] = React.useState('styling');
     const [underline, setUnderline] = React.useState('snapshots');

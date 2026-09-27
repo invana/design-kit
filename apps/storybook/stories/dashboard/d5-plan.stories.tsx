@@ -114,7 +114,7 @@ const SPEC: DashboardSpec<WithFlow> = {
  * into three pictures of the same graph.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

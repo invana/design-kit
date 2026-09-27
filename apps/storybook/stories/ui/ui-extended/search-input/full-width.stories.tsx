@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const FullWidth: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('');
     return (
       <div className="w-[600px]">

@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
  * fit is information about the data.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [v, setV] = useState('table-compact@3');
     return (
       <div className="w-[330px]">

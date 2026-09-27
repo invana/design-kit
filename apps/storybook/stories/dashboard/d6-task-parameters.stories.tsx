@@ -129,7 +129,7 @@ const SPEC: DashboardSpec<WithFlow> = {
  * rather than in a box.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

@@ -140,7 +140,7 @@ const SPEC: DashboardSpec<WithFlow> = {
  * registered `flow` panel; a real `@invana/canvas` one registers identically.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

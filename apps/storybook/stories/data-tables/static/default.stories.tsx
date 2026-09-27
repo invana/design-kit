@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { DataTable } from '@invana/tables';
 import type { ColumnDef } from '@invana/tables';
-import { Badge, Button } from '@invana/ui';
+import { Badge } from '@invana/ui';
 import { Input } from '@invana/forms';
 import { Search } from 'lucide-react';
 
@@ -57,7 +57,7 @@ function DataTableDemo(args: Partial<React.ComponentProps<typeof DataTable<Perso
     );
   }, [data, query]);
 
-  const columns: ColumnDef<Person, any>[] = React.useMemo(
+  const columns: ColumnDef<Person, unknown>[] = React.useMemo(
     () => [
       {
         id: 'name',

@@ -39,11 +39,14 @@ const PRESETS: ColorPreset[] = [
   { label: 'White', value: '#ffffff', darkValue: '#0f172a' },
 ];
 
+/** An editor's live form values, keyed by field name. */
+type EditorValues = Record<string, unknown>;
+
 // ============================================================
 // LAYERS
 // ============================================================
 
-function backgroundLayerFields(values: any = {}): FieldConfig[] {
+function backgroundLayerFields(values: EditorValues = {}): FieldConfig[] {
   return [
     { name: 'type', type: 'select', label: 'Type', options: [{ value: 'solid', label: 'Solid' }, { value: 'pattern', label: 'Pattern' }], group: 'Fill' },
     { name: 'backgroundColor', type: 'color', label: 'Background color', presetColors: PRESETS, description: 'Solid backdrop painted behind the pattern.', group: 'Fill' },
@@ -102,7 +105,7 @@ const densityContourFillLayerFields: FieldConfig[] = [
   { name: 'recomputeDebounceMs', type: 'number', label: 'Debounce (ms)', min: 0, max: 2000, step: 10, description: 'Debounce window for auto recomputes.', group: 'Lifecycle' },
 ];
 
-function densityContourStrokeLayerFields(values: any = {}): FieldConfig[] {
+function densityContourStrokeLayerFields(values: EditorValues = {}): FieldConfig[] {
   return [
     { name: 'bandwidth', type: 'number', label: 'Bandwidth', min: 1, max: 200, step: 1, description: 'Kernel bandwidth in world units. Larger = smoother, broader blobs.', group: 'Density' },
     { name: 'thresholds', type: 'number', label: 'Bands', min: 1, max: 60, step: 1, description: 'Number of iso-bands d3-contour computes.', group: 'Density' },
@@ -125,7 +128,7 @@ function densityContourStrokeLayerFields(values: any = {}): FieldConfig[] {
   ];
 }
 
-function bubbleSetsLayerFields(values: any = {}): FieldConfig[] {
+function bubbleSetsLayerFields(values: EditorValues = {}): FieldConfig[] {
   return [
     { name: 'nodeR0', type: 'number', label: 'Node radius (full)', min: 0, max: 200, step: 1, description: 'Node-influence inner radius — full influence, world units.', group: 'Influence' },
     { name: 'nodeR1', type: 'number', label: 'Node radius (falloff)', min: 0, max: 400, step: 1, description: 'Node-influence outer radius — zero influence, world units.', group: 'Influence' },
@@ -180,7 +183,7 @@ const keyboardCameraFields: FieldConfig[] = [
   { name: 'zoomFactor', type: 'number', label: 'Zoom factor', min: 1, step: 0.05, description: 'Zoom multiplier per key press. 1.1 = 10% in/out. Default 1.1.' },
 ];
 
-function wheelZoomFields(values: any = {}): FieldConfig[] {
+function wheelZoomFields(values: EditorValues = {}): FieldConfig[] {
   return [
     { name: 'requireCtrl', type: 'boolean', label: 'Require Ctrl', description: 'Only Ctrl+scroll zooms; plain scroll falls through to the page.' },
     { name: 'percent', type: 'number', label: 'Zoom speed', min: 0, max: 1, step: 0.01, description: 'Zoom fraction per wheel tick. Default 0.1 (10%).' },
@@ -382,7 +385,7 @@ const d3ForceLayoutFields: FieldConfig[] = [
   { name: 'collideIterations', type: 'number', label: 'Iterations', min: 1, max: 20, step: 1, description: 'Constraint-relaxation passes per tick.', group: 'Collide force' },
 ];
 
-function elkLayoutFields(values: any = {}): FieldConfig[] {
+function elkLayoutFields(values: EditorValues = {}): FieldConfig[] {
   const NODE_SPACING_FIELD: FieldConfig = { name: 'nodeSpacing', type: 'number', label: 'Node spacing', min: 0, max: 1000, step: 1, description: 'Minimum gap between sibling nodes.' };
   const LAYER_SPACING_FIELD: FieldConfig = { name: 'layerSpacing', type: 'number', label: 'Layer spacing', min: 0, max: 1000, step: 1, description: 'Gap between consecutive layers (layered algorithm only).' };
   const OTHER_SPACING_FIELDS: FieldConfig[] = [
@@ -406,7 +409,7 @@ function elkLayoutFields(values: any = {}): FieldConfig[] {
   ];
 }
 
-function d3HierarchyLayoutFields(values: any = {}): FieldConfig[] {
+function d3HierarchyLayoutFields(values: EditorValues = {}): FieldConfig[] {
   const ORIENTATION_FIELD: FieldConfig = { name: 'orientation', type: 'select', label: 'Orientation', description: 'Cartesian depth axis. Default `vertical`.', options: [{ value: 'vertical', label: 'Vertical' }, { value: 'horizontal', label: 'Horizontal' }] };
   const SIZE_FIELDS: FieldConfig[] = [
     { name: 'sizeWidth', type: 'number', label: 'Size width', min: 0, max: 20000, step: 10, description: 'Cartesian layout width. Default 640 (with height).' },
@@ -428,7 +431,7 @@ function d3HierarchyLayoutFields(values: any = {}): FieldConfig[] {
     ...[
       { name: 'mode', type: 'select', label: 'Mode', description: 'Hierarchy layout family. Default `radial-tree`.', options: [{ value: 'tree', label: 'Tree' }, { value: 'cluster', label: 'Cluster' }, { value: 'radial-tree', label: 'Radial tree' }, { value: 'radial-cluster', label: 'Radial cluster' }, { value: 'pack', label: 'Pack' }, { value: 'sunburst', label: 'Sunburst' }] } as FieldConfig,
       { name: 'rootId', type: 'text', label: 'Root id', placeholder: 'auto-detected', description: 'Explicit tree root. Auto-detected (unique node with no parent) when blank.' } as FieldConfig,
-      ...modeFields(values.mode),
+      ...modeFields(values.mode as string | undefined),
     ].map((f): FieldConfig => ({ ...f, group: 'Layout' })),
     { name: 'centerX', type: 'number', label: 'Center X', min: -10000, max: 10000, step: 10, group: 'Position' },
     { name: 'centerY', type: 'number', label: 'Center Y', min: -10000, max: 10000, step: 10, group: 'Position' },
@@ -448,7 +451,7 @@ const d3SankeyLayoutFields: FieldConfig[] = [
   { name: 'centerY', type: 'number', label: 'Center Y', min: -10000, max: 10000, step: 10, group: 'Position' },
 ];
 
-function geometricLayoutFields(values: any = {}): FieldConfig[] {
+function geometricLayoutFields(values: EditorValues = {}): FieldConfig[] {
   const MODE_FIELD: FieldConfig = { name: 'mode', type: 'select', label: 'Mode', options: [{ value: 'grid', label: 'Grid' }, { value: 'snake', label: 'Snake' }, { value: 'circular', label: 'Circular' }] };
   const GRID_FIELDS: FieldConfig[] = [
     { name: 'columns', type: 'number', label: 'Columns', min: 1, max: 200, step: 1, description: 'Default ⌈√n⌉ (a square-ish block).' },
@@ -479,7 +482,7 @@ type EditorEntry = {
   section: 'layers' | 'behaviours' | 'layouts';
   typeLabel: string;
   id: string;
-  fields: FieldConfig[] | ((v: any) => FieldConfig[]);
+  fields: FieldConfig[] | ((v: EditorValues) => FieldConfig[]);
 };
 
 const CANVAS_REGISTRY: EditorEntry[] = [
@@ -538,8 +541,8 @@ const SECTIONS: { id: 'layers' | 'behaviours' | 'layouts'; label: string }[] = [
 ];
 
 const resolve = (
-  fields: FieldConfig[] | ((v: any) => FieldConfig[]),
-  values: any,
+  fields: FieldConfig[] | ((v: EditorValues) => FieldConfig[]),
+  values: EditorValues,
 ): FieldConfig[] => (typeof fields === 'function' ? fields(values) : fields);
 
 /**
@@ -663,6 +666,7 @@ function EditorForm({
   const liveRef = useRef(onLiveChange);
   liveRef.current = onLiveChange;
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/incompatible-library -- react-hook-form's watch() subscription is the demo's point (per-field live patches); the compiler skipping this story component is expected
     const sub = form.watch((v, { name }) => {
       if (!name) return; // skip whole-form (non-field) events
       const key = name.replace(/^opts\./, '');

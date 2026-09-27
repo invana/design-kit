@@ -157,6 +157,7 @@ function AgentConsoleDemo() {
     );
 
   const run = (prompt: string) => {
+    // eslint-disable-next-line react-hooks/purity -- event-handler code (reached via the options()/actions closures built in render), never called during render
     const stamp = Date.now();
     const taskId = `t-${stamp}`;
     setItems((prev) => [

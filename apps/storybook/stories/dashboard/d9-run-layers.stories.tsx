@@ -138,7 +138,7 @@ const SPEC: DashboardSpec<RunPanelOptions> = {
  * run sat there. Drawing a guess would be the one dishonest mark on the strip.
  */
 export const RunLayers: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

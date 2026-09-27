@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MultipleSearchInputs: Story = {
-  render: () => {
+  render: function Render() {
     const [nameSearch, setNameSearch] = useState('');
     const [emailSearch, setEmailSearch] = useState('');
     const [locationSearch, setLocationSearch] = useState('');

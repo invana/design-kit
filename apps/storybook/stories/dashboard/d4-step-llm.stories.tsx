@@ -127,7 +127,7 @@ const SPEC: DashboardSpec = {
  * not evidence.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

@@ -80,7 +80,7 @@ const defaultValues = {
 };
 
 export const CreateProject: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues, mode: 'onTouched' });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
 

@@ -97,7 +97,7 @@ const defaultValues = {
 };
 
 export const PropertiesPanel: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
 
     return (

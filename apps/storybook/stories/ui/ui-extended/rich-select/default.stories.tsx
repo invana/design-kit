@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
  * description. The trigger reflects the active option's icon + label.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState<string>('force');
     return (
       <div className="w-[280px]">

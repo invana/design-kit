@@ -74,30 +74,40 @@ function DynamicPaginationDemo() {
   const [query, setQuery] = React.useState('');
   const debouncedQuery = useDebounced(query, 350);
 
-  const [data, setData] = React.useState<Product[]>([]);
-  const [total, setTotal] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const [lastUrl, setLastUrl] = React.useState('');
+  // The last settled response, tagged with the URL it answered. `loading` is
+  // derived: the current URL has not settled yet.
+  const [result, setResult] = React.useState<{
+    url: string;
+    data: Product[];
+    total: number;
+    error: string | null;
+  }>({ url: '', data: [], total: 0, error: null });
 
   // Reset to the first page whenever the search query changes.
-  React.useEffect(() => {
+  const [pagedQuery, setPagedQuery] = React.useState(debouncedQuery);
+  if (debouncedQuery !== pagedQuery) {
+    setPagedQuery(debouncedQuery);
     setPagination((p) => ({ ...p, pageIndex: 0 }));
-  }, [debouncedQuery]);
+  }
+
+  const lastUrl = React.useMemo(
+    () =>
+      buildUrl({
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        sorting,
+        query: debouncedQuery,
+      }),
+    [pagination.pageIndex, pagination.pageSize, sorting, debouncedQuery],
+  );
+  const loading = result.url !== lastUrl;
+  const { data, total } = result;
+  const error = loading ? null : result.error;
 
   // Refetch a fresh page on every page / sort / search change.
   React.useEffect(() => {
-    const url = buildUrl({
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      sorting,
-      query: debouncedQuery,
-    });
-    setLastUrl(url);
-
+    const url = lastUrl;
     const controller = new AbortController();
-    setLoading(true);
-    setError(null);
 
     fetch(url, { signal: controller.signal })
       .then((r) => {
@@ -105,19 +115,17 @@ function DynamicPaginationDemo() {
         return r.json() as Promise<ProductsResponse>;
       })
       .then((json) => {
-        setData(json.products);
-        setTotal(json.total);
+        setResult({ url, data: json.products, total: json.total, error: null });
       })
       .catch((e) => {
         if (e.name === 'AbortError') return;
-        setError(String(e.message ?? e));
-      })
-      .finally(() => setLoading(false));
+        setResult((r) => ({ ...r, url, error: String(e.message ?? e) }));
+      });
 
     return () => controller.abort();
-  }, [pagination.pageIndex, pagination.pageSize, sorting, debouncedQuery]);
+  }, [lastUrl]);
 
-  const columns = React.useMemo<ColumnDef<Product, any>[]>(
+  const columns = React.useMemo<ColumnDef<Product, unknown>[]>(
     () => [
       { id: 'title', accessorKey: 'title', header: 'Title', size: 280 },
       { id: 'brand', accessorKey: 'brand', header: 'Brand', size: 140 },

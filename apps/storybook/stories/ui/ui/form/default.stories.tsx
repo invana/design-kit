@@ -25,14 +25,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues: { username: '' } });
 
     return (
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((values) => {
-            // eslint-disable-next-line no-console
             console.log('submitted', values);
           })}
           className="w-80 space-y-6"

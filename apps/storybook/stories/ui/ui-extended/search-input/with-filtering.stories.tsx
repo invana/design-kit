@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WithFiltering: Story = {
-  render: () => {
+  render: function Render() {
     const [searchValue, setSearchValue] = useState('');
     const items = [
       'Apple', 'Banana', 'Cherry', 'Date', 'Elderberry',

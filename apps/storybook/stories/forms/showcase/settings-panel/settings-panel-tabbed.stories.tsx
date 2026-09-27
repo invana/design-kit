@@ -61,7 +61,7 @@ const defaultValues = {
 };
 
 export const Tabbed: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
 
     return (

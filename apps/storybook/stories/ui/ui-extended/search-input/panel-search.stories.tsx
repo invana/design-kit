@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
  * telling you anything.
  */
 export const PanelSearch: Story = {
-  render: () => {
+  render: function Render() {
     const [types, setTypes] = useState('');
     const [page, setPage] = useState('');
 

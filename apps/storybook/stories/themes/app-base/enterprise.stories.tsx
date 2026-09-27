@@ -2,18 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AppLayoutBase } from '@invana/themes/app-base/layout';
 import { Avatar, Badge, Button, Link, TypographyH4, TypographyH5 } from '@invana/ui';
 import { Input } from '@invana/forms';
-import { 
-  Home, 
-  Settings, 
-  Users, 
-  FileText, 
-  BarChart, 
+import {
   Search,
   Bell,
   HelpCircle,
-  LogOut,
-  Menu,
-  Plus
+  Plus,
 } from 'lucide-react';
 
 const meta: Meta<typeof AppLayoutBase> = {

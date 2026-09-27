@@ -40,7 +40,7 @@ const RUNS = [
  * id and the plan open line two.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [selected, setSelected] = React.useState('7d3184f1');
     return (
       <div className="w-[420px] border border-border bg-card">

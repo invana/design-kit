@@ -25,7 +25,7 @@ const PEOPLE = [
  * same way instead of a plain label.
  */
 export const CustomRender: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState<string>('ravi');
     const personFor = (v: string) => PEOPLE.find((p) => p.value === v);
     return (

@@ -65,7 +65,7 @@ const INITIAL: Param[] = [
  * hidden, because the contract's full surface is the point.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [params, setParams] = React.useState(INITIAL);
     const patch = (i: number, next: Partial<Param>) =>
       setParams((prev) => prev.map((p, j) => (j === i ? { ...p, ...next } : p)));

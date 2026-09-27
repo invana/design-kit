@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedPanel, TypographyH5 } from '@invana/ui';
-import { 
-  Folder, Search, GitBranch, FileCode, MessageSquare,
-  Plus, Settings, MoreHorizontal, Maximize2, X,
-  Terminal, AlertCircle, Bug, FileText, Database,
-  RefreshCw, Filter, Copy, Trash2, ChevronRight,
-  FolderOpen, File, Clock
+import {
+  MessageSquare,
+  Plus,
+  Settings,
+  MoreHorizontal,
+  Maximize2,
+  X,
 } from 'lucide-react';
 
 const meta: Meta<typeof TabbedPanel> = {
@@ -17,85 +18,6 @@ const meta: Meta<typeof TabbedPanel> = {
   tags: ['autodocs'],
 };
 
-
-// Sample content components
-const FileTree = () => (
-  <div className="p-2 space-y-1">
-    <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-      <ChevronRight className="h-3 w-3" />
-      <FolderOpen className="h-4 w-4 text-yellow-500" />
-      <span className="text-base">src</span>
-    </div>
-    <div className="pl-4 space-y-1">
-      <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-        <ChevronRight className="h-3 w-3" />
-        <FolderOpen className="h-4 w-4 text-yellow-500" />
-        <span className="text-base">components</span>
-      </div>
-      <div className="pl-4 space-y-1">
-        <div className="flex items-center gap-1 p-1 rounded bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Button.tsx</span>
-        </div>
-        <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Input.tsx</span>
-        </div>
-        <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-          <FileCode className="h-4 w-4 text-blue-500" />
-          <span className="text-base">Card.tsx</span>
-        </div>
-      </div>
-    </div>
-    <div className="flex items-center gap-1 p-1 rounded hover:bg-accent cursor-pointer">
-      <File className="h-4 w-4 text-gray-500" />
-      <span className="text-base">package.json</span>
-    </div>
-  </div>
-);
-
-const SearchResults = () => (
-  <div className="p-2 space-y-2">
-    <div className="text-sm text-muted-foreground mb-2">3 results in 2 files</div>
-    <div className="space-y-1">
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Button.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 12: const Button = ...</div>
-      </div>
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Input.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 8: const Input = ...</div>
-      </div>
-      <div className="p-2 rounded hover:bg-accent cursor-pointer">
-        <div className="text-base font-medium">Card.tsx</div>
-        <div className="text-sm text-muted-foreground">Line 5: const Card = ...</div>
-      </div>
-    </div>
-  </div>
-);
-
-const GitChanges = () => (
-  <div className="p-2">
-    <div className="text-sm font-semibold text-muted-foreground mb-2 uppercase">Changes (3)</div>
-    <div className="space-y-1">
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-green-500">M</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Button.tsx</span>
-      </div>
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-green-500">M</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Input.tsx</span>
-      </div>
-      <div className="flex items-center gap-2 p-1 rounded hover:bg-accent cursor-pointer">
-        <span className="text-blue-500">A</span>
-        <FileCode className="h-4 w-4" />
-        <span className="text-base">Card.tsx</span>
-      </div>
-    </div>
-  </div>
-);
 
 const ChatContent = () => (
   <div className="flex flex-col h-full">
@@ -125,27 +47,6 @@ const ChatContent = () => (
         Generate Agent Instructions
       </button>
     </div>
-  </div>
-);
-
-const ProblemsContent = () => (
-  <div className="p-4">
-    <div className="text-base text-muted-foreground">
-      No problems have been detected in the workspace.
-    </div>
-  </div>
-);
-
-const TerminalContent = () => (
-  <div className="p-3 font-mono text-sm bg-black text-green-400 h-full">
-    <div>$ npm run dev</div>
-    <div className="text-muted-foreground mt-1">&gt; design-kit@1.0.0 dev</div>
-    <div className="text-muted-foreground">&gt; vite</div>
-    <div className="mt-2 text-blue-400">  VITE v5.0.0  ready in 234 ms</div>
-    <div className="mt-1">  ➜  Local:   http://localhost:5173/</div>
-    <div>  ➜  Network: http://192.168.1.100:5173/</div>
-    <div className="mt-2 text-yellow-400">  press h + enter to show help</div>
-    <div className="mt-2 animate-pulse">█</div>
   </div>
 );
 

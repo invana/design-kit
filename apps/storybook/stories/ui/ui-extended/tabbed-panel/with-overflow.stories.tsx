@@ -106,7 +106,7 @@ const TABS = [
 
 export const WithOverflow: Story = {
   name: 'With overflow',
-  render: () => {
+  render: function Render() {
     const [width, setWidth] = React.useState(400);
     const [count, setCount] = React.useState(9);
     const [tab, setTab] = React.useState('snapshots');
@@ -114,9 +114,8 @@ export const WithOverflow: Story = {
 
     // Selecting a tab, then dropping the count below it, would leave the panel
     // pointing at a tab that is no longer there.
-    React.useEffect(() => {
-      if (!tabs.some((t) => t.value === tab)) setTab(tabs[tabs.length - 1]!.value);
-    }, [count]);
+    // Adjusted during render, so the panel never paints the stale tab.
+    if (!tabs.some((t) => t.value === tab)) setTab(tabs[tabs.length - 1]!.value);
 
     return (
       <div className="flex flex-col gap-4">

@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WithInitialValue: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('Initial search text');
     return (
       <div className="w-[400px]">

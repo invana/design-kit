@@ -207,7 +207,7 @@ const defaultValues = {
 };
 
 export const CanvasSettings: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({ defaultValues });
     // Watch the shape kind so the Geometry section swaps its numerics live.
     const shapeKind = form.watch('style.shapeKind') as ShapeKind;

@@ -44,7 +44,7 @@ const profileRowConfig: RowConfig[] = [
 ];
 
 export const ObjectField: Story = {
-  render: () => {
+  render: function Render() {
     const form = useForm({
       defaultValues: {
         profile: {

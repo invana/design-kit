@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardWithHeader, TypographyH3, TypographyH5 } from '@invana/ui';
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, TypographyH3, TypographyH5 } from '@invana/ui';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 

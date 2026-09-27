@@ -443,6 +443,7 @@ function SessionTaskTraceDemo() {
   const beginRun = () => {
     runningRef.current = true;
     setIsRunning(true);
+    // eslint-disable-next-line react-hooks/purity -- event-handler code (reached via the options()/actions closures built in render), never called during render
     setRunStart(Date.now());
     setScrollKey((k) => k + 1);
   };
@@ -696,6 +697,7 @@ function SessionTaskTraceDemo() {
 
   const ask = (prompt: string, scenario?: "clarify" | "fail") => {
     if (runningRef.current) return null;
+    // eslint-disable-next-line react-hooks/purity -- event-handler code (reached via the options()/actions closures built in render), never called during render
     const id = `t${Date.now()}`;
     const turn: Turn = {
       id,

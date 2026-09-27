@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
  * side automatically if the chosen side lacks space.
  */
 export const OpenUpward: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState<string>('force');
     return (
       <div className="flex h-screen flex-col">

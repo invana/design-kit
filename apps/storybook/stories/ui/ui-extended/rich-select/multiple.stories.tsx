@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
  * carry trailing count badges, and the trigger shows a running count.
  */
 export const Multiple: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState<string[]>(['errors', 'perf']);
     return (
       <div className="w-[300px]">

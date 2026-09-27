@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Textarea, Label } from '@invana/forms';
+import { Textarea } from '@invana/forms';
 
 const meta: Meta<typeof Textarea> = {
   title: 'UI/UI/Textarea',

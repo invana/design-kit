@@ -124,7 +124,7 @@ const SPEC: DashboardSpec = {
  * bands with the same kinds, because the runtime records them the same way.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [last, setLast] = React.useState('—');
     return (
       <Surface last={last}>

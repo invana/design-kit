@@ -16,7 +16,7 @@ const DEFAULT_VOICE =
 
 /** Empty — the placeholder is what the reader gets when nothing is written. It is never stored. */
 export const Placeholder: Story = {
-  render: () => {
+  render: function Render() {
     const [v, setV] = useState('');
     return (
       <div className="w-[560px]">

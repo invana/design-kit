@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
  * drawn.
  */
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = React.useState('order');
     return (
       <SegmentedControl

@@ -83,7 +83,7 @@ const colorGroups = [
 ];
 
 export const ColorPalette: StoryObj = {
-  render: (_args, context) => {
+  render: function Render(_args, context) {
     const [currentThemeId, setCurrentThemeId] = useState<string>('');
     const [debugInfo, setDebugInfo] = useState<string>('');
     const containerRef = React.useRef<HTMLDivElement>(null);

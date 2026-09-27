@@ -117,7 +117,7 @@ function MetadataGrid(
   // always-on controls sit flush; the default `p-2` is replaced with `px-3 py-2`.
   const cellCls = 'px-3 py-2 align-middle';
 
-  const columns: ColumnDef<Field, any>[] = React.useMemo(
+  const columns: ColumnDef<Field, unknown>[] = React.useMemo(
     () => [
       {
         id: 'name',
