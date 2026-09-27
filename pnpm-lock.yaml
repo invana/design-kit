@@ -53,6 +53,9 @@ importers:
 
   apps/storybook:
     dependencies:
+      '@invana/charts':
+        specifier: workspace:*
+        version: link:../../packages/charts
       '@invana/dashboard':
         specifier: workspace:*
         version: link:../../packages/dashboard
@@ -165,6 +168,40 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(msw@2.15.0(@types/node@26.1.1)(typescript@5.9.3))(vite@8.1.4(@types/node@26.1.1)(esbuild@0.27.7)(jiti@2.7.0))
+
+  packages/charts:
+    dependencies:
+      uplot:
+        specifier: ^1.6.32
+        version: 1.6.32
+    devDependencies:
+      '@invana/styling':
+        specifier: workspace:*
+        version: link:../styling
+      '@invana/tables':
+        specifier: workspace:*
+        version: link:../tables
+      '@invana/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
 
   packages/dashboard:
     dependencies:
@@ -5305,6 +5342,9 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  uplot@1.6.32:
+    resolution: {integrity: sha512-KIMVnG68zvu5XXUbC4LQEPnhwOxBuLyW1AHtpm6IKTXImkbLgkMy+jabjLgSLMasNuGGzQm/ep3tOkyTxpiQIw==}
+
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
@@ -10245,6 +10285,8 @@ snapshots:
       browserslist: 4.28.6
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  uplot@1.6.32: {}
 
   uri-js@4.4.1:
     dependencies:

@@ -10,7 +10,7 @@
  */
 import * as React from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "@invana/ui"
 
 export interface HeatCell {
   /** When this cell is — `09:45`. Used in the hover title. */

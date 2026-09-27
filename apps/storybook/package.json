@@ -84,6 +84,7 @@
     "sonner": "^2.0.7",
     "zod": "^4.4.3",
     "@invana/editor": "workspace:*",
-    "@invana/dashboard": "workspace:*"
+    "@invana/dashboard": "workspace:*",
+    "@invana/charts": "workspace:*"
   }
 }

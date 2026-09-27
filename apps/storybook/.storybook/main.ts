@@ -41,6 +41,8 @@ const config: StorybookConfig = {
       '@invana/forms/*': resolve(__dirname, '../../../packages/forms/src/*'),
       '@invana/editor': resolve(__dirname, '../../../packages/editor/src'),
       '@invana/editor/*': resolve(__dirname, '../../../packages/editor/src/*'),
+      '@invana/charts': resolve(__dirname, '../../../packages/charts/src'),
+      '@invana/charts/*': resolve(__dirname, '../../../packages/charts/src/*'),
 
     };
 

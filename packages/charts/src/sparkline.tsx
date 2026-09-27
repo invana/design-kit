@@ -10,7 +10,7 @@
  */
 import * as React from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "@invana/ui"
 
 export interface SparklineProps
   extends Omit<React.SVGAttributes<SVGSVGElement>, "children" | "values"> {

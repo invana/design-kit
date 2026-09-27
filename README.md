@@ -13,6 +13,7 @@ monorepo built on React, [Tailwind CSS v4](https://tailwindcss.com/), and
 | [`packages/ui`](packages/ui) | `@invana/ui` | React component library — shadcn/Radix primitives (`components/ui/*`) and higher-level compositions (`components/ui-extended/*`), typography, and the `cn` util. |
 | [`packages/forms`](packages/forms) | `@invana/forms` | Composable form building blocks — `FormField` (+ `ObjectField` and leaf inputs) on top of `react-hook-form`. Unopinionated: consumers own `useForm` and the form chrome. |
 | [`packages/tables`](packages/tables) | `@invana/tables` | Data table components. |
+| [`packages/charts`](packages/charts) | `@invana/charts` | Every chart: time series on uPlot (`LineChart`, `StackedBarChartV`, `StackedAreaChart`) and in-row marks in DOM/SVG (`Sparkline`, `InlineMeter`, `SegmentedBar`). |
 | [`packages/themes`](packages/themes) | `@invana/themes` | App layout shells (`AppLayoutBase`, `app-v1`, `app-v2`) built on `@invana/ui`. |
 | [`apps/storybook`](apps/storybook) | `@invana/stoybook` | Storybook 10 showcase and dev environment consuming all packages. Not published. |
 
@@ -107,7 +108,7 @@ Pushing a `v*` git tag runs [`release.yml`](.github/workflows/release.yml) — a
 workflow whose jobs are the stages of a release:
 
 ```
-resolve ─┬─ publish ──── dist-branches (matrix: all 7 packages)
+resolve ─┬─ publish ──── dist-branches (matrix: all 8 packages)
          ├─ notes
          └─ storybook
 ```

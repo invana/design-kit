@@ -86,7 +86,7 @@ The **tag** (`v*`) is what completes a release — pushing the commit alone does
 | --- | --- | --- |
 | `resolve` | — | Works out the target ref/tag once, so the rest share one answer |
 | `publish` | `resolve` | `turbo run build --filter="./packages/*"` then `pnpm -r publish` to **npm** with provenance (workspace deps rewritten to `^<version>`); uploads `packages/*/dist` as an artifact |
-| `dist-branches` | `publish` | Matrix over all 7 packages — force-pushes each to `releases/<pkg>` |
+| `dist-branches` | `publish` | Matrix over all 8 packages — force-pushes each to `releases/<pkg>` |
 | `notes` | `resolve` | git-cliff (`cliff.toml`) over the tag range → creates/edits the **GitHub Release** |
 | `storybook` | `resolve` | Builds and deploys the Storybook site to GitHub Pages |
 
@@ -123,7 +123,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
-- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (form generator stories, split into `forms/examples/` for full example forms — login, registration, create-project, … — and `forms/showcase/` for capability showcases — object-field, column-layout, complex, properties-panel), `data-tables/`, `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
+- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (form generator stories, split into `forms/examples/` for full example forms — login, registration, create-project, … — and `forms/showcase/` for capability showcases — object-field, column-layout, complex, properties-panel), `data-tables/`, `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The one exception is the forms section: files live under `forms/examples/` and `forms/showcase/`, but their titles are grouped under `Form Generator/…` for the sidebar — e.g. `"Form Generator/Examples/Login"`, `"Form Generator/Showcase/Properties Panel"`.
 
 ## Where demand comes from
@@ -138,9 +138,14 @@ gap in the kit, not a one-off in the design.
   a component, and update it when you ship one.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
-- Invana-domain composites (emissions, thinkings, citations, charts) belong in
+- Invana-domain composites (emissions, thinkings, citations) belong in
   `@invana/ui/components/ui-extended/` — they need no external dep, and the whole kit is Invana's.
   Only a component needing an external JS library gets its own package (see the placement rule
-  above); `@invana/editor` (CodeMirror 6) is the current example.
+  above); `@invana/editor` (CodeMirror 6) and `@invana/charts` (uPlot) are the current examples.
+- **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
+  charts → ui, and ui gets no re-exports. Time series are uPlot on the internal chart frame
+  (`packages/charts/src/base/`), which resolves tokens for the canvas and redraws on theme or
+  density change; in-row marks (sparkline, meter, segmented bar) are DOM/SVG. `Legend`,
+  `MetricTile`, `MetricGrid` and `Progress` stay in `@invana/ui`.
 - Density is a **token axis, not a prop**. `@invana/styling` ships `data-density="compact"`;
   components read `--control-h*` / `--font-size-*` rather than hard-coding `h-8`/`h-9`.
