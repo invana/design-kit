@@ -6,12 +6,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   PanelBox,
+  RecordDescription,
   RecordHeader,
+  StagedBar,
   StatusDot,
   TabbedPanel,
   cn,
 } from "@invana/ui"
-import { Check, ChevronDown } from "lucide-react"
+import { Check, ChevronDown, Lock } from "lucide-react"
 
 import { SpecActions, SpecChip, SpecChips } from "./chips"
 import { resolveRegistry } from "./registry"
@@ -23,6 +25,7 @@ import type {
   PanelRegistry,
   PanelSpec,
   RowSpec,
+  StagedSpec,
 } from "./types"
 
 /** Inside the renderer every spec is the widest one — the types guard authors, not the walk. */
@@ -151,7 +154,7 @@ function Row({
 }) {
   return (
     <div
-      className="flex min-w-0 items-stretch"
+      className={cn("flex min-w-0 items-stretch", row.fill && row.height == null && "min-h-0 flex-1")}
       style={{ gap: row.gap ?? gap, height: row.height }}
     >
       {row.panels.filter((panel) => !isDropped(panel as AnyPanel)).map((panel, i) => (
@@ -226,6 +229,10 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
   return (
     <div className={cn("flex min-h-0 flex-col bg-background", className)} {...props}>
       {spec.header ? <SpecHeader header={spec.header} onAction={emit} icons={icons} /> : null}
+      {spec.header?.description != null || spec.header?.details?.length ? (
+        <RecordDescription description={spec.header.description} details={spec.header.details} />
+      ) : null}
+      {spec.staged ? <SpecStaged staged={spec.staged} onAction={emit} /> : null}
 
       {tabs ? (
         <TabbedPanel
@@ -243,6 +250,8 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
           tabs={tabs.map((tab) => ({
             value: tab.id,
             label: tab.label,
+            icon: tab.locked ? Lock : undefined,
+            disabled: tab.locked,
             content: body(tab.rows as AnyRow[]),
           }))}
         />
@@ -250,6 +259,25 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
         body(spec.rows as AnyRow[])
       )}
     </div>
+  )
+}
+
+/** The staged set, from its spec — each act dispatched by id. */
+function SpecStaged({
+  staged,
+  onAction,
+}: {
+  staged: StagedSpec
+  onAction: (id: string, ctx?: ActionContext) => void
+}) {
+  const { discardAction, discardAllAction } = staged
+  return (
+    <StagedBar
+      items={staged.items}
+      hint={staged.hint}
+      onDiscard={discardAction ? (id) => onAction(discardAction, { itemId: id }) : undefined}
+      onDiscardAll={discardAllAction ? () => onAction(discardAllAction) : undefined}
+    />
   )
 }
 

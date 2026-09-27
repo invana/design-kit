@@ -89,6 +89,27 @@ export interface HeaderSpec {
   crumbMenu?: CrumbMenuSpec
   chips?: ChipSpec[]
   actions?: ActionSpec[]
+  /**
+   * The record's own description, on one line under the crumbs — see
+   * `RecordDescription`. `More` shows the whole of it and {@link details}.
+   */
+  description?: string
+  /** The record's facts, shown under the description by `More`. */
+  details?: Array<{ label: string; value: string; mono?: boolean }>
+}
+
+/**
+ * What is staged and not yet published — drawn as a `StagedBar` between the
+ * header and the tabs, on every tab, while a draft is open. Absent draws nothing.
+ */
+export interface StagedSpec {
+  items: Array<{ id: string; op: "add" | "remove" | "change"; name: string; note?: string }>
+  /** Dispatched with `{ itemId }` by an item's `×`. Absent, the items carry none. */
+  discardAction?: string
+  /** Dispatched by `Discard all`. Absent, there is no `Discard all`. */
+  discardAllAction?: string
+  /** The shortcut that finishes the set — `⌘↵ publish`. */
+  hint?: string
 }
 
 /** The siblings the last crumb can switch to. */
@@ -117,6 +138,11 @@ export interface TabSpec<X extends ExtraPanels = Record<never, never>> {
   id: string
   label: string
   rows: RowSpec<X>[]
+  /**
+   * Nothing to read here yet — the tab draws dimmed with a lock and cannot be
+   * picked. Why it is locked is said where the reader already is, not on the tab.
+   */
+  locked?: boolean
 }
 
 // ── panel options, one shape per built-in kind ──────────────────────────────
@@ -362,6 +388,11 @@ export interface RowSpec<X extends ExtraPanels = Record<never, never>> {
   panels: PanelSpec<X>[]
   /** Pin the row's height in px — for a flow, which has no content height. */
   height?: number
+  /**
+   * Take the height the tab has left — a canvas, which has no content height
+   * and no one right height either. Ignored with {@link height}.
+   */
+  fill?: boolean
   /** Gap between panels in px. Defaults to the dashboard's `gap`. */
   gap?: number
 }
@@ -370,6 +401,8 @@ export interface DashboardSpec<X extends ExtraPanels = Record<never, never>> {
   /** For the document title and nothing else; the header draws the crumbs. */
   title?: string
   header?: HeaderSpec
+  /** The staged set, as a bar under the header — see {@link StagedSpec}. */
+  staged?: StagedSpec
   /** The bands. Ignored when `tabs` is set — each tab carries its own. */
   rows: RowSpec<X>[]
   /** Readings of the record, as a tab strip under the header. */

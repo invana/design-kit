@@ -122,6 +122,7 @@ export function SpecAction({
         type="single"
         size="sm"
         value={action.value}
+        disabled={action.disabled}
         onValueChange={(option: string) => option && onAction(action.id, { ...ctx, option })}
       >
         {action.options.map((option) => (
