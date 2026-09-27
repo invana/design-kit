@@ -10,6 +10,7 @@ import { python } from "@codemirror/legacy-modes/mode/python"
 import { shell } from "@codemirror/legacy-modes/mode/shell"
 import { javascript, json } from "@codemirror/legacy-modes/mode/javascript"
 import { cypher } from "@codemirror/legacy-modes/mode/cypher"
+import { yaml } from "@codemirror/legacy-modes/mode/yaml"
 import { cn } from "@invana/ui"
 
 import { useCodeMirror } from "./use-code-mirror"
@@ -20,6 +21,7 @@ export type CodeLanguage =
   | "javascript"
   | "json"
   | "cypher"
+  | "yaml"
   | "plain"
 
 export interface CodeBlockProps
@@ -44,6 +46,7 @@ const MODES = {
   javascript: () => StreamLanguage.define(javascript),
   json: () => StreamLanguage.define(json),
   cypher: () => StreamLanguage.define(cypher),
+  yaml: () => StreamLanguage.define(yaml),
   plain: () => null,
 }
 

@@ -8,7 +8,17 @@ import {
   SelectValue,
   Switch,
 } from "@invana/forms"
-import { Badge, BoundChip, Button, ToggleGroup, ToggleGroupItem } from "@invana/ui"
+import {
+  Badge,
+  BoundChip,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@invana/ui"
 
 import type { ActionContext, ActionSpec, ChipSpec } from "./types"
 
@@ -44,7 +54,8 @@ export function SpecChips({ chips }: { chips?: ChipSpec[] }) {
  * `options` turns it into a segmented switch, because a view switch is one
  * decision with several positions and rendering it as three buttons would let a
  * reader think they could pick two. `picker` draws the same choice as a
- * dropdown, for records too many or too long to lay side by side.
+ * dropdown, for records too many or too long to lay side by side. `menu` puts
+ * them behind the action's own button, as acts rather than a choice.
  */
 export function SpecAction({
   action,
@@ -59,6 +70,32 @@ export function SpecAction({
 }) {
   const switchId = React.useId()
   const optionLabel = (option: string) => action.optionLabels?.[option] ?? option
+  if (action.options?.length && action.menu) {
+    const Trigger = action.icon ? icons[action.icon] : undefined
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          {/* With an icon the label names the button rather than printing
+              beside it — `⋯` is read as *More*, not drawn as it. */}
+          <Button
+            variant={action.variant ?? "outline"}
+            size={Trigger ? "icon" : "sm"}
+            disabled={action.disabled}
+            aria-label={action.label ?? action.id}
+          >
+            {Trigger ? <Trigger /> : action.label}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {action.options.map((option) => (
+            <DropdownMenuItem key={option} onSelect={() => onAction(action.id, { ...ctx, option })}>
+              {optionLabel(option)}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
   if (action.options?.length && action.picker) {
     return (
       <Select

@@ -51,6 +51,14 @@ export interface ActionSpec {
    */
   picker?: boolean
   /**
+   * Draw `options` as a menu behind this action's button — `⋯` opening
+   * `Versions · Arguments · Export YAML`. A menu is a list of acts, not a
+   * choice: nothing is selected and `value` is ignored. Dispatches with
+   * `{ option }`, and `optionLabels` names each item. With an `icon`, the
+   * button draws the icon alone and `label` is its accessible name.
+   */
+  menu?: boolean
+  /**
    * What the reader sees for an option, by option. The option itself is what
    * dispatches, so a picker can show a name and send an id. An option with no
    * label shows as itself.
@@ -138,7 +146,7 @@ export interface JsonOptions {
 
 export interface CodeOptions {
   value: string
-  language?: "python" | "shell" | "javascript" | "json" | "cypher" | "plain"
+  language?: "python" | "shell" | "javascript" | "json" | "cypher" | "yaml" | "plain"
   maxHeight?: number
   showLineNumbers?: boolean
 }
