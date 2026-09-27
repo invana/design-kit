@@ -22,10 +22,13 @@ export const SliderNumber: React.FC<SliderNumberProps> = ({
   className,
 }) => {
   const [local, setLocal] = React.useState<number>(value);
-
-  React.useEffect(() => {
+  // A new `value` from the parent replaces the local one — adjusted while
+  // rendering, not in an effect, so the stale number never paints.
+  const [seen, setSeen] = React.useState(value);
+  if (value !== seen) {
+    setSeen(value);
     setLocal(value);
-  }, [value]);
+  }
 
   const set = (n: number) => {
     setLocal(n);

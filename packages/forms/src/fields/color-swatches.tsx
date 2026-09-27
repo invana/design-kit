@@ -26,12 +26,17 @@ export const ColorSwatches: React.FC<ColorSwatchesProps> = ({
   const [customColor, setCustomColor] = React.useState(value || defaultValue);
   const [isCustom, setIsCustom] = React.useState(false);
 
-  React.useEffect(() => {
-    if (!value) return;
+  // A new `value` (or preset list) from the parent re-decides which swatch
+  // is on — adjusted while rendering, not in an effect.
+  const [seen, setSeen] = React.useState<{ value?: string; presetColors: typeof presetColors }>({
+    presetColors,
+  });
+  if (value && (value !== seen.value || presetColors !== seen.presetColors)) {
+    setSeen({ value, presetColors });
     const isPreset = presetColors.some((c) => c.value === value);
     setIsCustom(!isPreset);
     if (!isPreset) setCustomColor(value);
-  }, [value, presetColors]);
+  }
 
   const select = (newColor: string, custom = false) => {
     setIsCustom(custom);

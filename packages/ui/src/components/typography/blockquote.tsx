@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyBlockquoteProps
-  extends React.BlockquoteHTMLAttributes<HTMLQuoteElement> {}
+export type TypographyBlockquoteProps = React.BlockquoteHTMLAttributes<HTMLQuoteElement>
 
 const TypographyBlockquote = React.forwardRef<HTMLQuoteElement, TypographyBlockquoteProps>(
   ({ className, ...props }, ref) => {

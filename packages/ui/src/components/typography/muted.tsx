@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyMutedProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {}
+export type TypographyMutedProps = React.HTMLAttributes<HTMLParagraphElement>
 
 const TypographyMuted = React.forwardRef<HTMLParagraphElement, TypographyMutedProps>(
   ({ className, ...props }, ref) => {

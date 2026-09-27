@@ -318,7 +318,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
     const next = isVertical ? "ArrowDown" : "ArrowRight";
     const prev = isVertical ? "ArrowUp" : "ArrowLeft";
 
-    let target = -1;
+    let target: number;
     if (event.key === next) target = step(activeIndex, 1);
     else if (event.key === prev) target = step(activeIndex, -1);
     else if (event.key === "Home") target = edge(1);

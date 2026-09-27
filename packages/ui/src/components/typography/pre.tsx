@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyPreProps
-  extends React.HTMLAttributes<HTMLPreElement> {}
+export type TypographyPreProps = React.HTMLAttributes<HTMLPreElement>
 
 const TypographyPre = React.forwardRef<HTMLPreElement, TypographyPreProps>(
   ({ className, ...props }, ref) => {

@@ -109,6 +109,9 @@ const Carousel = React.forwardRef<
         return
       }
 
+      // The carousel's scroll state lives in its API, which exists only after
+      // mount — reading it once here is the subscription's first value.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       onSelect(api)
       api.on("reInit", onSelect)
       api.on("select", onSelect)

@@ -236,7 +236,11 @@ export function PanelStack({
   // `collapsed` is read inside callbacks the group owns, which capture their
   // closure; the ref keeps the donor search looking at the live map.
   const collapsedRef = React.useRef(collapsed)
-  collapsedRef.current = collapsed
+  // Synced after commit, not during render: the callbacks that read it run
+  // on user gestures, never inside a render.
+  React.useLayoutEffect(() => {
+    collapsedRef.current = collapsed
+  }, [collapsed])
 
   const collapsePanel = React.useCallback((id: string) => {
     const ref = refs.current[id]

@@ -38,7 +38,10 @@ export function useCodeMirror({
   // selection and focus mid-keystroke. "Callers are expected to memoise" is a
   // trap, not a contract, so the hook does not depend on it.
   const extensionsRef = React.useRef(extensions)
-  extensionsRef.current = extensions
+  // Synced after commit, before the effects below read it — never mid-render.
+  React.useLayoutEffect(() => {
+    extensionsRef.current = extensions
+  }, [extensions])
 
   const compartment = React.useRef(new Compartment())
 

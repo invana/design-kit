@@ -148,6 +148,9 @@ export function useOverflowItems({
   React.useLayoutEffect(() => {
     widths.current = [];
     itemEls.current.length = count;
+    // Before paint, with the measure cache it invalidates — a render-time
+    // reset would run before the refs it clears are laid out again.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHidden((prev) => (prev === NONE ? prev : NONE));
   }, [count]);
 

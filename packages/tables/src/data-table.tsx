@@ -51,6 +51,9 @@ import { EditableCell } from "./editable-cell";
 import type { CellEditHandler } from "./types";
 
 export interface DataTableProps<TData extends RowData> {
+  // TanStack's own idiom: a column's value type varies by column, and a
+  // `ColumnDef<T, string>` is not assignable to `ColumnDef<T, unknown>`.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: ColumnDef<TData, any>[];
   data: TData[];
   pageSize?: number;
@@ -307,9 +310,13 @@ export function DataTable<TData extends RowData>({
     right: [],
   });
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(() =>
-    columns.map((c, i) => (c as any).id ?? (c as any).accessorKey ?? String(i)),
+    columns.map((c, i) => {
+      const def = c as { id?: string; accessorKey?: unknown };
+      return def.id ?? (def.accessorKey != null ? String(def.accessorKey) : String(i));
+    }),
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- as `columns` above
   const wrappedColumns = React.useMemo<ColumnDef<TData, any>[]>(() => {
     return columns.map((col) => {
       const meta = col.meta;
@@ -331,6 +338,9 @@ export function DataTable<TData extends RowData>({
     });
   }, [columns, onCellEdit]);
 
+  // TanStack returns functions the React Compiler cannot memoise, so it skips
+  // this component — which is correct, and nothing here relies on it.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns: wrappedColumns,

@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyH6Props
-  extends React.HTMLAttributes<HTMLHeadingElement> {}
+export type TypographyH6Props = React.HTMLAttributes<HTMLHeadingElement>
 
 const TypographyH6 = React.forwardRef<HTMLHeadingElement, TypographyH6Props>(
   ({ className, ...props }, ref) => {

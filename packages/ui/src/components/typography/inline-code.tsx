@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyInlineCodeProps
-  extends React.HTMLAttributes<HTMLElement> {}
+export type TypographyInlineCodeProps = React.HTMLAttributes<HTMLElement>
 
 const TypographyInlineCode = React.forwardRef<HTMLElement, TypographyInlineCodeProps>(
   ({ className, ...props }, ref) => {

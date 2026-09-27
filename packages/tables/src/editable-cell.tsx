@@ -28,11 +28,6 @@ export function EditableCell<TData>({
 }: EditableCellProps<TData>) {
   const initial = ctx.getValue();
   const [editing, setEditing] = React.useState(false);
-  const [draft, setDraft] = React.useState<unknown>(initial);
-
-  React.useEffect(() => {
-    if (!editing) setDraft(initial);
-  }, [initial, editing]);
 
   const commit = (next: unknown) => {
     setEditing(false);

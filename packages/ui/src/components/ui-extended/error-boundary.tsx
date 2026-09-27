@@ -1,15 +1,15 @@
 import { Frown } from 'lucide-react';
-import { Component, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 export class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   constructor(props: { children: ReactNode }) {
     super(props);
     this.state = { hasError: false };
   }
-  static getDerivedStateFromError(_: Error) {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error', error, errorInfo);
   }
   render() {

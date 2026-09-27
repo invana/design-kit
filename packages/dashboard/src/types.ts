@@ -428,6 +428,9 @@ export interface PanelRendererProps<O = PanelOptions> {
   gap: number
 }
 
+// `any`, not `unknown`: a registry holds renderers for many option shapes, and
+// a renderer typed on its own options is not assignable to one on `unknown`.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PanelRenderer<O = any> = React.ComponentType<PanelRendererProps<O>>
 
 /** Kind → renderer. Consumer entries win over the built-ins. */

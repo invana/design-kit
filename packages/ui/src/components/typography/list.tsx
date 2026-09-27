@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-export interface TypographyListProps
-  extends React.HTMLAttributes<HTMLUListElement> {}
+export type TypographyListProps = React.HTMLAttributes<HTMLUListElement>
 
 const TypographyList = React.forwardRef<HTMLUListElement, TypographyListProps>(
   ({ className, ...props }, ref) => {
