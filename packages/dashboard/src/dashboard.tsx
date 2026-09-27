@@ -235,6 +235,11 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
           onTabChange={(value) =>
             spec.tabAction ? emit(spec.tabAction, { option: value }) : setOwnTab(value)
           }
+          headerContent={
+            spec.tabActions?.length ? (
+              <SpecActions actions={spec.tabActions} onAction={emit} icons={icons} />
+            ) : undefined
+          }
           tabs={tabs.map((tab) => ({
             value: tab.id,
             label: tab.label,

@@ -156,6 +156,12 @@ export interface GanttOptions {
 export interface TableOptions {
   columns: Array<{ key: string; label: string; mono?: boolean; align?: "left" | "right" }>
   rows: Array<Record<string, string | number | null>>
+  /** The column whose value names a row — what `selectAction` reports. */
+  rowKey?: string
+  /** Emits `onAction(this, { itemId })` with the row's `rowKey` value when it is picked. */
+  selectAction?: string
+  /** The `rowKey` value of the row drawn selected. */
+  selected?: string | null
 }
 
 export interface ListOptions {
@@ -355,6 +361,11 @@ export interface DashboardSpec<X extends ExtraPanels = Record<never, never>> {
    * dashboard keeps the tab itself — which is how a frozen report reads.
    */
   tabAction?: string
+  /**
+   * Controls on the right of the tab strip that apply to every tab — the
+   * window a plan's numbers are read over. Ignored without `tabs`.
+   */
+  tabActions?: ActionSpec[]
   /** Gap between rows and between panels, in px. Default `12`. */
   gap?: number
 }

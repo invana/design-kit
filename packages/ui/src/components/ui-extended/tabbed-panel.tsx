@@ -52,6 +52,17 @@ export interface TabbedPanelProps {
   headerActions?: NavHorizontalItem[]
 
   /**
+   * A control on the right of the tab strip, before `headerActions`, that
+   * applies to **every** tab: a time window, a version. Not a place for a
+   * tab's own controls — those belong in that tab's body.
+   *
+   * ```tsx
+   * headerContent={<ToggleGroup type="single" size="sm">…</ToggleGroup>}
+   * ```
+   */
+  headerContent?: React.ReactNode
+
+  /**
    * Fold the tabs that do not fit the header into a `…` dropdown at the end of
    * the strip, instead of letting the strip set the panel's minimum width.
    *
@@ -108,6 +119,7 @@ export function TabbedPanel({
   activeTab,
   onTabChange,
   headerActions,
+  headerContent,
   overflow = false,
   overflowLabel = "More panels",
   keepMounted = false,
@@ -175,6 +187,12 @@ export function TabbedPanel({
               className="min-w-0 flex-1 gap-0"
               iconClassName="h-3.5 w-3.5 shrink-0"
             />
+
+            {headerContent != null ? (
+              <div className="ml-auto flex h-full shrink-0 items-center gap-1 px-1">
+                {headerContent}
+              </div>
+            ) : null}
 
             {/* Right: Actions */}
             {headerActions && headerActions.length > 0 && (

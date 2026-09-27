@@ -115,7 +115,10 @@ export function GanttPanel({ panel, options, onAction }: PanelRendererProps<Gant
   )
 }
 
-export function TablePanel({ options }: PanelRendererProps<TableOptions>) {
+export function TablePanel({ panel, options, onAction }: PanelRendererProps<TableOptions>) {
+  const keyOf = (row: TableOptions["rows"][number]) =>
+    options.rowKey != null ? String(row[options.rowKey] ?? "") : undefined
+  const pick = options.selectAction
   return (
     <Table density="compact">
       <TableHeader>
@@ -129,7 +132,16 @@ export function TablePanel({ options }: PanelRendererProps<TableOptions>) {
       </TableHeader>
       <TableBody>
         {options.rows.map((row, i) => (
-          <TableRow key={i}>
+          <TableRow
+            key={keyOf(row) ?? i}
+            data-state={keyOf(row) != null && keyOf(row) === options.selected ? "selected" : undefined}
+            className={cn(pick && "cursor-pointer")}
+            onClick={
+              pick && keyOf(row) != null
+                ? () => onAction(pick, { panelId: panel.id, itemId: keyOf(row) })
+                : undefined
+            }
+          >
             {options.columns.map((col) => (
               <TableCell
                 key={col.key}
