@@ -32,6 +32,7 @@
     },
     "./themes": "./src/themes/index.ts",
     "./themes.config": "./src/themes.config.ts",
+    "./color": "./src/color.ts",
     "./themes/default": {
       "style": "./src/themes/default.css",
       "default": "./src/themes/default.css"
