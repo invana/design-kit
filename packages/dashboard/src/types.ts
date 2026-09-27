@@ -45,6 +45,18 @@ export interface ActionSpec {
   /** Which option is active. Only with `options`. */
   value?: string
   /**
+   * Draw `options` as a dropdown rather than a segmented switch — for a choice
+   * among named records (`agent`), too many or too long to lay side by side.
+   * Dispatches with `{ option }` exactly as the switch does.
+   */
+  picker?: boolean
+  /**
+   * What the reader sees for an option, by option. The option itself is what
+   * dispatches, so a picker can show a name and send an id. An option with no
+   * label shows as itself.
+   */
+  optionLabels?: Record<string, string>
+  /**
    * An on/off setting — `Fit`. Set, the action draws as a labelled `Switch` in
    * this state and dispatches with `{ pressed }`, the state it is switched to.
    */

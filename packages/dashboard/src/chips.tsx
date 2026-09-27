@@ -1,5 +1,13 @@
 import * as React from "react"
-import { Label, Switch } from "@invana/forms"
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
+} from "@invana/forms"
 import { Badge, BoundChip, Button, ToggleGroup, ToggleGroupItem } from "@invana/ui"
 
 import type { ActionContext, ActionSpec, ChipSpec } from "./types"
@@ -35,7 +43,8 @@ export function SpecChips({ chips }: { chips?: ChipSpec[] }) {
  *
  * `options` turns it into a segmented switch, because a view switch is one
  * decision with several positions and rendering it as three buttons would let a
- * reader think they could pick two.
+ * reader think they could pick two. `picker` draws the same choice as a
+ * dropdown, for records too many or too long to lay side by side.
  */
 export function SpecAction({
   action,
@@ -49,6 +58,27 @@ export function SpecAction({
   ctx?: ActionContext
 }) {
   const switchId = React.useId()
+  const optionLabel = (option: string) => action.optionLabels?.[option] ?? option
+  if (action.options?.length && action.picker) {
+    return (
+      <Select
+        value={action.value}
+        disabled={action.disabled}
+        onValueChange={(option: string) => onAction(action.id, { ...ctx, option })}
+      >
+        <SelectTrigger triggerSize="sm" className="w-auto gap-2" aria-label={action.label ?? action.id}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {action.options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {optionLabel(option)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    )
+  }
   if (action.options?.length) {
     return (
       <ToggleGroup
@@ -59,7 +89,7 @@ export function SpecAction({
       >
         {action.options.map((option) => (
           <ToggleGroupItem key={option} value={option}>
-            {option}
+            {optionLabel(option)}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
