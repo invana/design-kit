@@ -44,7 +44,7 @@
     "build": "tsup && pnpm run build:css",
     "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
     "prepare": "pnpm run build",
-    "lint": "eslint . --ext ts,tsx",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {

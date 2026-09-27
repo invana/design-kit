@@ -42,7 +42,7 @@
     "build": "tsup && npm run build:css",
     "build:css": "tailwindcss --input ./src/styles/globals.css --output ./dist/styles.css --minify",
     "build-storybook": "storybook build",
-    "lint": "eslint . --ext ts,tsx",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
