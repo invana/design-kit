@@ -19,7 +19,8 @@ type Story = StoryObj<typeof meta>;
  * bar between the header and the tabs, on every tab; a `locked` tab is dimmed
  * with a lock and cannot be picked; a `disabled` tab action greys the window
  * on a tab it does not apply to; a `fill` row takes the height the tab has
- * left, for a canvas.
+ * left, for a canvas, and a `flush` tab drops its padding so the canvas meets
+ * the tab strip.
  */
 export const HeaderStagedLocked: Story = {
   render: function Render() {
@@ -52,7 +53,7 @@ export const HeaderStagedLocked: Story = {
       },
       tabs: [
         { id: 'overview', label: 'Overview', rows: [{ panels: [{ kind: 'text', options: { text: 'Overview' } }] }] },
-        { id: 'model', label: 'Model', rows: [{ fill: true, panels: [{ kind: 'text', title: 'Canvas', options: { text: 'A row with `fill` takes the height the tab has left.' } }] }] },
+        { id: 'model', label: 'Model', flush: true, rows: [{ fill: true, panels: [{ kind: 'text', title: 'Canvas', options: { text: 'A row with `fill` takes the height the tab has left.' } }] }] },
         { id: 'usage', label: 'Usage', locked: true, rows: [] },
       ],
       tab,

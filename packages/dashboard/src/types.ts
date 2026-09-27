@@ -143,6 +143,11 @@ export interface TabSpec<X extends ExtraPanels = Record<never, never>> {
    * picked. Why it is locked is said where the reader already is, not on the tab.
    */
   locked?: boolean
+  /**
+   * Drop the body padding, so the tab's one band meets the tab strip and the
+   * page's edges — a canvas, which is a surface and not a card on one.
+   */
+  flush?: boolean
 }
 
 // ── panel options, one shape per built-in kind ──────────────────────────────

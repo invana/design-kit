@@ -209,8 +209,11 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
   const [ownTab, setOwnTab] = React.useState(spec.tab ?? tabs?.[0]?.id)
   const activeTab = spec.tabAction ? (spec.tab ?? tabs?.[0]?.id) : ownTab
 
-  const body = (rows: AnyRow[]) => (
-    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3" style={{ gap }}>
+  const body = (rows: AnyRow[], flush?: boolean) => (
+    <div
+      className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", !flush && "p-3")}
+      style={{ gap }}
+    >
       {rows
         .filter((row) => row.panels.some((panel) => !isDropped(panel as AnyPanel)))
         .map((row, i) => (
@@ -252,7 +255,7 @@ export function Dashboard<X extends ExtraPanels = Record<never, never>>({
             label: tab.label,
             icon: tab.locked ? Lock : undefined,
             disabled: tab.locked,
-            content: body(tab.rows as AnyRow[]),
+            content: body(tab.rows as AnyRow[], tab.flush),
           }))}
         />
       ) : (
