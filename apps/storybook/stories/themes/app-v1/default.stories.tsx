@@ -7,7 +7,7 @@ import { Home, Folder, Search, Settings,
     Bell, HelpCircle, User, LogOut } from "lucide-react";
 
 const meta: Meta<typeof AppLayoutV1> = {
-  title: 'Themes/AppV1',
+  title: 'Themes/AppV1/Default',
   component: AppLayoutV1,
   parameters: {
     layout: 'fullscreen',

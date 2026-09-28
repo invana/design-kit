@@ -11,7 +11,7 @@ import { Sun, Moon, Monitor } from 'lucide-react';
 import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Link } from '@invana/ui';
 
 const meta = {
-  title: 'Themes/Theme Selector',
+  title: 'Themes/Theme Selector/Themes Settings Card',
   parameters: {
     layout: 'fullscreen',
     // This story owns its theme via <ThemeProvider> — opt out of the toolbar decorator.

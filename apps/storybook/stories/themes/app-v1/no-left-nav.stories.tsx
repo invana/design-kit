@@ -5,7 +5,7 @@ import { Input } from "@invana/forms";
 import { Search, Bell, HelpCircle } from "lucide-react";
 
 const meta: Meta<typeof AppLayoutV1> = {
-  title: 'Themes/AppV1',
+  title: 'Themes/AppV1/No Left Nav',
   component: AppLayoutV1,
   parameters: {
     layout: 'fullscreen',
