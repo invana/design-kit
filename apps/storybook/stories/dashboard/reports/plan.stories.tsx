@@ -2,10 +2,10 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dashboard, type DashboardSpec } from '@invana/dashboard';
 
-import { ICONS, Surface } from './_fixtures';
+import { ICONS, Surface } from '../_fixtures';
 
 const meta: Meta<typeof Dashboard> = {
-  title: 'Dashboard/D11 Plan · a window, and a step picked',
+  title: 'Dashboard/Reports/Plan',
   component: Dashboard,
   parameters: { layout: 'fullscreen' },
 };
@@ -21,11 +21,14 @@ const STEPS = [
 ];
 
 /**
- * A plan read over a window. `tabActions` puts the `7 · 30 · 90 days` switch
- * on the right of the tab strip, where it applies to every tab; the step table
- * names its rows by `rowKey` and reports a pick through `selectAction`.
+ * **A plan, read as a report** over a window. `tabActions` puts the
+ * `7 · 30 · 90 days` switch on the right of the tab strip, where it applies to
+ * every tab; the step table names its rows by `rowKey` and reports a pick
+ * through `selectAction`. The header's `⋯` is a `menu` — the readings that are
+ * not tabs: acts, not a choice, so nothing stays selected, and each dispatches
+ * as `{ option }`.
  */
-export const PlanWindowAndSteps: Story = {
+export const Plan: Story = {
   render: function Render() {
     const [last, setLast] = React.useState('—');
     const [window, setWindow] = React.useState('30 days');
@@ -33,7 +36,21 @@ export const PlanWindowAndSteps: Story = {
     const [step, setStep] = React.useState<string | null>(null);
 
     const spec: DashboardSpec = {
-      header: { crumbs: ['library', 'nl-single@2'], chips: [{ label: 'published' }] },
+      header: {
+        crumbs: ['library', 'nl-single@2'],
+        chips: [{ label: 'v2' }, { label: 'published', variant: 'outline' }],
+        actions: [
+          { id: 'version', options: ['v1', 'v2'], value: 'v2' },
+          {
+            id: 'more',
+            label: 'More',
+            icon: 'more',
+            menu: true,
+            options: ['versions', 'arguments', 'export'],
+            optionLabels: { versions: 'Versions', arguments: 'Arguments', export: 'Export YAML' },
+          },
+        ],
+      },
       rows: [],
       tab,
       tabAction: 'tab',
