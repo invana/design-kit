@@ -14,7 +14,7 @@ import {
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Forms/Showcase/Complex',
+  title: 'Forms/Generated/Groups',
   parameters: { layout: 'centered' },
 };
 export default meta;
@@ -117,7 +117,7 @@ const defaultValues = {
   },
 };
 
-export const Complex: Story = {
+export const Groups: Story = {
   render: function Render() {
     const form = useForm({ defaultValues });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);

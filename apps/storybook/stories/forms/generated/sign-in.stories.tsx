@@ -5,7 +5,7 @@ import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, Car
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Forms/Examples/Login',
+  title: 'Forms/Generated/Sign In',
   parameters: { layout: 'centered' },
 };
 export default meta;
@@ -22,7 +22,7 @@ const defaultValues = {
   login: { email: '', password: '', remember: true },
 };
 
-export const Login: Story = {
+export const SignIn: Story = {
   render: function Render() {
     const form = useForm({ defaultValues, mode: 'onTouched' });
     const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);

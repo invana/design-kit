@@ -1,10 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
-import { SettingsPanel, type ColorPreset, type FieldConfig } from '@invana/forms';
+import {
+  SettingsPanel,
+  type ColorPreset,
+  type FieldConfig,
+  type GroupConfig,
+} from '@invana/forms';
 
 /**
- * Sectioned settings panel in the style of a canvas / diagram node-style
- * inspector, built with the reusable `SettingsPanel` component. The field set
+ * A docked inspector: the dense side panel beside a canvas or a graph, built
+ * with `SettingsPanel` at `size="xs"`. The field set
  * is the real `NodeStyle` editor schema (as used by the Invana canvas building
  * studio): grouped `FieldConfig`s across **Geometry**, **Background**,
  * **Stroke** and **Label** sections, mixing color pickers with presets, numeric
@@ -17,7 +22,7 @@ import { SettingsPanel, type ColorPreset, type FieldConfig } from '@invana/forms
  * `form.watch`.
  */
 const meta: Meta = {
-  title: 'Forms/Showcase/SettingsPanel',
+  title: 'Forms/Generated/Inspector',
   parameters: { layout: 'centered' },
 };
 export default meta;
@@ -181,6 +186,11 @@ function nodeStyleFields(shapeKind: ShapeKind): FieldConfig[] {
   ];
 }
 
+const GROUP_CONFIG: GroupConfig[] = [
+  { id: 'Geometry', badges: [{ label: 'edited' }] },
+  { id: 'Label', badges: [{ label: 'optional', variant: 'outline' }] },
+];
+
 const defaultValues = {
   style: {
     shapeKind: 'circle' as ShapeKind,
@@ -206,7 +216,7 @@ const defaultValues = {
   },
 };
 
-export const CanvasSettings: Story = {
+export const Inspector: Story = {
   render: function Render() {
     const form = useForm({ defaultValues });
     // Watch the shape kind so the Geometry section swaps its numerics live.
@@ -218,8 +228,9 @@ export const CanvasSettings: Story = {
         form={form}
         name="style"
         fields={nodeStyleFields(shapeKind)}
+        groupConfig={GROUP_CONFIG}
         labelPosition="top"
-        size="sm"
+        size="xs"
         columns={2}
         className="w-[360px]"
       />

@@ -4,7 +4,7 @@ import { ParamRow, type ParamSource } from '@invana/forms';
 import { PanelBox, Badge } from '@invana/ui';
 
 const meta: Meta<typeof ParamRow> = {
-  title: 'Forms/Examples/ParamRow',
+  title: 'Forms/Manual/Param Row',
   component: ParamRow,
   parameters: { layout: 'padded' },
 };
@@ -65,6 +65,7 @@ const INITIAL: Param[] = [
  * hidden, because the contract's full surface is the point.
  */
 export const Default: Story = {
+  name: 'Param Row',
   render: function Render() {
     const [params, setParams] = React.useState(INITIAL);
     const patch = (i: number, next: Partial<Param>) =>
