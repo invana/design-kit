@@ -72,9 +72,12 @@ export interface AppLayoutV2Props {
 const DEFAULT_SIDEBAR = { defaultSize: "250px", minSize: "150px", maxSize: "500px", collapsible: true };
 const DEFAULT_TERMINAL = { defaultSize: "300px", minSize: "100px", maxSize: "600px", collapsible: true };
 const DEFAULT_AUXILIARY = { defaultSize: "300px", minSize: "200px", maxSize: "600px", collapsible: true };
-const DEFAULT_EDITOR = { defaultSize: "600px", minSize: "400px" };
+// Main and the areas that wrap it carry no default size: a fixed default beside a
+// side panel's makes the library rescale both into percentages, so neither holds
+// its pixels. Without one, the side panels keep theirs and main takes the rest.
+const DEFAULT_EDITOR = { minSize: "400px" };
 const DEFAULT_EDITOR_AREA = { defaultSize: "500px", minSize: "300px" };
-const DEFAULT_LEFT_MAIN_AREA = { defaultSize: "800px", minSize: "400px" };
+const DEFAULT_LEFT_MAIN_AREA = { minSize: "400px" };
 
 export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   className,
@@ -147,7 +150,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   const editorPanel = (
     <ResizablePanel
       id={panelId("editor-panel")}
-      defaultSize={mainSection.defaultSize ?? DEFAULT_EDITOR.defaultSize}
+      defaultSize={mainSection.defaultSize}
       minSize={mainSection.minSize ?? DEFAULT_EDITOR.minSize}
     >
       <div className="h-full overflow-auto bg-card border-l border-r">{mainSection.content}</div>
@@ -232,7 +235,6 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
         )}
         <ResizablePanel
           id={panelId("main-center-area")}
-          defaultSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={(leftSection || rightSection) ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
           {editorWithBottom(false, false, "main-center-vertical")}
@@ -257,7 +259,6 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
         )}
         <ResizablePanel
           id={panelId("main-right-area")}
-          defaultSize={leftSection ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={leftSection ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
           {editorWithBottom(false, true, "main-right-vertical")}
@@ -270,7 +271,6 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       <ResizablePanelGroup orientation="horizontal" id={panelId("main-layout")}>
         <ResizablePanel
           id={panelId("left-main-area")}
-          defaultSize={rightSection ? DEFAULT_LEFT_MAIN_AREA.defaultSize : undefined}
           minSize={rightSection ? DEFAULT_LEFT_MAIN_AREA.minSize : undefined}
         >
           {editorWithBottom(true, false, "left-main-vertical")}
