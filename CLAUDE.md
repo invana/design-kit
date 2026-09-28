@@ -136,6 +136,9 @@ gap in the kit, not a one-off in the design.
 - `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
+- `docs/TODO.md` tracks every component planned by the Assistant Package RFC, across packages:
+  folder, change, status, tier, and the assistant's preset registry. Flip a row's `Status` in the
+  same commit that ships or changes the component.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
 - Invana-domain composites (emissions, thinkings, citations) belong in
