@@ -82,7 +82,7 @@ import {
 import { useState } from 'react';
 
 const meta: Meta<typeof AppLayoutV2> = {
-  title: 'Themes/AppV2',
+  title: 'Themes/AppV2/Explorer Shell',
   component: AppLayoutV2,
   parameters: { layout: 'fullscreen' },
 };

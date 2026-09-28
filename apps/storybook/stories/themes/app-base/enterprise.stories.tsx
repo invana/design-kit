@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 const meta: Meta<typeof AppLayoutBase> = {
-  title: 'Themes/AppBase',
+  title: 'Themes/AppBase/Enterprise',
   component: AppLayoutBase,
   parameters: {
     layout: 'fullscreen',

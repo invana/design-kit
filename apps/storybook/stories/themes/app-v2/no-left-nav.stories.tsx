@@ -3,7 +3,7 @@ import { AppLayoutV2, type AppLayoutV2Props } from "@invana/themes/app-v2/layout
 import { GitBranch, Terminal as TerminalIcon } from "lucide-react";
 
 const meta: Meta<typeof AppLayoutV2> = {
-  title: 'Themes/AppV2',
+  title: 'Themes/AppV2/No Left Nav',
   component: AppLayoutV2,
   parameters: {
     layout: 'fullscreen',

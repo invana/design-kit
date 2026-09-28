@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 const meta: Meta<typeof AppLayoutV2> = {
-  title: 'Themes/AppV2',
+  title: 'Themes/AppV2/Default',
   component: AppLayoutV2,
   parameters: {
     layout: 'fullscreen',
