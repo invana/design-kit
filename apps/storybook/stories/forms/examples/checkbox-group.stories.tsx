@@ -12,7 +12,7 @@ import {
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Examples/Checkbox Group',
+  title: 'Forms/Examples/Checkbox Group',
   parameters: { layout: 'centered' },
 };
 export default meta;

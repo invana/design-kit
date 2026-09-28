@@ -15,7 +15,7 @@ import {
  * `size` prop.
  */
 const meta: Meta = {
-  title: 'Form Generator/Showcase/Properties Panel',
+  title: 'Forms/Showcase/Properties Panel',
   parameters: { layout: 'centered' },
 };
 export default meta;

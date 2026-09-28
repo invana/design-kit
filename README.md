@@ -90,7 +90,7 @@ reflects unbuilt source — no need to rebuild packages while iterating.
    helper for class merging — avoid hardcoded colors so all themes work.
 3. Add a Storybook story for new components. Stories live in `apps/storybook/stories/`,
    one story per file, organized under `ui/` (mirroring `packages/ui/src/components/`),
-   `form-generator/`, `data-tables/`, `themes/`, and `others/`. Story titles mirror the
+   `forms/`, `data-tables/`, `themes/`, and `others/`. Story titles mirror the
    folder path (e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`).
 4. Run `pnpm lint`, `pnpm check-types`, and `pnpm build` before opening a PR.
 5. Open a PR against `main`. Commits are not created on your behalf — review the diff and

@@ -17,7 +17,7 @@ import { SettingsPanel, type ColorPreset, type FieldConfig } from '@invana/forms
  * `form.watch`.
  */
 const meta: Meta = {
-  title: 'Form Generator/Showcase/SettingsPanel',
+  title: 'Forms/Showcase/SettingsPanel',
   parameters: { layout: 'centered' },
 };
 export default meta;

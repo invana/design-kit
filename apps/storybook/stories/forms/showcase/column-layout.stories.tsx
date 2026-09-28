@@ -5,7 +5,7 @@ import { Button, Eyebrow, TypographyH6 } from '@invana/ui';
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Showcase/Column Layout',
+  title: 'Forms/Showcase/Column Layout',
   parameters: { layout: 'padded' },
 };
 export default meta;

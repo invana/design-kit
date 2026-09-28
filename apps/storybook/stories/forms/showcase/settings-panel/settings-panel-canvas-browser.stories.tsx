@@ -707,7 +707,7 @@ function EditorForm({
 }
 
 const meta: Meta = {
-  title: 'Form Generator/Showcase/SettingsPanel/Canvas Browser',
+  title: 'Forms/Showcase/SettingsPanel/Canvas Browser',
   parameters: { layout: 'centered' },
 };
 export default meta;

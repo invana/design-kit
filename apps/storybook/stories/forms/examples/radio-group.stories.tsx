@@ -12,7 +12,7 @@ import {
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Examples/Radio Group',
+  title: 'Forms/Examples/Radio Group',
   parameters: { layout: 'centered' },
 };
 export default meta;

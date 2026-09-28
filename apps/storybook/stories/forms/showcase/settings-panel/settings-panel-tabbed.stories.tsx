@@ -13,7 +13,7 @@ import { SlidersHorizontal, Info } from 'lucide-react';
  * fill the tab instead of carrying a fixed width.
  */
 const meta: Meta = {
-  title: 'Form Generator/Showcase/SettingsPanel/Tabbed',
+  title: 'Forms/Showcase/SettingsPanel/Tabbed',
   parameters: { layout: 'centered' },
 };
 export default meta;

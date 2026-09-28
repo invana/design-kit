@@ -5,7 +5,7 @@ import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, Car
 import { Form, FormField, type FieldConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Examples/Login',
+  title: 'Forms/Examples/Login',
   parameters: { layout: 'centered' },
 };
 export default meta;

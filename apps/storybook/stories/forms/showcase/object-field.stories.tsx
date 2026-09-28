@@ -5,7 +5,7 @@ import { Button, Eyebrow } from '@invana/ui';
 import { Form, FormField, type FieldConfig, type RowConfig } from '@invana/forms';
 
 const meta: Meta = {
-  title: 'Form Generator/Showcase/Object Field',
+  title: 'Forms/Showcase/Object Field',
   parameters: { layout: 'padded' },
 };
 export default meta;
