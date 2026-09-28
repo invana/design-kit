@@ -20,6 +20,7 @@ export * from './navigation-menu';
 export * from './pagination';
 export * from './popover';
 export * from './progress';
+export * from './questionnaire';
 export * from './resizable';
 export * from './scroll-area';
 export * from './segmented-control';
