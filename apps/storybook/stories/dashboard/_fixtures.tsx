@@ -16,13 +16,12 @@ import {
 } from 'lucide-react';
 
 /**
- * Shared scaffolding for the six dashboard variants.
+ * Shared scaffolding for the dashboard stories — two reports, two forms.
  *
- * The six artboards are one layout repeated, so the stories share everything the
- * designs share — the flow renderer, the icon set, the run's own trace — and
- * each file carries only what makes its surface different. If a fixture has to
- * be forked to render one of them, that is a difference the schema is not
- * expressing yet.
+ * The stories share everything the surfaces share — the flow renderer, the
+ * icon set, the run's own trace — and each file carries only what makes its
+ * surface different. If a fixture has to be forked to render one of them, that
+ * is a difference the schema is not expressing yet.
  */
 
 export const ICONS = {
@@ -150,17 +149,7 @@ export const RUN_LOG = [
   { time: '05.50', level: 'info' as const, source: 'import_dataset', message: 'lane 3 · 400 Order, 400 FOR' },
 ];
 
-/** Every step dashboard ends with the same three right-hand panels but one. */
-export const WHERE_IT_SITS = (task: string, lane: string) => ({
-  rows: [
-    { label: 'run', value: 'orders.csv → Brokerage.Order' },
-    { label: 'plan task', value: task },
-    { label: 'lane', value: lane },
-    { label: 'parent', value: 'root run' },
-  ],
-});
-
-// ── the shell the six stories render into ──────────────────────────────────
+// ── the shell the stories render into ──────────────────────────────────
 
 export function Surface({
   children,
@@ -177,4 +166,20 @@ export function Surface({
       </div>
     </div>
   );
+}
+
+// ── a record that arrives, for the form stories ────────────────────────────
+
+/**
+ * `record` after `ms`, `null` until then — a fetch, without a server. The form
+ * stories start empty and fill when it lands, which is the order a real editor
+ * sees: the page draws, then the data arrives.
+ */
+export function useLoaded<T>(record: T, ms = 600): T | null {
+  const [loaded, setLoaded] = React.useState<T | null>(null);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoaded(record), ms);
+    return () => clearTimeout(timer);
+  }, [record, ms]);
+  return loaded;
 }
