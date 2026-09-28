@@ -13,7 +13,7 @@ import {
   ChatSessionTaskGroup,
   ChatSessionTaskRow,
   type ChatSessionTaskStatus,
-} from "@invana/ui";
+} from "@invana/assistant";
 import {
   Select,
   SelectContent,
@@ -519,7 +519,7 @@ function AgentConsoleDemo() {
 }
 
 const meta: Meta<typeof ChatSession> = {
-  title: "UI/UI Extended/ChatSession",
+  title: "Assistant/Conversations/ChatSession",
   component: ChatSession,
   parameters: { layout: "centered" },
   render: () => <AgentConsoleDemo />,

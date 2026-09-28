@@ -49,6 +49,8 @@ function RunningDots() {
  *
  * Presentational only — no data fetching or state — so it composes over any
  * backend.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionMessage({
   role,

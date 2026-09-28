@@ -4,7 +4,7 @@ import {
   ChatSessionComposer,
   ChatSessionMessage,
   ChatSessionMessageOptions,
-} from "@invana/ui";
+} from "@invana/assistant";
 import {
   Select,
   SelectContent,
@@ -234,7 +234,7 @@ function ChatSessionStreamingDemo() {
 }
 
 const meta: Meta<typeof ChatSession> = {
-  title: "UI/UI Extended/ChatSession",
+  title: "Assistant/Conversations/ChatSession",
   component: ChatSession,
   parameters: { layout: "centered" },
   render: () => <ChatSessionStreamingDemo />,

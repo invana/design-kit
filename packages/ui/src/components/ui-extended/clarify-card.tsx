@@ -46,6 +46,8 @@ export interface ClarifyCardProps
  * holds, which is why `detail` exists and why `footnote` is worth saying out
  * loud. A card that offered invented options would undo the grounding the rest
  * of the system is built on.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
   (

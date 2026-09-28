@@ -1,0 +1,82 @@
+{
+  "id": "session-health-researcher",
+  "title": "Are Friday discharges after hip replacement readmitted more often?",
+  "turns": [
+    { "id": "t1", "role": "analyst", "text": "Are patients discharged on a Friday after a hip replacement readmitted more often?" },
+    { "id": "t2", "role": "assistant", "kind": "ask", "stage": "frame", "state": "answered",
+      "ask": { "preset": "confirm",
+        "question": "I'll count a readmission as any **unplanned** admission within **30 days** of discharge, at any of our three hospitals.",
+        "yes": "Use this", "no": "Change definition", "default": true },
+      "value": true },
+    { "id": "t3", "role": "assistant", "kind": "ask", "stage": "check", "state": "answered",
+      "ask": { "preset": "single",
+        "question": "318 of 4,912 episodes have a discharge date but no time. The day of the week is still known.",
+        "options": [
+          { "value": "keep", "label": "Keep them", "detail": "recommended" },
+          { "value": "exclude", "label": "Exclude them" } ],
+        "default": "keep" },
+      "value": "keep" },
+    { "id": "t4", "role": "assistant", "kind": "answer", "state": "complete", "flow": "compare", "pattern": "comparison",
+      "label": "chart", "title": "30-day readmission by discharge day",
+      "envelope": { "scope": ["Elective primary hip", "Jan 2022 – Jun 2026", "3 hospitals"],
+        "grounding": { "records": 4912, "noun": "episodes" }, "freshness": "27 Sep" },
+      "blocks": [
+        { "preset": "bars", "unit": "%", "highlight": "F",
+          "groups": ["M", "T", "W", "T", "F", "S", "S"],
+          "series": [{ "name": "30-day readmission", "values": [6.1, 5.8, 6.0, 6.4, 8.2, 7.9, 7.1] }],
+          "target": { "value": 6.1, "label": "avg" } },
+        { "preset": "grid", "tiles": [
+          { "label": "Friday", "value": "8.2%", "delta": "n = 1,061" },
+          { "label": "Mon–Thu", "value": "6.1%", "delta": "n = 3,322" },
+          { "label": "Unadjusted OR", "value": "1.38", "delta": "95% CI 1.08–1.76" } ] } ] },
+    { "id": "t5", "role": "analyst", "text": "Could that just be sicker patients going home on Fridays?" },
+    { "id": "t6", "role": "assistant", "kind": "ask", "stage": "analyse", "state": "answered",
+      "ask": { "preset": "multi", "question": "Adjust for",
+        "options": [
+          { "value": "age-sex", "label": "Age and sex" },
+          { "value": "asa", "label": "ASA grade" },
+          { "value": "charlson", "label": "Charlson comorbidity index" },
+          { "value": "deprivation", "label": "Deprivation decile" },
+          { "value": "los", "label": "Length of stay", "note": "on the causal path" } ],
+        "default": ["age-sex", "asa", "charlson", "deprivation"] },
+      "value": ["age-sex", "asa", "charlson", "deprivation"] },
+    { "id": "t7", "role": "assistant", "kind": "ask", "stage": "analyse", "state": "answered",
+      "ask": { "preset": "quick", "question": "Confidence level",
+        "options": [{ "value": "90", "label": "90%" }, { "value": "95", "label": "95%" }, { "value": "99", "label": "99%" }],
+        "default": "95" },
+      "value": "95" },
+    { "id": "t8", "role": "assistant", "kind": "answer", "state": "complete", "flow": "experiment", "pattern": "readout",
+      "label": "readout", "title": "Friday vs Mon–Thu, adjusted",
+      "envelope": { "method": "logistic regression · 4,912 episodes · 4 covariates",
+        "caveats": [{ "label": "observational", "text": "Unmeasured factors, such as weekend community physio cover, could explain the rest. This shows an association, not a cause." }] },
+      "blocks": [
+        { "preset": "metric", "label": "Adjusted odds ratio", "value": "1.29", "delta": "95% CI 1.04–1.60 · p = 0.02" },
+        { "preset": "narrative", "text": "After adjustment the gap narrows but **stays**. Case mix explains about a quarter of it." } ] },
+    { "id": "t9", "role": "analyst", "text": "What do the notes of readmitted Friday patients say?" },
+    { "id": "t10", "role": "assistant", "kind": "answer", "state": "complete", "flow": "qual", "pattern": "memo",
+      "label": "themes", "title": "87 Friday readmissions",
+      "envelope": { "grounding": { "records": 87, "noun": "notes" },
+        "caveats": [{ "label": "coding", "text": "Themes were coded by the model and checked by hand on 30 notes, with 27 agreeing." }] },
+      "blocks": [
+        { "preset": "ranked", "items": [
+          { "label": "No physio visit", "value": 36 }, { "label": "Pain relief ran out", "value": 25 },
+          { "label": "Wound queries", "value": 17 }, { "label": "Fall at home", "value": 9 } ] },
+        { "preset": "narrative", "text": "“No physio until Tuesday, couldn't manage the stairs” is the most common story. Most readmissions happen on day 3 or 4, which is the weekend." },
+        { "preset": "citations", "sources": [
+          { "label": "Readmission clerking notes", "count": 87 },
+          { "label": "Discharge letters", "count": 87 } ] } ] },
+    { "id": "t11", "role": "assistant", "kind": "answer", "state": "complete",
+      "label": "proposal", "title": "from this thread",
+      "blocks": [
+        { "preset": "proposal",
+          "rows": [
+            { "label": "Pilot", "value": "Physio visit within 48 h of Friday discharge" },
+            { "label": "Where", "value": "Hospital B, 12 weeks" },
+            { "label": "Readout", "value": "Weekly, 30-day readmission" } ],
+          "consequence": "Registers a pilot in the quality-improvement log with a weekly readout. No change for patients until clinical governance approves.",
+          "actions": [
+            { "id": "register-pilot", "label": "Register pilot", "variant": "primary" },
+            { "id": "edit", "label": "Edit", "variant": "secondary" } ] } ],
+      "suggestions": ["How many patients would the pilot need to detect a 2-point drop?", "Does the same pattern hold for knees?"] }
+  ]
+}

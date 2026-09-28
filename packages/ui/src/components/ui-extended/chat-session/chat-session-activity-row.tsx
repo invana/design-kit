@@ -6,6 +6,8 @@ import { cn } from "../../../lib/utils";
  * status dot, prompt caret, spinner — occupies this fixed-width column so all
  * body text starts on one left edge ({@link ChatSessionPromptRow},
  * {@link ChatSessionProgressLine} and this row all use it).
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const chatSessionGutterClass = "w-3.5 shrink-0 flex justify-center";
 
@@ -55,6 +57,8 @@ export interface ChatSessionActivityRowProps {
  * `actions` for the re-run / view-query / copy / vote toolbar.
  *
  * Presentational only — no data fetching or state.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionActivityRow({
   status = "default",
@@ -103,6 +107,8 @@ export interface ChatSessionActivitySubLineProps {
  * An indented detail line under an activity row — "└ Backgrounded agent
  * (↓ to manage)", an interruption note, a one-line result. Render inside the
  * row's `footer` (or directly after the body in `children`).
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionActivitySubLine({
   elbow,

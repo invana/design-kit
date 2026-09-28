@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button, CannotAnswerCard, ChatSessionTaskRow, DiagnosisCard, Eyebrow, RepairNote, RetryNote } from '@invana/ui';
+import { Button, CannotAnswerCard, DiagnosisCard, Eyebrow, RepairNote, RetryNote } from '@invana/ui';
+import { ChatSessionTaskRow } from '@invana/assistant';
 
 const meta: Meta<typeof CannotAnswerCard> = {
   title: 'UI/UI Extended/RunOutcomes',

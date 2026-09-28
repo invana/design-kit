@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ClarifyCard, Button } from '@invana/ui';
+import { Button } from '@invana/ui';
+import { ClarifyCard } from '@invana/assistant';
 import { useState } from 'react';
 
 const meta: Meta<typeof ClarifyCard> = {
-  title: 'UI/UI Extended/ClarifyCard',
+  title: 'Assistant/Asks/ClarifyCard',
   component: ClarifyCard,
   parameters: { layout: 'padded' },
 };

@@ -5,7 +5,7 @@ import {
   ChatSessionStatusBar,
   ChatSessionTaskGroup,
   ChatSessionTaskRow,
-} from "@invana/ui";
+} from "@invana/assistant";
 import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
@@ -110,7 +110,7 @@ function TaskDashboardDemo() {
 }
 
 const meta: Meta<typeof ChatSessionTaskGroup> = {
-  title: "UI/UI Extended/ChatSession",
+  title: "Assistant/Conversations/ChatSession",
   component: ChatSessionTaskGroup,
   parameters: { layout: "centered" },
   render: () => <TaskDashboardDemo />,

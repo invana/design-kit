@@ -27,6 +27,8 @@ export interface ChatSessionDisclosureProps {
  * `overflow-x-auto` body, matching the transcript's nested-detail grammar.
  *
  * Controlled (`open` + `onOpenChange`) or uncontrolled (`defaultOpen`).
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionDisclosure({
   label,

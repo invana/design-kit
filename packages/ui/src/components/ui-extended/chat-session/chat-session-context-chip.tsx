@@ -23,6 +23,8 @@ export interface ChatSessionContextChipProps
  *
  * It states the binding in words. A highlight on the canvas alone would leave
  * the reader guessing what scope their question has.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionContextChip({
   icon,

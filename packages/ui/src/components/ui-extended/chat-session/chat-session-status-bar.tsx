@@ -13,6 +13,8 @@ export interface ChatSessionStatusBarProps {
  * The slim bar under a chat session's composer — mode indicator, view
  * switches, agent counts, keyboard hints. Two slots, muted by default; put
  * interactive elements (buttons, toggles) straight into the slots.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionStatusBar({
   start,

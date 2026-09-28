@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { ChatSessionComposer, RichSelect } from '@invana/ui';
+import { RichSelect } from '@invana/ui';
+import { ChatSessionComposer } from '@invana/assistant';
 import { ArrowUp, Globe, Settings2 } from 'lucide-react';
 
 const meta: Meta<typeof RichSelect> = {

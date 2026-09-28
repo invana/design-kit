@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EmissionCard, CitationMarker, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@invana/ui';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@invana/ui';
+import { EmissionCard, CitationMarker } from '@invana/assistant';
 
 const meta: Meta<typeof EmissionCard> = {
-  title: 'UI/UI Extended/EmissionCard',
+  title: 'Assistant/Answers/EmissionCard',
   component: EmissionCard,
   parameters: { layout: 'padded' },
 };

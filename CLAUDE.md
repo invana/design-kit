@@ -32,7 +32,7 @@ Per-package scripts of note:
 - `@invana/stoybook`: `dev` = `storybook dev -p 6009`, `build-storybook` produces `storybook-static/`
 - `@invana/styling`: ships source CSS directly — no build step
 
-There is no test runner wired into root scripts; `vitest` is installed in `ui` and `storybook` but no `test` script exists. Don't claim test commands that aren't there.
+There is no test runner wired into root scripts. `@invana/assistant` has the one `test` script (`pnpm --filter @invana/assistant test`, vitest in node): it checks the grammar ids against the preset registry, runs `validate()` on every session fixture, and exercises `applyPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
 
 ## Workspace layout
 
@@ -41,11 +41,12 @@ packages/
   styling/   → @invana/styling   (Tailwind v4 design tokens, themes, source CSS only)
   ui/        → @invana/ui        (React component library, shadcn/Radix based)
   themes/    → @invana/themes    (App layout shells: AppLayoutBase, app-v1, app-v2)
+  assistant/ → @invana/assistant (JSON-driven analyst conversation: thread, asks, answers, follow-ups)
 apps/
   storybook/ → @invana/stoybook  (Storybook 10 + Vite consumer of the three packages)
 ```
 
-Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. Never invert this — `styling` must remain free of React, `ui` must not import from `themes`.
+Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. `assistant` depends on `ui`, `charts`, `tables`, `forms` and `styling` (peer + dev, workspace:*) and nothing depends on it — the dashboard included. Never invert this — `styling` must remain free of React, `ui` must not import from `themes` or `assistant`.
 
 ## Architecture
 
@@ -86,7 +87,7 @@ The **tag** (`v*`) is what completes a release — pushing the commit alone does
 | --- | --- | --- |
 | `resolve` | — | Works out the target ref/tag once, so the rest share one answer |
 | `publish` | `resolve` | `turbo run build --filter="./packages/*"` then `pnpm -r publish` to **npm** with provenance (workspace deps rewritten to `^<version>`); uploads `packages/*/dist` as an artifact |
-| `dist-branches` | `publish` | Matrix over all 8 packages — force-pushes each to `releases/<pkg>` |
+| `dist-branches` | `publish` | Matrix over all 9 packages — force-pushes each to `releases/<pkg>` |
 | `notes` | `resolve` | git-cliff (`cliff.toml`) over the tag range → creates/edits the **GitHub Release** |
 | `storybook` | `resolve` | Builds and deploys the Storybook site to GitHub Pages |
 
@@ -123,7 +124,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
-- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
+- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, plus `assistant/sessions/` — one story per grammar session, rendering `<Conversation spec={fixture} />` and nothing else), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The forms section follows the same rule — `"Forms/Manual/Composed Form"`, `"Forms/Generated/Dialog"`.
 
 ## Where demand comes from
@@ -141,10 +142,22 @@ gap in the kit, not a one-off in the design.
   same commit that ships or changes the component.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
-- Invana-domain composites (emissions, thinkings, citations) belong in
-  `@invana/ui/components/ui-extended/` — they need no external dep, and the whole kit is Invana's.
-  Only a component needing an external JS library gets its own package (see the placement rule
-  above); `@invana/editor` (CodeMirror 6) and `@invana/charts` (uPlot) are the current examples.
+- **Where a component goes** — ask in order and stop at the first yes (Assistant Package RFC):
+  needs an external JS library the other packages don't have → its own package
+  (`@invana/editor`, `@invana/charts`); encodes numbers as marks → `@invana/charts`; rows and
+  columns of records → `@invana/tables`; only meaningful inside a conversation turn, relative to
+  a prompt → `@invana/assistant`; anything else, including anything a dashboard, run view,
+  review queue or report also shows → `@invana/ui`. So `TraceList`, `ExchangeRecord`,
+  `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
+- **`@invana/assistant` is JSON only.** Studio renders `<Conversation spec onEvent />`; the API
+  sends a `ConversationSpec` then patches (`applyPatch`), the UI sends `ConversationEvent`s.
+  Presets, patterns and flows are ids from Analyst Flow Grammar, copied into
+  `packages/assistant/src/grammar/` — a new preset goes into the grammar first, then its
+  renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
+  `conversations/registry.ts`. An unbuilt preset renders a labelled placeholder; a renderer reads
+  only its preset's options — a screen that needs more is a grammar change, not a prop.
+  Envelope fields (scope, grounding, freshness, method, caveats) sit on the answer, never as
+  blocks. Answer patterns are typed recipes and stories, not exports.
 - **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
   charts → ui, and ui gets no re-exports. Time series are uPlot on the internal chart frame
   (`packages/charts/src/base/`), which resolves tokens for the canvas and redraws on theme or

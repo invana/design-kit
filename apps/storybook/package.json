@@ -85,6 +85,7 @@
     "zod": "^4.4.3",
     "@invana/editor": "workspace:*",
     "@invana/dashboard": "workspace:*",
-    "@invana/charts": "workspace:*"
+    "@invana/charts": "workspace:*",
+    "@invana/assistant": "workspace:*"
   }
 }

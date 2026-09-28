@@ -1,0 +1,69 @@
+{
+  "name": "@invana/assistant",
+  "version": "0.0.31",
+  "description": "Invana Design System - JSON-driven analyst assistant: thread, asks, answers and follow-ups",
+  "homepage": "https://github.com/invana/design-kit#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "design-system",
+    "react",
+    "assistant",
+    "invana/assistant"
+  ],
+  "bugs": {
+    "url": "https://github.com/invana/design-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/assistant"
+  },
+  "license": "MIT",
+  "author": "Ravi Raja Merugu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepare": "pnpm run build",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit --allowImportingTsExtensions -p tsconfig.lib.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@invana/charts": "workspace:*",
+    "@invana/forms": "workspace:*",
+    "@invana/styling": "workspace:*",
+    "@invana/tables": "workspace:*",
+    "@invana/ui": "workspace:*",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "devDependencies": {
+    "@invana/charts": "workspace:*",
+    "@invana/forms": "workspace:*",
+    "@invana/styling": "workspace:*",
+    "@invana/tables": "workspace:*",
+    "@invana/ui": "workspace:*",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.10"
+  }
+}

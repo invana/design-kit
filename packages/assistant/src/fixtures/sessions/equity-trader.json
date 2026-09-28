@@ -1,0 +1,101 @@
+{
+  "id": "session-equity-trader",
+  "title": "Explaining a bad week, then positioning into the CPI print",
+  "turns": [
+    { "id": "t1", "role": "analyst", "text": "My book lost £1.4M this week while the model portfolio was flat. What happened?" },
+    { "id": "t2", "role": "assistant", "kind": "ask", "stage": "frame", "state": "answered",
+      "ask": { "preset": "single", "question": "Which P&L should I explain?",
+        "options": [
+          { "value": "total", "label": "Total, mark-to-market plus realised", "detail": "pnl.total" },
+          { "value": "mtm", "label": "Mark-to-market only", "detail": "pnl.mtm" },
+          { "value": "realised", "label": "Realised only", "detail": "pnl.realised" } ],
+        "default": "total", "hint": "Default: total, which matches the desk report" },
+      "value": "total" },
+    { "id": "t3", "role": "assistant", "kind": "answer", "state": "complete", "flow": "diagnose", "pattern": "bridge",
+      "label": "chart", "title": "P&L attribution, £M",
+      "trace": [
+        { "id": "load", "label": "Loaded positions and fills", "detail": "64 positions", "state": "done" },
+        { "id": "attribute", "label": "Attributed with factor model v4", "detail": "1.2 s", "state": "done" },
+        { "id": "compare", "label": "Compared with the model portfolio", "state": "done" } ],
+      "envelope": { "scope": ["22–26 Sep", "Book EQ-EU-LS", "64 positions", "vs model portfolio"],
+        "grounding": { "records": 3406, "noun": "fills" }, "freshness": "Fri 17:30 CET" },
+      "blocks": [
+        { "preset": "narrative", "text": "The loss is mostly the **semiconductor sleeve (−£0.9M)**. Market beta cost £0.3M, other stock-specific moves £0.4M, and FX gave back £0.2M." },
+        { "preset": "waterfall", "unit": "£M",
+          "steps": [
+            { "label": "beta", "value": -0.3 }, { "label": "semis", "value": -0.9 },
+            { "label": "other", "value": -0.4 }, { "label": "FX", "value": 0.2 } ],
+          "end": { "label": "week", "value": -1.4 } },
+        { "preset": "citations", "sources": [
+          { "label": "OMS fills, 22–26 Sep", "count": "3,406" },
+          { "label": "Risk factor returns, v4", "count": "5 days" } ] } ] },
+    { "id": "t4", "role": "analyst", "text": "Is the semis hit just beta, or something specific?" },
+    { "id": "t5", "role": "assistant", "kind": "answer", "state": "complete", "flow": "drivers", "pattern": "drivers",
+      "label": "ranked", "title": "semis sleeve, −£0.9M by source",
+      "envelope": { "method": "returns = Σ exposure × factor return + specific",
+        "caveats": [{ "label": "model fit", "text": "Factor model v4 explains 71% of this book's daily variance over 60 days. Treat the split as approximate." }] },
+      "blocks": [
+        { "preset": "ranked", "items": [
+          { "label": "Momentum", "value": -0.35, "display": "−0.35" },
+          { "label": "Industry", "value": -0.30, "display": "−0.30" },
+          { "label": "Helix Semi", "value": -0.20, "display": "−0.20" },
+          { "label": "Other names", "value": -0.05, "display": "−0.05" } ] },
+        { "preset": "narrative", "text": "About **70%** is factor exposure: the momentum unwind on Tuesday and a sector sell-off. The one stock-specific hit is **Helix Semi**, which cut guidance on Wednesday." } ] },
+    { "id": "t6", "role": "analyst", "text": "How would the book do if Thursday's CPI print surprises?" },
+    { "id": "t7", "role": "assistant", "kind": "ask", "stage": "analyse", "state": "answered",
+      "ask": { "preset": "form", "question": "Scenario inputs",
+        "fields": [
+          { "name": "surprise", "label": "CPI surprise", "type": "text", "unit": "pp", "default": "±0.3" },
+          { "name": "moves", "label": "Market moves", "type": "select", "default": "From past prints" },
+          { "name": "horizon", "label": "Horizon", "type": "select", "default": "1 day" } ],
+        "hint": "Past prints: 14 releases since 2022" },
+      "value": { "surprise": "±0.3", "moves": "From past prints", "horizon": "1 day" } },
+    { "id": "t8", "role": "assistant", "kind": "ask", "stage": "check", "state": "answered",
+      "ask": { "preset": "confirm",
+        "question": "A full revaluation of 64 positions and 1,812 option legs takes about **3 min** on the risk grid.",
+        "yes": "Full revaluation", "no": "Greeks first, instant", "default": false,
+        "hint": "Default: greeks now, full revaluation in the background" },
+      "value": false },
+    { "id": "t9", "role": "assistant", "kind": "answer", "state": "partial", "flow": "scenario", "pattern": "scenariot",
+      "label": "scenario", "title": "CPI surprise, 1-day P&L",
+      "envelope": { "caveats": [{ "label": "history", "text": "Market moves are drawn from 14 prints since 2022. The 2022 prints were larger shocks than any this year." }] },
+      "blocks": [
+        { "preset": "table",
+          "columns": [
+            { "key": "scenario", "label": "Scenario" },
+            { "key": "bund", "label": "Bund 10y", "align": "right" },
+            { "key": "stoxx", "label": "Stoxx 600", "align": "right" },
+            { "key": "pnl", "label": "Book P&L", "align": "right" } ],
+          "rows": [
+            { "scenario": "Hot, +0.3 pp", "bund": "+12 bp", "stoxx": "−1.8%", "pnl": { "value": "−£620k", "tone": "bad" } },
+            { "scenario": "In line", "bund": "+1 bp", "stoxx": "+0.2%", "pnl": "+£40k" },
+            { "scenario": "Soft, −0.3 pp", "bund": "−10 bp", "stoxx": "+1.1%", "pnl": { "value": "+£410k", "tone": "good" } } ] },
+        { "preset": "grid", "tiles": [
+          { "label": "1-day VaR, 99%", "value": "£1.1M", "delta": "73% of limit" },
+          { "label": "Net beta", "value": "0.38", "delta": "▲ 0.12 wk", "tone": "good" },
+          { "label": "Worst case", "value": "−£620k", "delta": "within limit" } ] } ] },
+    { "id": "t10", "role": "analyst", "text": "What did we do the last time CPI came in hot, back in 2019?" },
+    { "id": "t11", "role": "assistant", "kind": "answer", "state": "cannot", "flow": "entity",
+      "label": "outcome",
+      "blocks": [
+        { "preset": "cannot",
+          "reason": "Trade history starts in March 2021, when the desk moved to the current order system. 2019 isn't held.",
+          "remedy": "Load the legacy order archive (2015–2021) to answer this." } ],
+      "suggestions": ["Use the five hot prints from 2022–2024 instead"] },
+    { "id": "t12", "role": "assistant", "kind": "answer", "state": "complete",
+      "label": "proposal", "title": "from this thread",
+      "blocks": [
+        { "preset": "proposal",
+          "rows": [
+            { "label": "Draft order", "value": "Sell 40 Stoxx 600 Dec futures" },
+            { "label": "Effect", "value": "Net beta 0.38 → 0.21" },
+            { "label": "Hot-print P&L", "value": "−£620k → −£350k" },
+            { "label": "Alert", "value": "Momentum factor falls another 2σ" } ],
+          "consequence": "Creates a draft ticket in the order system and one alert. Nothing goes to market until you release the ticket.",
+          "actions": [
+            { "id": "create-draft-and-alert", "label": "Create draft and alert", "variant": "primary" },
+            { "id": "alert-only", "label": "Alert only", "variant": "secondary" },
+            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ],
+      "suggestions": ["Size the hedge to a VaR target instead", "Which names are most exposed to momentum?"] }
+  ]
+}

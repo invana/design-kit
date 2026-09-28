@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button, ChatSession, ChatSessionActivityRow, ChatSessionActivitySubLine, ChatSessionComposer, ChatSessionDisclosure, ChatSessionMessageOptions, ChatSessionProgressLine, ChatSessionPromptRow, ChatSessionStatusBar, ChatSessionTaskGroup, ChatSessionTaskRow, cn, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, type ChatSessionActivityStatus, type ChatSessionTaskStatus, TypographyH3, TypographyH6 } from "@invana/ui";
+import { Button, cn, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TypographyH3, TypographyH6 } from "@invana/ui";
+import { ChatSession, ChatSessionActivityRow, ChatSessionActivitySubLine, ChatSessionComposer, ChatSessionDisclosure, ChatSessionMessageOptions, ChatSessionProgressLine, ChatSessionPromptRow, ChatSessionStatusBar, ChatSessionTaskGroup, ChatSessionTaskRow, type ChatSessionActivityStatus, type ChatSessionTaskStatus } from "@invana/assistant";
 import {
   Select,
   SelectContent,
@@ -1432,7 +1433,7 @@ function SessionTaskTraceDemo() {
 }
 
 const meta: Meta<typeof ChatSession> = {
-  title: "UI/UI Extended/ChatSession",
+  title: "Assistant/Conversations/ChatSession",
   component: ChatSession,
   parameters: { layout: "fullscreen" },
   render: () => <SessionTaskTraceDemo />,

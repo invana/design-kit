@@ -20,16 +20,16 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| Conversation | `packages/assistant/src/conversations/conversation.tsx` | new | todo | today |
-| ConversationTurn | `packages/assistant/src/conversations/conversation-turn.tsx` | new | todo | today |
-| Preset registry | `packages/assistant/src/conversations/registry.ts` | new | todo | today |
-| Protocol types | `packages/assistant/src/protocol/types.ts` | new | todo | today |
-| Events | `packages/assistant/src/protocol/events.ts` | new | todo | today |
-| applyPatch | `packages/assistant/src/protocol/reduce.ts` | new | todo | today |
-| validate | `packages/assistant/src/protocol/validate.ts` | new | todo | today |
-| Grammar ids | `packages/assistant/src/grammar/` | new | todo | today |
-| Session fixtures | `packages/assistant/src/fixtures/sessions/` | new | todo | today |
-| Placeholder | `packages/assistant/src/conversations/placeholder.tsx` | new | todo | today |
+| Conversation | `packages/assistant/src/conversations/conversation.tsx` | new | done | today |
+| ConversationTurn | `packages/assistant/src/conversations/conversation-turn.tsx` | new | done | today |
+| Preset registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
+| Protocol types | `packages/assistant/src/protocol/types.ts` | new | done | today |
+| Events | `packages/assistant/src/protocol/events.ts` | new | done | today |
+| applyPatch | `packages/assistant/src/protocol/reduce.ts` | new | done | today |
+| validate | `packages/assistant/src/protocol/validate.ts` | new | done | today |
+| Grammar ids | `packages/assistant/src/grammar/` | new | done | today |
+| Session fixtures | `packages/assistant/src/fixtures/sessions/` | new | done | today |
+| Placeholder | `packages/assistant/src/conversations/placeholder.tsx` | new | done | today |
 
 ### Thread parts, moved from ui into conversations/
 
@@ -230,8 +230,8 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/dashboard | Panel kinds for the new charts | `packages/dashboard/src/panels/` | extend | partial | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
 | @invana/themes | None | `packages/themes/src/` | stays | done | today |
-| apps/storybook | Assistant section | `apps/storybook/stories/assistant/` | new | todo | today |
-| release.yml | dist-branches matrix | `.github/workflows/release.yml` | extend | partial | today |
+| apps/storybook | Assistant section | `apps/storybook/stories/assistant/` | new | done | today |
+| release.yml | dist-branches matrix | `.github/workflows/release.yml` | extend | done | today |
 
 ## Preset registry
 

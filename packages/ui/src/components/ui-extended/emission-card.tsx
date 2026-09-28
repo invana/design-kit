@@ -6,6 +6,9 @@ import { cn } from "../../lib/utils"
  * How an answer's records are rendered. A kind is a *body inside* the emission
  * card, never a block of its own (DS9) — so this names the body, it does not
  * pick a different container.
+ *
+ * Open: the names below are the common ones, and an assistant answer labels
+ * its card in the grammar's own words — `ranked`, `scenario`, `model check`.
  */
 export type EmissionKind =
   | "metric"
@@ -15,6 +18,7 @@ export type EmissionKind =
   | "prose"
   | "empty"
   | "html"
+  | (string & {})
 
 export interface EmissionHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -50,6 +54,8 @@ export interface EmissionCardProps
  * result, a scheduled answer (DS7). It is exported on its own so a surface that
  * already owns its container can still show the same header rather than
  * inventing a second one that drifts.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const EmissionHeader = React.forwardRef<
   HTMLDivElement,
@@ -93,6 +99,8 @@ EmissionHeader.displayName = "EmissionHeader"
  * object (DS6). It does not know what an Observation is, and it does not fetch,
  * re-render or re-query anything; switching templates is the caller's job,
  * handed in through `actions`.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
   (
@@ -133,6 +141,8 @@ EmissionCard.displayName = "EmissionCard"
 /**
  * The `prose` body's citation marker — the superscript that ties a clause to
  * the records behind it.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const CitationMarker = React.forwardRef<
   HTMLElement,

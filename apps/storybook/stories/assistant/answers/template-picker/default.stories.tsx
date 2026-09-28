@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TemplatePicker } from '@invana/ui';
+import { TemplatePicker } from '@invana/assistant';
 import { useState } from 'react';
 
 const meta: Meta<typeof TemplatePicker> = {
-  title: 'UI/UI Extended/TemplatePicker',
+  title: 'Assistant/Answers/TemplatePicker',
   component: TemplatePicker,
   parameters: { layout: 'padded' },
 };

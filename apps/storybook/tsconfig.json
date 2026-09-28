@@ -33,6 +33,8 @@
       "@invana/charts/*": ["../../packages/charts/src/*"],
       "@invana/tables": ["../../packages/tables/src"],
       "@invana/tables/*": ["../../packages/tables/src/*"],
+      "@invana/assistant": ["../../packages/assistant/src"],
+      "@invana/assistant/*": ["../../packages/assistant/src/*"],
       "@invana/styling": ["../../packages/styling/src"],
       "@invana/styling/*": ["../../packages/styling/src/*"]
     }
