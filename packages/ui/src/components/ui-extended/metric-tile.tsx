@@ -55,8 +55,11 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
    * answer turns on — the adjusted odds ratio, net revenue retention — set
    * large on the surface it sits in: no box, the label in sentence case over
    * it, the caption in mono under it, so it reads as a result, not a gauge.
+   * `figure` is one of a band of figures inside an answer — boxed like a tile
+   * but set like a small hero: the label in sentence case, the value in a
+   * larger sans, the caption in mono.
    */
-  variant?: "tile" | "hero"
+  variant?: "tile" | "hero" | "figure"
   /** A sparkline, or anything else that sits under the value. */
   children?: React.ReactNode
 }
@@ -92,13 +95,16 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
 export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
   ({ label, value, caption, tone, captionTone, meter, variant = "tile", className, children, ...props }, ref) => {
     const hero = variant === "hero"
+    const figure = variant === "figure"
     return (
     <div
       ref={ref}
       data-variant={variant}
       className={cn(
         "flex flex-col gap-px",
-        !hero && "border border-border bg-card px-3 py-2.5",
+        !hero && "border border-border bg-card",
+        variant === "tile" && "px-3 py-2.5",
+        figure && "px-2 py-1.5",
         className,
       )}
       {...props}
@@ -109,8 +115,9 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           interrupts. */}
       <span
         className={cn(
-          "truncate text-sm text-muted-foreground",
-          !hero && "font-semibold uppercase tracking-wide",
+          "truncate text-muted-foreground",
+          figure ? "text-xs" : "text-sm",
+          variant === "tile" && "font-semibold uppercase tracking-wide",
         )}
       >
         {label}
@@ -124,7 +131,9 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           // tabular digits.
           hero
             ? "text-3xl font-semibold leading-tight tracking-tight tabular-nums"
-            : "font-mono text-lg font-semibold leading-tight",
+            : figure
+              ? "text-xl font-semibold leading-tight tracking-tight tabular-nums"
+              : "font-mono text-lg font-semibold leading-tight",
           tone ? (TONE[tone] ?? "text-foreground") : undefined,
         )}
       >
@@ -133,8 +142,8 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       {caption != null ? (
         <span
           className={cn(
-            "text-sm",
-            hero && "font-mono",
+            figure ? "text-xs" : "text-sm",
+            (hero || figure) && "font-mono",
             captionTone ? (TONE[captionTone] ?? "text-muted-foreground") : "text-muted-foreground",
           )}
         >

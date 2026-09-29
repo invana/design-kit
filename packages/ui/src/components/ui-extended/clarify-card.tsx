@@ -44,6 +44,8 @@ export interface ClarifyCardProps
   step?: React.ReactNode
   /** How long it has been waiting — `parked 14 min`. */
   waiting?: React.ReactNode
+  /** When it settled — `just now`, `2 min ago`. At the header's right, after `waiting`. */
+  time?: React.ReactNode
   /** The question. One sentence. */
   question?: React.ReactNode
   /** The choices, as one Questionnaire item. Ignored when `children` is given. */
@@ -128,6 +130,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
       state = "pending",
       step,
       waiting,
+      time,
       question,
       options,
       value,
@@ -162,6 +165,9 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
           <span className="flex-1" />
           {waiting != null ? (
             <span className="shrink-0 text-muted-foreground">{waiting}</span>
+          ) : null}
+          {time != null ? (
+            <span className="shrink-0 text-muted-foreground">{time}</span>
           ) : null}
         </div>
 

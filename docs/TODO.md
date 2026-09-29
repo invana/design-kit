@@ -54,6 +54,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | --- | --- | --- | --- | --- |
 | ClarifyCard | `packages/assistant/src/asks/clarify-card.tsx` | move in | done | today |
 | ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | done | today |
+| ClarifyCard time (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | done | today |
 | ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | todo | today |
 | InterpretationStrip | `packages/assistant/src/asks/interpretation-strip.tsx` | new | todo | today |
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
@@ -222,6 +223,8 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | --- | --- | --- | --- | --- |
 | SegmentedControl solid and read-only (on SegmentedControl) | `packages/ui/src/components/ui/segmented-control.tsx` | extend | done | today |
 | MetricTile hero (on MetricTile) | `packages/ui/src/components/ui-extended/metric-tile.tsx` | extend | done | today |
+| MetricTile figure (on MetricTile) | `packages/ui/src/components/ui-extended/metric-tile.tsx` | extend | done | today |
+| PropertyList summary (on PropertyList) | `packages/ui/src/components/ui-extended/property-list.tsx` | extend | done | today |
 | CitationRow numbered (on CitationList) | `packages/ui/src/components/ui-extended/citation-list.tsx` | extend | done | today |
 | TraceList progress (on TraceList, TraceStep) | `packages/ui/src/components/ui-extended/trace-list.tsx` | extend | done | today |
 | CannotAnswerCard type sizes (on CannotAnswerCard) | `packages/ui/src/components/ui-extended/cannot-answer-card.tsx` | extend | done | today |

@@ -10,6 +10,11 @@ export interface PropertyListProps extends React.HTMLAttributes<HTMLDListElement
    * labels such as the answers to an ask.
    */
   labelWidth?: number | "auto" | (string & {})
+  /**
+   * `summary` sets the rows tight — a settled answer read at a glance, such as
+   * the values an ask was answered with, or a proposal's terms.
+   */
+  variant?: "default" | "summary"
   children?: React.ReactNode
 }
 
@@ -33,10 +38,11 @@ export interface PropertyRowProps
  * read as noise.
  */
 export const PropertyList = React.forwardRef<HTMLDListElement, PropertyListProps>(
-  ({ labelWidth = 78, className, style, children, ...props }, ref) => (
+  ({ labelWidth = 78, variant = "default", className, style, children, ...props }, ref) => (
     <dl
       ref={ref}
       data-label-width={labelWidth === "auto" ? "auto" : undefined}
+      data-variant={variant}
       className={cn(
         "group/property-list",
         labelWidth === "auto" ? "grid grid-cols-[max-content_minmax(0,1fr)] gap-x-3" : "flex flex-col",
@@ -62,7 +68,7 @@ export const PropertyRow = React.forwardRef<HTMLDivElement, PropertyRowProps>(
     <div
       ref={ref}
       className={cn(
-        "flex items-baseline gap-2 py-1",
+        "flex items-baseline gap-2 py-1 group-data-[variant=summary]/property-list:py-px",
         // An auto-width list is a grid; each row joins its columns.
         "group-data-[label-width=auto]/property-list:col-span-2 group-data-[label-width=auto]/property-list:grid group-data-[label-width=auto]/property-list:grid-cols-subgrid",
         className,
