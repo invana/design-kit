@@ -4,6 +4,7 @@ import { STAGES } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
 import type { AnswerTurn, AskTurn, BlockSpec, Turn } from "../protocol/types"
 import { Placeholder } from "./placeholder"
+import { relativeTime } from "./relative-time"
 import type { ResolvedRegistry } from "./registry"
 import { ChatSessionMessage } from "./thread"
 
@@ -11,6 +12,11 @@ export interface ConversationTurnProps {
   turn: Turn
   registry: ResolvedRegistry
   onEvent: (event: ConversationEvent) => void
+  /**
+   * The clock an answered ask's time is read against, in ms. Defaults to the
+   * time of render; a story passes a fixed one so it reads the same every run.
+   */
+  now?: number
 }
 
 /**
@@ -121,14 +127,20 @@ function AskTurnView({
   turn,
   registry,
   onEvent,
+  now,
 }: {
   turn: AskTurn
   registry: ResolvedRegistry
   onEvent: (event: ConversationEvent) => void
+  now?: number
 }) {
   const Renderer = registry.asks[turn.ask.preset]
+  const time =
+    turn.state === "answered" && turn.answeredAt
+      ? relativeTime(turn.answeredAt, now ?? Date.now())
+      : undefined
   return (
-    <ClarifyCard state={turn.state} step={stageName(turn.stage)}>
+    <ClarifyCard state={turn.state} step={stageName(turn.stage)} time={time}>
       {Renderer ? (
         <Renderer turn={turn} options={turn.ask} onEvent={onEvent} />
       ) : (
@@ -143,10 +155,12 @@ function AskTurnView({
  * frame, or an answer card with its envelope, followed by any proposal and the
  * suggested follow-ups.
  */
-export function ConversationTurn({ turn, registry, onEvent }: ConversationTurnProps) {
+export function ConversationTurn({ turn, registry, onEvent, now }: ConversationTurnProps) {
   if (turn.role === "analyst") {
     return <ChatSessionMessage role="user">{turn.text}</ChatSessionMessage>
   }
-  if (turn.kind === "ask") return <AskTurnView turn={turn} registry={registry} onEvent={onEvent} />
+  if (turn.kind === "ask") {
+    return <AskTurnView turn={turn} registry={registry} onEvent={onEvent} now={now} />
+  }
   return <AnswerTurnView turn={turn} registry={registry} onEvent={onEvent} />
 }

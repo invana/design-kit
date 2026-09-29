@@ -56,8 +56,13 @@ export interface ChoiceOption {
 }
 
 export interface ConfirmOptions {
-  /** What yes does or costs, in one sentence. `**bold**` marks the cost. */
+  /** What yes does, in one sentence. `**bold**` marks what matters in it. */
   question: string
+  /**
+   * What yes costs, drawn as figures between the question and the buttons —
+   * the rows it scans, the time it takes, the records it writes.
+   */
+  cost?: { rows?: Figure; time?: string; writes?: Figure }
   yes: string
   no: string
   default?: boolean
@@ -413,6 +418,8 @@ export interface AskTurn {
   ask: AskSpec
   /** The analyst's reply, once answered. Its type is fixed by the preset. */
   value?: unknown
+  /** When it was answered, as an ISO 8601 time. Shown as `just now`, `2 min ago`. */
+  answeredAt?: string
 }
 
 export interface AnswerTurn {

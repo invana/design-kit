@@ -130,7 +130,7 @@ export function MultistepAsk({ turn, options, onEvent }: AskRendererProps<"multi
   if (answered && !editing) {
     return (
       <>
-        <PropertyList labelWidth="auto">
+        <PropertyList labelWidth="auto" variant="summary">
           {options.steps.map((step) => (
             <PropertyRow key={step.id} label={labelOf(step.id)} mono>
               {answerText(step, current[step.id])}

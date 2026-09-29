@@ -55,7 +55,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | ClarifyCard | `packages/assistant/src/asks/clarify-card.tsx` | move in | done | today |
 | ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | done | today |
 | ClarifyCard time (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | done | today |
-| ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | todo | today |
+| ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | done | today |
 | InterpretationStrip | `packages/assistant/src/asks/interpretation-strip.tsx` | new | todo | today |
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
 | PlanPreview | `packages/assistant/src/asks/plan-preview.tsx` | new | todo | next |

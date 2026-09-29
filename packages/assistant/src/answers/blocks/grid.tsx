@@ -19,6 +19,7 @@ export function GridBlock({ block }: BlockRendererProps<"grid">) {
       {block.tiles.map((tile) => (
         <MetricTile
           key={tile.label}
+          variant="figure"
           label={tile.label}
           value={figureText(tile.value)}
           caption={tile.delta}

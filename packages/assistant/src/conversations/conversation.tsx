@@ -24,6 +24,8 @@ export interface ConversationProps {
   stopIcon?: React.ReactNode
   /** Shown when the spec has no turns yet. */
   emptyState?: React.ReactNode
+  /** The clock answered asks' times are read against, in ms. Defaults to the time of render. */
+  now?: number
   className?: string
 }
 
@@ -59,6 +61,7 @@ export function Conversation({
   sendIcon,
   stopIcon,
   emptyState,
+  now,
   className,
 }: ConversationProps) {
   const resolved = React.useMemo(() => resolveRegistry(registry), [registry])
@@ -102,11 +105,11 @@ export function Conversation({
         const first = row[0]!
         const turns =
           row.length === 1 ? (
-            <ConversationTurn turn={first} registry={resolved} onEvent={emit} />
+            <ConversationTurn turn={first} registry={resolved} onEvent={emit} now={now} />
           ) : (
             <div className="grid gap-2 sm:grid-cols-2">
               {row.map((t) => (
-                <ConversationTurn key={t.id} turn={t} registry={resolved} onEvent={emit} />
+                <ConversationTurn key={t.id} turn={t} registry={resolved} onEvent={emit} now={now} />
               ))}
             </div>
           )

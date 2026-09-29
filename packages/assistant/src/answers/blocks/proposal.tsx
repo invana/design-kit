@@ -33,7 +33,7 @@ export function ProposalBlock({ turn, block, onEvent }: BlockRendererProps<"prop
             </Button>
           ))}
         >
-          <PropertyList labelWidth="auto">
+          <PropertyList labelWidth="auto" variant="summary">
             {block.rows.map((row) => (
               <PropertyRow key={row.label} label={row.label} mono>
                 {row.value}

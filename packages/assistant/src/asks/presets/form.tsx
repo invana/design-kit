@@ -69,7 +69,7 @@ export function FormAsk({ turn, options, onEvent }: AskRendererProps<"form">) {
     return (
       <>
         <p>{options.question}</p>
-        <PropertyList labelWidth="auto">
+        <PropertyList labelWidth="auto" variant="summary">
           {options.fields.map((f) => (
             <PropertyRow key={f.name} label={f.label} mono>
               {withUnit(current[f.name], f.unit)}

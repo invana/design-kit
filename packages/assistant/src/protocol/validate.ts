@@ -111,6 +111,9 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
       if (!STAGE_IDS.has(turn.stage)) error(`Unknown stage "${turn.stage}".`, id)
       if (!ASK_STATES.has(turn.state)) error(`Unknown ask state "${turn.state}".`, id)
       if (!asks.has(turn.ask?.preset)) error(`Unknown ask preset "${turn.ask?.preset}".`, id)
+      if (turn.answeredAt !== undefined && Number.isNaN(Date.parse(turn.answeredAt))) {
+        error(`answeredAt "${turn.answeredAt}" is not an ISO time.`, id)
+      }
       if (turn.ask?.preset === "multistep") {
         for (const step of turn.ask.steps ?? []) {
           if (!asks.has(step.preset)) error(`Unknown ask preset "${step.preset}" in step "${step.id}".`, id)
