@@ -9,9 +9,11 @@ export default defineConfig({
   clean: true,
   // Every kit package stays external: the assistant composes ui, charts, tables
   // and forms, and bundling any of them would ship a second copy of each.
+  // react-hook-form stays with them: the form ask shares forms' context.
   external: [
     'react',
     'react-dom',
+    'react-hook-form',
     '@invana/ui',
     '@invana/charts',
     '@invana/tables',

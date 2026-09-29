@@ -227,6 +227,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/styling | Sequential and diverging ramp tokens | `packages/styling/src/index.css` | new | todo | next |
 | @invana/styling | Interval and significance tokens | `packages/styling/src/index.css` | new | todo | next |
 | @invana/forms | FormField.Period, FormField.Weights | `packages/forms/src/form-field.tsx` | extend | partial | next |
+| @invana/forms | FieldConfig `unit` and `aside`, typed number | `packages/forms/src/types.ts` | extend | done | next |
 | @invana/dashboard | Panel kinds for the new charts | `packages/dashboard/src/panels/` | extend | partial | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
 | @invana/themes | None | `packages/themes/src/` | stays | done | today |
@@ -253,7 +254,7 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | entity | `id[]` | RichSelect + SearchInput · ui | `asks/presets/entity.tsx` | todo | next | 4 |
 | scale | `1–5` | RatingControl · ui | `asks/presets/scale.tsx` | todo | today | – |
 | multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `asks/presets/multistep.tsx` | done | today | 1 |
-| form | `Record<field, value>` | ObjectField · forms | `asks/presets/form.tsx` | todo | next | 1 |
+| form | `Record<field, value>` | ObjectField · forms | `asks/presets/form.tsx` | done | next | 1 |
 | weights | `Record<objective, 0–100>` | WeightControl · ui | `asks/presets/weights.tsx` | todo | today | 4 |
 | approval | `approve \| reject` | ProposalCard · ui | `asks/presets/approval.tsx` | todo | today | – |
 | interpretation (proposed) | `Record<slot, value>` | InterpretationStrip · assistant | `asks/presets/interpretation.tsx` | todo | today | 5 |

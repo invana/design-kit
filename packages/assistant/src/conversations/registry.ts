@@ -1,5 +1,6 @@
 import type * as React from "react"
 
+import { FormAsk } from "../asks/presets/form"
 import { MultistepAsk } from "../asks/presets/multistep"
 import { SingleAsk } from "../asks/presets/single"
 import type { AskPresetId, BlockPresetId } from "../grammar"
@@ -56,7 +57,7 @@ export const BUILT_IN_ASKS: AskRegistry = {
   entity: null,
   scale: null,
   multistep: MultistepAsk,
-  form: null,
+  form: FormAsk,
   weights: null,
   approval: null,
   interpretation: null,
