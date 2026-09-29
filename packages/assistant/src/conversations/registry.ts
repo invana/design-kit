@@ -1,8 +1,12 @@
 import type * as React from "react"
 
+import { BarsBlock } from "../answers/blocks/bars"
+import { CannotBlock } from "../answers/blocks/cannot"
 import { CaveatBlock } from "../answers/blocks/caveat"
+import { CitationsBlock } from "../answers/blocks/citations"
 import { FilesBlock } from "../answers/blocks/files"
 import { GridBlock } from "../answers/blocks/grid"
+import { MethodBlock } from "../answers/blocks/method"
 import { MetricBlock } from "../answers/blocks/metric"
 import { NarrativeBlock } from "../answers/blocks/narrative"
 import { ProposalBlock } from "../answers/blocks/proposal"
@@ -13,6 +17,7 @@ import { SuggestionsBlock } from "../answers/blocks/suggestions"
 import { TableBlock } from "../answers/blocks/table"
 import { TimelineBlock } from "../answers/blocks/timeline"
 import { TimeseriesBlock } from "../answers/blocks/timeseries"
+import { TraceBlock } from "../answers/blocks/trace"
 import { ConfirmAsk } from "../asks/presets/confirm"
 import { FormAsk } from "../asks/presets/form"
 import { MultiAsk } from "../asks/presets/multi"
@@ -93,23 +98,23 @@ export const BUILT_IN_BLOCKS: BlockRegistry = {
   record: RecordBlock,
   ranked: RankedBlock,
   timeseries: TimeseriesBlock,
-  bars: null,
+  bars: BarsBlock,
   waterfall: null,
   matrix: null,
   funnel: null,
   histogram: null,
   timeline: TimelineBlock,
   subgraph: null,
-  method: null,
-  citations: null,
+  method: MethodBlock,
+  citations: CitationsBlock,
   files: FilesBlock,
   proposal: ProposalBlock,
-  cannot: null,
+  cannot: CannotBlock,
   caveat: CaveatBlock,
   scope: ScopeBlock,
   checks: null,
   suggestions: SuggestionsBlock,
-  trace: null,
+  trace: TraceBlock,
   test: null,
   coef: null,
   forest: null,

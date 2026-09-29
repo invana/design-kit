@@ -59,7 +59,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
 | PlanPreview | `packages/assistant/src/asks/plan-preview.tsx` | new | todo | next |
 | ModelSpec | `packages/assistant/src/asks/model-spec.tsx` | new | todo | next |
-| Ask renderers (20) | `packages/assistant/src/asks/presets/` | new | todo | today |
+| Ask renderers (20) | `packages/assistant/src/asks/presets/` | new | partial | today |
 
 ### Answers: the card and what goes inside it
 
@@ -72,7 +72,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | TemplatePicker previews (on TemplatePicker) | `packages/assistant/src/answers/template-picker.tsx` | extend | partial | next |
 | AnswerPreview | `packages/assistant/src/answers/answer-preview.tsx` | new | todo | today |
 | TestResult | `packages/assistant/src/answers/test-result.tsx` | new | todo | next |
-| Block renderers (42) | `packages/assistant/src/answers/blocks/` | new | todo | today |
+| Block renderers (42) | `packages/assistant/src/answers/blocks/` | new | partial | today |
 
 ### Follow-ups
 
@@ -288,23 +288,23 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | done | today | 1 |
 | ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | done | today | 2 |
 | timeseries | `{ series, band?, forecastFrom?, forecastLabel?, marks? }` | LineChart · charts | `answers/blocks/timeseries.tsx` | done | today | 1 |
-| bars | `{ groups, series, target? }` | BarChartV · charts | `answers/blocks/bars.tsx` | todo | next | 2 |
+| bars | `{ groups, series, target? }` | BarChartV · charts | `answers/blocks/bars.tsx` | done | next | 2 |
 | waterfall | `{ start, steps[], end }` | Waterfall · charts | `answers/blocks/waterfall.tsx` | todo | next | 3 |
 | matrix | `{ rows, cols, values, scale }` | Heatmap · charts | `answers/blocks/matrix.tsx` | todo | next | – |
 | funnel | `{ steps[label, count] }` | Funnel · charts | `answers/blocks/funnel.tsx` | todo | next | – |
 | histogram | `{ bins \| values, threshold?, outliers? }` | Histogram · charts | `answers/blocks/histogram.tsx` | todo | next | 4 |
 | timeline | `{ events[when, text, tone] }` | TimelineList · ui | `answers/blocks/timeline.tsx` | done | today | 1 |
 | subgraph | `{ nodes, edges }` | @invana/canvas | `answers/blocks/subgraph.tsx` | todo | later | – |
-| method | `{ label, code, meta }` | ChatSessionDisclosure · assistant | `answers/blocks/method.tsx` | todo | today | 2 |
-| citations | `{ sources[] }` | CitationList · ui | `answers/blocks/citations.tsx` | todo | today | 2 |
+| method | `{ label, code, meta }` | ChatSessionDisclosure · assistant | `answers/blocks/method.tsx` | done | today | 2 |
+| citations | `{ sources[] }` | CitationList · ui | `answers/blocks/citations.tsx` | done | today | 2 |
 | files | `{ files[name, size, digest] }` | ArtifactTable · ui | `answers/blocks/files.tsx` | done | today | 1 |
 | proposal | `{ rows, consequence, actions[] }` | ProposalCard · ui | `answers/blocks/proposal.tsx` | done | today | 1 |
-| cannot | `{ reason, remedy, nearest? }` | CannotAnswerCard · ui | `answers/blocks/cannot.tsx` | todo | today | 3 |
+| cannot | `{ reason, remedy, nearest? }` | CannotAnswerCard · ui | `answers/blocks/cannot.tsx` | done | today | 3 |
 | caveat | `{ label, text }` | CaveatNote · ui | `answers/blocks/caveat.tsx` | done | today | 1 |
 | scope | `{ parts[] }` | ScopeLine · ui | `answers/blocks/scope.tsx` | done | today | 1 |
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `answers/blocks/checks.tsx` | todo | next | – |
 | suggestions | `{ items[] }` | SuggestionChips · assistant | `answers/blocks/suggestions.tsx` | done | today | 1 |
-| trace | `{ steps[] }` | TraceList · ui | `answers/blocks/trace.tsx` | todo | today | 3 |
+| trace | `{ steps[] }` | TraceList · ui | `answers/blocks/trace.tsx` | done | today | 3 |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · assistant | `answers/blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `answers/blocks/coef.tsx` | todo | next | 5 |
 | forest (proposed) | `{ rows[label, est, lo, hi], nullAt }` | ForestPlot · charts | `answers/blocks/forest.tsx` | todo | next | 5 |
