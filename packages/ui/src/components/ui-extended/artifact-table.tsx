@@ -34,6 +34,13 @@ export interface Artifact {
 export interface ArtifactTableProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   files: Artifact[]
+  /**
+   * `table` (default) — the step's full record: header, kind, written, and an
+   * Open / Download per row. `list` — name, size and digest in bare rows, for
+   * the files an answer hands over, where the header and buttons would
+   * outweigh two or three names.
+   */
+  variant?: "table" | "list"
   onOpen?: (file: Artifact, index: number) => void
   onDownload?: (file: Artifact, index: number) => void
   /** Anything else a row offers. Replaces the two defaults when given. */
@@ -59,7 +66,23 @@ export interface ArtifactTableProps
 export const ArtifactTable = React.forwardRef<
   HTMLDivElement,
   ArtifactTableProps
->(({ files, onOpen, onDownload, renderActions, className, ...props }, ref) => (
+>(({ files, variant = "table", onOpen, onDownload, renderActions, className, ...props }, ref) =>
+  variant === "list" ? (
+    <div ref={ref} className={cn("flex flex-col text-sm", className)} {...props}>
+      {files.map((file, index) => (
+        <div
+          key={index}
+          className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-2.5 border-b border-border/60 py-0.5 last:border-b-0"
+        >
+          <span className={cn("truncate", file.gone && "text-muted-foreground line-through")}>
+            {file.name}
+          </span>
+          <span className="font-mono text-xs tabular-nums text-muted-foreground">{file.size}</span>
+          <span className="font-mono text-xs text-muted-foreground">{file.digest}</span>
+        </div>
+      ))}
+    </div>
+  ) : (
   <div ref={ref} className={cn("flex flex-col", className)} {...props}>
     <Table density="compact">
       <TableHeader>
@@ -124,5 +147,6 @@ export const ArtifactTable = React.forwardRef<
       </TableBody>
     </Table>
   </div>
-))
+  ),
+)
 ArtifactTable.displayName = "ArtifactTable"

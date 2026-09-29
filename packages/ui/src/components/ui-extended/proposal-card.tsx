@@ -4,12 +4,18 @@ import { cn } from "../../lib/utils"
 
 export interface ProposalCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
-  /** What is being proposed — `Draft pattern`. */
-  title: React.ReactNode
+  /** What is being proposed — `Draft pattern`. Left out when the frame around the card already says it. */
+  title?: React.ReactNode
   /** Where it came from — `from the agent's result`. */
   source?: React.ReactNode
   /** The draft itself. A `PropertyList`, usually. */
   children?: React.ReactNode
+  /**
+   * The draft without its muted box — for a card whose frame is already its
+   * own, such as a proposal under an answer, where a box inside it is a box
+   * inside a box.
+   */
+  flush?: boolean
   /** What the proposal rests on — the instances, as a table or list. */
   evidence?: React.ReactNode
   /** A heading for the evidence — `The six instances`. */
@@ -38,6 +44,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
     {
       title,
       source,
+      flush,
       evidence,
       evidenceTitle,
       evidenceMeta,
@@ -51,13 +58,15 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
   ) => (
     <div ref={ref} className={cn("flex flex-col gap-3", className)} {...props}>
       <section className="flex flex-col gap-1">
-        <div className="flex items-baseline gap-2">
-          <h4 className="font-medium">{title}</h4>
-          {source != null ? (
-            <span className="text-sm text-muted-foreground">{source}</span>
-          ) : null}
-        </div>
-        <div className="border border-border bg-muted/30 p-2">{children}</div>
+        {title != null || source != null ? (
+          <div className="flex items-baseline gap-2">
+            {title != null ? <h4 className="font-medium">{title}</h4> : null}
+            {source != null ? (
+              <span className="text-sm text-muted-foreground">{source}</span>
+            ) : null}
+          </div>
+        ) : null}
+        {flush ? children : <div className="border border-border bg-muted/30 p-2">{children}</div>}
       </section>
 
       {evidence ? (

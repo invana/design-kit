@@ -12,8 +12,12 @@ import { cn } from "../../lib/utils"
  * `rail` — `when` sits above the title and a line threads the markers. For a
  * narrow card or sidebar, where a 72px column would eat a third of the width
  * and titles wrap anyway; the rail supplies the alignment the column was.
+ *
+ * `compact` — `when`, the marker and the text on one line, no rules. For a few
+ * dated events inside an answer, `wk 8 · Yantian port congestion notice`,
+ * where rules between two lines would outweigh the lines.
  */
-export type TimelineVariant = "columns" | "rail"
+export type TimelineVariant = "columns" | "rail" | "compact"
 
 const TimelineVariantContext = React.createContext<TimelineVariant>("columns")
 
@@ -113,6 +117,23 @@ export const TimelineEntry = React.forwardRef<
   TimelineEntryProps
 >(({ when, title, marker, className, children, ...props }, ref) => {
   const variant = React.useContext(TimelineVariantContext)
+
+  if (variant === "compact") {
+    return (
+      <li
+        ref={ref}
+        className={cn("grid grid-cols-[3.5rem_0.75rem_minmax(0,1fr)] items-baseline gap-1.5 pb-1 last:pb-0", className)}
+        {...props}
+      >
+        <span className="truncate font-mono text-xs text-muted-foreground">{when}</span>
+        <span className="flex justify-center">{marker}</span>
+        <div className="flex min-w-0 flex-col gap-0.5 text-sm">
+          {title != null ? <span className="font-medium">{title}</span> : null}
+          {children}
+        </div>
+      </li>
+    )
+  }
 
   if (variant === "rail") {
     return (

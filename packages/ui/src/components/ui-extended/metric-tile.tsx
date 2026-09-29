@@ -36,6 +36,11 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Tints the value. See {@link MetricTone} — most tiles should not set it. */
   tone?: MetricTone
   /**
+   * Tints the caption instead — for a caption that is a change, `▲ 8 d vs
+   * normal`, where the direction is the signal and the value is a plain figure.
+   */
+  captionTone?: MetricTone
+  /**
    * How much of a known ceiling has been spent, `0`–`1`, as a 4px bar under the
    * caption. Takes `tone`'s colour when one is set.
    *
@@ -61,6 +66,12 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
    * default.
    */
   gap?: number
+  /**
+   * One strip, the tiles divided by rules instead of spaced apart — for a
+   * band of figures that belong to one answer and read left to right. `gap`
+   * is ignored.
+   */
+  joined?: boolean
   children?: React.ReactNode
 }
 
@@ -72,7 +83,7 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
  * there is no honest caption, the number probably needs a different surface.
  */
 export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
-  ({ label, value, caption, tone, meter, className, children, ...props }, ref) => (
+  ({ label, value, caption, tone, captionTone, meter, className, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -100,7 +111,14 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
         {value}
       </span>
       {caption != null ? (
-        <span className="text-sm text-muted-foreground">{caption}</span>
+        <span
+          className={cn(
+            "text-sm",
+            captionTone ? (TONE[captionTone] ?? "text-muted-foreground") : "text-muted-foreground",
+          )}
+        >
+          {caption}
+        </span>
       ) : null}
       {meter != null ? (
         // Not a <Progress>: that is a control-sized, rounded, animated bar for
@@ -131,12 +149,18 @@ MetricTile.displayName = "MetricTile"
  * different call site for each.
  */
 export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
-  ({ minTileWidth = 120, gap = 6, className, style, children, ...props }, ref) => (
+  ({ minTileWidth = 120, gap = 6, joined, className, style, children, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("grid", className)}
+      className={cn(
+        "grid",
+        // The rules are the border colour showing through a 1px gap, so they
+        // follow the tiles when the grid wraps to a second row.
+        joined && "gap-px border border-border bg-border [&>*]:border-0",
+        className,
+      )}
       style={{
-        gap,
+        gap: joined ? undefined : gap,
         gridTemplateColumns: `repeat(auto-fit, minmax(${minTileWidth}px, 1fr))`,
         ...style,
       }}

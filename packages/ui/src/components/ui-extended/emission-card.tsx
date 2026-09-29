@@ -148,6 +148,18 @@ export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
 EmissionCard.displayName = "EmissionCard"
 
 /**
+ * The card's body: its blocks in one padded column, each a step apart.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
+ */
+export const EmissionBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("flex min-w-0 flex-col gap-2 p-2", className)} {...props} />
+  ),
+)
+EmissionBody.displayName = "EmissionBody"
+
+/**
  * The `prose` body's citation marker — the superscript that ties a clause to
  * the records behind it.
  *
