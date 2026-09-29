@@ -275,7 +275,7 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | attr | `{ columns[scale, dir], rows }` | DataTable column scale · tables | `answers/blocks/attr.tsx` | todo | today | 4 |
 | record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | done | today | 1 |
 | ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | todo | today | 2 |
-| timeseries | `{ series, band?, forecastFrom?, marks? }` | LineChart · charts | `answers/blocks/timeseries.tsx` | todo | today | 1 |
+| timeseries | `{ series, band?, forecastFrom?, forecastLabel?, marks? }` | LineChart · charts | `answers/blocks/timeseries.tsx` | done | today | 1 |
 | bars | `{ groups, series, target? }` | BarChartV · charts | `answers/blocks/bars.tsx` | todo | next | 2 |
 | waterfall | `{ start, steps[], end }` | Waterfall · charts | `answers/blocks/waterfall.tsx` | todo | next | 3 |
 | matrix | `{ rows, cols, values, scale }` | Heatmap · charts | `answers/blocks/matrix.tsx` | todo | next | – |

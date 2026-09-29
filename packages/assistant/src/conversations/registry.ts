@@ -10,6 +10,7 @@ import { ScopeBlock } from "../answers/blocks/scope"
 import { SuggestionsBlock } from "../answers/blocks/suggestions"
 import { TableBlock } from "../answers/blocks/table"
 import { TimelineBlock } from "../answers/blocks/timeline"
+import { TimeseriesBlock } from "../answers/blocks/timeseries"
 import { FormAsk } from "../asks/presets/form"
 import { MultistepAsk } from "../asks/presets/multistep"
 import { SingleAsk } from "../asks/presets/single"
@@ -86,7 +87,7 @@ export const BUILT_IN_BLOCKS: BlockRegistry = {
   attr: null,
   record: RecordBlock,
   ranked: null,
-  timeseries: null,
+  timeseries: TimeseriesBlock,
   bars: null,
   waterfall: null,
   matrix: null,

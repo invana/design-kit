@@ -291,6 +291,8 @@ export interface BlockOptionsByPreset {
     series: { name: string; points: [string, number][] }[]
     band?: { label?: string; lower: number; upper: number }
     forecastFrom?: string
+    /** Names the forecast boundary — `today`. Without one the rule is unlabelled. */
+    forecastLabel?: string
     marks?: { at: string; label?: string; tone?: Tone }[]
     unit?: string
   }
