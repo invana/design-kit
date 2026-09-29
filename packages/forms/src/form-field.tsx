@@ -101,6 +101,8 @@ const SIZE: Record<
     select: string;
     textarea: string;
     label: string;
+    /** a field's own label, over or beside its control (not a choice's) */
+    fieldLabel: string;
     desc: string;
     /** field-grid gaps */
     gap: string;
@@ -122,11 +124,16 @@ const SIZE: Record<
     radio: string;
   }
 > = {
+  // The dense tier — an ask in a conversation, an inspector. Controls are 28px,
+  // in px because a rem height drifts with the root, and the text stays at the
+  // 13px floor; the field label is muted and regular
+  // so the values, not the labels, carry the weight.
   xs: {
-    input: 'h-9',
-    select: 'h-9',
+    input: 'h-[28px] py-0',
+    select: 'h-[28px] py-0',
     textarea: '',
     label: 'text-base',
+    fieldLabel: 'font-normal text-muted-foreground',
     desc: 'text-base',
     gap: 'gap-x-3 gap-y-2.5',
     section: 'space-y-3',
@@ -143,6 +150,7 @@ const SIZE: Record<
     select: 'h-9',
     textarea: '',
     label: 'text-base',
+    fieldLabel: '',
     desc: 'text-base',
     gap: 'gap-x-3 gap-y-2',
     section: 'space-y-3',
@@ -159,6 +167,7 @@ const SIZE: Record<
     select: '',
     textarea: '',
     label: 'text-base',
+    fieldLabel: '',
     desc: 'text-base',
     gap: 'gap-4',
     section: 'space-y-4',
@@ -222,7 +231,7 @@ function FieldLabel({
 }) {
   if (!label && !badge) return null;
   return (
-    <FormLabel className={cn(SIZE[size].label, className)}>
+    <FormLabel className={cn(SIZE[size].label, SIZE[size].fieldLabel, className)}>
       {label}
       {badge && <StatusPill badge={badge} />}
     </FormLabel>

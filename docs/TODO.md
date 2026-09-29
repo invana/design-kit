@@ -243,6 +243,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/styling | Interval and significance tokens | `packages/styling/src/index.css` | new | todo | next |
 | @invana/forms | FormField.Period, FormField.Weights | `packages/forms/src/form-field.tsx` | extend | partial | next |
 | @invana/forms | FieldConfig `unit` and `aside`, typed number | `packages/forms/src/types.ts` | extend | done | next |
+| @invana/forms | `xs` tier at 28px, muted field labels | `packages/forms/src/form-field.tsx` | extend | done | today |
 | @invana/dashboard | Panel kinds for the new charts | `packages/dashboard/src/panels/` | extend | partial | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
 | @invana/themes | None | `packages/themes/src/` | stays | done | today |
