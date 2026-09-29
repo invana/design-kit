@@ -77,7 +77,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| SuggestionChips | `packages/assistant/src/followups/suggestion-chips.tsx` | new | todo | today |
+| SuggestionChips | `packages/assistant/src/followups/suggestion-chips.tsx` | new | done | today |
 | RefineChips | `packages/assistant/src/followups/refine-chips.tsx` | new | todo | next |
 | StarterGallery | `packages/assistant/src/followups/starter-gallery.tsx` | new | todo | next |
 
@@ -207,8 +207,8 @@ Fourteen components move to assistant; the folder shown is where they are today.
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| ScopeLine | `packages/ui/src/components/ui-extended/scope-line.tsx` | new | todo | today |
-| CaveatNote | `packages/ui/src/components/ui-extended/caveat-note.tsx` | new | todo | today |
+| ScopeLine | `packages/ui/src/components/ui-extended/scope-line.tsx` | new | done | today |
+| CaveatNote | `packages/ui/src/components/ui-extended/caveat-note.tsx` | new | done | today |
 | CheckList | `packages/ui/src/components/ui-extended/check-list.tsx` | new | todo | next |
 | EvidenceBadge | `packages/ui/src/components/ui-extended/evidence-badge.tsx` | new | todo | next |
 | formatValue | `packages/ui/src/lib/format.ts` | new | todo | today |
@@ -268,12 +268,12 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 
 | Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
-| narrative | `{ text, cites? }` | Prose with CitationMarker · assistant | `answers/blocks/narrative.tsx` | todo | today | 1 |
+| narrative | `{ text, cites? }` | Prose with CitationMarker · assistant | `answers/blocks/narrative.tsx` | done | today | 1 |
 | metric | `{ label, value, delta, compare }` | MetricTile · ui | `answers/blocks/metric.tsx` | todo | today | 2 |
 | grid | `{ tiles[] }` | MetricGrid · ui | `answers/blocks/grid.tsx` | todo | today | 1 |
 | table | `{ columns, rows, total }` | DataTable preview · tables | `answers/blocks/table.tsx` | todo | today | 1 |
 | attr | `{ columns[scale, dir], rows }` | DataTable column scale · tables | `answers/blocks/attr.tsx` | todo | today | 4 |
-| record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | todo | today | 1 |
+| record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | done | today | 1 |
 | ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | todo | today | 2 |
 | timeseries | `{ series, band?, forecastFrom?, marks? }` | LineChart · charts | `answers/blocks/timeseries.tsx` | todo | today | 1 |
 | bars | `{ groups, series, target? }` | BarChartV · charts | `answers/blocks/bars.tsx` | todo | next | 2 |
@@ -288,10 +288,10 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | files | `{ files[name, size, digest] }` | ArtifactTable · ui | `answers/blocks/files.tsx` | todo | today | 1 |
 | proposal | `{ rows, consequence, actions[] }` | ProposalCard · ui | `answers/blocks/proposal.tsx` | todo | today | 1 |
 | cannot | `{ reason, remedy, nearest? }` | CannotAnswerCard · ui | `answers/blocks/cannot.tsx` | todo | today | 3 |
-| caveat | `{ label, text }` | CaveatNote · ui | `answers/blocks/caveat.tsx` | todo | today | 1 |
-| scope | `{ parts[] }` | ScopeLine · ui | `answers/blocks/scope.tsx` | todo | today | 1 |
+| caveat | `{ label, text }` | CaveatNote · ui | `answers/blocks/caveat.tsx` | done | today | 1 |
+| scope | `{ parts[] }` | ScopeLine · ui | `answers/blocks/scope.tsx` | done | today | 1 |
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `answers/blocks/checks.tsx` | todo | next | – |
-| suggestions | `{ items[] }` | SuggestionChips · assistant | `answers/blocks/suggestions.tsx` | todo | today | 1 |
+| suggestions | `{ items[] }` | SuggestionChips · assistant | `answers/blocks/suggestions.tsx` | done | today | 1 |
 | trace | `{ steps[] }` | TraceList · ui | `answers/blocks/trace.tsx` | todo | today | 3 |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · assistant | `answers/blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `answers/blocks/coef.tsx` | todo | next | 5 |

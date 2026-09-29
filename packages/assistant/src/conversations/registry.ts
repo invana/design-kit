@@ -1,5 +1,10 @@
 import type * as React from "react"
 
+import { CaveatBlock } from "../answers/blocks/caveat"
+import { NarrativeBlock } from "../answers/blocks/narrative"
+import { RecordBlock } from "../answers/blocks/record"
+import { ScopeBlock } from "../answers/blocks/scope"
+import { SuggestionsBlock } from "../answers/blocks/suggestions"
 import { FormAsk } from "../asks/presets/form"
 import { MultistepAsk } from "../asks/presets/multistep"
 import { SingleAsk } from "../asks/presets/single"
@@ -69,12 +74,12 @@ export const BUILT_IN_ASKS: AskRegistry = {
 }
 
 export const BUILT_IN_BLOCKS: BlockRegistry = {
-  narrative: null,
+  narrative: NarrativeBlock,
   metric: null,
   grid: null,
   table: null,
   attr: null,
-  record: null,
+  record: RecordBlock,
   ranked: null,
   timeseries: null,
   bars: null,
@@ -89,10 +94,10 @@ export const BUILT_IN_BLOCKS: BlockRegistry = {
   files: null,
   proposal: null,
   cannot: null,
-  caveat: null,
-  scope: null,
+  caveat: CaveatBlock,
+  scope: ScopeBlock,
   checks: null,
-  suggestions: null,
+  suggestions: SuggestionsBlock,
   trace: null,
   test: null,
   coef: null,
