@@ -17,6 +17,11 @@ import {
   FormMessage,
 } from './components/form';
 import { Input } from './components/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from './components/input-group';
 import { PasswordInput } from './components/password-input';
 import { Textarea } from './components/textarea';
 import { Switch } from './components/switch';
@@ -74,6 +79,10 @@ interface BaseFieldProps {
   orientation?: FieldOrientation;
   /** Wrap a `switch` boolean in a bordered, padded box. Defaults to `false`. */
   boxed?: boolean;
+  /** Unit at the end of a text or number input. */
+  unit?: string;
+  /** Note at the end of a text or number input, after the unit. */
+  aside?: string;
 }
 
 /**
@@ -169,8 +178,10 @@ function itemClasses(
   className?: string
 ) {
   return cn(
+    // `space-y-0` undoes FormItem's own stacking, whose margin would push the
+    // control below its label in a row.
     labelPosition === 'side' &&
-      cn('grid grid-cols-3 items-center', SIZE[size].sideGap),
+      cn('grid grid-cols-3 items-center space-y-0', SIZE[size].sideGap),
     labelPosition === 'top' && SIZE[size].stack,
     className
   );
@@ -218,12 +229,36 @@ function FieldLabel({
   );
 }
 
+/**
+ * An input with its unit and a short note drawn at its end — `30 %`,
+ * `17 d  quoted 14 d`. Without either it is the plain `Input`. Props other than
+ * `className` reach the `<input>`, so `FormControl` wires its id and aria there.
+ */
+const AffixedInput = React.forwardRef<
+  HTMLInputElement,
+  React.ComponentProps<'input'> & { unit?: string; aside?: string }
+>(({ unit, aside, className, ...props }, ref) => {
+  if (!unit && !aside) return <Input ref={ref} className={className} {...props} />;
+  return (
+    <InputGroup className={cn('bg-background dark:bg-background', className)}>
+      <InputGroupInput ref={ref} className="h-full" {...props} />
+      <InputGroupAddon align="inline-end" className="font-mono font-normal">
+        {unit && <span>{unit}</span>}
+        {aside && <span>{aside}</span>}
+      </InputGroupAddon>
+    </InputGroup>
+  );
+});
+AffixedInput.displayName = 'AffixedInput';
+
 export const InputField: React.FC<BaseFieldProps> = ({
   label,
   description,
   placeholder,
   value,
   onChange,
+  unit,
+  aside,
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
@@ -234,8 +269,10 @@ export const InputField: React.FC<BaseFieldProps> = ({
     <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
-        <Input
+        <AffixedInput
           className={SIZE[size].input}
+          unit={unit}
+          aside={aside}
           placeholder={placeholder}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
@@ -569,6 +606,8 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   min,
   max,
   step,
+  unit,
+  aside,
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
@@ -579,13 +618,31 @@ export const NumberField: React.FC<BaseFieldProps> = ({
     <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
-        <SliderNumber
-          value={typeof value === 'number' ? value : 0}
-          onChange={onChange}
-          min={min}
-          max={max}
-          step={step}
-        />
+        {/* A bounded number gets the slider; an open one, such as a scenario
+            input, is typed, with its unit at the end. */}
+        {min != null && max != null ? (
+          <SliderNumber
+            value={typeof value === 'number' ? value : 0}
+            onChange={onChange}
+            min={min}
+            max={max}
+            step={step}
+          />
+        ) : (
+          <AffixedInput
+            type="number"
+            className={SIZE[size].input}
+            unit={unit}
+            aside={aside}
+            min={min}
+            max={max}
+            step={step}
+            value={typeof value === 'number' ? value : ''}
+            onChange={(e) =>
+              onChange?.(e.target.value === '' ? undefined : Number(e.target.value))
+            }
+          />
+        )}
       </FormControl>
       {description && (
         <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
@@ -674,6 +731,8 @@ function renderField(
           boxed: field.boxed,
           labelClassName: field.labelClassName,
           badge: field.badge,
+          unit: field.unit,
+          aside: field.aside,
           labelPosition,
           size,
           value: rhf.value,

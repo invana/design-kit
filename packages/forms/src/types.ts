@@ -54,6 +54,10 @@ export type FieldConfig = {
   description?: string;
   placeholder?: string;
   options?: { label: string; value: string }[];
+  /**
+   * Bounds of a `number` field. With both, it is a slider beside its number;
+   * without, a typed number input that can carry a `unit` and an `aside`.
+   */
   min?: number;
   max?: number;
   step?: number;
@@ -82,6 +86,16 @@ export type FieldConfig = {
   defaultValue?: string | number | boolean | string[];
   /** Number of visible rows for `textarea` fields. */
   rows?: number;
+  /**
+   * Unit drawn at the end of a `text` or `number` input — `%`, `d`, `kg/ha`.
+   * Display only; the value stays the bare number or text.
+   */
+  unit?: string;
+  /**
+   * A short note drawn at the end of a `text` or `number` input, after the
+   * unit — `quoted 14 d` beside an observed lead time. Display only.
+   */
+  aside?: string;
   /**
    * How many grid columns the field spans on `md+` screens. Defaults to `1`.
    * The grid is two columns by default (see `ObjectField`'s `columns`), so
