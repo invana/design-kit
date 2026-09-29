@@ -24,6 +24,17 @@ export interface SegmentedControlProps
   size?: "xs" | "sm"
   /** Fill the width given, each option an equal share of it. */
   stretch?: boolean
+  /**
+   * `tint` marks the active option with the primary tint — a reading of the
+   * page. `solid` fills it with primary and rules the options apart — an
+   * answer to a question, where the pick is the thing being read.
+   */
+  variant?: "tint" | "solid"
+  /**
+   * A settled answer: the pick is shown, not offered. Unlike disabling every
+   * option it keeps full strength, so the answer still reads.
+   */
+  readOnly?: boolean
 }
 
 /**
@@ -58,6 +69,8 @@ export const SegmentedControl = React.forwardRef<
       onValueChange,
       size = "xs",
       stretch,
+      variant = "tint",
+      readOnly,
       className,
       ...props
     },
@@ -70,6 +83,7 @@ export const SegmentedControl = React.forwardRef<
     const refs = React.useRef<(HTMLButtonElement | null)[]>([])
 
     const select = (next: string) => {
+      if (readOnly) return
       if (value == null) setInternal(next)
       onValueChange?.(next)
     }
@@ -97,9 +111,11 @@ export const SegmentedControl = React.forwardRef<
       <div
         ref={ref}
         role="radiogroup"
+        aria-readonly={readOnly || undefined}
         className={cn(
           "inline-flex overflow-hidden rounded-control border border-border",
-          stretch && "flex w-full",
+          // Its own width, even as the child of a column that stretches.
+          stretch ? "flex w-full" : "self-start",
           className,
         )}
         {...props}
@@ -120,13 +136,22 @@ export const SegmentedControl = React.forwardRef<
               onClick={() => select(option.value)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
-                "min-w-0 truncate px-2 text-center whitespace-nowrap",
+                "min-w-0 truncate text-center whitespace-nowrap",
+                variant === "solid" ? "px-3" : "px-2",
                 "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
                 size === "xs" ? "h-[22px] text-sm" : "h-[26px]",
                 stretch && "flex-1",
-                on
-                  ? "bg-primary/12 font-medium text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                variant === "solid"
+                  ? cn(
+                      "border-e border-border last:border-e-0",
+                      on
+                        ? "bg-primary text-primary-foreground"
+                        : cn("text-foreground", !readOnly && "hover:bg-accent"),
+                    )
+                  : on
+                    ? "bg-primary/12 font-medium text-primary"
+                    : cn("text-muted-foreground", !readOnly && "hover:bg-accent hover:text-foreground"),
+                readOnly && "cursor-default",
                 option.disabled && "pointer-events-none opacity-50",
               )}
             >

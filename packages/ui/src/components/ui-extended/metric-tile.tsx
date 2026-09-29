@@ -50,6 +50,13 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
    * a deadline that does not exist.
    */
   meter?: number
+  /**
+   * `tile` is one of several, boxed, in a strip. `hero` is the one figure an
+   * answer turns on — the adjusted odds ratio, net revenue retention — set
+   * large on the surface it sits in: no box, the label in sentence case over
+   * it, the caption in mono under it, so it reads as a result, not a gauge.
+   */
+  variant?: "tile" | "hero"
   /** A sparkline, or anything else that sits under the value. */
   children?: React.ReactNode
 }
@@ -83,11 +90,15 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
  * there is no honest caption, the number probably needs a different surface.
  */
 export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
-  ({ label, value, caption, tone, captionTone, meter, className, children, ...props }, ref) => (
+  ({ label, value, caption, tone, captionTone, meter, variant = "tile", className, children, ...props }, ref) => {
+    const hero = variant === "hero"
+    return (
     <div
       ref={ref}
+      data-variant={variant}
       className={cn(
-        "flex flex-col gap-px border border-border bg-card px-3 py-2.5",
+        "flex flex-col gap-px",
+        !hero && "border border-border bg-card px-3 py-2.5",
         className,
       )}
       {...props}
@@ -96,15 +107,24 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
           `Eyebrow`. A tile's label is a heading over a number, and left in
           sentence case it reads as the first line of a sentence the number then
           interrupts. */}
-      <span className="truncate text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+      <span
+        className={cn(
+          "truncate text-sm text-muted-foreground",
+          !hero && "font-semibold uppercase tracking-wide",
+        )}
+      >
         {label}
       </span>
       <span
         className={cn(
           // Mono, because a metric is a figure: proportional digits make
           // `1,880` and `2 / 5` in adjacent tiles sit at different widths, and
-          // a strip of six stops reading as one row of numbers.
-          "font-mono text-lg font-semibold leading-tight",
+          // a strip of six stops reading as one row of numbers. A hero stands
+          // alone, so it is set in the text face at display size, with
+          // tabular digits.
+          hero
+            ? "text-3xl font-semibold leading-tight tracking-tight tabular-nums"
+            : "font-mono text-lg font-semibold leading-tight",
           tone ? (TONE[tone] ?? "text-foreground") : undefined,
         )}
       >
@@ -114,6 +134,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
         <span
           className={cn(
             "text-sm",
+            hero && "font-mono",
             captionTone ? (TONE[captionTone] ?? "text-muted-foreground") : "text-muted-foreground",
           )}
         >
@@ -137,7 +158,8 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       ) : null}
       {children}
     </div>
-  ),
+    )
+  },
 )
 MetricTile.displayName = "MetricTile"
 
