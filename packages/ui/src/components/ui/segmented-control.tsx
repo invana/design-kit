@@ -15,10 +15,14 @@ export interface SegmentedControlProps
     "onChange" | "defaultValue"
   > {
   options: SegmentedOption[]
-  /** Controlled. Pass it with {@link onValueChange}. */
-  value?: string
-  /** Uncontrolled starting option. Defaults to the first. */
-  defaultValue?: string
+  /** Controlled. Pass it with {@link onValueChange}; `null` is no pick. */
+  value?: string | null
+  /**
+   * Uncontrolled starting option. Defaults to the first, because a reading is
+   * never off. `null` starts with none picked — a question not yet answered,
+   * where picking the first for the reader would answer it for them.
+   */
+  defaultValue?: string | null
   onValueChange?: (value: string) => void
   /** `xs` is 22px — a pagehead slot. `sm` is 26px, for a panel header. */
   size?: "xs" | "sm"
@@ -76,15 +80,19 @@ export const SegmentedControl = React.forwardRef<
     },
     ref,
   ) => {
-    const [internal, setInternal] = React.useState(
-      defaultValue ?? options[0]?.value,
+    const [internal, setInternal] = React.useState<string | null>(
+      defaultValue === undefined ? (options[0]?.value ?? null) : defaultValue,
     )
-    const active = value ?? internal
+    const active = value === undefined ? internal : value
+    // With nothing picked, the first option that can be is the one Tab reaches.
+    const entry = options.some((o) => o.value === active)
+      ? active
+      : options.find((o) => !o.disabled)?.value
     const refs = React.useRef<(HTMLButtonElement | null)[]>([])
 
     const select = (next: string) => {
       if (readOnly) return
-      if (value == null) setInternal(next)
+      if (value === undefined) setInternal(next)
       onValueChange?.(next)
     }
 
@@ -132,7 +140,7 @@ export const SegmentedControl = React.forwardRef<
               role="radio"
               aria-checked={on}
               disabled={option.disabled}
-              tabIndex={on ? 0 : -1}
+              tabIndex={option.value === entry ? 0 : -1}
               onClick={() => select(option.value)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
