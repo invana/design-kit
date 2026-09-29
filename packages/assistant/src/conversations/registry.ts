@@ -3,16 +3,21 @@ import type * as React from "react"
 import { CaveatBlock } from "../answers/blocks/caveat"
 import { FilesBlock } from "../answers/blocks/files"
 import { GridBlock } from "../answers/blocks/grid"
+import { MetricBlock } from "../answers/blocks/metric"
 import { NarrativeBlock } from "../answers/blocks/narrative"
 import { ProposalBlock } from "../answers/blocks/proposal"
+import { RankedBlock } from "../answers/blocks/ranked"
 import { RecordBlock } from "../answers/blocks/record"
 import { ScopeBlock } from "../answers/blocks/scope"
 import { SuggestionsBlock } from "../answers/blocks/suggestions"
 import { TableBlock } from "../answers/blocks/table"
 import { TimelineBlock } from "../answers/blocks/timeline"
 import { TimeseriesBlock } from "../answers/blocks/timeseries"
+import { ConfirmAsk } from "../asks/presets/confirm"
 import { FormAsk } from "../asks/presets/form"
+import { MultiAsk } from "../asks/presets/multi"
 import { MultistepAsk } from "../asks/presets/multistep"
+import { QuickAsk } from "../asks/presets/quick"
 import { SingleAsk } from "../asks/presets/single"
 import type { AskPresetId, BlockPresetId } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
@@ -57,10 +62,10 @@ export type AskRegistry = { [P in AskPresetId]: AskRenderer<P> | null }
 export type BlockRegistry = { [P in BlockPresetId]: BlockRenderer<P> | null }
 
 export const BUILT_IN_ASKS: AskRegistry = {
-  confirm: null,
+  confirm: ConfirmAsk,
   single: SingleAsk,
-  multi: null,
-  quick: null,
+  multi: MultiAsk,
+  quick: QuickAsk,
   period: null,
   number: null,
   short: null,
@@ -81,12 +86,12 @@ export const BUILT_IN_ASKS: AskRegistry = {
 
 export const BUILT_IN_BLOCKS: BlockRegistry = {
   narrative: NarrativeBlock,
-  metric: null,
+  metric: MetricBlock,
   grid: GridBlock,
   table: TableBlock,
   attr: null,
   record: RecordBlock,
-  ranked: null,
+  ranked: RankedBlock,
   timeseries: TimeseriesBlock,
   bars: null,
   waterfall: null,

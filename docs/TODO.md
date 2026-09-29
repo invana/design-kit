@@ -243,10 +243,10 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 
 | Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
-| confirm | `boolean` | ConfirmCard · assistant | `asks/presets/confirm.tsx` | todo | today | 2 |
+| confirm | `boolean` | ConfirmCard · assistant | `asks/presets/confirm.tsx` | done | today | 2 |
 | single | `string` | ClarifyCard · assistant | `asks/presets/single.tsx` | done | today | 1 |
-| multi | `string[]` | ClarifyCard, multiple · assistant | `asks/presets/multi.tsx` | todo | today | 2 |
-| quick | `string` | SegmentedControl · ui | `asks/presets/quick.tsx` | todo | today | 2 |
+| multi | `string[]` | ClarifyCard, multiple · assistant | `asks/presets/multi.tsx` | done | today | 2 |
+| quick | `string` | SegmentedControl · ui | `asks/presets/quick.tsx` | done | today | 2 |
 | period | `{ from, to, label }` | PeriodPicker · ui | `asks/presets/period.tsx` | todo | today | – |
 | number | `number` | Questionnaire input with unit · ui | `asks/presets/number.tsx` | todo | today | 4 |
 | short | `string` | Questionnaire input · ui | `asks/presets/short.tsx` | todo | today | – |
@@ -269,12 +269,12 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
 | narrative | `{ text, cites? }` | Prose with CitationMarker · assistant | `answers/blocks/narrative.tsx` | done | today | 1 |
-| metric | `{ label, value, delta, compare }` | MetricTile · ui | `answers/blocks/metric.tsx` | todo | today | 2 |
+| metric | `{ label, value, delta, compare }` | MetricTile · ui | `answers/blocks/metric.tsx` | done | today | 2 |
 | grid | `{ tiles[] }` | MetricGrid · ui | `answers/blocks/grid.tsx` | done | today | 1 |
 | table | `{ columns, rows, total }` | DataTable preview · tables | `answers/blocks/table.tsx` | done | today | 1 |
 | attr | `{ columns[scale, dir], rows }` | DataTable column scale · tables | `answers/blocks/attr.tsx` | todo | today | 4 |
 | record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | done | today | 1 |
-| ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | todo | today | 2 |
+| ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | done | today | 2 |
 | timeseries | `{ series, band?, forecastFrom?, forecastLabel?, marks? }` | LineChart · charts | `answers/blocks/timeseries.tsx` | done | today | 1 |
 | bars | `{ groups, series, target? }` | BarChartV · charts | `answers/blocks/bars.tsx` | todo | next | 2 |
 | waterfall | `{ start, steps[], end }` | Waterfall · charts | `answers/blocks/waterfall.tsx` | todo | next | 3 |
