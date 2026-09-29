@@ -243,7 +243,7 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
 | confirm | `boolean` | ConfirmCard · assistant | `asks/presets/confirm.tsx` | todo | today | 2 |
-| single | `string` | ClarifyCard · assistant | `asks/presets/single.tsx` | todo | today | 1 |
+| single | `string` | ClarifyCard · assistant | `asks/presets/single.tsx` | done | today | 1 |
 | multi | `string[]` | ClarifyCard, multiple · assistant | `asks/presets/multi.tsx` | todo | today | 2 |
 | quick | `string` | SegmentedControl · ui | `asks/presets/quick.tsx` | todo | today | 2 |
 | period | `{ from, to, label }` | PeriodPicker · ui | `asks/presets/period.tsx` | todo | today | – |
@@ -252,7 +252,7 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | long | `string` | Questionnaire freeform · ui | `asks/presets/long.tsx` | todo | today | – |
 | entity | `id[]` | RichSelect + SearchInput · ui | `asks/presets/entity.tsx` | todo | next | 4 |
 | scale | `1–5` | RatingControl · ui | `asks/presets/scale.tsx` | todo | today | – |
-| multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `asks/presets/multistep.tsx` | todo | today | 1 |
+| multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `asks/presets/multistep.tsx` | done | today | 1 |
 | form | `Record<field, value>` | ObjectField · forms | `asks/presets/form.tsx` | todo | next | 1 |
 | weights | `Record<objective, 0–100>` | WeightControl · ui | `asks/presets/weights.tsx` | todo | today | 4 |
 | approval | `approve \| reject` | ProposalCard · ui | `asks/presets/approval.tsx` | todo | today | – |

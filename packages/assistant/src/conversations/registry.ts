@@ -1,5 +1,7 @@
 import type * as React from "react"
 
+import { MultistepAsk } from "../asks/presets/multistep"
+import { SingleAsk } from "../asks/presets/single"
 import type { AskPresetId, BlockPresetId } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
 import type {
@@ -44,7 +46,7 @@ export type BlockRegistry = { [P in BlockPresetId]: BlockRenderer<P> | null }
 
 export const BUILT_IN_ASKS: AskRegistry = {
   confirm: null,
-  single: null,
+  single: SingleAsk,
   multi: null,
   quick: null,
   period: null,
@@ -53,7 +55,7 @@ export const BUILT_IN_ASKS: AskRegistry = {
   long: null,
   entity: null,
   scale: null,
-  multistep: null,
+  multistep: MultistepAsk,
   form: null,
   weights: null,
   approval: null,

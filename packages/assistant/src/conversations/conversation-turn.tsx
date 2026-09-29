@@ -1,5 +1,6 @@
 import { EmissionCard } from "../answers"
-import { AskFrame } from "../asks/ask-frame"
+import { ClarifyCard } from "../asks"
+import { STAGES } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
 import type { AnswerTurn, AskTurn, BlockSpec, Turn } from "../protocol/types"
 import { Placeholder } from "./placeholder"
@@ -96,7 +97,7 @@ function AnswerTurnView({
       {inCard.length ? (
         <EmissionCard
           kind={turn.label ?? turn.pattern ?? "answer"}
-          template={turn.title}
+          title={turn.title}
           citation={citation(turn)}
           note={turn.state === "complete" || turn.state === "cannot" ? undefined : turn.state}
         >
@@ -111,6 +112,13 @@ function AnswerTurnView({
   )
 }
 
+const STAGE_NAME = new Map<string, string>(STAGES.map((s) => [s.id, s.name]))
+const stageName = (stage: string) => (STAGE_NAME.get(stage) ?? stage).toLowerCase()
+
+/**
+ * An ask renders in ClarifyCard, which draws its state and the stage that
+ * asked; the preset's renderer fills the body.
+ */
 function AskTurnView({
   turn,
   registry,
@@ -122,13 +130,13 @@ function AskTurnView({
 }) {
   const Renderer = registry.asks[turn.ask.preset]
   return (
-    <AskFrame state={turn.state} stage={turn.stage}>
+    <ClarifyCard state={turn.state} step={stageName(turn.stage)}>
       {Renderer ? (
         <Renderer turn={turn} options={turn.ask} onEvent={onEvent} />
       ) : (
         <Placeholder kind="ask" preset={turn.ask.preset} options={turn.ask} />
       )}
-    </AskFrame>
+    </ClarifyCard>
   )
 }
 

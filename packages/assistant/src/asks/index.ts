@@ -1,9 +1,25 @@
-import { ClarifyCard as UiClarifyCard } from "@invana/ui"
+import {
+  ClarifyActions as UiClarifyActions,
+  ClarifyCard as UiClarifyCard,
+  ClarifyFootnote as UiClarifyFootnote,
+} from "@invana/ui"
 
-/**
- * The live ask: the run parks and answering resumes it. Moving from
- * `@invana/ui`; see `conversations/thread.ts` for why it is re-declared.
+/*
+ * The live ask and its parts, moving from `@invana/ui`; see
+ * `conversations/thread.ts` for why they are re-declared.
  */
-export const ClarifyCard = UiClarifyCard
 
-export type { ClarifyCardProps, ClarifyOption } from "@invana/ui"
+/** The ask, through its whole life: pending, answered, skipped, superseded, expired. */
+export const ClarifyCard = UiClarifyCard
+/** The line under an ask: why these options, or where a default came from. */
+export const ClarifyFootnote = UiClarifyFootnote
+/** The row of controls that answers, skips or changes an ask. */
+export const ClarifyActions = UiClarifyActions
+
+export type {
+  ClarifyActionsProps,
+  ClarifyCardProps,
+  ClarifyFootnoteProps,
+  ClarifyOption,
+  ClarifyState,
+} from "@invana/ui"
