@@ -114,7 +114,8 @@ Nothing moves out. Files stay flat in charts/src, one per chart. uPlot through C
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
 | LineChart band and forecast (on LineChart) | `packages/charts/src/line-chart.tsx` | extend | done | today |
-| BarChartV groups and target (on BarChartV) | `packages/charts/src/bar-chart-v.tsx` | extend | partial | next |
+| BarChartV groups and target (on BarChartV) | `packages/charts/src/bar-chart-v.tsx` | extend | done | next |
+| BarChartV comparison (on BarChartV) | `packages/charts/src/bar-chart-v.tsx` | extend | done | next |
 | BarChartH ranked (on BarChartH) | `packages/charts/src/bar-chart-h.tsx` | extend | done | today |
 | InlineMeter target (on InlineMeter) | `packages/charts/src/inline-meter.tsx` | extend | partial | next |
 
