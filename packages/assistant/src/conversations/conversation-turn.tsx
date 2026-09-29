@@ -1,4 +1,4 @@
-import { EmissionCard } from "../answers"
+import { EmissionBody, EmissionCard } from "../answers"
 import { ClarifyCard } from "../asks"
 import { STAGES } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
@@ -89,9 +89,7 @@ function AnswerTurnView({
     <div className="flex min-w-0 flex-col gap-2">
       {turn.trace?.length ? (
         <EmissionCard kind="running">
-          <div className="flex flex-col gap-2 p-2">
-            {block({ preset: "trace", steps: turn.trace }, 0)}
-          </div>
+          <EmissionBody>{block({ preset: "trace", steps: turn.trace }, 0)}</EmissionBody>
         </EmissionCard>
       ) : null}
       {inCard.length ? (
@@ -101,7 +99,7 @@ function AnswerTurnView({
           citation={citation(turn)}
           note={turn.state === "complete" || turn.state === "cannot" ? undefined : turn.state}
         >
-          <div className="flex min-w-0 flex-col gap-2 p-2">{inCard.map(block)}</div>
+          <EmissionBody>{inCard.map(block)}</EmissionBody>
         </EmissionCard>
       ) : null}
       {ownCards.map(block)}

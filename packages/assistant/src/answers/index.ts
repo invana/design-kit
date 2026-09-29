@@ -1,5 +1,6 @@
 import {
   CitationMarker as UiCitationMarker,
+  EmissionBody as UiEmissionBody,
   EmissionCard as UiEmissionCard,
   EmissionHeader as UiEmissionHeader,
   TemplatePicker as UiTemplatePicker,
@@ -12,6 +13,8 @@ import {
 
 /** The answer card. An answer is its blocks inside this card. */
 export const EmissionCard = UiEmissionCard
+/** The card's body: its blocks in one padded column. */
+export const EmissionBody = UiEmissionBody
 /** The strip that says what an answer is and what it is grounded in. */
 export const EmissionHeader = UiEmissionHeader
 /** The superscript that ties a clause to the records behind it. */

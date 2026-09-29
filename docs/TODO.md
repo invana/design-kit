@@ -168,7 +168,7 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| DataTable preview mode (on DataTable) | `packages/tables/src/data-table.tsx` | extend | partial | today |
+| DataTable preview mode (on DataTable) | `packages/tables/src/data-table.tsx` | extend | done | today |
 | DataTable column scale (on DataTable) | `packages/tables/src/data-table.tsx` | extend | partial | today |
 
 ### New
@@ -270,8 +270,8 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | --- | --- | --- | --- | --- | --- | --- |
 | narrative | `{ text, cites? }` | Prose with CitationMarker · assistant | `answers/blocks/narrative.tsx` | done | today | 1 |
 | metric | `{ label, value, delta, compare }` | MetricTile · ui | `answers/blocks/metric.tsx` | todo | today | 2 |
-| grid | `{ tiles[] }` | MetricGrid · ui | `answers/blocks/grid.tsx` | todo | today | 1 |
-| table | `{ columns, rows, total }` | DataTable preview · tables | `answers/blocks/table.tsx` | todo | today | 1 |
+| grid | `{ tiles[] }` | MetricGrid · ui | `answers/blocks/grid.tsx` | done | today | 1 |
+| table | `{ columns, rows, total }` | DataTable preview · tables | `answers/blocks/table.tsx` | done | today | 1 |
 | attr | `{ columns[scale, dir], rows }` | DataTable column scale · tables | `answers/blocks/attr.tsx` | todo | today | 4 |
 | record | `{ rows[label, value] }` | PropertyList · ui | `answers/blocks/record.tsx` | done | today | 1 |
 | ranked | `{ items[label, value] }` | BarChartH ranked · charts | `answers/blocks/ranked.tsx` | todo | today | 2 |
@@ -281,12 +281,12 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids are added to
 | matrix | `{ rows, cols, values, scale }` | Heatmap · charts | `answers/blocks/matrix.tsx` | todo | next | – |
 | funnel | `{ steps[label, count] }` | Funnel · charts | `answers/blocks/funnel.tsx` | todo | next | – |
 | histogram | `{ bins \| values, threshold?, outliers? }` | Histogram · charts | `answers/blocks/histogram.tsx` | todo | next | 4 |
-| timeline | `{ events[when, text, tone] }` | TimelineList · ui | `answers/blocks/timeline.tsx` | todo | today | 1 |
+| timeline | `{ events[when, text, tone] }` | TimelineList · ui | `answers/blocks/timeline.tsx` | done | today | 1 |
 | subgraph | `{ nodes, edges }` | @invana/canvas | `answers/blocks/subgraph.tsx` | todo | later | – |
 | method | `{ label, code, meta }` | ChatSessionDisclosure · assistant | `answers/blocks/method.tsx` | todo | today | 2 |
 | citations | `{ sources[] }` | CitationList · ui | `answers/blocks/citations.tsx` | todo | today | 2 |
-| files | `{ files[name, size, digest] }` | ArtifactTable · ui | `answers/blocks/files.tsx` | todo | today | 1 |
-| proposal | `{ rows, consequence, actions[] }` | ProposalCard · ui | `answers/blocks/proposal.tsx` | todo | today | 1 |
+| files | `{ files[name, size, digest] }` | ArtifactTable · ui | `answers/blocks/files.tsx` | done | today | 1 |
+| proposal | `{ rows, consequence, actions[] }` | ProposalCard · ui | `answers/blocks/proposal.tsx` | done | today | 1 |
 | cannot | `{ reason, remedy, nearest? }` | CannotAnswerCard · ui | `answers/blocks/cannot.tsx` | todo | today | 3 |
 | caveat | `{ label, text }` | CaveatNote · ui | `answers/blocks/caveat.tsx` | done | today | 1 |
 | scope | `{ parts[] }` | ScopeLine · ui | `answers/blocks/scope.tsx` | done | today | 1 |
