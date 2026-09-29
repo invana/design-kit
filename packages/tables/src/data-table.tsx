@@ -36,6 +36,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -135,8 +136,17 @@ export interface DataTableProps<TData extends RowData> {
    * under the rows: `3 of 214 · stores`, with `action` (an `Open all`) at the
    * end. `data` is the rows shown; `total` is how many exist, and without it
    * there is no count line, since `3 of 3` says nothing.
+   *
+   * `onOpen` draws the `Open all` link itself (`openLabel` renames it), in the
+   * primary colour and flush with the count; `action` is for anything else.
    */
-  preview?: { total?: number; noun?: string; action?: React.ReactNode };
+  preview?: {
+    total?: number;
+    noun?: string;
+    action?: React.ReactNode;
+    onOpen?: () => void;
+    openLabel?: React.ReactNode;
+  };
 }
 
 function getCommonPinStyles<TData>(
@@ -595,7 +605,7 @@ export function DataTable<TData extends RowData>({
       </DndContext>
 
       {preview ? (
-        preview.total != null || preview.action ? (
+        preview.total != null || preview.action || preview.onOpen ? (
           <div className="flex items-baseline justify-between gap-2 text-sm text-muted-foreground">
             <span>
               {preview.total != null
@@ -603,6 +613,17 @@ export function DataTable<TData extends RowData>({
                 : null}
             </span>
             {preview.action}
+            {preview.onOpen ? (
+              <Button
+                type="button"
+                variant="link"
+                size="xs"
+                className="h-auto p-0 font-medium"
+                onClick={preview.onOpen}
+              >
+                {preview.openLabel ?? "Open all"}
+              </Button>
+            ) : null}
           </div>
         ) : null
       ) : null}
