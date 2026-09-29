@@ -26,12 +26,17 @@ export function DataTableToolbar<TData>({
   const toggleableCols = table
     .getAllLeafColumns()
     .filter((c) => c.getCanHide());
+  const showColumns = enableColumnVisibility && toggleableCols.length > 0;
+
+  // Nothing to put in it: no row at all, or its padding opens a gap above
+  // the header.
+  if (!children && !showColumns) return null;
 
   return (
     <div className="flex items-center justify-between gap-2 px-2 py-2">
       <div className="flex items-center gap-2">{children}</div>
       <div className="flex items-center gap-2">
-        {enableColumnVisibility && toggleableCols.length > 0 && (
+        {showColumns && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="h-8">

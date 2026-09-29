@@ -129,6 +129,14 @@ export interface DataTableProps<TData extends RowData> {
   isRowSelected?: (row: TData) => boolean;
   /** Makes rows activate — click, `Enter` or `Space`. */
   onRowClick?: (row: TData) => void;
+  /**
+   * The table as a preview of a longer one — the first rows an answer shows.
+   * Turns pagination off, drops the header ground, and says how much there is
+   * under the rows: `3 of 214 · stores`, with `action` (an `Open all`) at the
+   * end. `data` is the rows shown; `total` is how many exist, and without it
+   * there is no count line, since `3 of 3` says nothing.
+   */
+  preview?: { total?: number; noun?: string; action?: React.ReactNode };
 }
 
 function getCommonPinStyles<TData>(
@@ -146,6 +154,8 @@ function getCommonPinStyles<TData>(
 
 interface DraggableHeaderProps<TData> {
   header: Header<TData, unknown>;
+  /** The muted header ground. Off in a preview, where the rows are the point. */
+  ground: boolean;
   enableReordering: boolean;
   enableResizing: boolean;
   enableSorting: boolean;
@@ -153,6 +163,7 @@ interface DraggableHeaderProps<TData> {
 
 function DraggableHeader<TData>({
   header,
+  ground,
   enableReordering,
   enableResizing,
   enableSorting,
@@ -192,7 +203,8 @@ function DraggableHeader<TData>({
         ...(isPinned ? { backgroundColor: "hsl(var(--background))" } : {}),
       }}
       className={cn(
-        "group relative select-none bg-muted/40",
+        "group relative select-none",
+        ground && "bg-muted/40",
         isPinned &&
           "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
         column.columnDef.meta?.headerClassName,
@@ -279,6 +291,7 @@ export function DataTable<TData extends RowData>({
   rowIndent,
   isRowSelected,
   onRowClick,
+  preview,
 }: DataTableProps<TData>) {
   const [internalSorting, setInternalSorting] = React.useState<SortingState>(
     [],
@@ -371,7 +384,7 @@ export function DataTable<TData extends RowData>({
       enableSorting && !manualSorting ? getSortedRowModel() : undefined,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel:
-      enablePagination && !manualPagination
+      enablePagination && !manualPagination && !preview
         ? getPaginationRowModel()
         : undefined,
   });
@@ -440,6 +453,7 @@ export function DataTable<TData extends RowData>({
                       <DraggableHeader
                         key={header.id}
                         header={header}
+                        ground={!preview}
                         enableReordering={enableColumnReordering}
                         enableResizing={enableColumnResizing}
                         enableSorting={enableSorting}
@@ -580,7 +594,20 @@ export function DataTable<TData extends RowData>({
         </div>
       </DndContext>
 
-      {enablePagination && (
+      {preview ? (
+        preview.total != null || preview.action ? (
+          <div className="flex items-baseline justify-between gap-2 text-sm text-muted-foreground">
+            <span>
+              {preview.total != null
+                ? `${data.length} of ${preview.total.toLocaleString()}${preview.noun ? ` · ${preview.noun}` : ""}`
+                : null}
+            </span>
+            {preview.action}
+          </div>
+        ) : null
+      ) : null}
+
+      {enablePagination && !preview && (
         <DataTablePagination table={table} pageSizeOptions={pageSizeOptions} />
       )}
     </div>
