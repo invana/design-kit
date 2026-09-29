@@ -80,6 +80,9 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
   const blocks = new Set([...BLOCK_IDS, ...(options.extraBlocks ?? [])])
 
   if (typeof spec?.id !== "string" || !spec.id) error("The conversation has no id.")
+  if (spec?.analyst !== undefined && (typeof spec.analyst !== "string" || !spec.analyst)) {
+    error("The analyst's name is not a non-empty string.")
+  }
   if (!Array.isArray(spec?.turns)) {
     error("The conversation has no turns array.")
     return issues

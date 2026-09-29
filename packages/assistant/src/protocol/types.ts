@@ -438,6 +438,12 @@ export type Turn = AnalystTurn | AskTurn | AnswerTurn
 export interface ConversationSpec {
   id: string
   title?: string
+  /**
+   * What the analyst is called in this thread — `Planner`, `Researcher`. When
+   * set, their prompts and the assistant's asks are labelled with who is
+   * speaking; answers are cards and need no label.
+   */
+  analyst?: string
   /** Scope carried by the whole thread, until a turn changes it. */
   scope?: Record<string, string>
   turns: Turn[]

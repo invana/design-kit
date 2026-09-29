@@ -5,6 +5,7 @@ import type { ConversationSpec, Turn } from "../protocol/types"
 import { ConversationTurn } from "./conversation-turn"
 import { type PresetRegistry, resolveRegistry } from "./registry"
 import { ChatSession, ChatSessionComposer } from "./thread"
+import { TurnLabel } from "./turn-label"
 
 export interface ConversationProps {
   /** The whole conversation, as data. Controlled: patch it with `applyPatch`. */
@@ -30,13 +31,13 @@ export interface ConversationProps {
  * Consecutive asks sit side by side, two at most — the grammar's limit before
  * the assistant must show something. Everything else is one turn per row.
  */
+const isAsk = (turn: Turn) => turn.role === "assistant" && turn.kind === "ask"
+
 function rows(turns: Turn[]): Turn[][] {
   const out: Turn[][] = []
   for (const turn of turns) {
     const last = out[out.length - 1]
-    const isAsk = turn.role === "assistant" && turn.kind === "ask"
-    const lastIsAsks = last?.every((t) => t.role === "assistant" && t.kind === "ask")
-    if (isAsk && lastIsAsks && last.length < 2) last.push(turn)
+    if (isAsk(turn) && last?.every(isAsk) && last.length < 2) last.push(turn)
     else out.push([turn])
   }
   return out
@@ -96,17 +97,37 @@ export function Conversation({
         </div>
       }
     >
-      {rows(spec.turns).map((row) =>
-        row.length === 1 ? (
-          <ConversationTurn key={row[0].id} turn={row[0]} registry={resolved} onEvent={emit} />
-        ) : (
-          <div key={row.map((t) => t.id).join("+")} className="grid gap-2 sm:grid-cols-2">
-            {row.map((t) => (
-              <ConversationTurn key={t.id} turn={t} registry={resolved} onEvent={emit} />
-            ))}
+      {rows(spec.turns).map((row) => {
+        const key = row.map((t) => t.id).join("+")
+        const first = row[0]!
+        const turns =
+          row.length === 1 ? (
+            <ConversationTurn turn={first} registry={resolved} onEvent={emit} />
+          ) : (
+            <div className="grid gap-2 sm:grid-cols-2">
+              {row.map((t) => (
+                <ConversationTurn key={t.id} turn={t} registry={resolved} onEvent={emit} />
+              ))}
+            </div>
+          )
+        // Only when the spec names the analyst: a label on one side alone
+        // would say one speaker is someone and the other is not.
+        const label = !spec.analyst
+          ? null
+          : first.role === "analyst"
+            ? <TurnLabel align="end">{spec.analyst}</TurnLabel>
+            : isAsk(first)
+              ? <TurnLabel>Assistant</TurnLabel>
+              : null
+        return label ? (
+          <div key={key} className="flex flex-col gap-1">
+            {label}
+            {turns}
           </div>
-        ),
-      )}
+        ) : (
+          <React.Fragment key={key}>{turns}</React.Fragment>
+        )
+      })}
     </ChatSession>
   )
 }

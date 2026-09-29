@@ -16,6 +16,11 @@ export type ConversationEvent =
   | { type: "action"; turn: string; action: string }
   /** One part of an answer's scope line was edited. */
   | { type: "scope"; turn: string; part: number; value: unknown }
+  /**
+   * Open a block's records in full — the rows a table previews. `block` is its
+   * index in the turn's `blocks`.
+   */
+  | { type: "open"; turn: string; block: number }
   /** Render the same records as another preset. */
   | { type: "template"; turn: string; preset: string }
   /** Change the current answer in place — `by-region`. */
@@ -36,6 +41,7 @@ export const EVENT_TYPES = [
   "change",
   "action",
   "scope",
+  "open",
   "template",
   "refine",
   "suggestion",

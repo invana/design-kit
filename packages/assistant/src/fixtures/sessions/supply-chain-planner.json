@@ -1,6 +1,7 @@
 {
   "id": "session-supply-chain-planner",
   "title": "Lead times are slipping. Should we move volume to the second supplier?",
+  "analyst": "Planner",
   "turns": [
     { "id": "t1", "role": "analyst", "text": "Our lead times from Apex keep slipping. Should we move volume to Brightline?" },
     { "id": "t2", "role": "assistant", "kind": "ask", "stage": "check", "state": "answered",

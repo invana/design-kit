@@ -52,6 +52,6 @@ describe("the grammar is internally consistent", () => {
       asks: ASKS.length,
       patterns: PATTERNS.length,
       events: EVENT_TYPES.length,
-    }).toEqual({ stages: 7, flows: 26, askPresets: 20, blockPresets: 42, asks: 28, patterns: 26, events: 12 })
+    }).toEqual({ stages: 7, flows: 26, askPresets: 20, blockPresets: 42, asks: 28, patterns: 26, events: 13 })
   })
 })

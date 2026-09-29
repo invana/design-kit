@@ -1,6 +1,7 @@
 {
   "id": "session-product-data-scientist",
   "title": "Did the onboarding checklist improve retention, or did it just arrive with better users?",
+  "analyst": "Data scientist",
   "turns": [
     { "id": "t1", "role": "analyst", "text": "We shipped the onboarding checklist on 2 June. Did it actually improve retention, or did it just arrive with better users?" },
     { "id": "t2", "role": "assistant", "kind": "ask", "stage": "frame", "state": "answered",

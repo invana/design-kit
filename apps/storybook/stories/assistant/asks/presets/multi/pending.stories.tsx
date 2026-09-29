@@ -31,7 +31,7 @@ const turn: AskTurn = {
   },
 };
 
-/** Waiting on the analyst. The defaults arrive ticked; the option left off says why on the right. Submit sends the ticked values. */
+/** Waiting on the analyst. The defaults arrive ticked; the option left off says why on the right. The button reads the prompt and the count — `Adjust for 4` — and sends the ticked values. */
 export const Pending: Story = {
   args: { turn, registry: resolveRegistry(), onEvent: fn() },
 };

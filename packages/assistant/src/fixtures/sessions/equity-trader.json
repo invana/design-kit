@@ -1,6 +1,7 @@
 {
   "id": "session-equity-trader",
   "title": "Explaining a bad week, then positioning into the CPI print",
+  "analyst": "Trader",
   "turns": [
     { "id": "t1", "role": "analyst", "text": "My book lost £1.4M this week while the model portfolio was flat. What happened?" },
     { "id": "t2", "role": "assistant", "kind": "ask", "stage": "frame", "state": "answered",

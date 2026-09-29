@@ -72,7 +72,7 @@ const turn: AnswerTurn = {
   ],
 };
 
-/** The first rows of a longer table, with how many there are under them. A cell with a `tone` is inked by it; `strong` marks the figure a row turns on. */
+/** The first rows of a longer table, with how many there are under them and an `Open all` that sends an `open` event. A cell with a `tone` is inked by it; `strong` marks the figure a row turns on. */
 export const Default: Story = {
   args: { turn, registry: resolveRegistry(), onEvent: fn() },
 };

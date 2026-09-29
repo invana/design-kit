@@ -1,6 +1,7 @@
 {
   "id": "session-plant-breeder",
   "title": "Planning a drought-tolerant variety from the ones we already grow",
+  "analyst": "Breeder",
   "turns": [
     { "id": "t1", "role": "analyst", "text": "I want a drought-tolerant line from our current varieties without losing yield. Which parents should I look at?" },
     { "id": "t2", "role": "assistant", "kind": "ask", "stage": "scope", "state": "answered",

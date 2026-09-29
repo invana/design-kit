@@ -1,6 +1,7 @@
 {
   "id": "session-health-researcher",
   "title": "Are Friday discharges after hip replacement readmitted more often?",
+  "analyst": "Researcher",
   "turns": [
     { "id": "t1", "role": "analyst", "text": "Are patients discharged on a Friday after a hip replacement readmitted more often?" },
     { "id": "t2", "role": "assistant", "kind": "ask", "stage": "frame", "state": "answered",
