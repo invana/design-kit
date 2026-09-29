@@ -30,12 +30,22 @@ export interface BarChartHProps
   data: BarDatum[]
   /** Fixes the scale. Defaults to the largest value present. */
   max?: number
-  /** Width of the label column, so bars start on the same x. */
+  /** Width of the label column, so bars start on the same x. Default: 78, or 96 in `ranked`. */
   labelWidth?: number
   /** Series colour when a datum does not override it. */
   color?: string
   /** Names what is plotted. A single series needs no legend when this is set. */
   caption?: React.ReactNode
+  /**
+   * `tips` labels each bar at its end. `ranked` is a list read top to bottom —
+   * drivers, top-N, likely causes: the labels are the reading in the text
+   * colour and may wrap, the bars take the width between, and the values line
+   * up in a column at the right. A negative value draws in `negativeColor`,
+   * its length its size.
+   */
+  variant?: "tips" | "ranked"
+  /** The colour of a bar below zero, in `ranked`. */
+  negativeColor?: string
 }
 
 /**
@@ -55,14 +65,44 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
     {
       data,
       max,
-      labelWidth = 78,
+      labelWidth,
       color = "var(--color-data-1)",
       caption,
+      variant = "tips",
+      negativeColor = "var(--color-destructive)",
       className,
       ...props
     },
     ref,
   ) => {
+    if (variant === "ranked") {
+      const ceiling = max ?? (Math.max(...data.map((d) => Math.abs(d.value)), 0) || 1)
+      return (
+        <div ref={ref} className={cn("flex flex-col gap-1.5", className)} {...props}>
+          {caption != null ? (
+            <span className="text-sm text-muted-foreground">{caption}</span>
+          ) : null}
+          {data.map((d, i) => (
+            <div
+              key={i}
+              className="grid items-center gap-2"
+              style={{ gridTemplateColumns: `${labelWidth ?? 96}px minmax(0, 1fr) auto` }}
+            >
+              <span className="min-w-0 text-pretty">{d.label}</span>
+              <span
+                title={`${d.label}: ${d.display ?? d.value}`}
+                className="h-2"
+                style={{
+                  width: `${Math.min(100, (Math.abs(d.value) / ceiling) * 100)}%`,
+                  background: d.color ?? (d.value < 0 ? negativeColor : color),
+                }}
+              />
+              <span className="min-w-[3ch] text-end tabular-nums">{d.display ?? d.value}</span>
+            </div>
+          ))}
+        </div>
+      )
+    }
     const ceiling = max ?? (Math.max(...data.map((d) => d.value), 0) || 1)
     return (
       <div ref={ref} className={cn("flex flex-col gap-1", className)} {...props}>
@@ -73,7 +113,7 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
           <div key={i} className="flex h-4 items-center gap-2">
             <span
               className="shrink-0 truncate text-sm text-muted-foreground"
-              style={{ width: labelWidth }}
+              style={{ width: labelWidth ?? 78 }}
             >
               {d.label}
             </span>
