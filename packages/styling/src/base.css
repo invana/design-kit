@@ -1,6 +1,13 @@
 /* Base styles */
-* {
-  border-color: var(--color-border);
+/*
+ * In the base layer, so a border-colour utility (`border-primary`,
+ * `border-l-warning`) wins. Unlayered, this rule beat every utility and each
+ * coloured border in the kit drew as the plain border.
+ */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
 }
 
 body {
