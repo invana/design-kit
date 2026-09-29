@@ -42,6 +42,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | ChatSessionActivityRow | `packages/assistant/src/conversations/chat-session-activity-row.tsx` | move in | done | today |
 | ChatSessionProgressLine | `packages/assistant/src/conversations/chat-session-progress-line.tsx` | move in | done | today |
 | ChatSessionDisclosure | `packages/assistant/src/conversations/chat-session-disclosure.tsx` | move in | done | today |
+| ChatSessionDisclosure inline (on ChatSessionDisclosure) | `packages/ui/src/components/ui-extended/chat-session/chat-session-disclosure.tsx` | extend | done | today |
 | ChatSessionComposer | `packages/assistant/src/conversations/chat-session-composer.tsx` | move in | done | today |
 | ChatSessionContextChip | `packages/assistant/src/conversations/chat-session-context-chip.tsx` | move in | done | today |
 | ChatSessionStatusBar | `packages/assistant/src/conversations/chat-session-status-bar.tsx` | move in | done | today |
@@ -213,6 +214,16 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | EvidenceBadge | `packages/ui/src/components/ui-extended/evidence-badge.tsx` | new | todo | next |
 | formatValue | `packages/ui/src/lib/format.ts` | new | todo | today |
 | Value | `packages/ui/src/components/ui-extended/value.tsx` | new | todo | today |
+
+### Extensions
+
+| Component | Folder | Change | Status | Tier |
+| --- | --- | --- | --- | --- |
+| SegmentedControl solid and read-only (on SegmentedControl) | `packages/ui/src/components/ui/segmented-control.tsx` | extend | done | today |
+| MetricTile hero (on MetricTile) | `packages/ui/src/components/ui-extended/metric-tile.tsx` | extend | done | today |
+| CitationRow numbered (on CitationList) | `packages/ui/src/components/ui-extended/citation-list.tsx` | extend | done | today |
+| TraceList progress (on TraceList, TraceStep) | `packages/ui/src/components/ui-extended/trace-list.tsx` | extend | done | today |
+| CannotAnswerCard type sizes (on CannotAnswerCard) | `packages/ui/src/components/ui-extended/cannot-answer-card.tsx` | extend | done | today |
 
 ### Everything else
 

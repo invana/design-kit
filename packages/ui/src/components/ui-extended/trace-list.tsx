@@ -9,8 +9,17 @@ import {
 } from "./layer-chip"
 
 export interface TraceListProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * `default` is the run view: stripe, sequence, layer, duration. `progress` is
+   * the trace a running answer streams — a dot per step (filled when done,
+   * pulsing while it runs, hollow while it waits), the step in plain text, and
+   * its timing or count at the right in mono.
+   */
+  variant?: "default" | "progress"
   children?: React.ReactNode
 }
+
+const TraceVariant = React.createContext<"default" | "progress">("default")
 
 /**
  * A run, in the order it happened.
@@ -25,15 +34,21 @@ export interface TraceListProps extends React.HTMLAttributes<HTMLDivElement> {
  * that holds it. The clock reading of the same trace is `LayerStrip`.
  */
 export const TraceList = React.forwardRef<HTMLDivElement, TraceListProps>(
-  ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="list"
-      className={cn("flex flex-col [&>*:first-child]:border-t-0", className)}
-      {...props}
-    >
-      {children}
-    </div>
+  ({ variant = "default", className, children, ...props }, ref) => (
+    <TraceVariant.Provider value={variant}>
+      <div
+        ref={ref}
+        role="list"
+        className={cn(
+          "flex flex-col",
+          variant === "progress" ? "gap-1" : "[&>*:first-child]:border-t-0",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    </TraceVariant.Provider>
   ),
 )
 TraceList.displayName = "TraceList"
@@ -68,6 +83,17 @@ export interface TraceStepProps
   struck?: boolean
   selected?: boolean
   onSelect?: () => void
+  /**
+   * Where the step is, in a `progress` list: `done`, `running` or `pending`.
+   * Defaults to `done`. The run view says the same with `dim` and `struck`.
+   */
+  status?: "done" | "running" | "pending"
+}
+
+const STATUS_DOT = {
+  done: "bg-primary",
+  running: "bg-info animate-pulse motion-reduce:animate-none",
+  pending: "border-[1.5px] border-muted-foreground",
 }
 
 /**
@@ -101,11 +127,37 @@ export const TraceStep = React.forwardRef<HTMLDivElement, TraceStepProps>(
       struck,
       selected,
       onSelect,
+      status = "done",
       className,
       ...props
     },
     ref,
   ) => {
+    const variant = React.useContext(TraceVariant)
+    if (variant === "progress") {
+      return (
+        <div
+          ref={ref}
+          role="listitem"
+          className={cn("flex min-w-0 items-center gap-2 text-sm", className)}
+          {...props}
+        >
+          <span className="flex w-3 shrink-0 justify-center">
+            <span
+              role="img"
+              aria-label={status}
+              className={cn("size-[7px] rounded-full", STATUS_DOT[status])}
+            />
+          </span>
+          <span className="min-w-0 flex-1 truncate">{name}</span>
+          {duration != null ? (
+            <span className="shrink-0 font-mono text-xs text-muted-foreground">
+              {duration}
+            </span>
+          ) : null}
+        </div>
+      )
+    }
     const paint = layer ? layerPaint(palette, layer) : undefined
     const Row = onSelect ? "button" : "div"
     return (

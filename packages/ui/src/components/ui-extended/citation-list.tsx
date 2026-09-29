@@ -5,11 +5,18 @@ import { cn } from "../../lib/utils"
 export interface CitationRowProps
   extends Omit<React.HTMLAttributes<HTMLLIElement>, "children"> {
   /** What kind of record this is — `Article`, `Bar`, `Event`. */
-  kind: React.ReactNode
+  kind?: React.ReactNode
+  /**
+   * The number an answer cites it by — `1` renders as `[1]`. Numbered rows are
+   * how an answer's markers are resolved, so the number leads the row.
+   */
+  marker?: React.ReactNode
   /** The record itself, in the words it was stored with. */
   children?: React.ReactNode
   /** Where it came from — the dataset, the publisher, the timestamp. */
   source?: React.ReactNode
+  /** How many records it contributed — `3,406`, `5 days`. Mono, at the right. */
+  count?: React.ReactNode
 }
 
 export interface CitationListProps
@@ -41,18 +48,34 @@ export const CitationList = React.forwardRef<
 CitationList.displayName = "CitationList"
 
 export const CitationRow = React.forwardRef<HTMLLIElement, CitationRowProps>(
-  ({ kind, source, className, children, ...props }, ref) => (
+  ({ kind, marker, source, count, className, children, ...props }, ref) => (
     <li
       ref={ref}
-      className={cn("flex min-h-[26px] items-center gap-2 py-0.5", className)}
+      className={cn(
+        "flex items-center gap-2 py-0.5",
+        // A numbered row is an answer's source line, set in the answer's
+        // secondary size; a kind row is a record in a list of its own.
+        marker != null ? "text-sm" : "min-h-[26px]",
+        className,
+      )}
       {...props}
     >
-      <span className="shrink-0 border border-border px-1 text-sm text-muted-foreground">
-        {kind}
-      </span>
+      {marker != null ? (
+        <span className="w-6 shrink-0 font-mono text-xs text-info">[{marker}]</span>
+      ) : null}
+      {kind != null ? (
+        <span className="shrink-0 border border-border px-1 text-sm text-muted-foreground">
+          {kind}
+        </span>
+      ) : null}
       <span className="min-w-0 flex-1 truncate">{children}</span>
       {source != null ? (
         <span className="shrink-0 text-sm text-muted-foreground">{source}</span>
+      ) : null}
+      {count != null ? (
+        <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+          {count}
+        </span>
       ) : null}
     </li>
   ),
