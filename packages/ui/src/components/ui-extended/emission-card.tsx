@@ -21,8 +21,11 @@ export type EmissionKind =
   | (string & {})
 
 export interface EmissionHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+  // `title` is what the card shows, not the element's tooltip attribute.
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   kind: EmissionKind
+  /** What the card shows, in words — `Apex Components, weekly lead time`. */
+  title?: React.ReactNode
   /** The projection template that rendered it — `table-compact@3`. Shown in mono. */
   template?: React.ReactNode
   /**
@@ -42,6 +45,7 @@ export interface EmissionHeaderProps
 export interface EmissionCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
     Omit<EmissionHeaderProps, keyof React.HTMLAttributes<HTMLDivElement>> {
+  title?: React.ReactNode
   /** Set false to render the body alone, where a surface supplies its own header. */
   showHeader?: boolean
   children?: React.ReactNode
@@ -60,16 +64,19 @@ export interface EmissionCardProps
 export const EmissionHeader = React.forwardRef<
   HTMLDivElement,
   EmissionHeaderProps
->(({ kind, template, citation, note, actions, className, ...props }, ref) => (
+>(({ kind, title, template, citation, note, actions, className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-sm",
+      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted px-2 text-sm",
       className,
     )}
     {...props}
   >
     <span className="shrink-0 font-medium">{kind}</span>
+    {title != null ? (
+      <span className="truncate text-muted-foreground">{title}</span>
+    ) : null}
     {template != null ? (
       <span className="truncate font-mono text-muted-foreground">{template}</span>
     ) : null}
@@ -106,6 +113,7 @@ export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
   (
     {
       kind,
+      title,
       template,
       citation,
       note,
@@ -126,6 +134,7 @@ export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
       {showHeader ? (
         <EmissionHeader
           kind={kind}
+          title={title}
           template={template}
           citation={citation}
           note={note}

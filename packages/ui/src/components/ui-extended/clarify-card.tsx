@@ -1,6 +1,13 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
+import {
+  Questionnaire,
+  QuestionnaireChoice,
+  QuestionnaireChoiceTitle,
+  QuestionnaireChoices,
+  QuestionnaireItem,
+} from "../ui/questionnaire"
 
 export interface ClarifyOption {
   /** Stable id handed back to `onSelect`. */
@@ -17,22 +24,82 @@ export interface ClarifyOption {
   disabled?: boolean
 }
 
+/**
+ * Where the ask is in its life. `pending` waits on the reader; the rest are
+ * settled and read-only. Open: a surface may name its own.
+ */
+export type ClarifyState =
+  | "pending"
+  | "answered"
+  | "skipped"
+  | "superseded"
+  | "expired"
+  | (string & {})
+
 export interface ClarifyCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
+  /** @default "pending" */
+  state?: ClarifyState
   /** Which step asked — `understand`. */
   step?: React.ReactNode
   /** How long it has been waiting — `parked 14 min`. */
   waiting?: React.ReactNode
   /** The question. One sentence. */
-  question: React.ReactNode
-  options: ClarifyOption[]
+  question?: React.ReactNode
+  /** The choices, as one Questionnaire item. Ignored when `children` is given. */
+  options?: ClarifyOption[]
   value?: string
   onSelect?: (value: string) => void
+  /**
+   * Any other control, in place of `options` — a `Questionnaire` of several
+   * steps, a form, a summary of the answers.
+   */
+  children?: React.ReactNode
+  /** Why these options and not others, or where a default came from. */
+  footnote?: React.ReactNode
   /** The confirm control. */
   actions?: React.ReactNode
-  /** Why these options and not others. */
-  footnote?: React.ReactNode
+  /** Which edge the actions sit on. @default "start" */
+  actionsAlign?: "start" | "end"
 }
+
+export interface ClarifyFootnoteProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  children?: React.ReactNode
+}
+
+/** The line under an ask: why these options, or where a default came from. *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
+ */
+export const ClarifyFootnote = React.forwardRef<HTMLParagraphElement, ClarifyFootnoteProps>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("text-xs text-muted-foreground", className)} {...props} />
+  ),
+)
+ClarifyFootnote.displayName = "ClarifyFootnote"
+
+export interface ClarifyActionsProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Which edge the actions sit on. @default "start" */
+  align?: "start" | "end"
+  children?: React.ReactNode
+}
+
+/** The row of controls that answers, skips or changes an ask. *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
+ */
+export const ClarifyActions = React.forwardRef<HTMLDivElement, ClarifyActionsProps>(
+  ({ align = "start", className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "flex flex-wrap items-center gap-1.5",
+        align === "end" && "justify-end",
+        className,
+      )}
+      {...props}
+    />
+  ),
+)
+ClarifyActions.displayName = "ClarifyActions"
 
 /**
  * The run stopped and asked, rather than guessing.
@@ -47,33 +114,48 @@ export interface ClarifyCardProps
  * loud. A card that offered invented options would undo the grounding the rest
  * of the system is built on.
  *
+ * **One card through the ask's whole life.** `pending` offers the choice; once
+ * `answered`, `skipped`, `superseded` or `expired` the header says so and the
+ * body is read-only. The body is `options` for a choice, or any control passed
+ * as `children` — a `Questionnaire` of several steps (with its progress and
+ * Skip / Next), a form, or the answers of a finished multi-step ask.
+ *
  * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
   (
     {
+      state = "pending",
       step,
       waiting,
       question,
       options,
       value,
       onSelect,
-      actions,
+      children,
       footnote,
+      actions,
+      actionsAlign = "start",
       className,
       ...props
     },
     ref,
   ) => {
+    const settled = state !== "pending"
     const name = React.useId()
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col overflow-hidden border border-border bg-card", className)}
+        data-state={state}
+        className={cn(
+          "flex min-w-0 flex-col overflow-hidden border border-border bg-card",
+          (state === "superseded" || state === "expired") && "opacity-75",
+          className,
+        )}
         {...props}
       >
-        <div className="flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-sm">
-          <span className="shrink-0 font-medium">question</span>
+        <div className="flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted px-2 text-sm">
+          <span className="shrink-0 font-medium">{settled ? state : "question"}</span>
           {step != null ? (
             <span className="truncate text-muted-foreground">{step}</span>
           ) : null}
@@ -83,60 +165,35 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-2 p-2">
-          <p>{question}</p>
+        <div className="flex flex-1 flex-col gap-2 p-2">
+          {question != null ? <p>{question}</p> : null}
 
-          <div role="radiogroup" className="flex flex-col gap-1">
-            {options.map((o) => {
-              const checked = value === o.value
-              return (
-                <label
-                  key={o.value}
-                  className={cn(
-                    "flex min-h-[30px] cursor-pointer items-center gap-2 border px-2 py-1",
-                    checked ? "border-primary/40 bg-primary/10" : "border-border",
-                    o.disabled && "cursor-not-allowed opacity-50",
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name={name}
-                    value={o.value}
-                    checked={checked}
-                    disabled={o.disabled}
-                    onChange={() => onSelect?.(o.value)}
-                    className="sr-only"
-                  />
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "flex size-3.5 shrink-0 items-center justify-center rounded-full border",
-                      checked ? "border-primary" : "border-muted-foreground",
-                    )}
-                  >
-                    {checked ? (
-                      <span className="size-1.5 rounded-full bg-primary" />
-                    ) : null}
-                  </span>
-                  <span className="flex-1 truncate">{o.label}</span>
-                  {o.detail != null ? (
-                    <span className="shrink-0 font-mono text-sm text-muted-foreground">
-                      {o.detail}
-                    </span>
-                  ) : null}
-                </label>
-              )
-            })}
-          </div>
+          {children ??
+            (options ? (
+              <Questionnaire onSubmit={(e) => e.preventDefault()}>
+                <QuestionnaireItem name={name}>
+                  <QuestionnaireChoices>
+                    {options.map((o) => (
+                      <QuestionnaireChoice
+                        key={o.value}
+                        value={o.value}
+                        detail={o.detail}
+                        disabled={o.disabled}
+                        readOnly={settled}
+                        checked={value === undefined ? undefined : value === o.value}
+                        onChange={() => onSelect?.(o.value)}
+                      >
+                        <QuestionnaireChoiceTitle>{o.label}</QuestionnaireChoiceTitle>
+                      </QuestionnaireChoice>
+                    ))}
+                  </QuestionnaireChoices>
+                </QuestionnaireItem>
+              </Questionnaire>
+            ) : null)}
 
-          {actions || footnote != null ? (
-            <div className="flex flex-wrap items-center gap-2">
-              {actions}
-              {footnote != null ? (
-                <span className="flex-1 text-sm text-muted-foreground">{footnote}</span>
-              ) : null}
-            </div>
-          ) : null}
+          {footnote != null ? <ClarifyFootnote>{footnote}</ClarifyFootnote> : null}
+
+          {actions ? <ClarifyActions align={actionsAlign}>{actions}</ClarifyActions> : null}
         </div>
       </div>
     )

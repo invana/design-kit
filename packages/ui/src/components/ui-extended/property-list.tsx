@@ -6,8 +6,10 @@ export interface PropertyListProps extends React.HTMLAttributes<HTMLDListElement
   /**
    * Width of the label column. One value for the whole list, so every value
    * starts on the same x — the reason to use this rather than a row of flexes.
+   * `"auto"` sizes the column to the widest label, for a short list of known
+   * labels such as the answers to an ask.
    */
-  labelWidth?: number | string
+  labelWidth?: number | "auto" | (string & {})
   children?: React.ReactNode
 }
 
@@ -34,7 +36,12 @@ export const PropertyList = React.forwardRef<HTMLDListElement, PropertyListProps
   ({ labelWidth = 78, className, style, children, ...props }, ref) => (
     <dl
       ref={ref}
-      className={cn("flex flex-col", className)}
+      data-label-width={labelWidth === "auto" ? "auto" : undefined}
+      className={cn(
+        "group/property-list",
+        labelWidth === "auto" ? "grid grid-cols-[max-content_minmax(0,1fr)] gap-x-3" : "flex flex-col",
+        className,
+      )}
       style={
         {
           "--property-label-width":
@@ -54,10 +61,15 @@ export const PropertyRow = React.forwardRef<HTMLDivElement, PropertyRowProps>(
   ({ label, mono, className, children, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex items-baseline gap-2 py-1", className)}
+      className={cn(
+        "flex items-baseline gap-2 py-1",
+        // An auto-width list is a grid; each row joins its columns.
+        "group-data-[label-width=auto]/property-list:col-span-2 group-data-[label-width=auto]/property-list:grid group-data-[label-width=auto]/property-list:grid-cols-subgrid",
+        className,
+      )}
       {...props}
     >
-      <dt className="shrink-0 truncate text-sm text-muted-foreground [width:var(--property-label-width,78px)]">
+      <dt className="shrink-0 truncate text-sm text-muted-foreground [width:var(--property-label-width,78px)] group-data-[label-width=auto]/property-list:w-auto">
         {label}
       </dt>
       <dd className={cn("min-w-0 flex-1", mono && "font-mono text-sm")}>

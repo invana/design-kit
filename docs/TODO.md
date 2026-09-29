@@ -52,7 +52,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
 | ClarifyCard | `packages/assistant/src/asks/clarify-card.tsx` | move in | done | today |
-| ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | partial | today |
+| ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | done | today |
 | ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | todo | today |
 | InterpretationStrip | `packages/assistant/src/asks/interpretation-strip.tsx` | new | todo | today |
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
@@ -200,7 +200,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | PeriodPicker | `packages/ui/src/components/ui-extended/period-picker.tsx` | new | todo | today |
 | WeightControl | `packages/ui/src/components/ui-extended/weight-control.tsx` | new | todo | today |
 | RangeInput | `packages/ui/src/components/ui-extended/range-input.tsx` | new | todo | next |
-| Number with unit (on Questionnaire input) | `packages/ui/src/components/ui/questionnaire.tsx` | extend | partial | today |
+| Number with unit (on Questionnaire input) | `packages/ui/src/components/ui/questionnaire.tsx` | extend | done | today |
 | Entity search (on RichSelect, SearchInput) | `packages/ui/src/components/ui-extended/rich-select.tsx` | extend | partial | next |
 
 ### New notes and values
