@@ -111,3 +111,23 @@ export const GROWTH_BY_TYPE = DAYS.map((label, i) => ({
   label,
   values: { route: ROUTE[i], airport: AIRPORT[i], country: 3100, contains: 1350 },
 }));
+
+// Supplier page — lead time a week, twelve weeks.
+export const WEEKS = Array.from({ length: 12 }, (_, i) => `wk ${i + 1}`);
+export const LEAD_TIME = [18.4, 18.4, 19.4, 18.4, 20.5, 19.4, 21.5, 23.6, 22.6, 25.7, 27.8, 26.0];
+export const leadDays = (v: number) => `${Number.isInteger(v) ? v : v.toFixed(1)} d`;
+
+// Demand page — units a week, actuals to today (week 16) then a forecast with its interval.
+export const DEMAND_WEEKS = Array.from({ length: 26 }, (_, i) => `wk ${i + 27}`);
+export const DEMAND = [
+  410, 432, 418, 455, 447, 470, 462, 488, 481, 476, 502, 495, 510, 524, 518, 530, 536, 548, 561, 572,
+  580, 594, 603, 615, 628, 640,
+];
+export const DEMAND_TODAY = 15;
+export const DEMAND_LOWER = DEMAND.map((v, i) =>
+  i < DEMAND_TODAY ? null : Math.round(v - (i - DEMAND_TODAY) * 6),
+);
+export const DEMAND_UPPER = DEMAND.map((v, i) =>
+  i < DEMAND_TODAY ? null : Math.round(v + (i - DEMAND_TODAY) * 6),
+);
+export const units = (v: number) => v.toLocaleString('en-GB');

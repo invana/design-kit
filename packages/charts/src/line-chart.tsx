@@ -9,17 +9,41 @@
  * label at the top — an event, not a value. A reference is a dashed rule with
  * its label at the right — a line to compare against, such as the Graph's p95.
  * Hover (or the arrow keys) reads the nearest day.
+ *
+ * A band shades the range the line is judged against — a normal range, or a
+ * forecast's interval — under the line. A highlight rings a period that stands
+ * out, in its own colour, without a label: whatever sits beside the chart says
+ * why. After `forecastFrom` the line is dashed, with an unlabelled rule at the
+ * boundary unless `forecastLabel` names it. A measure that never nears zero can
+ * drop the zero baseline (`zero={false}`), so its movement is not flattened.
  */
 import * as React from "react"
-import type uPlot from "uplot"
+import uPlot from "uplot"
 
 import { ChartFrame, type ChartMark, type ChartReference } from "./base/chart-frame"
-import { fixedSplits, niceScale } from "./base/floors"
-import { resolveColor, type ChartTheme } from "./base/theme"
+import { fixedSplits, niceRange, niceScale } from "./base/floors"
+import { resolveColor, withAlpha, type ChartTheme } from "./base/theme"
 import { useLatest } from "./base/use-latest"
 
 export type LineChartMark = ChartMark
 export type LineChartReference = ChartReference
+
+export interface LineChartBand {
+  /** The bottom edge: one value across the plot, or one per period (`null` leaves a gap). */
+  lower: number | (number | null)[]
+  upper: number | (number | null)[]
+  /** Named below the band's right end — `normal range`. */
+  label?: string
+  /** A CSS colour or token. Default: the line's. */
+  color?: string
+}
+
+export interface LineChartHighlight {
+  /** The period ringed. */
+  index: number
+  /** A CSS colour or token — `var(--color-warning)`. Default: the line's. */
+  color?: string
+}
 
 export interface LineChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   /** One per period; `null` where nothing was measured. */
@@ -35,6 +59,16 @@ export interface LineChartProps extends Omit<React.HTMLAttributes<HTMLDivElement
   marks?: LineChartMark[]
   /** A value to compare against, drawn as a dashed rule labelled at the right. */
   reference?: LineChartReference
+  /** A range shaded under the line. */
+  band?: LineChartBand
+  /** Periods ringed because they stand out. */
+  highlights?: LineChartHighlight[]
+  /** The last actual period — the one the forecast runs from. The line is dashed after it. */
+  forecastFrom?: number
+  /** Names the rule at `forecastFrom` — `today`. */
+  forecastLabel?: string
+  /** Start the axis at 0. Default: true. */
+  zero?: boolean
   /** Which periods name themselves under the axis. Default: the first and the last. */
   ticks?: number[]
   /** The plot's height in px. */
@@ -57,6 +91,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       gridlines = NONE,
       marks = NONE,
       reference,
+      band,
+      highlights = NONE,
+      forecastFrom,
+      forecastLabel,
+      zero = true,
       ticks,
       height = 132,
       color = "var(--color-primary)",
@@ -67,43 +106,145 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   ) => {
     const fmt = useLatest(format)
     const referenceValue = reference?.value
+    const n = values.length
+    // The band as one value per period, whichever form it arrived in.
+    const [lower, upper] = React.useMemo(() => {
+      const spread = (edge: number | (number | null)[] | undefined) =>
+        edge == null ? null : Array.from({ length: n }, (_, i) => (typeof edge === "number" ? edge : (edge[i] ?? null)))
+      return [spread(band?.lower), spread(band?.upper)]
+    }, [band?.lower, band?.upper, n])
+    const forecast = forecastFrom != null && forecastFrom >= 0 && forecastFrom < n ? forecastFrom : null
+    // Inline arrays; keyed by value so a parent's re-render keeps the canvas.
+    const highlightsKey = JSON.stringify(highlights)
 
     const build = React.useCallback(
       (theme: ChartTheme, host: HTMLElement) => {
         const stroke = resolveColor(host, color)
+        const rings: { index: number; color: string }[] = (JSON.parse(highlightsKey) as LineChartHighlight[])
+          .filter((h) => h.index >= 0 && h.index < n)
+          .map((h) => ({ index: h.index, color: h.color ? resolveColor(host, h.color) : stroke }))
+        const ringed = new Set(rings.map((r) => r.index))
         const measured = values.filter((v): v is number => v != null)
+        const edges = [...(lower ?? []), ...(upper ?? [])].filter((v): v is number => v != null)
+        const top = Math.max(...measured, ...edges, referenceValue ?? -Infinity)
+        const bottom = Math.min(...measured, ...edges, referenceValue ?? Infinity)
         // Headroom above the highest value, so a single point or a flat line
         // is not pinned to the top of the plot.
-        const scale = niceScale(Math.max(0, ...measured, referenceValue ?? 0) * 1.05)
+        const scale = zero
+          ? { floor: 0, ...niceScale(Math.max(0, top) * 1.05) }
+          : niceRange(bottom, top + (top - bottom) * 0.05)
         const ceiling = max ?? Math.max(scale.ceiling, ...gridlines)
-        const last = values.reduce<number>((at, v, i) => (v != null ? i : at), -1)
-        // Points: the latest value, and any value with no neighbour to join.
+        const last = forecast ?? values.reduce<number>((at, v, i) => (v != null ? i : at), -1)
+        // Points: the latest actual value, and any value with no neighbour to
+        // join — unless a ring already marks the period.
         const points = values
           .map((v, i) => (v != null && (i === last || (values[i - 1] == null && values[i + 1] == null)) ? i : -1))
-          .filter((i) => i >= 0)
-        const series: uPlot.Series = {
+          .filter((i) => i >= 0 && !ringed.has(i))
+        const line = (dash?: number[]): uPlot.Series => ({
           stroke,
           width: 2,
+          dash,
           spanGaps: false,
           points: {
-            show: true,
+            show: !dash,
             size: 10,
             width: 2,
             stroke: theme.card,
             fill: stroke,
             filter: () => points,
           },
+        })
+        // A forecast is a second, dashed series that shares the boundary
+        // period, so the two lines join.
+        const actual = forecast == null ? values : values.map((v, i) => (i <= forecast ? v : null))
+        const ahead = forecast == null ? null : values.map((v, i) => (i >= forecast ? v : null))
+        const bandFill = withAlpha(band?.color ? resolveColor(host, band.color) : stroke, 0.1)
+        const bandLabel = band?.label
+
+        const drawUnder = (u: uPlot) => {
+          if (!lower || !upper) return
+          const ctx = u.ctx
+          const pr = uPlot.pxRatio
+          const { left, width: w, top: t, height: h } = u.bbox
+          ctx.save()
+          ctx.beginPath()
+          ctx.rect(left, t, w, h)
+          ctx.clip()
+          ctx.fillStyle = bandFill
+          const y = (v: number) => u.valToPos(v, "y", true)
+          if (typeof band?.lower === "number" && typeof band?.upper === "number") {
+            // A constant range runs the width of the plot.
+            ctx.fillRect(left, y(band.upper), w, y(band.lower) - y(band.upper))
+          } else {
+            // One polygon per run of periods with both edges.
+            let run: number[] = []
+            const flush = () => {
+              if (run.length) {
+                const x = (i: number) => u.valToPos(i, "x", true)
+                ctx.beginPath()
+                run.forEach((i, k) => (k ? ctx.lineTo(x(i), y(upper[i] as number)) : ctx.moveTo(x(i), y(upper[i] as number))))
+                for (const i of [...run].reverse()) ctx.lineTo(x(i), y(lower[i] as number))
+                ctx.closePath()
+                ctx.fill()
+              }
+              run = []
+            }
+            for (let i = 0; i < n; i++) {
+              if (lower[i] != null && upper[i] != null) run.push(i)
+              else flush()
+            }
+            flush()
+          }
+          ctx.restore()
+          if (bandLabel) {
+            // Named under the band's right end, or over it when the band sits
+            // on the floor of the plot.
+            const at = n - 1 - [...lower].reverse().findIndex((v, k) => v != null && upper[n - 1 - k] != null)
+            if (at < n) {
+              ctx.save()
+              ctx.font = `${theme.size.xs * pr}px ${theme.family}`
+              ctx.fillStyle = theme.mutedForeground
+              ctx.textAlign = "right"
+              const below = y(lower[at] as number) + 3 * pr
+              const room = below + theme.size.xs * pr <= t + h
+              ctx.textBaseline = room ? "top" : "bottom"
+              ctx.fillText(bandLabel, left + w - 4 * pr, room ? below : y(upper[at] as number) - 3 * pr)
+              ctx.restore()
+            }
+          }
         }
+
+        const draw = (u: uPlot) => {
+          if (!rings.length) return
+          const ctx = u.ctx
+          const pr = uPlot.pxRatio
+          ctx.save()
+          ctx.lineWidth = 1.5 * pr
+          for (const r of rings) {
+            const v = values[r.index]
+            if (v == null) continue
+            ctx.strokeStyle = r.color
+            ctx.beginPath()
+            ctx.arc(u.valToPos(r.index, "x", true), u.valToPos(v, "y", true), 4.5 * pr, 0, Math.PI * 2)
+            ctx.stroke()
+          }
+          ctx.restore()
+        }
+
         return {
-          series: [series],
-          data: [values],
+          series: ahead ? [line(), line([6, 4])] : [line()],
+          data: ahead ? [actual, ahead] : [actual],
+          floor: scale.floor,
           ceiling,
           splits: gridlines.length ? gridlines : max != null ? fixedSplits(max) : scale.splits,
           format: (v: number) => fmt.current(v),
           crosshair: true,
+          cursorPoints: true,
+          drawUnder,
+          draw,
         }
       },
-      [values, color, max, gridlines, referenceValue, fmt],
+      [values, color, max, gridlines, referenceValue, fmt, zero, lower, upper, band?.lower, band?.upper, band?.color, band?.label, forecast, highlightsKey, n],
     )
 
     const measured = values.filter((v): v is number => v != null)
@@ -115,17 +256,31 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       values.forEach((v, i) => {
         if (v != null && v > (values[top] ?? -Infinity)) top = i
       })
-      const lastIdx = values.reduce<number>((at, v, i) => (v != null ? i : at), -1)
+      const lastIdx = forecast ?? values.reduce<number>((at, v, i) => (v != null ? i : at), -1)
       const parts = [
         `Line chart over ${values.length} periods, ${labels[0]} to ${labels[labels.length - 1]}.`,
         `Latest ${f(values[lastIdx] as number)} on ${labels[lastIdx]}; highest ${f(values[top] as number)} on ${labels[top]}.`,
       ]
       const gaps = values.length - measured.length
       if (gaps) parts.push(`${gaps} periods with nothing measured.`)
-      if (marks.length) parts.push(`Marked: ${marks.map((m) => `${m.label} (${labels[m.index]})`).join(", ")}.`)
+      if (forecast != null) parts.push(`Forecast from ${labels[forecast]}.`)
+      if (band && typeof band.lower === "number" && typeof band.upper === "number")
+        parts.push(`${band.label ?? "Band"} ${f(band.lower)} to ${f(band.upper)}.`)
+      else if (band) parts.push(`${band.label ?? "A band"} shaded.`)
+      if (highlights.length) parts.push(`Highlighted: ${highlights.map((h) => labels[h.index]).join(", ")}.`)
+      const named = marks.filter((m) => m.label)
+      if (named.length) parts.push(`Marked: ${named.map((m) => `${m.label} (${labels[m.index]})`).join(", ")}.`)
       if (reference) parts.push(`Reference ${reference.label} at ${f(reference.value)}.`)
       return parts.join(" ")
-    }, [blank, values, labels, marks, reference, measured.length, format])
+    }, [blank, values, labels, marks, reference, measured.length, format, forecast, band, highlights])
+
+    // The forecast boundary is a mark: a dashed rule, named only if asked.
+    const allMarks = React.useMemo(
+      () => (forecast == null ? marks : [...marks, { index: forecast, label: forecastLabel }]),
+      [marks, forecast, forecastLabel],
+    )
+    const bandText = (i: number) =>
+      lower?.[i] != null && upper?.[i] != null ? `${format(lower[i] as number)} – ${format(upper[i] as number)}` : ""
 
     return (
       <ChartFrame
@@ -134,7 +289,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
         labels={labels}
         height={height}
         ticks={ticks}
-        marks={marks}
+        marks={allMarks}
         reference={reference}
         empty={blank ? (empty ?? "Nothing measured in this period") : undefined}
         build={build}
@@ -144,16 +299,26 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
             values[i] != null
               ? [{ key: "value", label: "", color, value: format(values[i] as number) }]
               : [],
-          note: values[i] == null ? "nothing ran" : undefined,
+          note:
+            values[i] == null
+              ? "nothing ran"
+              : [
+                  forecast != null && i > forecast ? "forecast" : "",
+                  bandText(i) ? `${band?.label ?? "band"} ${bandText(i)}` : "",
+                ]
+                  .filter(Boolean)
+                  .join(" · ") || undefined,
         })}
         table={{
           columns: [
             { accessorKey: "period", header: "Period" },
             { accessorKey: "value", header: "Value" },
+            ...(band ? [{ accessorKey: "band", header: band.label ?? "Band" }] : []),
           ],
           rows: values.map((v, i) => ({
             period: labels[i],
-            value: v != null ? format(v) : "—",
+            value: v != null ? `${format(v)}${forecast != null && i > forecast ? " (forecast)" : ""}` : "—",
+            band: bandText(i) || "—",
           })),
         }}
         {...props}

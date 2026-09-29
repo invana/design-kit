@@ -43,6 +43,32 @@ export function niceScale(max: number, { integers = false } = {}): Scale {
   }
 }
 
+/**
+ * A clean axis for values running `min` → `max` that need not start at 0 — a
+ * lead time moving between 16 and 28 days reads as a flat line on a 0-based
+ * axis. The same 1, 2 or 5 × 10ⁿ step, two to four of them, with the floor on
+ * a step below the lowest value: 15 · 20 · 25 · 30 for 16.3 → 29.2.
+ */
+export function niceRange(min: number, max: number): Scale & { floor: number } {
+  const span = max > min ? max - min : Math.abs(max) || 1
+  let power = 10 ** Math.floor(Math.log10(span / 4))
+  for (;;) {
+    for (const m of [1, 2, 5]) {
+      const step = m * power
+      const floor = Math.floor(min / step + 1e-9) * step
+      const k = Math.max(1, Math.ceil((max - floor) / step - 1e-9))
+      if (k <= 4) {
+        return {
+          floor,
+          ceiling: floor + step * k,
+          splits: Array.from({ length: k + 1 }, (_, i) => floor + i * step),
+        }
+      }
+    }
+    power *= 10
+  }
+}
+
 /** A count axis: clean, and never topping out below {@link COUNT_FLOOR}. */
 export function countScale(max: number): Scale {
   return niceScale(Math.max(max, COUNT_FLOOR), { integers: true })
