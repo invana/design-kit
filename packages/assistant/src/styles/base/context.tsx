@@ -3,7 +3,7 @@ import * as React from "react"
 import type { ResolvedRegistry } from "../../conversations/registry"
 import type { ConversationEvent } from "../../protocol/events"
 import type { ConversationSpec } from "../../protocol/types"
-import type { ChatSessionIcons, ChatSessionView } from "../types"
+import type { ChatSessionAnswerAction, ChatSessionIcons, ChatSessionView } from "../types"
 
 /**
  * Everything a variant's parts read, so no part takes more than its turn as a
@@ -21,6 +21,10 @@ export interface ChatSessionContextValue {
   /** An answer's steps shown, or folded to one line. Unset follows the run: open while it runs. */
   stepsOpen: (turnId: string, live: boolean) => boolean
   toggleSteps: (turnId: string, open?: boolean) => void
+  /** The analyst opened or folded an answer's steps: toggles them, and sends `toggle-steps`. */
+  setSteps: (turnId: string, open: boolean) => void
+  /** The actions beside a settled answer's time. */
+  actions: ChatSessionAnswerAction[]
   /** One step's record open. */
   recordOpen: (turnId: string, stepId: string) => boolean
   toggleRecord: (turnId: string, stepId: string, open?: boolean) => void

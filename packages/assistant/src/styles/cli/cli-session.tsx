@@ -14,7 +14,7 @@ import {
 import type { AnswerTurn, AskTurn } from "../../protocol/types"
 import { AskView } from "../base/ask"
 import { BlockStack, BlockView, OutcomeView, splitBlocks } from "../base/blocks"
-import { AnswerActions, KeyHints, SessionHeader } from "../base/chrome"
+import { AnswerLine, KeyHints, SessionHeader } from "../base/chrome"
 import { ComposerBar } from "../base/composer"
 import { useChatSessionContext } from "../base/context"
 import { clockTime, formatDuration } from "../base/format"
@@ -99,17 +99,15 @@ function CliAnswer({ turn }: { turn: AnswerTurn }) {
   return (
     <ChatSessionActivityRow
       status={ANSWER_DOT[outcome]}
-      actions={live ? undefined : <AnswerActions turn={turn} />}
       meta={!live && turn.meta ? turn.meta : undefined}
       footer={
         <>
-          {turn.trace?.length ? (
-            showSteps ? (
-              <StepList turn={turn} className="pt-0.5" />
-            ) : (
-              <RunSummaryLine turn={turn} />
-            )
+          {live && turn.trace?.length ? <StepList turn={turn} className="pt-0.5" /> : null}
+          {!live ? (
+            // The run in one line, and what can be done with the answer at its right.
+            <AnswerLine turn={turn}>{turn.trace?.length ? <RunSummaryLine turn={turn} /> : null}</AnswerLine>
           ) : null}
+          {!live && showSteps ? <StepList turn={turn} className="pt-0.5" /> : null}
           {turn.outcome && !live ? (
             <OutcomeView
               className="mt-0.5"

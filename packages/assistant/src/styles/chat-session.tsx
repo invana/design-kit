@@ -15,7 +15,7 @@ import {
 } from "./base/context"
 import { isAnswer, runOutcome, turnDomId } from "./base/model"
 import { CliSession } from "./cli/cli-session"
-import type { ChatSessionHandle, ChatSessionProps, ChatSessionView } from "./types"
+import { type ChatSessionHandle, type ChatSessionProps, type ChatSessionView, DEFAULT_ANSWER_ACTIONS } from "./types"
 import { WebSession } from "./web/web-session"
 
 /** `open-run` → `onOpenRun`: the callback prop an event goes to. */
@@ -113,6 +113,7 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
     emptyState,
     view: controlledView,
     defaultView = "chat",
+    actions = DEFAULT_ANSWER_ACTIONS,
     className,
   } = props
 
@@ -197,6 +198,11 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
     opensRuns: typeof props.onOpenRun === "function",
     stepsOpen: viewState.stepsOpen,
     toggleSteps: viewState.toggleSteps,
+    setSteps: (turnId, open) => {
+      viewState.toggleSteps(turnId, open)
+      emit({ type: "toggle-steps", turn: turnId, open })
+    },
+    actions,
     recordOpen: viewState.recordOpen,
     toggleRecord: viewState.toggleRecord,
     rating: viewState.rating,

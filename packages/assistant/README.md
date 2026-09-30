@@ -55,7 +55,19 @@ A trace step carries its record — `startedAt` and `duration`, `attempt` of `at
 
 Every action comes back as one `ConversationEvent` — `prompt` (with the composer's `settings` and
 `files`), `reply`, `skip`, `change`, `action`, `scope`, `open`, `template`, `refine`, `rate`,
-`stop`, `retry`, `open-run`, `setting`. The component changes nothing itself.
+`stop`, `retry`, `open-run`, `setting`, `copy`, `toggle-steps`. The component changes nothing itself.
+
+Beside each settled answer's time sit its actions, chosen by the `actions` prop — the built-ins by
+name (`retry`, `copy`, `steps`, `rate`) and your own as `{ id, label, icon }`, sent as `action`:
+
+```tsx
+<ChatSession
+  spec={spec}
+  actions={['retry', 'copy', { id: 'pin', label: 'Pin to report', icon: <Pin /> }, 'rate']}
+  onAction={(e) => e.action === 'pin' && reports.pin(e.turn)}
+  onCopy={(e) => toast('Copied')}
+/>
+```
 
 `validate(spec)` checks a payload the compiler cannot see: unknown presets and broken turns are
 errors, and an answer that does not match its pattern is a warning.

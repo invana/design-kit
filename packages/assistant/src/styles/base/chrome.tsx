@@ -3,6 +3,7 @@ import { cn } from "@invana/ui"
 
 import { ChatSessionMessageOptions, type ChatSessionMessageAction } from "../../conversations/thread"
 import type { AnswerTurn } from "../../protocol/types"
+import type { ChatSessionBuiltInAction } from "../types"
 import { useChatSessionContext } from "./context"
 import { isAnswer, plainText, runOutcome } from "./model"
 
@@ -33,10 +34,14 @@ export function SessionHeader({ onClose, className }: { onClose?: () => void; cl
   )
 }
 
+const SETTLED_RATEABLE = new Set(["complete", "partial"])
+
 /**
- * What can be done with a settled answer: run it again, copy its words, open
- * its steps, rate it. Every one is an event — `retry`, `rate` — or view state;
- * none knows what the answer's blocks are.
+ * The actions beside a settled answer's time, at the right of its line: the
+ * ones the session's `actions` prop names, in its order. Every one is an
+ * event — `retry`, `copy`, `toggle-steps`, `rate`, or `action` for your own —
+ * so a host hears each through its callback; none knows what the answer's
+ * blocks are.
  */
 export function AnswerActions({ turn }: { turn: AnswerTurn }) {
   const ctx = useChatSessionContext()
@@ -48,48 +53,88 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
     ctx.rate(turn.id, next)
     ctx.emit({ type: "rate", turn: turn.id, value: next })
   }
-  const actions: ChatSessionMessageAction[] = [
-    {
-      icon: ctx.icons.retry,
-      label: "Run again",
-      disabled: running,
-      onClick: () => ctx.emit({ type: "retry", turn: turn.id }),
+  const built: Record<ChatSessionBuiltInAction, () => ChatSessionMessageAction[]> = {
+    retry: () => [
+      {
+        icon: ctx.icons.retry,
+        label: "Run again",
+        disabled: running,
+        onClick: () => ctx.emit({ type: "retry", turn: turn.id }),
+      },
+    ],
+    copy: () =>
+      text
+        ? [
+            {
+              icon: ctx.icons.copy,
+              label: "Copy",
+              onClick: () => {
+                void navigator.clipboard?.writeText(text)
+                ctx.emit({ type: "copy", turn: turn.id, text })
+              },
+            },
+          ]
+        : [],
+    steps: () => {
+      if (!turn.trace?.length) return []
+      const open = ctx.stepsOpen(turn.id, false)
+      return [{ icon: ctx.icons.steps, label: "Steps", active: open, onClick: () => ctx.setSteps(turn.id, !open) }]
     },
-    ...(text
-      ? [{ icon: ctx.icons.copy, label: "Copy", onClick: () => void navigator.clipboard?.writeText(text) }]
-      : []),
-    ...(turn.trace?.length
-      ? [
-          {
-            icon: ctx.icons.steps,
-            label: "Steps",
-            active: ctx.stepsOpen(turn.id, false),
-            onClick: () => ctx.toggleSteps(turn.id),
-          },
-        ]
-      : []),
-    ...(turn.state === "complete" || turn.state === "partial"
-      ? [
-          {
-            icon: ctx.icons.rateUp,
-            label: "Good answer",
-            align: "end" as const,
-            active: rating === 1,
-            activeClassName: "text-success hover:text-success",
-            onClick: () => rate(1),
-          },
-          {
-            icon: ctx.icons.rateDown,
-            label: "Not what I wanted",
-            align: "end" as const,
-            active: rating === -1,
-            activeClassName: "text-destructive hover:text-destructive",
-            onClick: () => rate(-1),
-          },
-        ]
-      : []),
-  ]
-  return <ChatSessionMessageOptions actions={actions} />
+    rate: () =>
+      SETTLED_RATEABLE.has(turn.state)
+        ? [
+            {
+              icon: ctx.icons.rateUp,
+              label: "Good answer",
+              active: rating === 1,
+              activeClassName: "text-success hover:text-success",
+              onClick: () => rate(1),
+            },
+            {
+              icon: ctx.icons.rateDown,
+              label: "Not what I wanted",
+              active: rating === -1,
+              activeClassName: "text-destructive hover:text-destructive",
+              onClick: () => rate(-1),
+            },
+          ]
+        : [],
+  }
+  const actions = ctx.actions.flatMap((a): ChatSessionMessageAction[] =>
+    typeof a === "string"
+      ? built[a]()
+      : !a.states || a.states.includes(turn.state)
+        ? [{ icon: a.icon, label: a.label, onClick: () => ctx.emit({ type: "action", turn: turn.id, action: a.id }) }]
+        : [],
+  )
+  if (!actions.length) return null
+  // All at the end: the row's start is the answer's time. Small and quiet — they
+  // sit on a line of metadata, not beside the answer's words; whatever size the
+  // host's icons are, they draw at 11px, and come up to full strength on hover.
+  return (
+    <ChatSessionMessageOptions
+      actions={actions.map((a) => ({
+        ...a,
+        align: "end",
+        className: cn(
+          "size-5 hover:bg-transparent [&_svg]:!size-[11px]",
+          !a.active && "text-muted-foreground/60 hover:text-foreground",
+        ),
+      }))}
+    />
+  )
+}
+
+/** A settled answer's line: what it says at the left, its actions at the right. */
+export function AnswerLine({ turn, children }: { turn: AnswerTurn; children?: React.ReactNode }) {
+  return (
+    <div className="flex min-w-0 items-center gap-2">
+      {children ? <div className="min-w-0 shrink truncate">{children}</div> : null}
+      <div className="min-w-0 flex-1">
+        <AnswerActions turn={turn} />
+      </div>
+    </div>
+  )
 }
 
 /** The keys that work now: send and newline, or stop while a run is in flight. */

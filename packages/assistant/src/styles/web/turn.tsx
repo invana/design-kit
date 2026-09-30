@@ -35,6 +35,11 @@ export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTur
     opensRuns: false,
     stepsOpen: view.stepsOpen,
     toggleSteps: view.toggleSteps,
+    setSteps: (turnId, open) => {
+      view.toggleSteps(turnId, open)
+      emit({ type: "toggle-steps", turn: turnId, open })
+    },
+    actions: [],
     recordOpen: view.recordOpen,
     toggleRecord: view.toggleRecord,
     rating: view.rating,

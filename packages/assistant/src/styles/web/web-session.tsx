@@ -7,7 +7,7 @@ import { ChatSessionFrame, ChatSessionMessage, ChatSessionStatusBar } from "../.
 import type { AnswerTurn } from "../../protocol/types"
 import { AskView } from "../base/ask"
 import { BlockView, citationOf, OutcomeView, splitBlocks } from "../base/blocks"
-import { AnswerActions, KeyHints, SessionHeader } from "../base/chrome"
+import { AnswerLine, KeyHints, SessionHeader } from "../base/chrome"
 import { ComposerBar } from "../base/composer"
 import { useChatSessionContext } from "../base/context"
 import { clockTime, dayLabel, formatDuration, sameDay } from "../base/format"
@@ -35,7 +35,7 @@ function RunLine({ turn }: { turn: AnswerTurn }) {
           aria-expanded={ctx.opensRuns ? undefined : open}
           className="underline decoration-dotted underline-offset-2 hover:text-foreground"
           onClick={() =>
-            ctx.opensRuns ? ctx.emit({ type: "open-run", turn: turn.id }) : ctx.toggleSteps(turn.id, !open)
+            ctx.opensRuns ? ctx.emit({ type: "open-run", turn: turn.id }) : ctx.setSteps(turn.id, !open)
           }
         >
           {words} {formatDuration(time, { spaced: true })}
@@ -98,10 +98,9 @@ export function WebAnswer({ turn, chrome = true }: { turn: AnswerTurn; chrome?: 
         <OutcomeView outcome={turn.outcome} turn={turn} onEvent={ctx.emit} tone={outcome === "failed" ? "bad" : undefined} />
       ) : null}
       {chrome && !live ? (
-        <div className="flex min-w-0 flex-col gap-0.5">
+        <AnswerLine turn={turn}>
           <RunLine turn={turn} />
-          <AnswerActions turn={turn} />
-        </div>
+        </AnswerLine>
       ) : null}
     </div>
   )

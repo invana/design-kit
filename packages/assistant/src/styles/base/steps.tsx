@@ -173,7 +173,7 @@ export function RunSummaryLine({ turn }: { turn: AnswerTurn }) {
             type="button"
             className="tabular-nums underline-offset-2 hover:text-foreground hover:underline"
             onClick={() =>
-              ctx.opensRuns ? ctx.emit({ type: "open-run", turn: turn.id }) : ctx.toggleSteps(turn.id, !open)
+              ctx.opensRuns ? ctx.emit({ type: "open-run", turn: turn.id }) : ctx.setSteps(turn.id, !open)
             }
           >
             {formatDuration(time)}
@@ -189,7 +189,7 @@ export function RunSummaryLine({ turn }: { turn: AnswerTurn }) {
           aria-expanded={open}
           aria-label={open ? "Fold the steps" : "Show the steps"}
           className="hover:text-foreground"
-          onClick={() => ctx.toggleSteps(turn.id, !open)}
+          onClick={() => ctx.setSteps(turn.id, !open)}
         >
           <span className={cn("inline-block transition-transform", open && "rotate-90")}>▸</span>
         </button>

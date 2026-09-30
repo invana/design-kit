@@ -3,7 +3,7 @@ import type * as React from "react"
 import type { PresetRegistry } from "../conversations/registry"
 import type { ConversationEvent, ConversationEventType } from "../protocol/events"
 import type { PatchSource } from "../protocol/stream"
-import type { ConversationSpec } from "../protocol/types"
+import type { AnswerState, ConversationSpec } from "../protocol/types"
 
 /** `cli` is the console: caret prompts, status-dotted replies, step rows, a Tasks view. `web` is the chat: labelled turns, answer cards. */
 export type ChatSessionVariant = "cli" | "web"
@@ -38,6 +38,27 @@ export interface ChatSessionIcons {
   rateUp: React.ReactNode
   rateDown: React.ReactNode
 }
+
+/**
+ * The actions on a settled answer, beside its time. `retry` is sent as
+ * `retry`, `copy` as `copy` (and written to the clipboard), `steps` as
+ * `toggle-steps`, `rate` as `rate`.
+ */
+export type ChatSessionBuiltInAction = "retry" | "copy" | "steps" | "rate"
+
+/** An action of your own on a settled answer, sent as an `action` event with its `id`. */
+export interface ChatSessionCustomAction {
+  id: string
+  /** Its accessible name and tooltip. */
+  label: string
+  icon: React.ReactNode
+  /** Only on answers in these states. Every settled state when left out. */
+  states?: AnswerState[]
+}
+
+export type ChatSessionAnswerAction = ChatSessionBuiltInAction | ChatSessionCustomAction
+
+export const DEFAULT_ANSWER_ACTIONS: ChatSessionAnswerAction[] = ["retry", "copy", "steps", "rate"]
 
 /** What the CLI variant shows: the thread, or every step of every reply. */
 export type ChatSessionView = "chat" | "tasks"
@@ -74,6 +95,12 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /** Renderers and traits of your own asks and blocks, merged over the built-ins. */
   registry?: PresetRegistry
   icons?: Partial<ChatSessionIcons>
+  /**
+   * The actions beside a settled answer's time, in order — the built-ins by
+   * name, yours as `{ id, label, icon }`. `[]` shows none.
+   * @default ["retry", "copy", "steps", "rate"]
+   */
+  actions?: ChatSessionAnswerAction[]
   /**
    * The clock, in ms. Left out, the session ticks while anything runs so
    * elapsed times move; a story passes a fixed one to read the same every run.

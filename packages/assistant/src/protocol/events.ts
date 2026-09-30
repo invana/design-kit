@@ -36,6 +36,10 @@ export type ConversationEvent =
   | { type: "open-run"; turn: string; step?: string }
   /** A composer control changed — the mode, the model, the timeout. */
   | { type: "setting"; id: string; value: string }
+  /** An answer's words were copied, as `text`. */
+  | { type: "copy"; turn: string; text: string }
+  /** An answer's steps were opened or folded. */
+  | { type: "toggle-steps"; turn: string; open: boolean }
 
 export type ConversationEventType = ConversationEvent["type"]
 
@@ -55,4 +59,6 @@ export const EVENT_TYPES = [
   "retry",
   "open-run",
   "setting",
+  "copy",
+  "toggle-steps",
 ] as const satisfies readonly ConversationEventType[]
