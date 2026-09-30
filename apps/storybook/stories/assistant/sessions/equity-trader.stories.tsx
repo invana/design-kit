@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
 import { ChatSession } from '@invana/assistant';
 import { SESSIONS } from '@invana/assistant/fixtures';
 
-import { CHAT_ICONS, VARIANT_ARG_TYPES } from '../chat-kit';
+import { CHAT_ICONS, chatCallbacks, VARIANT_ARG_TYPES } from '../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Sessions/Equity Trader',
@@ -23,5 +22,5 @@ type Story = StoryObj<typeof meta>;
  * JSON: the placeholders left in this story are the work left for its slice.
  */
 export const EquityTrader: Story = {
-  args: { variant: 'web', spec: SESSIONS.equityTrader, onEvent: fn(), icons: CHAT_ICONS },
+  args: { ...chatCallbacks(), variant: 'web', spec: SESSIONS.equityTrader, icons: CHAT_ICONS },
 };

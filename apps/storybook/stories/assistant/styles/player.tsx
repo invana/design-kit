@@ -35,7 +35,7 @@ import {
   longScenario,
   respond,
 } from '@invana/assistant/fixtures';
-import { CHAT_ICONS } from '../chat-kit';
+import { CHAT_ICONS, logEvent } from '../chat-kit';
 
 // Story chrome, not a kit component: a ChatSession driven by recorded runs,
 // with a Play button per moment of the walkthrough. The session is the kit;
@@ -161,6 +161,7 @@ export function ScenarioPlayer({ variant, widths }: ScenarioPlayerProps) {
   const note = (line: string) => setLog((prev) => [`${clockTime(new Date().toISOString())}  ${line}`, ...prev].slice(0, 40));
   const onEvent = (event: ConversationEvent) => {
     note(describe(event));
+    logEvent(event);
     if (event.type === 'stop') return;
     // The API's side: what it would stream back.
     const script = respond(event, specRef.current, Date.now());

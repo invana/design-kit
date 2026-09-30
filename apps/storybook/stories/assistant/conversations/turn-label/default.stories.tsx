@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
 import { ChatSession } from '@invana/assistant';
 import { CONVERSATIONS } from '@invana/assistant/fixtures';
 
-import { CHAT_ICONS, inPanel } from '../../chat-kit';
+import { CHAT_ICONS, chatCallbacks, inPanel } from '../../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Conversations/TurnLabel',
@@ -21,9 +20,9 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
+    ...chatCallbacks(),
     spec: CONVERSATIONS.turnLabels,
     variant: 'web',
     icons: CHAT_ICONS,
-    onEvent: fn(),
   },
 };

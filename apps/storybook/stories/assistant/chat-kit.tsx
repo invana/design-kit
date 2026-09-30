@@ -1,5 +1,7 @@
 import type { Decorator } from '@storybook/react-vite';
-import type { ChatSessionIcons } from '@invana/assistant';
+import { action } from 'storybook/actions';
+import { fn } from 'storybook/test';
+import { EVENT_TYPES, type ChatSessionProps, type ChatSessionIcons, type ConversationEvent } from '@invana/assistant';
 import {
   ArrowUp,
   Copy,
@@ -41,3 +43,29 @@ export const inPanel =
 export const VARIANT_ARG_TYPES = {
   variant: { control: 'inline-radio', options: ['web', 'cli'] },
 } as const;
+
+/** `open-run` → `onOpenRun`: the callback prop an event goes to. */
+const handlerName = (type: string) => `on${type.replace(/(^|-)([a-z])/g, (_, __, c: string) => c.toUpperCase())}`;
+
+/**
+ * A spy for every callback a ChatSession takes — one per event (`onRetry`, `onCopy`,
+ * `onToggleSteps`, `onAction`, `onOpenRun`, …), then `onEvent` and the rest — so every
+ * interaction shows in the Actions panel. Derived from the protocol's event list, so an event
+ * added there is logged here with no change. Spread it into a story's args.
+ */
+export function chatCallbacks(): Partial<ChatSessionProps> {
+  const handlers = Object.fromEntries(EVENT_TYPES.map((type) => [handlerName(type), fn().mockName(handlerName(type))]));
+  return {
+    ...handlers,
+    onEvent: fn().mockName('onEvent'),
+    onClose: fn().mockName('onClose'),
+    onStreamEnd: fn().mockName('onStreamEnd'),
+    onViewChange: fn().mockName('onViewChange'),
+  };
+}
+
+/** For a story that renders ChatSession itself: log an event to the Actions panel under its callback. */
+export function logEvent(event: ConversationEvent) {
+  action(handlerName(event.type))(event);
+  action('onEvent')(event);
+}

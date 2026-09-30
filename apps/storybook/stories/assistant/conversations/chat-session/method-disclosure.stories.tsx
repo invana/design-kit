@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
 import { ChatSession } from '@invana/assistant';
 import { CONVERSATIONS } from '@invana/assistant/fixtures';
 
-import { CHAT_ICONS, inPanel, VARIANT_ARG_TYPES } from '../../chat-kit';
+import { CHAT_ICONS, chatCallbacks, inPanel, VARIANT_ARG_TYPES } from '../../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Conversations/ChatSession',
@@ -22,9 +21,9 @@ type Story = StoryObj<typeof meta>;
  */
 export const MethodDisclosure: Story = {
   args: {
+    ...chatCallbacks(),
     spec: CONVERSATIONS.methodDisclosure,
     variant: 'web',
     icons: CHAT_ICONS,
-    onEvent: fn(),
   },
 };

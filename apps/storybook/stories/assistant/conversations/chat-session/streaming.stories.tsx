@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
 import { ChatSession, playScript } from '@invana/assistant';
 import { CONVERSATIONS, STREAMING_SCRIPT } from '@invana/assistant/fixtures';
 
-import { CHAT_ICONS, inPanel, VARIANT_ARG_TYPES } from '../../chat-kit';
+import { CHAT_ICONS, chatCallbacks, inPanel, VARIANT_ARG_TYPES } from '../../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Conversations/ChatSession',
@@ -27,11 +26,10 @@ const replay = (signal: AbortSignal) => playScript(STREAMING_SCRIPT, { signal })
  */
 export const Streaming: Story = {
   args: {
+    ...chatCallbacks(),
     spec: CONVERSATIONS.streaming,
     stream: replay,
     variant: 'web',
     icons: CHAT_ICONS,
-    onEvent: fn(),
-    onStreamEnd: fn(),
   },
 };
