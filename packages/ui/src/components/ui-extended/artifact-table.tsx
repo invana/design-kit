@@ -29,6 +29,8 @@ export interface Artifact {
    * existed and is gone* is a different fact from *no file was written*.
    */
   gone?: boolean
+  /** A glyph before the name, in `list` — the file's type. Passed in: the kit ships no icon set. */
+  icon?: React.ReactNode
 }
 
 export interface ArtifactTableProps
@@ -72,13 +74,34 @@ export const ArtifactTable = React.forwardRef<
       {files.map((file, index) => (
         <div
           key={index}
-          className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-2.5 border-b border-border/60 py-0.5 last:border-b-0"
+          className="flex items-center gap-2.5 border-b border-border/60 py-1 last:border-b-0"
         >
-          <span className={cn("truncate", file.gone && "text-muted-foreground line-through")}>
+          {file.icon != null ? (
+            <span className="flex w-4 shrink-0 justify-center text-muted-foreground">{file.icon}</span>
+          ) : null}
+          <span className={cn("min-w-0 flex-1 truncate", file.gone && "text-muted-foreground line-through")}>
             {file.name}
           </span>
-          <span className="font-mono text-xs tabular-nums text-muted-foreground">{file.size}</span>
-          <span className="font-mono text-xs text-muted-foreground">{file.digest}</span>
+          {file.size != null ? (
+            <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">{file.size}</span>
+          ) : null}
+          {file.digest != null ? (
+            <span className="shrink-0 font-mono text-xs text-muted-foreground">{file.digest}</span>
+          ) : null}
+          {renderActions ? (
+            renderActions(file, index)
+          ) : onDownload ? (
+            <Button
+              type="button"
+              variant="link"
+              size="xs"
+              className="h-auto shrink-0 p-0 text-xs font-normal"
+              disabled={file.gone}
+              onClick={() => onDownload(file, index)}
+            >
+              Download
+            </Button>
+          ) : null}
         </div>
       ))}
     </div>
@@ -150,3 +173,52 @@ export const ArtifactTable = React.forwardRef<
   ),
 )
 ArtifactTable.displayName = "ArtifactTable"
+
+export interface ArtifactCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+  file: Artifact
+  /** The line under the name — `48 KB · kept for 7 days`, `412 rows · missing store code`. */
+  note?: React.ReactNode
+  /** At the right — a `Download` button, or a tag saying what the file is. */
+  aside?: React.ReactNode
+}
+
+/** The file type as a short badge — `XLSX` — from the name's extension. */
+function extensionOf(name: React.ReactNode) {
+  if (typeof name !== "string") return null
+  const dot = name.lastIndexOf(".")
+  return dot > 0 ? name.slice(dot + 1).toUpperCase() : null
+}
+
+/**
+ * One file, as the whole of what an answer hands over: its type, its name,
+ * what it holds and what to do with it. Several files are an `ArtifactTable`.
+ */
+export const ArtifactCard = React.forwardRef<HTMLDivElement, ArtifactCardProps>(
+  ({ file, note, aside, className, ...props }, ref) => {
+    const ext = extensionOf(file.name)
+    return (
+      <div
+        ref={ref}
+        className={cn("flex items-center gap-2.5 rounded-[3px] border border-border p-2", className)}
+        {...props}
+      >
+        {ext ? (
+          <span
+            aria-hidden
+            className="flex h-9 w-[30px] shrink-0 items-end justify-center rounded-[2px] border border-border bg-muted pb-[3px] font-mono text-[0.692rem] leading-none text-muted-foreground"
+          >
+            {ext}
+          </span>
+        ) : null}
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className={cn("truncate font-semibold", file.gone && "text-muted-foreground line-through")}>
+            {file.name}
+          </span>
+          {note != null ? <span className="text-xs text-muted-foreground">{note}</span> : null}
+        </span>
+        {aside != null ? <span className="shrink-0">{aside}</span> : null}
+      </div>
+    )
+  },
+)
+ArtifactCard.displayName = "ArtifactCard"

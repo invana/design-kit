@@ -26,6 +26,8 @@ export interface ProposalCardProps
   consequence?: React.ReactNode
   /** Author / reject / reassign. */
   actions?: React.ReactNode
+  /** Written: what was made — `Alert created` — stamped above the draft. */
+  done?: React.ReactNode
 }
 
 /**
@@ -50,17 +52,24 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
       evidenceMeta,
       consequence,
       actions,
+      done,
       className,
       children,
       ...props
     },
     ref,
   ) => (
-    <div ref={ref} className={cn("flex flex-col gap-3", className)} {...props}>
+    <div ref={ref} className={cn("flex flex-col gap-3", flush && "gap-2", className)} {...props}>
+      {done != null ? (
+        <p className="flex items-center gap-1.5 text-sm text-primary">
+          <span aria-hidden>✓</span>
+          {done}
+        </p>
+      ) : null}
       <section className="flex flex-col gap-1">
         {title != null || source != null ? (
           <div className="flex items-baseline gap-2">
-            {title != null ? <h4 className="font-medium">{title}</h4> : null}
+            {title != null ? <h4 className="font-semibold">{title}</h4> : null}
             {source != null ? (
               <span className="text-sm text-muted-foreground">{source}</span>
             ) : null}
@@ -82,7 +91,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
       ) : null}
 
       {consequence != null ? (
-        <p className="text-sm text-muted-foreground">{consequence}</p>
+        <p className="text-xs text-muted-foreground">{consequence}</p>
       ) : null}
       {actions ? <div className="flex flex-wrap items-center gap-1.5">{actions}</div> : null}
     </div>

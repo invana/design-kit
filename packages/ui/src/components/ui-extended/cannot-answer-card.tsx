@@ -15,6 +15,11 @@ export interface CannotAnswerCardProps
   remedy?: React.ReactNode
   /** Overrides the label. Defaults to `cannot answer`. */
   label?: React.ReactNode
+  /**
+   * `info` for an answer given in part: the card says which part the data
+   * does not hold, above the answer that covers the rest.
+   */
+  tone?: "default" | "info"
 }
 
 /**
@@ -31,16 +36,24 @@ export interface CannotAnswerCardProps
 export const CannotAnswerCard = React.forwardRef<
   HTMLDivElement,
   CannotAnswerCardProps
->(({ label = "cannot answer", remedy, className, children, ...props }, ref) => (
+>(({ label = "cannot answer", remedy, tone = "default", className, children, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "flex flex-col gap-1 border border-dashed border-border bg-card p-2",
+      "flex flex-col gap-1 border border-dashed bg-card p-2",
+      tone === "info" ? "border-info/55" : "border-border",
       className,
     )}
     {...props}
   >
-    <span className="text-xs font-medium text-muted-foreground">{label}</span>
+    <span
+      className={cn(
+        "text-xs font-medium",
+        tone === "info" ? "text-info" : "text-muted-foreground",
+      )}
+    >
+      {label}
+    </span>
     <span>{children}</span>
     {remedy != null ? (
       <span className="text-xs text-muted-foreground">{remedy}</span>

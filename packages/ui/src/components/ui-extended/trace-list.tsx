@@ -84,16 +84,21 @@ export interface TraceStepProps
   selected?: boolean
   onSelect?: () => void
   /**
-   * Where the step is, in a `progress` list: `done`, `running` or `pending`.
-   * Defaults to `done`. The run view says the same with `dim` and `struck`.
+   * Where the step is, in a `progress` list: `done`, `running`, `pending`,
+   * `failed`, or `waiting` on the reader. Defaults to `done`. The run view says
+   * the same with `dim` and `struck`.
    */
-  status?: "done" | "running" | "pending"
+  status?: "done" | "running" | "pending" | "failed" | "waiting"
+  /** Why a failed step failed, on a line under it in a `progress` list. */
+  error?: React.ReactNode
 }
 
 const STATUS_DOT = {
   done: "bg-primary",
   running: "bg-info animate-pulse motion-reduce:animate-none",
   pending: "border-[1.5px] border-muted-foreground",
+  failed: "bg-destructive",
+  waiting: "border-[1.5px] border-info",
 }
 
 /**
@@ -128,6 +133,7 @@ export const TraceStep = React.forwardRef<HTMLDivElement, TraceStepProps>(
       selected,
       onSelect,
       status = "done",
+      error,
       className,
       ...props
     },
@@ -139,21 +145,22 @@ export const TraceStep = React.forwardRef<HTMLDivElement, TraceStepProps>(
         <div
           ref={ref}
           role="listitem"
-          className={cn("flex min-w-0 items-center gap-2 text-sm", className)}
+          className={cn("grid min-w-0 grid-cols-[0.75rem_1fr_auto] items-center gap-x-2 text-sm", className)}
           {...props}
         >
-          <span className="flex w-3 shrink-0 justify-center">
+          <span className="flex justify-center">
             <span
               role="img"
               aria-label={status}
               className={cn("size-[7px] rounded-full", STATUS_DOT[status])}
             />
           </span>
-          <span className="min-w-0 flex-1 truncate">{name}</span>
-          {duration != null ? (
-            <span className="shrink-0 font-mono text-xs text-muted-foreground">
-              {duration}
-            </span>
+          <span className={cn("min-w-0 truncate", status === "pending" && "text-muted-foreground")}>
+            {name}
+          </span>
+          <span className="font-mono text-xs text-muted-foreground">{duration}</span>
+          {error != null ? (
+            <span className="col-start-2 col-end-4 text-xs text-destructive">{error}</span>
           ) : null}
         </div>
       )

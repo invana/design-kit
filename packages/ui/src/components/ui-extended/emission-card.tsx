@@ -161,7 +161,7 @@ EmissionBody.displayName = "EmissionBody"
 
 /**
  * The `prose` body's citation marker — the superscript that ties a clause to
- * the records behind it.
+ * the records behind it. Set `data-active` while its source is the one in view.
  *
  * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
@@ -171,7 +171,11 @@ export const CitationMarker = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <sup
     ref={ref}
-    className={cn("px-0.5 align-super text-[0.7em] text-primary", className)}
+    className={cn(
+      "ml-px rounded-sm align-super font-mono text-xs leading-none text-info",
+      "data-[active=true]:bg-info/15 data-[active=true]:px-0.5",
+      className,
+    )}
     {...props}
   >
     {children}

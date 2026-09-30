@@ -4,6 +4,10 @@ import { cn } from "../../lib/utils"
 
 export type LegendSwatchKind =
   | "dot"
+  /** A filled square — a column or a bar. */
+  | "box"
+  /** A dashed square outline — a plan or a target a column stands inside. */
+  | "outline"
   | "line"
   | "dashed"
   | "arrow"
@@ -46,6 +50,16 @@ function Swatch({ kind = "dot", color }: { kind?: LegendSwatchKind; color?: stri
         aria-hidden
         style={style}
         className="size-2 shrink-0 rounded-full bg-current"
+      />
+    )
+  if (kind === "box")
+    return <span aria-hidden style={style} className="h-2 w-2.5 shrink-0 rounded-[1px] bg-current" />
+  if (kind === "outline")
+    return (
+      <span
+        aria-hidden
+        style={style}
+        className="h-2 w-2.5 shrink-0 rounded-[1px] border-[1.5px] border-dashed border-current"
       />
     )
   if (kind === "ring")

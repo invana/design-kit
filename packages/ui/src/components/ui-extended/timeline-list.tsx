@@ -42,6 +42,11 @@ export interface TimelineEntryProps
   title?: React.ReactNode
   /** A marker in the rail — a `StatusDot`, usually. */
   marker?: React.ReactNode
+  /**
+   * Calls the entry out on a tinted ground — the anomaly the events around it
+   * explain. `compact` only.
+   */
+  highlight?: "error" | "warning" | "success" | "info"
   children?: React.ReactNode
 }
 
@@ -115,14 +120,22 @@ function RailGutter({ marker }: { marker?: React.ReactNode }) {
 export const TimelineEntry = React.forwardRef<
   HTMLLIElement,
   TimelineEntryProps
->(({ when, title, marker, className, children, ...props }, ref) => {
+>(({ when, title, marker, highlight, className, children, ...props }, ref) => {
   const variant = React.useContext(TimelineVariantContext)
 
   if (variant === "compact") {
     return (
       <li
         ref={ref}
-        className={cn("grid grid-cols-[3.5rem_0.75rem_minmax(0,1fr)] items-baseline gap-1.5 pb-1 last:pb-0", className)}
+        className={cn(
+          "grid grid-cols-[3.5rem_0.75rem_minmax(0,1fr)] items-baseline gap-1.5 pb-1 last:pb-0",
+          highlight && "rounded-[2px]",
+          highlight === "error" && "bg-destructive/15",
+          highlight === "warning" && "bg-warning/15",
+          highlight === "success" && "bg-success/15",
+          highlight === "info" && "bg-info/15",
+          className,
+        )}
         {...props}
       >
         <span className="truncate font-mono text-xs text-muted-foreground">{when}</span>
@@ -209,3 +222,28 @@ export const TimelineFooter = React.forwardRef<
   )
 })
 TimelineFooter.displayName = "TimelineFooter"
+
+export interface TimelineSectionProps extends React.HTMLAttributes<HTMLLIElement> {
+  children?: React.ReactNode
+}
+
+/**
+ * A label over a run of entries — `Before`, `Spike`, `After` — for events read
+ * around one moment rather than as one sequence.
+ */
+export const TimelineSection = React.forwardRef<HTMLLIElement, TimelineSectionProps>(
+  ({ className, children, ...props }, ref) => (
+    <li
+      ref={ref}
+      role="presentation"
+      className={cn(
+        "pt-1 pb-0.5 font-mono text-xs uppercase tracking-wide text-muted-foreground",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </li>
+  ),
+)
+TimelineSection.displayName = "TimelineSection"

@@ -6,6 +6,8 @@ export interface SegmentedOption {
   /** What the caller gets back. */
   value: string
   label: React.ReactNode
+  /** A second line under the label, smaller and muted — `±1.4 pp`. */
+  sub?: React.ReactNode
   disabled?: boolean
 }
 
@@ -145,9 +147,12 @@ export const SegmentedControl = React.forwardRef<
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
                 "min-w-0 truncate text-center whitespace-nowrap",
-                variant === "solid" ? "px-3" : "px-2",
+                // Stretched, each option has its share already; padding would only truncate it.
+                variant === "solid" ? (stretch ? "px-1" : "px-3") : "px-2",
                 "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
                 size === "xs" ? "h-[22px] text-sm" : "h-[26px]",
+                // Two lines take the height they need.
+                option.sub != null && "h-auto py-1",
                 stretch && "flex-1",
                 variant === "solid"
                   ? cn(
@@ -163,7 +168,16 @@ export const SegmentedControl = React.forwardRef<
                 option.disabled && "pointer-events-none opacity-50",
               )}
             >
-              {option.label}
+              {option.sub != null ? (
+                <span className="flex flex-col items-center leading-tight">
+                  <span className="truncate">{option.label}</span>
+                  <span className={cn("truncate font-mono text-xs", on && variant === "solid" ? "opacity-85" : "text-muted-foreground")}>
+                    {option.sub}
+                  </span>
+                </span>
+              ) : (
+                option.label
+              )}
             </button>
           )
         })}

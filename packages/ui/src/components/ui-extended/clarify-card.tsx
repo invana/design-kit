@@ -40,6 +40,8 @@ export interface ClarifyCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
   /** @default "pending" */
   state?: ClarifyState
+  /** The header's word while the ask waits — `confirm` for a yes-or-no. @default "question" */
+  kind?: React.ReactNode
   /** Which step asked — `understand`. */
   step?: React.ReactNode
   /** How long it has been waiting — `parked 14 min`. */
@@ -128,6 +130,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
   (
     {
       state = "pending",
+      kind = "question",
       step,
       waiting,
       time,
@@ -158,7 +161,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
         {...props}
       >
         <div className="flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted px-2 text-sm">
-          <span className="shrink-0 font-medium">{settled ? state : "question"}</span>
+          <span className="shrink-0 font-medium">{settled ? state : kind}</span>
           {step != null ? (
             <span className="truncate text-muted-foreground">{step}</span>
           ) : null}

@@ -2,10 +2,29 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
+export interface ScopeLineChoice {
+  value: string
+  label: React.ReactNode
+  /** At the right of the choice, in mono — `188`, `2 of 3`. */
+  detail?: React.ReactNode
+}
+
+/** A part with more to say than its text. */
+export interface ScopeLinePart {
+  text: React.ReactNode
+  /**
+   * `changed` — this part differs from the question it was carried from;
+   * `stale` — the data behind it is late.
+   */
+  mark?: "changed" | "stale"
+  /** What the part can be changed to. Opening the part lists them under the line. */
+  choices?: ScopeLineChoice[]
+}
+
 export interface ScopeLineProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   /** What the figure covers, in order — period, comparison, filters, population, freshness. */
-  parts: React.ReactNode[]
+  parts: (React.ReactNode | ScopeLinePart)[]
   /**
    * Makes the text parts editable in place: click one, type, `Enter` to send
    * the new value, `Escape` or leaving it to keep the old one. Called only
@@ -17,6 +36,24 @@ export interface ScopeLineProps
    * freshness is a fact about the load, not a choice of the analyst's.
    */
   fixedParts?: number[]
+  /** The part whose choices are showing. Controlled; see `defaultOpenPart`. */
+  openPart?: number | null
+  /** The part whose choices show at first, uncontrolled. */
+  defaultOpenPart?: number
+  onOpenPartChange?: (index: number | null) => void
+  /** A line under the scope — `Click any part to change it and re-run`. */
+  note?: React.ReactNode
+  /** `warning` when the note is about late data. */
+  noteTone?: "muted" | "warning"
+}
+
+const MARK = {
+  changed: "bg-primary/15 text-primary",
+  stale: "bg-warning/15 text-warning",
+}
+
+function isPart(part: unknown): part is ScopeLinePart {
+  return typeof part === "object" && part !== null && !React.isValidElement(part) && "text" in part
 }
 
 const PART = "border-r border-border/60 px-2 py-0.5 last:border-r-0"
@@ -24,9 +61,11 @@ const PART = "border-r border-border/60 px-2 py-0.5 last:border-r-0"
 function EditablePart({
   value,
   onChange,
+  className,
 }: {
   value: string
   onChange: (value: string) => void
+  className?: string
 }) {
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState(value)
@@ -38,6 +77,7 @@ function EditablePart({
         className={cn(
           PART,
           "cursor-text text-left hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
+          className,
         )}
         onClick={() => {
           setDraft(value)
@@ -84,25 +124,139 @@ function EditablePart({
  * where it is read, rather than by asking the question again.
  */
 export const ScopeLine = React.forwardRef<HTMLDivElement, ScopeLineProps>(
-  ({ parts, onPartChange, fixedParts, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "flex w-fit max-w-full flex-wrap border border-border font-mono text-xs text-muted-foreground",
-        className,
-      )}
-      {...props}
-    >
-      {parts.map((part, i) =>
-        onPartChange && typeof part === "string" && !fixedParts?.includes(i) ? (
-          <EditablePart key={i} value={part} onChange={(value) => onPartChange(i, value)} />
-        ) : (
-          <span key={i} className={PART}>
-            {part}
+  (
+    {
+      parts,
+      onPartChange,
+      fixedParts,
+      openPart,
+      defaultOpenPart,
+      onOpenPartChange,
+      note,
+      noteTone = "muted",
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const [uncontrolledOpen, setUncontrolledOpen] = React.useState<number | null>(
+      defaultOpenPart ?? null,
+    )
+    const open = openPart !== undefined ? openPart : uncontrolledOpen
+    const setOpen = (index: number | null) => {
+      if (openPart === undefined) setUncontrolledOpen(index)
+      onOpenPartChange?.(index)
+    }
+    const opened = open != null ? parts[open] : undefined
+    const choices = isPart(opened) ? opened.choices : undefined
+    const wrapped = !!choices?.length || note != null
+
+    const line = (
+      <div
+        ref={wrapped ? undefined : ref}
+        className={cn(
+          "flex w-fit max-w-full flex-wrap border border-border font-mono text-xs text-muted-foreground",
+          !wrapped && className,
+        )}
+        {...(wrapped ? {} : props)}
+      >
+        {parts.map((part, i) => {
+          if (isPart(part)) {
+            const mark = part.mark ? MARK[part.mark] : undefined
+            if (part.choices?.length) {
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  aria-expanded={open === i}
+                  className={cn(
+                    PART,
+                    "text-left hover:bg-accent hover:text-foreground focus-visible:outline-none",
+                    open === i && "shadow-[inset_0_0_0_1px_var(--color-primary)]",
+                    mark,
+                  )}
+                  onClick={() => setOpen(open === i ? null : i)}
+                >
+                  {part.text}
+                </button>
+              )
+            }
+            if (onPartChange && typeof part.text === "string" && !fixedParts?.includes(i)) {
+              return (
+                <EditablePart
+                  key={i}
+                  value={part.text}
+                  className={mark}
+                  onChange={(value) => onPartChange(i, value)}
+                />
+              )
+            }
+            return (
+              <span key={i} className={cn(PART, mark)}>
+                {part.text}
+              </span>
+            )
+          }
+          return onPartChange && typeof part === "string" && !fixedParts?.includes(i) ? (
+            <EditablePart key={i} value={part} onChange={(value) => onPartChange(i, value)} />
+          ) : (
+            <span key={i} className={PART}>
+              {part as React.ReactNode}
+            </span>
+          )
+        })}
+      </div>
+    )
+
+    if (!wrapped) return line
+    return (
+      <div ref={ref} className={cn("flex min-w-0 flex-col gap-1.5", className)} {...props}>
+        {line}
+        {choices?.length && open != null ? (
+        <div
+          role="listbox"
+          className="flex flex-col rounded-sm border border-border bg-card p-0.5 shadow-md"
+        >
+          {choices.map((choice) => {
+            const current = isPart(opened) && choice.label === opened.text
+            return (
+              <button
+                key={choice.value}
+                type="button"
+                role="option"
+                aria-selected={current}
+                className={cn(
+                  "flex items-baseline gap-2 rounded-sm px-1.5 py-1 text-left text-sm hover:bg-accent",
+                  current && "bg-primary/15 text-primary hover:bg-primary/15",
+                )}
+                onClick={() => {
+                  setOpen(null)
+                  if (!current && open != null) onPartChange?.(open, choice.value)
+                }}
+              >
+                {choice.label}
+                {choice.detail != null ? (
+                  <span className="ml-auto font-mono text-xs text-muted-foreground">
+                    {choice.detail}
+                  </span>
+                ) : null}
+              </button>
+            )
+          })}
+        </div>
+        ) : null}
+        {note != null ? (
+          <span
+            className={cn(
+              "text-xs",
+              noteTone === "warning" ? "text-warning" : "text-muted-foreground",
+            )}
+          >
+            {note}
           </span>
-        ),
-      )}
-    </div>
-  ),
+        ) : null}
+      </div>
+    )
+  },
 )
 ScopeLine.displayName = "ScopeLine"

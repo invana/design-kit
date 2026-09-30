@@ -10,7 +10,7 @@ import { cn } from "../../lib/utils"
  * carries no signal, and a number that is merely large is not a warning.
  */
 export type KnownMetricTone =
-  | "running" | "success" | "warning" | "error" | "info"
+  | "running" | "success" | "warning" | "error" | "info" | "muted"
 
 /**
  * The values the kit draws specially — **suggestions, not a limit.** Anything
@@ -24,6 +24,7 @@ const TONE: Partial<Record<MetricTone, string>> = {
   warning: "text-warning",
   error: "text-destructive",
   info: "text-info",
+  muted: "text-muted-foreground",
 }
 
 export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -50,6 +51,22 @@ export interface MetricTileProps extends React.HTMLAttributes<HTMLDivElement> {
    * a deadline that does not exist.
    */
   meter?: number
+  /**
+   * The figure against a target, as a bar under it: `fill` is how far the
+   * figure has come and `mark` where the target sits, both `0`–`1` of the
+   * scale. `labels` writes the scale's start, the target and its end under it.
+   *
+   * Unlike `meter`, the target is a line the figure is read against, not a
+   * ceiling it spends — the fill may pass it.
+   */
+  gauge?: { fill: number; mark: number; labels?: [React.ReactNode, React.ReactNode, React.ReactNode] }
+  /**
+   * Set on the warning ground: the one tile in a band that needs a second look
+   * — a figure resting on too few records. Say why in a line under the band.
+   */
+  flagged?: boolean
+  /** Beside the figure, at the right, bottom-aligned — a sparkline of its recent run. */
+  aside?: React.ReactNode
   /**
    * `tile` is one of several, boxed, in a strip. `hero` is the one figure an
    * answer turns on — the adjusted odds ratio, net revenue retention — set
@@ -82,6 +99,11 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
    * is ignored.
    */
   joined?: boolean
+  /**
+   * A fixed number of columns instead of fitting to the width — for a band
+   * whose shape is part of what it says: three across, two by two.
+   */
+  columns?: number
   children?: React.ReactNode
 }
 
@@ -93,21 +115,25 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
  * there is no honest caption, the number probably needs a different surface.
  */
 export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
-  ({ label, value, caption, tone, captionTone, meter, variant = "tile", className, children, ...props }, ref) => {
+  ({ label, value, caption, tone, captionTone, meter, gauge, flagged, aside, variant = "tile", className, children, ...props }, ref) => {
     const hero = variant === "hero"
     const figure = variant === "figure"
-    return (
+    const clamp = (n: number) => Math.min(Math.max(n, 0), 1) * 100
+    const tile = (
     <div
-      ref={ref}
-      data-variant={variant}
+      ref={aside == null ? ref : undefined}
+      data-variant={aside == null ? variant : undefined}
       className={cn(
-        "flex flex-col gap-px",
+        "flex min-w-0 flex-col gap-px",
         !hero && "border border-border bg-card",
+        // Mixed onto the card rather than translucent: a joined grid's rules are
+        // its background showing through, and would tint the tile too.
+        flagged && "bg-[color-mix(in_srgb,var(--color-warning)_15%,var(--color-card))]",
         variant === "tile" && "px-3 py-2.5",
         figure && "px-2 py-1.5",
-        className,
+        aside == null && className,
       )}
-      {...props}
+      {...(aside == null ? props : {})}
     >
       {/* Caps, like every other label that titles a thing in this system — see
           `Eyebrow`. A tile's label is a heading over a number, and left in
@@ -116,7 +142,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       <span
         className={cn(
           "truncate text-muted-foreground",
-          figure ? "text-xs" : "text-sm",
+          figure || hero ? "text-xs" : "text-sm",
           variant === "tile" && "font-semibold uppercase tracking-wide",
         )}
       >
@@ -142,7 +168,7 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       {caption != null ? (
         <span
           className={cn(
-            figure ? "text-xs" : "text-sm",
+            figure || hero ? "text-xs" : "text-sm",
             (hero || figure) && "font-mono",
             captionTone ? (TONE[captionTone] ?? "text-muted-foreground") : "text-muted-foreground",
           )}
@@ -168,6 +194,40 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       {children}
     </div>
     )
+    const withGauge =
+      gauge == null ? (
+        tile
+      ) : (
+        <div className="flex flex-col gap-1">
+          {tile}
+          <div
+            className="relative mt-1.5 h-1.5 rounded-[1px] bg-muted"
+            role="img"
+            aria-label={`${Math.round(clamp(gauge.fill))}% of the scale, target at ${Math.round(clamp(gauge.mark))}%`}
+          >
+            <div className="h-full rounded-[1px] bg-primary" style={{ width: `${clamp(gauge.fill)}%` }} />
+            <span
+              aria-hidden
+              className="absolute -top-[3px] h-3 w-0.5 -translate-x-1/2 bg-foreground"
+              style={{ left: `${clamp(gauge.mark)}%` }}
+            />
+          </div>
+          {gauge.labels ? (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              {gauge.labels.map((l, i) => (
+                <span key={i}>{l}</span>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      )
+    if (aside == null) return withGauge
+    return (
+      <div ref={ref} data-variant={variant} className={cn("flex items-end gap-2.5", className)} {...props}>
+        {withGauge}
+        <div className="ms-auto shrink-0">{aside}</div>
+      </div>
+    )
   },
 )
 MetricTile.displayName = "MetricTile"
@@ -180,7 +240,7 @@ MetricTile.displayName = "MetricTile"
  * different call site for each.
  */
 export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
-  ({ minTileWidth = 120, gap = 6, joined, className, style, children, ...props }, ref) => (
+  ({ minTileWidth = 120, gap = 6, joined, columns, className, style, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -192,7 +252,9 @@ export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
       )}
       style={{
         gap: joined ? undefined : gap,
-        gridTemplateColumns: `repeat(auto-fit, minmax(${minTileWidth}px, 1fr))`,
+        gridTemplateColumns: columns
+          ? `repeat(${columns}, minmax(0, 1fr))`
+          : `repeat(auto-fit, minmax(${minTileWidth}px, 1fr))`,
         ...style,
       }}
       {...props}
