@@ -34,4 +34,9 @@ export type CellEditHandler<TData> = (args: {
   columnId: string;
   value: unknown;
   row: TData;
-}) => void;
+  /**
+   * Return a promise to save asynchronously: the cell shows the new value as
+   * saving until it settles, and on a rejection puts the old value back and
+   * says why (the error's `message`) on the cell.
+   */
+}) => void | Promise<unknown>;

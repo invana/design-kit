@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -10,6 +11,7 @@ import {
   type ColumnFiltersState,
   type ColumnOrderState,
   type ColumnPinningState,
+  type ExpandedState,
   type Header,
   type OnChangeFn,
   type PaginationState,
@@ -44,8 +46,15 @@ import {
   TableHeader,
   TableRow,
   cn,
+  type TableDensity,
 } from "@invana/ui";
-import { ArrowDown, ArrowUp, ChevronsUpDown, GripVertical } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronRight,
+  ChevronsUpDown,
+  GripVertical,
+} from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { EditableCell } from "./editable-cell";
@@ -106,7 +115,7 @@ export interface DataTableProps<TData extends RowData> {
    * journal, a trace or a step's output table is drawn at. The primitive
    * `Table` has carried it all along; this is the table that passes it on.
    */
-  density?: "default" | "compact";
+  density?: TableDensity;
   /**
    * No box, and nothing wasted on its outside: only the rules between rows are
    * drawn, and the first and last columns sit flush with the text around the
@@ -149,7 +158,7 @@ export interface DataTableProps<TData extends RowData> {
   onRowClick?: (row: TData) => void;
   /**
    * The table as a preview of a longer one — the first rows an answer shows.
-   * Turns pagination off, drops the header ground, and says how much there is
+   * Turns pagination off and says how much there is
    * under the rows: `3 of 214 · stores`, with `action` (an `Open all`) at the
    * end. `data` is the rows shown; `total` is how many exist, and without it
    * there is no count line, since `3 of 3` says nothing.
@@ -164,7 +173,45 @@ export interface DataTableProps<TData extends RowData> {
     onOpen?: () => void;
     openLabel?: React.ReactNode;
   };
+  /**
+   * Rows under a row, with the same columns — a plan's subtasks, a folder's
+   * files, a dataset's tables. A row with children gets a chevron in its first
+   * cell; each level indents that cell, as `rowIndent` does for a flat list
+   * (and wins over it). Sorting orders siblings, so children stay under their
+   * parent; pagination counts top-level rows, so opening one never pushes
+   * another onto the next page.
+   */
+  getSubRows?: (row: TData) => TData[] | undefined;
+  /**
+   * Anything under a row, the full width of the table — a payload, a small
+   * table, a trace. Drawn with no box of its own, aligned with the row's
+   * content. Every row can open one unless `canExpand` says otherwise.
+   */
+  renderExpanded?: (row: TData) => React.ReactNode;
+  /** Which rows `renderExpanded` has something for. Defaults to all of them. */
+  canExpand?: (row: TData) => boolean;
+  /**
+   * Which rows start open: `true` for all, or `{ [rowId]: true }` for some.
+   * Ignored when `expanded` is controlled.
+   */
+  defaultExpanded?: ExpandedState;
+  /** Which rows are open, by row id — `true` for all. Controlled. */
+  expanded?: ExpandedState;
+  onExpandedChange?: OnChangeFn<ExpandedState>;
+  /** Also open and close a row by clicking it, not only its chevron. */
+  expandOnRowClick?: boolean;
+  /**
+   * A row's id — what `expanded` is keyed by. Defaults to its position
+   * (`0`, `0.1`, …), which moves when the data does; pass one to keep a row
+   * open across a refetch or a sort.
+   */
+  getRowId?: (row: TData, index: number, parent?: { id: string }) => string;
 }
+
+/** How far a first cell's content steps in per level, in px. */
+const INDENT_STEP = 14;
+/** The first cell's own left padding, in px — `px-2`. */
+const CELL_PAD = 8;
 
 function getCommonPinStyles<TData>(
   header: Header<TData, unknown>,
@@ -181,8 +228,6 @@ function getCommonPinStyles<TData>(
 
 interface DraggableHeaderProps<TData> {
   header: Header<TData, unknown>;
-  /** The muted header ground. Off in a preview, where the rows are the point. */
-  ground: boolean;
   enableReordering: boolean;
   enableResizing: boolean;
   enableSorting: boolean;
@@ -190,7 +235,6 @@ interface DraggableHeaderProps<TData> {
 
 function DraggableHeader<TData>({
   header,
-  ground,
   enableReordering,
   enableResizing,
   enableSorting,
@@ -231,12 +275,14 @@ function DraggableHeader<TData>({
       }}
       className={cn(
         "group relative select-none",
-        ground && "bg-muted/40",
         isPinned &&
           "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
         column.columnDef.meta?.headerClassName,
       )}
-      {...attributes}
+      // Only a draggable header takes dnd-kit's attributes: when reordering is
+      // off they carry `aria-disabled`, which a screen reader applies to the
+      // whole header — announcing its sort button as disabled.
+      {...(canDrag ? attributes : {})}
     >
       <div className={cn("flex items-center gap-1", alignClass)}>
         {canDrag && (
@@ -253,15 +299,31 @@ function DraggableHeader<TData>({
           <button
             type="button"
             onClick={column.getToggleSortingHandler()}
-            className="inline-flex items-center gap-1 font-medium hover:text-foreground"
+            aria-label={
+              sortDir === "asc"
+                ? "Sorted ascending — sort descending"
+                : sortDir === "desc"
+                  ? "Sorted descending — clear sort"
+                  : "Sort"
+            }
+            className={cn(
+              "-mx-1 inline-flex items-center gap-1 rounded-control px-1 font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              // Right-aligned columns keep their text flush right, so the
+              // arrow goes on the left where it cannot push the label off it.
+              align === "right" && "flex-row-reverse",
+              sortDir && "text-foreground",
+            )}
           >
             {flexRender(column.columnDef.header, header.getContext())}
+            {/* The arrow says the column is sorted. Unsorted, it is only an
+                offer, so it waits for the pointer rather than repeating down
+                every header. */}
             {sortDir === "asc" ? (
               <ArrowUp className="h-3.5 w-3.5" />
             ) : sortDir === "desc" ? (
               <ArrowDown className="h-3.5 w-3.5" />
             ) : (
-              <ChevronsUpDown className="h-3.5 w-3.5 opacity-50" />
+              <ChevronsUpDown className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-50 group-focus-within:opacity-50" />
             )}
           </button>
         ) : (
@@ -322,7 +384,25 @@ export function DataTable<TData extends RowData>({
   minWidth,
   onRowClick,
   preview,
+  getSubRows,
+  renderExpanded,
+  canExpand,
+  defaultExpanded,
+  expanded: expandedProp,
+  onExpandedChange,
+  expandOnRowClick = false,
+  getRowId,
 }: DataTableProps<TData>) {
+  const expandable = getSubRows != null || renderExpanded != null;
+  const [internalExpanded, setInternalExpanded] = React.useState<ExpandedState>(
+    defaultExpanded ?? {},
+  );
+  const expanded = expandedProp ?? internalExpanded;
+  const setExpanded: OnChangeFn<ExpandedState> = (updater) => {
+    if (onExpandedChange) onExpandedChange(updater);
+    if (!expandedProp) setInternalExpanded(updater);
+  };
+
   const [internalSorting, setInternalSorting] = React.useState<SortingState>(
     [],
   );
@@ -394,6 +474,7 @@ export function DataTable<TData extends RowData>({
       columnVisibility,
       columnPinning,
       columnOrder,
+      expanded,
     },
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
@@ -401,12 +482,27 @@ export function DataTable<TData extends RowData>({
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
     onColumnOrderChange: setColumnOrder,
+    onExpandedChange: setExpanded,
+    getSubRows,
+    getRowId,
+    getRowCanExpand: (row) =>
+      row.subRows.length > 0 ||
+      (renderExpanded != null && (canExpand?.(row.original) ?? true)),
+    getExpandedRowModel: expandable ? getExpandedRowModel() : undefined,
+    // Page by top-level rows: opening one adds its children to this page
+    // rather than pushing rows onto the next. TanStack only expands inside its
+    // own pagination step when this is off, so a table it does not paginate
+    // (pagination off, or paged by the server) must expand the usual way.
+    paginateExpandedRows: !(enablePagination && !manualPagination && !preview),
     enableSorting,
     enableColumnResizing,
     enableColumnPinning,
     manualPagination,
     manualSorting,
-    pageCount: pageCount ?? -1,
+    // Only a server-paged table needs telling how many pages there are; given
+    // `-1` a client-paged one reports "Page 1 of -1" and its last-page button
+    // jumps nowhere.
+    pageCount: manualPagination ? (pageCount ?? -1) : undefined,
     rowCount,
     columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
@@ -442,6 +538,9 @@ export function DataTable<TData extends RowData>({
   };
 
   const visibleLeafColumnIds = table.getVisibleLeafColumns().map((c) => c.id);
+  // Groups section the top level only: a child row sits under its parent,
+  // whatever group it would name on its own.
+  const topLevel = table.getRowModel().rows.filter((r) => r.depth === 0);
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -476,7 +575,8 @@ export function DataTable<TData extends RowData>({
           >
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                // The header is not a row a reader picks, so it does not light up.
+                <TableRow key={headerGroup.id} className="hover:bg-transparent">
                   <SortableContext
                     items={visibleLeafColumnIds}
                     strategy={horizontalListSortingStrategy}
@@ -485,7 +585,6 @@ export function DataTable<TData extends RowData>({
                       <DraggableHeader
                         key={header.id}
                         header={header}
-                        ground={!preview}
                         enableReordering={enableColumnReordering}
                         enableResizing={enableColumnResizing}
                         enableSorting={enableSorting}
@@ -506,14 +605,29 @@ export function DataTable<TData extends RowData>({
                   </TableCell>
                 </TableRow>
               ) : (
-                table.getRowModel().rows.map((row, rowIndex, allRows) => {
-                  const groupKey = groupBy?.(row.original);
-                  const previousKey =
-                    rowIndex > 0
-                      ? groupBy?.(allRows[rowIndex - 1].original)
-                      : undefined;
+                table.getRowModel().rows.map((row) => {
+                  const groupKey =
+                    row.depth === 0 ? groupBy?.(row.original) : undefined;
+                  const previousTop = topLevel[topLevel.indexOf(row) - 1];
+                  const previousKey = previousTop
+                    ? groupBy?.(previousTop.original)
+                    : undefined;
                   const startsGroup =
                     groupKey != null && groupKey !== previousKey;
+                  const canExpand = expandable && row.getCanExpand();
+                  const isExpanded = canExpand && row.getIsExpanded();
+                  const panel =
+                    isExpanded && renderExpanded
+                      ? renderExpanded(row.original)
+                      : null;
+                  const depth = getSubRows
+                    ? row.depth
+                    : (rowIndent?.(row.original) ?? 0);
+                  const activates = onRowClick != null || (expandOnRowClick && canExpand);
+                  const activate = () => {
+                    onRowClick?.(row.original);
+                    if (expandOnRowClick && canExpand) row.toggleExpanded();
+                  };
                   return (
                     <React.Fragment key={row.id}>
                       {startsGroup ? (
@@ -525,7 +639,7 @@ export function DataTable<TData extends RowData>({
                             {renderGroupHeader
                               ? renderGroupHeader(
                                   groupKey,
-                                  allRows
+                                  topLevel
                                     .filter(
                                       (r) => groupBy?.(r.original) === groupKey,
                                     )
@@ -542,19 +656,16 @@ export function DataTable<TData extends RowData>({
                         aria-selected={
                           isRowSelected ? isRowSelected(row.original) : undefined
                         }
-                        tabIndex={onRowClick ? 0 : undefined}
-                        onClick={
-                          onRowClick
-                            ? () => onRowClick(row.original)
-                            : undefined
-                        }
+                        tabIndex={activates ? 0 : undefined}
+                        onClick={activates ? activate : undefined}
                         onKeyDown={
-                          onRowClick
+                          activates
                             ? (event) => {
+                                if (event.target !== event.currentTarget) return;
                                 if (event.key !== "Enter" && event.key !== " ")
                                   return;
                                 event.preventDefault();
-                                onRowClick(row.original);
+                                activate();
                               }
                             : undefined
                         }
@@ -570,23 +681,28 @@ export function DataTable<TData extends RowData>({
                           isRowSelected?.(row.original) &&
                             seamless &&
                             "[&[data-selected]>td:first-child]:ps-2",
-                          onRowClick &&
+                          activates &&
                             "cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
+                          // The panel reads as the row's own continuation, so
+                          // no rule between them.
+                          panel != null && "border-b-0",
                         )}
                       >
                         {row.getVisibleCells().map((cell, cellIndex) => {
                           const column = cell.column;
                           const isPinned = column.getIsPinned();
                           const align = column.columnDef.meta?.align ?? "left";
-                          const indent =
-                            cellIndex === 0 ? rowIndent?.(row.original) : undefined;
+                          const first = cellIndex === 0;
+                          const indent = first && depth ? depth : undefined;
                           return (
                             <TableCell
                               key={cell.id}
                               style={{
                                 width: cell.column.getSize(),
                                 ...(indent
-                                  ? { paddingLeft: `${indent * 14 + (seamless ? 0 : 8)}px` }
+                                  ? {
+                                      paddingLeft: `${indent * INDENT_STEP + (seamless ? 0 : CELL_PAD)}px`,
+                                    }
                                   : {}),
                                 ...(isPinned
                                   ? {
@@ -613,14 +729,64 @@ export function DataTable<TData extends RowData>({
                                 column.columnDef.meta?.cellClassName,
                               )}
                             >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext(),
+                              {first && expandable ? (
+                                <div className="flex items-center gap-1">
+                                  {canExpand ? (
+                                    <button
+                                      type="button"
+                                      aria-expanded={isExpanded}
+                                      aria-label={isExpanded ? "Collapse row" : "Expand row"}
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                        row.toggleExpanded();
+                                      }}
+                                      className="inline-flex size-4 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                    >
+                                      <ChevronRight
+                                        aria-hidden
+                                        className={cn(
+                                          "size-3.5 transition-transform motion-reduce:transition-none",
+                                          isExpanded && "rotate-90",
+                                        )}
+                                      />
+                                    </button>
+                                  ) : (
+                                    // A leaf keeps the chevron's room, so its
+                                    // text lines up with its expandable siblings.
+                                    <span aria-hidden className="size-4 shrink-0" />
+                                  )}
+                                  <div className="min-w-0 flex-1">
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext(),
+                                    )}
+                                  </div>
+                                </div>
+                              ) : (
+                                flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext(),
+                                )
                               )}
                             </TableCell>
                           );
                         })}
                       </TableRow>
+                      {panel != null ? (
+                        <TableRow className="hover:bg-transparent">
+                          <TableCell
+                            colSpan={row.getVisibleCells().length}
+                            className="h-auto pt-0"
+                            style={{
+                              // In line with the row's content: past its
+                              // indent and the chevron's 16px + 4px gap.
+                              paddingLeft: `${depth * INDENT_STEP + (seamless ? 0 : CELL_PAD) + 20}px`,
+                            }}
+                          >
+                            {panel}
+                          </TableCell>
+                        </TableRow>
+                      ) : null}
                     </React.Fragment>
                   );
                 })
