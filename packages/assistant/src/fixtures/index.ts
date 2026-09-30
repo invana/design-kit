@@ -9,6 +9,8 @@ import taskDashboard from "./conversations/task-dashboard.json"
 import turnLabels from "./conversations/turn-labels.json"
 import breeder from "../data/conversations/breeder.json"
 import dataScientist from "../data/conversations/data-scientist.json"
+import financeAnalyst from "../data/conversations/finance-analyst.json"
+import journalist from "../data/conversations/journalist.json"
 import network from "../data/conversations/network.json"
 import planner from "../data/conversations/planner.json"
 import researcher from "../data/conversations/researcher.json"
@@ -33,17 +35,21 @@ export const USERS = {
   researcher: researcher as unknown as UserData,
   planner: planner as unknown as UserData,
   dataScientist: dataScientist as unknown as UserData,
+  financeAnalyst: financeAnalyst as unknown as UserData,
+  journalist: journalist as unknown as UserData,
 }
 
 export type UserId = keyof typeof USERS
 
-/** The research sessions alone, as each user opens on them. */
+/** Each user's opening thread alone, as `fixtures.test.ts` validates it against its known drift. */
 export const SESSIONS = {
   plantBreeder: USERS.breeder.session,
   equityTrader: USERS.trader.session,
   healthResearcher: USERS.researcher.session,
   supplyChainPlanner: USERS.planner.session,
   productDataScientist: USERS.dataScientist.session,
+  financeAnalyst: USERS.financeAnalyst.session,
+  journalist: USERS.journalist.session,
 }
 
 export type SessionId = keyof typeof SESSIONS

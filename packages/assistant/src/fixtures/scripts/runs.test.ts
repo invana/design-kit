@@ -20,6 +20,10 @@ const added = (before: ConversationSpec, after: ConversationSpec) => {
 describe.each(Object.entries(USERS))("user %s", (_, user: UserData) => {
   const opening = openingSpec(user, NOW)
 
+  it("opens on a valid thread", () => {
+    expect(issues(opening).filter((i) => i.startsWith("error"))).toEqual([])
+  })
+
   it("opens settled, with a composer", () => {
     expect(isRunning(opening)).toBe(false)
     expect(opening.composer).toBeDefined()
