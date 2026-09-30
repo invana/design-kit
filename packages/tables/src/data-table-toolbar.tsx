@@ -26,17 +26,31 @@ export function DataTableToolbar<TData>({
   const toggleableCols = table
     .getAllLeafColumns()
     .filter((c) => c.getCanHide());
+  const showColumns = enableColumnVisibility && toggleableCols.length > 0;
 
+  // Nothing to put on the row, so no row: an empty band above a table reads
+  // as a gap in the layout.
+  if (children == null && !showColumns) return null;
+
+  // One row. What the caller passes takes the width; the column picker is a
+  // named icon at the end, a setting of the table rather than a second
+  // toolbar under the first.
   return (
-    <div className="flex items-center justify-between gap-2 px-2 py-2">
-      <div className="flex items-center gap-2">{children}</div>
-      <div className="flex items-center gap-2">
-        {enableColumnVisibility && toggleableCols.length > 0 && (
+    <div className="flex items-center gap-2">
+      {/* A block, not a flex row: a block child (a `FilterBar`) fills the
+          width, an inline one (a search, a segmented control) keeps its own. */}
+      <div className="min-w-0 flex-1">{children}</div>
+      <div className="flex shrink-0 items-center">
+        {showColumns && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8">
-                <Settings2 className="mr-2 h-4 w-4" />
-                Columns
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                aria-label="Columns"
+                title="Columns"
+              >
+                <Settings2 aria-hidden />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">

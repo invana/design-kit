@@ -43,6 +43,7 @@ import {
   TableHeader,
   TableRow,
   cn,
+  type TableDensity,
 } from "@invana/ui";
 import { ArrowDown, ArrowUp, ChevronsUpDown, GripVertical } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
@@ -105,7 +106,7 @@ export interface DataTableProps<TData extends RowData> {
    * journal, a trace or a step's output table is drawn at. The primitive
    * `Table` has carried it all along; this is the table that passes it on.
    */
-  density?: "default" | "compact";
+  density?: TableDensity;
   /**
    * Draw the box around the table. Off for a table that sits directly in a
    * card or a panel's column — the edge already frames it, and a second border
@@ -192,7 +193,7 @@ function DraggableHeader<TData>({
         ...(isPinned ? { backgroundColor: "hsl(var(--background))" } : {}),
       }}
       className={cn(
-        "group relative select-none bg-muted/40",
+        "group relative select-none",
         isPinned &&
           "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
         column.columnDef.meta?.headerClassName,
@@ -214,15 +215,31 @@ function DraggableHeader<TData>({
           <button
             type="button"
             onClick={column.getToggleSortingHandler()}
-            className="inline-flex items-center gap-1 font-medium hover:text-foreground"
+            aria-label={
+              sortDir === "asc"
+                ? "Sorted ascending — sort descending"
+                : sortDir === "desc"
+                  ? "Sorted descending — clear sort"
+                  : "Sort"
+            }
+            className={cn(
+              "-mx-1 inline-flex items-center gap-1 rounded-control px-1 font-medium hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              // Right-aligned columns keep their text flush right, so the
+              // arrow goes on the left where it cannot push the label off it.
+              align === "right" && "flex-row-reverse",
+              sortDir && "text-foreground",
+            )}
           >
             {flexRender(column.columnDef.header, header.getContext())}
+            {/* The arrow says the column is sorted. Unsorted, it is only an
+                offer, so it waits for the pointer rather than repeating down
+                every header. */}
             {sortDir === "asc" ? (
               <ArrowUp className="h-3.5 w-3.5" />
             ) : sortDir === "desc" ? (
               <ArrowDown className="h-3.5 w-3.5" />
             ) : (
-              <ChevronsUpDown className="h-3.5 w-3.5 opacity-50" />
+              <ChevronsUpDown className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-50 group-focus-within:opacity-50" />
             )}
           </button>
         ) : (
@@ -363,7 +380,10 @@ export function DataTable<TData extends RowData>({
     enableColumnPinning,
     manualPagination,
     manualSorting,
-    pageCount: pageCount ?? -1,
+    // Only a server-paged table needs telling how many pages there are; given
+    // `-1` a client-paged one reports "Page 1 of -1" and its last-page button
+    // jumps nowhere.
+    pageCount: manualPagination ? (pageCount ?? -1) : undefined,
     rowCount,
     columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
