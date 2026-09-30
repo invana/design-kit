@@ -1,4 +1,5 @@
 export * from './absence-note';
+export * from './access';
 export * from './address-chip';
 export * from './agent-chip';
 export * from './app-status-bar';
