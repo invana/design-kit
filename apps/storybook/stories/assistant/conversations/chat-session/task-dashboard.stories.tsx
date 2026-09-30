@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChatSession,
+  ChatSessionFrame,
   ChatSessionComposer,
   ChatSessionStatusBar,
   ChatSessionTaskGroup,
@@ -75,7 +75,7 @@ function TaskDashboardDemo() {
 
   return (
     <div className="h-[560px] w-[760px] border border-border rounded-md bg-background overflow-hidden">
-      <ChatSession
+      <ChatSessionFrame
         bodyClassName="p-4 gap-5"
         footer={
           <>
@@ -104,7 +104,7 @@ function TaskDashboardDemo() {
         <ChatSessionTaskGroup heading="Completed">
           {COMPLETED.map((t) => row(t, "success"))}
         </ChatSessionTaskGroup>
-      </ChatSession>
+      </ChatSessionFrame>
     </div>
   );
 }

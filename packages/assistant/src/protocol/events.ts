@@ -2,10 +2,14 @@
  * Everything the analyst can do, as data. The component never acts on a
  * conversation itself: it reports an event, and the API answers with patches.
  *
- * Every event but `prompt` and `stop` names the turn it came from.
+ * Every event but `prompt`, `stop` and `setting` names the turn it came from.
  */
 export type ConversationEvent =
-  | { type: "prompt"; text: string; context?: string[] }
+  /**
+   * A prompt. `settings` is what the composer's controls held — `{ mode: "nl",
+   * model: "qwen" }`; `files` what was attached, as the browser gave them.
+   */
+  | { type: "prompt"; text: string; context?: string[]; settings?: Record<string, string>; files?: File[] }
   /** An ask was answered. `value` has the type its preset fixes. */
   | { type: "reply"; turn: string; value: unknown }
   /** An ask was skipped; its default is used and recorded. */
@@ -28,6 +32,10 @@ export type ConversationEvent =
   | { type: "rate"; turn: string; value: number }
   | { type: "stop" }
   | { type: "retry"; turn: string }
+  /** Open the whole run behind an answer — its elapsed time was clicked. `step` when one step was. */
+  | { type: "open-run"; turn: string; step?: string }
+  /** A composer control changed — the mode, the model, the timeout. */
+  | { type: "setting"; id: string; value: string }
 
 export type ConversationEventType = ConversationEvent["type"]
 
@@ -45,4 +53,6 @@ export const EVENT_TYPES = [
   "rate",
   "stop",
   "retry",
+  "open-run",
+  "setting",
 ] as const satisfies readonly ConversationEventType[]

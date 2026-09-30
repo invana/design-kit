@@ -13,15 +13,21 @@ Status of every component the assistant needs, across packages. The design refer
 
 ## @invana/assistant
 
-Everything here is only meaningful relative to a prompt. Conversation is the parent that assembles the rest from JSON. The package adds no external dependency.
+Everything here is only meaningful relative to a prompt. ChatSession is the parent that assembles the rest from JSON, in a `cli` or `web` variant. The package adds no external dependency.
 
 
 ### Parent, protocol and grammar
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| Conversation | `packages/assistant/src/conversations/conversation.tsx` | new | done | today |
-| ConversationTurn | `packages/assistant/src/conversations/conversation-turn.tsx` | new | done | today |
+| ChatSession (`variant="cli" \| "web"`) | `packages/assistant/src/styles/chat-session.tsx` | new | done | today |
+| ChatSession base (blocks, asks, steps, composer, chrome, view model) | `packages/assistant/src/styles/base/` | new | done | today |
+| ChatSession CLI variant | `packages/assistant/src/styles/cli/` | new | done | today |
+| ChatSession web variant, ChatSessionTurn | `packages/assistant/src/styles/web/` | new | done | today |
+| useChatSession | `packages/assistant/src/styles/use-chat-session.ts` | new | done | today |
+| Stream sources (NDJSON, SSE, scripts, deltas, stop) | `packages/assistant/src/protocol/stream.ts` | new | done | today |
+| Recorded runs (airports) | `packages/assistant/src/fixtures/scripts/airports.ts` | new | done | today |
+| Conversation, ConversationTurn | `packages/assistant/src/conversations/` | remove (→ ChatSession) | done | today |
 | Preset registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
 | Protocol types | `packages/assistant/src/protocol/types.ts` | new | done | today |
 | Events | `packages/assistant/src/protocol/events.ts` | new | done | today |
@@ -35,7 +41,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| ChatSession | `packages/assistant/src/conversations/chat-session.tsx` | move in | done | today |
+| ChatSessionFrame (was ChatSession, the layout) | `packages/assistant/src/conversations/thread.ts` | move in, rename | done | today |
 | ChatSessionPromptRow | `packages/assistant/src/conversations/chat-session-prompt-row.tsx` | move in | done | today |
 | ChatSessionMessage | `packages/assistant/src/conversations/chat-session-message.tsx` | move in | done | today |
 | ChatSessionMessageOptions | `packages/assistant/src/conversations/chat-session-message-options.tsx` | move in | done | today |

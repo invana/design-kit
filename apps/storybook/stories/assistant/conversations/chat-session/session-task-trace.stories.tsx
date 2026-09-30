@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, cn, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TypographyH3, TypographyH6 } from "@invana/ui";
-import { ChatSession, ChatSessionActivityRow, ChatSessionActivitySubLine, ChatSessionComposer, ChatSessionDisclosure, ChatSessionMessageOptions, ChatSessionProgressLine, ChatSessionPromptRow, ChatSessionStatusBar, ChatSessionTaskGroup, ChatSessionTaskRow, type ChatSessionActivityStatus, type ChatSessionTaskStatus } from "@invana/assistant";
+import { ChatSessionFrame, ChatSessionActivityRow, ChatSessionActivitySubLine, ChatSessionComposer, ChatSessionDisclosure, ChatSessionMessageOptions, ChatSessionProgressLine, ChatSessionPromptRow, ChatSessionStatusBar, ChatSessionTaskGroup, ChatSessionTaskRow, type ChatSessionActivityStatus, type ChatSessionTaskStatus } from "@invana/assistant";
 import {
   Select,
   SelectContent,
@@ -1273,7 +1273,7 @@ function SessionTaskTraceDemo() {
               </span>
             </div>
 
-            <ChatSession
+            <ChatSessionFrame
               className="flex-1 min-h-0"
               footer={footer}
               autoScrollKey={`${view}-${scrollKey}`}
@@ -1309,7 +1309,7 @@ function SessionTaskTraceDemo() {
                       </ChatSessionTaskGroup>
                     );
                   })}
-            </ChatSession>
+            </ChatSessionFrame>
           </div>
           <div className="mt-2 flex justify-between gap-2 px-0.5 text-muted-foreground">
             <span>Sessions rail · 440 px · design-kit ChatSession rows</span>
@@ -1432,9 +1432,9 @@ function SessionTaskTraceDemo() {
   );
 }
 
-const meta: Meta<typeof ChatSession> = {
+const meta: Meta<typeof ChatSessionFrame> = {
   title: "Assistant/Conversations/ChatSession",
-  component: ChatSession,
+  component: ChatSessionFrame,
   parameters: { layout: "fullscreen" },
   render: () => <SessionTaskTraceDemo />,
 };

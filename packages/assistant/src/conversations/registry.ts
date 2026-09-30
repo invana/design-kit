@@ -135,23 +135,63 @@ export const BUILT_IN_BLOCKS: BlockRegistry = {
 }
 
 /**
- * Renderers a consumer adds or replaces — `{ blocks: { subgraph: CanvasBlock } }`.
- * Consumer entries win over the built-ins, as in the dashboard.
+ * How an ask sits in the thread, apart from what its renderer draws.
+ *
+ * `frame: "card"` draws it in the ask card, with its state, the stage that
+ * asked and when it was answered; `"none"` draws the renderer alone — chips
+ * that show their own pick. `kind` is the card's header word while it waits.
+ */
+export interface AskTraits {
+  frame?: "card" | "none"
+  kind?: string
+}
+
+/**
+ * How a block sits in an answer. `"card"` is inside the answer card with the
+ * rest of the evidence; `"own"` is a card of its own under it — a proposal is
+ * something to approve, not part of the evidence.
+ */
+export interface BlockTraits {
+  placement?: "card" | "own"
+}
+
+/** Traits of the built-in presets; every preset not named takes the defaults. */
+export const BUILT_IN_ASK_TRAITS: Partial<Record<string, AskTraits>> = {
+  suggestions: { frame: "none" },
+  confirm: { kind: "confirm" },
+  approval: { kind: "proposal" },
+}
+export const BUILT_IN_BLOCK_TRAITS: Partial<Record<string, BlockTraits>> = {
+  proposal: { placement: "own" },
+}
+
+/**
+ * Renderers a consumer adds or replaces — `{ blocks: { subgraph: CanvasBlock } }`
+ * — with their traits. Consumer entries win over the built-ins, as in the
+ * dashboard, so a template of your own sits in the thread exactly as you say.
  */
 export interface PresetRegistry {
   asks?: Partial<Record<string, AskRenderer>>
   blocks?: Partial<Record<string, BlockRenderer>>
+  askTraits?: Partial<Record<string, AskTraits>>
+  blockTraits?: Partial<Record<string, BlockTraits>>
 }
 
 export interface ResolvedRegistry {
   asks: Record<string, AskRenderer | null | undefined>
   blocks: Record<string, BlockRenderer | null | undefined>
+  askTraits: (preset: string) => Required<Pick<AskTraits, "frame">> & AskTraits
+  blockTraits: (preset: string) => Required<BlockTraits>
 }
 
 export function resolveRegistry(extra?: PresetRegistry): ResolvedRegistry {
+  const askTraits = { ...BUILT_IN_ASK_TRAITS, ...extra?.askTraits }
+  const blockTraits = { ...BUILT_IN_BLOCK_TRAITS, ...extra?.blockTraits }
   return {
     asks: { ...BUILT_IN_ASKS, ...extra?.asks },
     blocks: { ...BUILT_IN_BLOCKS, ...extra?.blocks },
+    askTraits: (preset) => ({ frame: "card", ...askTraits[preset] }),
+    blockTraits: (preset) => ({ placement: "card", ...blockTraits[preset] }),
   }
 }
 

@@ -133,7 +133,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
-- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, plus `assistant/sessions/` — one story per grammar session, rendering `<Conversation spec={fixture} />` and nothing else), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
+- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, plus `assistant/sessions/` — one story per grammar session, rendering `<ChatSession spec={fixture} />` and nothing else, and `assistant/styles/` — one folder per `ChatSession` variant, `styles/cli/` and `styles/web/`, each a walkthrough that plays recorded runs), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The forms section follows the same rule — `"Forms/Manual/Composed Form"`, `"Forms/Generated/Dialog"`.
 
 ## Where demand comes from
@@ -164,8 +164,14 @@ gap in the kit, not a one-off in the design.
   a prompt → `@invana/assistant`; anything else, including anything a dashboard, run view,
   review queue or report also shows → `@invana/ui`. So `TraceList`, `ExchangeRecord`,
   `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
-- **`@invana/assistant` is JSON only.** Studio renders `<Conversation spec onEvent />`; the API
-  sends a `ConversationSpec` then patches (`applyPatch`), the UI sends `ConversationEvent`s.
+- **`@invana/assistant` is JSON only.** Studio renders `<ChatSession spec variant="cli" | "web" />`
+  (`packages/assistant/src/styles/`); the API sends a `ConversationSpec` then patches
+  (`applyPatch`, or handed over as `stream` / `useChatSession().stream`), the UI sends
+  `ConversationEvent`s — to `onEvent` and to a typed callback per event (`onReply`, `onAction`,
+  `onOpenRun`, …). The variants share one base (`styles/base/`) and **name no preset**: every ask
+  and block is drawn through the registry, and how one sits (an ask bare or in the question card, a
+  block in the answer card or its own) is a trait registered beside its renderer, never a check on
+  its id in a variant.
   Presets, patterns and flows are ids in `packages/assistant/src/grammar/` — a new preset
   gets a board on the Assistant Presets canvas and an id in the grammar first, then its
   renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in

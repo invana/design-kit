@@ -10,7 +10,7 @@ const meta: Meta<typeof TurnLabel> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Who is speaking, over a prompt or an ask. `Conversation` draws it when the spec names the analyst. */
+/** Who is speaking, over a prompt or an ask. `ChatSession` draws it over every prompt and reply in its web variant. */
 export const Default: Story = {
   args: { children: 'Assistant' },
 };

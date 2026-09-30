@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChatSession,
+  ChatSessionFrame,
   ChatSessionActivityRow,
   type ChatSessionActivityStatus,
   ChatSessionActivitySubLine,
@@ -417,7 +417,7 @@ function AgentConsoleDemo() {
 
   return (
     <div className="h-[720px] w-[480px] border border-border rounded-md bg-background overflow-hidden">
-      <ChatSession
+      <ChatSessionFrame
         footer={footer}
         autoScrollKey={`${view}-${items.length}-${isRunning}`}
       >
@@ -513,14 +513,14 @@ function AgentConsoleDemo() {
             )}
           </>
         )}
-      </ChatSession>
+      </ChatSessionFrame>
     </div>
   );
 }
 
-const meta: Meta<typeof ChatSession> = {
+const meta: Meta<typeof ChatSessionFrame> = {
   title: "Assistant/Conversations/ChatSession",
-  component: ChatSession,
+  component: ChatSessionFrame,
   parameters: { layout: "centered" },
   render: () => <AgentConsoleDemo />,
 };

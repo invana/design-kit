@@ -26,8 +26,12 @@ import {
  * into this folder; the names and props do not change.
  */
 
-/** Scrolling stack of turns that sticks to the latest, with a fixed composer footer. */
-export const ChatSession = UiChatSession
+/**
+ * The frame a session is drawn in: a scrolling stack that sticks to the
+ * latest, with a fixed footer. `ChatSession` is the conversation itself, drawn
+ * from JSON; this is only its layout.
+ */
+export const ChatSessionFrame = UiChatSession
 /** The assistant's turn, with running, stopped, error and idle states. */
 export const ChatSessionMessage = UiChatSessionMessage
 /** Actions under a message: copy, retry, rate. */
@@ -61,8 +65,8 @@ export const ChatSessionStatusBar = UiChatSessionStatusBar
 /** What the next question is about, bound from a selection. */
 export const ChatSessionContextChip = UiChatSessionContextChip
 
+export type { ChatSessionProps as ChatSessionFrameProps } from "@invana/ui"
 export type {
-  ChatSessionProps,
   ChatSessionMessageProps,
   ChatSessionMessageRole,
   ChatSessionMessageStatus,

@@ -30,6 +30,9 @@ const PATTERN_BY = new Map<string, readonly string[]>(PATTERNS.map((p) => [p.id,
 
 const ASK_STATES = new Set(["pending", "answered", "skipped", "superseded", "expired"])
 const ANSWER_STATES = new Set(["running", "partial", "complete", "cannot", "error", "stopped"])
+const STEP_STATES = new Set(["done", "running", "pending", "failed", "waiting", "retrying", "stopped"])
+
+const notIso = (value: unknown) => value !== undefined && (typeof value !== "string" || Number.isNaN(Date.parse(value)))
 
 /**
  * Presets a pattern names that the answer carries elsewhere: the envelope, or
@@ -82,6 +85,17 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
   if (spec?.analyst !== undefined && (typeof spec.analyst !== "string" || !spec.analyst)) {
     error("The analyst's name is not a non-empty string.")
   }
+  const controls = spec?.composer?.controls ?? []
+  const controlIds = new Set<string>()
+  for (const control of controls) {
+    if (!control?.id) error("A composer control has no id.")
+    else if (controlIds.has(control.id)) error(`Composer control id "${control.id}" is used twice.`)
+    else controlIds.add(control.id)
+    if (!control?.options?.length) error(`Composer control "${control?.id}" has no options.`)
+    else if (control.default !== undefined && !control.options.some((o) => o.value === control.default)) {
+      error(`Composer control "${control.id}" defaults to "${control.default}", which is not one of its options.`)
+    }
+  }
   if (!Array.isArray(spec?.turns)) {
     error("The conversation has no turns array.")
     return issues
@@ -99,6 +113,7 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
 
     if (turn.role === "analyst") {
       if (typeof turn.text !== "string" || !turn.text) error("An analyst turn has no text.", id)
+      if (notIso(turn.at)) error(`at "${turn.at}" is not an ISO time.`, id)
       continue
     }
     if (turn.role !== "assistant") {
@@ -125,6 +140,20 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
       if (!ANSWER_STATES.has(turn.state)) error(`Unknown answer state "${turn.state}".`, id)
       if (turn.flow && !FLOW_IDS.has(turn.flow)) error(`Unknown flow "${turn.flow}".`, id)
       if (turn.pattern && !PATTERN_BY.has(turn.pattern)) error(`Unknown pattern "${turn.pattern}".`, id)
+      if (notIso(turn.at)) error(`at "${turn.at}" is not an ISO time.`, id)
+      if (notIso(turn.startedAt)) error(`startedAt "${turn.startedAt}" is not an ISO time.`, id)
+      const stepIds = new Set<string>()
+      for (const step of turn.trace ?? []) {
+        if (!STEP_STATES.has(step?.state)) error(`Unknown step state "${step?.state}" on "${step?.label}".`, id)
+        if (notIso(step?.startedAt)) error(`Step "${step.label}" startedAt "${step.startedAt}" is not an ISO time.`, id)
+        if (step?.id) {
+          if (stepIds.has(step.id)) error(`Step id "${step.id}" is used twice.`, id)
+          stepIds.add(step.id)
+        }
+      }
+      for (const action of turn.outcome?.actions ?? []) {
+        if (!action?.id || !action.label) error("An outcome action has no id or label.", id)
+      }
       if (!Array.isArray(turn.blocks)) {
         error("An answer has no blocks array.", id)
         continue

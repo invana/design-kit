@@ -1,5 +1,5 @@
 import { Eyebrow } from '@invana/ui';
-import { ConversationTurn, resolveRegistry, type ConversationEvent, type Turn } from '@invana/assistant';
+import { ChatSessionTurn, type ConversationEvent, type Turn } from '@invana/assistant';
 
 /** One cell of an artboard: the caption the Assistant Presets canvas gives it, and the turn it draws. */
 export interface BoardVariant {
@@ -16,8 +16,6 @@ export interface BoardProps {
   onEvent: (event: ConversationEvent) => void;
 }
 
-const registry = resolveRegistry();
-
 /**
  * Story chrome, not a kit component: lays a preset's variants out as its artboard on the
  * Assistant Presets canvas does — four 320px columns, a caption over each cell — so a story
@@ -29,7 +27,7 @@ export function Board({ variants, onEvent }: BoardProps) {
       {variants.map((v) => (
         <div key={v.caption} className="flex min-w-0 flex-col gap-2" style={{ width: v.narrow ? 280 : 320 }}>
           <Eyebrow>{v.caption}</Eyebrow>
-          <ConversationTurn turn={v.turn} registry={registry} onEvent={onEvent} now={v.now} />
+          <ChatSessionTurn turn={v.turn} onEvent={onEvent} now={v.now} />
         </div>
       ))}
     </div>

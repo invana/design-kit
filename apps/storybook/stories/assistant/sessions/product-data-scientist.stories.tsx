@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { ArrowUp, Square } from 'lucide-react';
-import { Conversation } from '@invana/assistant';
+import { ArrowUp, Copy, List, RotateCw, Square, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { ChatSession } from '@invana/assistant';
 import { SESSIONS } from '@invana/assistant/fixtures';
 
-const meta: Meta<typeof Conversation> = {
+const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Sessions/Product Data Scientist',
-  component: Conversation,
+  component: ChatSession,
   parameters: { layout: 'fullscreen' },
 };
 
@@ -21,5 +21,13 @@ type Story = StoryObj<typeof meta>;
  * JSON: the placeholders left in this story are the work left for its slice.
  */
 export const ProductDataScientist: Story = {
-  args: { spec: SESSIONS.productDataScientist, onEvent: fn(), sendIcon: <ArrowUp />, stopIcon: <Square /> },
+  args: { spec: SESSIONS.productDataScientist, onEvent: fn(), icons: {
+      send: <ArrowUp className="size-4" />,
+      stop: <Square className="size-3 fill-current" />,
+      retry: <RotateCw className="size-3" />,
+      copy: <Copy className="size-3" />,
+      steps: <List className="size-3" />,
+      rateUp: <ThumbsUp className="size-3" />,
+      rateDown: <ThumbsDown className="size-3" />,
+    } },
 };

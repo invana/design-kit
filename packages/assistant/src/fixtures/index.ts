@@ -22,3 +22,10 @@ export const SESSIONS = {
 }
 
 export type SessionId = keyof typeof SESSIONS
+
+/*
+ * Recorded runs, as the API would stream them: the airports session of the
+ * Session Task Trace walkthrough, and the API's side of it. Stories play them
+ * into a <ChatSession>.
+ */
+export * from "./scripts/airports"

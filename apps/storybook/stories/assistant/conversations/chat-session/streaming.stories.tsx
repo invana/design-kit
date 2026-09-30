@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChatSession,
+  ChatSessionFrame,
   ChatSessionComposer,
   ChatSessionMessage,
   ChatSessionMessageOptions,
@@ -205,7 +205,7 @@ function ChatSessionStreamingDemo() {
   return (
     // A sized panel so ChatSession has a height to fill.
     <div className="h-[720px] w-[440px] border border-border rounded-md bg-background overflow-hidden">
-      <ChatSession footer={composer} autoScrollKey={messages.length}>
+      <ChatSessionFrame footer={composer} autoScrollKey={messages.length}>
         {messages.map((m) =>
           m.role === "user" ? (
             <ChatSessionMessage key={m.id} role="user">
@@ -228,14 +228,14 @@ function ChatSessionStreamingDemo() {
             </ChatSessionMessage>
           ),
         )}
-      </ChatSession>
+      </ChatSessionFrame>
     </div>
   );
 }
 
-const meta: Meta<typeof ChatSession> = {
+const meta: Meta<typeof ChatSessionFrame> = {
   title: "Assistant/Conversations/ChatSession",
-  component: ChatSession,
+  component: ChatSessionFrame,
   parameters: { layout: "centered" },
   render: () => <ChatSessionStreamingDemo />,
 };

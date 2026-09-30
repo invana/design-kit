@@ -695,19 +695,54 @@ export interface Envelope {
   caveats?: { label: string; text: string }[]
 }
 
+/** One row of what a step read or wrote — `prompt`, `rows`, `query`. */
+export interface TraceIoRow {
+  label: string
+  value: string
+  /** Set the value as code, keeping its line breaks — a query, a formula. */
+  code?: boolean
+}
+
+/**
+ * A step of the run behind an answer. Only `label` and `state` are required;
+ * everything else is the step's record, filled in as the run streams — its
+ * time, its attempts, the reasoning it streamed, what went in and came out.
+ */
 export interface TraceStep {
   id?: string
   label: string
+  /** What the step is doing or did, in a line — `14 rows · 3 batches`. */
   detail?: string
-  /** `failed` stops the run at this step; `waiting` is a step held on the analyst — an ask. */
-  state: "done" | "running" | "pending" | "failed" | "waiting"
+  /**
+   * `failed` stops the run at this step; `waiting` is a step held on the
+   * analyst — an ask; `retrying` is a failed attempt about to go again;
+   * `stopped` is a step the analyst interrupted.
+   */
+  state: "done" | "running" | "pending" | "failed" | "waiting" | "retrying" | "stopped"
   /** Why a failed step failed, under it. */
   error?: string
+  /** The step's machine name, in mono on its record — `translate_thought`. */
+  key?: string
+  /** When the step started, as an ISO 8601 time. A running step counts up from it. */
+  startedAt?: string
+  /** How long it took, in ms, once settled. */
+  duration?: number
+  /** Which attempt this is, and of how many allowed — `retrying 2/3`. */
+  attempt?: number
+  attempts?: number
+  /** The model's reasoning, streamed under the step while it runs. */
+  thinking?: string
+  /** What went in and what came out — the step's audit record. */
+  io?: { input?: TraceIoRow[]; output?: TraceIoRow[] }
 }
 
 // ── turns ───────────────────────────────────────────────────────────────────
 
 export type AskState = "pending" | "answered" | "skipped" | "superseded" | "expired"
+/**
+ * `running` is being produced; `partial` is answered in part — settled, the
+ * rest in the background or not to be had; `stopped` was interrupted.
+ */
 export type AnswerState = "running" | "partial" | "complete" | "cannot" | "error" | "stopped"
 
 export interface AnalystTurn {
@@ -716,6 +751,8 @@ export interface AnalystTurn {
   text: string
   /** What the prompt was about — carried scope, a selection. */
   context?: string[]
+  /** When it was sent, as an ISO 8601 time. */
+  at?: string
 }
 
 export interface AskTurn {
@@ -750,6 +787,28 @@ export interface AnswerTurn {
   /** Streamed while the answer runs; kept as the record of what was done. */
   trace?: TraceStep[]
   blocks: BlockSpec[]
+  /** When the run started, as an ISO 8601 time. A running answer counts up from it. */
+  startedAt?: string
+  /** When it settled, as an ISO 8601 time. */
+  at?: string
+  /** How long the run took, in ms — `Answered in 1.4 s`. */
+  duration?: number
+  /** The run's facts in one line — `local · qwen3-27b · 14 rows · query 1.4 s`. */
+  meta?: string
+  /** What the run produced, outside the thread, and what can be done with it. */
+  outcome?: Outcome
+  /** How the analyst rated it — `1` good, `-1` not what they wanted. Sent as a `rate` event. */
+  rating?: number
+}
+
+/**
+ * What a run produced, outside the thread — `14 nodes · 212 relationships`
+ * with `Load to canvas`; or, when it failed, what to do next. Each action is
+ * sent as an `action` event.
+ */
+export interface Outcome {
+  text?: string
+  actions?: ActionOption[]
 }
 
 export type Turn = AnalystTurn | AskTurn | AnswerTurn
@@ -763,7 +822,51 @@ export interface ConversationSpec {
    * speaking; answers are cards and need no label.
    */
   analyst?: string
+  /** What the assistant is called in this thread — `Analyst`. Labels its turns where speakers are labelled. */
+  assistant?: string
   /** Scope carried by the whole thread, until a turn changes it. */
   scope?: Record<string, string>
+  /** What the composer offers besides the text — mode, model, timeout, files. */
+  composer?: ComposerSpec
   turns: Turn[]
+}
+
+// ── the composer ────────────────────────────────────────────────────────────
+
+/** One choice of a composer control. */
+export interface ComposerOption {
+  value: string
+  label: string
+  /** The composer's placeholder while this is picked — `MATCH (n) WHERE … RETURN n`. */
+  placeholder?: string
+  /** Set the prompt in mono while this is picked — a query language. */
+  mono?: boolean
+}
+
+/**
+ * A select in the composer's toolbar — `Natural Language`, `local · qwen3-27b`,
+ * `2m`. What is picked is sent with every prompt, under its `id`.
+ */
+export interface ComposerControl {
+  id: string
+  /** Its accessible name and tooltip — `Model`, `LLM + query timeout`. */
+  label: string
+  options: ComposerOption[]
+  /** Picked at first. Defaults to the first option. */
+  default?: string
+  /** `start` sits with the text controls; `end` beside send. @default "start" */
+  align?: "start" | "end"
+  /** An icon before the value: the path data of a 16×16 stroked icon. */
+  icon?: string
+  /** Muted: a setting, not the mode. */
+  quiet?: boolean
+}
+
+export interface ComposerSpec {
+  placeholder?: string
+  controls?: ComposerControl[]
+  /** Offer attaching files; `accept` is the input's accept list. */
+  attach?: boolean | { accept?: string; multiple?: boolean }
+  /** Keyboard hints under the composer — `↵ send`, `esc stop`. @default true */
+  hints?: boolean
 }
