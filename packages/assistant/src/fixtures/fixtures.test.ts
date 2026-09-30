@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest"
 
+import { applyPatches } from "../protocol/reduce"
+import type { AnswerTurn } from "../protocol/types"
 import { validate } from "../protocol/validate"
-import { SESSIONS } from "./index"
+import { CONVERSATIONS, SESSIONS, STREAMING_SCRIPT } from "./index"
 
 /**
  * Where a session's answer does not match its pattern. Each line is real drift
@@ -54,5 +56,22 @@ describe.each(Object.entries(SESSIONS))("session %s", (name, spec) => {
   it("matches its patterns, apart from known drift", () => {
     const warnings = issues.filter((i) => i.level === "warning").map((i) => `${i.turn}: ${i.message}`)
     expect(warnings).toEqual(KNOWN_DRIFT[name] ?? [])
+  })
+})
+
+describe.each(Object.entries(CONVERSATIONS))("conversation %s", (_, spec) => {
+  it("keeps the contract, with no drift", () => {
+    expect(validate(spec)).toEqual([])
+  })
+})
+
+describe("the streaming script", () => {
+  it("writes the answer whole and settles it", () => {
+    const patches = STREAMING_SCRIPT.flatMap((s) => (Array.isArray(s.patch) ? s.patch : [s.patch]))
+    const done = applyPatches(CONVERSATIONS.streaming, patches)
+    const answer = done.turns.find((t) => t.id === "a1") as AnswerTurn
+    expect(validate(done)).toEqual([])
+    expect(answer.state).toBe("complete")
+    expect((answer.blocks[0] as { text: string }).text).toMatch(/^Your graph has \*\*8,412 nodes\*\*.*Singapore\.$/)
   })
 })

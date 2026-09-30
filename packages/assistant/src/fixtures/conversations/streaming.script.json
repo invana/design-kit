@@ -1,0 +1,535 @@
+[
+  {
+    "at": 300,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Your "
+    }
+  },
+  {
+    "at": 345,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "graph "
+    }
+  },
+  {
+    "at": 390,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "has "
+    }
+  },
+  {
+    "at": 435,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "**8,412 "
+    }
+  },
+  {
+    "at": 480,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "nodes** "
+    }
+  },
+  {
+    "at": 525,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "across "
+    }
+  },
+  {
+    "at": 570,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "4 "
+    }
+  },
+  {
+    "at": 615,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "labels "
+    }
+  },
+  {
+    "at": 660,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "— "
+    }
+  },
+  {
+    "at": 705,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Airport, "
+    }
+  },
+  {
+    "at": 750,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "City, "
+    }
+  },
+  {
+    "at": 795,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Country "
+    }
+  },
+  {
+    "at": 840,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "and "
+    }
+  },
+  {
+    "at": 885,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Airline. "
+    }
+  },
+  {
+    "at": 930,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Airports "
+    }
+  },
+  {
+    "at": 975,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "are "
+    }
+  },
+  {
+    "at": 1020,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "the "
+    }
+  },
+  {
+    "at": 1065,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "densest, "
+    }
+  },
+  {
+    "at": 1110,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "with "
+    }
+  },
+  {
+    "at": 1155,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "an "
+    }
+  },
+  {
+    "at": 1200,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "average "
+    }
+  },
+  {
+    "at": 1245,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "of "
+    }
+  },
+  {
+    "at": 1290,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "6.3 "
+    }
+  },
+  {
+    "at": 1335,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "routes "
+    }
+  },
+  {
+    "at": 1380,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "each. "
+    }
+  },
+  {
+    "at": 1425,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "The "
+    }
+  },
+  {
+    "at": 1470,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "most "
+    }
+  },
+  {
+    "at": 1515,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "connected "
+    }
+  },
+  {
+    "at": 1560,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "hub "
+    }
+  },
+  {
+    "at": 1605,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "is "
+    }
+  },
+  {
+    "at": 1650,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "**Frankfurt "
+    }
+  },
+  {
+    "at": 1695,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "(FRA)** "
+    }
+  },
+  {
+    "at": 1740,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "with "
+    }
+  },
+  {
+    "at": 1785,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "291 "
+    }
+  },
+  {
+    "at": 1830,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "outbound "
+    }
+  },
+  {
+    "at": 1875,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "routes, "
+    }
+  },
+  {
+    "at": 1920,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "followed "
+    }
+  },
+  {
+    "at": 1965,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "by "
+    }
+  },
+  {
+    "at": 2010,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Amsterdam "
+    }
+  },
+  {
+    "at": 2055,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "and "
+    }
+  },
+  {
+    "at": 2100,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Istanbul. "
+    }
+  },
+  {
+    "at": 2145,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Traffic "
+    }
+  },
+  {
+    "at": 2190,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "clusters "
+    }
+  },
+  {
+    "at": 2235,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "into "
+    }
+  },
+  {
+    "at": 2280,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "three "
+    }
+  },
+  {
+    "at": 2325,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "regions "
+    }
+  },
+  {
+    "at": 2370,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "— "
+    }
+  },
+  {
+    "at": 2415,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "a "
+    }
+  },
+  {
+    "at": 2460,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "European "
+    }
+  },
+  {
+    "at": 2505,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "core, "
+    }
+  },
+  {
+    "at": 2550,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "a "
+    }
+  },
+  {
+    "at": 2595,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "North-American "
+    }
+  },
+  {
+    "at": 2640,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "core, "
+    }
+  },
+  {
+    "at": 2685,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "and "
+    }
+  },
+  {
+    "at": 2730,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "an "
+    }
+  },
+  {
+    "at": 2775,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Asia-Pacific "
+    }
+  },
+  {
+    "at": 2820,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "web "
+    }
+  },
+  {
+    "at": 2865,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "bridged "
+    }
+  },
+  {
+    "at": 2910,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "mainly "
+    }
+  },
+  {
+    "at": 2955,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "through "
+    }
+  },
+  {
+    "at": 3000,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Dubai "
+    }
+  },
+  {
+    "at": 3045,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "and "
+    }
+  },
+  {
+    "at": 3090,
+    "patch": {
+      "op": "append-text",
+      "turn": "a1",
+      "text": "Singapore."
+    }
+  },
+  {
+    "at": 3195,
+    "patch": [
+      {
+        "op": "update-trace-step",
+        "turn": "a1",
+        "step": "write",
+        "fields": {
+          "state": "done",
+          "detail": "4 sentences",
+          "duration": 3195
+        }
+      },
+      {
+        "op": "update-turn",
+        "turn": "a1",
+        "fields": {
+          "at": "2026-09-30T09:00:05.000Z",
+          "duration": 3615,
+          "meta": "local · qwen3-27b · 8,412 nodes read"
+        }
+      },
+      {
+        "op": "set-state",
+        "turn": "a1",
+        "state": "complete"
+      }
+    ]
+  }
+]

@@ -1,16 +1,29 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TurnLabel } from '@invana/assistant';
+import { fn } from 'storybook/test';
+import { ChatSession } from '@invana/assistant';
+import { CONVERSATIONS } from '@invana/assistant/fixtures';
 
-const meta: Meta<typeof TurnLabel> = {
+import { CHAT_ICONS, inPanel } from '../../chat-kit';
+
+const meta: Meta<typeof ChatSession> = {
   title: 'Assistant/Conversations/TurnLabel',
-  component: TurnLabel,
-  parameters: { layout: 'padded' },
+  component: ChatSession,
+  parameters: { layout: 'centered' },
+  decorators: [inPanel(420, 560)],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Who is speaking, over a prompt or an ask. `ChatSession` draws it over every prompt and reply in its web variant. */
+/**
+ * Who is speaking, over each turn: the spec's `analyst` over the prompts (`PLANNER`) and its
+ * `assistant` over the replies. The web variant draws them; the console needs none.
+ */
 export const Default: Story = {
-  args: { children: 'Assistant' },
+  args: {
+    spec: CONVERSATIONS.turnLabels,
+    variant: 'web',
+    icons: CHAT_ICONS,
+    onEvent: fn(),
+  },
 };

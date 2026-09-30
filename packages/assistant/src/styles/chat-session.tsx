@@ -3,7 +3,7 @@ import * as React from "react"
 import { resolveRegistry } from "../conversations/registry"
 import type { ConversationEvent } from "../protocol/events"
 import { applyPatches } from "../protocol/reduce"
-import { isRunning, patchesOf, stopPatches } from "../protocol/stream"
+import { patchesOf, stopPatches } from "../protocol/stream"
 import type { ConversationSpec } from "../protocol/types"
 import { useStopKey } from "./base/chrome"
 import {
@@ -13,7 +13,7 @@ import {
   useClock,
   useViewState,
 } from "./base/context"
-import { turnDomId } from "./base/model"
+import { isAnswer, runOutcome, turnDomId } from "./base/model"
 import { CliSession } from "./cli/cli-session"
 import type { ChatSessionHandle, ChatSessionProps, ChatSessionView } from "./types"
 import { WebSession } from "./web/web-session"
@@ -59,7 +59,8 @@ function useStreamedSpec(
     abort.current = controller
     void (async () => {
       try {
-        for await (const batch of patchesOf(stream)) {
+        const source = typeof stream === "function" ? stream(controller.signal) : stream
+        for await (const batch of patchesOf(source)) {
           if (controller.signal.aborted) return
           set(applyPatches(current.current, batch))
         }
@@ -116,7 +117,9 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
   } = props
 
   const { live, stop: stopStream } = useStreamedSpec(spec, stream, onStreamEnd, onStreamError)
-  const running = isRunning(live)
+  // A run held on the analyst's answer is not in flight: the composer takes
+  // their words, and there is nothing to stop.
+  const running = live.turns.some((t) => isAnswer(t) && runOutcome(t) === "live")
   const now = useClock(fixedNow, running)
   const resolved = React.useMemo(() => resolveRegistry(registry), [registry])
   const resolvedIcons = React.useMemo(() => ({ ...DEFAULT_ICONS, ...icons }), [icons])

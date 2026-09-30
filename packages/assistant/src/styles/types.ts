@@ -61,8 +61,12 @@ export interface ChatSessionProps extends ChatSessionHandlers {
    * EventSource (`fromEventSource`), a generator, or a recorded script
    * (`playScript`). The session draws `spec` with them applied; a new `spec`
    * starts over from it. Stopping ends the stream and records how far it got.
+   *
+   * Pass a function, `(signal) => source`, to open the source afresh each time
+   * the session mounts — a generator can be read only once. Keep it stable
+   * (module scope, `useCallback`): a new one starts a new stream.
    */
-  stream?: PatchSource | null
+  stream?: PatchSource | ((signal: AbortSignal) => PatchSource) | null
   /** The stream ended; `spec` is the conversation as it left it. */
   onStreamEnd?: (spec: ConversationSpec) => void
   /** A patch did not apply, or the source failed. The stream stops there. */

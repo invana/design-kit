@@ -10,25 +10,21 @@ const meta: Meta<typeof ChatSession> = {
   component: ChatSession,
   parameters: { layout: 'centered' },
   argTypes: VARIANT_ARG_TYPES,
-  decorators: [inPanel(440)],
+  decorators: [inPanel(440, 480)],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Three graph expansions, each answered with what it added and a Load to canvas outcome — the
- * Studio's Sessions rail. The whole thread is the `spec` arg: JSON, as the API sends it. Every event
- * lands in the Actions panel, through its own callback and `onEvent`.
+ * The inline disclosure, where it lives: an answer's `envelope.method` drawn as a bare `▸ method`
+ * line under the evidence, opening onto the query that computed the figure.
  */
-export const Default: Story = {
+export const MethodDisclosure: Story = {
   args: {
-    spec: CONVERSATIONS.graphExpansions,
+    spec: CONVERSATIONS.methodDisclosure,
     variant: 'web',
     icons: CHAT_ICONS,
     onEvent: fn(),
-    onPrompt: fn(),
-    onAction: fn(),
-    onOpenRun: fn(),
   },
 };

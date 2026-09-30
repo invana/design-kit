@@ -35,34 +35,12 @@ import {
   longScenario,
   respond,
 } from '@invana/assistant/fixtures';
-import {
-  ArrowUp,
-  Copy,
-  List,
-  Paperclip,
-  RotateCw,
-  Square,
-  ThumbsDown,
-  ThumbsUp,
-  X,
-} from 'lucide-react';
+import { CHAT_ICONS } from '../chat-kit';
 
 // Story chrome, not a kit component: a ChatSession driven by recorded runs,
 // with a Play button per moment of the walkthrough. The session is the kit;
 // everything around it is here so a walkthrough reads one-to-one with the
 // Session Task Trace board. Icons stay story-side: the kit ships none.
-
-const ICONS = {
-  send: <ArrowUp className="size-4" />,
-  stop: <Square className="size-3 fill-current" />,
-  attach: <Paperclip className="size-4" />,
-  close: <X className="size-3.5" />,
-  retry: <RotateCw className="size-3" />,
-  copy: <Copy className="size-3" />,
-  steps: <List className="size-3" />,
-  rateUp: <ThumbsUp className="size-3" />,
-  rateDown: <ThumbsDown className="size-3" />,
-};
 
 interface Moment {
   title: string;
@@ -203,7 +181,7 @@ export function ScenarioPlayer({ variant, widths }: ScenarioPlayerProps) {
             ref={handle}
             variant={variant}
             spec={chat.spec}
-            icons={ICONS}
+            icons={CHAT_ICONS}
             onEvent={onEvent}
             onStop={chat.stop}
             onOpenRun={(e) => setRun((specRef.current.turns.find((t) => t.id === e.turn) as AnswerTurn) ?? null)}

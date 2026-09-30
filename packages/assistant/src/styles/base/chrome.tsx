@@ -2,10 +2,9 @@ import * as React from "react"
 import { cn } from "@invana/ui"
 
 import { ChatSessionMessageOptions, type ChatSessionMessageAction } from "../../conversations/thread"
-import { isRunning } from "../../protocol/stream"
 import type { AnswerTurn } from "../../protocol/types"
 import { useChatSessionContext } from "./context"
-import { plainText } from "./model"
+import { isAnswer, plainText, runOutcome } from "./model"
 
 /** The session's title bar: what the thread is about, how long it is, and close. */
 export function SessionHeader({ onClose, className }: { onClose?: () => void; className?: string }) {
@@ -41,7 +40,7 @@ export function SessionHeader({ onClose, className }: { onClose?: () => void; cl
  */
 export function AnswerActions({ turn }: { turn: AnswerTurn }) {
   const ctx = useChatSessionContext()
-  const running = isRunning(ctx.spec)
+  const running = ctx.spec.turns.some((t) => isAnswer(t) && runOutcome(t) === "live")
   const rating = ctx.rating(turn.id) ?? turn.rating
   const text = plainText(turn)
   const rate = (value: number) => {

@@ -1,4 +1,12 @@
+import type { PatchScript } from "../protocol/stream"
 import type { ConversationSpec } from "../protocol/types"
+import agentConsole from "./conversations/agent-console.json"
+import graphExpansions from "./conversations/graph-expansions.json"
+import methodDisclosure from "./conversations/method-disclosure.json"
+import streaming from "./conversations/streaming.json"
+import streamingScript from "./conversations/streaming.script.json"
+import taskDashboard from "./conversations/task-dashboard.json"
+import turnLabels from "./conversations/turn-labels.json"
 import equityTrader from "./sessions/equity-trader.json"
 import healthResearcher from "./sessions/health-researcher.json"
 import plantBreeder from "./sessions/plant-breeder.json"
@@ -22,6 +30,25 @@ export const SESSIONS = {
 }
 
 export type SessionId = keyof typeof SESSIONS
+
+/*
+ * The conversation stories' data: each a whole thread as the API would send
+ * it, drawn by <ChatSession>. `streaming` is sent part-written; its words
+ * arrive as `STREAMING_SCRIPT`, a recorded run of `append-text` patches.
+ * Validated like the sessions, by `fixtures.test.ts`.
+ */
+export const CONVERSATIONS = {
+  graphExpansions: graphExpansions as unknown as ConversationSpec,
+  agentConsole: agentConsole as unknown as ConversationSpec,
+  taskDashboard: taskDashboard as unknown as ConversationSpec,
+  streaming: streaming as unknown as ConversationSpec,
+  methodDisclosure: methodDisclosure as unknown as ConversationSpec,
+  turnLabels: turnLabels as unknown as ConversationSpec,
+}
+
+export type ConversationId = keyof typeof CONVERSATIONS
+
+export const STREAMING_SCRIPT = streamingScript as unknown as PatchScript
 
 /*
  * Recorded runs, as the API would stream them: the airports session of the

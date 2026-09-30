@@ -27,6 +27,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | useChatSession | `packages/assistant/src/styles/use-chat-session.ts` | new | done | today |
 | Stream sources (NDJSON, SSE, scripts, deltas, stop) | `packages/assistant/src/protocol/stream.ts` | new | done | today |
 | Recorded runs (airports) | `packages/assistant/src/fixtures/scripts/airports.ts` | new | done | today |
+| Conversation fixtures (the conversations/ stories' JSON, with a streaming script) | `packages/assistant/src/fixtures/conversations/` | new | done | today |
 | Conversation, ConversationTurn | `packages/assistant/src/conversations/` | remove (→ ChatSession) | done | today |
 | Preset registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
 | Protocol types | `packages/assistant/src/protocol/types.ts` | new | done | today |

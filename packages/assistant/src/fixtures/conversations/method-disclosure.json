@@ -1,0 +1,99 @@
+{
+  "id": "method-disclosure",
+  "title": "Operating margin by region",
+  "composer": {
+    "placeholder": "Ask anything about your graph…",
+    "controls": [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "options": [
+          {
+            "value": "nl",
+            "label": "Natural Language"
+          },
+          {
+            "value": "ql",
+            "label": "Query Language",
+            "placeholder": "MATCH (n) WHERE … RETURN n",
+            "mono": true
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "Model",
+        "quiet": true,
+        "options": [
+          {
+            "value": "qwen",
+            "label": "local · qwen3-27b"
+          },
+          {
+            "value": "gpt",
+            "label": "openai · gpt-4o-mini"
+          }
+        ]
+      },
+      {
+        "id": "timeout",
+        "label": "LLM + query timeout",
+        "align": "end",
+        "quiet": true,
+        "default": "120",
+        "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+        "options": [
+          {
+            "value": "30",
+            "label": "30s"
+          },
+          {
+            "value": "60",
+            "label": "1m"
+          },
+          {
+            "value": "120",
+            "label": "2m"
+          },
+          {
+            "value": "300",
+            "label": "5m"
+          }
+        ]
+      }
+    ],
+    "attach": true
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Operating margin by region last quarter?",
+      "at": "2026-09-30T09:00:00.000Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "label": "records",
+      "title": "Operating margin, Q3",
+      "startedAt": "2026-09-30T09:00:00.000Z",
+      "at": "2026-09-30T09:00:01.000Z",
+      "duration": 1180,
+      "envelope": {
+        "grounding": {
+          "records": 12408,
+          "noun": "ledger rows"
+        },
+        "method": "SELECT region, sum(op_income)/sum(net_rev)\nFROM fin.pnl_monthly\nWHERE period BETWEEN '2026-07' AND '2026-09'\nGROUP BY region"
+      },
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "Operating margin was **18.2%** across regions; North led at **21.4%**. Open **method** under the answer for the query that computed it."
+        }
+      ]
+    }
+  ]
+}
