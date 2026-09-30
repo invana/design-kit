@@ -5,7 +5,7 @@ import { SESSIONS } from '@invana/assistant/fixtures';
 import { CHAT_ICONS, chatCallbacks, VARIANT_ARG_TYPES } from '../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
-  title: 'Assistant/Sessions/Plant Breeder',
+  title: 'Assistant/Users/Plant Breeder',
   component: ChatSession,
   parameters: { layout: 'fullscreen' },
   argTypes: VARIANT_ARG_TYPES,

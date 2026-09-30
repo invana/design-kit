@@ -5,7 +5,7 @@ import { SESSIONS } from '@invana/assistant/fixtures';
 import { CHAT_ICONS, chatCallbacks, VARIANT_ARG_TYPES } from '../chat-kit';
 
 const meta: Meta<typeof ChatSession> = {
-  title: 'Assistant/Sessions/Health Researcher',
+  title: 'Assistant/Users/Supply Chain Planner',
   component: ChatSession,
   parameters: { layout: 'fullscreen' },
   argTypes: VARIANT_ARG_TYPES,
@@ -15,12 +15,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * A health-services researcher asks whether Friday discharges are readmitted more: a definition confirm and a data-issue ask, a comparison, adjustment asks, an adjusted readout, a findings memo from notes, and a pilot to register.
+ * A supply-chain planner weighs moving volume to a second supplier: disambiguation, an anomaly report, a scenario form, a recommendation with a proposal, and a monitoring schedule with its files.
  *
  * Rendered from the session fixture alone, exactly as the API would send it.
  * Every preset without a renderer yet shows as a labelled placeholder with its
  * JSON: the placeholders left in this story are the work left for its slice.
  */
-export const HealthResearcher: Story = {
-  args: { ...chatCallbacks(), variant: 'web', spec: SESSIONS.healthResearcher, icons: CHAT_ICONS },
+export const SupplyChainPlanner: Story = {
+  args: { ...chatCallbacks(), variant: 'web', spec: SESSIONS.supplyChainPlanner, icons: CHAT_ICONS },
 };
