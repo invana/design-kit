@@ -217,12 +217,19 @@ function EventLog({ lines }: { lines: string[] }) {
   );
 }
 
-function AssistantPlayground() {
-  const [userId, setUserId] = React.useState<UserId>('network');
+interface PlaygroundProps {
+  /** The user the playground opens on — a link to one user's thread. */
+  user?: UserId;
+  /** The variant it opens in. */
+  variant?: ChatSessionVariant;
+}
+
+function AssistantPlayground({ user: initialUser = 'network', variant: initialVariant = 'web' }: PlaygroundProps) {
+  const [userId, setUserId] = React.useState<UserId>(initialUser);
   const user = USERS[userId];
   const chat = useChatSession(() => openingSpec(user, Date.now()));
   const handle = React.useRef<ChatSessionHandle>(null);
-  const [variant, setVariant] = React.useState<ChatSessionVariant>('web');
+  const [variant, setVariant] = React.useState<ChatSessionVariant>(initialVariant);
   const [width, setWidth] = React.useState('420');
   const [tab, setTab] = React.useState('moments');
   const [log, setLog] = React.useState<string[]>([]);
@@ -345,6 +352,11 @@ const meta: Meta<typeof AssistantPlayground> = {
   title: 'Assistant/Playground',
   component: AssistantPlayground,
   parameters: { layout: 'fullscreen' },
+  args: { user: 'network', variant: 'web' },
+  argTypes: {
+    user: { control: 'select', options: Object.keys(USERS) },
+    variant: { control: 'inline-radio', options: ['web', 'cli'] },
+  },
 };
 
 export default meta;
@@ -357,5 +369,6 @@ type Story = StoryObj<typeof meta>;
  * session sends lands in Events and the Actions panel.
  */
 export const Playground: Story = {
-  render: () => <AssistantPlayground />,
+  // A changed control opens the playground afresh on it.
+  render: (args) => <AssistantPlayground key={`${args.user}-${args.variant}`} {...args} />,
 };
