@@ -86,7 +86,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
               <span className="text-sm text-muted-foreground">{evidenceMeta}</span>
             ) : null}
           </div>
-          <div className="overflow-hidden border border-border">{evidence}</div>
+          {evidence}
         </section>
       ) : null}
 

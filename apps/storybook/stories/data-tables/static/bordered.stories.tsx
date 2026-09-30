@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { DataTable } from '@invana/tables';
 import type { ColumnDef } from '@invana/tables';
-import { Card, SectionHeader } from '@invana/ui';
 
 type Ceiling = { key: string; value: string; bounds: string };
 
@@ -19,26 +18,27 @@ const columns: ColumnDef<Ceiling>[] = [
 ];
 
 const meta: Meta<typeof DataTable<Ceiling>> = {
-  title: 'Data Tables/Static/Borderless',
+  title: 'Data Tables/Static/Bordered',
   component: DataTable<Ceiling>,
   parameters: { layout: 'padded' },
 };
 
 export default meta;
 
-/** Inside a card the card is the frame, so the table drops its own box and keeps its row rules. */
-export const InACard: StoryObj<typeof meta> = {
+/**
+ * `bordered` draws the box, for a table standing alone on a page. Off by
+ * default: in a card, a panel or an answer the edge is the frame, so the table
+ * keeps its row rules only and its outer columns sit flush.
+ */
+export const Bordered: StoryObj<typeof meta> = {
   render: () => (
-    <Card>
-      <SectionHeader title="Reach" />
-      <DataTable
-        columns={columns}
-        data={rows}
-        bordered={false}
-        enableSorting={false}
-        enablePagination={false}
-        enableColumnVisibility={false}
-      />
-    </Card>
+    <DataTable
+      columns={columns}
+      data={rows}
+      bordered
+      enableSorting={false}
+      enablePagination={false}
+      enableColumnVisibility={false}
+    />
   ),
 };

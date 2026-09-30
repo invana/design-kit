@@ -34,7 +34,6 @@ export const Preview: Story = {
     columns,
     data: rows,
     density: 'compact',
-    bordered: false,
     enableSorting: false,
     enableColumnVisibility: false,
     preview: { total: 214, noun: 'stores' },

@@ -61,8 +61,10 @@ export const ConfirmCard = React.forwardRef<HTMLDivElement, ConfirmCardProps>(
       <p className={heading || description ? "font-semibold" : undefined}>{question}</p>
       {description ? <p className="-mt-1.5 text-sm text-muted-foreground">{description}</p> : null}
       {cost?.length && costAs === "strip" ? (
+        // No box: the rules between the cells only, and the outer cells flush
+        // with the question — reaching out by a cell's padding and clipping it.
         <dl
-          className="grid overflow-hidden rounded-control border border-border"
+          className="-mx-2 -my-1 grid [clip-path:inset(0.25rem_0.5rem)]"
           style={{ gridTemplateColumns: `repeat(${cost.length}, minmax(0, 1fr))` }}
         >
           {cost.map((c, i) => (

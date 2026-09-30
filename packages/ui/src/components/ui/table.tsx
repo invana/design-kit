@@ -7,18 +7,27 @@ const Table = React.forwardRef<
   React.HTMLAttributes<HTMLTableElement> & {
     density?: "default" | "compact"
     /**
-     * Draw the box around the table. Off for a table that sits directly in a
-     * panel's column — the panel edge already frames it, and a second border a
-     * few pixels in reads as a box inside a box. The row rules stay.
+     * Draw the box around the table. Off by default: a table sits in a card, a
+     * panel or an answer whose edge already frames it, and a second border a
+     * few pixels in reads as a box inside a box. Unboxed, only the rules between
+     * rows are drawn and the first and last columns sit flush with the text
+     * around the table. Turn it on for a table standing alone on a page.
      */
     bordered?: boolean
+    /**
+     * Set the first and last columns flush with the text around the table.
+     * Follows `bordered` — for a wrapper that draws the box itself.
+     */
+    flush?: boolean
   }
->(({ className, density = "default", bordered = true, ...props }, ref) => (
+>(({ className, density = "default", bordered = false, flush = !bordered, ...props }, ref) => (
   <div
     data-density={density}
     className={cn(
       "group/table relative w-full overflow-auto",
       bordered && "border rounded-md",
+      flush &&
+        "[&_td:first-child]:ps-0 [&_th:first-child]:ps-0 [&_td:last-child]:pe-0 [&_th:last-child]:pe-0",
     )}
   >
     <table

@@ -155,7 +155,11 @@ export const ScopeLine = React.forwardRef<HTMLDivElement, ScopeLineProps>(
       <div
         ref={wrapped ? undefined : ref}
         className={cn(
-          "flex w-fit max-w-full flex-wrap border border-border font-mono text-xs text-muted-foreground",
+          // No box: the rules between the parts only, and the first part flush
+          // with the text around the strip — it reaches out by a part's padding
+          // and clips it off. Sideways only, so a part's focus ring keeps its
+          // top and bottom.
+          "-mx-2 flex w-fit max-w-[calc(100%+1rem)] flex-wrap font-mono text-xs text-muted-foreground [clip-path:inset(0_0.5rem)]",
           !wrapped && className,
         )}
         {...(wrapped ? {} : props)}

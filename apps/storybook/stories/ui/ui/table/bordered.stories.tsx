@@ -17,14 +17,14 @@ const ROWS = [
 ];
 
 /**
- * `bordered={false}` — for a table that sits straight in a panel's column. The
- * panel edge already frames it; a second border a few pixels in is a box
- * inside a box. The row rules stay, so it still reads as a table.
+ * `bordered` — for a table standing alone on a page, with nothing around it to
+ * frame it. Off by default: in a card, a panel or an answer the edge is the
+ * frame, so the table draws its row rules only and its outer columns sit flush.
  */
-export const Borderless: Story = {
+export const Bordered: Story = {
   render: () => (
     <div className="w-[420px]">
-      <Table density="compact" bordered={false}>
+      <Table density="compact" bordered>
         <TableHeader>
           <TableRow>
             <TableHead>role</TableHead><TableHead>resolves to</TableHead><TableHead>why this one</TableHead>

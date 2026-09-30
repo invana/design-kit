@@ -108,9 +108,11 @@ export interface DataTableProps<TData extends RowData> {
    */
   density?: "default" | "compact";
   /**
-   * Draw the box around the table. Off for a table that sits directly in a
-   * card or a panel's column — the edge already frames it, and a second border
-   * a few pixels in reads as a box inside a box. The row rules stay.
+   * Draw the box around the table. Off by default: a table sits in a card, a
+   * panel or an answer whose edge already frames it, and a second border a few
+   * pixels in reads as a box inside a box. Unboxed, only the rules between rows
+   * are drawn and the first and last columns sit flush with the text around
+   * the table. Turn it on for a table standing alone on a page.
    */
   bordered?: boolean;
   /**
@@ -313,7 +315,7 @@ export function DataTable<TData extends RowData>({
   groupBy,
   renderGroupHeader,
   density = "default",
-  bordered = true,
+  bordered = false,
   rowIndent,
   isRowSelected,
   isRowHighlighted,
@@ -466,6 +468,7 @@ export function DataTable<TData extends RowData>({
           )}
           <Table
             bordered={false}
+            flush={!bordered}
             density={density}
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
@@ -563,6 +566,11 @@ export function DataTable<TData extends RowData>({
                             "border-t border-border font-semibold hover:bg-transparent [&>td]:border-b-0",
                           isRowSelected?.(row.original) &&
                             "bg-accent shadow-[inset_2px_0_0_var(--color-primary)] hover:bg-accent",
+                          // The rule down the leading edge needs the text off it,
+                          // even in an unboxed table whose first column is flush.
+                          isRowSelected?.(row.original) &&
+                            !bordered &&
+                            "[&[data-selected]>td:first-child]:ps-2",
                           onRowClick &&
                             "cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
                         )}
@@ -579,7 +587,7 @@ export function DataTable<TData extends RowData>({
                               style={{
                                 width: cell.column.getSize(),
                                 ...(indent
-                                  ? { paddingLeft: `${indent * 14 + 8}px` }
+                                  ? { paddingLeft: `${indent * 14 + (bordered ? 8 : 0)}px` }
                                   : {}),
                                 ...(isPinned
                                   ? {

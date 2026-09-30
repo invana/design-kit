@@ -63,7 +63,6 @@ export function TableBlock({ block, turn, onEvent }: BlockRendererProps<"table">
       columns={columns}
       data={data}
       density="compact"
-      bordered={false}
       enableSorting={false}
       enableColumnVisibility={false}
       minWidth={block.columns.length > FITS ? block.columns.length * COLUMN_MIN : undefined}

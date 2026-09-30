@@ -35,7 +35,6 @@ export const PreviewOpenAll: Story = {
     columns,
     data: rows,
     density: 'compact',
-    bordered: false,
     enableSorting: false,
     enableColumnVisibility: false,
     preview: { total: 214, noun: 'stores', onOpen: fn() },
