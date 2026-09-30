@@ -1,61 +1,71 @@
-import { Button } from "@invana/ui"
+import { Button, CaveatNote } from "@invana/ui"
 
 import { ConfirmCard, type ConfirmCost } from "../confirm-card"
 import type { AskRendererProps } from "../../conversations/registry"
 import type { ConfirmOptions } from "../../protocol/types"
 import { strong } from "../../prose"
-import { figureText } from "../../answers/blocks/figure"
+import { AskHint, AskSummary, hintText } from "../parts"
 
-/** The grammar's cost, as the card's figures, in the order they are weighed. */
+/** The grammar's cost, as the card's figures. A value with `**…**` bolds only that part. */
 function costOf(cost: ConfirmOptions["cost"]): ConfirmCost[] | undefined {
-  if (!cost) return undefined
-  const out: ConfirmCost[] = []
-  if (cost.rows != null) out.push({ label: "rows scanned", value: figureText(cost.rows) })
-  if (cost.time != null) out.push({ label: "to run", value: cost.time })
-  if (cost.writes != null) {
-    const written = figureText(cost.writes)
-    // Writing nothing is the reassuring case; writing anything is the one to read.
-    out.push({ label: "records written", value: written, tone: written === "0" ? undefined : "warning" })
-  }
-  return out
+  return cost?.map((c) => ({
+    label: c.label,
+    value: c.value.includes("**") ? hintText(c.value) : c.value,
+    tone: c.tone === "warn" || c.tone === "bad" ? "warning" : undefined,
+  }))
 }
 
 /**
  * Yes or no, where the question says what yes will do and the cost — rows
- * scanned, time, records written — is stated as figures before the buttons.
- * The default is the primary button while it waits; `hint` says where the
+ * scanned, time, records written — is stated before the buttons, as a line or
+ * a strip of figures. A caveat to weigh sits under the cost. The default is the
+ * primary button; with `align: "end"` it takes the card's right edge and the
+ * other its left, and a `dismiss` no draws quiet. `hint` says where the
  * default came from.
  *
- * Answered, both stay drawn: the answer given is the primary one, and the
- * other still works, sending a `change`.
+ * Answered, it settles into the decision, in `settled` words when given, with
+ * the hint the API patches in to say what it led to.
  */
 export function ConfirmAsk({ turn, options, onEvent }: AskRendererProps<"confirm">) {
   const pending = turn.state === "pending"
-  const answered = turn.state === "answered"
-  const chosen = answered ? turn.value === true : (options.default ?? true)
 
-  const send = (value: boolean) => {
-    if (pending) onEvent({ type: "reply", turn: turn.id, value })
-    else if (answered && value !== chosen) onEvent({ type: "change", turn: turn.id, value })
+  if (!pending) {
+    const yes = turn.value === undefined ? (options.default ?? true) : turn.value === true
+    const words = yes ? (options.settled?.yes ?? options.yes) : (options.settled?.no ?? options.no)
+    return (
+      <AskSummary rows={[{ label: options.label ?? "Decision", value: words }]}>
+        <AskHint>{options.hint}</AskHint>
+      </AskSummary>
+    )
   }
 
+  const chosen = options.default ?? true
+  const end = options.align === "end"
   const button = (value: boolean) => (
     <Button
       key={String(value)}
       size="xs"
-      variant={value === chosen ? "default" : "outline"}
-      disabled={!pending && !answered}
-      aria-pressed={answered ? value === chosen : undefined}
-      onClick={() => send(value)}
+      variant={value === chosen ? "default" : value === false && options.dismiss ? "ghost" : "outline"}
+      className={end && value === chosen ? "ms-auto" : undefined}
+      onClick={() => onEvent({ type: "reply", turn: turn.id, value })}
     >
       {value ? options.yes : options.no}
     </Button>
   )
+  // Together, the default leads; apart, it takes the right edge.
+  const order = end ? [!chosen, chosen] : [chosen, !chosen]
 
   return (
-    <ConfirmCard question={strong(options.question)} cost={costOf(options.cost)} hint={options.hint}>
-      {/* The primary leads, as it does in every ask. */}
-      {chosen ? [button(true), button(false)] : [button(false), button(true)]}
+    <ConfirmCard
+      question={strong(options.question)}
+      description={options.description}
+      heading={options.heading}
+      cost={costOf(options.cost)}
+      costAs={options.costAs}
+      caveat={options.caveat ? <CaveatNote label={options.caveat.label}>{options.caveat.text}</CaveatNote> : undefined}
+      hint={options.hint ? hintText(options.hint) : undefined}
+    >
+      {order.map(button)}
     </ConfirmCard>
   )
 }

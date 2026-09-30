@@ -135,6 +135,12 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
         else if (block.preset in CARRIED) {
           error(`"${block.preset}" is part of the answer, not a block: send it in the ${block.preset === "suggestions" || block.preset === "trace" ? `answer's "${block.preset}"` : "envelope"}.`, id)
         }
+        if (block?.status !== undefined && block.status !== "loading" && block.status !== "empty") {
+          error(`Unknown block status "${block.status as string}".`, id)
+        }
+        if (block?.status === "empty" && !block.emptyText) {
+          error(`An empty "${block.preset}" block does not say what is missing in emptyText.`, id)
+        }
       }
       checkPattern(turn, issues)
       continue

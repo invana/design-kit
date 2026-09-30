@@ -1,45 +1,56 @@
-import { Button, ProposalCard, PropertyList, PropertyRow, type ButtonProps } from "@invana/ui"
+import {
+  MetricGrid,
+  MetricTile,
+  ProposalCard,
+  PropertyList,
+  PropertyRow,
+} from "@invana/ui"
 
 import { EmissionBody, EmissionCard } from ".."
 import type { BlockRendererProps } from "../../conversations/registry"
-import type { ActionOption } from "../../protocol/types"
-
-const VARIANT: Record<NonNullable<ActionOption["variant"]>, ButtonProps["variant"]> = {
-  primary: "default",
-  secondary: "outline",
-  ghost: "ghost",
-}
+import { ActionRow } from "./actions"
 
 /**
  * Something the answer proposes to write, as its own card under the answer:
- * the draft, what writing it would do, and the actions. An action is an
- * `action` event; nothing is written until the API acts on it.
+ * what it proposes, the draft or what writing it does as figures, what writing
+ * it would do in words, and the actions. An action is an `action` event;
+ * nothing is written until the API acts on it. Once written, a stamp says so
+ * and the header says when.
  */
 export function ProposalBlock({ turn, block, onEvent }: BlockRendererProps<"proposal">) {
   return (
-    <EmissionCard kind="proposal" title={block.title}>
+    <EmissionCard kind="proposal" title={block.title} citation={block.done?.at}>
       <EmissionBody>
         <ProposalCard
           flush
+          title={block.heading}
+          done={block.done?.label}
           consequence={block.consequence}
-          actions={block.actions.map((a) => (
-            <Button
-              key={a.id}
-              size="xs"
-              variant={VARIANT[a.variant ?? "secondary"]}
-              onClick={() => onEvent({ type: "action", turn: turn.id, action: a.id })}
-            >
-              {a.label}
-            </Button>
-          ))}
+          actions={
+            block.actions.length ? (
+              <ActionRow
+                actions={block.actions}
+                onAction={(action) => onEvent({ type: "action", turn: turn.id, action })}
+              />
+            ) : undefined
+          }
         >
-          <PropertyList labelWidth="auto" variant="summary">
-            {block.rows.map((row) => (
-              <PropertyRow key={row.label} label={row.label} mono>
-                {row.value}
-              </PropertyRow>
-            ))}
-          </PropertyList>
+          {block.rows?.length ? (
+            <PropertyList labelWidth="auto" variant="summary">
+              {block.rows.map((row) => (
+                <PropertyRow key={row.label} label={row.label} mono>
+                  {row.value}
+                </PropertyRow>
+              ))}
+            </PropertyList>
+          ) : null}
+          {block.figures?.length ? (
+            <MetricGrid joined minTileWidth={72}>
+              {block.figures.map((f) => (
+                <MetricTile key={f.label} variant="figure" label={f.label} value={f.value} />
+              ))}
+            </MetricGrid>
+          ) : null}
         </ProposalCard>
       </EmissionBody>
     </EmissionCard>

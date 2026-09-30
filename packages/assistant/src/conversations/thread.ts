@@ -4,7 +4,10 @@ import {
   ChatSessionActivitySubLine as UiChatSessionActivitySubLine,
   ChatSessionComposer as UiChatSessionComposer,
   ChatSessionContextChip as UiChatSessionContextChip,
+  ChatSessionCaret as UiChatSessionCaret,
   ChatSessionDisclosure as UiChatSessionDisclosure,
+  ChatSessionDisclosureCode as UiChatSessionDisclosureCode,
+  ChatSessionDisclosureSteps as UiChatSessionDisclosureSteps,
   ChatSessionMessage as UiChatSessionMessage,
   ChatSessionMessageOptions as UiChatSessionMessageOptions,
   ChatSessionProgressLine as UiChatSessionProgressLine,
@@ -41,8 +44,14 @@ export const chatSessionGutterClass = uiChatSessionGutterClass
 export const ChatSessionPromptRow = UiChatSessionPromptRow
 /** One-line status while work is in flight. */
 export const ChatSessionProgressLine = UiChatSessionProgressLine
+/** The cursor at the end of text still being written. */
+export const ChatSessionCaret = UiChatSessionCaret
 /** Collapsible detail under a row: query, preview, context. */
 export const ChatSessionDisclosure = UiChatSessionDisclosure
+/** The code a disclosure opens onto, keywords marked, when it opens onto more than code. */
+export const ChatSessionDisclosureCode = UiChatSessionDisclosureCode
+/** A method of several steps, numbered, each with its count or time. */
+export const ChatSessionDisclosureSteps = UiChatSessionDisclosureSteps
 /** A background task with its lifecycle. */
 export const ChatSessionTaskRow = UiChatSessionTaskRow
 /** A group of background tasks under one heading. */
@@ -66,6 +75,7 @@ export type {
   ChatSessionPromptRowProps,
   ChatSessionProgressLineProps,
   ChatSessionDisclosureProps,
+  ChatSessionDisclosureStepsProps,
   ChatSessionTaskRowProps,
   ChatSessionTaskGroupProps,
   ChatSessionTaskStatus,

@@ -45,6 +45,28 @@ export type Tone = "good" | "bad" | "warn" | "neutral"
 
 // ── ask presets: options in, value out ──────────────────────────────────────
 
+/**
+ * What every ask says before its control. `hint`, where an ask has one, is the
+ * line under it: `**bold**` marks a figure and `` `Enter` `` a key.
+ */
+export interface AskText {
+  /** The question. `**bold**` marks what matters in it. */
+  question: string
+  /** A muted line under the question — what the answer is used for. Makes the question a heading. */
+  description?: string
+  /** Set the question as a heading, bold — a short question over a longer body. */
+  heading?: boolean
+  /** What the answer is called once settled, in its summary — `Margin`, `Yield floor`. */
+  label?: string
+}
+
+/** A figure on the right of a choice — `2,480` over `kg/ha`, `−8.4%` over `vs LY`. */
+export interface ChoiceFigure {
+  value: string
+  unit?: string
+  tone?: Tone
+}
+
 /** A choice the data model holds. `detail` names where it comes from. */
 export interface ChoiceOption {
   value: string
@@ -53,42 +75,100 @@ export interface ChoiceOption {
   disabled?: boolean
   /** Why it is off or on — `on the causal path`. */
   note?: string
+  /** A second line under the label — `Adjusts for seasonality`. */
+  description?: string
+  /** A short tag in a box before the label — `BV`. */
+  lead?: string
+  /**
+   * An icon in that box instead: the path data of a 16×16 stroked icon, so
+   * the API can send one without the kit shipping an icon set.
+   */
+  icon?: string
+  /** What picking it would give, on the right in place of `detail`. */
+  figure?: ChoiceFigure
+  /** How the pick reads in a summary, when not as its label — `Semi-arid, 3 sites`. */
+  summary?: string
 }
 
-export interface ConfirmOptions {
-  /** What yes does, in one sentence. `**bold**` marks what matters in it. */
-  question: string
+/** One figure of what yes costs — `2.3B` `rows scanned`. */
+export interface CostFigure {
+  label: string
+  /** The figure. `about **40 s**` bolds only the figure in a `line`. */
+  value: string
+  /** `warn` for a cost that changes something — records it writes. */
+  tone?: Tone
+}
+
+export interface ConfirmOptions extends AskText {
+  /** What yes costs, stated before the buttons: the rows it scans, the time it takes, what it writes. */
+  cost?: CostFigure[]
   /**
-   * What yes costs, drawn as figures between the question and the buttons —
-   * the rows it scans, the time it takes, the records it writes.
+   * `line` writes the cost as a sentence under the question, each figure
+   * before its label; `strip` sets the figures in cells, each label above.
+   * @default "line"
    */
-  cost?: { rows?: Figure; time?: string; writes?: Figure }
+  costAs?: "line" | "strip"
+  /** Something the analyst should weigh before answering — `data gap`. */
+  caveat?: { label: string; text: string }
   yes: string
   no: string
   default?: boolean
+  /** The no is a dismissal — `Not now` — and draws quiet. */
+  dismiss?: boolean
+  /**
+   * `end` sets the default at the card's right edge, the other at its left;
+   * `start` sets them together at the left, the default first.
+   * @default "start"
+   */
+  align?: "start" | "end"
+  /** How the decision reads once made — `Narrowed to Q3 first`. Defaults to the button's words. */
+  settled?: { yes?: string; no?: string }
   hint?: string
 }
-export interface SingleOptions {
-  question: string
+export interface SingleOptions extends AskText {
   options: ChoiceOption[]
   default?: string
-  /** Offer an “Other…” answer typed by the analyst. */
+  /** Offer an “Other…” choice, answered in the analyst's own words. */
   other?: boolean
+  /** Send with a button of these words — `Next` — rather than on the pick. */
+  submit?: string
+  /** Offer Skip, which keeps the default. */
+  skippable?: boolean
   hint?: string
 }
-export interface MultiOptions {
-  question: string
+export interface MultiOptions extends AskText {
   options: ChoiceOption[]
   default?: string[]
   min?: number
   max?: number
+  /**
+   * The submit's words, `{count}` standing for how many are ticked — `Hold
+   * {count} fixed`. Defaults to the question's own verb, or `Use {count} selected`.
+   */
+  submit?: string
+  /** Offer Select all beside the question. */
+  selectAll?: boolean
   hint?: string
 }
-export interface QuickOptions {
+/** One row of a quick ask: a question and two to five short answers. */
+export interface QuickPick {
   question: string
-  options: { value: string; label: string }[]
+  /** What the answer is called once settled, in its summary — `Trend by`. */
+  label?: string
+  /** Each option; `sub` is a second line under it — `±1.4 pp`. */
+  options: { value: string; label: string; sub?: string }[]
   default?: string
   hint?: string
+}
+export interface QuickOptions extends AskText, QuickPick {
+  /** Stretch the row across the card, each option an equal share. */
+  stretch?: boolean
+  /**
+   * Further rows answered in the same card — `Confidence level` under `Show
+   * the trend by`. With any, the value is keyed: `id` for each of these,
+   * `label` (or the question) for the first.
+   */
+  more?: (QuickPick & { id: string })[]
 }
 export interface PeriodOptions {
   question: string
@@ -97,8 +177,7 @@ export interface PeriodOptions {
   custom?: boolean
   hint?: string
 }
-export interface NumberOptions {
-  question: string
+export interface NumberOptions extends AskText {
   unit?: string
   min?: number
   max?: number
@@ -134,11 +213,21 @@ export interface ScaleOptions {
   default?: number
 }
 export interface MultistepOptions {
-  /** Each step is an ask of its own; the value is keyed by step id. */
-  steps: ({ id: string } & AskSpec)[]
+  /**
+   * Each step is an ask of its own; the value is keyed by step id. A
+   * `required` step holds Next back until it is answered, and has no Skip.
+   */
+  steps: ({ id: string; required?: boolean } & AskSpec)[]
+  /** Show the answers for a last look, each with Edit, before they are sent. */
+  review?: boolean
 }
-export interface FormOptions {
-  question: string
+export interface FormOptions extends AskText {
+  /**
+   * `side` sets each label in a column at the left; `top` sets it over its
+   * field, two fields to a row where the card is wide enough.
+   * @default "side"
+   */
+  labels?: "side" | "top"
   fields: {
     name: string
     label: string
@@ -147,6 +236,14 @@ export interface FormOptions {
     default?: string | number
     /** Shown beside the value — `quoted 14 d`. */
     aside?: string
+    /** A line under the field — `From last year's promotions`. */
+    hint?: string
+    /** The section the field sits in, under its name — `Price`, `Timing`. */
+    group?: string
+    /** A number must be greater than this — an elasticity `above` 0. */
+    above?: number
+    /** A number must be less than this. */
+    below?: number
   }[]
   submit?: string
   hint?: string
@@ -234,7 +331,8 @@ export interface AskValueByPreset {
   confirm: boolean
   single: string
   multi: string[]
-  quick: string
+  /** Keyed by row when the ask has `more` rows. */
+  quick: string | Record<string, string>
   period: { from: string; to: string; label: string }
   number: number
   short: string
@@ -262,15 +360,149 @@ export type AskSpec = {
 export interface ActionOption {
   id: string
   label: string
-  variant?: "primary" | "secondary" | "ghost"
+  variant?: "primary" | "secondary" | "ghost" | "link"
+  /** Starts the right-hand group: this action and those after it sit at the far end. */
+  push?: boolean
+}
+
+export interface NarrativeOptions {
+  /**
+   * Two or three sentences, leading with the number. `**…**` marks a figure;
+   * `[n]` places the marker for source n where the clause it backs ends; a
+   * figure led by `▲` or `▼` is drawn in the tone of its direction.
+   */
+  text: string
+  /** Markers appended after the text, for prose that places none of its own. */
+  cites?: number[]
+  /** The source the reader is on: its marker is lit, as is its row in the citations. */
+  active?: number
+}
+
+export interface MethodOptions {
+  /** The word on the line — `method`, `query`, `model`, `3 steps`. */
+  label?: string
+  /** The formula, query or model. `**…**` marks its keywords. */
+  code?: string
+  /** At the right of the line — `12,408 rows · 18 ms`. */
+  meta?: string
+  /** What the model rests on, under the code — `Plots 1,284`. */
+  facts?: { label: string; value: string }[]
+  /** A method of several steps, in order, each with its count or time. */
+  steps?: { label: string; detail?: string }[]
+  /** Drawn open. Closed, the line alone says what was run. */
+  open?: boolean
+}
+
+export interface CitationSource {
+  label: string
+  count?: Figure
+  /** What kind of source and how fresh — `table · loaded 28 Sep 06:00`. */
+  detail?: string
+}
+
+export interface CitationsOptions {
+  sources: CitationSource[]
+  /** The source the reader is on, lit with its marker in the prose. */
+  active?: number
+  /** One line — `▸ 3 sources`, the record total at the right — until opened. */
+  folded?: boolean
+  /** Said under the sources. When they hold no records it is said as a warning. */
+  note?: string
+}
+
+export interface ProposalOptions {
+  /** Where it came from, on the card's header — `from this answer`. */
+  title?: string
+  /** What it proposes, in one line above the draft. */
+  heading?: string
+  /** The draft, label by label. */
+  rows?: { label: string; value: string }[]
+  /** What writing it does, as figures — `Rules 1`, `Recipients 214`. */
+  figures?: { label: string; value: string }[]
+  /** What writing it does, in words. */
+  consequence?: string
+  actions: ActionOption[]
+  /** Written: the stamp that says so, and when, on the header. */
+  done?: { label: string; at?: string }
+}
+
+export interface CannotOptions {
+  reason: string
+  remedy: string
+  /** Nearby questions the data can answer; each is sent as the next prompt. */
+  nearest?: string[]
+  /** Answered for part of what was asked; the reason says which part is missing. */
+  partial?: boolean
+}
+
+export type CaveatTone = "warning" | "info" | "bad"
+
+export interface CaveatNoteOptions {
+  label: string
+  text: string
+  /** `warning` (the default) qualifies; `info` says what was filled in; `bad` says what is wrong with the data. */
+  tone?: CaveatTone
+  /** A link after the text — `Show the 4 stores` — sent as an `action` event. */
+  action?: { id: string; label: string }
+}
+
+/** One caveat, or several folded behind one line — `▸ 2 caveats`. */
+export type CaveatOptions =
+  | (CaveatNoteOptions & { items?: never; folded?: never })
+  | { items: CaveatNoteOptions[]; folded?: boolean; label?: never; text?: never }
+
+export interface ScopePart {
+  text: string
+  /** `changed` — this part differs from the question it was carried from; `stale` — the data behind it is late. */
+  mark?: "changed" | "stale"
+  /** What this part can be changed to; opening the part lists them. */
+  choices?: { value: string; label: string; detail?: string }[]
+}
+
+export interface ScopeOptions {
+  parts: (string | ScopePart)[]
+  /** The line under the scope. Said as a warning when a part is stale. */
+  hint?: string
+  /** The part whose choices are showing — a restored view, or a story. */
+  openPart?: number
+}
+
+export interface SuggestionsOptions {
+  items?: string[]
+  /** Follow-ups under a heading each — `Go deeper`, `Act`. */
+  groups?: { label: string; items: string[] }[]
+  /** `stack` puts one per line, full width. Narrow threads stack on their own. */
+  layout?: "wrap" | "stack"
+  /** Follow-ups already sent from here; they stay, dimmed and disabled. */
+  sent?: string[]
+}
+
+export interface TraceOptions {
+  steps: TraceStep[]
+  /** One line — `▸ 4 steps` with `summary` at the right — until opened. */
+  folded?: boolean
+  /** At the right of the folded line — `4.2 s · 16,319 rows`. */
+  summary?: string
+  /** Under a failed step — `Retry`, `Skip this step` — sent as `action` events. */
+  actions?: ActionOption[]
 }
 
 export interface MetricOptions {
   label: string
-  value: Figure
+  /** `null` when there is no figure to give; `delta` then says why. Drawn as a muted `—`. */
+  value: Figure | null
   /** The comparison, already worded — `▲ 3 pts vs Q2 · target 110%`. */
   delta?: string
   tone?: Tone
+  /**
+   * A bar under the figure: `value` against `target` on a scale from `min` to
+   * `max`, with the scale's ends and the target written under it in `unit`.
+   */
+  gauge?: { value: number; target: number; min?: number; max: number; unit?: string }
+  /** The recent run of the figure, oldest first, drawn as a sparkline beside it. */
+  trend?: number[]
+  /** Set on the warning ground: the one figure in a band that needs a second look. */
+  flag?: boolean
 }
 
 export interface Column {
@@ -279,19 +511,64 @@ export interface Column {
   align?: "left" | "right"
 }
 
+/** A file an answer hands over. */
+export interface FileItem {
+  name: string
+  size?: string
+  /** Eight characters, mono — what a reader quotes. */
+  digest?: string
+  /** What the file is, in a line — `412 rows · missing store code`. */
+  note?: string
+  /** A word on the file's state — `rejected`. */
+  status?: { label: string; tone?: Tone }
+}
+
+/** One label/value pair in a record. */
+export interface RecordRow {
+  label: string
+  value: string
+  /** Where the value came from — `last year's promotions`, `your input`. */
+  source?: string
+}
+
 export interface BlockOptionsByPreset {
-  narrative: { text: string; cites?: number[] }
+  narrative: NarrativeOptions
   metric: MetricOptions
   grid: { tiles: MetricOptions[] }
-  table: { columns: Column[]; rows: Record<string, Cell>[]; total?: number; noun?: string }
+  table: {
+    columns: Column[]
+    rows: Record<string, Cell>[]
+    /** How many rows exist; more than `rows` draws `Open all`. */
+    total?: number
+    noun?: string
+    /** What follows the count — `sorted by Δ`, `7 columns`. */
+    note?: string
+    /** The column the rows are ordered by, marked in its header. */
+    sort?: { key: string; dir: "asc" | "desc" }
+    /** Rows called out, by index in `rows`. */
+    highlight?: number[]
+    /** A total row under the rows, set bold. */
+    totals?: Record<string, Cell>
+  }
   attr: {
     columns: (Column & { dir?: "higher" | "lower" })[]
     rows: Record<string, Cell>[]
     total?: number
     noun?: string
   }
-  record: { rows: { label: string; value: string }[] }
-  ranked: { items: { label: string; value: number; display?: string }[] }
+  record: {
+    rows?: RecordRow[]
+    /** Rows under headings — `Identity`, `Performance, semi-arid`. Drawn after `rows`. */
+    groups?: { label: string; rows: RecordRow[] }[]
+    /** Who or what the record is, above its rows, with its state as a tag. */
+    header?: { title: string; initials?: string; status?: { label: string; tone?: Tone } }
+  }
+  ranked: {
+    /** `muted` is the rest folded into one line — `3 others`. */
+    items: { label: string; value: number; display?: string; muted?: boolean }[]
+    /** Bars grow both ways from a zero rule, with what each side means under them. */
+    diverging?: { below: string; above: string }
+  }
   timeseries: {
     series: { name: string; points: [string, number][] }[]
     band?: { label?: string; lower: number; upper: number }
@@ -303,8 +580,11 @@ export interface BlockOptionsByPreset {
   }
   bars: {
     groups: string[]
-    series: { name: string; values: number[] }[]
+    /** `muted` draws a series as the comparison — last quarter behind this one. */
+    series: { name: string; values: number[]; muted?: boolean }[]
     target?: { value: number; label: string }
+    /** A plan per group, drawn as a dashed column the actual stands inside. */
+    plan?: { name: string; values: number[] }
     highlight?: string
     unit?: string
   }
@@ -317,18 +597,28 @@ export interface BlockOptionsByPreset {
     outliers?: number
     unit?: string
   }
-  timeline: { events: { when: string; text: string; tone?: Tone }[] }
+  timeline: {
+    /**
+     * `detail` is a second line under the text. `section` starts a labelled run
+     * of events — `Before`, `Spike`, `After`; `highlight` calls one out.
+     */
+    events: { when: string; text: string; tone?: Tone; detail?: string; section?: string; highlight?: boolean }[]
+  }
   subgraph: { nodes: { id: string; label: string }[]; edges: { from: string; to: string }[] }
-  method: { label?: string; code: string; meta?: string }
-  citations: { sources: { label: string; count?: Figure }[] }
-  files: { files: { name: string; size: string; digest: string }[] }
-  proposal: { title?: string; rows: { label: string; value: string }[]; consequence: string; actions: ActionOption[] }
-  cannot: { reason: string; remedy: string; nearest?: string }
-  caveat: { label: string; text: string }
-  scope: { parts: string[] }
+  method: MethodOptions
+  citations: CitationsOptions
+  files: {
+    files: FileItem[]
+    /** Each file gets its type icon and a `Download` link. */
+    download?: boolean
+  }
+  proposal: ProposalOptions
+  cannot: CannotOptions
+  caveat: CaveatOptions
+  scope: ScopeOptions
   checks: { rows: { label: string; ok: boolean; count?: Figure }[] }
-  suggestions: { items: string[] }
-  trace: { steps: TraceStep[] }
+  suggestions: SuggestionsOptions
+  trace: TraceOptions
   test: {
     verdict: string
     evidence?: "strong" | "moderate" | "weak"
@@ -365,6 +655,17 @@ export interface BlockOptionsByPreset {
 export interface BlockBase {
   /** The line under a block — `kg/ha per step of each trait`. */
   caption?: string
+  /** `warn` when the line is a warning — `North rests on 9 stores · indicative`. */
+  captionTone?: Tone
+  /**
+   * `loading` draws the block's skeleton while its data is on the way; `empty`
+   * says there is nothing to draw, in `emptyText`. The card's header stays in both.
+   */
+  status?: "loading" | "empty"
+  /** What is missing, said out loud — `No renewals fell due in September`. */
+  emptyText?: string
+  /** Follow-ups under an empty block that would find something — `Search “Acme”`. */
+  emptySuggestions?: string[]
 }
 
 export type BlockSpec = {
@@ -393,7 +694,10 @@ export interface TraceStep {
   id?: string
   label: string
   detail?: string
-  state: "done" | "running" | "pending"
+  /** `failed` stops the run at this step; `waiting` is a step held on the analyst — an ask. */
+  state: "done" | "running" | "pending" | "failed" | "waiting"
+  /** Why a failed step failed, under it. */
+  error?: string
 }
 
 // ── turns ───────────────────────────────────────────────────────────────────
@@ -420,6 +724,8 @@ export interface AskTurn {
   value?: unknown
   /** When it was answered, as an ISO 8601 time. Shown as `just now`, `2 min ago`. */
   answeredAt?: string
+  /** How long a pending ask has been left, already worded — `parked 1 min`. */
+  waiting?: string
 }
 
 export interface AnswerTurn {
@@ -433,6 +739,8 @@ export interface AnswerTurn {
   label?: string
   /** What the card shows — `P&L attribution, £M`. */
   title?: string
+  /** The right of the header strip when nothing is cited — `3 files · 166 KB`. */
+  aside?: string
   envelope?: Envelope
   /** Streamed while the answer runs; kept as the record of what was done. */
   trace?: TraceStep[]

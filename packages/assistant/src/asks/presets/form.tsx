@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
-import { Button, PropertyList, PropertyRow } from "@invana/ui"
+import { Button } from "@invana/ui"
 import {
   Form,
   ObjectField,
@@ -9,9 +9,10 @@ import {
   type FieldValues,
 } from "@invana/forms"
 
-import { ClarifyActions, ClarifyFootnote } from ".."
+import { ClarifyActions } from ".."
 import type { AskRendererProps } from "../../conversations/registry"
 import type { FormOptions } from "../../protocol/types"
+import { AskHint, AskQuestion, AskSummary } from "../parts"
 
 type Spec = FormOptions["fields"][number]
 type Values = Record<string, unknown>
@@ -28,12 +29,28 @@ const FIELD_TYPE: Record<Spec["type"], FieldType> = {
   select: "select",
 }
 
+/** A number's bounds, as the rule that says which one it broke. */
+function boundsRule(f: Spec): FieldConfig["rules"] {
+  if (f.above == null && f.below == null) return undefined
+  return {
+    validate: (v: unknown) => {
+      const n = Number(v)
+      if (f.above != null && !(n > f.above)) return `Must be above ${f.above}`
+      if (f.below != null && !(n < f.below)) return `Must be below ${f.below}`
+      return true
+    },
+  }
+}
+
 const toField = (f: Spec): FieldConfig => ({
   name: f.name,
   type: FIELD_TYPE[f.type],
   label: f.label,
   unit: f.unit,
   aside: f.aside,
+  description: f.hint,
+  group: f.group,
+  rules: boundsRule(f),
   placeholder: "",
 })
 
@@ -46,44 +63,36 @@ function withUnit(value: unknown, unit?: string): string {
 
 /**
  * Several related values answered together, where they only make sense as a
- * set — scenario inputs. The fields come from the ask and render through the
- * form generator, labels in a column on the left, each unit or note at the end
- * of its input; the submit sends a `reply` keyed by field name.
+ * set — scenario inputs. The fields render through the form generator: with
+ * `labels: "side"` in a column on the left, with `"top"` over each field, two
+ * to a row where the card is wide enough; a field's `group` sets it under a
+ * small caps name. A number out of its `above`/`below` bounds says so under
+ * itself and holds the submit back. The submit sends a `reply` keyed by field
+ * name.
  *
- * Answered, it settles into its values as label/value pairs; "Change answers"
+ * Answered, it settles into its values as label/value pairs; Change inputs
  * reopens the form with them filled in, and sending again is a `change`.
  */
 export function FormAsk({ turn, options, onEvent }: AskRendererProps<"form">) {
-  const answered = turn.state === "answered"
+  const pending = turn.state === "pending"
   const [editing, setEditing] = React.useState(false)
   const id = React.useId()
   const current = (turn.value ?? {}) as Values
+  const top = options.labels === "top"
 
   const defaults = Object.fromEntries(
-    options.fields.map((f) => [f.name, answered ? current[f.name] : f.default]),
+    options.fields.map((f) => [f.name, pending ? f.default : current[f.name]]),
   )
   // Untyped past the root: ObjectField takes any form's control.
-  const form = useForm<FieldValues>({ defaultValues: { values: defaults } })
+  const form = useForm<FieldValues>({ defaultValues: { values: defaults }, mode: "onChange" })
 
-  if (turn.state !== "pending" && !editing) {
+  if (!pending && !editing) {
     return (
-      <>
-        <p>{options.question}</p>
-        <PropertyList labelWidth="auto" variant="summary">
-          {options.fields.map((f) => (
-            <PropertyRow key={f.name} label={f.label} mono>
-              {withUnit(current[f.name], f.unit)}
-            </PropertyRow>
-          ))}
-        </PropertyList>
-        {answered ? (
-          <ClarifyActions>
-            <Button size="xs" variant="ghost" onClick={() => setEditing(true)}>
-              Change answers
-            </Button>
-          </ClarifyActions>
-        ) : null}
-      </>
+      <AskSummary
+        rows={options.fields.map((f) => ({ label: f.label, value: withUnit(current[f.name], f.unit) }))}
+        change={turn.state === "answered" ? "Change inputs" : undefined}
+        onChange={() => setEditing(true)}
+      />
     )
   }
 
@@ -91,15 +100,11 @@ export function FormAsk({ turn, options, onEvent }: AskRendererProps<"form">) {
   // in the card's own rhythm; the submit reaches it through `form={id}`.
   return (
     <Form {...form}>
-      <p>{options.question}</p>
+      <AskQuestion text={options} />
       <form
         id={id}
         onSubmit={form.handleSubmit(({ values }) => {
-          onEvent(
-            answered
-              ? { type: "change", turn: turn.id, value: values }
-              : { type: "reply", turn: turn.id, value: values },
-          )
+          onEvent(editing ? { type: "change", turn: turn.id, value: values } : { type: "reply", turn: turn.id, value: values })
           setEditing(false)
         })}
       >
@@ -107,14 +112,22 @@ export function FormAsk({ turn, options, onEvent }: AskRendererProps<"form">) {
           control={form.control}
           name="values"
           fields={options.fields.map(toField)}
-          labelPosition="side"
+          labelPosition={top ? "top" : "side"}
           size="xs"
-          columns={1}
+          columns={top ? 2 : 1}
+          fit="container"
+          groupAs="section"
         />
       </form>
-      {options.hint ? <ClarifyFootnote>{options.hint}</ClarifyFootnote> : null}
+      <AskHint>{options.hint}</AskHint>
       <ClarifyActions>
-        <Button type="submit" form={id} size="xs">
+        <Button
+          type="submit"
+          form={id}
+          size="xs"
+          className={top ? "ms-auto" : undefined}
+          disabled={!form.formState.isValid}
+        >
           {options.submit ?? "Submit"}
         </Button>
       </ClarifyActions>

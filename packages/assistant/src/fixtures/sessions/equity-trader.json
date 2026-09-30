@@ -54,7 +54,7 @@
     { "id": "t8", "role": "assistant", "kind": "ask", "stage": "check", "state": "answered",
       "ask": { "preset": "confirm",
         "question": "A full revaluation reprices 64 positions and 1,812 option legs on the risk grid.",
-        "cost": { "time": "about 3 min" },
+        "cost": [{ "label": "to run", "value": "about **3 min**" }],
         "yes": "Full revaluation", "no": "Greeks first, instant", "default": false,
         "hint": "Default: greeks now, full revaluation in the background" },
       "value": false },

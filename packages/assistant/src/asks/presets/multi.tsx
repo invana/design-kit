@@ -1,47 +1,68 @@
 import * as React from "react"
 import {
   Button,
+  cn,
   Questionnaire,
   QuestionnaireChoice,
-  QuestionnaireChoiceTitle,
   QuestionnaireChoices,
+  QuestionnaireDescription,
   QuestionnaireItem,
   QuestionnaireTitle,
 } from "@invana/ui"
 
-import { ClarifyActions, ClarifyFootnote } from ".."
+import { ClarifyActions } from ".."
 import type { AskRendererProps } from "../../conversations/registry"
+import { AskHint, AskLink, AskSummary, choiceParts, hintText, isHeading, joinPicks } from "../parts"
+import { strong } from "../../prose"
+
+/**
+ * The submit's words, from the ask's `submit` or else from the question. A
+ * prompt that is a phrase — `Adjust for` — is already the verb: `Adjust for 4`.
+ * A question — `Who should receive it?` — is not, so it says what is being
+ * sent: `Use 2 selected`.
+ */
+function submitLabel(question: string, count: number, submit?: string) {
+  if (submit) return submit.replace("{count}", String(count))
+  const q = question.trim()
+  return q.endsWith("?") ? `Use ${count} selected` : `${q} ${count}`
+}
 
 /**
  * Several choices from a list the data model holds — filters, or the
  * assumptions an analysis will make, where the one left off says why in its
  * `note`. The defaults arrive ticked; `min` holds the submit back until enough
- * are, and at `max` the rest stop being offered. Submit, labelled from the
- * question and the count, sends the ticked values as a `reply`, in the ask's
- * order.
+ * are, and `max` counts toward its limit beside the submit — at the limit the
+ * rest stop being offered. Options take the same description, lead and
+ * figure a single choice does. Submit sends the ticked values as a `reply`, in
+ * the ask's order.
  *
- * Once answered the ticks stay drawn, read-only, beside the ones not taken.
+ * Answered, it settles into one label/value pair; Change answer reopens it.
  */
-/**
- * The submit label, from the question and the count ticked. A prompt that is a
- * phrase — `Adjust for` — is already the verb: `Adjust for 4`. A question —
- * `Who should receive it?` — is not, so it says what is being sent: `Use 2 selected`.
- */
-function submitLabel(question: string, count: number) {
-  const q = question.trim()
-  return q.endsWith("?") ? `Use ${count} selected` : `${q} ${count}`
-}
-
 export function MultiAsk({ turn, options, onEvent }: AskRendererProps<"multi">) {
-  const answered = turn.state !== "pending"
-  const [picked, setPicked] = React.useState<string[]>(options.default ?? [])
-  const value = answered ? ((turn.value as string[] | undefined) ?? []) : picked
+  const pending = turn.state === "pending"
+  const [editing, setEditing] = React.useState(false)
+  const [picked, setPicked] = React.useState<string[]>(
+    pending ? (options.default ?? []) : ((turn.value as string[] | undefined) ?? []),
+  )
   const id = React.useId()
-  const full = options.max != null && value.length >= options.max
-  const short = options.min != null && value.length < options.min
 
+  if (!pending && !editing) {
+    const value = (turn.value as string[] | undefined) ?? options.default ?? []
+    const text = joinPicks(options.options.filter((o) => value.includes(o.value)))
+    return (
+      <AskSummary
+        rows={[{ label: options.label ?? "Answer", value: text || "—" }]}
+        change={turn.state === "answered" ? "Change answer" : undefined}
+        onChange={() => setEditing(true)}
+      />
+    )
+  }
+
+  const full = options.max != null && picked.length >= options.max
+  const short = options.min != null && picked.length < options.min
   const toggle = (v: string) =>
     setPicked((now) => (now.includes(v) ? now.filter((x) => x !== v) : [...now, v]))
+  const all = options.options.filter((o) => !o.disabled).map((o) => o.value)
 
   return (
     <>
@@ -50,40 +71,57 @@ export function MultiAsk({ turn, options, onEvent }: AskRendererProps<"multi">) 
         onSubmit={(e) => {
           e.preventDefault()
           if (short) return
-          const ordered = options.options.map((o) => o.value).filter((v) => value.includes(v))
-          onEvent({ type: "reply", turn: turn.id, value: ordered })
+          const value = options.options.map((o) => o.value).filter((v) => picked.includes(v))
+          onEvent(editing ? { type: "change", turn: turn.id, value } : { type: "reply", turn: turn.id, value })
+          setEditing(false)
         }}
       >
         <QuestionnaireItem name={turn.id} multiple>
-          <QuestionnaireTitle>{options.question}</QuestionnaireTitle>
+          <QuestionnaireTitle
+            className={cn(
+              isHeading(options) && "font-semibold",
+              options.selectAll && "flex w-full items-baseline justify-between gap-2",
+            )}
+          >
+            {strong(options.question)}
+            {options.selectAll ? (
+              <AskLink onClick={() => setPicked(options.max != null ? all.slice(0, options.max) : all)}>Select all</AskLink>
+            ) : null}
+          </QuestionnaireTitle>
+          {options.description ? <QuestionnaireDescription>{options.description}</QuestionnaireDescription> : null}
           <QuestionnaireChoices>
             {options.options.map((o) => {
-              const checked = value.includes(o.value)
+              const checked = picked.includes(o.value)
+              const { props, body } = choiceParts(o)
               return (
                 <QuestionnaireChoice
                   key={o.value}
                   value={o.value}
-                  detail={o.note ?? o.detail}
+                  {...props}
                   disabled={o.disabled || (full && !checked)}
-                  readOnly={answered}
                   checked={checked}
                   onChange={() => toggle(o.value)}
                 >
-                  <QuestionnaireChoiceTitle>{o.label}</QuestionnaireChoiceTitle>
+                  {body}
                 </QuestionnaireChoice>
               )
             })}
           </QuestionnaireChoices>
         </QuestionnaireItem>
       </Questionnaire>
-      {options.hint ? <ClarifyFootnote>{options.hint}</ClarifyFootnote> : null}
-      {answered ? null : (
-        <ClarifyActions>
-          <Button type="submit" form={id} size="xs" disabled={short}>
-            {submitLabel(options.question, value.length)}
-          </Button>
-        </ClarifyActions>
-      )}
+      <AskHint>{options.hint}</AskHint>
+      <ClarifyActions>
+        {options.max != null ? (
+          full && options.max < options.options.length ? (
+            <AskHint tone="warning">Limit reached · clear one to swap</AskHint>
+          ) : (
+            <span className="text-xs text-muted-foreground">{hintText(`**${picked.length}** of ${options.max}`)}</span>
+          )
+        ) : null}
+        <Button type="submit" form={id} size="xs" className="ms-auto" disabled={short}>
+          {submitLabel(options.question, picked.length, options.submit)}
+        </Button>
+      </ClarifyActions>
     </>
   )
 }
