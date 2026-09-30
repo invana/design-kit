@@ -137,12 +137,18 @@ gap in the kit, not a one-off in the design.
 - `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
-- `docs/TODO.md` tracks every component planned by the Assistant Package RFC, across packages:
+- The **Assistant Presets** canvas (https://claude.ai/artifact/DFrcsV7JSR2Ef7PSJAHztz) is the design reference for asks and
+  answer blocks. Each preset with a renderer has **one story that replicates its whole board**:
+  every variant, captioned as the board captions it, laid out by the story-only `Board` helper
+  (`apps/storybook/stories/assistant/board.tsx`, four 320px columns; the 280px variant draws at
+  280px). A variant the renderer cannot draw is a gap in the renderer, not a story workaround.
+  A design change goes to the canvas first.
+- `docs/TODO.md` tracks every component the assistant needs, across packages:
   folder, change, status, tier, and the assistant's preset registry. Flip a row's `Status` in the
   same commit that ships or changes the component.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
-- **Where a component goes** — ask in order and stop at the first yes (Assistant Package RFC):
+- **Where a component goes** — ask in order and stop at the first yes:
   needs an external JS library the other packages don't have → its own package
   (`@invana/editor`, `@invana/charts`); encodes numbers as marks → `@invana/charts`; rows and
   columns of records → `@invana/tables`; only meaningful inside a conversation turn, relative to
@@ -151,8 +157,8 @@ gap in the kit, not a one-off in the design.
   `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
 - **`@invana/assistant` is JSON only.** Studio renders `<Conversation spec onEvent />`; the API
   sends a `ConversationSpec` then patches (`applyPatch`), the UI sends `ConversationEvent`s.
-  Presets, patterns and flows are ids from Analyst Flow Grammar, copied into
-  `packages/assistant/src/grammar/` — a new preset goes into the grammar first, then its
+  Presets, patterns and flows are ids in `packages/assistant/src/grammar/` — a new preset
+  gets a board on the Assistant Presets canvas and an id in the grammar first, then its
   renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
   `conversations/registry.ts`. An unbuilt preset renders a labelled placeholder; a renderer reads
   only its preset's options — a screen that needs more is a grammar change, not a prop.

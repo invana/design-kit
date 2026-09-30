@@ -1,12 +1,12 @@
 # Components tracker
 
-Status of every component planned in the [Assistant Package RFC](https://claude.ai/artifact/9phFHPT243XVFihvVt62wr), across packages. The contract it follows is [Analyst Flow Grammar](https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo).
+Status of every component the assistant needs, across packages. The design reference is the [Assistant Presets](https://claude.ai/artifact/DFrcsV7JSR2Ef7PSJAHztz) canvas: one board per ask and answer-block preset, each variant on a board is one story.
 
-**Update the row in the same commit that changes the component.** Edit only the `Status` cell unless the design changes; a design change goes to the RFC or the grammar first.
+**Update the row in the same commit that changes the component.** Edit only the `Status` cell unless the design changes; a design change goes to the canvas first.
 
 - **Change:** `stays` · `move in` · `move out` · `extend` · `new` · `compose` (preset from existing parts, story only) · `later` (needs a dependency)
 - **Status:** `done` (in the repo and matches the row) · `partial` (exists, change not made) · `todo` (not started)
-- **Tier:** `today` · `next` · `later`, as in the RFC
+- **Tier:** `today` · `next` · `later`
 - **Slice** (preset registry): 0 contract · 1 supply-chain · 2 health · 3 trader · 4 breeder · 5 statistics
 - Folders are relative to the repo root; renderer files in the preset registry are relative to `packages/assistant/src/`.
 
@@ -56,6 +56,7 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | done | today |
 | ClarifyCard time (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | done | today |
 | ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | done | today |
+| ClarifyCard rich options (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | todo | next |
 | InterpretationStrip | `packages/assistant/src/asks/interpretation-strip.tsx` | new | todo | today |
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
 | PlanPreview | `packages/assistant/src/asks/plan-preview.tsx` | new | todo | next |
@@ -252,7 +253,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 
 ## Preset registry
 
-One renderer file per preset id in `assistant/src/`. `proposed` ids are added to Analyst Flow Grammar before they are built.
+One renderer file per preset id in `assistant/src/`. `proposed` ids get a board on the canvas before they are built.
 
 
 ### Ask presets
