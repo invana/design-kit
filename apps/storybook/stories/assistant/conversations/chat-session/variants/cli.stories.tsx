@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ChatSession } from '@invana/assistant';
 
-import { ScenarioPlayer } from '../player';
+import { ScenarioPlayer } from './player';
 
 const meta: Meta<typeof ChatSession> = {
-  title: 'Assistant/Styles/CLI',
+  title: 'Assistant/Conversations/ChatSession',
   component: ChatSession,
   parameters: { layout: 'fullscreen' },
 };
@@ -22,6 +22,6 @@ type Story = StoryObj<typeof meta>;
  * their own timing (`useChatSession().play`). Press Play on a moment, or send a prompt of your own.
  * Clicking an elapsed time opens the run (`onOpenRun`); every action lands in the event log.
  */
-export const Walkthrough: Story = {
+export const CliVariant: Story = {
   render: () => <ScenarioPlayer variant="cli" widths={[440, 720, 320]} />,
 };

@@ -35,7 +35,7 @@ import {
   longScenario,
   respond,
 } from '@invana/assistant/fixtures';
-import { CHAT_ICONS, logEvent } from '../chat-kit';
+import { CHAT_ICONS, logEvent } from '../../../chat-kit';
 
 // Story chrome, not a kit component: a ChatSession driven by recorded runs,
 // with a Play button per moment of the walkthrough. The session is the kit;

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ChatSession } from '@invana/assistant';
 
-import { ScenarioPlayer } from '../player';
+import { ScenarioPlayer } from './player';
 
 const meta: Meta<typeof ChatSession> = {
-  title: 'Assistant/Styles/Web',
+  title: 'Assistant/Conversations/ChatSession',
   component: ChatSession,
   parameters: { layout: 'fullscreen' },
 };
@@ -21,6 +21,6 @@ type Story = StoryObj<typeof meta>;
  * The same spec and the same recorded patches as the CLI story, drawn by the other variant; the
  * composer is the same in both. Press Play on a moment, or send a prompt of your own.
  */
-export const Walkthrough: Story = {
+export const WebVariant: Story = {
   render: () => <ScenarioPlayer variant="web" widths={[420, 720, 280]} />,
 };
