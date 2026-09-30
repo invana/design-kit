@@ -128,6 +128,22 @@ export interface DataTableProps<TData extends RowData> {
    * leading edge, so it is still findable after a scroll.
    */
   isRowSelected?: (row: TData) => boolean;
+  /**
+   * Rows called out for what they say — the worst store, the outlier — on a
+   * tinted ground. Unlike `isRowSelected` nothing is open elsewhere, so there
+   * is no leading rule.
+   */
+  isRowHighlighted?: (row: TData) => boolean;
+  /**
+   * The total row: set bold under a rule, and not counted among the rows a
+   * preview says it shows. Pass it last in `data`.
+   */
+  isTotalRow?: (row: TData) => boolean;
+  /**
+   * The narrowest the table may draw, in px. A wide table keeps its columns
+   * legible and scrolls sideways instead of squeezing them.
+   */
+  minWidth?: number;
   /** Makes rows activate — click, `Enter` or `Space`. */
   onRowClick?: (row: TData) => void;
   /**
@@ -300,6 +316,9 @@ export function DataTable<TData extends RowData>({
   bordered = true,
   rowIndent,
   isRowSelected,
+  isRowHighlighted,
+  isTotalRow,
+  minWidth,
   onRowClick,
   preview,
 }: DataTableProps<TData>) {
@@ -450,6 +469,7 @@ export function DataTable<TData extends RowData>({
             density={density}
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
+              minWidth,
             }}
           >
             <TableHeader>
@@ -537,6 +557,10 @@ export function DataTable<TData extends RowData>({
                             : undefined
                         }
                         className={cn(
+                          isRowHighlighted?.(row.original) &&
+                            "bg-primary/15 hover:bg-primary/15",
+                          isTotalRow?.(row.original) &&
+                            "border-t border-border font-semibold hover:bg-transparent [&>td]:border-b-0",
                           isRowSelected?.(row.original) &&
                             "bg-accent shadow-[inset_2px_0_0_var(--color-primary)] hover:bg-accent",
                           onRowClick &&
@@ -609,7 +633,7 @@ export function DataTable<TData extends RowData>({
           <div className="flex items-baseline justify-between gap-2 text-sm text-muted-foreground">
             <span>
               {preview.total != null
-                ? `${data.length} of ${preview.total.toLocaleString()}${preview.noun ? ` · ${preview.noun}` : ""}`
+                ? `${isTotalRow ? data.filter((r) => !isTotalRow(r)).length : data.length} of ${preview.total.toLocaleString()}${preview.noun ? ` · ${preview.noun}` : ""}`
                 : null}
             </span>
             {preview.action}
