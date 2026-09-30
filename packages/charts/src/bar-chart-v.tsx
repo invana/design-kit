@@ -23,6 +23,11 @@ interface ColumnBase {
 export interface SingleColumnDatum extends ColumnBase {
   value: number
   display?: React.ReactNode
+  /**
+   * What the column was meant to reach — drawn as a dashed column the value
+   * stands inside, so falling short reads as the gap between them.
+   */
+  plan?: number
 }
 
 /** A group of columns side by side, one per {@link BarSeries}, in the same order. */
@@ -90,9 +95,12 @@ export interface BarChartVProps
    * caps, and carry their values in the muted text colour.
    */
   variant?: "default" | "comparison"
+  /** Names the dashed plan columns in the legend — `plan`. */
+  planLabel?: React.ReactNode
 }
 
 interface Mark {
+  plan?: number
   value: number
   display: React.ReactNode
   color: string
@@ -128,6 +136,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
       labelMode = "last",
       caption,
       variant = "default",
+      planLabel,
       className,
       ...props
     },
@@ -152,6 +161,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
           }))
         : [
             {
+              plan: d.plan,
               value: d.value,
               display: d.display ?? d.value,
               color: i === emphasis ? (highlightColor ?? color) : color,
@@ -159,16 +169,24 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
           ],
     )
 
-    const largest = Math.max(0, ...marks.flat().map((m) => m.value), target?.value ?? 0)
+    const largest = Math.max(
+      0,
+      ...marks.flat().map((m) => Math.max(m.value, m.plan ?? 0)),
+      target?.value ?? 0,
+    )
+    const planned = marks.some((g) => g.some((m) => m.plan != null))
     const ceiling = max ?? (largest || 1)
     const labelled = (i: number) =>
       labelMode === "all" || (labelMode === "last" && i === emphasis)
     const at = (v: number) => `${(v / ceiling) * 100}%`
     const comparison = variant === "comparison"
 
+    const legend = (series != null && series.length > 1) || (planned && planLabel != null)
     const rules = [
       ...gridlines.map((g) => ({ key: `g${g}`, value: g, label: g as React.ReactNode })),
-      ...(target?.label != null
+      // With a legend the target is named there, and a gutter label would only
+      // take width from the plot.
+      ...(target?.label != null && !legend
         ? [{ key: "target", value: target.value, label: target.label }]
         : []),
     ]
@@ -210,10 +228,17 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
                       <div
                         key={k}
                         className={cn(
-                          "flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1",
+                          "relative flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1",
                           !comparison && "max-w-6",
                         )}
                       >
+                        {m.plan != null ? (
+                          <span
+                            aria-hidden
+                            className="absolute inset-x-0 bottom-0 border border-dashed border-muted-foreground"
+                            style={{ height: `${Math.max(0, (m.plan / ceiling) * 100)}%` }}
+                          />
+                        ) : null}
                         {labelled(i) ? (
                           <span
                             className={cn(
@@ -226,7 +251,10 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
                         ) : null}
                         <span
                           title={`${textOf(data[i]!.label)}: ${textOf(m.display)}`}
-                          className={cn("w-full", !comparison && "rounded-t-[4px]")}
+                          className={cn(
+                            m.plan != null ? "relative w-2/3" : "w-full",
+                            !comparison && "rounded-t-[4px]",
+                          )}
                           style={{
                             height: `${Math.max(0, (m.value / ceiling) * 100)}%`,
                             background: m.color,
@@ -292,11 +320,14 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
           </div>
         </div>
 
-        {series && series.length > 1 ? (
+        {legend ? (
           <Legend>
-            {series.map((s, k) => (
-              <LegendItem key={k} color={seriesColor(k)} label={s.name} />
+            {(series ?? []).map((s, k) => (
+              <LegendItem key={k} kind="box" color={seriesColor(k)} label={s.name} />
             ))}
+            {planned && planLabel != null ? (
+              <LegendItem kind="outline" color="var(--color-muted-foreground)" label={planLabel} />
+            ) : null}
             {target?.label != null ? (
               <LegendItem
                 kind="dashed"

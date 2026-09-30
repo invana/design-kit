@@ -23,6 +23,11 @@ export interface BarDatum {
   color?: string
   /** What the tip should read, if not the raw value. */
   display?: React.ReactNode
+  /**
+   * Drawn as the remainder rather than an item — `3 others`, the rest folded
+   * into one line: its label and bar in the muted colour. `ranked` only.
+   */
+  muted?: boolean
 }
 
 export interface BarChartHProps
@@ -46,6 +51,12 @@ export interface BarChartHProps
   variant?: "tips" | "ranked"
   /** The colour of a bar below zero, in `ranked`. */
   negativeColor?: string
+  /**
+   * `ranked` only: bars grow both ways from a zero rule in the middle, and the
+   * line under them says what each side means — `− pulls margin down`,
+   * `lifts it +`.
+   */
+  diverging?: { below?: React.ReactNode; above?: React.ReactNode }
 }
 
 /**
@@ -70,6 +81,7 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
       caption,
       variant = "tips",
       negativeColor = "var(--color-destructive)",
+      diverging,
       className,
       ...props
     },
@@ -77,29 +89,64 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
   ) => {
     if (variant === "ranked") {
       const ceiling = max ?? (Math.max(...data.map((d) => Math.abs(d.value)), 0) || 1)
+      const share = (d: BarDatum) => Math.min(100, (Math.abs(d.value) / ceiling) * 100)
+      const fill = (d: BarDatum) =>
+        d.color ??
+        (d.muted
+          ? "color-mix(in srgb, var(--color-muted-foreground) 40%, transparent)"
+          : d.value < 0
+            ? negativeColor
+            : color)
+      // Below ~290px the label and value columns narrow, so the bars keep their length.
+      const columns =
+        labelWidth != null
+          ? { gridTemplateColumns: `${labelWidth}px minmax(0, 1fr) 40px` }
+          : undefined
       return (
-        <div ref={ref} className={cn("flex flex-col gap-1.5", className)} {...props}>
+        <div ref={ref} className={cn("@container flex flex-col gap-1.5", className)} {...props}>
           {caption != null ? (
             <span className="text-sm text-muted-foreground">{caption}</span>
           ) : null}
           {data.map((d, i) => (
             <div
               key={i}
-              className="grid items-center gap-2"
-              style={{ gridTemplateColumns: `${labelWidth ?? 96}px minmax(0, 1fr) auto` }}
+              className={cn(
+                "grid items-center gap-[7px] text-sm",
+                labelWidth == null &&
+                  "grid-cols-[96px_minmax(0,1fr)_40px] @max-[290px]:grid-cols-[74px_minmax(0,1fr)_36px]",
+              )}
+              style={columns}
             >
-              <span className="min-w-0 text-pretty">{d.label}</span>
-              <span
-                title={`${d.label}: ${d.display ?? d.value}`}
-                className="h-2"
-                style={{
-                  width: `${Math.min(100, (Math.abs(d.value) / ceiling) * 100)}%`,
-                  background: d.color ?? (d.value < 0 ? negativeColor : color),
-                }}
-              />
-              <span className="min-w-[3ch] text-end tabular-nums">{d.display ?? d.value}</span>
+              <span className={cn("min-w-0 truncate", d.muted && "text-muted-foreground")}>{d.label}</span>
+              {diverging ? (
+                <span className="relative block h-2 before:absolute before:-inset-y-[3px] before:left-1/2 before:border-l before:border-border">
+                  <span
+                    title={`${d.label}: ${d.display ?? d.value}`}
+                    className="absolute top-0 h-2 rounded-[1px] opacity-85"
+                    style={{
+                      left: d.value < 0 ? `${50 - share(d) / 2}%` : "50%",
+                      width: `${share(d) / 2}%`,
+                      background: fill(d),
+                    }}
+                  />
+                </span>
+              ) : (
+                <span
+                  title={`${d.label}: ${d.display ?? d.value}`}
+                  className="h-2 rounded-[1px] opacity-85"
+                  style={{ width: `${share(d)}%`, background: fill(d) }}
+                />
+              )}
+              <span className="text-end font-mono text-xs tabular-nums">{d.display ?? d.value}</span>
             </div>
           ))}
+          {diverging ? (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>{diverging.below}</span>
+              <span>0</span>
+              <span>{diverging.above}</span>
+            </div>
+          ) : null}
         </div>
       )
     }

@@ -20,6 +20,8 @@ export interface SparklineProps
   color?: string
   /** Washes the area under the line at 10%. Off by default at this size. */
   area?: boolean
+  /** The line's width, in px. `2` by default; a sparkline beside a figure draws finer. */
+  strokeWidth?: number
   /** A filled dot on the last point, ringed in the surface colour. */
   endMarker?: boolean
   /** What the line is, for assistive tech. The surface around it usually says. */
@@ -44,6 +46,7 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
       height = 20,
       color = "var(--color-data-1)",
       area,
+      strokeWidth = 2,
       endMarker = true,
       label,
       className,
@@ -86,7 +89,7 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
           d={d}
           fill="none"
           stroke={color}
-          strokeWidth={2}
+          strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
