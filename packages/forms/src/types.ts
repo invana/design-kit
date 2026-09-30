@@ -1,4 +1,4 @@
-import type { Control } from 'react-hook-form';
+import type { Control, FieldValues, RegisterOptions } from 'react-hook-form';
 
 export type LabelPosition = 'side' | 'top';
 
@@ -121,6 +121,11 @@ export type FieldConfig = {
    * "active" chip in an inspector row). See {@link FieldBadge}.
    */
   badge?: FieldBadge;
+  /**
+   * Validation, as react-hook-form's rules — `validate: (v) => v > 0 || 'Must
+   * be above 0'`. The message shows under the field.
+   */
+  rules?: Omit<RegisterOptions<FieldValues>, 'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'>;
 };
 
 export type RowConfig = {
@@ -164,4 +169,17 @@ export interface ObjectFieldProps {
    * Below `md` the grid always collapses to a single column.
    */
   columns?: number;
+  /**
+   * What the columns answer to. `viewport` (the default) is the grid of a
+   * page: `columns` wide from `md` up. `container` is a form inside a card or
+   * a chat turn, which is narrow on any screen: two columns once the form
+   * itself is 280px wide, one below, and a lone last field takes the row.
+   */
+  fit?: 'viewport' | 'container';
+  /**
+   * How a field's `group` is drawn. `accordion` (the default) folds each
+   * group under a header with its count — a settings panel. `section` sets
+   * each under a small caps label and keeps it open — a short form in a card.
+   */
+  groupAs?: 'accordion' | 'section';
 }

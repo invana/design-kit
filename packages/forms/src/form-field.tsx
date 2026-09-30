@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
   Badge,
   cn,
+  Eyebrow,
 } from '@invana/ui';
 import {
   FormField as FormFieldBase,
@@ -724,6 +725,7 @@ function renderField(
       control={control}
       name={`${parentName}.${field.name}`}
       defaultValue={field.defaultValue as AnyValue}
+      rules={field.rules}
       render={({ field: rhf }) => {
         const common: BaseFieldProps = {
           label: field.label ?? humanize(field.name),
@@ -810,11 +812,34 @@ function renderGrid(
   labelPosition: LabelPosition,
   size: FieldSize,
   columns: number,
-  key?: string
+  key?: string,
+  fit: 'viewport' | 'container' = 'viewport'
 ) {
   // Default 2-col layout keeps the plain `md:grid-cols-2` utility; custom
   // counts drive the template from `--ff-cols`.
   const customCols = columns !== 2;
+  if (fit === 'container') {
+    // A form in a card answers to the card, not the screen: two columns once
+    // it is 280px wide, and a lone last field takes the whole row.
+    return (
+      <div key={key} className="@container">
+        <div
+          className={cn(
+            'grid grid-cols-1',
+            SIZE[size].gap,
+            columns > 1 &&
+              '@min-[280px]:grid-cols-2 @min-[280px]:[&>*:last-child:nth-child(odd)]:col-span-2'
+          )}
+        >
+          {fields.map((f) => (
+            <div key={f.name} className={f.className}>
+              {renderField(f, parentName, control, labelPosition, size)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       key={key}
@@ -858,10 +883,11 @@ function renderRows(
   control: any,
   labelPosition: LabelPosition,
   size: FieldSize,
-  columns: number
+  columns: number,
+  fit: 'viewport' | 'container' = 'viewport'
 ) {
   if (!rowConfig || rowConfig.length === 0) {
-    return renderGrid(fields, parentName, control, labelPosition, size, columns);
+    return renderGrid(fields, parentName, control, labelPosition, size, columns, undefined, fit);
   }
   const used = new Set(rowConfig.flatMap((r) => r.fields));
   const unassigned = fields.filter((f) => !used.has(f.name));
@@ -881,7 +907,8 @@ function renderRows(
           labelPosition,
           size,
           columns,
-          row.id
+          row.id,
+          fit
         );
       })}
       {unassigned.length > 0 &&
@@ -892,7 +919,8 @@ function renderRows(
           labelPosition,
           size,
           columns,
-          '_unassigned'
+          '_unassigned',
+          fit
         )}
     </div>
   );
@@ -907,6 +935,8 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   columns = 2,
+  fit = 'viewport',
+  groupAs = 'accordion',
 }) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
@@ -932,12 +962,24 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
             control,
             labelPosition,
             size,
-            columns
+            columns,
+            fit
           )}
         </div>
       )}
 
-      {groupedEntries.length > 0 && (
+      {groupedEntries.length > 0 && groupAs === 'section' && (
+        <div className={SIZE[size].section}>
+          {groupedEntries.map(([group, gFields]) => (
+            <section key={group} className={SIZE[size].stack}>
+              <Eyebrow>{groupConfigById.get(group)?.label ?? humanize(group)}</Eyebrow>
+              {renderRows(gFields, rowConfig, name, control, labelPosition, size, columns, fit)}
+            </section>
+          ))}
+        </div>
+      )}
+
+      {groupedEntries.length > 0 && groupAs === 'accordion' && (
         <Accordion
           type="multiple"
           defaultValue={groupedEntries.map(([k]) => k)}
@@ -977,7 +1019,8 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
                     control,
                     labelPosition,
                     size,
-                    columns
+                    columns,
+                    fit
                   )}
                 </div>
               </AccordionContent>
