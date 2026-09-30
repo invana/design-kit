@@ -77,7 +77,8 @@
           "consequence": "Registers a pilot in the quality-improvement log with a weekly readout. No change for patients until clinical governance approves.",
           "actions": [
             { "id": "register-pilot", "label": "Register pilot", "variant": "primary" },
-            { "id": "edit", "label": "Edit", "variant": "secondary" } ] } ],
-      "suggestions": ["How many patients would the pilot need to detect a 2-point drop?", "Does the same pattern hold for knees?"] }
+            { "id": "edit", "label": "Edit", "variant": "secondary" } ] } ] },
+    { "id": "t12", "role": "assistant", "kind": "ask", "stage": "explain", "state": "pending",
+      "ask": { "preset": "suggestions", "items": ["How many patients would the pilot need to detect a 2-point drop?", "Does the same pattern hold for knees?"] } }
   ]
 }

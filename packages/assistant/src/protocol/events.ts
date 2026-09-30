@@ -25,8 +25,6 @@ export type ConversationEvent =
   | { type: "template"; turn: string; preset: string }
   /** Change the current answer in place — `by-region`. */
   | { type: "refine"; turn: string; refine: string }
-  /** A suggested follow-up was picked; it is sent as the next prompt. */
-  | { type: "suggestion"; turn: string; text: string }
   | { type: "rate"; turn: string; value: number }
   | { type: "stop" }
   | { type: "retry"; turn: string }
@@ -44,7 +42,6 @@ export const EVENT_TYPES = [
   "open",
   "template",
   "refine",
-  "suggestion",
   "rate",
   "stop",
   "retry",

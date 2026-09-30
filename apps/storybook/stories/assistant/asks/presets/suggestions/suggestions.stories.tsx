@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import type { AnswerTurn, BlockSpec } from '@invana/assistant';
+import type { AskSpec, AskTurn } from '@invana/assistant';
 
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Answers/Blocks/Suggestions',
+  title: 'Assistant/Asks/Presets/Suggestions',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -13,21 +13,22 @@ const meta: Meta<typeof Board> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const next = (id: string, block: BlockSpec): AnswerTurn => ({
+const next = (id: string, spec: AskSpec, settled?: Partial<AskTurn>): AskTurn => ({
   id,
   role: 'assistant',
-  kind: 'answer',
-  state: 'complete',
-  label: 'next',
-  blocks: [block],
+  kind: 'ask',
+  stage: 'explain',
+  state: 'pending',
+  ask: spec,
+  ...settled,
 });
 
 const items = ['Break freight down by carrier', 'Compare with Q3 last year', 'Alert me if it gets worse'];
 
 /**
- * Follow-ups that reuse the current scope. Picking one sends a `suggestion` event, which the API
- * sends on as the next prompt (see the Actions panel). They run along a line, stack one per line,
- * or sit under headings; one already sent stays, dimmed.
+ * Follow-ups after an answer, each reusing the current scope. Picking one is the ask's `reply`,
+ * which the API sends on as the next prompt (see the Actions panel). They run along a line, stack
+ * one per line, or sit under headings; answered, the one picked stays, dimmed.
  */
 export const Suggestions: Story = {
   name: 'Suggestions',
@@ -48,7 +49,7 @@ export const Suggestions: Story = {
       },
       {
         caption: 'One already sent',
-        turn: next('sent', { preset: 'suggestions', items, sent: ['Break freight down by carrier'] }),
+        turn: next('sent', { preset: 'suggestions', items }, { state: 'answered', value: 'Break freight down by carrier' }),
       },
     ],
   },

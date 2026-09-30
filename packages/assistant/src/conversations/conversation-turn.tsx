@@ -45,7 +45,7 @@ function Block({
       <BlockEmpty
         text={block.emptyText ?? "Nothing to show."}
         suggestions={block.emptySuggestions}
-        onSuggest={(text) => onEvent({ type: "suggestion", turn: turn.id, text })}
+        onSuggest={(text) => onEvent({ type: "prompt", text })}
       />
     ) : !Renderer ? (
       <Placeholder kind="block" preset={block.preset} options={block} />
@@ -140,9 +140,6 @@ function AnswerTurnView({
         </EmissionCard>
       ) : null}
       {ownCards.map(block)}
-      {turn.suggestions?.length
-        ? block({ preset: "suggestions", items: turn.suggestions }, 0)
-        : null}
     </div>
   )
 }
@@ -152,6 +149,12 @@ const HEADER_WORD: Partial<Record<string, string>> = { confirm: "confirm", appro
 
 const STAGE_NAME = new Map<string, string>(STAGES.map((s) => [s.id, s.name]))
 const stageName = (stage: string) => (STAGE_NAME.get(stage) ?? stage).toLowerCase()
+
+/**
+ * Asks drawn without a card: follow-ups sit under the answer as chips, and the
+ * chips themselves show what was picked.
+ */
+const UNFRAMED = new Set<string>(["suggestions"])
 
 /**
  * An ask renders in ClarifyCard, which draws its state and the stage that
@@ -173,6 +176,9 @@ function AskTurnView({
     turn.state === "answered" && turn.answeredAt
       ? relativeTime(turn.answeredAt, now ?? Date.now())
       : undefined
+  if (Renderer && UNFRAMED.has(turn.ask.preset)) {
+    return <Renderer turn={turn} options={turn.ask} onEvent={onEvent} />
+  }
   return (
     <ClarifyCard
       state={turn.state}
@@ -192,8 +198,7 @@ function AskTurnView({
 
 /**
  * One turn, rendered by role and kind: the analyst's prompt, an ask in its
- * frame, or an answer card with its envelope, followed by any proposal and the
- * suggested follow-ups.
+ * frame, or an answer card with its envelope, followed by any proposal.
  */
 export function ConversationTurn({ turn, registry, onEvent, now }: ConversationTurnProps) {
   if (turn.role === "analyst") {

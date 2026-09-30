@@ -299,6 +299,19 @@ export interface RangeOptions {
 }
 
 /**
+ * Follow-ups after an answer, each a whole prompt that reuses the current
+ * scope. The reply is the one picked, and the API sends it on as the next
+ * prompt; the one picked stays, dimmed.
+ */
+export interface SuggestionsOptions {
+  items?: string[]
+  /** Follow-ups under a heading each — `Go deeper`, `Act`. */
+  groups?: { label: string; items: string[] }[]
+  /** `stack` puts one per line, full width. Narrow threads stack on their own. */
+  layout?: "wrap" | "stack"
+}
+
+/**
  * Ask preset → the options it reads.
  *
  * Keyed by exactly the grammar's ask preset ids; `grammar.test.ts` checks it.
@@ -324,6 +337,7 @@ export interface AskOptionsByPreset {
   modelspec: ModelSpecOptions
   hypothesis: HypothesisOptions
   range: RangeOptions
+  suggestions: SuggestionsOptions
 }
 
 /** Ask preset → the type of the value the analyst's reply carries. */
@@ -349,6 +363,8 @@ export interface AskValueByPreset {
   modelspec: { outcome: string; predictors: string[]; group?: string; controls: string[] }
   hypothesis: { test: string; tails: 1 | 2; alpha: number }
   range: { min: number; max: number }
+  /** The follow-up picked, as it reads. */
+  suggestions: string
 }
 
 export type AskSpec = {
@@ -429,7 +445,7 @@ export interface ProposalOptions {
 export interface CannotOptions {
   reason: string
   remedy: string
-  /** Nearby questions the data can answer; each is sent as the next prompt. */
+  /** Nearby questions the data can answer; each is sent as a `prompt`. */
   nearest?: string[]
   /** Answered for part of what was asked; the reason says which part is missing. */
   partial?: boolean
@@ -465,16 +481,6 @@ export interface ScopeOptions {
   hint?: string
   /** The part whose choices are showing — a restored view, or a story. */
   openPart?: number
-}
-
-export interface SuggestionsOptions {
-  items?: string[]
-  /** Follow-ups under a heading each — `Go deeper`, `Act`. */
-  groups?: { label: string; items: string[] }[]
-  /** `stack` puts one per line, full width. Narrow threads stack on their own. */
-  layout?: "wrap" | "stack"
-  /** Follow-ups already sent from here; they stay, dimmed and disabled. */
-  sent?: string[]
 }
 
 export interface TraceOptions {
@@ -617,7 +623,6 @@ export interface BlockOptionsByPreset {
   caveat: CaveatOptions
   scope: ScopeOptions
   checks: { rows: { label: string; ok: boolean; count?: Figure }[] }
-  suggestions: SuggestionsOptions
   trace: TraceOptions
   test: {
     verdict: string
@@ -745,7 +750,6 @@ export interface AnswerTurn {
   /** Streamed while the answer runs; kept as the record of what was done. */
   trace?: TraceStep[]
   blocks: BlockSpec[]
-  suggestions?: string[]
 }
 
 export type Turn = AnalystTurn | AskTurn | AnswerTurn

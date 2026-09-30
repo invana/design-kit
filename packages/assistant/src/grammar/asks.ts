@@ -1,4 +1,4 @@
-// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 3).
+// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 5).
 // Do not edit by hand: change the grammar first, then copy the ids here.
 // grammar.test.ts fails when these ids and the preset registry disagree.
 
@@ -27,6 +27,7 @@ export const ASKS = [
   { id: "scenario", name: "Scenario inputs", stage: "analyse", preset: "form" },
   { id: "format", name: "Choose the output", stage: "explain", preset: "quick" },
   { id: "rate", name: "Rate the answer", stage: "explain", preset: "scale" },
+  { id: "next", name: "Suggest what's next", stage: "explain", preset: "suggestions" },
   { id: "approve", name: "Approve an action", stage: "act", preset: "approval" },
   { id: "schedule", name: "Schedule and share", stage: "monitor", preset: "multistep" },
   { id: "reading", name: "Check my reading", stage: "frame", preset: "interpretation" },

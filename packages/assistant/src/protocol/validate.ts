@@ -33,13 +33,12 @@ const ANSWER_STATES = new Set(["running", "partial", "complete", "cannot", "erro
 
 /**
  * Presets a pattern names that the answer carries elsewhere: the envelope, or
- * the answer's own `suggestions` and `trace`. Sent as blocks they are an error.
+ * the answer's own `trace`. Sent as blocks they are an error.
  */
 const CARRIED: Record<string, (a: AnswerTurn) => boolean> = {
   scope: (a) => !!a.envelope?.scope?.length,
   method: (a) => !!a.envelope?.method,
   caveat: (a) => !!a.envelope?.caveats?.length,
-  suggestions: (a) => !!a.suggestions?.length,
   trace: (a) => !!a.trace?.length,
 }
 
@@ -133,7 +132,7 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
       for (const block of turn.blocks) {
         if (!blocks.has(block?.preset)) error(`Unknown block preset "${block?.preset}".`, id)
         else if (block.preset in CARRIED) {
-          error(`"${block.preset}" is part of the answer, not a block: send it in the ${block.preset === "suggestions" || block.preset === "trace" ? `answer's "${block.preset}"` : "envelope"}.`, id)
+          error(`"${block.preset}" is part of the answer, not a block: send it in the ${block.preset === "trace" ? `answer's "trace"` : "envelope"}.`, id)
         }
         if (block?.status !== undefined && block.status !== "loading" && block.status !== "empty") {
           error(`Unknown block status "${block.status as string}".`, id)

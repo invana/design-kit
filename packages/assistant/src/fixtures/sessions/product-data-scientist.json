@@ -159,7 +159,8 @@
           "actions": [
             { "id": "start-retraining", "label": "Start retraining", "variant": "primary" },
             { "id": "edit", "label": "Edit", "variant": "secondary" },
-            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ],
-      "suggestions": ["Design a holdout test of the checklist", "Which checklist steps matter most?"] }
+            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ] },
+    { "id": "t18", "role": "assistant", "kind": "ask", "stage": "explain", "state": "pending",
+      "ask": { "preset": "suggestions", "items": ["Design a holdout test of the checklist", "Which checklist steps matter most?"] } }
   ]
 }

@@ -13,7 +13,6 @@ import { ProposalBlock } from "../answers/blocks/proposal"
 import { RankedBlock } from "../answers/blocks/ranked"
 import { RecordBlock } from "../answers/blocks/record"
 import { ScopeBlock } from "../answers/blocks/scope"
-import { SuggestionsBlock } from "../answers/blocks/suggestions"
 import { TableBlock } from "../answers/blocks/table"
 import { TimelineBlock } from "../answers/blocks/timeline"
 import { TimeseriesBlock } from "../answers/blocks/timeseries"
@@ -24,6 +23,7 @@ import { MultiAsk } from "../asks/presets/multi"
 import { MultistepAsk } from "../asks/presets/multistep"
 import { QuickAsk } from "../asks/presets/quick"
 import { SingleAsk } from "../asks/presets/single"
+import { SuggestionsAsk } from "../asks/presets/suggestions"
 import type { AskPresetId, BlockPresetId } from "../grammar"
 import type { ConversationEvent } from "../protocol/events"
 import type {
@@ -87,6 +87,7 @@ export const BUILT_IN_ASKS: AskRegistry = {
   modelspec: null,
   hypothesis: null,
   range: null,
+  suggestions: SuggestionsAsk,
 }
 
 export const BUILT_IN_BLOCKS: BlockRegistry = {
@@ -113,7 +114,6 @@ export const BUILT_IN_BLOCKS: BlockRegistry = {
   caveat: CaveatBlock,
   scope: ScopeBlock,
   checks: null,
-  suggestions: SuggestionsBlock,
   trace: TraceBlock,
   test: null,
   coef: null,

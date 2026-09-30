@@ -82,8 +82,8 @@
       "blocks": [
         { "preset": "cannot",
           "reason": "Trade history starts in March 2021, when the desk moved to the current order system. 2019 isn't held.",
-          "remedy": "Load the legacy order archive (2015–2021) to answer this." } ],
-      "suggestions": ["Use the five hot prints from 2022–2024 instead"] },
+          "remedy": "Load the legacy order archive (2015–2021) to answer this.",
+          "nearest": ["Use the five hot prints from 2022–2024 instead"] } ] },
     { "id": "t12", "role": "assistant", "kind": "answer", "state": "complete",
       "label": "proposal", "title": "from this thread",
       "blocks": [
@@ -97,7 +97,8 @@
           "actions": [
             { "id": "create-draft-and-alert", "label": "Create draft and alert", "variant": "primary" },
             { "id": "alert-only", "label": "Alert only", "variant": "secondary" },
-            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ],
-      "suggestions": ["Size the hedge to a VaR target instead", "Which names are most exposed to momentum?"] }
+            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ] },
+    { "id": "t13", "role": "assistant", "kind": "ask", "stage": "explain", "state": "pending",
+      "ask": { "preset": "suggestions", "items": ["Size the hedge to a VaR target instead", "Which names are most exposed to momentum?"] } }
   ]
 }

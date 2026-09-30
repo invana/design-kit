@@ -126,7 +126,8 @@
           "actions": [
             { "id": "add-to-plan", "label": "Add to plan", "variant": "primary" },
             { "id": "edit", "label": "Edit", "variant": "secondary" },
-            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ],
-      "suggestions": ["Which markers are linked to drought score?", "How much do these parents' pedigrees overlap?", "Compare with last season's crosses"] }
+            { "id": "not-now", "label": "Not now", "variant": "ghost" } ] } ] },
+    { "id": "t12", "role": "assistant", "kind": "ask", "stage": "explain", "state": "pending",
+      "ask": { "preset": "suggestions", "items": ["Which markers are linked to drought score?", "How much do these parents' pedigrees overlap?", "Compare with last season's crosses"] } }
   ]
 }

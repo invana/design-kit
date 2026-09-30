@@ -91,7 +91,8 @@
       "blocks": [
         { "preset": "files", "files": [
           { "name": "supplier-shift-scenario.xlsx", "size": "64 KB", "digest": "3be0a917" },
-          { "name": "apex-lead-times-12wk.csv", "size": "18 KB", "digest": "f41c02d8" } ] } ],
-      "suggestions": ["Check Brightline's capacity for 50%", "Which SKUs are single-sourced?"] }
+          { "name": "apex-lead-times-12wk.csv", "size": "18 KB", "digest": "f41c02d8" } ] } ] },
+    { "id": "t10", "role": "assistant", "kind": "ask", "stage": "explain", "state": "pending",
+      "ask": { "preset": "suggestions", "items": ["Check Brightline's capacity for 50%", "Which SKUs are single-sourced?"] } }
   ]
 }

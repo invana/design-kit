@@ -3,7 +3,7 @@ import { fn } from "storybook/test";
 import { SuggestionChips } from "@invana/assistant";
 
 const meta: Meta<typeof SuggestionChips> = {
-  title: "Assistant/Followups/SuggestionChips",
+  title: "Assistant/Asks/SuggestionChips",
   component: SuggestionChips,
   parameters: { layout: "padded" },
 };

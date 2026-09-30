@@ -24,3 +24,4 @@ export type {
   ClarifyState,
 } from "@invana/ui"
 export * from "./confirm-card"
+export * from "./suggestion-chips"

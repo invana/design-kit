@@ -27,7 +27,7 @@ socket.on('patch', (patch) => setSpec((s) => applyPatch(s, patch)));
 ```
 
 Every action comes back as one `ConversationEvent` — `prompt`, `reply`, `skip`, `change`, `action`,
-`scope`, `template`, `refine`, `suggestion`, `rate`, `stop`, `retry`. The component changes nothing
+`scope`, `template`, `refine`, `rate`, `stop`, `retry`. The component changes nothing
 itself.
 
 `validate(spec)` checks a payload the compiler cannot see: unknown presets and broken turns are

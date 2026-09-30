@@ -37,14 +37,14 @@ describe("applyPatch", () => {
       { op: "add-trace-step", turn: "t3", step: { id: "read", label: "Read ledger", state: "running" } },
       { op: "add-trace-step", turn: "t3", step: { id: "read", label: "Read ledger", detail: "12,408 rows", state: "done" } },
       { op: "add-block", turn: "t3", block: { preset: "narrative", text: "Margin fell **1.8 pts**." } },
-      { op: "update-turn", turn: "t3", fields: { suggestions: ["By region"] } },
+      { op: "update-turn", turn: "t3", fields: { envelope: { scope: ["Q3 2026"] } } },
       { op: "set-state", turn: "t3", state: "complete" },
     ])
     const t3 = next.turns[2] as AnswerTurn
     expect(t3.state).toBe("complete")
     expect(t3.trace).toEqual([{ id: "read", label: "Read ledger", detail: "12,408 rows", state: "done" }])
     expect(t3.blocks).toHaveLength(1)
-    expect(t3.suggestions).toEqual(["By region"])
+    expect(t3.envelope).toEqual({ scope: ["Q3 2026"] })
   })
 
   it("refuses a patch it cannot place", () => {

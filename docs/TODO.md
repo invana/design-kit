@@ -56,12 +56,13 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | ClarifyCard states (on ClarifyCard) | `packages/assistant/src/asks/clarify-card.tsx` | extend | done | today |
 | ClarifyCard time (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | done | today |
 | ConfirmCard | `packages/assistant/src/asks/confirm-card.tsx` | new | done | today |
+| SuggestionChips | `packages/assistant/src/asks/suggestion-chips.tsx` | new | done | today |
 | ClarifyCard rich options (on ClarifyCard) | `packages/ui/src/components/ui-extended/clarify-card.tsx` | extend | todo | next |
 | InterpretationStrip | `packages/assistant/src/asks/interpretation-strip.tsx` | new | todo | today |
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
 | PlanPreview | `packages/assistant/src/asks/plan-preview.tsx` | new | todo | next |
 | ModelSpec | `packages/assistant/src/asks/model-spec.tsx` | new | todo | next |
-| Ask renderers (20) | `packages/assistant/src/asks/presets/` | new | partial | today |
+| Ask renderers (21) | `packages/assistant/src/asks/presets/` | new | partial | today |
 
 ### Answers: the card and what goes inside it
 
@@ -74,13 +75,12 @@ Everything here is only meaningful relative to a prompt. Conversation is the par
 | TemplatePicker previews (on TemplatePicker) | `packages/assistant/src/answers/template-picker.tsx` | extend | partial | next |
 | AnswerPreview | `packages/assistant/src/answers/answer-preview.tsx` | new | todo | today |
 | TestResult | `packages/assistant/src/answers/test-result.tsx` | new | todo | next |
-| Block renderers (42) | `packages/assistant/src/answers/blocks/` | new | partial | today |
+| Block renderers (41) | `packages/assistant/src/answers/blocks/` | new | partial | today |
 
 ### Follow-ups
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| SuggestionChips | `packages/assistant/src/followups/suggestion-chips.tsx` | new | done | today |
 | RefineChips | `packages/assistant/src/followups/refine-chips.tsx` | new | todo | next |
 | StarterGallery | `packages/assistant/src/followups/starter-gallery.tsx` | new | todo | next |
 
@@ -280,6 +280,7 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids get a board 
 | modelspec (proposed) | `{ outcome, predictors[], group?, controls[] }` | ModelSpec · assistant | `asks/presets/modelspec.tsx` | todo | next | 5 |
 | hypothesis (proposed) | `{ test, tails, alpha }` | ClarifyCard + SegmentedControl + number | `asks/presets/hypothesis.tsx` | todo | next | 5 |
 | range (proposed) | `{ min, max }` | RangeInput · ui | `asks/presets/range.tsx` | todo | next | 5 |
+| suggestions | `string` | SuggestionChips · assistant | `asks/presets/suggestions.tsx` | done | today | 1 |
 
 ### Block presets
 
@@ -308,7 +309,6 @@ One renderer file per preset id in `assistant/src/`. `proposed` ids get a board 
 | caveat | `{ label, text }` | CaveatNote · ui | `answers/blocks/caveat.tsx` | done | today | 1 |
 | scope | `{ parts[] }` | ScopeLine · ui | `answers/blocks/scope.tsx` | done | today | 1 |
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `answers/blocks/checks.tsx` | todo | next | – |
-| suggestions | `{ items[] }` | SuggestionChips · assistant | `answers/blocks/suggestions.tsx` | done | today | 1 |
 | trace | `{ steps[] }` | TraceList · ui | `answers/blocks/trace.tsx` | done | today | 3 |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · assistant | `answers/blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `answers/blocks/coef.tsx` | todo | next | 5 |

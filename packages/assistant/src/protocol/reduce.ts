@@ -11,7 +11,7 @@ export type ConversationPatch =
   | { op: "set-state"; turn: string; state: AskState | AnswerState; value?: unknown }
   | { op: "add-block"; turn: string; block: BlockSpec }
   | { op: "add-trace-step"; turn: string; step: TraceStep }
-  /** Anything else on a turn — its envelope once known, its suggestions at the end. */
+  /** Anything else on a turn — its envelope once known. */
   | { op: "update-turn"; turn: string; fields: Record<string, unknown> }
 
 export class PatchError extends Error {}

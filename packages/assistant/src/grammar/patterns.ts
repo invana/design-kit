@@ -1,4 +1,4 @@
-// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 3).
+// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 5).
 // Do not edit by hand: change the grammar first, then copy the ids here.
 // grammar.test.ts fails when these ids and the preset registry disagree.
 
@@ -12,7 +12,7 @@ export const PATTERNS = [
   { id: "snapshot", name: "KPI snapshot", blocks: ["grid", "timeseries", "narrative", "scope"] },
   { id: "bridge", name: "Change explanation", blocks: ["narrative", "waterfall", "ranked", "citations"] },
   { id: "comparison", name: "Comparison", blocks: ["bars", "table", "caveat"] },
-  { id: "ranking", name: "Ranked list", blocks: ["ranked", "table", "suggestions"] },
+  { id: "ranking", name: "Ranked list", blocks: ["ranked", "table"] },
   { id: "profile", name: "Segment profile", blocks: ["table", "bars", "narrative"] },
   { id: "cohort", name: "Cohort matrix", blocks: ["matrix", "narrative"] },
   { id: "forecast", name: "Forecast", blocks: ["timeseries", "record", "caveat"] },
@@ -25,7 +25,7 @@ export const PATTERNS = [
   { id: "quality", name: "Quality report", blocks: ["checks", "table", "files"] },
   { id: "e360", name: "Entity 360", blocks: ["record", "timeline", "table"] },
   { id: "relmap", name: "Relationship map", blocks: ["subgraph", "ranked"] },
-  { id: "memo", name: "Findings memo", blocks: ["narrative", "citations", "caveat", "suggestions"] },
+  { id: "memo", name: "Findings memo", blocks: ["narrative", "citations", "caveat"] },
   { id: "recommend", name: "Recommendation", blocks: ["table", "ranked", "proposal"] },
   { id: "delivery", name: "Scheduled delivery", blocks: ["files", "proposal", "record"] },
   { id: "shortlist", name: "Candidate shortlist", blocks: ["attr", "histogram", "caveat", "proposal"] },

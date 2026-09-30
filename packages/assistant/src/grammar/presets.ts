@@ -1,4 +1,4 @@
-// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 3).
+// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 5).
 // Do not edit by hand: change the grammar first, then copy the ids here.
 // grammar.test.ts fails when these ids and the preset registry disagree.
 
@@ -27,6 +27,7 @@ export const ASK_PRESETS = [
   { id: "modelspec", name: "Model spec", returns: "{outcome, predictors[], group?, controls[]}", tier: "next" },
   { id: "hypothesis", name: "Hypothesis", returns: "{test, tails, alpha}", tier: "next" },
   { id: "range", name: "Range", returns: "{min, max}", tier: "next" },
+  { id: "suggestions", name: "Suggestions", returns: "string", tier: "today" },
 ] as const
 
 export type AskPresetId = (typeof ASK_PRESETS)[number]["id"]
@@ -56,7 +57,6 @@ export const BLOCK_PRESETS = [
   { id: "caveat", name: "Caveat", tier: "today" },
   { id: "scope", name: "Scope line", tier: "today" },
   { id: "checks", name: "Checks", tier: "next" },
-  { id: "suggestions", name: "Suggestions", tier: "today" },
   { id: "trace", name: "Progress trace", tier: "today" },
   { id: "test", name: "Test result", tier: "next" },
   { id: "coef", name: "Coefficients", tier: "next" },

@@ -30,7 +30,6 @@ const KNOWN_DRIFT: Record<string, string[]> = {
     "t4: Block \"grid\" is not part of pattern \"comparison\".",
     "t8: Pattern \"readout\" expects \"record\", which this answer does not have.",
     "t8: Pattern \"readout\" expects \"proposal\", which this answer does not have.",
-    "t10: Pattern \"memo\" expects \"suggestions\", which this answer does not have.",
     "t10: Block \"ranked\" is not part of pattern \"memo\".",
   ],
   supplyChainPlanner: [

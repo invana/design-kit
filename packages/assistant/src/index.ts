@@ -5,9 +5,6 @@ export * from "./conversations"
 export * from "./asks"
 export * from "./answers"
 
-// Follow-ups under an answer.
-export * from "./followups"
-
 // The contract: types, events, patches, validation, and the grammar's ids.
 export * from "./protocol"
 export * from "./grammar"
