@@ -85,10 +85,11 @@ export interface TraceStepProps
   onSelect?: () => void
   /**
    * Where the step is, in a `progress` list: `done`, `running`, `pending`,
-   * `failed`, or `waiting` on the reader. Defaults to `done`. The run view says
-   * the same with `dim` and `struck`.
+   * `failed`, `waiting` on the reader, `retrying` after a failed attempt, or
+   * `stopped` by the reader. Defaults to `done`. The run view says the same
+   * with `dim` and `struck`.
    */
-  status?: "done" | "running" | "pending" | "failed" | "waiting"
+  status?: "done" | "running" | "pending" | "failed" | "waiting" | "retrying" | "stopped"
   /** Why a failed step failed, on a line under it in a `progress` list. */
   error?: React.ReactNode
 }
@@ -99,6 +100,8 @@ const STATUS_DOT = {
   pending: "border-[1.5px] border-muted-foreground",
   failed: "bg-destructive",
   waiting: "border-[1.5px] border-info",
+  retrying: "bg-warning animate-pulse motion-reduce:animate-none",
+  stopped: "bg-warning",
 }
 
 /**
