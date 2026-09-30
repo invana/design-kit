@@ -7,26 +7,43 @@ import streaming from "./conversations/streaming.json"
 import streamingScript from "./conversations/streaming.script.json"
 import taskDashboard from "./conversations/task-dashboard.json"
 import turnLabels from "./conversations/turn-labels.json"
-import equityTrader from "./sessions/equity-trader.json"
-import healthResearcher from "./sessions/health-researcher.json"
-import plantBreeder from "./sessions/plant-breeder.json"
-import productDataScientist from "./sessions/product-data-scientist.json"
-import supplyChainPlanner from "./sessions/supply-chain-planner.json"
+import breeder from "../data/conversations/breeder.json"
+import dataScientist from "../data/conversations/data-scientist.json"
+import network from "../data/conversations/network.json"
+import planner from "../data/conversations/planner.json"
+import researcher from "../data/conversations/researcher.json"
+import trader from "../data/conversations/trader.json"
+import type { UserData } from "./scripts/runs"
 
 /*
- * The research sessions of Analyst Flow Grammar, as the API would send them.
- * They are the acceptance tests and the story data: a slice is done when its
- * session renders with no placeholders.
+ * The users of the assistant, each a conversation as the API would send it:
+ * the thread they open on (the research sessions of Analyst Flow Grammar, and
+ * the airports graph) and the runs recorded for them. They are the acceptance
+ * tests and the story data: a slice is done when its sessions render with no
+ * placeholders.
  *
  * JSON widens every string, so these cannot be checked by the compiler; the
- * cast is honest only because `fixtures.test.ts` runs `validate()` on each.
+ * cast is honest only because `fixtures.test.ts` runs `validate()` on each
+ * session and on every run played onto it.
  */
+export const USERS = {
+  network: network as unknown as UserData,
+  trader: trader as unknown as UserData,
+  breeder: breeder as unknown as UserData,
+  researcher: researcher as unknown as UserData,
+  planner: planner as unknown as UserData,
+  dataScientist: dataScientist as unknown as UserData,
+}
+
+export type UserId = keyof typeof USERS
+
+/** The research sessions alone, as each user opens on them. */
 export const SESSIONS = {
-  plantBreeder: plantBreeder as unknown as ConversationSpec,
-  equityTrader: equityTrader as unknown as ConversationSpec,
-  healthResearcher: healthResearcher as unknown as ConversationSpec,
-  supplyChainPlanner: supplyChainPlanner as unknown as ConversationSpec,
-  productDataScientist: productDataScientist as unknown as ConversationSpec,
+  plantBreeder: USERS.breeder.session,
+  equityTrader: USERS.trader.session,
+  healthResearcher: USERS.researcher.session,
+  supplyChainPlanner: USERS.planner.session,
+  productDataScientist: USERS.dataScientist.session,
 }
 
 export type SessionId = keyof typeof SESSIONS
@@ -51,8 +68,7 @@ export type ConversationId = keyof typeof CONVERSATIONS
 export const STREAMING_SCRIPT = streamingScript as unknown as PatchScript
 
 /*
- * Recorded runs, as the API would stream them: the airports session of the
- * Session Task Trace walkthrough, and the API's side of it. Stories play them
- * into a <ChatSession>.
+ * Recorded runs, as the API would stream them, built from a user's data, and
+ * the API's side of the conversation. Stories play them into a <ChatSession>.
  */
-export * from "./scripts/airports"
+export * from "./scripts/runs"

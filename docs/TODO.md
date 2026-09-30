@@ -26,7 +26,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | ChatSession web variant, ChatSessionTurn | `packages/assistant/src/styles/web/` | new | done | today |
 | useChatSession | `packages/assistant/src/styles/use-chat-session.ts` | new | done | today |
 | Stream sources (NDJSON, SSE, scripts, deltas, stop) | `packages/assistant/src/protocol/stream.ts` | new | done | today |
-| Recorded runs (airports) | `packages/assistant/src/fixtures/scripts/airports.ts` | new | done | today |
+| Recorded runs (every user) | `packages/assistant/src/fixtures/scripts/runs.ts` | new | done | today |
 | Conversation fixtures (the conversations/ stories' JSON, with a streaming script) | `packages/assistant/src/fixtures/conversations/` | new | done | today |
 | Conversation, ConversationTurn | `packages/assistant/src/conversations/` | remove (→ ChatSession) | done | today |
 | Preset registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
@@ -35,7 +35,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | applyPatch | `packages/assistant/src/protocol/reduce.ts` | new | done | today |
 | validate | `packages/assistant/src/protocol/validate.ts` | new | done | today |
 | Grammar ids | `packages/assistant/src/grammar/` | new | done | today |
-| Session fixtures | `packages/assistant/src/fixtures/sessions/` | new | done | today |
+| User conversations (session + runs) | `packages/assistant/src/data/conversations/` | new | done | today |
 | Placeholder | `packages/assistant/src/conversations/placeholder.tsx` | new | done | today |
 
 ### Thread parts, moved from ui into conversations/

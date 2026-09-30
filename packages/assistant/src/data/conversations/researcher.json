@@ -1,0 +1,974 @@
+{
+  "id": "researcher",
+  "name": "Health Researcher",
+  "role": "Studies readmissions and outcomes across three hospitals in a de-identified patient warehouse, cohort by cohort.",
+  "model": "cloud · claude-sonnet-5",
+  "steps": {
+    "understand": {
+      "key": "define_cohort"
+    },
+    "execute": {
+      "key": "execute_cohort_sql"
+    },
+    "project": {
+      "key": "shape_readout"
+    }
+  },
+  "record": {
+    "understand": {
+      "input": [
+        {
+          "label": "schema",
+          "value": "outcomes warehouse v12 · de-identified · 38 tables"
+        },
+        {
+          "label": "context",
+          "value": "11 prior turns (cohort, adjustment, notes, pilot)"
+        },
+        {
+          "label": "definitions",
+          "value": "readmission = unplanned · ≤ 30 days · any of 3 hospitals"
+        },
+        {
+          "label": "model",
+          "value": "cloud · claude-sonnet-5 · timeout 120s"
+        }
+      ],
+      "output": [
+        {
+          "label": "query",
+          "value": "SELECT e.discharge_dow,\n       count(*) AS episodes,\n       count(r.episode_id) AS readmitted\nFROM episodes e\nLEFT JOIN readmissions r\n  ON r.index_episode_id = e.episode_id\n AND r.unplanned AND r.days_after <= 30\nWHERE e.opcs4 LIKE 'W40%' AND e.elective\n  AND e.discharged BETWEEN '2022-01-01' AND '2026-06-30'\nGROUP BY e.discharge_dow",
+          "code": true
+        },
+        {
+          "label": "tokens",
+          "value": "3,860 in · 212 out"
+        }
+      ]
+    },
+    "validate": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:c41d…08e2"
+        }
+      ],
+      "output": [
+        {
+          "label": "verdict",
+          "value": "read-only · no INSERT / UPDATE / DELETE"
+        },
+        {
+          "label": "privacy",
+          "value": "no direct identifiers selected · cells under 5 suppressed"
+        },
+        {
+          "label": "tables",
+          "value": "episodes, readmissions — both in warehouse v12"
+        }
+      ]
+    },
+    "execute": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:c41d…08e2"
+        },
+        {
+          "label": "connection",
+          "value": "postgres · outcomes-warehouse · read replica"
+        },
+        {
+          "label": "limits",
+          "value": "timeout 60s · page 1,000"
+        }
+      ],
+      "output": [
+        {
+          "label": "rows",
+          "value": "7 · 1 batch"
+        },
+        {
+          "label": "episodes read",
+          "value": "5,630"
+        }
+      ]
+    },
+    "project": {
+      "input": [
+        {
+          "label": "rows",
+          "value": "sha256:7ab3…e519"
+        }
+      ],
+      "output": [
+        {
+          "label": "readout",
+          "value": "1 chart · 1 metric · 2 sources"
+        }
+      ]
+    }
+  },
+  "session": {
+    "id": "session-health-researcher",
+    "title": "Are Friday discharges after hip replacement readmitted more often?",
+    "analyst": "Researcher",
+    "composer": {
+      "placeholder": "Ask about a cohort, an outcome or a hospital…",
+      "controls": [
+        {
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            {
+              "value": "nl",
+              "label": "Natural Language"
+            },
+            {
+              "value": "sql",
+              "label": "SQL",
+              "placeholder": "SELECT … FROM episodes WHERE …",
+              "mono": true
+            }
+          ]
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "quiet": true,
+          "options": [
+            {
+              "value": "sonnet",
+              "label": "cloud · claude-sonnet-5"
+            },
+            {
+              "value": "opus",
+              "label": "cloud · claude-opus-5"
+            },
+            {
+              "value": "qwen",
+              "label": "local · qwen3-27b"
+            }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "LLM + query timeout",
+          "align": "end",
+          "quiet": true,
+          "default": "120",
+          "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+          "options": [
+            {
+              "value": "60",
+              "label": "1m"
+            },
+            {
+              "value": "120",
+              "label": "2m"
+            },
+            {
+              "value": "300",
+              "label": "5m"
+            }
+          ]
+        }
+      ],
+      "attach": {
+        "accept": ".csv,.sql,.pdf",
+        "multiple": true
+      }
+    },
+    "turns": [
+      {
+        "id": "t1",
+        "role": "analyst",
+        "text": "Are patients discharged on a Friday after a hip replacement readmitted more often?"
+      },
+      {
+        "id": "t2",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "frame",
+        "state": "answered",
+        "ask": {
+          "preset": "confirm",
+          "question": "I'll count a readmission as any **unplanned** admission within **30 days** of discharge, at any of our three hospitals.",
+          "yes": "Use this",
+          "no": "Change definition",
+          "default": true
+        },
+        "value": true
+      },
+      {
+        "id": "t3",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "check",
+        "state": "answered",
+        "ask": {
+          "preset": "single",
+          "question": "318 of 4,912 episodes have a discharge date but no time. The day of the week is still known.",
+          "options": [
+            {
+              "value": "keep",
+              "label": "Keep them",
+              "detail": "recommended"
+            },
+            {
+              "value": "exclude",
+              "label": "Exclude them"
+            }
+          ],
+          "default": "keep"
+        },
+        "value": "keep"
+      },
+      {
+        "id": "t4",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "compare",
+        "pattern": "comparison",
+        "label": "chart",
+        "title": "30-day readmission by discharge day",
+        "envelope": {
+          "scope": [
+            "Elective primary hip",
+            "Jan 2022 – Jun 2026",
+            "3 hospitals"
+          ],
+          "grounding": {
+            "records": 4912,
+            "noun": "episodes"
+          },
+          "freshness": "27 Sep"
+        },
+        "blocks": [
+          {
+            "preset": "bars",
+            "unit": "%",
+            "highlight": "F",
+            "groups": [
+              "M",
+              "T",
+              "W",
+              "T",
+              "F",
+              "S",
+              "S"
+            ],
+            "series": [
+              {
+                "name": "30-day readmission",
+                "values": [
+                  6.1,
+                  5.8,
+                  6.0,
+                  6.4,
+                  8.2,
+                  7.9,
+                  7.1
+                ]
+              }
+            ],
+            "target": {
+              "value": 6.1,
+              "label": "avg"
+            }
+          },
+          {
+            "preset": "grid",
+            "tiles": [
+              {
+                "label": "Friday",
+                "value": "8.2%",
+                "delta": "n = 1,061"
+              },
+              {
+                "label": "Mon–Thu",
+                "value": "6.1%",
+                "delta": "n = 3,322"
+              },
+              {
+                "label": "Unadjusted OR",
+                "value": "1.38",
+                "delta": "95% CI 1.08–1.76"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t5",
+        "role": "analyst",
+        "text": "Could that just be sicker patients going home on Fridays?"
+      },
+      {
+        "id": "t6",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "analyse",
+        "state": "answered",
+        "ask": {
+          "preset": "multi",
+          "question": "Adjust for",
+          "options": [
+            {
+              "value": "age-sex",
+              "label": "Age and sex"
+            },
+            {
+              "value": "asa",
+              "label": "ASA grade"
+            },
+            {
+              "value": "charlson",
+              "label": "Charlson comorbidity index"
+            },
+            {
+              "value": "deprivation",
+              "label": "Deprivation decile"
+            },
+            {
+              "value": "los",
+              "label": "Length of stay",
+              "note": "on the causal path"
+            }
+          ],
+          "default": [
+            "age-sex",
+            "asa",
+            "charlson",
+            "deprivation"
+          ]
+        },
+        "value": [
+          "age-sex",
+          "asa",
+          "charlson",
+          "deprivation"
+        ]
+      },
+      {
+        "id": "t7",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "analyse",
+        "state": "answered",
+        "ask": {
+          "preset": "quick",
+          "question": "Confidence level",
+          "options": [
+            {
+              "value": "90",
+              "label": "90%"
+            },
+            {
+              "value": "95",
+              "label": "95%"
+            },
+            {
+              "value": "99",
+              "label": "99%"
+            }
+          ],
+          "default": "95"
+        },
+        "value": "95"
+      },
+      {
+        "id": "t8",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "experiment",
+        "pattern": "readout",
+        "label": "readout",
+        "title": "Friday vs Mon–Thu, adjusted",
+        "envelope": {
+          "method": "logistic regression · 4,912 episodes · 4 covariates",
+          "caveats": [
+            {
+              "label": "observational",
+              "text": "Unmeasured factors, such as weekend community physio cover, could explain the rest. This shows an association, not a cause."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "metric",
+            "label": "Adjusted odds ratio",
+            "value": "1.29",
+            "delta": "95% CI 1.04–1.60 · p = 0.02"
+          },
+          {
+            "preset": "narrative",
+            "text": "After adjustment the gap narrows but **stays**. Case mix explains about a quarter of it."
+          }
+        ]
+      },
+      {
+        "id": "t9",
+        "role": "analyst",
+        "text": "What do the notes of readmitted Friday patients say?"
+      },
+      {
+        "id": "t10",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "qual",
+        "pattern": "memo",
+        "label": "themes",
+        "title": "87 Friday readmissions",
+        "envelope": {
+          "grounding": {
+            "records": 87,
+            "noun": "notes"
+          },
+          "caveats": [
+            {
+              "label": "coding",
+              "text": "Themes were coded by the model and checked by hand on 30 notes, with 27 agreeing."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "ranked",
+            "items": [
+              {
+                "label": "No physio visit",
+                "value": 36
+              },
+              {
+                "label": "Pain relief ran out",
+                "value": 25
+              },
+              {
+                "label": "Wound queries",
+                "value": 17
+              },
+              {
+                "label": "Fall at home",
+                "value": 9
+              }
+            ]
+          },
+          {
+            "preset": "narrative",
+            "text": "“No physio until Tuesday, couldn't manage the stairs” is the most common story. Most readmissions happen on day 3 or 4, which is the weekend."
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              {
+                "label": "Readmission clerking notes",
+                "count": 87
+              },
+              {
+                "label": "Discharge letters",
+                "count": 87
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t11",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "label": "proposal",
+        "title": "from this thread",
+        "blocks": [
+          {
+            "preset": "proposal",
+            "rows": [
+              {
+                "label": "Pilot",
+                "value": "Physio visit within 48 h of Friday discharge"
+              },
+              {
+                "label": "Where",
+                "value": "Hospital B, 12 weeks"
+              },
+              {
+                "label": "Readout",
+                "value": "Weekly, 30-day readmission"
+              }
+            ],
+            "consequence": "Registers a pilot in the quality-improvement log with a weekly readout. No change for patients until clinical governance approves.",
+            "actions": [
+              {
+                "id": "register-pilot",
+                "label": "Register pilot",
+                "variant": "primary"
+              },
+              {
+                "id": "edit",
+                "label": "Edit",
+                "variant": "secondary"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t12",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "explain",
+        "state": "pending",
+        "ask": {
+          "preset": "suggestions",
+          "items": [
+            "How many patients would the pilot need to detect a 2-point drop?",
+            "Does the same pattern hold for knees?"
+          ]
+        }
+      }
+    ]
+  },
+  "runs": {
+    "send": {
+      "prompt": "Does the same pattern hold for knees?",
+      "thinking": "Same cohort rules as the hips: elective primary knee (OPCS-4 W40), unplanned readmission within 30 days at any of the three hospitals, the same four covariates and 95% intervals.",
+      "progress": {
+        "understood": "proposed SQL · 12 lines · confidence 0.91",
+        "validating": "checking the query is read-only and suppresses small cells",
+        "validated": "read-only ✓ · episodes, readmissions · no identifiers",
+        "batches": [
+          "5,630 episodes counted",
+          "7 rows · 1 batch"
+        ],
+        "projecting": "fitting the adjusted model and shaping 7 rows",
+        "projected": "1 chart · 1 metric → answer"
+      },
+      "answer": {
+        "label": "readout",
+        "title": "Knees by discharge day",
+        "text": "Not for knees. Friday discharges are readmitted at **5.9 per 100** against 5.4 on Mon–Thu, and after the same adjustment the odds ratio is **1.07 (95% CI 0.86–1.33)** — no clear difference. Knee patients are less often sent home needing stairs practice, which fits the physio story from the hips.",
+        "blocks": [
+          {
+            "preset": "metric",
+            "label": "Adjusted odds ratio, Friday vs Mon–Thu",
+            "value": "1.07",
+            "delta": "95% CI 0.86–1.33 · p = 0.54",
+            "tone": "neutral"
+          },
+          {
+            "preset": "bars",
+            "unit": "%",
+            "highlight": "F",
+            "groups": [
+              "M",
+              "T",
+              "W",
+              "T",
+              "F",
+              "S",
+              "S"
+            ],
+            "series": [
+              {
+                "name": "Knee, 30-day readmission",
+                "values": [
+                  5.3,
+                  5.5,
+                  5.2,
+                  5.6,
+                  5.9,
+                  6.2,
+                  5.8
+                ]
+              },
+              {
+                "name": "Hip, 30-day readmission",
+                "values": [
+                  6.1,
+                  5.8,
+                  6.0,
+                  6.4,
+                  8.2,
+                  7.9,
+                  7.1
+                ],
+                "muted": true
+              }
+            ],
+            "target": {
+              "value": 5.4,
+              "label": "knee avg"
+            },
+            "caption": "Readmissions per 100 discharges · hips shown behind"
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              {
+                "label": "Inpatient episodes, elective primary knee",
+                "count": 5630,
+                "detail": "OPCS-4 W40 · Jan 2022 – Jun 2026"
+              },
+              {
+                "label": "Unplanned readmissions within 30 days",
+                "count": 318
+              },
+              {
+                "label": "National Joint Registry linkage",
+                "count": 5412,
+                "detail": "96% matched"
+              }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 5,630 episodes · LLM 1.1s · query 2.3s",
+        "envelope": {
+          "scope": [
+            "Elective primary knee",
+            "Jan 2022 – Jun 2026",
+            "3 hospitals"
+          ],
+          "grounding": {
+            "records": 5630,
+            "noun": "episodes"
+          },
+          "freshness": "27 Sep",
+          "method": "logistic regression · 5,630 episodes · age, sex, ASA grade, Charlson index, deprivation decile\n\nSELECT e.discharge_dow,\n       count(*) AS episodes,\n       count(r.episode_id) AS readmitted\nFROM episodes e\nLEFT JOIN readmissions r\n  ON r.index_episode_id = e.episode_id\n AND r.unplanned AND r.days_after <= 30\nWHERE e.opcs4 LIKE 'W40%' AND e.elective\n  AND e.discharged BETWEEN '2022-01-01' AND '2026-06-30'\nGROUP BY e.discharge_dow"
+        },
+        "followUps": {
+          "groups": [
+            {
+              "label": "Dig further",
+              "items": [
+                "Which knee patients were readmitted on a Monday?",
+                "Split the hip result by hospital"
+              ]
+            },
+            {
+              "label": "Plan",
+              "items": [
+                "How many patients would the pilot need to detect a 2-point drop?"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "clarify": {
+      "prompt": "When did the Friday gap for hips open up?",
+      "thinking": "The three hospitals changed their weekend physiotherapy rotas at different times, so a pooled trend would blur three separate steps. The question needs one hospital before the monthly series means anything.",
+      "waiting": "which hospital?",
+      "ask": {
+        "preset": "single",
+        "question": "Each hospital changed its weekend physio cover at a different time. **Which one should I trace?**",
+        "label": "Hospital",
+        "options": [
+          {
+            "value": "A",
+            "label": "Hospital A",
+            "detail": "1,702 episodes",
+            "description": "Weekend cover unchanged since 2022",
+            "figure": {
+              "value": "6.6%",
+              "tone": "neutral"
+            }
+          },
+          {
+            "value": "B",
+            "label": "Hospital B",
+            "detail": "1,988 episodes",
+            "description": "Weekend physio moved to on-call, Apr 2024",
+            "figure": {
+              "value": "10.1%",
+              "tone": "bad"
+            }
+          },
+          {
+            "value": "C",
+            "label": "Hospital C",
+            "detail": "1,222 episodes",
+            "description": "Saturday clinic added, Sep 2023",
+            "figure": {
+              "value": "5.9%",
+              "tone": "good"
+            }
+          }
+        ],
+        "default": "B",
+        "other": true
+      },
+      "progress": {
+        "understood": "proposed SQL · monthly Friday vs Mon–Thu · confidence 0.88",
+        "validating": "checking the query is read-only and suppresses small cells",
+        "validated": "read-only ✓ · episodes, readmissions, rota_changes",
+        "batches": [
+          "27 months counted",
+          "54 rows · 2 batches"
+        ],
+        "projecting": "finding the step in 54 monthly rates",
+        "projected": "timeline · 6 events → answer"
+      },
+      "answer": {
+        "label": "timeline",
+        "title": "Hospital B, Friday gap over time",
+        "text": "At Hospital B the gap opened with the **April 2024** rota change. Before it, Friday discharges were readmitted at 6.4 per 100 against 6.0 on Mon–Thu; after it, **10.1 per 100** against 6.2.",
+        "blocks": [
+          {
+            "preset": "timeline",
+            "events": [
+              {
+                "section": "Before",
+                "when": "Jan 2022",
+                "text": "Series starts · Friday 6.4 vs Mon–Thu 6.0 per 100",
+                "detail": "n = 412 Friday discharges to Mar 2024"
+              },
+              {
+                "when": "Sep 2023",
+                "text": "Enhanced recovery pathway rolled out",
+                "detail": "Median stay falls from 3 to 2 days",
+                "tone": "neutral"
+              },
+              {
+                "section": "Rota change",
+                "when": "Apr 2024",
+                "text": "Weekend physio moved to on-call only",
+                "tone": "bad",
+                "highlight": true
+              },
+              {
+                "when": "Jun 2024",
+                "text": "Friday rate first exceeds 9 per 100",
+                "tone": "warn"
+              },
+              {
+                "section": "After",
+                "when": "Apr 2024 – Jun 2026",
+                "text": "Friday 10.1 vs Mon–Thu 6.2 per 100",
+                "detail": "n = 298 Friday discharges · difference 3.9 (95% CI 1.2–6.6)",
+                "tone": "bad"
+              },
+              {
+                "when": "27 Sep 2026",
+                "text": "Latest load of the warehouse"
+              }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 1,988 episodes · LLM 0.9s · query 1.6s",
+        "envelope": {
+          "scope": [
+            "Elective primary hip",
+            "Hospital B",
+            "Jan 2022 – Jun 2026"
+          ],
+          "grounding": {
+            "records": 1988,
+            "noun": "episodes"
+          },
+          "freshness": "27 Sep",
+          "caveats": [
+            {
+              "label": "before and after",
+              "text": "The enhanced recovery pathway also shortened stays over the same period, so the rota change is the likeliest cause, not the only one."
+            }
+          ]
+        }
+      }
+    },
+    "confirm": {
+      "prompt": "Did the readmitted Friday patients actually miss a physio visit? Check the community records.",
+      "thinking": "Physio visits after discharge live in the community services dataset, not the hospital warehouse. Answering means linking every Friday discharge to it on the pseudonymised NHS number — a large linkage job.",
+      "waiting": "this links the community dataset",
+      "ask": {
+        "preset": "confirm",
+        "question": "This links **1,061 Friday discharges** to the community services dataset. Run it?",
+        "cost": [
+          {
+            "label": "records linked",
+            "value": "1.4M"
+          },
+          {
+            "label": "about",
+            "value": "3 min"
+          },
+          {
+            "label": "writes",
+            "value": "nothing"
+          }
+        ],
+        "costAs": "strip",
+        "caveat": {
+          "label": "linkage",
+          "text": "About 4% of episodes have no community record and will be left out."
+        },
+        "yes": "Link and run",
+        "no": "Hospital data only",
+        "default": true
+      },
+      "progress": {
+        "understood": "linkage on pseudonymised NHS number · physio contact ≤ 72 h",
+        "validating": "checking the query is read-only and suppresses small cells",
+        "validated": "read-only ✓ · episodes, readmissions, community_contacts",
+        "batches": [
+          "480,000 contacts linked",
+          "960,000 contacts linked",
+          "1.4M contacts linked · 1,018 episodes matched"
+        ],
+        "projecting": "tabulating 1,018 matched episodes",
+        "projected": "table · 3 rows → answer"
+      },
+      "answer": {
+        "label": "table",
+        "title": "Friday discharges by physio contact",
+        "text": "Yes. Friday patients with **no physio contact within 72 hours** were readmitted at **12.8 per 100**, against 5.1 for those who had one — about two and a half times the rate.",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "group",
+                "label": "Physio contact"
+              },
+              {
+                "key": "episodes",
+                "label": "Episodes",
+                "align": "right"
+              },
+              {
+                "key": "readmitted",
+                "label": "Readmitted",
+                "align": "right"
+              },
+              {
+                "key": "rate",
+                "label": "Per 100",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "group": "Within 72 h",
+                "episodes": 598,
+                "readmitted": 30,
+                "rate": {
+                  "value": "5.0",
+                  "tone": "good"
+                }
+              },
+              {
+                "group": "After 72 h",
+                "episodes": 247,
+                "readmitted": 27,
+                "rate": {
+                  "value": "10.9",
+                  "tone": "bad"
+                }
+              },
+              {
+                "group": "None within 30 days",
+                "episodes": 173,
+                "readmitted": 25,
+                "rate": {
+                  "value": "14.5",
+                  "tone": "bad",
+                  "strong": true
+                }
+              }
+            ],
+            "totals": {
+              "group": "Matched",
+              "episodes": 1018,
+              "readmitted": 82,
+              "rate": "8.1"
+            },
+            "noun": "groups",
+            "note": "43 unmatched episodes left out"
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 1,018 episodes · 1.4M contacts · query 2m 51s",
+        "envelope": {
+          "scope": [
+            "Friday discharges",
+            "Elective primary hip",
+            "Jan 2022 – Jun 2026"
+          ],
+          "grounding": {
+            "records": 1018,
+            "noun": "episodes"
+          },
+          "freshness": "27 Sep",
+          "caveats": [
+            {
+              "label": "linkage",
+              "text": "43 of 1,061 episodes (4%) had no community record and are left out."
+            }
+          ]
+        }
+      },
+      "narrowed": {
+        "understood": "hospital data only · no community linkage",
+        "answer": {
+          "label": "partial",
+          "text": "Using the hospital data alone, I can say who was **referred** for community physio, but not who was seen.",
+          "blocks": [
+            {
+              "preset": "cannot",
+              "partial": true,
+              "reason": "Physio visits after discharge are recorded only in the community services dataset, which this run was asked not to link.",
+              "remedy": "Run the linkage, or ask a question the discharge letters can answer.",
+              "nearest": [
+                "How many Friday patients were referred for community physio?",
+                "Were referrals on Friday slower to be sent than on Mon–Thu?",
+                "Link the community records and run it in full"
+              ]
+            }
+          ],
+          "meta": "cloud · claude-sonnet-5 · 1,061 discharge letters · query 0.8s",
+          "envelope": {
+            "grounding": {
+              "records": 1061,
+              "noun": "discharge letters"
+            }
+          }
+        }
+      }
+    },
+    "fail": {
+      "prompt": "Fit the Friday model across all 14 elective procedures, with hospital as a random effect",
+      "understood": "proposed SQL + mixed model · 14 procedures · confidence 0.74",
+      "validated": "read-only ✓ · episodes, readmissions, procedures",
+      "retrying": "timeout after 60s",
+      "failed": "failed · timeout after 60s · 2 attempts",
+      "error": "transient · the warehouse did not return 61,204 episodes within the timeout",
+      "text": "The warehouse did not return the cohort within 60s, twice. Pulling all 14 procedures joins the full episodes table to readmissions without the procedure-date index.",
+      "meta": "cloud · claude-sonnet-5 · LLM 1.4s · query timed out ×2",
+      "actions": [
+        {
+          "id": "retry",
+          "label": "Try again",
+          "variant": "secondary"
+        },
+        {
+          "id": "narrow",
+          "label": "Hips and knees only",
+          "variant": "secondary"
+        },
+        {
+          "id": "schedule",
+          "label": "Run overnight",
+          "variant": "secondary"
+        }
+      ]
+    },
+    "long": {
+      "prompt": "Compute 30-day readmission by discharge day for every elective procedure since 2015",
+      "understood": "proposed SQL · all elective procedures · confidence 0.89",
+      "validated": "read-only ✓ · episodes, readmissions",
+      "progress": "212,480 episodes · {n}% scanned"
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "id": "network",
+  "name": "Network Analyst",
+  "role": "Explores an airports graph with a local model: routes, hubs and who connects where.",
+  "model": "local · qwen3-27b",
+  "steps": {
+    "execute": { "key": "execute_graph_query" },
+    "project": { "key": "shape_for_canvas" }
+  },
+  "record": {
+    "understand": {
+      "input": [
+        { "label": "schema", "value": "model v7 · 5 node types · 6 relationship types" },
+        { "label": "context", "value": "3 prior turns (2 queries, 1 clarification)" },
+        { "label": "model", "value": "local · qwen3-27b · timeout 120s" }
+      ],
+      "output": [
+        { "label": "query", "value": "MATCH (a:Airline)-[:OPERATES]->(r:Route)-[:FROM]->(:Airport {iata: \"FRA\"})\nMATCH (r)-[:TO]->(:Airport)-[:IN]->(c:Country)\nWITH a, count(DISTINCT c) AS countries\nWHERE countries > 20\nRETURN a.name, countries ORDER BY countries DESC", "code": true },
+        { "label": "tokens", "value": "1,240 in · 96 out" }
+      ]
+    },
+    "validate": {
+      "input": [{ "label": "query", "value": "sha256:9f2c…a71b" }],
+      "output": [
+        { "label": "verdict", "value": "read-only · no CREATE / MERGE / DELETE / SET" },
+        { "label": "labels", "value": "Airline, Route, Airport, Country — all in model v7" }
+      ]
+    },
+    "execute": {
+      "input": [
+        { "label": "query", "value": "sha256:9f2c…a71b" },
+        { "label": "connection", "value": "neo4j · airports-prod · read replica" },
+        { "label": "limits", "value": "timeout 30s · page 500" }
+      ],
+      "output": [
+        { "label": "rows", "value": "14 · 3 batches" },
+        { "label": "emitted", "value": "graph.delta ×3" }
+      ]
+    },
+    "project": {
+      "input": [{ "label": "rows", "value": "sha256:44e0…c210" }],
+      "output": [{ "label": "canvas", "value": "14 nodes · 212 relationships · layout: force" }]
+    }
+  },
+  "session": {
+    "id": "airports",
+    "title": "Airlines out of Frankfurt",
+    "assistant": "Analyst",
+    "composer": {
+      "placeholder": "Ask anything about your graph…",
+      "controls": [
+        {
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            { "value": "nl", "label": "Natural Language" },
+            { "value": "ql", "label": "Query Language", "placeholder": "MATCH (n) WHERE … RETURN n", "mono": true }
+          ]
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "quiet": true,
+          "options": [
+            { "value": "qwen", "label": "local · qwen3-27b" },
+            { "value": "gpt", "label": "openai · gpt-4o-mini" },
+            { "value": "claude", "label": "anthropic · claude-sonnet-5" }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "LLM + query timeout",
+          "align": "end",
+          "quiet": true,
+          "default": "120",
+          "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+          "options": [
+            { "value": "30", "label": "30s" },
+            { "value": "60", "label": "1m" },
+            { "value": "120", "label": "2m" }
+          ]
+        }
+      ],
+      "attach": true
+    },
+    "turns": []
+  },
+  "runs": {
+    "send": {
+      "prompt": "Which airlines connect Frankfurt to more than 20 countries?",
+      "thinking": "Airlines operate routes; a route runs FROM one airport TO another; countries hang off airports — so count distinct destination countries per airline.",
+      "progress": {
+        "understood": "proposed Cypher · 5 lines · confidence 0.86",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · Airline, Route, Airport, Country",
+        "batches": ["5 rows so far · batch 1", "10 rows so far · batch 2", "14 rows so far · batch 3", "14 rows · 3 batches"],
+        "projecting": "shaping 14 rows for the canvas",
+        "projected": "14 nodes · 212 relationships → canvas"
+      },
+      "answer": {
+        "text": "Found **14 airlines**. Lufthansa alone reaches 74 countries from Frankfurt; the next, Condor, 41. Added 14 nodes and 212 relationships to the canvas.",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              { "key": "airline", "label": "Airline" },
+              { "key": "countries", "label": "Countries", "align": "right" },
+              { "key": "routes", "label": "Routes", "align": "right" }
+            ],
+            "rows": [
+              { "airline": "Lufthansa", "countries": 74, "routes": 212 },
+              { "airline": "Condor", "countries": 41, "routes": 88 },
+              { "airline": "Turkish Airlines", "countries": 33, "routes": 12 },
+              { "airline": "United", "countries": 24, "routes": 9 },
+              { "airline": "Emirates", "countries": 22, "routes": 4 }
+            ],
+            "total": 14,
+            "noun": "airlines",
+            "sort": { "key": "countries", "dir": "desc" }
+          }
+        ],
+        "meta": "local · qwen3-27b · 14 rows · LLM 0.9s · query 1.4s",
+        "envelope": {
+          "grounding": { "records": 212, "noun": "routes" },
+          "method": "MATCH (a:Airline)-[:OPERATES]->(r:Route)-[:FROM]->(:Airport {iata: \"FRA\"})\nMATCH (r)-[:TO]->(:Airport)-[:IN]->(c:Country)\nWITH a, count(DISTINCT c) AS countries\nWHERE countries > 20\nRETURN a.name, countries ORDER BY countries DESC"
+        },
+        "outcome": {
+          "text": "14 nodes · 212 relationships",
+          "actions": [{ "id": "load-canvas", "label": "Load to canvas", "variant": "secondary" }]
+        },
+        "followUps": {
+          "items": ["Which of these fly to Asia?", "Rank airports by betweenness", "How many routes leave Frankfurt?"]
+        }
+      }
+    },
+    "clarify": {
+      "prompt": "How many routes leave Frankfurt?",
+      "thinking": "\"Frankfurt\" matches two Airport nodes — FRA and HHN. The question needs one of them before a query makes sense.",
+      "waiting": "which \"Frankfurt\"?",
+      "ask": {
+        "preset": "single",
+        "question": "Frankfurt matches two airports here. **Which one do you mean?**",
+        "options": [
+          { "value": "FRA", "label": "Frankfurt am Main", "detail": "FRA", "description": "Hub · 3,504 routes" },
+          { "value": "HHN", "label": "Frankfurt-Hahn", "detail": "HHN", "description": "Regional · 212 routes" }
+        ],
+        "other": true,
+        "label": "Airport"
+      },
+      "progress": {
+        "understood": "proposed Cypher · 3 lines · confidence 0.93",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · Route, Airport",
+        "batches": ["1 row · batch 1", "1 row · 1 batch"],
+        "projecting": "shaping the count for the canvas",
+        "projected": "1 node · 3,504 relationships → canvas"
+      },
+      "answer": {
+        "text": "**3,504 routes** leave Frankfurt am Main, to 312 airports in 104 countries. Lufthansa flies 61% of them.",
+        "blocks": [
+          {
+            "preset": "grid",
+            "tiles": [
+              { "label": "Routes", "value": "3,504", "delta": "▲ 4% vs last season", "tone": "good" },
+              { "label": "Airports", "value": "312" },
+              { "label": "Countries", "value": "104" }
+            ]
+          }
+        ],
+        "meta": "local · qwen3-27b · 1 row · LLM 0.7s · query 0.3s",
+        "envelope": { "scope": ["FRA", "summer schedule"], "grounding": { "records": 3504, "noun": "routes" } }
+      }
+    },
+    "confirm": {
+      "prompt": "Which airports would strand the most passengers if they closed?",
+      "thinking": "This is betweenness over the whole route network, weighted by seats — a full scan.",
+      "waiting": "this reads the whole graph",
+      "ask": {
+        "preset": "confirm",
+        "question": "This scores **every airport** against every route. Run it?",
+        "cost": [
+          { "label": "rows scanned", "value": "2.3M" },
+          { "label": "about", "value": "40 s" },
+          { "label": "writes", "value": "nothing" }
+        ],
+        "costAs": "strip",
+        "yes": "Run it",
+        "no": "Just the top hubs",
+        "default": true
+      },
+      "progress": {
+        "understood": "betweenness · weighted by seats",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · Airport, Route",
+        "batches": ["1,200 airports scored", "2,400 airports scored", "3,504 airports scored"],
+        "projecting": "ranking 3,504 airports",
+        "projected": "top 5 → canvas"
+      },
+      "answer": {
+        "text": "Closing **Frankfurt** would strand the most: 0.31 of all seat-weighted shortest paths pass through it. Istanbul and Dubai follow.",
+        "blocks": [
+          {
+            "preset": "ranked",
+            "items": [
+              { "label": "FRA · Frankfurt", "value": 0.31, "display": "0.31" },
+              { "label": "IST · Istanbul", "value": 0.27, "display": "0.27" },
+              { "label": "DXB · Dubai", "value": 0.24, "display": "0.24" },
+              { "label": "AMS · Amsterdam", "value": 0.19, "display": "0.19" },
+              { "label": "3,500 others", "value": 0.05, "display": "≤ 0.05", "muted": true }
+            ]
+          }
+        ],
+        "meta": "local · qwen3-27b · 3,504 airports · query 38.2s",
+        "envelope": { "grounding": { "records": 2300000, "noun": "routes" } }
+      },
+      "narrowed": {
+        "understood": "narrowed to the 20 busiest hubs",
+        "answer": {
+          "text": "Scoring only the 20 busiest hubs instead: this reads 4% of the graph.",
+          "blocks": [
+            {
+              "preset": "ranked",
+              "items": [
+                { "label": "FRA · Frankfurt", "value": 0.31, "display": "0.31" },
+                { "label": "IST · Istanbul", "value": 0.27, "display": "0.27" },
+                { "label": "DXB · Dubai", "value": 0.24, "display": "0.24" },
+                { "label": "17 others", "value": 0.09, "display": "≤ 0.09", "muted": true }
+              ]
+            }
+          ],
+          "meta": "local · qwen3-27b · 20 hubs · query 3.1s"
+        }
+      }
+    },
+    "fail": {
+      "prompt": "List every route between two European hubs with a layover",
+      "understood": "proposed Cypher · 9 lines · confidence 0.71",
+      "validated": "read-only ✓ · Route, Airport",
+      "retrying": "timeout after 30s",
+      "failed": "failed · timeout after 30s · 2 attempts",
+      "error": "transient · the graph did not respond within the timeout",
+      "text": "The graph did not answer within 30s, twice. The query joins four labels without an index on Airport.iata.",
+      "meta": "local · qwen3-27b · LLM 0.9s · query timed out ×2",
+      "actions": [
+        { "id": "retry", "label": "Try again", "variant": "secondary" },
+        { "id": "add-index", "label": "Add an index in Modeller", "variant": "secondary" },
+        { "id": "narrow", "label": "Narrow to one airline", "variant": "secondary" }
+      ]
+    },
+    "long": {
+      "prompt": "Rank airports by betweenness across the whole graph",
+      "understood": "proposed Cypher · betweenness · confidence 0.9",
+      "validated": "read-only ✓ · Airport, Route",
+      "progress": "3,504 airports · {n}% scored"
+    }
+  }
+}
