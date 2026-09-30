@@ -9,7 +9,7 @@ const columnsFor = (n: number) => (n === 4 ? 2 : Math.min(n, 3))
 /** A band of figures that belong to one answer, each with its change beneath it. */
 export function GridBlock({ block }: BlockRendererProps<"grid">) {
   return (
-    <MetricGrid joined columns={columnsFor(block.tiles.length)}>
+    <MetricGrid joined seamless columns={columnsFor(block.tiles.length)}>
       {block.tiles.map((tile) => (
         <MetricTile
           key={tile.label}

@@ -20,6 +20,7 @@ export function ScopeBlock({ block, turn, onEvent }: BlockRendererProps<"scope">
       defaultOpenPart={block.openPart}
       note={block.hint}
       noteTone={stale ? "warning" : "muted"}
+      seamless
       onPartChange={(part, value) => onEvent({ type: "scope", turn: turn.id, part, value })}
     />
   )

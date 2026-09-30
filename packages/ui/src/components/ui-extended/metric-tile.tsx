@@ -97,12 +97,15 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
    * One strip, the tiles divided by rules instead of spaced apart — for a
    * band of figures that belong to one answer and read left to right. `gap`
    * is ignored.
-   *
-   * No box around the strip: only the rules between tiles are drawn, and the
-   * outer tiles sit flush with the text around the grid, as an unboxed table's
-   * first and last columns do.
    */
   joined?: boolean
+  /**
+   * With `joined`: no box around the strip, and nothing wasted on its outside
+   * — only the rules between tiles are drawn, and the outer tiles sit flush
+   * with the text around the grid, as a seamless table's outer columns do.
+   * For a strip inside a card or an answer, whose edge already frames it.
+   */
+  seamless?: boolean
   /**
    * A fixed number of columns instead of fitting to the width — for a band
    * whose shape is part of what it says: three across, two by two.
@@ -244,7 +247,7 @@ MetricTile.displayName = "MetricTile"
  * different call site for each.
  */
 export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
-  ({ minTileWidth = 120, gap = 6, joined, columns, className, style, children, ...props }, ref) => {
+  ({ minTileWidth = 120, gap = 6, joined, seamless, columns, className, style, children, ...props }, ref) => {
     const gridStyle: React.CSSProperties = {
       gap: joined ? undefined : gap,
       gridTemplateColumns: columns
@@ -252,9 +255,17 @@ export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
         : `repeat(auto-fit, minmax(${minTileWidth}px, 1fr))`,
       ...style,
     }
-    if (!joined) {
+    // The rules are the border colour showing through a 1px gap, so they
+    // follow the tiles when the grid wraps to a second row.
+    const rules = "gap-px bg-border [&>*]:border-0"
+    if (!(joined && seamless)) {
       return (
-        <div ref={ref} className={cn("grid", className)} style={gridStyle} {...props}>
+        <div
+          ref={ref}
+          className={cn("grid", joined && cn(rules, "border border-border"), className)}
+          style={gridStyle}
+          {...props}
+        >
           {children}
         </div>
       )
@@ -266,13 +277,11 @@ export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
     // edge snaps to the pixel, where a clip-path's anti-aliased edge lets the
     // rule colour show through as a hairline.
     return (
-      <div ref={ref} className={cn("overflow-hidden", className)} {...props}>
+      <div ref={ref} data-seamless className={cn("overflow-hidden", className)} {...props}>
         <div
           className={cn(
             "grid",
-            // The rules are the border colour showing through a 1px gap, so
-            // they follow the tiles when the grid wraps to a second row.
-            "gap-px bg-border [&>*]:border-0",
+            rules,
             "[--edge-x:0.75rem] [--edge-y:0.625rem] has-[>[data-variant=figure]]:[--edge-x:0.5rem] has-[>[data-variant=figure]]:[--edge-y:0.375rem] -mx-(--edge-x) -my-(--edge-y)",
           )}
           style={gridStyle}

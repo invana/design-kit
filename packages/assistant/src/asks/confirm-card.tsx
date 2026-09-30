@@ -29,6 +29,12 @@ export interface ConfirmCardProps extends React.HTMLAttributes<HTMLDivElement> {
    * `strip` sets the figures in cells, each label above. @default "line"
    */
   costAs?: "line" | "strip"
+  /**
+   * The strip without its box: only the rules between its cells, and the
+   * outer cells flush with the question — for a card whose frame is already
+   * the edge.
+   */
+  seamless?: boolean
   /** Something to weigh before answering, under the cost — a `CaveatNote`. */
   caveat?: React.ReactNode
   /** The line under the buttons — where the default came from. */
@@ -54,17 +60,22 @@ const figure = (value: React.ReactNode, tone?: "warning") =>
  */
 export const ConfirmCard = React.forwardRef<HTMLDivElement, ConfirmCardProps>(
   (
-    { question, description, heading, cost, costAs = "line", caveat, hint, className, children, ...props },
+    { question, description, heading, cost, costAs = "line", seamless, caveat, hint, className, children, ...props },
     ref,
   ) => (
     <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props}>
       <p className={heading || description ? "font-semibold" : undefined}>{question}</p>
       {description ? <p className="-mt-1.5 text-sm text-muted-foreground">{description}</p> : null}
       {cost?.length && costAs === "strip" ? (
-        // No box: the rules between the cells only, and the outer cells flush
-        // with the question — reaching out by a cell's padding and clipping it.
         <dl
-          className="-mx-2 -my-1 grid [clip-path:inset(0.25rem_0.5rem)]"
+          className={cn(
+            "grid",
+            // Seamless: it reaches out by a cell's padding and clips that off,
+            // so the outer cells are flush.
+            seamless
+              ? "-mx-2 -my-1 [clip-path:inset(0.25rem_0.5rem)]"
+              : "overflow-hidden rounded-control border border-border",
+          )}
           style={{ gridTemplateColumns: `repeat(${cost.length}, minmax(0, 1fr))` }}
         >
           {cost.map((c, i) => (

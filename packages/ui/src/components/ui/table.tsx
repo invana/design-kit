@@ -7,26 +7,27 @@ const Table = React.forwardRef<
   React.HTMLAttributes<HTMLTableElement> & {
     density?: "default" | "compact"
     /**
-     * Draw the box around the table. Off by default: a table sits in a card, a
-     * panel or an answer whose edge already frames it, and a second border a
-     * few pixels in reads as a box inside a box. Unboxed, only the rules between
-     * rows are drawn and the first and last columns sit flush with the text
-     * around the table. Turn it on for a table standing alone on a page.
+     * No box, and nothing wasted on its outside: only the rules between rows
+     * are drawn, and the first and last columns sit flush with the text around
+     * the table. For a table inside a card, a panel or an answer, whose edge
+     * already frames it — a second border a few pixels in reads as a box
+     * inside a box.
+     */
+    seamless?: boolean
+    /**
+     * Draw the box. Off for a wrapper that draws the box itself, as `DataTable`
+     * does. `seamless` draws no box either way.
      */
     bordered?: boolean
-    /**
-     * Set the first and last columns flush with the text around the table.
-     * Follows `bordered` — for a wrapper that draws the box itself.
-     */
-    flush?: boolean
   }
->(({ className, density = "default", bordered = false, flush = !bordered, ...props }, ref) => (
+>(({ className, density = "default", seamless, bordered = true, ...props }, ref) => (
   <div
     data-density={density}
+    data-seamless={seamless || undefined}
     className={cn(
       "group/table relative w-full overflow-auto",
-      bordered && "border rounded-md",
-      flush &&
+      bordered && !seamless && "border rounded-md",
+      seamless &&
         "[&_td:first-child]:ps-0 [&_th:first-child]:ps-0 [&_td:last-child]:pe-0 [&_th:last-child]:pe-0",
     )}
   >

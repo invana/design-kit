@@ -62,6 +62,7 @@ export function ConfirmAsk({ turn, options, onEvent }: AskRendererProps<"confirm
       heading={options.heading}
       cost={costOf(options.cost)}
       costAs={options.costAs}
+      seamless
       caveat={options.caveat ? <CaveatNote label={options.caveat.label}>{options.caveat.text}</CaveatNote> : undefined}
       hint={options.hint ? hintText(options.hint) : undefined}
     >

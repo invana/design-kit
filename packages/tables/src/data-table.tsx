@@ -108,13 +108,12 @@ export interface DataTableProps<TData extends RowData> {
    */
   density?: "default" | "compact";
   /**
-   * Draw the box around the table. Off by default: a table sits in a card, a
-   * panel or an answer whose edge already frames it, and a second border a few
-   * pixels in reads as a box inside a box. Unboxed, only the rules between rows
-   * are drawn and the first and last columns sit flush with the text around
-   * the table. Turn it on for a table standing alone on a page.
+   * No box, and nothing wasted on its outside: only the rules between rows are
+   * drawn, and the first and last columns sit flush with the text around the
+   * table. For a table inside a card, a panel or an answer, whose edge already
+   * frames it — a second border a few pixels in reads as a box inside a box.
    */
-  bordered?: boolean;
+  seamless?: boolean;
   /**
    * How deep this row sits under another — a child run under the run that
    * spawned it. Indents the **first** cell only, so the shape of the list is
@@ -315,7 +314,7 @@ export function DataTable<TData extends RowData>({
   groupBy,
   renderGroupHeader,
   density = "default",
-  bordered = false,
+  seamless = false,
   rowIndent,
   isRowSelected,
   isRowHighlighted,
@@ -460,7 +459,7 @@ export function DataTable<TData extends RowData>({
         modifiers={[restrictToHorizontalAxis]}
         onDragEnd={handleDragEnd}
       >
-        <div className={cn("relative overflow-auto", bordered && "rounded-md border")}>
+        <div className={cn("relative overflow-auto", !seamless && "rounded-md border")}>
           {loading && (
             <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-12 text-muted-foreground">
               Loading…
@@ -468,7 +467,7 @@ export function DataTable<TData extends RowData>({
           )}
           <Table
             bordered={false}
-            flush={!bordered}
+            seamless={seamless}
             density={density}
             style={{
               width: enableColumnResizing ? table.getTotalSize() : undefined,
@@ -569,7 +568,7 @@ export function DataTable<TData extends RowData>({
                           // The rule down the leading edge needs the text off it,
                           // even in an unboxed table whose first column is flush.
                           isRowSelected?.(row.original) &&
-                            !bordered &&
+                            seamless &&
                             "[&[data-selected]>td:first-child]:ps-2",
                           onRowClick &&
                             "cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
@@ -587,7 +586,7 @@ export function DataTable<TData extends RowData>({
                               style={{
                                 width: cell.column.getSize(),
                                 ...(indent
-                                  ? { paddingLeft: `${indent * 14 + (bordered ? 8 : 0)}px` }
+                                  ? { paddingLeft: `${indent * 14 + (seamless ? 0 : 8)}px` }
                                   : {}),
                                 ...(isPinned
                                   ? {

@@ -45,6 +45,12 @@ export interface ScopeLineProps
   note?: React.ReactNode
   /** `warning` when the note is about late data. */
   noteTone?: "muted" | "warning"
+  /**
+   * No box, and nothing wasted on its outside: only the rules between parts
+   * are drawn, and the first part sits flush with the text around the strip.
+   * For a scope inside a card or an answer, whose edge already frames it.
+   */
+  seamless?: boolean
 }
 
 const MARK = {
@@ -134,6 +140,7 @@ export const ScopeLine = React.forwardRef<HTMLDivElement, ScopeLineProps>(
       onOpenPartChange,
       note,
       noteTone = "muted",
+      seamless,
       className,
       ...props
     },
@@ -155,11 +162,13 @@ export const ScopeLine = React.forwardRef<HTMLDivElement, ScopeLineProps>(
       <div
         ref={wrapped ? undefined : ref}
         className={cn(
-          // No box: the rules between the parts only, and the first part flush
-          // with the text around the strip — it reaches out by a part's padding
-          // and clips it off. Sideways only, so a part's focus ring keeps its
-          // top and bottom.
-          "-mx-2 flex w-fit max-w-[calc(100%+1rem)] flex-wrap font-mono text-xs text-muted-foreground [clip-path:inset(0_0.5rem)]",
+          "flex w-fit flex-wrap font-mono text-xs text-muted-foreground",
+          // Seamless: it reaches out by a part's padding and clips that off, so
+          // the first part is flush. Sideways only, so a part's focus ring
+          // keeps its top and bottom.
+          seamless
+            ? "-mx-2 max-w-[calc(100%+1rem)] [clip-path:inset(0_0.5rem)]"
+            : "max-w-full border border-border",
           !wrapped && className,
         )}
         {...(wrapped ? {} : props)}

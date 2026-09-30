@@ -18,6 +18,12 @@ export interface ProposalCardProps
   flush?: boolean
   /** What the proposal rests on — the instances, as a table or list. */
   evidence?: React.ReactNode
+  /**
+   * The evidence without its box — for evidence that is a `seamless` table or
+   * grid, drawing only the rules between its rows, whose edge the card's own
+   * frame already is.
+   */
+  seamless?: boolean
   /** A heading for the evidence — `The six instances`. */
   evidenceTitle?: React.ReactNode
   /** Scope of the evidence — `30 days`. */
@@ -48,6 +54,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
       source,
       flush,
       evidence,
+      seamless,
       evidenceTitle,
       evidenceMeta,
       consequence,
@@ -86,7 +93,7 @@ export const ProposalCard = React.forwardRef<HTMLDivElement, ProposalCardProps>(
               <span className="text-sm text-muted-foreground">{evidenceMeta}</span>
             ) : null}
           </div>
-          {evidence}
+          {seamless ? evidence : <div className="overflow-hidden border border-border">{evidence}</div>}
         </section>
       ) : null}
 

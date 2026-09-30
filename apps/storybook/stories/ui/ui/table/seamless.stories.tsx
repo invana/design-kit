@@ -17,14 +17,14 @@ const ROWS = [
 ];
 
 /**
- * `bordered` — for a table standing alone on a page, with nothing around it to
- * frame it. Off by default: in a card, a panel or an answer the edge is the
- * frame, so the table draws its row rules only and its outer columns sit flush.
+ * `seamless` — for a table inside a card, a panel or an answer, whose edge
+ * already frames it. No box: only the rules between rows, and the first and
+ * last columns flush with the text around the table.
  */
-export const Bordered: Story = {
+export const Seamless: Story = {
   render: () => (
     <div className="w-[420px]">
-      <Table density="compact" bordered>
+      <Table density="compact" seamless>
         <TableHeader>
           <TableRow>
             <TableHead>role</TableHead><TableHead>resolves to</TableHead><TableHead>why this one</TableHead>

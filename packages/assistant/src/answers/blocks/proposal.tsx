@@ -23,6 +23,7 @@ export function ProposalBlock({ turn, block, onEvent }: BlockRendererProps<"prop
       <EmissionBody>
         <ProposalCard
           flush
+          seamless
           title={block.heading}
           done={block.done?.label}
           consequence={block.consequence}
@@ -45,7 +46,7 @@ export function ProposalBlock({ turn, block, onEvent }: BlockRendererProps<"prop
             </PropertyList>
           ) : null}
           {block.figures?.length ? (
-            <MetricGrid joined minTileWidth={72}>
+            <MetricGrid joined seamless minTileWidth={72}>
               {block.figures.map((f) => (
                 <MetricTile key={f.label} variant="figure" label={f.label} value={f.value} />
               ))}

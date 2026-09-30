@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { DataTable } from '@invana/tables';
 import type { ColumnDef } from '@invana/tables';
+import { Card, CardContent } from '@invana/ui';
 
 type Ceiling = { key: string; value: string; bounds: string };
 
@@ -18,7 +19,7 @@ const columns: ColumnDef<Ceiling>[] = [
 ];
 
 const meta: Meta<typeof DataTable<Ceiling>> = {
-  title: 'Data Tables/Static/Bordered',
+  title: 'Data Tables/Static/Seamless',
   component: DataTable<Ceiling>,
   parameters: { layout: 'padded' },
 };
@@ -26,19 +27,23 @@ const meta: Meta<typeof DataTable<Ceiling>> = {
 export default meta;
 
 /**
- * `bordered` draws the box, for a table standing alone on a page. Off by
- * default: in a card, a panel or an answer the edge is the frame, so the table
- * keeps its row rules only and its outer columns sit flush.
+ * `seamless` inside a card: the card is the frame, so the table draws no box
+ * of its own — only the rules between rows — and its first and last columns
+ * sit flush with the card's content edge.
  */
-export const Bordered: StoryObj<typeof meta> = {
+export const Seamless: StoryObj<typeof meta> = {
   render: () => (
-    <DataTable
-      columns={columns}
-      data={rows}
-      bordered
-      enableSorting={false}
-      enablePagination={false}
-      enableColumnVisibility={false}
-    />
+    <Card>
+      <CardContent>
+        <DataTable
+          columns={columns}
+          data={rows}
+          seamless
+          enableSorting={false}
+          enablePagination={false}
+          enableColumnVisibility={false}
+        />
+      </CardContent>
+    </Card>
   ),
 };
