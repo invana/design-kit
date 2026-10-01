@@ -1,0 +1,583 @@
+[
+  {
+    "caption": "Source control",
+    "width": 360,
+    "height": 620,
+    "sections": [
+      {
+        "id": "repositories",
+        "title": { "text": "Repositories", "count": "rows" },
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "design-kit", "icon": "repo", "label": "design-kit", "description": "feat/hifi-board-components", "badge": "3" },
+            { "id": "invana", "icon": "repo", "label": "invana", "description": "main" },
+            { "id": "canvas", "icon": "repo", "label": "canvas", "description": "fix/toolbar-density", "badge": "7" }
+          ]
+        }
+      },
+      {
+        "id": "changes",
+        "title": { "text": "Changes", "count": "rows" },
+        "actions": [
+          { "id": "commit", "name": "Commit", "icon": "check" },
+          { "id": "refresh", "name": "Refresh", "icon": "refresh" }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "panel-stack.tsx", "icon": "file-code", "label": "panel-stack.tsx", "description": "packages/ui/src", "meta": "U" },
+            { "id": "index.ts", "icon": "file-code", "label": "index.ts", "description": "packages/ui/src/components", "meta": "M" },
+            { "id": "panel-stack.stories.tsx", "icon": "file-text", "label": "panel-stack.stories.tsx", "description": "apps/storybook", "meta": "U" }
+          ]
+        }
+      },
+      {
+        "id": "graph",
+        "title": { "text": "Graph" },
+        "view": { "sort": "reverse", "releases": { "dropPrefix": "release:" } },
+        "actions": [
+          { "id": "refresh", "name": "Refresh", "icon": "refresh" },
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "sort", "label": "Sort oldest first", "icon": "sort", "toggle": { "label": "Sort newest first" } },
+              { "id": "releases", "label": "Hide release commits", "icon": "filter", "toggle": { "label": "Show release commits" } },
+              { "id": "reset", "label": "Reset view", "icon": "reset", "shortcut": "⌘R", "separatorBefore": true, "effect": "reset" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "c17", "icon": "commit", "label": "release: v0.0.16" },
+            { "id": "c16", "icon": "commit", "label": "docs(claude): require release.sh + --follow-tags for cutting releases" },
+            { "id": "c15", "icon": "commit", "label": "release: v0.0.15" },
+            { "id": "c14", "icon": "commit", "label": "docs(storybook): show bottomSpan badge on the bottom panel in AppV2" },
+            { "id": "c13", "icon": "commit", "label": "feat(themes): add \"main\" bottomSpan to AppV2" },
+            { "id": "c12", "icon": "commit", "label": "feat(themes): make leftNav optional in app-v1/app-v2" },
+            { "id": "c11", "icon": "commit", "label": "release: v0.0.14" },
+            { "id": "c10", "icon": "commit", "label": "ci(storybook): bump Storybook build to Node 22" },
+            { "id": "c09", "icon": "commit", "label": "fix(themes): resolve lint findings surfaced by eslint 10 upgrade" },
+            { "id": "c08", "icon": "commit", "label": "chore(deps): upgrade all dependencies to latest for testing" },
+            { "id": "c07", "icon": "commit", "label": "fix(ui): narrow the resizable gutter to 4px" },
+            { "id": "c06", "icon": "commit", "label": "release: v0.0.13" }
+          ]
+        }
+      },
+      {
+        "id": "branches",
+        "title": { "text": "Branches", "count": "rows" },
+        "defaultCollapsed": true,
+        "view": { "remotes": "extra" },
+        "actions": [
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "remotes", "label": "Show remote branches", "icon": "cloud", "toggle": { "label": "Hide remote branches", "icon": "cloud-off" } },
+              { "id": "fetch", "label": "Fetch all remotes", "icon": "refresh", "shortcut": "⌘⇧F", "enabledWhen": "remotes" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "feat/hifi-board-components", "icon": "branch", "label": "feat/hifi-board-components", "meta": "3↑", "current": true },
+            { "id": "main", "icon": "branch", "label": "main" },
+            { "id": "feat/forms-object-field", "icon": "branch", "label": "feat/forms-object-field", "meta": "1↑ 2↓" },
+            { "id": "fix/panel-stack-menu", "icon": "branch", "label": "fix/panel-stack-menu", "meta": "5↑" }
+          ],
+          "extra": [
+            { "id": "origin/main", "icon": "branch", "label": "origin/main" },
+            { "id": "origin/feat/hifi-board-components", "icon": "branch", "label": "origin/feat/hifi-board-components" }
+          ]
+        }
+      },
+      {
+        "id": "stashes",
+        "title": { "text": "Stashes", "count": "rows" },
+        "defaultCollapsed": true,
+        "actions": [
+          {
+            "id": "stash",
+            "name": "Stash current changes",
+            "icon": "plus",
+            "effect": "add-row",
+            "add": { "id": "stash-new", "icon": "archive", "label": "WIP on feat/hifi-board-components: 3 files", "meta": "just now" }
+          },
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "apply", "label": "Apply latest stash", "icon": "apply", "effect": "shift-row", "enabledWhen": "rows" },
+              { "id": "drop", "label": "Drop all stashes", "icon": "trash", "destructive": true, "separatorBefore": true, "effect": "clear-rows", "enabledWhen": "rows" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "stash@{0}", "icon": "archive", "label": "WIP on feat/hifi-board-components: panel menus", "meta": "2 hours ago" },
+            { "id": "stash@{1}", "icon": "archive", "label": "WIP on main: density token spike", "meta": "yesterday" }
+          ],
+          "empty": { "title": "No stashes", "description": "Use the header menu to stash the current changes." }
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Properties panel",
+    "width": 320,
+    "height": 600,
+    "sections": [
+      {
+        "id": "summary",
+        "title": { "text": "Summary", "badge": "thesis" },
+        "icon": "info",
+        "actionsOnHover": false,
+        "actions": [
+          { "id": "pin", "name": "Pin record", "icon": "pin", "toggle": { "name": "Unpin record", "icon": "pin-off" } },
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "copy-id", "label": "Copy record id", "icon": "copy" },
+              { "id": "open", "label": "Open in new tab", "icon": "external", "shortcut": "⌘↵" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "properties",
+          "rows": [
+            { "label": "id", "value": "obs_20260908_bpcl_01", "mono": true },
+            { "label": "kind", "value": "thesis" },
+            { "label": "direction", "value": "long" },
+            { "label": "horizon", "value": "intraday" },
+            { "label": "confidence", "value": "0.72" }
+          ]
+        }
+      },
+      {
+        "id": "relations",
+        "title": { "text": "Relations", "count": "rows" },
+        "icon": "link",
+        "actions": [
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "hide-SUPPORTS", "label": "Hide SUPPORTS", "icon": "eye-off", "hide": "SUPPORTS", "toggle": { "label": "Show SUPPORTS" } },
+              { "id": "hide-DERIVED_FROM", "label": "Hide DERIVED_FROM", "icon": "eye-off", "hide": "DERIVED_FROM", "toggle": { "label": "Show DERIVED_FROM" } },
+              { "id": "hide-CONTRADICTS", "label": "Hide CONTRADICTS", "icon": "eye-off", "hide": "CONTRADICTS", "toggle": { "label": "Show CONTRADICTS" } },
+              { "id": "show-all", "label": "Show all relations", "separatorBefore": true, "effect": "show-all", "enabledWhen": "hidden" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "SUPPORTS", "label": "art_20260908_reuters_11", "meta": "SUPPORTS" },
+            { "id": "DERIVED_FROM", "label": "stk_BPCL", "meta": "DERIVED_FROM" },
+            { "id": "CONTRADICTS", "label": "obs_20260907_bpcl_04", "meta": "CONTRADICTS" }
+          ],
+          "empty": { "title": "All relation types hidden" }
+        }
+      },
+      {
+        "id": "citations",
+        "title": "Citations",
+        "icon": "quote",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "reuters", "label": "Reuters · Defence order book firms up" },
+            { "id": "nse", "label": "NSE · Delivery volumes 2026-09-08" }
+          ]
+        }
+      },
+      {
+        "id": "thinking",
+        "title": "Thinking",
+        "icon": "sparkles",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "text",
+          "text": "Delivery volumes lead the order-book confirmation by two sessions, so the intraday leg is sized against volume rather than price."
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Pinned actions",
+    "width": 380,
+    "height": 520,
+    "sections": [
+      {
+        "id": "results",
+        "title": "Results",
+        "actionsOnHover": false,
+        "actions": [
+          { "id": "previous", "name": "Previous page", "icon": "chevron-left", "effect": "page-previous" },
+          { "id": "position", "name": "Page {page} of {pages}", "label": "{page}/{pages}" },
+          { "id": "next", "name": "Next page", "icon": "chevron-right", "effect": "page-next" },
+          {
+            "id": "export",
+            "name": "Export",
+            "icon": "download",
+            "menu": [
+              { "id": "json", "label": "Export as JSON", "icon": "file-json" },
+              { "id": "csv", "label": "Export as CSV", "icon": "file-sheet" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [],
+          "pages": [
+            [
+              { "id": "stk_BPCL", "label": "stk_BPCL" },
+              { "id": "stk_IOC", "label": "stk_IOC" },
+              { "id": "stk_HPCL", "label": "stk_HPCL" },
+              { "id": "stk_ONGC", "label": "stk_ONGC" },
+              { "id": "stk_GAIL", "label": "stk_GAIL" }
+            ],
+            [
+              { "id": "stk_RELIANCE", "label": "stk_RELIANCE" },
+              { "id": "stk_NTPC", "label": "stk_NTPC" },
+              { "id": "stk_POWERGRID", "label": "stk_POWERGRID" },
+              { "id": "stk_COALINDIA", "label": "stk_COALINDIA" },
+              { "id": "stk_SBIN", "label": "stk_SBIN" }
+            ],
+            [
+              { "id": "stk_INFY", "label": "stk_INFY" },
+              { "id": "stk_TCS", "label": "stk_TCS" },
+              { "id": "stk_WIPRO", "label": "stk_WIPRO" },
+              { "id": "stk_HCLTECH", "label": "stk_HCLTECH" },
+              { "id": "stk_TECHM", "label": "stk_TECHM" }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "stream",
+        "title": "Stream",
+        "actionsOnHover": false,
+        "actions": [
+          { "id": "running", "name": "Pause stream", "icon": "pause", "toggle": { "name": "Resume stream", "icon": "play" } }
+        ],
+        "body": {
+          "kind": "log",
+          "lines": [
+            ["12:04:11", "info", "BPCL   328.40  +0.6%"],
+            ["12:04:09", "info", "IOC    141.15  −0.2%"],
+            ["12:04:08", "info", "ONGC   256.90  +1.1%"],
+            ["12:04:04", "info", "GAIL   188.05  +0.3%"],
+            ["12:04:01", "info", "HPCL   402.75  −0.9%"]
+          ]
+        }
+      },
+      {
+        "id": "schema",
+        "title": "Schema",
+        "actions": [
+          { "id": "reload", "name": "Reload schema", "icon": "refresh" },
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [{ "id": "copy", "label": "Copy as JSON schema", "icon": "file-json" }]
+          }
+        ],
+        "body": {
+          "kind": "properties",
+          "rows": [
+            { "label": "id", "value": "string", "mono": true },
+            { "label": "symbol", "value": "string", "mono": true },
+            { "label": "close", "value": "float", "mono": true },
+            { "label": "ts", "value": "datetime", "mono": true }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Section icons",
+    "width": 300,
+    "height": 560,
+    "sections": [
+      {
+        "id": "layers",
+        "title": "Layers",
+        "icon": "layers",
+        "actions": [
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [{ "id": "show-all", "label": "Show all layers", "icon": "eye", "effect": "show-all", "enabledWhen": "hidden" }]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "toggleable": true,
+          "hidden": ["Clusters"],
+          "rows": [
+            { "id": "Nodes", "label": "Nodes", "meta": "512" },
+            { "id": "Edges", "label": "Edges", "meta": "1,284" },
+            { "id": "Labels", "label": "Labels", "meta": "512" },
+            { "id": "Clusters", "label": "Clusters", "meta": "6" }
+          ]
+        }
+      },
+      {
+        "id": "filters",
+        "title": "Filters",
+        "icon": "sliders",
+        "actions": [
+          {
+            "id": "more",
+            "name": "More options",
+            "icon": "more",
+            "menu": [
+              { "id": "reset", "label": "Reset filters", "icon": "reset" },
+              { "id": "clear", "label": "Remove all filters", "icon": "trash", "destructive": true, "separatorBefore": true, "effect": "clear-rows", "enabledWhen": "rows" }
+            ]
+          }
+        ],
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "degree", "label": "degree ≥ 3" },
+            { "id": "confidence", "label": "confidence > 0.6" },
+            { "id": "updated", "label": "updated in the last 7 days" }
+          ],
+          "empty": { "title": "No filters" }
+        }
+      },
+      {
+        "id": "legend",
+        "title": "Legend",
+        "icon": "palette",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "legend",
+          "items": [
+            { "label": "Stock", "color": "var(--color-data-1)" },
+            { "label": "Article", "color": "var(--color-data-2)" },
+            { "label": "Observation", "color": "var(--color-data-3)" },
+            { "label": "Learning", "color": "var(--color-data-4)" }
+          ]
+        }
+      },
+      {
+        "id": "history",
+        "title": "History",
+        "icon": "history",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "e1", "label": "Hid 2 clusters" },
+            { "id": "e2", "label": "Set confidence filter" },
+            { "id": "e3", "label": "Pinned obs_20260908_bpcl_01" },
+            { "id": "e4", "label": "Ran layout: force-directed" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Sized sections",
+    "width": 340,
+    "height": 600,
+    "withHandle": true,
+    "sections": [
+      {
+        "id": "preview",
+        "title": "Preview",
+        "icon": "image",
+        "defaultSize": "200px",
+        "body": { "kind": "empty", "title": "graph thumbnail", "description": "A fixed 200px — a thumbnail wants the same height whatever the sidebar's." }
+      },
+      {
+        "id": "outline",
+        "title": "Outline",
+        "icon": "outline",
+        "defaultSize": "45%",
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "o1", "label": "Defence theme — Sep 2026", "description": "Thesis · order book · Evidence · 12 articles · Counterpoints · 3" },
+            { "id": "o2", "label": "BPCL today", "description": "Intraday observations · Volume anomaly" },
+            { "id": "o3", "label": "Watchlist", "description": "Refiners · Power" }
+          ]
+        }
+      },
+      {
+        "id": "log",
+        "title": "Log",
+        "icon": "log",
+        "minSize": "120px",
+        "body": {
+          "kind": "log",
+          "lines": [
+            ["12:04:11", "info", "layout  force-directed · 512 nodes"],
+            ["12:03:58", "debug", "query   MATCH (s:Stock)-[:MENTIONS]->(a)"],
+            ["12:03:58", "debug", "cache   hit · 41 edges"],
+            ["12:03:12", "info", "ingest  nse-daily · 2026-09-08.csv"],
+            ["12:02:44", "info", "ingest  reuters · 118 articles"],
+            ["12:01:03", "debug", "auth    session refreshed"]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Driven from outside",
+    "width": 380,
+    "height": 420,
+    "withHandle": true,
+    "headerHeight": 30,
+    "outside": [
+      { "section": "runs", "label": "Open Runs" },
+      { "section": "plans", "label": "Open Plans" },
+      { "section": "catalogue", "label": "Open Catalogue" }
+    ],
+    "sections": [
+      {
+        "id": "runs",
+        "title": "Runs",
+        "icon": "runs",
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "r1", "label": "orders.csv → Brokerage.Order", "description": "1,204 written · 2m" },
+            { "id": "r2", "label": "nse-quotes-2026-09-15.csv", "description": "connection refused" },
+            { "id": "r3", "label": "supplier → company", "description": "6 rules · committed" }
+          ]
+        }
+      },
+      {
+        "id": "plans",
+        "title": "Plans",
+        "icon": "plans",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "p1", "label": "nightly-load", "description": "import · v4" },
+            { "id": "p2", "label": "supplier-sweep", "description": "enrich · v2" }
+          ]
+        }
+      },
+      {
+        "id": "catalogue",
+        "title": "Catalogue",
+        "icon": "catalogue",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "k1", "label": "import_dataset", "meta": "writes" },
+            { "id": "k2", "label": "execute_query", "meta": "reads" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Custom title",
+    "width": 360,
+    "height": 560,
+    "sections": [
+      {
+        "id": "branch",
+        "title": { "text": "main", "badge": "3 ahead", "icon": "branch" },
+        "body": { "kind": "items", "rows": [
+          { "id": "b1", "label": "Commit item 1" }, { "id": "b2", "label": "Commit item 2" }, { "id": "b3", "label": "Commit item 3" }
+        ] }
+      },
+      {
+        "id": "issues",
+        "title": { "text": "Issues", "badge": "2", "tone": "destructive", "icon": "bug" },
+        "body": { "kind": "items", "rows": [
+          { "id": "i1", "label": "Issue item 1" }, { "id": "i2", "label": "Issue item 2" }
+        ] }
+      },
+      {
+        "id": "features",
+        "title": { "text": "Highlights", "badge": "new", "tone": "warning", "icon": "sparkles" },
+        "body": { "kind": "items", "rows": [
+          { "id": "h1", "label": "Highlight item 1" }, { "id": "h2", "label": "Highlight item 2" }, { "id": "h3", "label": "Highlight item 3" }
+        ] }
+      }
+    ]
+  },
+  {
+    "caption": "Dense headers — with custom classes",
+    "width": 340,
+    "height": 520,
+    "withHandle": true,
+    "headerHeight": 28,
+    "classes": { "className": "bg-muted/20", "headerClassName": "bg-background/60", "bodyClassName": "px-1 font-mono text-sm" },
+    "sections": [
+      {
+        "id": "variables",
+        "title": "Variables",
+        "actions": [
+          { "id": "more", "name": "More options", "icon": "more", "menu": [{ "id": "copy", "label": "Copy all as JSON", "icon": "copy" }] }
+        ],
+        "body": {
+          "kind": "properties",
+          "rows": [
+            { "label": "symbol", "value": "\"BPCL\"", "mono": true },
+            { "label": "window", "value": "7d", "mono": true },
+            { "label": "minConfidence", "value": "0.6", "mono": true },
+            { "label": "includeDrafts", "value": "false", "mono": true }
+          ]
+        }
+      },
+      {
+        "id": "callstack",
+        "title": "Call stack",
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "f1", "label": "resolveThesis", "description": "analysis.ts:118", "current": true },
+            { "id": "f2", "label": "scoreEvidence", "description": "analysis.ts:64" },
+            { "id": "f3", "label": "runPipeline", "description": "pipeline.ts:212" },
+            { "id": "f4", "label": "handleRequest", "description": "server.ts:41" }
+          ]
+        }
+      },
+      {
+        "id": "breakpoints",
+        "title": "Breakpoints",
+        "defaultCollapsed": true,
+        "body": {
+          "kind": "items",
+          "rows": [
+            { "id": "bp1", "icon": "pin", "label": "analysis.ts:118" },
+            { "id": "bp2", "icon": "pin", "label": "pipeline.ts:212" },
+            { "id": "bp3", "icon": "pin", "label": "server.ts:41" }
+          ]
+        }
+      },
+      {
+        "id": "watch",
+        "title": "Watch",
+        "defaultCollapsed": true,
+        "body": { "kind": "empty", "title": "No watch expressions" }
+      }
+    ]
+  }
+]
