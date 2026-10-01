@@ -158,7 +158,7 @@ export function DataTableToolbar<TData>({
   if (chips && filters) {
     return (
       <div className="flex items-center gap-2">
-        <FilterBar className="min-w-0 flex-1" summary={summary}>
+        <FilterBar seamless className="min-w-0 flex-1" summary={summary}>
           {searchBox}
           {chips.map(({ filter, options }) => (
             <MultiFilterChip
