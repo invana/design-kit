@@ -1,0 +1,34 @@
+[
+  {
+    "caption": "Four tones",
+    "width": 480,
+    "labelWidth": 240,
+    "chips": [
+      { "tone": "allowed", "address": "graph_data/model/Deals@1.0.0", "note": "in view, and the run read it" },
+      { "tone": "denied", "address": "third_party/**", "note": "what the bound says, read at rest" },
+      {
+        "tone": "refused",
+        "address": "graph_data/stitch/tweet_article@about",
+        "note": "the run reached for it and was refused"
+      },
+      { "tone": "untouched", "address": "cache/prefix/*", "note": "allowed, and nothing went near it" }
+    ]
+  },
+  {
+    "caption": "200px — the kind gives way first",
+    "width": 200,
+    "chips": [
+      { "address": "graph_data/model/NewsArticles@1.0.1" },
+      { "address": "graph_data/stitch/route_airport@departs_from" },
+      { "address": "llm/claude_agent_sdk/claude-opus-5" }
+    ]
+  },
+  {
+    "caption": "Opens what it names",
+    "open": true,
+    "chips": [
+      { "tone": "allowed", "address": "graph_data/model/Deals@1.0.0" },
+      { "tone": "refused", "address": "graph_data/stitch/tweet_article@about" }
+    ]
+  }
+]

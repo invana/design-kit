@@ -1,0 +1,36 @@
+[
+  {
+    "caption": "Files it left",
+    "width": 860,
+    "panel": {
+      "title": "Files it left",
+      "aside": "a file is addressed by its digest — the same bytes twice are one artifact"
+    },
+    "props": {
+      "files": [
+        { "name": "rejects.jsonl", "kind": "rejects", "size": "6 KB", "digest": "a10f47b3", "written": "+8.2s" },
+        { "name": "report.json", "kind": "interpreter", "size": "2.4 KB", "digest": "5d93c1ef", "written": "+8.4s" },
+        { "name": "mapping.yml", "kind": "input", "size": "1.1 KB", "digest": "e8b2470a", "written": "+0.1s" },
+        {
+          "name": "rows-4902.csv",
+          "kind": "export",
+          "size": "412 KB",
+          "digest": "7c02e918",
+          "written": "+8.4s",
+          "gone": true
+        }
+      ]
+    }
+  },
+  {
+    "caption": "List",
+    "props": {
+      "variant": "list",
+      "files": [
+        { "name": "margin-bridge-q3.xlsx", "size": "48 KB", "digest": "a91f03c2" },
+        { "name": "rejected-rows.csv", "size": "6 KB", "digest": "77be1d0e" },
+        { "name": "chart-freight.png", "size": "112 KB", "digest": "c0d45a9b" }
+      ]
+    }
+  }
+]

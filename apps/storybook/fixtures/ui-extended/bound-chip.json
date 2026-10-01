@@ -1,0 +1,16 @@
+[
+  {
+    "caption": "Nine bounds",
+    "chips": [
+      { "bound": "none", "note": "emit_table · read_artefact" },
+      { "bound": "network", "note": "what network spends" },
+      { "bound": "graph_read", "note": "what graph_read spends" },
+      { "bound": "graph_write", "note": "what graph_write spends" },
+      { "bound": "schema_write", "note": "what schema_write spends" },
+      { "bound": "ingest", "note": "what ingest spends" },
+      { "bound": "llm", "note": "what llm spends" },
+      { "bound": "plan_write", "note": "what plan_write spends" },
+      { "bound": "work_write", "note": "what work_write spends" }
+    ]
+  }
+]

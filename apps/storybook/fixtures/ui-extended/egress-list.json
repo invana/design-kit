@@ -1,0 +1,26 @@
+[
+  {
+    "caption": "What may be sent",
+    "width": 480,
+    "props": { "to": "llm/anthropic-prod/claude-opus-5", "classes": ["type_names", "property_names", "the_question"] }
+  },
+  {
+    "caption": "Everything, to a local model",
+    "width": 480,
+    "props": { "to": "llm/ollama-local/llama-3.1-8b", "classes": ["everything"] }
+  },
+  {
+    "caption": "With what was cut",
+    "width": 480,
+    "props": {
+      "to": "llm/anthropic-prod/claude-opus-5",
+      "classes": ["type_names", "the_question"],
+      "cut": ["property_values", "record_ids"]
+    }
+  },
+  {
+    "caption": "Nothing may leave",
+    "width": 480,
+    "props": { "to": "third_party/api/clearbit.com" }
+  }
+]
