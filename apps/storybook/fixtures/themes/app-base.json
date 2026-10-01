@@ -1,0 +1,97 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "header": {
+      "brand": { "name": "InvanaApp" },
+      "search": "Search...",
+      "actions": [
+        { "name": "Notifications", "icon": "bell" },
+        { "name": "Help", "icon": "help" }
+      ],
+      "user": { "name": "User", "avatar": "https://github.com/shadcn.png", "initials": "U" }
+    },
+    "page": {
+      "title": "Dashboard",
+      "subtitle": "Welcome to your application dashboard",
+      "metrics": [
+        { "label": "Total Users", "value": "2,345", "caption": "+12%" },
+        { "label": "Active Sessions", "value": "1,234", "caption": "+8%" },
+        { "label": "Revenue", "value": "$45,231", "caption": "+23%" },
+        { "label": "Conversions", "value": "573", "caption": "+5%" }
+      ],
+      "panels": [
+        {
+          "title": "Recent Activity",
+          "activity": [
+            { "title": "User 1 completed an action", "when": "1 minutes ago", "avatar": "https://i.pravatar.cc/150?img=1", "initials": "U1" },
+            { "title": "User 2 completed an action", "when": "2 minutes ago", "avatar": "https://i.pravatar.cc/150?img=2", "initials": "U2" },
+            { "title": "User 3 completed an action", "when": "3 minutes ago", "avatar": "https://i.pravatar.cc/150?img=3", "initials": "U3" },
+            { "title": "User 4 completed an action", "when": "4 minutes ago", "avatar": "https://i.pravatar.cc/150?img=4", "initials": "U4" },
+            { "title": "User 5 completed an action", "when": "5 minutes ago", "avatar": "https://i.pravatar.cc/150?img=5", "initials": "U5" }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "left": [{ "name": "© 2025 InvanaApp" }],
+      "center": [{ "name": "v1.0.0" }],
+      "right": [{ "name": "Status", "label": "All systems operational", "icon": "operational" }]
+    }
+  },
+  {
+    "caption": "Enterprise",
+    "wide": true,
+    "header": {
+      "brand": { "name": "Enterprise Suite", "mark": "E" },
+      "search": "Search across all modules...",
+      "actions": [
+        { "name": "Notifications", "icon": "bell", "badge": 3 },
+        { "name": "Help", "icon": "help" }
+      ],
+      "user": { "name": "Admin User", "avatar": "https://github.com/shadcn.png", "initials": "AU", "label": true }
+    },
+    "page": {
+      "title": "Enterprise Dashboard",
+      "actions": [
+        { "name": "Export", "label": "Export" },
+        { "name": "New Report", "label": "New Report", "icon": "plus" }
+      ],
+      "metrics": [
+        { "label": "Total Revenue", "value": "$1.2M", "caption": "+18.2%", "tone": "success" },
+        { "label": "Active Users", "value": "12,345", "caption": "+12.5%", "tone": "success" },
+        { "label": "Projects", "value": "234", "caption": "+3.1%", "tone": "success" },
+        { "label": "Avg. Response", "value": "1.2s", "caption": "-8.3%", "tone": "muted" }
+      ],
+      "panels": [
+        {
+          "title": "Recent Activity",
+          "activity": [
+            { "title": "Sarah Chen", "description": "created a new project", "when": "2m ago", "avatar": "https://i.pravatar.cc/150?img=10", "initials": "SC" },
+            { "title": "Mike Johnson", "description": "updated dashboard settings", "when": "15m ago", "avatar": "https://i.pravatar.cc/150?img=11", "initials": "MJ" },
+            { "title": "Emma Wilson", "description": "exported monthly report", "when": "1h ago", "avatar": "https://i.pravatar.cc/150?img=12", "initials": "EW" },
+            { "title": "David Lee", "description": "added 3 new team members", "when": "2h ago", "avatar": "https://i.pravatar.cc/150?img=13", "initials": "DL" }
+          ]
+        },
+        {
+          "title": "System Status",
+          "status": [
+            { "service": "API Server", "uptime": "99.99%" },
+            { "service": "Database", "uptime": "99.98%" },
+            { "service": "CDN", "uptime": "100%" },
+            { "service": "Email Service", "uptime": "99.95%" }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "left": [
+        { "name": "© 2025 Enterprise Suite" },
+        { "name": "Privacy", "static": false },
+        { "name": "Terms", "static": false }
+      ],
+      "center": [{ "name": "v2.4.1 • Build 2025.12.23" }],
+      "right": [{ "name": "Status", "label": "All systems operational", "icon": "operational" }]
+    }
+  }
+]
