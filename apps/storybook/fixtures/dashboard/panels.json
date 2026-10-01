@@ -248,9 +248,11 @@
     "caption": "Lens",
     "wide": true,
     "panel": {
+      "id": "lens",
       "kind": "lens",
       "title": "What the world allowed",
       "options": {
+        "selectAction": "select-lens",
         "palette": { "graph_data": { "swatch": "bg-data-1", "text": "text-data-1" }, "third_party": { "swatch": "bg-data-8", "text": "text-data-8" } },
         "sections": [
           {
@@ -259,6 +261,10 @@
             "participants": [
               { "address": "model/Orders@v2", "verdict": "touched", "note": "1,284 rows · step 4" },
               { "address": "model/Suppliers@v1", "verdict": "never touched" }
+            ],
+            "rows": [
+              { "name": "orders-readonly", "narrows": [{ "kind": "allow", "count": 2 }, { "kind": "excludes", "properties": ["email", "phone"] }], "usage": { "runs": 41, "lastUsed": "2h ago" } },
+              { "name": "suppliers-sliced", "narrows": [{ "kind": "sliced" }], "usage": { "runs": 0 } }
             ]
           },
           {

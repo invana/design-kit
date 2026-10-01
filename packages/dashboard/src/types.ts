@@ -444,6 +444,8 @@ export interface ActionContext {
   pressed?: boolean
   /** Set by `trace`'s row select — the step a reader picked out of a run. */
   stepId?: string
+  /** Set by `lens`'s row select — the lens a reader picked, by name. */
+  lens?: string
   /** Set by a block panel — what its action carries: a row's key, a form's values. */
   value?: unknown
 }

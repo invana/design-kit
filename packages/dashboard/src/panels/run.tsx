@@ -4,6 +4,7 @@ import {
   ExchangeRecord,
   LayerSection,
   LayerStrip,
+  LensRow,
   MarkChip,
   ParticipantRow,
   TouchStrip,
@@ -379,7 +380,10 @@ export function LayersPanel({
   )
 }
 
-export function LensPanel({ options }: PanelRendererProps<LensOptions>) {
+export function LensPanel({ panel, options, onAction }: PanelRendererProps<LensOptions>) {
+  const pick = options.selectAction
+    ? (lens: string) => onAction(options.selectAction as string, { panelId: panel.id, lens })
+    : undefined
   return (
     <div className="flex flex-col gap-2">
       {options.sections.map((section) => (
@@ -397,6 +401,17 @@ export function LensPanel({ options }: PanelRendererProps<LensOptions>) {
               address={participant.address}
               verdict={participant.verdict}
               note={participant.note}
+            />
+          ))}
+          {(section.rows ?? []).map((row) => (
+            <LensRow
+              key={row.name}
+              name={row.name}
+              narrows={row.narrows}
+              usage={row.usage}
+              palette={options.palette}
+              selected={options.selected === row.name}
+              onSelect={pick}
             />
           ))}
         </LayerSection>

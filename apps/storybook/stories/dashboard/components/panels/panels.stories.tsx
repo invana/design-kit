@@ -89,6 +89,8 @@ function answer(spec: Spec, id: string, ctx: ActionContext = {}): Spec {
       return patchPanel(spec, panelId, { selectedKey: ctx.taskKey });
     case 'select-item':
       return patchPanel(spec, panelId, { selectedItem: ctx.itemId });
+    case 'select-lens':
+      return patchPanel(spec, panelId, { selected: ctx.lens });
     case 'edit-param':
       return mapPanels(spec, (p) =>
         p.id === panelId && ctx.param
