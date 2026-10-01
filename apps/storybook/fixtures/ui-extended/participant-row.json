@@ -1,0 +1,35 @@
+[
+  {
+    "caption": "Every participant this run could have spent",
+    "width": 640,
+    "title": "Every participant this run could have spent",
+    "aside": "refusals struck, never hidden",
+    "sections": [
+      {
+        "layer": "graph_data",
+        "summary": "3 allowed · 2 touched",
+        "rows": [
+          { "address": "graph_data/model/Routes@v4", "verdict": "touched", "note": "1,284 rows · step 7" },
+          { "address": "graph_data/model/Carriers@v2", "verdict": "touched", "note": "schema only · step 4" },
+          { "address": "graph_data/model/Deal@v3", "verdict": "never touched", "note": "allowed, and nothing asked for it" },
+          { "address": "graph_data/stitch/publisher_sponsor", "verdict": "refused", "note": "outside this world — widen to answer" }
+        ]
+      },
+      {
+        "layer": "llm",
+        "summary": "3 allowed · 2 touched",
+        "rows": [
+          { "address": "llm/anthropic-prod/claude-haiku-4.5", "verdict": "touched", "note": "3 calls · extract" },
+          { "address": "llm/ollama-local/llama-3.3", "verdict": "never touched", "note": "allowed as a judge, never asked" }
+        ]
+      },
+      {
+        "layer": "third_party",
+        "summary": "1 allowed · 0 touched",
+        "rows": [
+          { "address": "third_party/api/clearbit.com/**", "verdict": "refused", "note": "denied by a guardrail" }
+        ]
+      }
+    ]
+  }
+]

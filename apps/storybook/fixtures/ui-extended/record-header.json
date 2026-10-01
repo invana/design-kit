@@ -1,0 +1,46 @@
+[
+  {
+    "caption": "A running run — views and a cancel",
+    "wide": true,
+    "tone": "running",
+    "crumbs": ["Which suppliers are exposed to the Red Sea route?"],
+    "chips": [{ "bound": "llm" }, { "badge": "running" }],
+    "views": [
+      { "value": "dashboard", "label": "Dashboard" },
+      { "value": "yml", "label": "dashboard.yml" }
+    ],
+    "view": "dashboard",
+    "actions": [
+      { "label": "Cancel", "variant": "outline" },
+      { "label": "More", "variant": "ghost", "icon": "more" }
+    ]
+  },
+  {
+    "caption": "A finished task — walk to the next",
+    "wide": true,
+    "tone": "success",
+    "crumbs": ["orders.csv → Brokerage.Order", "import_dataset"],
+    "chips": [{ "bound": "ingest" }, { "badge": "succeeded" }],
+    "pager": [
+      { "label": "Previous task", "icon": "previous" },
+      { "label": "Next task", "icon": "next" }
+    ]
+  },
+  {
+    "caption": "A draft — one primary action",
+    "wide": true,
+    "tone": "warning",
+    "crumbs": ["nightly-load", "import_dataset"],
+    "chips": [{ "badge": "draft v5" }],
+    "actions": [{ "label": "Publish v5", "variant": "default" }]
+  },
+  {
+    "caption": "In a panel — size md",
+    "width": 520,
+    "size": "md",
+    "tone": "success",
+    "crumbs": ["run:7d3184f1"],
+    "chips": [{ "badge": "succeeded" }],
+    "actions": [{ "label": "Open run", "variant": "outline" }]
+  }
+]

@@ -1,0 +1,33 @@
+[
+  {
+    "caption": "Refused by the agent's guardrail",
+    "width": 480,
+    "label": "refused · the agent's own guardrail",
+    "remedy": "Ask in a world whose models this guardrail allows, or ask an agent without it.",
+    "body": [
+      { "strong": "This ask was not run." },
+      { "text": " In " },
+      { "strong": "Everything" },
+      { "text": ", " },
+      { "code": "decide" },
+      { "text": " is cast to " },
+      { "code": "llm/anthropic-prod/claude-opus-5" },
+      { "text": ", and the agent's own guardrail " },
+      { "strong": "Nothing leaves" },
+      { "text": " does not allow it." }
+    ]
+  },
+  {
+    "caption": "Refused by the world — no remedy given",
+    "width": 480,
+    "label": "refused · the world's lens",
+    "body": [
+      { "strong": "This ask was not run." },
+      { "text": " " },
+      { "code": "third_party/**" },
+      { "text": " is denied in " },
+      { "strong": "EU · H1 2026" },
+      { "text": "." }
+    ]
+  }
+]

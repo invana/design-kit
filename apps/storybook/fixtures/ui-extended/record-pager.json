@@ -1,0 +1,31 @@
+[
+  {
+    "caption": "In a step's pagehead",
+    "wide": true,
+    "noun": "step",
+    "records": ["resolve_schema", "build_query", "validate_query", "execute_query", "summarise"],
+    "start": 3,
+    "header": {
+      "tone": "success",
+      "crumbs": ["runs", "run:7d3184f1"],
+      "chips": ["graph_read", "succeeded"],
+      "readings": [
+        { "value": "overview", "label": "Overview" },
+        { "value": "touched", "label": "Touched" },
+        { "value": "log", "label": "Log" }
+      ]
+    }
+  },
+  {
+    "caption": "At the first step — back is disabled, not hidden",
+    "noun": "step",
+    "records": ["resolve_schema", "build_query", "validate_query", "execute_query", "summarise"],
+    "start": 0
+  },
+  {
+    "caption": "At the last step",
+    "noun": "step",
+    "records": ["resolve_schema", "build_query", "validate_query", "execute_query", "summarise"],
+    "start": 4
+  }
+]
