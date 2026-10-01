@@ -32,6 +32,12 @@ export interface PanelStackSection {
   /** Optional leading icon component, shown before the title. */
   icon?: React.ElementType
   /**
+   * How many things the section holds — `4`, `12 changed` — beside the title,
+   * muted. A fact, not an action: always shown, even while the actions wait
+   * for hover, and while the section is collapsed.
+   */
+  count?: React.ReactNode
+  /**
    * Actions on the right of the title bar, as `NavHorizontal` items — the same
    * list `PanelContent` and `TabbedPanel` take, so a header is described once
    * and reads the same everywhere. A header has one action area, so this is
@@ -52,7 +58,7 @@ export interface PanelStackSection {
   /**
    * Keep `headerActions` hidden until the header is hovered or focused (or a
    * menu inside them is open) — VS Code's quiet view header. Defaults to
-   * `true`. Chrome that must always read, like a count, belongs in `title`.
+   * `true`. A count that must always read is `count`.
    */
   actionsOnHover?: boolean
   /** Start the section collapsed (header only). Defaults to `false`. */
@@ -382,6 +388,9 @@ export function PanelStack({
                       <span className="flex min-w-0 flex-1 items-center">
                         {section.title}
                       </span>
+                    )}
+                    {section.count != null && (
+                      <span className="ms-1 shrink-0 text-sm text-muted-foreground">{section.count}</span>
                     )}
                   </button>
                   {section.headerActions && section.headerActions.length > 0 && (

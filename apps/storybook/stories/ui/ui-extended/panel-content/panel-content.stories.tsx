@@ -104,10 +104,9 @@ function panelCode(p: Panel) {
   if (p.titleText) attrs.push(`titleText="${p.titleText}"`);
   if (p.title)
     attrs.push(
-      `title={<>${p.title.icon ? `<${ICON_NAMES[p.title.icon]} size={14} /> ` : ''}${p.title.text}${
-        p.title.count ? ` <Badge variant="secondary" size="xs">${p.title.count}</Badge>` : ''
-      }${p.title.status ? ` <Badge variant="soft" tone="success" size="xs">${p.title.status}</Badge>` : ''}</>}`,
+      `title={<>${p.title.icon ? `<${ICON_NAMES[p.title.icon]} size={14} /> ` : ''}${p.title.text}${p.title.status ? ` <Badge variant="soft" tone="success" size="xs">${p.title.status}</Badge>` : ''}</>}`,
     );
+  if (p.title?.count) attrs.push(`count="${p.title.count}"`);
   if (p.actionsOnHover) attrs.push('actionsOnHover');
   if (p.actions) attrs.push(`headerActions={${actionsCode(p.actions).split('\n').join('\n  ')}}`);
   if (p.classes) Object.entries(p.classes).forEach(([k, v]) => attrs.push(`${k}="${v}"`));
@@ -279,15 +278,11 @@ function LivePanel({ p, height, log, onAction, onSelect }: { p: Panel; height: n
       <div style={{ height }}>
         <PanelContent
           titleText={p.titleText}
+          count={p.title?.count}
           title={
             p.title ? (
               <>
                 {TitleIcon ? <TitleIcon size={14} aria-hidden /> : null} {p.title.text}{' '}
-                {p.title.count ? (
-                  <Badge variant="secondary" size="xs">
-                    {p.title.count}
-                  </Badge>
-                ) : null}
                 {p.title.status ? (
                   <Badge variant="soft" tone="success" size="xs">
                     {p.title.status}

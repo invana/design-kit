@@ -12,6 +12,11 @@ export interface PanelContentProps {
   title?: React.ReactNode
   /** Header title as plain text, rendered in the default panel header style. */
   titleText?: string
+  /**
+   * How many things the panel holds — `4`, `12 changed` — beside the title,
+   * muted. A fact about the panel, so always shown, unlike its actions.
+   */
+  count?: React.ReactNode
   children?: React.ReactNode
   /** Classes for the outer card. */
   className?: string
@@ -54,7 +59,7 @@ export interface PanelContentProps {
 }
 
 export function PanelContent({
-  title, titleText, children,
+  title, titleText, count, children,
   className, headerClassName, bodyClassName, footerContent, footerClassName,
   headerActions, actionsOnHover = false,
 }: PanelContentProps) {
@@ -76,6 +81,7 @@ export function PanelContent({
           >
             {title && <span className="min-w-0 truncate font-bold leading-none">{title}</span>}
             {titleText && <h4 className="min-w-0 truncate font-bold leading-none">{titleText}</h4>}
+            {count != null && <span className="shrink-0 text-sm leading-none text-muted-foreground">{count}</span>}
             {headerActions && headerActions.length > 0 && (
               <div
                 className={cn(

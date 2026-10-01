@@ -362,9 +362,9 @@ function Live({ v, log, onCollapsedChange, onClick, onSelect }: { v: StackVarian
   const title = (s: Section): React.ReactNode => {
     if (typeof s.title === 'string') return s.title;
     const t = s.title;
-    const count = t.count === 'rows' ? shown(s).length : undefined;
     const TitleIcon = t.icon ? ICONS[t.icon] : undefined;
-    const tag = count ?? t.badge;
+    // A status is a badge in the title; a count is the section's own `count`.
+    const tag = t.badge;
     return (
       <Eyebrow
         aside={
@@ -482,6 +482,7 @@ function Live({ v, log, onCollapsedChange, onClick, onSelect }: { v: StackVarian
   const sections: PanelStackSection[] = v.sections.map((s) => ({
     id: s.id,
     title: title(s),
+    count: typeof s.title !== 'string' && s.title.count === 'rows' ? shown(s).length : undefined,
     icon: s.icon ? ICONS[s.icon] : undefined,
     defaultCollapsed: s.defaultCollapsed,
     defaultSize: s.defaultSize,
@@ -537,7 +538,7 @@ function Live({ v, log, onCollapsedChange, onClick, onSelect }: { v: StackVarian
  * `fixtures/ui-extended/panel-stack.json`. Every header stays visible; open sections share the
  * column with draggable dividers. Headers take `headerActions` (the `NavHorizontal` item list
  * `PanelContent` and `TabbedPanel` take), quiet until hovered unless `actionsOnHover: false`;
- * counts go in `title` where they always read. Collapsed state is **reported, not dictated**:
+ * counts are the section's `count`, which always reads. Collapsed state is **reported, not dictated**:
  * `onCollapsedChange` gets the whole map, and `stackRef` is how something outside opens one.
  * Every menu is live — sort, filter, show remotes, stash, drop, pin, page — and logged.
  */
