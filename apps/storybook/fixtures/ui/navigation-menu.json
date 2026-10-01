@@ -1,0 +1,24 @@
+[
+  {
+    "caption": "Default",
+    "width": 560,
+    "menus": [
+      {
+        "label": "Products",
+        "links": [
+          { "title": "Graph Explorer", "description": "Visualize and traverse your graph data.", "href": "#graph-explorer" },
+          { "title": "Dashboards", "description": "Build interactive analytics views.", "href": "#dashboards" }
+        ]
+      },
+      {
+        "label": "Resources",
+        "links": [
+          { "title": "Documentation", "href": "#docs" },
+          { "title": "API Reference", "href": "#api" },
+          { "title": "Community", "href": "#community" }
+        ]
+      },
+      { "label": "Pricing", "href": "#pricing" }
+    ]
+  }
+]

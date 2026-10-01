@@ -1,0 +1,26 @@
+[
+  {
+    "caption": "Default",
+    "parts": [
+      "A run is grounded in the graph it was asked against. Read ",
+      { "text": "how grounding works", "href": "#" },
+      " before changing a world."
+    ]
+  },
+  {
+    "caption": "Underlined",
+    "parts": ["By continuing you accept the ", { "text": "terms of service", "href": "#", "variant": "underlined" }, "."]
+  },
+  {
+    "caption": "Quiet",
+    "parts": [{ "text": "Privacy", "href": "#", "variant": "quiet" }, " ", { "text": "Terms", "href": "#", "variant": "quiet" }]
+  },
+  {
+    "caption": "External",
+    "parts": [
+      "The catalogue ships with the engine — ",
+      { "text": "invana.io", "href": "https://invana.io", "external": true },
+      " opens in a new tab."
+    ]
+  }
+]

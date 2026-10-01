@@ -1,0 +1,39 @@
+[
+  {
+    "caption": "Default",
+    "width": 480,
+    "menus": [
+      {
+        "label": "File",
+        "items": [
+          { "type": "item", "label": "New Tab", "shortcut": "⌘T" },
+          { "type": "item", "label": "New Window", "shortcut": "⌘N" },
+          { "type": "separator" },
+          { "type": "sub", "label": "Share", "items": ["Email link", "Messages", "Notes"] },
+          { "type": "separator" },
+          { "type": "item", "label": "Print", "shortcut": "⌘P" }
+        ]
+      },
+      {
+        "label": "Edit",
+        "items": [
+          { "type": "item", "label": "Undo", "shortcut": "⌘Z" },
+          { "type": "item", "label": "Redo", "shortcut": "⇧⌘Z" },
+          { "type": "separator" },
+          { "type": "item", "label": "Cut" },
+          { "type": "item", "label": "Copy" },
+          { "type": "item", "label": "Paste" }
+        ]
+      },
+      {
+        "label": "View",
+        "items": [
+          { "type": "checkbox", "label": "Show Toolbar", "checked": true },
+          { "type": "checkbox", "label": "Show Sidebar", "checked": false },
+          { "type": "separator" },
+          { "type": "radio", "name": "density", "value": "comfortable", "options": ["Compact", "Comfortable"] }
+        ]
+      }
+    ]
+  }
+]

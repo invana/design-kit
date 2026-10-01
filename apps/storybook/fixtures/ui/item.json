@@ -1,0 +1,54 @@
+[
+  {
+    "caption": "Default",
+    "width": 384,
+    "variant": "outline",
+    "items": [
+      {
+        "id": "proposal",
+        "icon": "file",
+        "title": "Project proposal.pdf",
+        "description": "Updated 2 hours ago · 1.4 MB · Shared with 3 people",
+        "action": "Open"
+      }
+    ]
+  },
+  {
+    "caption": "Entity row",
+    "width": 420,
+    "size": "xs",
+    "selected": "intraday",
+    "items": [
+      {
+        "id": "scout",
+        "dot": "success",
+        "title": "Market Scout",
+        "tag": "default",
+        "description": "claude-opus-5 · 4 skills · 1 running",
+        "status": { "text": "active", "tone": "success" }
+      },
+      {
+        "id": "intraday",
+        "dot": "success",
+        "title": "Intraday Analyst",
+        "description": "5 skills · 1 in review · 1 needs input",
+        "status": { "text": "active", "tone": "success" }
+      },
+      {
+        "id": "risk",
+        "dot": "muted",
+        "title": "└ Risk Checker",
+        "description": "spawned · ephemeral · retired 6 min ago",
+        "status": { "text": "retired", "tone": "muted" }
+      },
+      {
+        "id": "setup-bel",
+        "dot": "warning",
+        "title": "Setup check BEL",
+        "agent": "Intraday Analyst",
+        "description": "asked a question",
+        "status": { "text": "needs input", "tone": "warning" }
+      }
+    ]
+  }
+]

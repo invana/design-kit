@@ -1,0 +1,19 @@
+[
+  {
+    "caption": "Search with a button",
+    "id": "search",
+    "start": { "icon": "search" },
+    "placeholder": "Search components...",
+    "value": "",
+    "end": { "button": "Search" }
+  },
+  {
+    "caption": "Amount with a currency",
+    "id": "amount",
+    "start": { "icon": "dollar" },
+    "type": "number",
+    "placeholder": "0.00",
+    "value": "",
+    "end": { "text": "USD" }
+  }
+]

@@ -1,0 +1,5 @@
+[
+  { "caption": "Keys alone", "keys": ["⌘", "K"] },
+  { "caption": "Beside an action", "label": "Save", "keys": ["⌘", "S"] },
+  { "caption": "Three keys", "label": "Command palette", "keys": ["⌘", "⇧", "P"] }
+]
