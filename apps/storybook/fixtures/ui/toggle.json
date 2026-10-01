@@ -1,0 +1,6 @@
+[
+  { "caption": "Default", "icon": "bold", "text": "Bold", "ariaLabel": "Toggle bold", "pressed": false },
+  { "caption": "Pressed", "icon": "italic", "text": "Italic", "ariaLabel": "Toggle italic", "pressed": true },
+  { "caption": "Outline", "icon": "underline", "ariaLabel": "Toggle underline", "pressed": false, "variant": "outline" },
+  { "caption": "Disabled", "icon": "bold", "text": "Bold", "ariaLabel": "Toggle bold", "pressed": false, "disabled": true }
+]

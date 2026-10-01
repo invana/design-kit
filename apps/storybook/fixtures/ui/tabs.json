@@ -1,0 +1,107 @@
+[
+  {
+    "caption": "Default",
+    "width": 400,
+    "groups": [
+      {
+        "tabs": [
+          { "value": "tab1", "label": "Account", "body": "Manage your account settings." },
+          { "value": "tab2", "label": "Password", "body": "Change your password here." },
+          { "value": "tab3", "label": "Settings", "body": "Update your preferences." }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "With cards",
+    "width": 500,
+    "groups": [
+      {
+        "card": true,
+        "tabs": [
+          { "value": "overview", "label": "Overview", "body": "View your dashboard overview and key metrics." },
+          { "value": "analytics", "label": "Analytics", "body": "Detailed analytics and performance data." },
+          { "value": "reports", "label": "Reports", "body": "Generate and download reports." }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Full width",
+    "wide": true,
+    "groups": [
+      {
+        "fullWidth": true,
+        "tabs": [
+          { "value": "all", "label": "All", "body": "All items" },
+          { "value": "active", "label": "Active", "body": "Active items only" },
+          { "value": "completed", "label": "Completed", "body": "Completed items only" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Complete showcase",
+    "wide": true,
+    "groups": [
+      {
+        "title": "Basic tabs",
+        "tabs": [
+          { "value": "tab1", "label": "Tab 1", "body": "Content for Tab 1" },
+          { "value": "tab2", "label": "Tab 2", "body": "Content for Tab 2" },
+          { "value": "tab3", "label": "Tab 3", "body": "Content for Tab 3" }
+        ]
+      },
+      {
+        "title": "Tabs with cards",
+        "card": true,
+        "tabs": [
+          { "value": "overview", "label": "Overview", "body": "Dashboard overview with key metrics and recent activity." },
+          { "value": "analytics", "label": "Analytics", "body": "Detailed analytics and performance data visualization." },
+          { "value": "reports", "label": "Reports", "body": "Generate and download comprehensive reports." },
+          { "value": "settings", "label": "Settings", "body": "Configure your preferences and account settings." }
+        ]
+      },
+      {
+        "title": "Full width tabs",
+        "fullWidth": true,
+        "tabs": [
+          { "value": "all", "label": "All", "body": "Showing all items" },
+          { "value": "active", "label": "Active", "body": "Showing active items only" },
+          { "value": "completed", "label": "Completed", "body": "Showing completed items" },
+          { "value": "archived", "label": "Archived", "body": "Showing archived items" }
+        ]
+      },
+      {
+        "title": "Navigation tabs",
+        "card": true,
+        "cardHeader": false,
+        "tabs": [
+          { "value": "home", "label": "Home", "body": "Home feed and recent updates" },
+          { "value": "profile", "label": "Profile", "body": "Your profile information" },
+          { "value": "messages", "label": "Messages", "body": "Your conversations and messages" },
+          { "value": "notifications", "label": "Notifications", "body": "Recent notifications and alerts" }
+        ]
+      },
+      {
+        "title": "Many tabs",
+        "tabs": [
+          { "value": "1", "label": "Tab 1", "body": "Content 1" },
+          { "value": "2", "label": "Tab 2", "body": "Content 2" },
+          { "value": "3", "label": "Tab 3", "body": "Content 3" },
+          { "value": "4", "label": "Tab 4", "body": "Content 4" },
+          { "value": "5", "label": "Tab 5", "body": "Content 5" },
+          { "value": "6", "label": "Tab 6", "body": "Content 6" }
+        ]
+      },
+      {
+        "title": "Small (application strip)",
+        "size": "sm",
+        "tabs": [
+          { "value": "query", "label": "Query", "body": "The panel's query view." },
+          { "value": "results", "label": "Results", "body": "The panel's results view." }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[
+  { "caption": "Default", "icons": [{ "state": "waiting", "label": "awaiting_approval" }] },
+  {
+    "caption": "Every state",
+    "icons": [
+      { "state": "success", "label": "succeeded" },
+      { "state": "error", "label": "failed" },
+      { "state": "running", "label": "running" },
+      { "state": "queued", "label": "queued" },
+      { "state": "waiting", "label": "awaiting_approval" },
+      { "state": "question", "label": "could not answer" },
+      { "state": "alert", "label": "partial" },
+      { "state": "cancelled", "label": "cancelled" }
+    ]
+  },
+  {
+    "caption": "Sizes",
+    "icons": [
+      { "state": "success", "size": "sm", "label": "sm — 14px, a dense row" },
+      { "state": "success", "size": "md", "label": "md — 16px, a list row" }
+    ]
+  }
+]

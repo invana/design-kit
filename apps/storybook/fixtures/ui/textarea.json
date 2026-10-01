@@ -1,0 +1,64 @@
+[
+  { "caption": "Default", "sections": [{ "fields": [{ "id": "default", "ariaLabel": "Message", "placeholder": "Enter your message..." }] }] },
+  { "caption": "With label", "sections": [{ "fields": [{ "id": "message", "label": "Message", "placeholder": "Type your message here..." }] }] },
+  { "caption": "Disabled", "sections": [{ "fields": [{ "id": "disabled", "label": "Disabled", "placeholder": "This textarea is disabled", "disabled": true }] }] },
+  {
+    "caption": "With value",
+    "sections": [
+      {
+        "fields": [
+          {
+            "id": "bio",
+            "label": "Bio",
+            "value": "I'm a software developer passionate about building great products and helping teams succeed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Large",
+    "width": 384,
+    "sections": [{ "fields": [{ "id": "description", "label": "Description", "placeholder": "Enter a detailed description...", "rows": 8 }] }]
+  },
+  {
+    "caption": "Complete showcase",
+    "width": 640,
+    "sections": [
+      {
+        "title": "Sizes",
+        "fields": [
+          { "id": "small", "label": "Small (default height)", "placeholder": "Small textarea..." },
+          { "id": "medium", "label": "Medium", "placeholder": "Medium textarea...", "rows": 6 },
+          { "id": "large", "label": "Large", "placeholder": "Large textarea...", "rows": 10 }
+        ]
+      },
+      {
+        "title": "States",
+        "fields": [
+          { "id": "normal", "label": "Normal", "placeholder": "Type something..." },
+          { "id": "with-value", "label": "With value", "value": "This is some pre-filled content that demonstrates how the textarea looks with text." },
+          { "id": "disabled-empty", "label": "Disabled (empty)", "placeholder": "Disabled textarea", "disabled": true },
+          { "id": "disabled-filled", "label": "Disabled (with value)", "value": "This textarea is disabled and contains text.", "disabled": true },
+          { "id": "readonly", "label": "Read-only", "value": "This textarea is read-only. You can select and copy but not edit.", "readOnly": true }
+        ]
+      },
+      {
+        "title": "Common use cases",
+        "fields": [
+          { "id": "comment", "label": "Comment", "placeholder": "Leave a comment...", "description": "Your comment will be visible to all members." },
+          { "id": "uc-bio", "label": "Bio", "placeholder": "Tell us about yourself...", "rows": 5, "description": "Maximum 500 characters." },
+          { "id": "uc-description", "label": "Project description", "placeholder": "Describe your project...", "rows": 7 },
+          { "id": "feedback", "label": "Feedback", "placeholder": "Share your feedback...", "rows": 6, "description": "We appreciate your feedback!" }
+        ]
+      },
+      {
+        "title": "With validation",
+        "fields": [
+          { "id": "error", "label": "Message (error)", "placeholder": "Type your message...", "error": "Message is required and must be at least 10 characters." },
+          { "id": "valid", "label": "Message (valid)", "value": "This is a valid message with enough content.", "description": "Looks good!" }
+        ]
+      }
+    ]
+  }
+]

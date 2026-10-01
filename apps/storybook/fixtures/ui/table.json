@@ -1,0 +1,70 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "tables": [
+      {
+        "caption": "A list of users",
+        "columns": ["ID", "Name", "Email", "Role"],
+        "rows": [
+          ["1", "John Doe", "john@example.com", "Admin"],
+          ["2", "Jane Smith", "jane@example.com", "User"],
+          ["3", "Bob Johnson", "bob@example.com", "User"],
+          ["4", "Alice Williams", "alice@example.com", "Moderator"]
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Without caption",
+    "wide": true,
+    "tables": [
+      {
+        "columns": ["ID", "Name", "Email", "Role"],
+        "rows": [
+          ["1", "John Doe", "john@example.com", "Admin"],
+          ["2", "Jane Smith", "jane@example.com", "User"],
+          ["3", "Bob Johnson", "bob@example.com", "User"],
+          ["4", "Alice Williams", "alice@example.com", "Moderator"]
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Empty",
+    "wide": true,
+    "tables": [{ "caption": "No data available", "columns": ["ID", "Name", "Email", "Role"], "rows": [] }]
+  },
+  {
+    "caption": "Compact",
+    "width": 560,
+    "tables": [
+      {
+        "density": "compact",
+        "columns": ["pattern", "instances", "accepted", "net"],
+        "rows": [
+          ["gap-continuation", "14", "12", "+6"],
+          ["gap-no-delivery", "6", "2", "−5"],
+          ["orb-hold", "9", "8", "+3"]
+        ]
+      },
+      { "columns": ["default density, unchanged"], "rows": [["gap-continuation"]] }
+    ]
+  },
+  {
+    "caption": "Seamless",
+    "width": 420,
+    "tables": [
+      {
+        "density": "compact",
+        "seamless": true,
+        "columns": ["role", "resolves to", "why this one"],
+        "rows": [
+          ["extract", "llm/ollama-local/llama-3.1-8b", "set on the agent"],
+          ["decide", "nothing casts it", "the call that matters"],
+          ["judge", "nothing casts it", "checks an answer"]
+        ]
+      }
+    ]
+  }
+]

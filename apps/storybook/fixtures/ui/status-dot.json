@@ -1,0 +1,27 @@
+[
+  {
+    "caption": "Default",
+    "dots": [{ "tone": "running", "size": "sm", "label": "Running" }]
+  },
+  {
+    "caption": "Sizes",
+    "dots": [
+      { "tone": "success", "size": "xs", "name": "xs", "note": "5px — inside a dense step row" },
+      { "tone": "success", "size": "sm", "name": "sm", "note": "6px — a thread or list row" },
+      { "tone": "success", "size": "md", "name": "md", "note": "8px — a roster row, a legend swatch" },
+      { "tone": "success", "size": "lg", "name": "lg", "note": "10px — a legend key on its own" }
+    ]
+  },
+  {
+    "caption": "Tones",
+    "dots": [
+      { "tone": "running", "name": "running", "note": "Understand · 0.3s" },
+      { "tone": "success", "name": "success", "note": "Execute · 4 rows" },
+      { "tone": "warning", "name": "warning", "note": "Verify · needs input" },
+      { "tone": "error", "name": "error", "note": "Execute · failed after 2 attempts" },
+      { "tone": "info", "name": "info", "note": "Project · table" },
+      { "tone": "queued", "name": "queued", "note": "snapshot_model" },
+      { "tone": "muted", "name": "muted", "note": "Diagnose · will not run" }
+    ]
+  }
+]

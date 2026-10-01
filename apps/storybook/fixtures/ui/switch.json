@@ -1,0 +1,66 @@
+[
+  { "caption": "Default", "sections": [{ "fields": [{ "id": "switch-default", "checked": false, "ariaLabel": "Default switch" }] }] },
+  { "caption": "With label", "sections": [{ "fields": [{ "id": "airplane-mode", "label": "Airplane Mode", "checked": false }] }] },
+  { "caption": "Disabled", "sections": [{ "fields": [{ "id": "disabled", "label": "Disabled switch", "checked": false, "disabled": true }] }] },
+  { "caption": "Default checked", "sections": [{ "fields": [{ "id": "notifications", "label": "Enable notifications", "checked": true }] }] },
+  {
+    "caption": "Multiple",
+    "sections": [
+      {
+        "fields": [
+          { "id": "s1", "label": "Email notifications", "checked": true },
+          { "id": "s2", "label": "Push notifications", "checked": false },
+          { "id": "s3", "label": "SMS notifications", "checked": false }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Complete showcase",
+    "width": 640,
+    "sections": [
+      {
+        "title": "All states",
+        "fields": [
+          { "id": "off", "label": "Off", "checked": false },
+          { "id": "on", "label": "On", "checked": true },
+          { "id": "disabled-off", "label": "Disabled (Off)", "checked": false, "disabled": true },
+          { "id": "disabled-on", "label": "Disabled (On)", "checked": true, "disabled": true }
+        ]
+      },
+      {
+        "title": "Settings panel",
+        "fields": [
+          { "id": "sp-notifications", "label": "Notifications", "description": "Receive push notifications", "checked": true },
+          { "id": "sp-marketing", "label": "Marketing emails", "description": "Receive marketing updates", "checked": false },
+          { "id": "sp-security", "label": "Security alerts", "description": "Get notified of security events", "checked": true }
+        ]
+      },
+      {
+        "title": "Feature toggles",
+        "fields": [
+          { "id": "dark-mode", "label": "Dark mode", "checked": true },
+          { "id": "beta", "label": "Beta features", "checked": false },
+          { "id": "analytics", "label": "Analytics", "checked": true },
+          { "id": "2fa", "label": "Two-factor auth", "checked": true }
+        ]
+      },
+      {
+        "title": "Privacy settings",
+        "fields": [
+          { "id": "profile-public", "label": "Public profile", "description": "Make your profile visible to everyone", "checked": true },
+          { "id": "show-email", "label": "Show email", "description": "Display email on your profile", "checked": false },
+          { "id": "activity", "label": "Activity status", "description": "Show when you're online", "checked": true }
+        ]
+      },
+      {
+        "title": "Compact layout",
+        "fields": [
+          { "id": "c1", "label": "Option 1", "checked": true },
+          { "id": "c2", "label": "Option 2", "checked": false },
+          { "id": "c3", "label": "Option 3", "checked": true }
+        ]
+      }
+    ]
+  }
+]

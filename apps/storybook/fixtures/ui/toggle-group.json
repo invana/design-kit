@@ -1,0 +1,96 @@
+[
+  {
+    "caption": "Default",
+    "groups": [
+      {
+        "type": "multiple", "variant": "outline", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Default variant",
+    "groups": [
+      {
+        "type": "multiple", "variant": "default", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Single selection",
+    "groups": [
+      {
+        "type": "single", "variant": "outline", "value": "center",
+        "items": [
+          { "value": "left", "label": "Align left", "icon": "align-left" },
+          { "value": "center", "label": "Align center", "icon": "align-center" },
+          { "value": "right", "label": "Align right", "icon": "align-right" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Sizes",
+    "groups": [
+      {
+        "type": "multiple", "variant": "outline", "size": "sm", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      },
+      {
+        "type": "multiple", "variant": "outline", "size": "default", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      },
+      {
+        "type": "multiple", "variant": "outline", "size": "lg", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "With text",
+    "groups": [
+      {
+        "type": "multiple", "variant": "outline", "value": ["bold"],
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold", "text": "Bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic", "text": "Italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline", "text": "Underline" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Disabled",
+    "groups": [
+      {
+        "type": "multiple", "variant": "outline", "value": ["bold"], "disabled": true,
+        "items": [
+          { "value": "bold", "label": "Toggle bold", "icon": "bold" },
+          { "value": "italic", "label": "Toggle italic", "icon": "italic" },
+          { "value": "underline", "label": "Toggle underline", "icon": "underline" }
+        ]
+      }
+    ]
+  }
+]
