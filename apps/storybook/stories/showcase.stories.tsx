@@ -5,7 +5,7 @@ import { useForm, type FieldValues } from 'react-hook-form';
 import { ThemeControls, useThemeControls } from '../src';
 import { // Newly showcased primitives
   AlertDialog, // ui-extended
-  ButtonWithTooltip, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarImage, Badge, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, ButtonGroupSeparator, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, ErrorBoundary, Eyebrow, HoverCard, HoverCardContent, HoverCardTrigger, Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle, Kbd, KbdGroup, Link, Menubar, MenubarCheckboxItem, MenubarContent, MenubarItem, MenubarMenu, MenubarRadioGroup, MenubarRadioItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger, MenuItem, NavBase, NavHorizontal, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle, NavVertical, NestedMenu, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PanelContent, Popover, PopoverContent, PopoverTrigger, Progress, ResizableHandle, ResizablePanel, ResizablePanelGroup, RichSelect, SearchInput, Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Spinner, TabbedPanel, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Toolbar, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Tour, TreeView, type TourStep, type TreeItem, Typography, TypographyH1, TypographyH3, TypographyH4, UnderDevelopment, useTour, MetricGrid, MetricTile, StatusDot, EmptyState } from '@invana/ui';
+  ButtonWithTooltip, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, ButtonGroupSeparator, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, ErrorBoundary, Eyebrow, HoverCard, HoverCardContent, HoverCardTrigger, Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle, Kbd, KbdGroup, Link, Menubar, MenubarCheckboxItem, MenubarContent, MenubarItem, MenubarMenu, MenubarRadioGroup, MenubarRadioItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger, MenuItem, NavBase, NavHorizontal, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle, NavVertical, NestedMenu, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PanelContent, Popover, PopoverContent, PopoverTrigger, Progress, ResizableHandle, ResizablePanel, ResizablePanelGroup, RichSelect, SearchInput, Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Spinner, TabbedPanel, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Toolbar, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Tour, TreeView, type TourStep, type TreeItem, Typography, TypographyH1, TypographyH3, TypographyH4, UnderDevelopment, useTour, MetricGrid, MetricTile, StatusDot, EmptyState, Stack } from '@invana/ui';
 import {
   Input,
   Label,
@@ -239,23 +239,25 @@ const ShowcaseForm = () => {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-4xl">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(setSubmitted)} className="space-y-4">
-          <FormField.ObjectField
-            control={form.control}
-            name="profile"
-            fields={profileFields}
-            rowConfig={profileRowConfig}
-            labelPosition="top"
-          />
-          <Button type="submit">Save</Button>
+        <form onSubmit={form.handleSubmit(setSubmitted)}>
+          <Stack gap="lg" align="start">
+            <FormField.ObjectField
+              control={form.control}
+              name="profile"
+              fields={profileFields}
+              rowConfig={profileRowConfig}
+              labelPosition="top"
+            />
+            <Button type="submit">Save</Button>
+          </Stack>
         </form>
       </Form>
-      <div>
+      <Stack gap="sm">
         <Eyebrow>Submitted payload</Eyebrow>
         <Typography.Pre>
           {submitted ? JSON.stringify(submitted, null, 2) : '— submit the form —'}
         </Typography.Pre>
-      </div>
+      </Stack>
     </div>
   );
 };
@@ -308,20 +310,22 @@ const Section = ({
 }) => (
   <>
     <Separator />
-    {/* Kit gap: no Stack layout primitive, so a section's rhythm is a flex gap. */}
-    <section className="flex flex-col gap-6">
+    <Stack gap="xl">
       <TypographyH3>{title}</TypographyH3>
       {children}
-    </section>
+    </Stack>
   </>
 );
 
 const Sub = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="flex flex-col gap-3">
+  <Stack>
     <Eyebrow>{title}</Eyebrow>
     {children}
-  </div>
+  </Stack>
 );
+
+// A label over its control.
+const Field = ({ children }: { children: React.ReactNode }) => <Stack gap="sm">{children}</Stack>;
 
 // ---------------------------------------------------------------------------
 // Showcase
@@ -349,14 +353,14 @@ const ThemeShowcase = ({
   return (
     <TooltipProvider>
       <Toaster />
-      <div className="transition-colors duration-300" style={accentStyles}>
+      <div style={accentStyles}>
         {/* Header */}
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-          <div className="container flex h-16 items-center justify-between px-4 max-w-7xl mx-auto">
-            <div className="flex items-center gap-4">
+          <Stack direction="row" justify="between" className="container h-16 px-4 max-w-7xl mx-auto">
+            <Stack direction="row" gap="lg">
               <TypographyH4>@invana/ui</TypographyH4>
               <Badge variant="secondary">v1.0</Badge>
-            </div>
+            </Stack>
             <ThemeControls
               storybookTheme={storybookTheme}
               storybookVariant={storybookVariant}
@@ -367,12 +371,12 @@ const ThemeShowcase = ({
               onAccentChange={setCurrentAccent}
               onModeChange={setIsDarkMode}
             />
-          </div>
+          </Stack>
         </header>
 
-        <main className="container max-w-7xl mx-auto p-8 space-y-16">
+        <Stack gap="xl" className="container max-w-7xl mx-auto p-8">
           {/* Hero Section */}
-          <section className="flex flex-col items-center gap-6 py-12 text-center">
+          <Stack align="center" gap="xl" className="text-center">
             <TypographyH1>
               Every component, one page
             </TypographyH1>
@@ -380,329 +384,347 @@ const ThemeShowcase = ({
               A complete visual review of the Invana Design Kit — UI primitives, composed
               components, typography, data tables, and forms. Switch themes from the header.
             </Typography.Lead>
-            <div className="flex justify-center gap-4">
+            <Stack direction="row" gap="lg">
               <Button>
-                <PlusCircle className="mr-2 h-4 w-4" />
+                <PlusCircle />
                 New Project
               </Button>
               <Button variant="outline">
                 View Components
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight />
               </Button>
-            </div>
-          </section>
+            </Stack>
+          </Stack>
 
           {/* ============================ COMPOSED EXAMPLES ============================ */}
           <Section title="Dashboard Components">
-            <Tabs defaultValue="examples" className="w-full">
-              <TabsList className="mb-6">
-                <TabsTrigger value="examples">Examples</TabsTrigger>
-                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-                <TabsTrigger value="cards">Cards</TabsTrigger>
-                <TabsTrigger value="authentication">Authentication</TabsTrigger>
-              </TabsList>
+            <Tabs defaultValue="examples">
+              <Stack gap="xl">
+                <TabsList>
+                  <TabsTrigger value="examples">Examples</TabsTrigger>
+                  <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+                  <TabsTrigger value="cards">Cards</TabsTrigger>
+                  <TabsTrigger value="authentication">Authentication</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="examples">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Payment Method</CardTitle>
-                      <CardDescription>All transactions are secure and encrypted</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name-on-card">Name on Card</Label>
-                        <Input id="name-on-card" placeholder="John Doe" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="card-number">Card Number</Label>
-                        <Input id="card-number" placeholder="1234 5678 9012 3456" />
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <Button className="w-full">Continue</Button>
-                    </CardFooter>
-                  </Card>
+                <TabsContent value="examples">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Payment Method</CardTitle>
+                        <CardDescription>All transactions are secure and encrypted</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Stack gap="lg">
+                          <Field>
+                            <Label htmlFor="name-on-card">Name on Card</Label>
+                            <Input id="name-on-card" placeholder="John Doe" />
+                          </Field>
+                          <Field>
+                            <Label htmlFor="card-number">Card Number</Label>
+                            <Input id="card-number" placeholder="1234 5678 9012 3456" />
+                          </Field>
+                        </Stack>
+                      </CardContent>
+                      <CardFooter>
+                        <Button className="w-full">Continue</Button>
+                      </CardFooter>
+                    </Card>
 
-                  <Card>
-                    <CardHeader className="text-center">
-                      <div className="flex justify-center -space-x-4 mb-4">
-                        <Avatar className="border-2 border-background">
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <Avatar className="border-2 border-background">
-                          <AvatarFallback>JD</AvatarFallback>
-                        </Avatar>
-                        <Avatar className="border-2 border-background">
-                          <AvatarFallback>AB</AvatarFallback>
-                        </Avatar>
-                      </div>
-                      <CardTitle>No Team Members</CardTitle>
-                      <CardDescription>Invite your team to collaborate on this project.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <Button>
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Invite Members
-                      </Button>
-                    </CardContent>
-                    <CardFooter className="justify-center gap-2">
-                      <Badge variant="outline">Syncing</Badge>
-                      <Badge variant="secondary">Updating</Badge>
-                      <Badge>Loading</Badge>
-                    </CardFooter>
-                  </Card>
+                    <Card>
+                      <CardContent>
+                        <Stack align="center">
+                          <EmptyState
+                            icon={
+                              <AvatarGroup>
+                                <Avatar>
+                                  <AvatarImage src="https://github.com/shadcn.png" />
+                                  <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                                <Avatar>
+                                  <AvatarFallback>JD</AvatarFallback>
+                                </Avatar>
+                                <Avatar>
+                                  <AvatarFallback>AB</AvatarFallback>
+                                </Avatar>
+                              </AvatarGroup>
+                            }
+                            title="No Team Members"
+                            description="Invite your team to collaborate on this project."
+                            actions={
+                              <Button>
+                                <PlusCircle />
+                                Invite Members
+                              </Button>
+                            }
+                          />
+                          <Stack direction="row" gap="sm">
+                            <Badge variant="outline">Syncing</Badge>
+                            <Badge variant="secondary">Updating</Badge>
+                            <Badge>Loading</Badge>
+                          </Stack>
+                        </Stack>
+                      </CardContent>
+                    </Card>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Appearance Settings</CardTitle>
-                      <CardDescription>Customize the look and feel</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <Item variant="outline">
-                        <ItemMedia variant="icon">
-                          <Bell />
-                        </ItemMedia>
-                        <ItemContent>
-                          <ItemTitle>Push Notifications</ItemTitle>
-                          <ItemDescription>Send notifications to device.</ItemDescription>
-                        </ItemContent>
-                        <ItemActions>
-                          <Switch />
-                        </ItemActions>
-                      </Item>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <Label>Volume</Label>
-                          <Typography.Muted>50%</Typography.Muted>
-                        </div>
-                        <Slider defaultValue={[50]} max={100} step={1} />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="terms-appearance" />
-                        <Label htmlFor="terms-appearance">I agree to the terms and conditions</Label>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="dashboard">
-                <MetricGrid minTileWidth={220}>
-                  {[
-                    { title: 'Total Revenue', value: '$45,231.89', note: '+20.1% from last month' },
-                    { title: 'Subscriptions', value: '+2,350', note: '+180.1% from last month' },
-                    { title: 'Active Now', value: '+573', note: '+201 since last hour' },
-                  ].map((stat) => (
-                    <MetricTile key={stat.title} label={stat.title} value={stat.value} caption={stat.note} />
-                  ))}
-                </MetricGrid>
-              </TabsContent>
-
-              <TabsContent value="cards">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Notifications</CardTitle>
-                      <CardDescription>You have 3 unread messages.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {[
-                        { title: 'Your call has been confirmed.', time: '1 hour ago' },
-                        { title: 'You have a new message!', time: '2 hours ago' },
-                        { title: 'Your subscription is expiring soon!', time: '3 hours ago' },
-                      ].map((notification, index) => (
-                        <Item key={index} size="sm">
-                          <ItemMedia>
-                            <StatusDot tone="info" />
-                          </ItemMedia>
-                          <ItemContent>
-                            <ItemTitle>{notification.title}</ItemTitle>
-                            <ItemDescription>{notification.time}</ItemDescription>
-                          </ItemContent>
-                        </Item>
-                      ))}
-                    </CardContent>
-                    <CardFooter>
-                      <Button variant="outline" className="w-full">
-                        <Check className="mr-2 h-4 w-4" />
-                        Mark all as read
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Share this document</CardTitle>
-                      <CardDescription>Anyone with the link can view this document.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex gap-2">
-                        <Input value="https://example.com/share/abc123" readOnly />
-                        <Button variant="secondary">
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <Separator />
-                      <div className="space-y-4">
-                        <Eyebrow>People with access</Eyebrow>
-                        {[
-                          { name: 'Olivia Martin', email: 'm@example.com', access: 'can-edit' },
-                          { name: 'Isabella Nguyen', email: 'b@example.com', access: 'can-view' },
-                        ].map((person, index) => (
-                          <Item key={index} size="sm">
-                            <ItemMedia>
-                              <Avatar>
-                                <AvatarFallback>{person.name[0]}</AvatarFallback>
-                              </Avatar>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Appearance Settings</CardTitle>
+                        <CardDescription>Customize the look and feel</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Stack gap="lg">
+                          <Item variant="outline">
+                            <ItemMedia variant="icon">
+                              <Bell />
                             </ItemMedia>
                             <ItemContent>
-                              <ItemTitle>{person.name}</ItemTitle>
-                              <ItemDescription>{person.email}</ItemDescription>
+                              <ItemTitle>Push Notifications</ItemTitle>
+                              <ItemDescription>Send notifications to device.</ItemDescription>
                             </ItemContent>
                             <ItemActions>
-                            <Select defaultValue={person.access}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="can-edit">Can edit</SelectItem>
-                                <SelectItem value="can-view">Can view</SelectItem>
-                              </SelectContent>
-                            </Select>
+                              <Switch />
                             </ItemActions>
                           </Item>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
+                          <Field>
+                            <Stack direction="row" justify="between">
+                              <Label>Volume</Label>
+                              <Typography.Muted>50%</Typography.Muted>
+                            </Stack>
+                            <Slider defaultValue={[50]} max={100} step={1} />
+                          </Field>
+                          <Stack direction="row" gap="sm">
+                            <Checkbox id="terms-appearance" />
+                            <Label htmlFor="terms-appearance">I agree to the terms and conditions</Label>
+                          </Stack>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
 
-              <TabsContent value="authentication">
-                <div className="max-w-md mx-auto">
-                  <Card>
-                    <CardHeader className="text-center">
-                      <CardTitle>Create an account</CardTitle>
-                      <CardDescription>Enter your email below to create your account</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="m@example.com" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input id="password" type="password" />
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-4">
-                      <Button className="w-full">Create account</Button>
-                    </CardFooter>
-                  </Card>
-                </div>
-              </TabsContent>
+                <TabsContent value="dashboard">
+                  <MetricGrid minTileWidth={220}>
+                    {[
+                      { title: 'Total Revenue', value: '$45,231.89', note: '+20.1% from last month' },
+                      { title: 'Subscriptions', value: '+2,350', note: '+180.1% from last month' },
+                      { title: 'Active Now', value: '+573', note: '+201 since last hour' },
+                    ].map((stat) => (
+                      <MetricTile key={stat.title} label={stat.title} value={stat.value} caption={stat.note} />
+                    ))}
+                  </MetricGrid>
+                </TabsContent>
+
+                <TabsContent value="cards">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Notifications</CardTitle>
+                        <CardDescription>You have 3 unread messages.</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Stack gap="lg">
+                          {[
+                            { title: 'Your call has been confirmed.', time: '1 hour ago' },
+                            { title: 'You have a new message!', time: '2 hours ago' },
+                            { title: 'Your subscription is expiring soon!', time: '3 hours ago' },
+                          ].map((notification, index) => (
+                            <Item key={index} size="sm">
+                              <ItemMedia>
+                                <StatusDot tone="info" />
+                              </ItemMedia>
+                              <ItemContent>
+                                <ItemTitle>{notification.title}</ItemTitle>
+                                <ItemDescription>{notification.time}</ItemDescription>
+                              </ItemContent>
+                            </Item>
+                          ))}
+                        </Stack>
+                      </CardContent>
+                      <CardFooter>
+                        <Button variant="outline" className="w-full">
+                          <Check />
+                          Mark all as read
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Share this document</CardTitle>
+                        <CardDescription>Anyone with the link can view this document.</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Stack gap="lg">
+                          <Stack direction="row" gap="sm">
+                            <Input value="https://example.com/share/abc123" readOnly />
+                            <Button variant="secondary" size="icon" aria-label="Copy link">
+                              <Copy />
+                            </Button>
+                          </Stack>
+                          <Separator />
+                          <Stack gap="lg">
+                            <Eyebrow>People with access</Eyebrow>
+                            {[
+                              { name: 'Olivia Martin', email: 'm@example.com', access: 'can-edit' },
+                              { name: 'Isabella Nguyen', email: 'b@example.com', access: 'can-view' },
+                            ].map((person, index) => (
+                              <Item key={index} size="sm">
+                                <ItemMedia>
+                                  <Avatar>
+                                    <AvatarFallback>{person.name[0]}</AvatarFallback>
+                                  </Avatar>
+                                </ItemMedia>
+                                <ItemContent>
+                                  <ItemTitle>{person.name}</ItemTitle>
+                                  <ItemDescription>{person.email}</ItemDescription>
+                                </ItemContent>
+                                <ItemActions>
+                                  <Select defaultValue={person.access}>
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="can-edit">Can edit</SelectItem>
+                                      <SelectItem value="can-view">Can view</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </ItemActions>
+                              </Item>
+                            ))}
+                          </Stack>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="authentication">
+                  <div className="max-w-md mx-auto">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Create an account</CardTitle>
+                        <CardDescription>Enter your email below to create your account</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Stack gap="lg">
+                          <Field>
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" placeholder="m@example.com" />
+                          </Field>
+                          <Field>
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" type="password" />
+                          </Field>
+                        </Stack>
+                      </CardContent>
+                      <CardFooter>
+                        <Button className="w-full">Create account</Button>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </Stack>
             </Tabs>
           </Section>
 
           {/* ============================ UI PRIMITIVES ============================ */}
 
           <Section title="Buttons">
-            <div className="space-y-6">
+            <Stack gap="xl">
               <Sub title="Variants">
-                <div className="flex flex-wrap gap-4 items-center">
+                <Stack direction="row" gap="lg" wrap>
                   <Button variant="default">Default</Button>
                   <Button variant="secondary">Secondary</Button>
                   <Button variant="destructive">Destructive</Button>
                   <Button variant="outline">Outline</Button>
                   <Button variant="ghost">Ghost</Button>
                   <Button variant="link">Link</Button>
-                </div>
+                </Stack>
               </Sub>
               <Sub title="Sizes">
-                <div className="flex flex-wrap gap-4 items-center">
+                <Stack direction="row" gap="lg" wrap>
                   <Button size="sm">Small</Button>
                   <Button size="default">Default</Button>
                   <Button size="lg">Large</Button>
-                  <Button size="icon"><Settings className="h-4 w-4" /></Button>
-                </div>
+                  <Button size="icon" aria-label="Settings"><Settings /></Button>
+                </Stack>
               </Sub>
               <Sub title="States">
-                <div className="flex flex-wrap gap-4 items-center">
+                <Stack direction="row" gap="lg" wrap>
                   <Button disabled>Disabled</Button>
                   <Button variant="outline" disabled>Disabled Outline</Button>
-                </div>
+                </Stack>
               </Sub>
               <Sub title="Button Group">
                 <ButtonGroup>
-                  <Button variant="outline" size="icon"><Bold className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="icon"><Italic className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="icon"><Underline className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="icon" aria-label="Bold"><Bold /></Button>
+                  <Button variant="outline" size="icon" aria-label="Italic"><Italic /></Button>
+                  <Button variant="outline" size="icon" aria-label="Underline"><Underline /></Button>
                   <ButtonGroupSeparator />
                   <Button variant="outline">Clear</Button>
                 </ButtonGroup>
               </Sub>
               <Sub title="Button with Tooltip">
                 <ButtonWithTooltip tooltip="Open settings" size="icon">
-                  <Settings className="h-4 w-4" />
+                  <Settings />
                 </ButtonWithTooltip>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Badges">
-            <div className="flex flex-wrap gap-4 items-center">
+            <Stack direction="row" gap="lg" wrap>
               <Badge variant="default">Default</Badge>
               <Badge variant="secondary">Secondary</Badge>
               <Badge variant="destructive">Destructive</Badge>
               <Badge variant="outline">Outline</Badge>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Alerts">
-            <div className="space-y-4 max-w-2xl">
+            <Stack gap="lg">
               <Alert>
-                <Bell className="h-4 w-4" />
+                <Bell className="size-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>You can add components to your app using the cli.</AlertDescription>
               </Alert>
               <Alert variant="destructive">
-                <X className="h-4 w-4" />
+                <X className="size-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>Your session has expired. Please log in again.</AlertDescription>
               </Alert>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Form Elements">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl">
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Input</Eyebrow>
-                <div className="space-y-2">
+                <Field>
                   <Label htmlFor="default-input">Default</Label>
                   <Input id="default-input" placeholder="Enter text..." />
-                </div>
-                <div className="space-y-2">
+                </Field>
+                <Field>
                   <Label htmlFor="disabled-input">Disabled</Label>
                   <Input id="disabled-input" placeholder="Disabled" disabled />
-                </div>
-                <div className="space-y-2">
+                </Field>
+                <Field>
                   <Label htmlFor="file-input">File</Label>
                   <Input id="file-input" type="file" />
-                </div>
-              </div>
+                </Field>
+              </Stack>
 
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Textarea</Eyebrow>
-                <div className="space-y-2">
+                <Field>
                   <Label htmlFor="textarea">Message</Label>
                   <Textarea id="textarea" placeholder="Type your message here..." />
-                </div>
-              </div>
+                </Field>
+              </Stack>
 
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Select</Eyebrow>
-                <div className="space-y-2">
+                <Field>
                   <Label>Framework</Label>
                   <Select>
                     <SelectTrigger>
@@ -715,68 +737,68 @@ const ThemeShowcase = ({
                       <SelectItem value="astro">Astro</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-              </div>
+                </Field>
+              </Stack>
 
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Checkbox &amp; Switch</Eyebrow>
-                <div className="flex items-center space-x-2">
+                <Stack direction="row" gap="sm">
                   <Checkbox id="terms-form" />
                   <Label htmlFor="terms-form">Accept terms</Label>
-                </div>
-                <div className="flex items-center space-x-2">
+                </Stack>
+                <Stack direction="row" gap="sm">
                   <Checkbox id="marketing" defaultChecked />
                   <Label htmlFor="marketing">Marketing emails</Label>
-                </div>
-                <Separator className="my-4" />
-                <div className="flex items-center space-x-2">
+                </Stack>
+                <Separator />
+                <Stack direction="row" gap="sm">
                   <Switch id="airplane" />
                   <Label htmlFor="airplane">Airplane Mode</Label>
-                </div>
-              </div>
+                </Stack>
+              </Stack>
 
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Slider</Eyebrow>
-                <div className="space-y-6">
-                  <div className="space-y-2">
+                <Stack gap="xl">
+                  <Field>
                     <Label>Default</Label>
                     <Slider defaultValue={[50]} max={100} step={1} />
-                  </div>
-                  <div className="space-y-2">
+                  </Field>
+                  <Field>
                     <Label>Range</Label>
                     <Slider defaultValue={[25, 75]} max={100} step={1} />
-                  </div>
-                </div>
-              </div>
+                  </Field>
+                </Stack>
+              </Stack>
 
-              <div className="space-y-4">
+              <Stack gap="lg">
                 <Eyebrow>Search Input</Eyebrow>
                 <SearchInput value={searchValue} onChange={setSearchValue} />
-              </div>
+              </Stack>
             </div>
           </Section>
 
           <Section title="Toggle">
-            <div className="space-y-6">
+            <Stack gap="xl">
               <Sub title="Single Toggle">
-                <div className="flex gap-4">
-                  <Toggle aria-label="Toggle bold"><Bold className="h-4 w-4" /></Toggle>
-                  <Toggle aria-label="Toggle italic"><Italic className="h-4 w-4" /></Toggle>
-                  <Toggle aria-label="Toggle underline"><Underline className="h-4 w-4" /></Toggle>
-                </div>
+                <Stack direction="row" gap="lg">
+                  <Toggle aria-label="Toggle bold"><Bold /></Toggle>
+                  <Toggle aria-label="Toggle italic"><Italic /></Toggle>
+                  <Toggle aria-label="Toggle underline"><Underline /></Toggle>
+                </Stack>
               </Sub>
               <Sub title="Toggle Group">
                 <ToggleGroup type="single" defaultValue="center">
-                  <ToggleGroupItem value="left" aria-label="Align left"><AlignLeft className="h-4 w-4" /></ToggleGroupItem>
-                  <ToggleGroupItem value="center" aria-label="Align center"><AlignCenter className="h-4 w-4" /></ToggleGroupItem>
-                  <ToggleGroupItem value="right" aria-label="Align right"><AlignRight className="h-4 w-4" /></ToggleGroupItem>
+                  <ToggleGroupItem value="left" aria-label="Align left"><AlignLeft /></ToggleGroupItem>
+                  <ToggleGroupItem value="center" aria-label="Align center"><AlignCenter /></ToggleGroupItem>
+                  <ToggleGroupItem value="right" aria-label="Align right"><AlignRight /></ToggleGroupItem>
                 </ToggleGroup>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Accordion">
-            <Accordion type="single" collapsible className="max-w-2xl">
+            <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger>Is it accessible?</AccordionTrigger>
                 <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
@@ -793,22 +815,20 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Overlays — Dialog, Alert Dialog, Sheet, Popover, Tooltip, Hover Card">
-            <div className="flex flex-wrap gap-4 items-center">
+            <Stack direction="row" gap="lg" wrap>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="outline">Edit Profile</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
                     <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="dialog-name" className="text-right">Name</Label>
-                      <Input id="dialog-name" defaultValue="John Doe" className="col-span-3" />
-                    </div>
-                  </div>
+                  <Stack direction="row" gap="lg">
+                    <Label htmlFor="dialog-name">Name</Label>
+                    <Input id="dialog-name" defaultValue="John Doe" />
+                  </Stack>
                   <DialogFooter>
                     <Button type="submit">Save changes</Button>
                   </DialogFooter>
@@ -818,7 +838,7 @@ const ThemeShowcase = ({
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
+                    <Trash2 />
                     Delete project
                   </Button>
                 </AlertDialogTrigger>
@@ -837,7 +857,7 @@ const ThemeShowcase = ({
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline">
-                    <Settings className="mr-2 h-4 w-4" />
+                    <Settings />
                     Open settings
                   </Button>
                 </SheetTrigger>
@@ -859,17 +879,17 @@ const ThemeShowcase = ({
                 <PopoverTrigger asChild>
                   <Button variant="outline">Open Popover</Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <div className="grid gap-4">
-                    <div className="space-y-2">
+                <PopoverContent>
+                  <Stack gap="lg">
+                    <Stack gap="sm">
                       <Eyebrow tone="foreground">Dimensions</Eyebrow>
                       <Typography.Muted>Set the dimensions for the layer.</Typography.Muted>
-                    </div>
-                    <div className="grid grid-cols-3 items-center gap-4">
+                    </Stack>
+                    <Stack direction="row" gap="lg">
                       <Label htmlFor="width">Width</Label>
-                      <Input id="width" defaultValue="100%" className="col-span-2 h-8" />
-                    </div>
-                  </div>
+                      <Input id="width" defaultValue="100%" inputSize="sm" />
+                    </Stack>
+                  </Stack>
                 </PopoverContent>
               </Popover>
 
@@ -886,36 +906,38 @@ const ThemeShowcase = ({
                 <HoverCardTrigger asChild>
                   <Button variant="link">@invana</Button>
                 </HoverCardTrigger>
-                <HoverCardContent className="w-80">
-                  <Eyebrow tone="foreground">@invana</Eyebrow>
-                  <Typography.Muted>
-                    The open-source graph visualization and analytics platform.
-                  </Typography.Muted>
-                  <Typography.Muted>
-                    <CalendarDays className="mr-2 inline size-4" />
-                    Joined December 2021
-                  </Typography.Muted>
+                <HoverCardContent>
+                  <Stack gap="sm">
+                    <Eyebrow tone="foreground">@invana</Eyebrow>
+                    <Typography.Muted>
+                      The open-source graph visualization and analytics platform.
+                    </Typography.Muted>
+                    <Stack direction="row" gap="sm">
+                      <CalendarDays className="size-4" />
+                      <Typography.Muted>Joined December 2021</Typography.Muted>
+                    </Stack>
+                  </Stack>
                 </HoverCardContent>
               </HoverCard>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Menus — Dropdown, Menubar, Navigation Menu, Command">
-            <div className="space-y-8">
+            <Stack gap="xl">
               <Sub title="Dropdown Menu">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">
-                      <Menu className="mr-2 h-4 w-4" />
+                      <Menu />
                       Open Menu
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuItem><User className="mr-2 h-4 w-4" /><span>Profile</span></DropdownMenuItem>
-                    <DropdownMenuItem><CreditCard className="mr-2 h-4 w-4" /><span>Billing</span></DropdownMenuItem>
-                    <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>Settings</span></DropdownMenuItem>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem><User /><span>Profile</span></DropdownMenuItem>
+                    <DropdownMenuItem><CreditCard /><span>Billing</span></DropdownMenuItem>
+                    <DropdownMenuItem><Settings /><span>Settings</span></DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem><LogOut className="mr-2 h-4 w-4" /><span>Log out</span></DropdownMenuItem>
+                    <DropdownMenuItem><LogOut /><span>Log out</span></DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </Sub>
@@ -955,20 +977,28 @@ const ThemeShowcase = ({
                     <NavigationMenuItem>
                       <NavigationMenuTrigger>Products</NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid w-[420px] gap-2 p-4 md:grid-cols-2">
-                          <li>
-                            <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                              <ItemTitle>Graph Explorer</ItemTitle>
-                              <ItemDescription>Visualize and traverse your graph data.</ItemDescription>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink className="block rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                              <ItemTitle>Dashboards</ItemTitle>
-                              <ItemDescription>Build and share live dashboards.</ItemDescription>
-                            </NavigationMenuLink>
-                          </li>
-                        </ul>
+                        <Stack direction="row" gap="sm" align="start" className="w-[420px] p-2">
+                          <NavigationMenuLink asChild>
+                            <Item asChild size="sm">
+                              <a href="#">
+                                <ItemContent>
+                                  <ItemTitle>Graph Explorer</ItemTitle>
+                                  <ItemDescription>Visualize and traverse your graph data.</ItemDescription>
+                                </ItemContent>
+                              </a>
+                            </Item>
+                          </NavigationMenuLink>
+                          <NavigationMenuLink asChild>
+                            <Item asChild size="sm">
+                              <a href="#">
+                                <ItemContent>
+                                  <ItemTitle>Dashboards</ItemTitle>
+                                  <ItemDescription>Build and share live dashboards.</ItemDescription>
+                                </ItemContent>
+                              </a>
+                            </Item>
+                          </NavigationMenuLink>
+                        </Stack>
                       </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
@@ -994,11 +1024,11 @@ const ThemeShowcase = ({
                   </CommandList>
                 </Command>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Navigation — Breadcrumb & Pagination">
-            <div className="space-y-8">
+            <Stack gap="xl">
               <Sub title="Breadcrumb">
                 <Breadcrumb>
                   <BreadcrumbList>
@@ -1028,35 +1058,39 @@ const ThemeShowcase = ({
                   </PaginationContent>
                 </Pagination>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Feedback — Progress, Spinner, Skeleton, Toast">
-            <div className="space-y-8 max-w-xl">
+            <Stack gap="xl">
               <Sub title="Progress">
                 <Progress value={60} />
               </Sub>
               <Sub title="Spinner">
-                <div className="flex items-center gap-6 text-primary">
-                  <Spinner className="size-4" />
+                <Stack direction="row" gap="xl">
+                  <Spinner />
                   <Spinner className="size-6" />
                   <Spinner className="size-8" />
-                </div>
+                </Stack>
               </Sub>
               <Sub title="Skeleton">
-                <div className="flex w-[320px] flex-col gap-4 rounded-lg border border-border p-4">
-                  <div className="flex items-center gap-3">
-                    <Skeleton className="size-12 rounded-full" />
-                    <div className="flex flex-col gap-2">
-                      <Skeleton className="h-4 w-[160px]" />
-                      <Skeleton className="h-3 w-[100px]" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-32 w-full rounded-md" />
-                </div>
+                <Card className="w-[320px]">
+                  <CardContent>
+                    <Stack gap="lg">
+                      <Stack direction="row">
+                        <Skeleton className="size-12 rounded-full" />
+                        <Stack gap="sm">
+                          <Skeleton className="h-4 w-[160px]" />
+                          <Skeleton className="h-3 w-[100px]" />
+                        </Stack>
+                      </Stack>
+                      <Skeleton className="h-32" />
+                    </Stack>
+                  </CardContent>
+                </Card>
               </Sub>
               <Sub title="Toast (Sonner)">
-                <div className="flex flex-wrap items-center gap-2">
+                <Stack direction="row" gap="sm" wrap>
                   <Button variant="outline" onClick={() => toast('Event has been created')}>Show toast</Button>
                   <Button
                     variant="outline"
@@ -1064,9 +1098,9 @@ const ThemeShowcase = ({
                   >
                     Success toast
                   </Button>
-                </div>
+                </Stack>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Item">
@@ -1079,7 +1113,7 @@ const ThemeShowcase = ({
                 <ItemDescription>Updated 2 hours ago · 1.4 MB</ItemDescription>
               </ItemContent>
               <ItemActions>
-                <Button variant="ghost" size="icon"><ChevronRight /></Button>
+                <Button variant="ghost" size="icon" aria-label="Open"><ChevronRight /></Button>
               </ItemActions>
             </Item>
           </Section>
@@ -1092,14 +1126,14 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Carousel">
-            <Carousel className="w-full max-w-xs" opts={{ align: 'start' }}>
+            <Carousel className="max-w-xs" opts={{ align: 'start' }}>
               <CarouselContent>
                 {Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem key={index} className="basis-full">
-                    <Card>
-                      <CardContent className="flex aspect-square items-center justify-center p-6">
-                        <span className="text-4xl font-semibold">{index + 1}</span>
-                      </CardContent>
+                  <CarouselItem key={index}>
+                    <Card className="aspect-square">
+                      <Stack align="center" justify="center" className="h-full">
+                        <Typography.H1>{index + 1}</Typography.H1>
+                      </Stack>
                     </Card>
                   </CarouselItem>
                 ))}
@@ -1110,7 +1144,7 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Resizable Panels">
-            <div className="h-72 w-full max-w-3xl">
+            <div className="h-72 max-w-3xl">
               <ResizablePanelGroup orientation="horizontal" className="rounded-md border">
                 <ResizablePanel defaultSize={50} minSize={20}>
                   <EmptyState title="Left Panel" />
@@ -1132,60 +1166,57 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Table">
-            <div className="max-w-4xl">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Method</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Invoice</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[
+                  { invoice: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' },
+                  { invoice: 'INV002', status: 'Pending', method: 'PayPal', amount: '$150.00' },
+                  { invoice: 'INV003', status: 'Unpaid', method: 'Bank Transfer', amount: '$350.00' },
+                ].map((row) => (
+                  <TableRow key={row.invoice}>
+                    <TableCell>{row.invoice}</TableCell>
+                    <TableCell>
+                      <Badge variant={row.status === 'Paid' ? 'default' : row.status === 'Pending' ? 'secondary' : 'destructive'}>
+                        {row.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{row.method}</TableCell>
+                    <TableCell className="text-right">{row.amount}</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {[
-                    { invoice: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' },
-                    { invoice: 'INV002', status: 'Pending', method: 'PayPal', amount: '$150.00' },
-                    { invoice: 'INV003', status: 'Unpaid', method: 'Bank Transfer', amount: '$350.00' },
-                  ].map((row) => (
-                    <TableRow key={row.invoice}>
-                      <TableCell className="font-medium">{row.invoice}</TableCell>
-                      <TableCell>
-                        <Badge variant={row.status === 'Paid' ? 'default' : row.status === 'Pending' ? 'secondary' : 'destructive'}>
-                          {row.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{row.method}</TableCell>
-                      <TableCell className="text-right">{row.amount}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                ))}
+              </TableBody>
+            </Table>
           </Section>
 
           <Section title="Avatar">
-            <div className="flex gap-4 items-center">
+            <Stack direction="row" gap="lg">
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <Avatar><AvatarFallback>JD</AvatarFallback></Avatar>
-              <Avatar className="h-12 w-12">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>LG</AvatarFallback>
-              </Avatar>
-              <Avatar className="h-16 w-16">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>XL</AvatarFallback>
-              </Avatar>
-            </div>
+              <Avatar size="md"><AvatarFallback>MD</AvatarFallback></Avatar>
+              <Avatar size="sm"><AvatarFallback>SM</AvatarFallback></Avatar>
+              <AvatarGroup max={3}>
+                {['AB', 'CD', 'EF', 'GH', 'IJ'].map((i) => (
+                  <Avatar key={i}><AvatarFallback>{i}</AvatarFallback></Avatar>
+                ))}
+              </AvatarGroup>
+            </Stack>
           </Section>
 
           {/* ============================ TYPOGRAPHY ============================ */}
 
           <Section title="Typography">
-            <div className="space-y-4 max-w-3xl">
+            <Stack gap="lg">
               <Typography.H1>The quick brown fox (H1)</Typography.H1>
               <Typography.H2>The quick brown fox (H2)</Typography.H2>
               <Typography.H3>The quick brown fox (H3)</Typography.H3>
@@ -1205,37 +1236,39 @@ const ThemeShowcase = ({
                 <li>Second item in the list</li>
                 <li>Third item in the list</li>
               </Typography.List>
-              <div className="flex flex-wrap items-center gap-4">
+              <Stack direction="row" gap="lg" wrap>
                 <Typography.Large>Large text</Typography.Large>
                 <Typography.Small>Small text</Typography.Small>
                 <Typography.Muted>Muted text</Typography.Muted>
                 <Typography.Code>npm install @invana/ui</Typography.Code>
-              </div>
+              </Stack>
               <Typography.Pre>{`function greet(name) {\n  return \`Hello, \${name}!\`;\n}`}</Typography.Pre>
-            </div>
+            </Stack>
           </Section>
 
           {/* ============================ UI EXTENDED ============================ */}
 
           <Section title="Navigation Shells">
-            <div className="space-y-8">
+            <Stack gap="xl">
               <Sub title="Nav Horizontal">
-                <NavHorizontal
-                  className="h-12 rounded-md border bg-card px-3 text-card-foreground"
-                  left={<Typography.Large>Invana</Typography.Large>}
-                  leftNavItems={[
-                    { name: 'Home', label: 'Home', icon: Home, onClick: () => {} },
-                    { name: 'Apps', label: 'Apps', icon: LayoutGrid, href: '#apps' },
-                  ]}
-                  rightNavItems={[
-                    { name: 'Notifications', icon: Bell, onClick: () => {} },
-                    { name: 'Profile', icon: User, href: '#profile' },
-                  ]}
-                />
+                <Card>
+                  <NavHorizontal
+                    className="h-12 px-3"
+                    left={<Typography.Large>Invana</Typography.Large>}
+                    leftNavItems={[
+                      { name: 'Home', label: 'Home', icon: Home, onClick: () => {} },
+                      { name: 'Apps', label: 'Apps', icon: LayoutGrid, href: '#apps' },
+                    ]}
+                    rightNavItems={[
+                      { name: 'Notifications', icon: Bell, onClick: () => {} },
+                      { name: 'Profile', icon: User, href: '#profile' },
+                    ]}
+                  />
+                </Card>
               </Sub>
 
               <Sub title="Nav Vertical">
-                <div className="h-[320px] w-[45px] rounded-md border bg-card text-card-foreground">
+                <Card className="h-[320px] w-[45px]">
                   <NavVertical
                     topNavItems={[
                       { name: 'Home', icon: Home, onClick: () => {} },
@@ -1246,38 +1279,42 @@ const ThemeShowcase = ({
                       { name: 'Profile', icon: User, href: '#profile' },
                     ]}
                   />
-                </div>
+                </Card>
               </Sub>
 
               <Sub title="Nav Base">
-                <NavBase
-                  orientation="horizontal"
-                  className="h-12 rounded-md border bg-card px-3 text-card-foreground"
-                  sections={{
-                    start: { content: <Typography.Large>Invana</Typography.Large> },
-                    center: { content: <Typography.Muted>Dashboard</Typography.Muted> },
-                    end: { content: <Link href="#" variant="quiet">Sign out</Link> },
-                  }}
-                />
+                <Card>
+                  <NavBase
+                    orientation="horizontal"
+                    className="h-12 px-3"
+                    sections={{
+                      start: { content: <Typography.Large>Invana</Typography.Large> },
+                      center: { content: <Typography.Muted>Dashboard</Typography.Muted> },
+                      end: { content: <Link href="#" variant="quiet">Sign out</Link> },
+                    }}
+                  />
+                </Card>
               </Sub>
-            </div>
+            </Stack>
           </Section>
 
           <Section title="Menus (Extended) — Menu Item & Nested Menu">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
               <Sub title="Menu Item">
-                <ul className="w-[240px] rounded-md border bg-card p-1 text-card-foreground">
-                  <MenuItem
-                    id="settings"
-                    label="Settings"
-                    icon={Settings}
-                    shortcut="⌘,"
-                    children={[
-                      { id: 'account', label: 'Account', icon: Users, shortcut: '⌘A' },
-                      { id: 'security', label: 'Security', icon: Shield, shortcut: '⌘L' },
-                    ]}
-                  />
-                </ul>
+                <Card className="w-[240px]">
+                  <ul>
+                    <MenuItem
+                      id="settings"
+                      label="Settings"
+                      icon={Settings}
+                      shortcut="⌘,"
+                      children={[
+                        { id: 'account', label: 'Account', icon: Users, shortcut: '⌘A' },
+                        { id: 'security', label: 'Security', icon: Shield, shortcut: '⌘L' },
+                      ]}
+                    />
+                  </ul>
+                </Card>
               </Sub>
               <Sub title="Nested Menu">
                 <NestedMenu menuItems={nestedMenuItems} />
@@ -1291,7 +1328,7 @@ const ThemeShowcase = ({
 
           <Section title="Tabbed Panel">
             <TabbedPanel
-              className="w-full max-w-2xl h-[320px]"
+              className="max-w-2xl h-[320px]"
               defaultTab="tab1"
               tabs={[
                 { value: 'tab1', label: 'Overview', content: <Typography.P>Content for the Overview tab.</Typography.P> },
@@ -1302,22 +1339,22 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Panel Content">
-            <div className="h-[320px] w-[360px] rounded-md border">
+            <Card className="h-[320px] w-[360px]">
               <PanelContent
                 titleText="Panel title"
                 headerActions={[{ name: 'Close panel', icon: X, onClick: () => {} }]}
                 footerContent={
-                  <div className="flex w-full justify-end gap-2">
+                  <Stack direction="row" justify="end" gap="sm" className="w-full">
                     <Button variant="ghost" size="sm">Cancel</Button>
                     <Button size="sm">Save</Button>
-                  </div>
+                  </Stack>
                 }
               >
                 <Typography.Muted>
                   Panel body content goes here. The header and footer stay fixed while the body scrolls.
                 </Typography.Muted>
               </PanelContent>
-            </div>
+            </Card>
           </Section>
 
           <Section title="Toolbar">
@@ -1342,19 +1379,19 @@ const ThemeShowcase = ({
           <Section title="Under Development & Error Boundary">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
               <Sub title="Under Development">
-                <div className="h-48 w-full rounded-md border">
+                <Card className="h-48">
                   <UnderDevelopment
                     title="Under Development"
                     description="This feature is currently being built."
                   />
-                </div>
+                </Card>
               </Sub>
               <Sub title="Error Boundary">
-                <div className="h-48 w-full rounded-md border">
+                <Card className="h-48">
                   <ErrorBoundary>
                     <BrokenComponent />
                   </ErrorBoundary>
-                </div>
+                </Card>
               </Sub>
             </div>
           </Section>
@@ -1391,18 +1428,19 @@ const ThemeShowcase = ({
                 { name: 'Card', class: 'bg-card border', textClass: 'text-card-foreground' },
                 { name: 'Popover', class: 'bg-popover border', textClass: 'text-popover-foreground' },
               ].map((color) => (
-                <div key={color.name} className="space-y-2">
-                  <div className={`h-16 rounded-md flex items-center justify-center text-sm ${color.class} ${color.textClass}`}>
+                <Stack key={color.name} gap="sm">
+                  <Stack justify="center" align="center" className={`h-16 rounded-md ${color.class} ${color.textClass}`}>
                     {color.name}
-                  </div>
-                  <p className="text-sm text-center text-muted-foreground">{color.class}</p>
-                </div>
+                  </Stack>
+                  <Typography.Muted>{color.class}</Typography.Muted>
+                </Stack>
               ))}
             </div>
           </Section>
 
           {/* Footer */}
-          <footer className="flex flex-col items-center gap-2 border-t pt-8 pb-16">
+          <Separator />
+          <Stack align="center" gap="sm">
             <Typography.Muted>
               Built with <Heart className="inline-block size-4 text-destructive" /> using @invana/ui components
             </Typography.Muted>
@@ -1412,8 +1450,8 @@ const ThemeShowcase = ({
                 shadcn/ui
               </Link>
             </Typography.Muted>
-          </footer>
-        </main>
+          </Stack>
+        </Stack>
       </div>
     </TooltipProvider>
   );
