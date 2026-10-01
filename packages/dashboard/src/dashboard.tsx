@@ -102,7 +102,7 @@ function Panel({
     : { flexGrow: panel.grow ?? 1, flexBasis: 0, minWidth: 0 }
 
   // `title` is what puts a panel in a box — so a strip of tiles sits directly
-  // on the dashboard instead of inside a card labelled "Metrics".
+  // on the dashboard instead of inside a card labelled "Figures".
   if (!panel.title) {
     return (
       <div style={style} className="min-w-0">

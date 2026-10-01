@@ -1,19 +1,4 @@
-import * as React from "react"
-import {
-  Eyebrow,
-  MetricGrid,
-  MetricTile,
-  PropertyList,
-  PropertyRow,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TaskGantt,
-  cn,
-} from "@invana/ui"
+import { Eyebrow, TaskGantt } from "@invana/ui"
 import { CodeBlock } from "@invana/editor"
 
 import type {
@@ -21,40 +6,8 @@ import type {
   ExchangeOptions,
   GanttOptions,
   JsonOptions,
-  MetricsOptions,
   PanelRendererProps,
-  PropertiesOptions,
-  TableOptions,
 } from "../types"
-
-export function MetricsPanel({ options, gap }: PanelRendererProps<MetricsOptions>) {
-  return (
-    <MetricGrid minTileWidth={options.minTileWidth ?? 130} gap={gap}>
-      {options.tiles.map((tile, i) => (
-        <MetricTile
-          key={i}
-          label={tile.label}
-          value={tile.value}
-          caption={tile.caption}
-          tone={tile.tone}
-          meter={tile.meter}
-        />
-      ))}
-    </MetricGrid>
-  )
-}
-
-export function PropertiesPanel({ options }: PanelRendererProps<PropertiesOptions>) {
-  return (
-    <PropertyList labelWidth={options.labelWidth ?? 108}>
-      {options.rows.map((row, i) => (
-        <PropertyRow key={i} label={row.label} mono={row.mono ?? true}>
-          {row.value}
-        </PropertyRow>
-      ))}
-    </PropertyList>
-  )
-}
 
 export function JsonPanel({ options }: PanelRendererProps<JsonOptions>) {
   const value =
@@ -112,47 +65,5 @@ export function GanttPanel({ panel, options, onAction }: PanelRendererProps<Gant
           : undefined
       }
     />
-  )
-}
-
-export function TablePanel({ panel, options, onAction }: PanelRendererProps<TableOptions>) {
-  const keyOf = (row: TableOptions["rows"][number]) =>
-    options.rowKey != null ? String(row[options.rowKey] ?? "") : undefined
-  const pick = options.selectAction
-  return (
-    <Table density="compact">
-      <TableHeader>
-        <TableRow>
-          {options.columns.map((col) => (
-            <TableHead key={col.key} className={cn(col.align === "right" && "text-right")}>
-              {col.label}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {options.rows.map((row, i) => (
-          <TableRow
-            key={keyOf(row) ?? i}
-            data-state={keyOf(row) != null && keyOf(row) === options.selected ? "selected" : undefined}
-            className={cn(pick && "cursor-pointer")}
-            onClick={
-              pick && keyOf(row) != null
-                ? () => onAction(pick, { panelId: panel.id, itemId: keyOf(row) })
-                : undefined
-            }
-          >
-            {options.columns.map((col) => (
-              <TableCell
-                key={col.key}
-                className={cn(col.mono !== false && "font-mono", col.align === "right" && "text-right")}
-              >
-                {row[col.key] ?? "—"}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
   )
 }

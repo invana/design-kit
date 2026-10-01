@@ -299,6 +299,12 @@ importers:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
     devDependencies:
+      '@invana/blocks':
+        specifier: workspace:*
+        version: link:../blocks
+      '@invana/charts':
+        specifier: workspace:*
+        version: link:../charts
       '@invana/editor':
         specifier: workspace:*
         version: link:../editor
@@ -308,6 +314,9 @@ importers:
       '@invana/styling':
         specifier: workspace:*
         version: link:../styling
+      '@invana/tables':
+        specifier: workspace:*
+        version: link:../tables
       '@invana/ui':
         specifier: workspace:*
         version: link:../ui
@@ -323,6 +332,9 @@ importers:
       react-dom:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
+      react-hook-form:
+        specifier: ^7.81.0
+        version: 7.81.0(react@19.2.7)
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)

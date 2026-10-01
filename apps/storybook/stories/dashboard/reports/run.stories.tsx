@@ -29,15 +29,16 @@ const SPEC: DashboardSpec<WithFlow> = {
     {
       panels: [
         {
-          kind: 'metrics',
+          kind: 'grid',
           options: {
+            minTileWidth: 130,
             tiles: [
-              { label: 'Tasks', value: '4 / 7', caption: 'running', tone: 'running', meter: 4 / 7 },
-              { label: 'Elapsed', value: '12s', caption: 'no timeout yet' },
-              { label: 'Tokens', value: '8.2k', caption: 'of 40k ceiling', meter: 0.21 },
-              { label: 'Cost', value: '$0.04', caption: 'of $2.00 budget', tone: 'info', meter: 0.02 },
-              { label: 'Rows', value: '1,880', caption: 'so far' },
-              { label: 'Lanes', value: '2 / 5', caption: 'execute_graph_query', meter: 0.4 },
+              { label: 'Tasks', value: '4 / 7', delta: 'running', gauge: { value: 4, max: 7 } },
+              { label: 'Elapsed', value: '12s', delta: 'no timeout yet' },
+              { label: 'Tokens', value: '8.2k', delta: 'of 40k ceiling', gauge: { value: 8.2, max: 40 } },
+              { label: 'Cost', value: '$0.04', delta: 'of $2.00 budget', gauge: { value: 0.04, max: 2 } },
+              { label: 'Rows', value: '1,880', delta: 'so far' },
+              { label: 'Lanes', value: '2 / 5', delta: 'execute_graph_query', gauge: { value: 2, max: 5 } },
             ],
           },
         },
@@ -65,7 +66,7 @@ const SPEC: DashboardSpec<WithFlow> = {
           options: { labelWidth: 124, selectAction: 'open-step', tasks: RUN_TRACE },
         },
         {
-          kind: 'properties',
+          kind: 'record',
           title: 'Reported',
           asideChip: { label: '47', tone: 'warning' },
           width: 340,
@@ -82,13 +83,13 @@ const SPEC: DashboardSpec<WithFlow> = {
     {
       panels: [
         {
-          kind: 'properties',
+          kind: 'record',
           title: 'Input · what opened this run',
           aside: 'rendered from result.json',
           options: {
             rows: [
               { label: 'trigger', value: 'session · message #214' },
-              { label: 'asked', value: '"Which suppliers are exposed to the Red Sea route?"' },
+              { label: 'asked', value: '"Which suppliers are exposed to the Red Sea route?"', mono: false },
               { label: 'plan', value: 'market-brief v1 · reused' },
               { label: 'agent', value: 'Scout · envelope Analyst-2' },
               { label: 'lens', value: '4 models · 6 stitches · frozen' },
@@ -167,12 +168,12 @@ function stepSpec(task: Task): DashboardSpec {
           {
             panels: [
               {
-                kind: 'metrics',
+                kind: 'grid',
                 options: {
                   tiles: [
-                    { label: 'Status', value: task.status.replace('_', ' '), tone: task.status === 'succeeded' ? 'success' : undefined },
+                    { label: 'Status', value: task.status.replace('_', ' ') },
                     { label: 'Duration', value: seconds(task.durationMs) },
-                    { label: 'Attempts', value: String(attempts), tone: attempts > 1 ? 'warning' : undefined },
+                    { label: 'Attempts', value: String(attempts), flag: attempts > 1 },
                   ],
                 },
               },

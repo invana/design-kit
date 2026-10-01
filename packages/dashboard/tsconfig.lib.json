@@ -16,10 +16,16 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@/components/*": ["../ui/src/components/*"],
+      "@/lib/*": ["../ui/src/lib/*"],
+      "@/hooks/*": ["../ui/src/hooks/*"],
       "@invana/ui": ["../ui/src"],
       "@invana/ui/*": ["../ui/src/*"],
       "@invana/forms": ["../forms/src"],
-      "@invana/editor": ["../editor/src"]
+      "@invana/editor": ["../editor/src"],
+      "@invana/blocks": ["../blocks/src"],
+      "@invana/charts": ["../charts/src"],
+      "@invana/tables": ["../tables/src"]
     }
   },
   "include": ["src"],

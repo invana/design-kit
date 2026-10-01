@@ -63,13 +63,14 @@ export const Plan: Story = {
             {
               panels: [
                 {
-                  kind: 'metrics',
+                  kind: 'grid',
                   options: {
+                    minTileWidth: 130,
                     tiles: [
-                      { label: 'runs', value: '25', caption: `over ${window}` },
+                      { label: 'runs', value: '25', delta: `over ${window}` },
                       { label: 'served', value: '71%' },
                       { label: 'work p50', value: '12.9s' },
-                      { label: 'failed', value: '1', tone: 'error' },
+                      { label: 'failed', value: '1', flag: true },
                     ],
                   },
                 },
@@ -78,22 +79,21 @@ export const Plan: Story = {
             {
               panels: [
                 {
+                  id: 'steps',
                   kind: 'table',
                   title: 'Each step, across 25 runs',
                   aside: 'pick a step',
-                  flush: true,
                   options: {
                     columns: [
-                      { key: 'step', label: 'step' },
-                      { key: 'layer', label: 'layer', mono: false },
-                      { key: 'ran_in', label: 'ran in', align: 'right' },
-                      { key: 'p50', label: 'p50', align: 'right' },
-                      { key: 'p95', label: 'p95', align: 'right' },
-                      { key: 'failed', label: 'failed', align: 'right' },
+                      { key: 'step', label: 'step', mono: true },
+                      { key: 'layer', label: 'layer' },
+                      { key: 'ran_in', label: 'ran in', align: 'right', mono: true },
+                      { key: 'p50', label: 'p50', align: 'right', mono: true },
+                      { key: 'p95', label: 'p95', align: 'right', mono: true },
+                      { key: 'failed', label: 'failed', align: 'right', mono: true },
                     ],
                     rows: STEPS,
                     rowKey: 'step',
-                    selectAction: 'select-step',
                     selected: step,
                   },
                 },
@@ -115,7 +115,10 @@ export const Plan: Story = {
             setLast(`${id} ${JSON.stringify(ctx ?? {})}`);
             if (id === 'tab' && ctx?.option) setTab(ctx.option);
             if (id === 'window' && ctx?.option) setWindow(ctx.option);
-            if (id === 'select-step') setStep(ctx?.itemId === step ? null : (ctx?.itemId ?? null));
+            if (id === 'select' && ctx?.panelId === 'steps') {
+              const picked = String(ctx.value);
+              setStep(picked === step ? null : picked);
+            }
           }}
         />
       </Surface>

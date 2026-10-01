@@ -48,7 +48,7 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 | `@invana/themes` | App shells: `AppLayoutV2` and the rest | ui |
 | **`@invana/blocks`** | **Blocks: `types.ts` (kinds and their option types), `registry.ts`, `block.tsx`, one file per kind** | ui, charts, tables, forms |
 | `@invana/assistant` | The conversation shell: turns, intents, patterns, flows, envelope, streaming, cite focus | blocks, ui |
-| `@invana/dashboard` | The dashboard shell: rows, panels in `PanelBox`, header, tabs; panels only a dashboard has (`json`, `code`, `log`, `exchange`) | blocks, ui, forms, editor |
+| `@invana/dashboard` | The dashboard shell: rows, panels in `PanelBox`, header, tabs; every block kind as a panel; panels only a dashboard has (`json`, `code`, `exchange`, `gantt`, `log`, `list`, `params`, `text`) | blocks, ui, charts, tables, forms, editor |
 
 **Where a component goes**, in order, stopping at the first yes:
 
@@ -62,8 +62,9 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 
 `blocks` holds every kind: the 24 with renderers, and the rest as kinds and option types that
 draw a labelled placeholder. Assistant registers them from `blocks` through one adapter. Dashboard
-draws them in `PanelBox` once each clash with its own panels is decided (see To do). No backward
-compatibility is kept.
+draws every kind in `PanelBox`: a panel's `options` are the block's, its title and aside are the
+panel's, and a block's `onAction(action, value)` arrives as `onAction(action, { panelId, value })`.
+A kind the consumer registers wins over the block of that name. No backward compatibility is kept.
 
 ## To do
 
@@ -72,9 +73,11 @@ compatibility is kept.
       `AnswerKind`), `ASKS` → `ASK_INTENTS`, the `preset` key → `kind`.
 - [x] **Create `@invana/blocks`** with every block and `Page`, a `Blocks/<Kind>` story each.
       Assistant draws every kind from it, and `answerToPage(turn)` opens a long answer as a page.
-- [ ] **Dashboard draws blocks.** Decide each clash first: dashboard `table` (row selection) vs the
-      `table` block; `metrics` vs `grid` (tones, `meter`); `properties` vs `record` (`mono`,
-      `labelWidth`); `text` (callout, actions) is not `narrative` and stays.
+- [x] **Dashboard draws blocks.** The `table` block gained `rowKey` + `selected` (a click sends
+      `select`) and `mono` columns, replacing the dashboard `table`; `grid` gained `minTileWidth`
+      and a target-less `gauge` (a meter), replacing `metrics` (its `running`/`info` tones are
+      gone); `record` rows gained `mono`, replacing `properties` (`labelWidth` is gone). `text`
+      stays a dashboard panel. Still to add to the spec's boards: those four options.
 - [ ] **Triage Needs review.** Keep only the generic variants and merge them into their block
       boards: line with reference + forecast (`timeseries`), tile with a mark (`grid`), stacked
       (`bars`), one flagged cell (`matrix`), proposal tag + scope note (`proposal`), compact

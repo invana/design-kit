@@ -1,8 +1,10 @@
 # @invana/dashboard
 
 A dashboard is **data**. This package takes a JSON-serialisable `DashboardSpec` and renders it
-from `@invana/ui` panels — so one component covers many screens, and a spec can be fetched from
-an API, stored beside a plan as `dashboard.yml`, and diffed between two runs.
+from blocks (`@invana/blocks`) and a few panels only a dashboard has — so one component covers
+many screens, and a spec can be fetched from an API, stored beside a plan as `dashboard.yml`, and
+diffed between two runs. A panel of a block kind is drawn from the same JSON a conversation turn
+is.
 
 ```bash
 pnpm add @invana/dashboard
@@ -11,7 +13,7 @@ pnpm add @invana/dashboard
 ## Peer dependencies
 
 ```bash
-pnpm add @invana/ui @invana/styling @invana/forms @invana/editor react react-dom
+pnpm add @invana/blocks @invana/ui @invana/charts @invana/tables @invana/styling @invana/forms @invana/editor react-hook-form react react-dom
 ```
 
 Styles come from `@invana/styling` — see [its README](../styling/README.md) for the Tailwind v4
@@ -36,11 +38,11 @@ const spec: DashboardSpec = {
     {
       panels: [
         {
-          kind: 'metrics',
+          kind: 'grid',
           options: {
             tiles: [
-              { label: 'Status', value: 'ok', caption: 'first attempt', tone: 'success' },
-              { label: 'Duration', value: '3.4s', caption: '72% of the run' },
+              { label: 'Status', value: 'ok', delta: 'first attempt', tone: 'good' },
+              { label: 'Duration', value: '3.4s', delta: '72% of the run' },
             ],
           },
         },
@@ -65,18 +67,31 @@ const spec: DashboardSpec = {
 
 A function is not JSON, so actions carry an `id` and come back through a single
 `onAction(actionId, ctx)`. `ctx` tells you which panel it came from and, where the panel has a
-selection, what was selected (`taskKey`, `itemId`, `param`, `option`).
+selection, what was selected (`taskKey`, `itemId`, `param`, `option`). A block panel sends the
+block's own action with what it carries as `value` — a `table` row picked is
+`onAction('select', { panelId, value: <rowKey value> })`, a `form` submitted is `reply`.
 
 Icons are passed in by name via the `icons` prop — the spec only ever carries the string. Unknown
 names render nothing, so this package pulls in no icon set of its own.
 
-## Built-in panel kinds
+## Panel kinds
 
-`metrics` · `properties` · `json` · `code` · `exchange` · `gantt` · `table` · `log` · `list` ·
-`params` · `text`
+- **Every block kind** (`BLOCKS` in `@invana/blocks`): `options` are the block's options,
+  checked against `BlockOptionsByKind`. The block draws bare; the panel's `title`, `aside` and
+  `absent` frame it. A kind with no renderer yet is a labelled placeholder.
+- **Panels only a dashboard has:** `json` · `code` · `exchange` · `gantt` · `log` · `list` ·
+  `params` · `text`.
 
 A panel with a `title` is wrapped in a `PanelBox`; without one it renders bare, which is how a
 tile strip sits directly on the surface.
+
+### From the old panels
+
+| Was | Now | Changes |
+| --- | --- | --- |
+| `metrics` | `grid` | `caption` → `delta`; `meter: n` → `gauge: { value: n, max: 1 }`; `tone` is `good`/`bad`/`warn`/`neutral` and colours the `delta` (`running`, `info` are gone; `flag` marks the tile to look at) |
+| `properties` | `record` | `mono` defaults to `true` as before; `labelWidth` is gone |
+| `table` | `table` | Columns set `mono: true` (the default is now off); `selectAction` is gone — a pick is `select` with `{ panelId, value }` |
 
 ## Extra panel kinds
 
@@ -96,12 +111,15 @@ const spec: DashboardSpec<Extra> = { rows: [{ panels: [{ kind: 'canvas', options
 `@invana/canvas` arrives this way rather than as an import, so PixiJS stays out of the bundle of
 every consumer that only wanted tiles and a log.
 
+A registered kind wins over a block of the same name, at runtime and in the types: `RUN_PANELS`
+registers its own `trace`, which replaces the `trace` block on that dashboard.
+
 For a spec arriving off the wire, where nothing can be checked anyway, use `AnyDashboardSpec`.
 
 ## Exports
 
-`Dashboard`, the panel components (`MetricsPanel`, `PropertiesPanel`, `JsonPanel`, `CodePanel`,
-`ExchangePanel`, `GanttPanel`, `TablePanel`, `LogPanel`, `ListPanel`, `ParamsPanel`, `TextPanel`),
+`Dashboard`, `BlockPanel` and `BLOCK_PANELS`, the panel components (`JsonPanel`, `CodePanel`,
+`ExchangePanel`, `GanttPanel`, `LogPanel`, `ListPanel`, `ParamsPanel`, `TextPanel`), `RUN_PANELS`,
 `SpecChip(s)` / `SpecAction(s)`, `BUILT_IN_PANELS`, `resolveRegistry`, and the spec types.
 
 ## License

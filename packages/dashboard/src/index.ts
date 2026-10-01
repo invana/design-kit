@@ -1,16 +1,9 @@
 export * from "./types"
 export * from "./registry"
 export { Dashboard } from "./dashboard"
+export { BlockPanel, BLOCK_PANELS } from "./panels/block"
 export { SpecChip, SpecChips, SpecAction, SpecActions } from "./chips"
-export {
-  MetricsPanel,
-  PropertiesPanel,
-  JsonPanel,
-  CodePanel,
-  ExchangePanel,
-  GanttPanel,
-  TablePanel,
-} from "./panels/data"
+export { JsonPanel, CodePanel, ExchangePanel, GanttPanel } from "./panels/data"
 export { LogPanel, ListPanel, ParamsPanel, TextPanel } from "./panels/rows"
 export {
   RUN_PANELS,

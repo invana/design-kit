@@ -12,7 +12,11 @@ export default defineConfig({
   external: [
     'react',
     'react-dom',
+    'react-hook-form',
     '@invana/ui',
+    '@invana/blocks',
+    '@invana/charts',
+    '@invana/tables',
     '@invana/forms',
     '@invana/editor',
     '@invana/styling',

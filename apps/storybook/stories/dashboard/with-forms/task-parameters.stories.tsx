@@ -95,7 +95,7 @@ function spec(params: Param[] | null, changed: string[], version: number): Dashb
               }
             : { kind: 'text', title: 'Parameters · import_dataset', options: { text: 'Loading the draft…' } },
           {
-            kind: 'properties',
+            kind: 'record',
             title: 'Its contract · from the catalogue',
             aside: 'read-only',
             width: 330,

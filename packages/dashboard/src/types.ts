@@ -1,4 +1,5 @@
 import type * as React from "react"
+import type { BlockKind, BlockOptionsByKind } from "@invana/blocks"
 import type { Bound, StatusDotProps, TaskGanttTask } from "@invana/ui"
 
 /**
@@ -151,23 +152,10 @@ export interface TabSpec<X extends ExtraPanels = Record<never, never>> {
 }
 
 // ── panel options, one shape per built-in kind ──────────────────────────────
-
-export interface MetricsOptions {
-  tiles: Array<{
-    label: string
-    value: string
-    caption?: string
-    tone?: "running" | "success" | "warning" | "error" | "info"
-    /** `0`–`1`. Only for a value with a real ceiling — see `MetricTile`. */
-    meter?: number
-  }>
-  minTileWidth?: number
-}
-
-export interface PropertiesOptions {
-  rows: Array<{ label: string; value: string; mono?: boolean }>
-  labelWidth?: number
-}
+//
+// Only the panels a dashboard alone has. A table, a band of figures and a
+// record are blocks — `table`, `grid`, `record` — drawn from the same JSON a
+// conversation turn is; see `BlockPanelSpec`.
 
 export interface JsonOptions {
   /** The document, as a string. Objects are stringified with 2-space indent. */
@@ -202,17 +190,6 @@ export interface GanttOptions {
   selectedKey?: string | null
   /** Emits `onAction(selectAction, { taskKey })` when a row is picked. */
   selectAction?: string
-}
-
-export interface TableOptions {
-  columns: Array<{ key: string; label: string; mono?: boolean; align?: "left" | "right" }>
-  rows: Array<Record<string, string | number | null>>
-  /** The column whose value names a row — what `selectAction` reports. */
-  rowKey?: string
-  /** Emits `onAction(this, { itemId })` with the row's `rowKey` value when it is picked. */
-  selectAction?: string
-  /** The `rowKey` value of the row drawn selected. */
-  selected?: string | null
 }
 
 export interface ListOptions {
@@ -279,13 +256,10 @@ export interface CustomOptions {
  * the map exists.
  */
 export interface PanelOptionsByKind {
-  metrics: MetricsOptions
-  properties: PropertiesOptions
   json: JsonOptions
   code: CodeOptions
   exchange: ExchangeOptions
   gantt: GanttOptions
-  table: TableOptions
   log: LogOptions
   list: ListOptions
   params: ParamsOptions
@@ -294,7 +268,16 @@ export interface PanelOptionsByKind {
 
 export type BuiltInPanelKind = keyof PanelOptionsByKind
 
-export type PanelOptions = PanelOptionsByKind[BuiltInPanelKind] | CustomOptions
+export type PanelOptions =
+  | PanelOptionsByKind[BuiltInPanelKind]
+  | BlockOptionsByKind[BlockKind]
+  | CustomOptions
+
+// A built-in panel and a block never share a kind: the dashboard would have to
+// pick one, and the JSON would mean different things in a turn and a panel.
+type Overlap = Extract<BuiltInPanelKind, BlockKind>
+const builtInsAreNotBlocks: [Overlap] extends [never] ? true : false = true
+void builtInsAreNotBlocks
 
 /** Everything a panel carries apart from its kind and its options. */
 export interface PanelBase {
@@ -359,6 +342,15 @@ export type BuiltInPanelSpec = {
 }[BuiltInPanelKind]
 
 /**
+ * A block as a panel: its kind, and the options the same block reads in a
+ * conversation turn — `{ kind: "timeseries", title: "Demand", options: { series } }`.
+ * A kind the consumer registers itself is theirs, not the block's.
+ */
+export type BlockPanelSpec<X extends ExtraPanels = Record<never, never>> = {
+  [K in Exclude<BlockKind, keyof X>]: PanelBase & { kind: K; options: BlockOptionsByKind[K] }
+}[Exclude<BlockKind, keyof X>]
+
+/**
  * The extra kinds a consumer registers — `{ canvas: CanvasOptions }`.
  *
  * A dashboard's type is **parametrised by its registry**, which is the only way
@@ -386,6 +378,7 @@ export type RegisteredPanelSpec<X extends ExtraPanels> = {
  */
 export type PanelSpec<X extends ExtraPanels = Record<never, never>> =
   | BuiltInPanelSpec
+  | BlockPanelSpec<X>
   | RegisteredPanelSpec<X>
 
 export interface RowSpec<X extends ExtraPanels = Record<never, never>> {
@@ -433,7 +426,7 @@ export interface ActionContext {
   panelId?: string
   /** Set by `gantt`'s row select. */
   taskKey?: string
-  /** Set by `list`'s row select. */
+  /** Set by `list`'s row select and a crumb or staged item. */
   itemId?: string
   /** Set by `params` on an edit. */
   param?: { name: string; source: string; value: string }
@@ -443,6 +436,8 @@ export interface ActionContext {
   pressed?: boolean
   /** Set by `trace`'s row select — the step a reader picked out of a run. */
   stepId?: string
+  /** Set by a block panel — what its action carries: a row's key, a form's values. */
+  value?: unknown
 }
 
 export interface PanelRendererProps<O = PanelOptions> {
