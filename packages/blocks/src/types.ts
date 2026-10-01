@@ -125,8 +125,14 @@ interface SharedAnswerOptions {
     diverging?: { below: string; above: string }
   }
   timeseries: {
-    series: { name: string; points: [string, number][] }[]
+    /** A point with no value — `null` — breaks the line rather than bridging the gap. */
+    series: { name: string; points: [string, number | null][] }[]
     band?: { label?: string; lower: number; upper: number }
+    /**
+     * A line to read against — an alert level, a budget — drawn dashed and
+     * named at the right. Every point above it is ringed in the `bad` tone.
+     */
+    reference?: { value: number; label: string }
     forecastFrom?: string
     /** Names the forecast boundary — `today`. Without one the rule is unlabelled. */
     forecastLabel?: string
