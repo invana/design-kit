@@ -2,6 +2,14 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The filter controls. `FilterChip`s, a `SearchInput`, a toggle. */
@@ -125,3 +133,85 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
   },
 )
 FilterChip.displayName = "FilterChip"
+
+/** One choice in a {@link MultiFilterChip}: its value, or a value with a label. */
+export type FilterChipOption = string | { value: string; label?: React.ReactNode }
+
+export interface MultiFilterChipProps {
+  /** The dimension — `kind`, `agent`, `status`. */
+  label: React.ReactNode
+  options: FilterChipOption[]
+  /** What it is narrowed to. Empty means "not filtered". */
+  value: string[]
+  onChange: (next: string[]) => void
+  /**
+   * Many at once (the default) — a row matches any of them — or one, where
+   * picking a choice replaces the last and picking it again clears it.
+   */
+  multiple?: boolean
+}
+
+/**
+ * A `FilterChip` with its menu: the choices for one dimension, checked as
+ * they narrow the list. The chip reads what it is set to — the value, or
+ * `3 selected` — and, once set, carries the × that clears it.
+ */
+export function MultiFilterChip({
+  label,
+  options,
+  value,
+  onChange,
+  multiple = true,
+}: MultiFilterChipProps) {
+  const choices = options.map((o) =>
+    typeof o === "string" ? { value: o, label: o } : { value: o.value, label: o.label ?? o.value },
+  )
+  const shown =
+    value.length === 0
+      ? undefined
+      : value.length === 1
+        ? (choices.find((c) => c.value === value[0])?.label ?? value[0])
+        : `${value.length} selected`
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <FilterChip
+          label={label}
+          value={shown}
+          active={value.length > 0}
+          onRemove={value.length ? () => onChange([]) : undefined}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        {multiple ? (
+          choices.map((c) => (
+            <DropdownMenuCheckboxItem
+              key={c.value}
+              checked={value.includes(c.value)}
+              onSelect={(e) => e.preventDefault()}
+              onCheckedChange={(on) =>
+                onChange(on ? [...value, c.value] : value.filter((v) => v !== c.value))
+              }
+            >
+              {c.label}
+            </DropdownMenuCheckboxItem>
+          ))
+        ) : (
+          <DropdownMenuRadioGroup
+            value={value[0] ?? ""}
+            onValueChange={(v) => onChange(v === value[0] ? [] : [v])}
+          >
+            {choices.map((c) => (
+              // Radix reports every pick, the current one included, so
+              // picking it again clears the chip.
+              <DropdownMenuRadioItem key={c.value} value={c.value}>
+                {c.label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
