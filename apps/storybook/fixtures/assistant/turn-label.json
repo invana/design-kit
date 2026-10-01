@@ -1,0 +1,4 @@
+[
+  { "caption": "Over an ask", "props": { "align": "start" }, "text": "Assistant" },
+  { "caption": "Over the analyst's prompt", "props": { "align": "end" }, "text": "Planner" }
+]

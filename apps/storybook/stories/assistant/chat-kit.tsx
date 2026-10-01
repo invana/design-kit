@@ -1,4 +1,4 @@
-import type { Decorator } from '@storybook/react-vite';
+import type * as React from 'react';
 import { action } from 'storybook/actions';
 import { fn } from 'storybook/test';
 import { EVENT_TYPES, type ChatSessionProps, type ChatSessionIcons, type ConversationEvent } from '@invana/assistant';
@@ -7,6 +7,7 @@ import {
   Copy,
   List,
   Paperclip,
+  Pin,
   RotateCw,
   Square,
   ThumbsDown,
@@ -30,19 +31,19 @@ export const CHAT_ICONS: ChatSessionIcons = {
   rateDown: <ThumbsDown className="size-3" />,
 };
 
-/** Draw the story in a panel `width` wide and `height` tall, as a rail or a page. */
-export const inPanel =
-  (width: number | string, height = 720): Decorator =>
-  (Story) => (
-    <div className="border border-border shadow-md" style={{ width, height }}>
-      <Story />
+/** Icons for a host's own answer actions, named in JSON (`"icon": "pin"`). */
+export const ACTION_ICONS: Record<string, React.ReactNode> = {
+  pin: <Pin className="size-3" />,
+};
+
+/** A session in a panel `height` tall, as the rail or page it stands for; its width is the cell's. */
+export function RailPanel({ height = 720, children }: { height?: number; children: React.ReactNode }) {
+  return (
+    <div className="border border-border shadow-md" style={{ height }}>
+      {children}
     </div>
   );
-
-/** The variant as a control on every ChatSession story. */
-export const VARIANT_ARG_TYPES = {
-  variant: { control: 'inline-radio', options: ['web', 'cli'] },
-} as const;
+}
 
 /** `open-run` → `onOpenRun`: the callback prop an event goes to. */
 const handlerName = (type: string) => `on${type.replace(/(^|-)([a-z])/g, (_, __, c: string) => c.toUpperCase())}`;

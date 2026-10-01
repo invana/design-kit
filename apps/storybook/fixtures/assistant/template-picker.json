@@ -1,0 +1,18 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "heading": "Render these 4 records as",
+      "value": "table-compact@3",
+      "options": [
+        { "id": "table-compact@3", "kind": "table", "note": "in use" },
+        { "id": "table-wide@1", "kind": "table" },
+        { "id": "bars-h@2", "kind": "chart" },
+        { "id": "stat-compact@1", "kind": "metric", "unavailable": "needs 1 record, has 4" },
+        { "id": "line-time@2", "kind": "chart", "unavailable": "needs a time column" },
+        { "id": "card-html@1", "kind": "html", "note": "sandboxed" }
+      ],
+      "footnote": "Re-renders from the same 4 records. The query does not run again."
+    }
+  }
+]
