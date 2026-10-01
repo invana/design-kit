@@ -1,0 +1,403 @@
+[
+  { "caption": "H1", "nodes": [{ "as": "H1", "text": "Taxing Laughter: The Joke Tax Chronicles" }] },
+  { "caption": "H2", "nodes": [{ "as": "H2", "text": "The People of the Kingdom" }] },
+  { "caption": "H3", "nodes": [{ "as": "H3", "text": "The Joke Tax" }] },
+  { "caption": "H4", "nodes": [{ "as": "H4", "text": "People stopped telling jokes" }] },
+  { "caption": "H5", "nodes": [{ "as": "H5", "text": "The Jester's Plan" }] },
+  { "caption": "H6", "nodes": [{ "as": "H6", "text": "A New Beginning" }] },
+  {
+    "caption": "Lead",
+    "nodes": [{ "as": "Lead", "text": "A modal dialog that interrupts the user with important content and expects a response." }]
+  },
+  { "caption": "Large", "nodes": [{ "as": "Large", "text": "Are you absolutely sure?" }] },
+  { "caption": "Small", "nodes": [{ "as": "Small", "text": "Email address" }] },
+  { "caption": "Muted", "nodes": [{ "as": "Muted", "text": "Enter your email address." }] },
+  {
+    "caption": "Paragraph",
+    "nodes": [
+      {
+        "as": "P",
+        "text": "The king, seeing how much happier his subjects were, realized the error of his ways and repealed the joke tax."
+      }
+    ]
+  },
+  {
+    "caption": "List",
+    "nodes": [
+      {
+        "as": "List",
+        "items": [
+          ["1st level of puns: 5 gold coins"],
+          ["2nd level of jokes: 10 gold coins"],
+          ["3rd level of one-liners: 20 gold coins"]
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Blockquote",
+    "nodes": [
+      {
+        "as": "Blockquote",
+        "text": "\"After all,\" he said, \"everyone enjoys a good joke, so it's only fair that they should pay for the privilege.\""
+      }
+    ]
+  },
+  { "caption": "Code", "nodes": [{ "as": "Code", "text": "@radix-ui/react-alert-dialog" }] },
+  {
+    "caption": "Pre",
+    "nodes": [
+      {
+        "as": "Pre",
+        "text": "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(\"World\"));"
+      }
+    ]
+  },
+  {
+    "caption": "Inline styles — with a custom class",
+    "wide": true,
+    "nodes": [
+      { "as": "H3", "text": "Font Weight Variations" },
+      {
+        "as": "P",
+        "runs": [
+          "This paragraph contains ",
+          { "text": "light weight text", "className": "font-light" },
+          ", ",
+          { "text": "normal weight text", "className": "font-normal" },
+          ", ",
+          { "text": "medium weight text", "className": "font-medium" },
+          ", ",
+          { "text": "semibold weight text", "className": "font-semibold" },
+          ", and ",
+          { "text": "bold weight text", "className": "font-bold" },
+          " for emphasis."
+        ]
+      },
+      { "as": "H3", "text": "Font Style Variations" },
+      {
+        "as": "P",
+        "runs": [
+          "You can use ",
+          { "em": "italic text" },
+          " for emphasis, ",
+          { "text": "non-italic emphasized text", "className": "not-italic font-medium" },
+          ", or ",
+          { "strong": "strong bold text" },
+          " for important content."
+        ]
+      },
+      { "as": "H3", "text": "Text Decoration" },
+      {
+        "as": "P",
+        "runs": [
+          "This paragraph shows ",
+          { "text": "underlined text", "className": "underline" },
+          ", ",
+          { "text": "strikethrough text", "className": "line-through" },
+          ", ",
+          { "text": "thick underline", "className": "underline decoration-2" },
+          ", ",
+          { "text": "dotted underline", "className": "underline decoration-dotted" },
+          ", and ",
+          { "text": "wavy underline", "className": "underline decoration-wavy" },
+          "."
+        ]
+      },
+      { "as": "H3", "text": "Text Transform" },
+      {
+        "as": "P",
+        "runs": [
+          "Text can be ",
+          { "text": "transformed to uppercase", "className": "uppercase" },
+          ", ",
+          { "text": "TRANSFORMED TO LOWERCASE", "className": "lowercase" },
+          ", ",
+          { "text": "capitalized for each word", "className": "capitalize" },
+          ", or ",
+          { "text": "KEpt IN noRMAL CasE", "className": "normal-case" },
+          "."
+        ]
+      },
+      { "as": "H3", "text": "Text Color Utilities" },
+      {
+        "as": "P",
+        "runs": [
+          "Inline text can use ",
+          { "text": "primary color", "className": "text-primary" },
+          ", ",
+          { "text": "secondary color", "className": "text-secondary" },
+          ", ",
+          { "text": "muted foreground", "className": "text-muted-foreground" },
+          ", ",
+          { "text": "destructive/error color", "className": "text-destructive" },
+          ", or ",
+          { "text": "accent color", "className": "text-accent" },
+          " for semantic meaning."
+        ]
+      },
+      { "as": "H3", "text": "Background Highlights" },
+      {
+        "as": "P",
+        "runs": [
+          "You can highlight text with ",
+          { "text": "primary background", "className": "bg-primary/20 px-1 rounded" },
+          ", ",
+          { "text": "secondary background", "className": "bg-secondary px-1 rounded" },
+          ", ",
+          { "text": "muted background", "className": "bg-muted px-1 rounded" },
+          ", or ",
+          { "text": "accent background", "className": "bg-accent/20 px-1 rounded" },
+          " for emphasis."
+        ]
+      },
+      { "as": "H3", "text": "Font Size Inline" },
+      {
+        "as": "P",
+        "runs": [
+          "Mix sizes within text: ",
+          { "text": "extra small", "className": "text-xs" },
+          ", ",
+          { "text": "small", "className": "text-sm" },
+          ", ",
+          { "text": "base", "className": "text-base" },
+          ", ",
+          { "text": "large", "className": "text-lg" },
+          ", and ",
+          { "text": "extra large", "className": "text-xl" },
+          " text."
+        ]
+      },
+      { "as": "H3", "text": "Letter Spacing" },
+      {
+        "as": "P",
+        "runs": [
+          "Adjust spacing with ",
+          { "text": "tighter tracking", "className": "tracking-tighter" },
+          ", ",
+          { "text": "tight tracking", "className": "tracking-tight" },
+          ", ",
+          { "text": "normal tracking", "className": "tracking-normal" },
+          ", ",
+          { "text": "wide tracking", "className": "tracking-wide" },
+          ", or ",
+          { "text": "wider tracking", "className": "tracking-wider" },
+          "."
+        ]
+      },
+      { "as": "H3", "text": "Combined Styles" },
+      {
+        "as": "P",
+        "runs": [
+          "Combine multiple styles: ",
+          { "text": "bold primary underlined", "className": "font-bold text-primary underline" },
+          ", ",
+          { "text": "italic muted", "className": "italic text-muted-foreground" },
+          ", ",
+          { "text": "semibold highlighted", "className": "font-semibold bg-accent/20 px-1 rounded" },
+          ", or ",
+          { "text": "uppercase bold destructive", "className": "uppercase font-bold tracking-wide text-destructive" },
+          "."
+        ]
+      },
+      { "as": "H3", "text": "Hover States" },
+      {
+        "as": "P",
+        "runs": [
+          "Interactive text with ",
+          { "text": "hover fade", "className": "text-primary hover:text-primary/80 cursor-pointer underline" },
+          ", ",
+          { "text": "hover background", "className": "hover:bg-muted px-1 rounded transition-colors cursor-pointer" },
+          ", or ",
+          { "text": "hover underline", "className": "hover:underline cursor-pointer text-foreground" },
+          "."
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Complete example",
+    "wide": true,
+    "nodes": [
+      { "as": "H1", "text": "Taxing Laughter: The Joke Tax Chronicles" },
+      {
+        "as": "Lead",
+        "text": "Once upon a time, in a far-off land, there was a very lazy king who spent all day lounging on his throne. One day, his advisors came to him with a problem: the kingdom was running out of money."
+      },
+      { "as": "H2", "text": "The King's Plan" },
+      {
+        "as": "P",
+        "text": "The king thought long and hard, and finally came up with a brilliant plan: he would tax the jokes in the kingdom."
+      },
+      {
+        "as": "Blockquote",
+        "text": "\"After all,\" he said, \"everyone enjoys a good joke, so it's only fair that they should pay for the privilege.\""
+      },
+      { "as": "H3", "text": "The Joke Tax" },
+      {
+        "as": "P",
+        "text": "The king's subjects were not amused. They grumbled and complained, but the king was firm:"
+      },
+      {
+        "as": "List",
+        "items": [
+          ["1st level of puns: 5 gold coins"],
+          ["2nd level of jokes: 10 gold coins"],
+          ["3rd level of one-liners: 20 gold coins"]
+        ]
+      },
+      {
+        "as": "P",
+        "text": "As a result, people stopped telling jokes, and the kingdom fell into a gloom. But there was one person who refused to let the king's foolishness get him down: a court jester named Jokester."
+      },
+      { "as": "Muted", "text": "The end of the tale approaches..." }
+    ]
+  },
+  {
+    "caption": "Rich content showcase",
+    "wide": true,
+    "nodes": [
+      { "as": "H1", "text": "Getting Started with React Components" },
+      {
+        "as": "Lead",
+        "text": "Build modern, accessible user interfaces with our comprehensive component library. This guide will walk you through installation, configuration, and best practices."
+      },
+      { "as": "H2", "text": "Installation" },
+      { "as": "P", "text": "To get started, install the package using your preferred package manager:" },
+      { "as": "Code", "text": "npm install @invana/ui" },
+      { "as": "Muted", "text": "Note: Node.js version 18.0.0 or higher is required." },
+      { "as": "Separator" },
+      { "as": "H2", "text": "Key Features" },
+      { "as": "Large", "text": "Everything you need to build modern applications" },
+      {
+        "as": "List",
+        "items": [
+          [{ "strong": "Fully Accessible" }, " - WCAG 2.1 compliant components"],
+          [{ "strong": "Customizable" }, " - Tailwind CSS powered theming system"],
+          [{ "strong": "TypeScript First" }, " - Complete type safety out of the box"],
+          [{ "strong": "Tree Shakeable" }, " - Import only what you need"],
+          [{ "strong": "Dark Mode" }, " - Built-in support for light and dark themes"]
+        ]
+      },
+      { "as": "H3", "text": "Performance Optimized" },
+      {
+        "as": "P",
+        "text": "Our components are designed with performance in mind. Each component is optimized for minimal bundle size and maximum runtime efficiency. With lazy loading support and efficient re-rendering strategies, your applications will stay fast even as they grow."
+      },
+      {
+        "as": "Blockquote",
+        "text": "\"The best design system I've used. It's fast, flexible, and the developer experience is outstanding. Migration took less than a day for our entire application.\" — Sarah Chen, Engineering Lead at TechCorp"
+      },
+      { "as": "Separator" },
+      { "as": "H2", "text": "Design System Best Practices" },
+      { "as": "Muted", "text": "Published on December 22, 2025 • 8 min read" },
+      {
+        "as": "P",
+        "text": "Building a scalable design system requires careful planning and consistent execution. In this article, we'll explore key principles that have helped teams maintain coherence across large applications."
+      },
+      { "as": "H3", "text": "1. Establish Clear Naming Conventions" },
+      {
+        "as": "P",
+        "runs": [
+          "Consistent naming makes your components predictable and easy to discover. Use descriptive names that clearly communicate purpose, like ",
+          { "code": "SearchInput" },
+          " instead of ",
+          { "code": "Input2" },
+          "."
+        ]
+      },
+      { "as": "H4", "text": "Component Naming Strategy" },
+      {
+        "as": "List",
+        "items": [
+          ["Use PascalCase for component names"],
+          ["Prefix composed components (e.g., CardHeader, CardContent)"],
+          ["Suffix variants with descriptive terms (e.g., ButtonPrimary, ButtonOutline)"]
+        ]
+      },
+      { "as": "H3", "text": "2. Document Everything" },
+      {
+        "as": "P",
+        "text": "Good documentation is the foundation of a successful design system. Each component should have clear usage examples, prop definitions, and accessibility guidelines."
+      },
+      { "as": "H4", "text": "Essential Documentation Elements" },
+      {
+        "as": "P",
+        "text": "Every component page should include: interactive examples, code snippets, accessibility notes, and common use cases. This helps developers understand not just how to use a component, but when to use it."
+      },
+      { "as": "H5", "text": "Interactive Examples" },
+      { "as": "Small", "text": "TIP: Live demos with editable code" },
+      {
+        "as": "P",
+        "text": "Interactive examples allow developers to experiment with different props and see results in real-time. Tools like Storybook make this process seamless."
+      },
+      { "as": "H5", "text": "Code Snippets" },
+      {
+        "as": "P",
+        "text": "Provide ready-to-use code snippets that developers can copy and paste directly into their projects. Include common patterns and edge cases."
+      },
+      { "as": "H6", "text": "Additional Resources" },
+      { "as": "Muted", "text": "Check out our GitHub repository for more examples and community contributions." },
+      { "as": "Separator" },
+      { "as": "H1", "text": "Build Better Products, Faster" },
+      { "as": "Large", "text": "Join thousands of developers who trust Invana UI for their next project" },
+      {
+        "as": "P",
+        "text": "Whether you're building a startup MVP or an enterprise application, our component library scales with your needs. Start shipping features today, not fighting with UI inconsistencies."
+      },
+      {
+        "as": "Metrics",
+        "items": [
+          { "label": "Weekly Downloads", "value": "50K+" },
+          { "label": "Uptime SLA", "value": "99.8%" },
+          { "label": "Support Available", "value": "24/7" }
+        ]
+      },
+      { "as": "Blockquote", "text": "Start building today. No credit card required." },
+      { "as": "Separator" },
+      { "as": "H2", "text": "System Messages" },
+      {
+        "as": "Alert",
+        "tone": "error",
+        "title": "Error: Connection Failed",
+        "text": "Unable to connect to the server. Please check your internet connection and try again.",
+        "note": "Error Code: NET_001"
+      },
+      {
+        "as": "Alert",
+        "tone": "warning",
+        "title": "Warning: Unsaved Changes",
+        "text": "You have unsaved changes. Are you sure you want to leave this page?"
+      },
+      {
+        "as": "Alert",
+        "tone": "success",
+        "title": "Success: Profile Updated",
+        "text": "Your profile has been successfully updated with the new information."
+      },
+      {
+        "as": "Alert",
+        "tone": "info",
+        "title": "Info: New Features Available",
+        "text": "We've released new features to improve your experience. Check out the changelog for details."
+      },
+      { "as": "Separator" },
+      { "as": "H2", "text": "Typography Hierarchy Demonstration" },
+      {
+        "as": "P",
+        "text": "This section demonstrates how different heading levels work together to create a clear content hierarchy. Proper use of headings improves both readability and accessibility."
+      },
+      { "as": "H3", "text": "Primary Section (H3)" },
+      { "as": "Lead", "text": "Lead text introduces the section with slightly larger, more prominent text." },
+      { "as": "H4", "text": "Subsection (H4)" },
+      {
+        "as": "P",
+        "text": "Regular paragraph text provides detailed information. It should be easy to read with appropriate line height and spacing."
+      },
+      { "as": "H5", "text": "Minor Section (H5)" },
+      { "as": "Small", "text": "Small text for supplementary information or labels." },
+      { "as": "H6", "text": "Detail Section (H6)" },
+      { "as": "Muted", "text": "Muted text for less important, secondary information that provides context." }
+    ]
+  }
+]
