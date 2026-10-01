@@ -94,7 +94,7 @@ export function DataTableToolbar<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon-xs"
+          size="icon-sm"
           className="shrink-0"
           aria-label="Columns"
           title="Columns"
