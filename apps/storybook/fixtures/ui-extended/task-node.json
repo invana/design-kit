@@ -1,0 +1,22 @@
+[
+  {
+    "caption": "On a draft — picked, with handles",
+    "props": { "taskKey": "execute_query", "bound": "graph_read", "meta": "1,284 rows · 2.1s", "selected": true }
+  },
+  {
+    "caption": "On a run — picked, read-only",
+    "props": {
+      "taskKey": "execute_query",
+      "bound": "graph_read",
+      "status": "success",
+      "tags": [{ "label": "↺ 2", "tone": "warning" }],
+      "meta": "1,284 rows · 2.1s",
+      "selected": true,
+      "readOnly": true
+    }
+  },
+  {
+    "caption": "On a run — the branch never taken",
+    "props": { "taskKey": "call_enrichment", "bound": "network", "meta": "never taken", "dim": true, "readOnly": true }
+  }
+]
