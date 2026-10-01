@@ -4,7 +4,7 @@ export {
   RemotePaginatedTable,
   type RemotePaginatedTableProps,
 } from './remote-paginated-table';
-export type { TableBaseProps } from './core/props';
+export type { TableBaseProps, TableFilterProps } from './core/props';
 export { DataTablePagination } from './data-table-pagination';
 export { DataTableToolbar } from './data-table-toolbar';
 export { EditableCell } from './editable-cell';
@@ -17,8 +17,11 @@ export type {
   CellEditHandler,
   EditOption,
   EditType,
+  FilterValues,
   RemotePage,
   RemotePageQuery,
+  TableFilter,
+  TableFilterOption,
 } from './types';
 export type {
   ColumnDef,

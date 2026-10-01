@@ -7,7 +7,7 @@ import type {
   SortingState,
 } from "@tanstack/react-table";
 import type { TableDensity } from "@invana/ui";
-import type { CellEditHandler } from "../types";
+import type { CellEditHandler, FilterValues, TableFilter } from "../types";
 
 /**
  * Everything a table reads the same way whether it shows every row, pages
@@ -25,6 +25,8 @@ export interface TableBaseProps<TData extends RowData> {
   /** Controlled sorting state. */
   sorting?: SortingState;
   onSortingChange?: OnChangeFn<SortingState>;
+  /** The sort to start from, when `sorting` is not controlled. */
+  defaultSorting?: SortingState;
   /** Offer the column picker — the icon at the end of the toolbar. */
   enableColumnVisibility?: boolean;
   /** Drag a header by its grip to move the column. */
@@ -193,4 +195,31 @@ export function pickViewProps<TData extends RowData>(
     enableColumnResizing: props.enableColumnResizing,
     enableSorting: props.enableSorting,
   };
+}
+
+/**
+ * Search and filter chips — the same props on both paged tables. Where the
+ * work happens is the table's: `PaginatedTable` narrows its rows in memory,
+ * `RemotePaginatedTable` sends the picks to `fetchPage`. Either way the
+ * callbacks hear every change and the table goes back to its first page.
+ */
+export interface TableFilterProps<TData> {
+  /** Draw the search box. On by default. */
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  /** Controlled search text. */
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  /** The filter chips, in order, after the search box. */
+  filters?: TableFilter<TData>[];
+  /** Controlled filter values, by filter id. */
+  filterValues?: FilterValues;
+  /** The values to start from, when `filterValues` is not controlled. */
+  defaultFilterValues?: FilterValues;
+  onFiltersChange?: (values: FilterValues) => void;
+  /**
+   * What the rows are, for the count at the end of the filter row —
+   * `23 of 91 events`. Shown whenever there are filters.
+   */
+  noun?: string;
 }

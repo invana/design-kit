@@ -10,12 +10,19 @@ import {
   DEFAULT_PAGE_SIZE_OPTIONS,
 } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { pickViewProps, type TableBaseProps } from "./core/props";
+import { applyFilters, filterOptions } from "./core/filters";
+import {
+  pickViewProps,
+  type TableBaseProps,
+  type TableFilterProps,
+} from "./core/props";
+import type { FilterValues } from "./types";
 import { TableGrid } from "./core/table-grid";
 import { useControllable, useTableModel } from "./core/use-table-model";
 
 export interface PaginatedTableProps<TData extends RowData>
-  extends TableBaseProps<TData> {
+  extends TableBaseProps<TData>,
+    TableFilterProps<TData> {
   /** Every row; the table searches and pages them itself. */
   data: TData[];
   /** Dim the rows under a spinner. */
@@ -35,20 +42,16 @@ export interface PaginatedTableProps<TData extends RowData>
   /** Controlled pagination state. */
   pagination?: PaginationState;
   onPaginationChange?: OnChangeFn<PaginationState>;
-  /** Draw the search box. On by default. */
-  searchable?: boolean;
-  searchPlaceholder?: string;
   /** Which columns the search reads, by id. Defaults to every column with an accessor. */
   searchColumns?: string[];
-  /** Controlled search text. */
-  search?: string;
-  onSearchChange?: (value: string) => void;
 }
 
 /**
  * Every row in hand, a page of them at a time — with a search across them,
- * the column picker and the line of pages under the rows. A new search goes
- * back to the first page; editing a cell keeps the page you are on.
+ * filter chips, the column picker and the line of pages under the rows.
+ * Search, filters and sorting all run in memory: filter, then search, then
+ * sort, then page. A new search, filter or sort goes back to the first page;
+ * editing a cell keeps the page you are on.
  *
  * When the server holds the rows and sends a page at a time, use
  * `RemotePaginatedTable`.
@@ -72,6 +75,14 @@ export function PaginatedTable<TData extends RowData>(
     searchColumns,
     search: searchProp,
     onSearchChange,
+    filters,
+    filterValues: filterValuesProp,
+    defaultFilterValues,
+    onFiltersChange,
+    noun,
+    columns,
+    getSubRows,
+    onSortingChange,
     enableColumnVisibility = true,
     enableColumnPinning = false,
   } = props;
@@ -89,9 +100,37 @@ export function PaginatedTable<TData extends RowData>(
     setPagination((p) => ({ ...p, pageIndex: 0 }));
   };
 
+  const [internalFilters, setInternalFilters] = React.useState<FilterValues>(
+    defaultFilterValues ?? {},
+  );
+  const filterValues = filterValuesProp ?? internalFilters;
+  const setFilterValues = (values: FilterValues) => {
+    onFiltersChange?.(values);
+    if (filterValuesProp === undefined) setInternalFilters(values);
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  };
+  const rows = React.useMemo(
+    () => applyFilters(data, filters ?? [], filterValues, columns, getSubRows),
+    [data, filters, filterValues, columns, getSubRows],
+  );
+  // The choices come from every row, not the filtered ones, so picking one
+  // never takes the others off the menu.
+  const filterItems = React.useMemo(
+    () =>
+      (filters ?? []).map((filter) => ({
+        filter,
+        options: filterOptions(filter, columns, data, getSubRows),
+      })),
+    [filters, columns, data, getSubRows],
+  );
+
   const table = useTableModel({
     ...props,
-    data,
+    data: rows,
+    onSortingChange: (updater) => {
+      onSortingChange?.(updater);
+      setPagination((p) => ({ ...p, pageIndex: 0 }));
+    },
     paging: { mode: "client", state: pagination, onChange: setPagination },
     search: { value: search, columns: searchColumns },
   });
@@ -116,6 +155,12 @@ export function PaginatedTable<TData extends RowData>(
             ? { value: search, onChange: setSearch, placeholder: searchPlaceholder }
             : undefined
         }
+        filters={
+          filterItems.length
+            ? { items: filterItems, values: filterValues, onChange: setFilterValues }
+            : undefined
+        }
+        summary={`${table.getFilteredRowModel().rows.length} of ${data.length}${noun ? ` ${noun}` : ""}`}
       >
         {toolbar}
       </DataTableToolbar>

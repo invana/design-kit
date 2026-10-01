@@ -1,7 +1,12 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { RemotePaginatedTable } from '@invana/tables';
-import type { CellEditHandler, ColumnDef, RemotePageQuery } from '@invana/tables';
+import type {
+  CellEditHandler,
+  ColumnDef,
+  RemotePageQuery,
+  TableFilter,
+} from '@invana/tables';
 import { Badge, PropertyList, PropertyRow } from '@invana/ui';
 
 type Product = {
@@ -19,7 +24,7 @@ type ProductsResponse = { products: Product[]; total: number };
 const SORTABLE_FIELDS = new Set(['title', 'brand', 'price', 'rating', 'stock']);
 
 /** The dummyjson.com request for one page — the caller's half of the contract. */
-function productsUrl({ pageIndex, pageSize, sorting, search }: RemotePageQuery) {
+function productsUrl({ pageIndex, pageSize, sorting, search, filters }: RemotePageQuery) {
   const params = new URLSearchParams({
     limit: String(pageSize),
     skip: String(pageIndex * pageSize),
@@ -30,12 +35,25 @@ function productsUrl({ pageIndex, pageSize, sorting, search }: RemotePageQuery) 
     params.set('sortBy', sort.id);
     params.set('order', sort.desc ? 'desc' : 'asc');
   }
+  // dummyjson searches or narrows to one category, not both: the search wins.
   if (search) {
     params.set('q', search);
     return `https://dummyjson.com/products/search?${params}`;
   }
+  const category = filters.category?.[0];
+  if (category) return `https://dummyjson.com/products/category/${category}?${params}`;
   return `https://dummyjson.com/products?${params}`;
 }
+
+/** The server cannot be asked for every category, so the chip names them. */
+const FILTERS: TableFilter<Product>[] = [
+  {
+    id: 'category',
+    label: 'category',
+    single: true,
+    options: ['beauty', 'fragrances', 'furniture', 'groceries', 'laptops', 'smartphones'],
+  },
+];
 
 const COLUMNS: ColumnDef<Product, unknown>[] = [
   { id: 'title', accessorKey: 'title', header: 'Title', size: 280, meta: { editable: true } },
@@ -93,6 +111,10 @@ type Story = StoryObj<typeof meta>;
  * and the new value, and sends a `PATCH`; once it succeeds the table writes
  * the value into the page it is showing, with no refetch.
  *
+ * The `category` chip is declared exactly as on a `PaginatedTable`; here its
+ * pick arrives in `fetchPage` as `filters.category`, with the sort and the
+ * search, and the story turns them into the URL.
+ *
  * The footer shows the last request.
  */
 export const Default: Story = {
@@ -130,6 +152,8 @@ export const Default: Story = {
         getRowId={(p) => String(p.id)}
         onCellEdit={onCellEdit}
         searchPlaceholder="Search products"
+        filters={FILTERS}
+        noun="products"
         emptyState="No products found."
         footer={
           <PropertyList labelWidth={48}>

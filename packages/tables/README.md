@@ -55,6 +55,29 @@ const columns: ColumnDef<Run>[] = [
 inline function does not refetch on every render. Change `refreshKey` to fetch the current page
 again.
 
+### Search, filters and sorting
+
+Declared the same way on both paged tables; where the work happens is the table's.
+`PaginatedTable` runs them in memory (filter → search → sort → page); `RemotePaginatedTable` sends
+them to `fetchPage` as `{ filters, search, sorting }`. Either way a change goes back to page 1 and
+the callbacks (`onFiltersChange`, `onSearchChange`, `onSortingChange`) hear it.
+
+```tsx
+const filters: TableFilter<Run>[] = [
+  { id: 'status', label: 'status' },                       // choices from the rows (PaginatedTable)
+  { id: 'agent', label: 'agent', options: ['planner', 'researcher'] },
+  { id: 'slow', label: 'took', single: true, options: ['> 1s'],
+    match: (row) => row.durationMs > 1000 },               // in memory only
+];
+
+<PaginatedTable columns={columns} data={rows} filters={filters} noun="runs" />
+<RemotePaginatedTable columns={columns} filters={filters} fetchPage={({ filters, sorting, search }) => …} />
+```
+
+Within a chip any pick matches; across chips all must. `filterValues` / `defaultFilterValues`
+and `sorting` / `defaultSorting` control or seed the state; `noun` labels the count at the end of
+the filter row.
+
 ### Inline edits
 
 A column opts in with `meta.editable`. `onCellEdit` receives a `CellEdit` — everything needed to

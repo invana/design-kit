@@ -45,6 +45,7 @@ export type TableModelOptions<TData extends RowData> = Pick<
   | "enableSorting"
   | "sorting"
   | "onSortingChange"
+  | "defaultSorting"
   | "enableColumnResizing"
   | "enableColumnPinning"
   | "getSubRows"
@@ -85,6 +86,7 @@ export function useTableModel<TData extends RowData>({
   enableSorting = true,
   sorting: sortingProp,
   onSortingChange,
+  defaultSorting,
   manualSorting = false,
   enableColumnResizing = false,
   enableColumnPinning = false,
@@ -107,7 +109,7 @@ export function useTableModel<TData extends RowData>({
   const [sorting, setSorting] = useControllable<SortingState>(
     sortingProp,
     onSortingChange,
-    [],
+    defaultSorting ?? [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});

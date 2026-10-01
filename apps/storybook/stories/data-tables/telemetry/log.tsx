@@ -1,16 +1,5 @@
-import * as React from "react";
-import type { ColumnDef } from "@invana/tables";
-import {
-  AgentChip,
-  Badge,
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  FilterBar,
-  FilterChip,
-  SearchInput,
-} from "@invana/ui";
+import type { ColumnDef, TableFilter } from "@invana/tables";
+import { AgentChip, Badge } from "@invana/ui";
 import {
   AGENTS,
   KINDS,
@@ -23,7 +12,7 @@ import {
 
 /**
  * Story-only helpers for `Data Tables/Telemetry` — the event log's columns and
- * its filter row, shared so every story reads the same log the same way. Not a
+ * its filters, shared so every story reads the same log the same way. Not a
  * story file (no `.stories.`), so Storybook does not index it.
  */
 
@@ -115,120 +104,16 @@ export const LOG_COLUMNS: ColumnDef<TelemetryEvent, unknown>[] = [
   },
 ];
 
-export interface LogFilter {
-  query: string;
-  kinds: string[];
-  agents: string[];
-  levels: string[];
-}
+/**
+ * The log's filter chips — kind, agent and level, in the engine's own order.
+ * The table does the filtering: in memory on a `PaginatedTable`, on the
+ * server on a `RemotePaginatedTable`.
+ */
+export const LOG_FILTERS: TableFilter<TelemetryEvent>[] = [
+  { id: "kind", label: "kind", options: KINDS },
+  { id: "agent", label: "agent", options: AGENTS },
+  { id: "level", label: "level", options: LEVELS },
+];
 
-export const EMPTY_FILTER: LogFilter = {
-  query: "",
-  kinds: [],
-  agents: [],
-  levels: [],
-};
-
-export function applyLogFilter(events: TelemetryEvent[], f: LogFilter) {
-  const q = f.query.trim().toLowerCase();
-  return events.filter(
-    (e) =>
-      (!f.kinds.length || f.kinds.includes(e.kind)) &&
-      (!f.agents.length || f.agents.includes(e.agent)) &&
-      (!f.levels.length || f.levels.includes(e.level)) &&
-      (!q || `${e.taskKey ?? ""} ${e.detail}`.toLowerCase().includes(q)),
-  );
-}
-
-function MultiChip({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: string[];
-  value: string[];
-  onChange: (next: string[]) => void;
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <FilterChip
-          label={label}
-          value={
-            value.length
-              ? value.length === 1
-                ? value[0]
-                : `${value.length} selected`
-              : undefined
-          }
-          active={value.length > 0}
-        />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        {options.map((o) => (
-          <DropdownMenuCheckboxItem
-            key={o}
-            checked={value.includes(o)}
-            onSelect={(e) => e.preventDefault()}
-            onCheckedChange={(on) =>
-              onChange(on ? [...value, o] : value.filter((v) => v !== o))
-            }
-          >
-            {o}
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-/** Search, then a chip per dimension; the count of what is left sits hard right. */
-export function LogFilterBar({
-  filter,
-  onChange,
-  shown,
-  total,
-  children,
-}: {
-  filter: LogFilter;
-  onChange: (next: LogFilter) => void;
-  shown: number;
-  total: number;
-  /** Extra chips, after the standard three — a task the timeline picked. */
-  children?: React.ReactNode;
-}) {
-  return (
-    <FilterBar summary={`${shown} of ${total} events`}>
-      <SearchInput
-        inputSize="sm"
-        // Gap: `SearchInput` is `w-full`, so in a `FilterBar` it takes the row
-        // and squeezes the chips. The bar should size its search; until then, this.
-        className="w-56"
-        value={filter.query}
-        onChange={(query) => onChange({ ...filter, query })}
-        placeholder="Search task or detail…"
-      />
-      <MultiChip
-        label="kind"
-        options={KINDS}
-        value={filter.kinds}
-        onChange={(kinds) => onChange({ ...filter, kinds })}
-      />
-      <MultiChip
-        label="agent"
-        options={AGENTS}
-        value={filter.agents}
-        onChange={(agents) => onChange({ ...filter, agents })}
-      />
-      <MultiChip
-        label="level"
-        options={LEVELS}
-        value={filter.levels}
-        onChange={(levels) => onChange({ ...filter, levels })}
-      />
-      {children}
-    </FilterBar>
-  );
-}
+/** The search reads the task and the detail, not the offset or the slot. */
+export const LOG_SEARCH_COLUMNS = ["task", "detail"];

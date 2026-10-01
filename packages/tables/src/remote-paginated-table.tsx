@@ -10,18 +10,29 @@ import {
   DEFAULT_PAGE_SIZE_OPTIONS,
 } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { pickViewProps, type TableBaseProps } from "./core/props";
+import { activeFilterValues, filterOptions } from "./core/filters";
+import {
+  pickViewProps,
+  type TableBaseProps,
+  type TableFilterProps,
+} from "./core/props";
 import { TableGrid } from "./core/table-grid";
-import { useTableModel } from "./core/use-table-model";
+import { useControllable, useTableModel } from "./core/use-table-model";
 import { applyCellEdit } from "./apply-cell-edit";
-import type { CellEditHandler, RemotePage, RemotePageQuery } from "./types";
+import type {
+  CellEditHandler,
+  FilterValues,
+  RemotePage,
+  RemotePageQuery,
+} from "./types";
 
 export interface RemotePaginatedTableProps<TData extends RowData>
-  extends Omit<TableBaseProps<TData>, "sorting" | "onSortingChange"> {
+  extends TableBaseProps<TData>,
+    TableFilterProps<TData> {
   /**
    * Fetch one page. Called on the first draw and whenever the page, the page
-   * size, the sort or the (debounced) search changes, and when `refreshKey`
-   * does. Transport is yours — headers, auth, the URL shape, GraphQL — the
+   * size, the sort, the filters or the (debounced) search changes, and when
+   * `refreshKey` does. Transport is yours — headers, auth, the URL shape, GraphQL — the
    * table only says which page it wants and aborts `signal` when it stops
    * wanting it. A rejection is shown in the table, with a retry.
    *
@@ -42,9 +53,6 @@ export interface RemotePaginatedTableProps<TData extends RowData>
   allowCustomPageSize?: boolean;
   /** The largest page `Custom…` accepts. Defaults to 500. */
   maxPageSize?: number;
-  /** Draw the search box. On by default; its text arrives as `search`. */
-  searchable?: boolean;
-  searchPlaceholder?: string;
   /** How long typing must pause before the search is sent, in ms. Defaults to 300. */
   searchDebounceMs?: number;
   /** What a failed fetch says. Defaults to the error's message and a retry. */
@@ -61,9 +69,9 @@ type Settled<TData> = {
 
 /**
  * A table whose rows live on a server: it asks `fetchPage` for one page at a
- * time — by page, size, sort and search — and owns everything around that
- * ask: the debounce on typing, aborting a request a newer one replaced, going
- * back to the first page on a new search or sort, the spinner while a page is
+ * time — by page, size, sort, filters and search — and owns everything
+ * around that ask: the debounce on typing, aborting a request a newer one
+ * replaced, going back to the first page on a new search, filter or sort, the spinner while a page is
  * on its way (the last page stays under it), and the error with a retry.
  *
  * An edited cell is written into the page it is on once `onCellEdit` settles,
@@ -85,7 +93,18 @@ export function RemotePaginatedTable<TData extends RowData>(
     maxPageSize,
     searchable = true,
     searchPlaceholder,
+    search: searchProp,
+    onSearchChange,
     searchDebounceMs = 300,
+    sorting: sortingProp,
+    onSortingChange,
+    defaultSorting,
+    filters,
+    filterValues: filterValuesProp,
+    defaultFilterValues,
+    onFiltersChange,
+    noun,
+    columns,
     errorState,
     emptyState,
     enableColumnVisibility = true,
@@ -101,15 +120,35 @@ export function RemotePaginatedTable<TData extends RowData>(
     pageIndex: 0,
     pageSize,
   });
-  const [sorting, setSortingState] = React.useState<SortingState>([]);
+  const [sorting, setSortingState] = useControllable<SortingState>(
+    sortingProp,
+    onSortingChange,
+    defaultSorting ?? [],
+  );
   const setSorting: typeof setSortingState = (updater) => {
     setSortingState(updater);
     setPagination((p) => ({ ...p, pageIndex: 0 }));
   };
 
+  const [internalFilters, setInternalFilters] = React.useState<FilterValues>(
+    defaultFilterValues ?? {},
+  );
+  const filterValues = filterValuesProp ?? internalFilters;
+  const setFilterValues = (values: FilterValues) => {
+    onFiltersChange?.(values);
+    if (filterValuesProp === undefined) setInternalFilters(values);
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  };
+  const sentFilters = activeFilterValues(filterValues);
+
   // The box shows every keystroke; the server hears the text once typing
   // pauses, and a new search starts from the first page.
-  const [typed, setTyped] = React.useState("");
+  const [internalTyped, setInternalTyped] = React.useState("");
+  const typed = searchProp ?? internalTyped;
+  const setTyped = (value: string) => {
+    onSearchChange?.(value);
+    if (searchProp === undefined) setInternalTyped(value);
+  };
   const [search, setSearch] = React.useState("");
   React.useEffect(() => {
     const t = setTimeout(() => setSearch(typed.trim()), searchDebounceMs);
@@ -135,6 +174,7 @@ export function RemotePaginatedTable<TData extends RowData>(
     pagination.pageSize,
     sorting,
     search,
+    sentFilters,
     reloads,
   ]);
   const [settled, setSettled] = React.useState<Settled<TData>>({
@@ -153,6 +193,7 @@ export function RemotePaginatedTable<TData extends RowData>(
         pageSize: pagination.pageSize,
         sorting,
         search,
+        filters: sentFilters,
         signal: controller.signal,
       })
       .then(
@@ -206,6 +247,8 @@ export function RemotePaginatedTable<TData extends RowData>(
     sorting,
     onSortingChange: setSorting,
     manualSorting: true,
+    // The server searches; the model must not filter the page again.
+    search: undefined,
     paging: {
       mode: "server",
       state: pagination,
@@ -238,6 +281,20 @@ export function RemotePaginatedTable<TData extends RowData>(
             ? { value: typed, onChange: setTyped, placeholder: searchPlaceholder }
             : undefined
         }
+        filters={
+          filters?.length
+            ? {
+                // Named choices; without them, what the page in hand holds.
+                items: filters.map((filter) => ({
+                  filter,
+                  options: filterOptions(filter, columns, rows),
+                })),
+                values: filterValues,
+                onChange: setFilterValues,
+              }
+            : undefined
+        }
+        summary={`${settled.total.toLocaleString()}${noun ? ` ${noun}` : ""}`}
       >
         {toolbar}
       </DataTableToolbar>

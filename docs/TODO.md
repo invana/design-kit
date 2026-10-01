@@ -183,6 +183,7 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 | DataTable column scale (on DataTable) | `packages/tables/src/data-table.tsx` | extend | partial | today |
 | Cell highlight (`isCellHighlighted`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
 | Control cells (`meta.control`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
+| Filter chips (`filters`: in memory on PaginatedTable, sent to `fetchPage` on RemotePaginatedTable) | `packages/tables/src/core/filters.ts` | extend | done | today |
 
 ### New
 

@@ -75,6 +75,39 @@ export type CellEditHandler<TData> = (
   edit: CellEdit<TData>,
 ) => void | Promise<unknown>;
 
+/** One choice of a filter: its value, or a value with a label. */
+export type TableFilterOption = string | { value: string; label?: string };
+
+/**
+ * A filter chip over the rows. The same definition works on both paged
+ * tables: `PaginatedTable` applies it to the rows in memory,
+ * `RemotePaginatedTable` sends the picks to `fetchPage` as `filters[id]`.
+ */
+export interface TableFilter<TData> {
+  /** Its key in the filter values, and in `RemotePageQuery.filters`. */
+  id: string;
+  /** What the chip says — `kind`, `status`. */
+  label: string;
+  /**
+   * The choices. `PaginatedTable` derives them from the rows when absent —
+   * every distinct value of the column — sorted; `RemotePaginatedTable`
+   * cannot see every row, so name them there.
+   */
+  options?: TableFilterOption[];
+  /** The column whose value is matched. Defaults to the filter's `id`. */
+  columnId?: string;
+  /** Pick one at a time rather than many. */
+  single?: boolean;
+  /**
+   * In memory only: whether a row passes, given what is picked (never
+   * empty). Defaults to the column's value being one of them.
+   */
+  match?: (row: TData, selected: string[]) => boolean;
+}
+
+/** What each filter is narrowed to, by filter id. An empty or missing list is not filtering. */
+export type FilterValues = Record<string, string[]>;
+
 /** What `RemotePaginatedTable` asks the server for. */
 export interface RemotePageQuery {
   pageIndex: number;
@@ -82,6 +115,8 @@ export interface RemotePageQuery {
   sorting: SortingState;
   /** The search box, debounced and trimmed — `''` when empty. */
   search: string;
+  /** The filters that are set, by id — only those with a pick. */
+  filters: FilterValues;
   /** Aborted when a newer query replaces this one. */
   signal: AbortSignal;
 }
