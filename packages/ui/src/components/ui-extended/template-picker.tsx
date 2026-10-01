@@ -40,6 +40,8 @@ export interface TemplatePickerProps
  * again**. That is why unavailable options are listed rather than hidden — the
  * reason a template does not fit ("needs a time column") is information about
  * the data, and hiding it would leave the reader wondering what else exists.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const TemplatePicker = React.forwardRef<
   HTMLDivElement,

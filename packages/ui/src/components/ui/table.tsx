@@ -2,23 +2,47 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
+/**
+ * How much room a row gets. The type size never moves — a row is the root size
+ * at every density — only the height and the cell padding do.
+ *
+ * - `compact` — 26px rows: a journal, a trace, a step's output, a log.
+ * - `default` — 34px rows at a 13px root: a list in an application.
+ * - `comfortable` — 44px rows at a 13px root: a table standing alone on a
+ *   page, a settings list.
+ *
+ * `default` and `comfortable` are ratios of the root, like the type, so a
+ * site that sets a 16px root gets proportionally roomier rows.
+ */
+export type TableDensity = "compact" | "default" | "comfortable"
+
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement> & {
-    density?: "default" | "compact"
+    density?: TableDensity
     /**
-     * Draw the box around the table. Off for a table that sits directly in a
-     * panel's column — the panel edge already frames it, and a second border a
-     * few pixels in reads as a box inside a box. The row rules stay.
+     * No box, and nothing wasted on its outside: only the rules between rows
+     * are drawn, and the first and last columns sit flush with the text around
+     * the table. For a table inside a card, a panel or an answer, whose edge
+     * already frames it — a second border a few pixels in reads as a box
+     * inside a box.
+     */
+    seamless?: boolean
+    /**
+     * Draw the box. Off for a wrapper that draws the box itself, as `DataTable`
+     * does. `seamless` draws no box either way.
      */
     bordered?: boolean
   }
->(({ className, density = "default", bordered = true, ...props }, ref) => (
+>(({ className, density = "default", seamless, bordered = true, ...props }, ref) => (
   <div
     data-density={density}
+    data-seamless={seamless || undefined}
     className={cn(
       "group/table relative w-full overflow-auto",
-      bordered && "border rounded-md",
+      bordered && !seamless && "border rounded-md",
+      seamless &&
+        "[&_td:first-child]:ps-0 [&_th:first-child]:ps-0 [&_td:last-child]:pe-0 [&_th:last-child]:pe-0",
     )}
   >
     <table
@@ -72,7 +96,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      "border-b transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted",
       className
     )}
     {...props}
@@ -88,11 +112,12 @@ const TableHead = React.forwardRef<
     ref={ref}
     className={cn(
       "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-      // Compact density: `<Table density="compact">` marks the wrapper, and
-      // every cell follows from there. One prop on the table rather than a
-      // size on <TableHead> and <TableCell> individually — four places to
-      // forget, and a table with two densities in it is always a mistake.
+      // Density: `<Table density>` marks the wrapper, and every cell follows
+      // from there. One prop on the table rather than a size on <TableHead>
+      // and <TableCell> individually — four places to forget, and a table with
+      // two densities in it is always a mistake.
       "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:text-sm",
+      "group-data-[density=comfortable]/table:h-[3.375rem] group-data-[density=comfortable]/table:px-3",
       className
     )}
     {...props}
@@ -107,8 +132,9 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-      "group-data-[density=compact]/table:px-2 group-data-[density=compact]/table:py-1",
+      "h-[2.625rem] px-2 py-1.5 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:py-1",
+      "group-data-[density=comfortable]/table:h-[3.375rem] group-data-[density=comfortable]/table:px-3 group-data-[density=comfortable]/table:py-2.5",
       className
     )}
     {...props}

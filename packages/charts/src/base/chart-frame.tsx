@@ -32,7 +32,8 @@ import { installUPlotStyles } from "./uplot-styles"
 export interface ChartMark {
   /** The period the mark sits on. */
   index: number
-  label: string
+  /** Named above the rule. Without one the rule stands alone — a boundary, not an event. */
+  label?: string
 }
 
 export interface ChartReference {
@@ -69,8 +70,10 @@ export interface BuiltChart {
   series: uPlot.Series[]
   data: (number | null)[][]
   bands?: uPlot.Band[]
-  /** The top of the y scale. The bottom is always 0. */
+  /** The top of the y scale. */
   ceiling: number
+  /** The bottom of the y scale. Default: 0. */
+  floor?: number
   /** Where the y hairlines and their labels go. */
   splits: number[]
   format: (value: number) => string
@@ -80,6 +83,8 @@ export interface BuiltChart {
   cursorPoints?: boolean
   /** Custom marks drawn after the series and before event marks. */
   draw?: (u: uPlot) => void
+  /** Custom marks drawn over the grid and under the series — a band. */
+  drawUnder?: (u: uPlot) => void
   /** CSS px kept free right of the plot, for direct labels. */
   padRight?: number
 }
@@ -181,7 +186,7 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
       const referenceNow: ChartReference | null = JSON.parse(referenceKey)
       setCrosshair(built.crosshair)
 
-      const labelBand = marksNow.length ? Math.ceil(theme.size.xs) + 8 : 0
+      const labelBand = marksNow.some((m) => m.label) ? Math.ceil(theme.size.xs) + 8 : 0
       const half = Math.ceil(theme.size.xs / 2) + 1
       const axisWidth =
         Math.ceil(Math.max(0, ...built.splits.map((s) => measure(theme.font.xs, built.format(s))))) + 10
@@ -222,6 +227,7 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
           ctx.moveTo(x, top - 2 * pr)
           ctx.lineTo(x, top + h)
           ctx.stroke()
+          if (!m.label) continue
           const tw = ctx.measureText(m.label).width
           const flip = x + 4 * pr + tw > left + w
           const start = flip ? x - 4 * pr - tw : x + 4 * pr
@@ -259,7 +265,7 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
         legend: { show: false },
         scales: {
           x: { time: false, range: [-0.5, n - 0.5] },
-          y: { range: [0, built.ceiling] },
+          y: { range: [built.floor ?? 0, built.ceiling] },
         },
         axes: [
           { show: false },
@@ -294,6 +300,7 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
           ready: [readBox],
           setSize: [readBox],
           setCursor: [(u) => setHover(u.cursor.idx ?? null)],
+          drawAxes: built.drawUnder ? [built.drawUnder] : [],
           draw: [...(built.draw ? [built.draw] : []), drawMarks],
         },
       }
@@ -343,7 +350,10 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
     })
 
     const tip = hover != null && hover < n ? tooltip(hover) : null
-    const markHere = hover != null ? marks.filter((m) => m.index === hover).map((m) => m.label) : []
+    const markHere =
+      hover != null
+        ? marks.flatMap((m) => (m.index === hover && m.label ? [m.label] : []))
+        : []
     const tipLeft = hover != null ? xAt(hover) : 0
     const tipFlip = box ? tipLeft > box.left + box.width / 2 : false
 

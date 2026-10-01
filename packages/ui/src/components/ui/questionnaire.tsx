@@ -12,10 +12,16 @@ import { buttonVariants, type ButtonProps } from "./button"
  * Questionnaire; `@shadcn/react` owns navigation, validation, keyboard
  * shortcuts and the fieldset/legend semantics, this file owns the look.
  *
+ * The look is the kit's ask language (Analyst Flow Grammar): compact choice
+ * rows with a ring radio and the choice's source in mono on the right, a thin
+ * progress bar, small actions with Skip as ghost. It is the body of an
+ * assistant's `ClarifyCard` as readily as a standalone form.
+ *
  * Deviations from upstream: answer text inherits the root size (no `text-sm`
  * on a choice or the input), controls use `rounded-control`, the check mark is
- * an inline SVG so the kit takes no icon dependency, and the choice has a
- * `QuestionnaireChoiceTitle` slot so a story needs no classes.
+ * an inline SVG so the kit takes no icon dependency, the choice has a
+ * `QuestionnaireChoiceTitle` slot so a story needs no classes, a choice takes
+ * a `detail` and can be `readOnly`, and the input takes a `unit`.
  */
 
 type NavProps = Pick<ButtonProps, "size" | "variant">
@@ -27,22 +33,62 @@ function Questionnaire({
   return (
     <QuestionnairePrimitive.Root
       data-slot="questionnaire"
-      className={cn("flex w-full min-w-0 flex-col gap-4", className)}
+      className={cn("flex w-full min-w-0 flex-col gap-2", className)}
       {...props}
     />
   )
 }
 
-function QuestionnaireProgress({
+/**
+ * The progress line on its own — a label and a bar filled to `value` (0–1).
+ * `QuestionnaireProgress` draws it from the questionnaire's position; a step
+ * outside the items, such as a review before submitting, draws it directly.
+ */
+function QuestionnaireProgressBar({
+  label,
+  value,
   className,
   ...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Progress>) {
+}: React.ComponentProps<"div"> & { label?: React.ReactNode; value: number }) {
+  return (
+    <div
+      data-slot="questionnaire-progress"
+      className={cn(
+        "flex min-h-[1lh] items-center gap-2 font-mono text-xs tabular-nums text-muted-foreground",
+        className
+      )}
+      {...props}
+    >
+      <span className="shrink-0">{label}</span>
+      <span className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-border">
+        <span
+          className="absolute inset-y-0 start-0 rounded-full bg-primary transition-[width]"
+          style={{ width: `${Math.min(1, Math.max(0, value)) * 100}%` }}
+        />
+      </span>
+    </div>
+  )
+}
+
+/**
+ * `1 of 3` and a bar that fills as the steps are answered. Pass children to
+ * replace the count's words; the bar stays.
+ */
+function QuestionnaireProgress({
+  className,
+  children,
+  ...props
+}: Omit<React.ComponentProps<typeof QuestionnairePrimitive.Progress>, "render">) {
   return (
     <QuestionnairePrimitive.Progress
       data-slot="questionnaire-progress"
-      className={cn(
-        "min-h-[1lh] w-fit min-w-[14ch] text-xs font-medium tabular-nums text-muted-foreground",
-        className
+      render={(rendered, { current, total }) => (
+        <QuestionnaireProgressBar
+          {...(rendered as React.ComponentProps<"div">)}
+          className={className}
+          label={children ?? (total ? `${current} of ${total}` : null)}
+          value={total ? current / total : 0}
+        />
       )}
       {...props}
     />
@@ -57,7 +103,7 @@ function QuestionnaireItem({
     <QuestionnairePrimitive.Item
       data-slot="questionnaire-item"
       className={cn(
-        "flex min-w-0 flex-col gap-4 border-0 p-0 outline-none",
+        "flex min-w-0 flex-col gap-2 border-0 p-0 outline-none",
         className
       )}
       {...props}
@@ -73,7 +119,8 @@ function QuestionnaireTitle({
     <QuestionnairePrimitive.Title
       data-slot="questionnaire-title"
       className={cn(
-        "text-base font-medium leading-snug text-pretty [&:not(:has(~[data-slot=questionnaire-description]))]:mb-4",
+        // A legend is not a flex item, so the item's gap does not reach it.
+        "p-0 text-pretty [&:not(:has(~[data-slot=questionnaire-description]))]:mb-2",
         className
       )}
       {...props}
@@ -101,25 +148,79 @@ function QuestionnaireChoices({
   return (
     <QuestionnairePrimitive.Choices
       data-slot="questionnaire-choices"
-      className={cn("group/questionnaire-choices grid min-w-0 gap-2", className)}
+      className={cn("group/questionnaire-choices grid min-w-0 gap-1.5", className)}
       {...props}
     />
   )
 }
 
+interface QuestionnaireChoiceProps
+  extends React.ComponentProps<typeof QuestionnairePrimitive.Choice> {
+  /**
+   * Where the choice comes from, on the right in mono — `142 open POs`,
+   * `pnl.total`. What makes an option read as something the data holds.
+   */
+  detail?: React.ReactNode
+  /**
+   * A settled answer: the choice is shown, not offered. Unlike `disabled` it
+   * keeps full strength, so the answer still reads.
+   */
+  readOnly?: boolean
+  /**
+   * A short tag or an icon in a box before the choice — `BV`, a store. What
+   * the choice is, read before its name.
+   */
+  lead?: React.ReactNode
+  /**
+   * A figure on the right, in place of `detail` — the value over its unit,
+   * `2,480` over `kg/ha`. What the choice would give, read before picking it.
+   */
+  figure?: QuestionnaireChoiceFigure
+}
+
+/**
+ * The tones the kit draws specially — **suggestions, not a limit.** Anything
+ * else renders in the foreground.
+ */
+export type QuestionnaireFigureTone = "success" | "warning" | "error" | (string & {})
+
+export interface QuestionnaireChoiceFigure {
+  value: React.ReactNode
+  unit?: React.ReactNode
+  tone?: QuestionnaireFigureTone
+}
+
+const FIGURE_TONE: Partial<Record<QuestionnaireFigureTone, string>> = {
+  success: "text-success",
+  warning: "text-warning",
+  error: "text-destructive",
+}
+
 function QuestionnaireChoice({
   children,
   className,
+  detail,
+  readOnly,
+  disabled,
+  lead,
+  figure,
   ...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Choice>) {
+}: QuestionnaireChoiceProps) {
   return (
     <QuestionnairePrimitive.Choice
       data-slot="questionnaire-choice"
+      data-readonly={readOnly ? "" : undefined}
+      data-lead={lead != null ? "" : undefined}
+      disabled={disabled || readOnly}
       className={cn(
-        "group/questionnaire-choice relative flex min-h-9 cursor-pointer select-none items-start gap-2.5 rounded-control border border-input bg-background px-3 py-2 text-start outline-none transition-colors hover:bg-muted/50",
+        "group/questionnaire-choice relative flex min-h-7 cursor-pointer select-none items-start gap-2 rounded-control border border-border px-2 py-1 text-start outline-none transition-colors hover:bg-muted/50",
+        // A choice with a second line, or a lead, breathes a little more.
+        "has-[[data-slot=questionnaire-choice-description]]:py-1.5 data-[lead]:py-1.5",
         "has-[>input:focus-visible]:ring-2 has-[>input:focus-visible]:ring-ring has-[>input:focus-visible]:ring-offset-2 has-[>input:focus-visible]:ring-offset-background",
-        "data-[checked]:border-primary/40 data-[checked]:bg-muted data-[invalid]:border-destructive",
-        "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
+        "data-[checked]:border-primary/45 data-[checked]:bg-primary/15 data-[invalid]:border-destructive",
+        readOnly
+          ? "pointer-events-none cursor-default"
+          : "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         className
       )}
       {...props}
@@ -131,11 +232,11 @@ function QuestionnaireChoice({
       <span
         aria-hidden="true"
         data-slot="questionnaire-choice-indicator"
-        className="pointer-events-none relative mt-[0.2lh] flex size-4 shrink-0 items-center justify-center rounded-control border border-input bg-background group-data-[type=radio]/questionnaire-choice:rounded-full group-data-[checked]/questionnaire-choice:border-primary group-data-[checked]/questionnaire-choice:bg-primary group-data-[checked]/questionnaire-choice:text-primary-foreground"
+        className="pointer-events-none relative mt-[0.25em] flex size-[1em] group-data-[lead]/questionnaire-choice:mt-[0.5em] shrink-0 items-center justify-center rounded-control border border-muted-foreground group-data-[type=radio]/questionnaire-choice:rounded-full group-data-[checked]/questionnaire-choice:border-primary group-data-[type=checkbox]/questionnaire-choice:group-data-[checked]/questionnaire-choice:bg-primary group-data-[checked]/questionnaire-choice:text-primary-foreground"
       >
         <span
           data-slot="questionnaire-choice-indicator-dot"
-          className="hidden size-2 rounded-full bg-primary-foreground group-data-[type=radio]/questionnaire-choice:group-data-[checked]/questionnaire-choice:block"
+          className="hidden size-[0.46em] rounded-full bg-primary group-data-[type=radio]/questionnaire-choice:group-data-[checked]/questionnaire-choice:block"
         />
         <svg
           data-slot="questionnaire-choice-indicator-check"
@@ -145,20 +246,49 @@ function QuestionnaireChoice({
           strokeWidth={3}
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="hidden size-3 group-data-[type=checkbox]/questionnaire-choice:group-data-[checked]/questionnaire-choice:block"
+          className="hidden size-[0.75em] group-data-[type=checkbox]/questionnaire-choice:group-data-[checked]/questionnaire-choice:block"
         >
           <path d="M20 6 9 17l-5-5" />
         </svg>
       </span>
+      {lead != null ? (
+        <span
+          aria-hidden="true"
+          data-slot="questionnaire-choice-lead"
+          className="pointer-events-none flex size-[2em] shrink-0 items-center justify-center rounded-control border border-border/60 bg-muted font-mono text-xs text-muted-foreground [&_svg]:size-[1.1em]"
+        >
+          {lead}
+        </span>
+      ) : null}
       <QuestionnairePrimitive.ChoiceLabel
         data-slot="questionnaire-choice-label"
-        className="flex min-w-0 flex-1 flex-col gap-0.5 leading-snug"
+        className="flex min-w-0 flex-1 flex-col gap-0.5 self-baseline group-data-[lead]/questionnaire-choice:self-start"
       >
         {children}
       </QuestionnairePrimitive.ChoiceLabel>
+      {figure != null ? (
+        <span
+          data-slot="questionnaire-choice-figure"
+          className="ms-auto flex shrink-0 flex-col items-end self-start whitespace-nowrap font-mono"
+        >
+          <span className={cn("text-sm font-medium tabular-nums", FIGURE_TONE[figure.tone ?? ""])}>
+            {figure.value}
+          </span>
+          {figure.unit != null ? (
+            <span className="text-xs text-muted-foreground">{figure.unit}</span>
+          ) : null}
+        </span>
+      ) : detail != null ? (
+        <span
+          data-slot="questionnaire-choice-detail"
+          className="ms-auto shrink-0 self-baseline font-mono text-xs text-muted-foreground"
+        >
+          {detail}
+        </span>
+      ) : null}
       <QuestionnairePrimitive.ChoiceShortcut
         data-slot="questionnaire-choice-shortcut"
-        className="pointer-events-none ms-auto hidden size-5 shrink-0 items-center justify-center rounded-control border border-input bg-background font-mono text-xs font-medium leading-none text-muted-foreground group-data-[shortcut]/questionnaire-choice:inline-flex"
+        className="pointer-events-none ms-auto hidden size-5 shrink-0 items-center justify-center rounded-control border border-border bg-background font-mono text-xs font-medium leading-none text-muted-foreground group-data-[shortcut]/questionnaire-choice:inline-flex"
       />
     </QuestionnairePrimitive.Choice>
   )
@@ -172,7 +302,8 @@ function QuestionnaireChoiceTitle({
   return (
     <span
       data-slot="questionnaire-choice-title"
-      className={cn("font-medium", className)}
+      // Over a description it is the choice's name, so it takes the weight.
+      className={cn("[&:has(~[data-slot=questionnaire-choice-description])]:font-medium", className)}
       {...props}
     />
   )
@@ -192,25 +323,37 @@ function QuestionnaireChoiceDescription({
   )
 }
 
-function QuestionnaireInput({
-  className,
-  ...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Input>) {
+interface QuestionnaireInputProps
+  extends React.ComponentProps<typeof QuestionnairePrimitive.Input> {
+  /** The unit, on the right in mono — `%`, `kg/ha`. Open vocabulary. */
+  unit?: React.ReactNode
+}
+
+function QuestionnaireInput({ className, unit, ...props }: QuestionnaireInputProps) {
   return (
     <div
       data-slot="questionnaire-input-wrapper"
-      className="group/questionnaire-input relative w-full min-w-0"
+      className="group/questionnaire-input relative flex w-full min-w-0 items-center"
     >
       <QuestionnairePrimitive.Input
         data-slot="questionnaire-input"
         className={cn(
-          "flex h-9 w-full min-w-0 rounded-control border border-input bg-background px-3 py-1 outline-none transition-colors placeholder:text-muted-foreground",
+          "flex h-7 w-full min-w-0 rounded-control border border-border bg-background px-2 py-1 outline-none transition-colors placeholder:text-muted-foreground",
           "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           "disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive",
+          unit != null && "pe-10",
           className
         )}
         {...props}
       />
+      {unit != null ? (
+        <span
+          data-slot="questionnaire-input-unit"
+          className="pointer-events-none absolute end-2 font-mono text-sm text-muted-foreground"
+        >
+          {unit}
+        </span>
+      ) : null}
     </div>
   )
 }
@@ -236,7 +379,7 @@ function QuestionnaireActions({
     <div
       data-slot="questionnaire-actions"
       className={cn(
-        "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2",
+        "grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-1.5",
         className
       )}
       {...props}
@@ -247,7 +390,7 @@ function QuestionnaireActions({
 function QuestionnairePrevious({
   children,
   className,
-  size = "default",
+  size = "xs",
   variant = "outline",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Previous> & NavProps) {
@@ -269,8 +412,8 @@ function QuestionnairePrevious({
 function QuestionnaireSkip({
   children,
   className,
-  size = "default",
-  variant = "outline",
+  size = "xs",
+  variant = "ghost",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Skip> & NavProps) {
   return (
@@ -291,7 +434,7 @@ function QuestionnaireSkip({
 function QuestionnaireNext({
   children,
   className,
-  size = "default",
+  size = "xs",
   variant = "default",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Next> & NavProps) {
@@ -313,7 +456,7 @@ function QuestionnaireNext({
 function QuestionnaireSubmit({
   children,
   className,
-  size = "default",
+  size = "xs",
   variant = "default",
   ...props
 }: React.ComponentProps<typeof QuestionnairePrimitive.Submit> & NavProps) {
@@ -346,7 +489,9 @@ export {
   QuestionnaireNext,
   QuestionnairePrevious,
   QuestionnaireProgress,
+  QuestionnaireProgressBar,
   QuestionnaireSkip,
   QuestionnaireSubmit,
   QuestionnaireTitle,
 }
+export type { QuestionnaireChoiceProps, QuestionnaireInputProps }

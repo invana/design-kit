@@ -1,0 +1,1280 @@
+{
+  "id": "breeder",
+  "name": "Plant Breeder",
+  "role": "Breeds drought-tolerant lentil lines from the programme's own varieties: trials, genomic predictions, crosses.",
+  "model": "cloud · claude-sonnet-5",
+  "record": {
+    "understand": {
+      "input": [
+        {
+          "label": "schema",
+          "value": "trials v4 · plots, sites, seasons, pedigrees, markers"
+        },
+        {
+          "label": "context",
+          "value": "11 prior turns (4 answers, 4 asks)"
+        },
+        {
+          "label": "model",
+          "value": "cloud · claude-sonnet-5 · timeout 120s"
+        }
+      ],
+      "output": [
+        {
+          "label": "query",
+          "value": "SELECT v.variety, avg(p.yield_kg_ha) AS yield, avg(p.drought_score) AS drought\nFROM plots p JOIN varieties v USING (variety_id)\nWHERE p.site_class = 'semi-arid' AND p.season BETWEEN 2022 AND 2025\nGROUP BY v.variety ORDER BY drought DESC",
+          "code": true
+        },
+        {
+          "label": "tokens",
+          "value": "2,310 in · 142 out"
+        }
+      ]
+    },
+    "validate": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:3b7d…e904"
+        }
+      ],
+      "output": [
+        {
+          "label": "verdict",
+          "value": "read-only · no INSERT / UPDATE / DELETE"
+        },
+        {
+          "label": "tables",
+          "value": "plots, varieties, sites — all in trials v4"
+        }
+      ]
+    },
+    "execute": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:3b7d…e904"
+        },
+        {
+          "label": "connection",
+          "value": "postgres · trials-db · read replica"
+        },
+        {
+          "label": "limits",
+          "value": "timeout 60s · page 1,000"
+        }
+      ],
+      "output": [
+        {
+          "label": "rows",
+          "value": "1,284 plots · 4 batches"
+        },
+        {
+          "label": "predictions",
+          "value": "GBLUP · 42 lines · 3,120 SNPs"
+        }
+      ]
+    },
+    "project": {
+      "input": [
+        {
+          "label": "rows",
+          "value": "sha256:a91f…07c2"
+        }
+      ],
+      "output": [
+        {
+          "label": "shaped",
+          "value": "42 varieties × 6 traits → answer blocks"
+        }
+      ]
+    }
+  },
+  "session": {
+    "id": "session-plant-breeder",
+    "title": "Planning a drought-tolerant variety from the ones we already grow",
+    "analyst": "Breeder",
+    "composer": {
+      "placeholder": "Ask about trials, parents or crosses…",
+      "controls": [
+        {
+          "id": "model",
+          "label": "Model",
+          "quiet": true,
+          "options": [
+            {
+              "value": "claude",
+              "label": "cloud · claude-sonnet-5"
+            },
+            {
+              "value": "qwen",
+              "label": "local · qwen3-27b"
+            },
+            {
+              "value": "gpt",
+              "label": "openai · gpt-4o-mini"
+            }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "LLM + query timeout",
+          "align": "end",
+          "quiet": true,
+          "default": "120",
+          "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+          "options": [
+            {
+              "value": "60",
+              "label": "1m"
+            },
+            {
+              "value": "120",
+              "label": "2m"
+            },
+            {
+              "value": "300",
+              "label": "5m"
+            }
+          ]
+        }
+      ],
+      "attach": true
+    },
+    "turns": [
+      {
+        "id": "t1",
+        "role": "analyst",
+        "text": "I want a drought-tolerant line from our current varieties without losing yield. Which parents should I look at?"
+      },
+      {
+        "id": "t2",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "scope",
+        "state": "answered",
+        "ask": {
+          "preset": "multistep",
+          "steps": [
+            {
+              "id": "environment",
+              "preset": "single",
+              "question": "Which environment is the new line for?",
+              "options": [
+                {
+                  "value": "semi-arid",
+                  "label": "Semi-arid, under 400 mm",
+                  "detail": "3 sites"
+                },
+                {
+                  "value": "rainfed",
+                  "label": "Rainfed, 400–700 mm",
+                  "detail": "2 sites"
+                },
+                {
+                  "value": "irrigated",
+                  "label": "Irrigated",
+                  "detail": "1 site"
+                }
+              ],
+              "default": "semi-arid"
+            },
+            {
+              "id": "floor",
+              "preset": "number",
+              "question": "What yield must the new line keep?",
+              "unit": "kg/ha",
+              "default": 2200
+            },
+            {
+              "id": "keep",
+              "preset": "multi",
+              "question": "What else must it keep?",
+              "options": [
+                {
+                  "value": "rust",
+                  "label": "Rust ≥ 6"
+                },
+                {
+                  "value": "maturity",
+                  "label": "Maturity ≤ 115 d"
+                },
+                {
+                  "value": "pod",
+                  "label": "Pod ≥ 30 mm"
+                }
+              ],
+              "default": [
+                "rust",
+                "maturity"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "environment": "semi-arid",
+          "floor": 2200,
+          "keep": [
+            "rust",
+            "maturity"
+          ]
+        }
+      },
+      {
+        "id": "t3",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "combine",
+        "label": "table",
+        "title": "varieties × traits",
+        "envelope": {
+          "scope": [
+            "Trials 2022–2025",
+            "3 semi-arid sites",
+            "42 varieties"
+          ],
+          "grounding": {
+            "records": 1284,
+            "noun": "plots"
+          },
+          "freshness": "2025 harvest"
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "No variety clears **2,200 kg/ha** and scores **7+** on drought. The high-yield lines lack tolerance, and the tolerant landraces lack yield, which makes them natural parents to cross."
+          },
+          {
+            "preset": "attr",
+            "total": 42,
+            "noun": "varieties",
+            "caption": "drought and rust scored 1–9 · shade per column, fewer days is better",
+            "columns": [
+              {
+                "key": "variety",
+                "label": "Variety"
+              },
+              {
+                "key": "yield",
+                "label": "kg/ha",
+                "align": "right",
+                "dir": "higher"
+              },
+              {
+                "key": "pod",
+                "label": "Pod mm",
+                "align": "right",
+                "dir": "higher"
+              },
+              {
+                "key": "seeds",
+                "label": "Seeds/pod",
+                "align": "right",
+                "dir": "higher"
+              },
+              {
+                "key": "drought",
+                "label": "Drought",
+                "align": "right",
+                "dir": "higher"
+              },
+              {
+                "key": "rust",
+                "label": "Rust",
+                "align": "right",
+                "dir": "higher"
+              },
+              {
+                "key": "days",
+                "label": "Days",
+                "align": "right",
+                "dir": "lower"
+              }
+            ],
+            "rows": [
+              {
+                "variety": "BV-112",
+                "yield": 2480,
+                "pod": 31,
+                "seeds": 3.1,
+                "drought": 4,
+                "rust": 8,
+                "days": 104
+              },
+              {
+                "variety": "BV-207",
+                "yield": 2210,
+                "pod": 34,
+                "seeds": 2.8,
+                "drought": 6,
+                "rust": 3,
+                "days": 112
+              },
+              {
+                "variety": "BV-150",
+                "yield": 2050,
+                "pod": 29,
+                "seeds": 3.4,
+                "drought": 7,
+                "rust": 6,
+                "days": 108
+              },
+              {
+                "variety": "LR-31",
+                "yield": 1720,
+                "pod": 24,
+                "seeds": 2.2,
+                "drought": 9,
+                "rust": 6,
+                "days": 118
+              },
+              {
+                "variety": "LR-08",
+                "yield": 1610,
+                "pod": 22,
+                "seeds": 2.4,
+                "drought": 8,
+                "rust": 7,
+                "days": 121
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t4",
+        "role": "analyst",
+        "text": "How much does each trait actually matter for yield when it's dry?"
+      },
+      {
+        "id": "t5",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "drivers",
+        "pattern": "drivers",
+        "label": "ranked",
+        "title": "yield gain on semi-arid sites",
+        "envelope": {
+          "grounding": {
+            "records": 1284,
+            "noun": "plots"
+          },
+          "method": "mixed model · yield ~ traits + (1|site) + (1|season)",
+          "caveats": [
+            {
+              "label": "association",
+              "text": "These are associations across trial plots, not proven effects. Drought score heritability is 0.42 over 4 seasons."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "ranked",
+            "caption": "kg/ha per step of each trait, other traits held constant",
+            "items": [
+              {
+                "label": "Drought, +1 pt",
+                "value": 96,
+                "display": "+96"
+              },
+              {
+                "label": "Rust, +1 pt",
+                "value": 38,
+                "display": "+38"
+              },
+              {
+                "label": "Seeds/pod, +0.1",
+                "value": 22,
+                "display": "+22"
+              },
+              {
+                "label": "Pod, +1 mm",
+                "value": 9,
+                "display": "+9"
+              },
+              {
+                "label": "1 day earlier",
+                "value": 7,
+                "display": "+7"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t6",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "analyse",
+        "state": "answered",
+        "ask": {
+          "preset": "weights",
+          "question": "How much does each goal matter?",
+          "objectives": [
+            {
+              "id": "drought",
+              "label": "Drought"
+            },
+            {
+              "id": "yield",
+              "label": "Yield"
+            },
+            {
+              "id": "rust",
+              "label": "Rust"
+            },
+            {
+              "id": "pod",
+              "label": "Pod size"
+            }
+          ],
+          "default": {
+            "drought": 40,
+            "yield": 35,
+            "rust": 15,
+            "pod": 10
+          },
+          "total": 100,
+          "hint": "Prefilled from the driver ranking · total 100"
+        },
+        "value": {
+          "drought": 40,
+          "yield": 35,
+          "rust": 15,
+          "pod": 10
+        }
+      },
+      {
+        "id": "t7",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "scope",
+        "state": "answered",
+        "ask": {
+          "preset": "entity",
+          "question": "Which crosses should I simulate?",
+          "results": [
+            {
+              "id": "BV-112xLR-31",
+              "label": "BV-112 × LR-31",
+              "type": "cross"
+            },
+            {
+              "id": "BV-112xLR-08",
+              "label": "BV-112 × LR-08",
+              "type": "cross"
+            },
+            {
+              "id": "BV-207xBV-150",
+              "label": "BV-207 × BV-150",
+              "type": "cross"
+            }
+          ],
+          "default": [
+            "BV-112xLR-31",
+            "BV-112xLR-08",
+            "BV-207xBV-150"
+          ],
+          "submit": "Simulate 3 crosses",
+          "hint": "Suggested: pairs whose strengths cover each other's gaps"
+        },
+        "value": [
+          "BV-112xLR-31",
+          "BV-112xLR-08",
+          "BV-207xBV-150"
+        ]
+      },
+      {
+        "id": "t8",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "combine",
+        "pattern": "shortlist",
+        "label": "simulation",
+        "title": "1,000 F6 lines per cross",
+        "envelope": {
+          "grounding": {
+            "records": 42,
+            "noun": "pedigrees"
+          },
+          "caveats": [
+            {
+              "label": "simulation",
+              "text": "Assumes additive effects and this season's trait estimates. Use it to rank crosses, not to predict the yield of a finished variety."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "cross",
+                "label": "Cross"
+              },
+              {
+                "key": "mean",
+                "label": "Mean kg/ha",
+                "align": "right"
+              },
+              {
+                "key": "drought",
+                "label": "Drought",
+                "align": "right"
+              },
+              {
+                "key": "rust",
+                "label": "Rust",
+                "align": "right"
+              },
+              {
+                "key": "meets",
+                "label": "Meets all goals",
+                "align": "right"
+              },
+              {
+                "key": "weighted",
+                "label": "Weighted",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "cross": "BV-112 × LR-31",
+                "mean": 2260,
+                "drought": 7.1,
+                "rust": 7.2,
+                "meets": {
+                  "value": "34%",
+                  "strong": true
+                },
+                "weighted": 0.78
+              },
+              {
+                "cross": "BV-112 × LR-08",
+                "mean": 2190,
+                "drought": 6.6,
+                "rust": 7.6,
+                "meets": {
+                  "value": "27%",
+                  "strong": true
+                },
+                "weighted": 0.71
+              },
+              {
+                "cross": "BV-207 × BV-150",
+                "mean": 2140,
+                "drought": 6.4,
+                "rust": 4.5,
+                "meets": {
+                  "value": "12%",
+                  "strong": true
+                },
+                "weighted": 0.58
+              }
+            ]
+          },
+          {
+            "preset": "histogram",
+            "unit": "kg/ha",
+            "caption": "BV-112 × LR-31 · predicted yield of simulated lines, kg/ha",
+            "threshold": {
+              "value": 2200,
+              "label": "floor 2,200 · 34% above"
+            },
+            "bins": [
+              {
+                "from": 1780,
+                "to": 1850,
+                "count": 19
+              },
+              {
+                "from": 1850,
+                "to": 1920,
+                "count": 51
+              },
+              {
+                "from": 1920,
+                "to": 1990,
+                "count": 96
+              },
+              {
+                "from": 1990,
+                "to": 2060,
+                "count": 139
+              },
+              {
+                "from": 2060,
+                "to": 2130,
+                "count": 171
+              },
+              {
+                "from": 2130,
+                "to": 2200,
+                "count": 184
+              },
+              {
+                "from": 2200,
+                "to": 2270,
+                "count": 128
+              },
+              {
+                "from": 2270,
+                "to": 2340,
+                "count": 99
+              },
+              {
+                "from": 2340,
+                "to": 2410,
+                "count": 64
+              },
+              {
+                "from": 2410,
+                "to": 2480,
+                "count": 34
+              },
+              {
+                "from": 2480,
+                "to": 2550,
+                "count": 15
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t9",
+        "role": "analyst",
+        "text": "What if rust pressure doubles next season?"
+      },
+      {
+        "id": "t10",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "scenario",
+        "pattern": "scenariot",
+        "label": "scenario",
+        "title": "rust pressure × 2",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "cross",
+                "label": "Cross"
+              },
+              {
+                "key": "now",
+                "label": "Meets all goals, now",
+                "align": "right"
+              },
+              {
+                "key": "rust2",
+                "label": "Rust × 2",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "cross": "BV-112 × LR-31",
+                "now": "34%",
+                "rust2": "29%"
+              },
+              {
+                "cross": "BV-112 × LR-08",
+                "now": "27%",
+                "rust2": "25%"
+              },
+              {
+                "cross": "BV-207 × BV-150",
+                "now": "12%",
+                "rust2": {
+                  "value": "4%",
+                  "tone": "bad"
+                }
+              }
+            ]
+          },
+          {
+            "preset": "narrative",
+            "text": "The order holds. **BV-207 × BV-150** falls away because BV-207 carries little rust resistance (score 3), while BV-112's score of 8 protects both of its crosses."
+          }
+        ]
+      },
+      {
+        "id": "t11",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "label": "proposal",
+        "title": "from this thread",
+        "blocks": [
+          {
+            "preset": "proposal",
+            "rows": [
+              {
+                "label": "Add to",
+                "value": "2026 crossing block"
+              },
+              {
+                "label": "Crosses",
+                "value": "BV-112 × LR-31, BV-112 × LR-08"
+              },
+              {
+                "label": "Pollinations",
+                "value": "40 each"
+              }
+            ],
+            "consequence": "Adds two crosses to the draft plan. Nothing is sown until the plan is published.",
+            "actions": [
+              {
+                "id": "add-to-plan",
+                "label": "Add to plan",
+                "variant": "primary"
+              },
+              {
+                "id": "edit",
+                "label": "Edit",
+                "variant": "secondary"
+              },
+              {
+                "id": "not-now",
+                "label": "Not now",
+                "variant": "ghost"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t12",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "explain",
+        "state": "pending",
+        "ask": {
+          "preset": "suggestions",
+          "items": [
+            "Which markers are linked to drought score?",
+            "How much do these parents' pedigrees overlap?",
+            "Compare with last season's crosses"
+          ]
+        }
+      }
+    ]
+  },
+  "runs": {
+    "send": {
+      "prompt": "Show me LR-31 as a parent: its trial record and how its offspring have done.",
+      "thinking": "LR-31 is a landrace with drought 9 but low yield. Pull its own semi-arid plots, then every cross it has parented since 2019 and rank the progeny by yield under drought.",
+      "progress": {
+        "understood": "proposed SQL · 2 queries · confidence 0.88",
+        "validating": "checking the queries are read-only",
+        "validated": "read-only ✓ · plots, varieties, pedigrees",
+        "batches": [
+          "96 plots so far · batch 1",
+          "184 plots so far · batch 2",
+          "212 plots · 2 batches"
+        ],
+        "projecting": "shaping LR-31's record and 5 crosses",
+        "projected": "1 record · 5 crosses ranked"
+      },
+      "answer": {
+        "text": "LR-31 has scored **9** on drought in all **4 seasons** across 3 semi-arid sites, but averages only **1,720 kg/ha** [1]. Its best cross so far, **LR-31 × BV-150**, reached **2,140 kg/ha** in F5 plots [2] — close to the floor, with drought 7.8.",
+        "label": "record",
+        "title": "LR-31 as a parent",
+        "blocks": [
+          {
+            "preset": "record",
+            "header": {
+              "title": "LR-31 · Kabuli landrace",
+              "initials": "LR",
+              "status": {
+                "label": "parent · 5 crosses",
+                "tone": "good"
+              }
+            },
+            "groups": [
+              {
+                "label": "Identity",
+                "rows": [
+                  {
+                    "label": "Origin",
+                    "value": "Collected 2011, Tel Hadya",
+                    "source": "genebank passport"
+                  },
+                  {
+                    "label": "Maturity",
+                    "value": "118 d"
+                  },
+                  {
+                    "label": "Seed",
+                    "value": "Large, beige, 2.2 per pod"
+                  }
+                ]
+              },
+              {
+                "label": "Performance, semi-arid",
+                "rows": [
+                  {
+                    "label": "Yield",
+                    "value": "1,720 kg/ha · 96 plots",
+                    "source": "trials 2022–2025"
+                  },
+                  {
+                    "label": "Drought score",
+                    "value": "9 of 9 · every season"
+                  },
+                  {
+                    "label": "Rust score",
+                    "value": "6 of 9"
+                  },
+                  {
+                    "label": "GEBV, drought",
+                    "value": "+1.6 pts · accuracy 0.71",
+                    "source": "GBLUP, 3,120 SNPs"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "preset": "ranked",
+            "caption": "mean yield of progeny, kg/ha, semi-arid F5 plots",
+            "items": [
+              {
+                "label": "LR-31 × BV-150",
+                "value": 2140,
+                "display": "2,140"
+              },
+              {
+                "label": "LR-31 × BV-207",
+                "value": 2010,
+                "display": "2,010"
+              },
+              {
+                "label": "LR-31 × BV-098",
+                "value": 1930,
+                "display": "1,930"
+              },
+              {
+                "label": "LR-31 × LR-08",
+                "value": 1640,
+                "display": "1,640"
+              },
+              {
+                "label": "1 other",
+                "value": 1510,
+                "display": "1,510",
+                "muted": true
+              }
+            ]
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              {
+                "label": "Semi-arid yield trials",
+                "count": {
+                  "value": 96,
+                  "type": "count",
+                  "unit": "plots"
+                },
+                "detail": "table · loaded 2 Sep 06:00"
+              },
+              {
+                "label": "Pedigree register",
+                "count": {
+                  "value": 116,
+                  "type": "count",
+                  "unit": "plots"
+                },
+                "detail": "table · F5 progeny, 2023–2025"
+              }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 212 plots · LLM 1.2s · query 0.8s",
+        "envelope": {
+          "scope": [
+            "LR-31",
+            "Trials 2022–2025",
+            "3 semi-arid sites"
+          ],
+          "grounding": {
+            "records": 212,
+            "noun": "plots"
+          },
+          "freshness": "2025 harvest"
+        },
+        "followUps": {
+          "groups": [
+            {
+              "label": "Go deeper",
+              "items": [
+                "Which markers carry LR-31's drought score?",
+                "Why did LR-31 × LR-08 yield so little?"
+              ]
+            },
+            {
+              "label": "Act",
+              "items": [
+                "Add LR-31 × BV-150 to the shortlist"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "clarify": {
+      "prompt": "Which lines from last season should go forward to multi-site trials?",
+      "thinking": "There are 186 F6 lines from 2025. Advancing depends on which traits must clear their thresholds — I should ask which ones gate advancement before filtering.",
+      "waiting": "which traits gate advancement?",
+      "ask": {
+        "preset": "multi",
+        "question": "Which traits must a line clear to **go forward**?",
+        "description": "Lines failing any ticked trait are held back.",
+        "options": [
+          {
+            "value": "yield",
+            "label": "Yield ≥ 2,200 kg/ha",
+            "detail": "94 pass"
+          },
+          {
+            "value": "drought",
+            "label": "Drought ≥ 7",
+            "detail": "71 pass"
+          },
+          {
+            "value": "rust",
+            "label": "Rust ≥ 6",
+            "detail": "128 pass"
+          },
+          {
+            "value": "maturity",
+            "label": "Maturity ≤ 115 d",
+            "detail": "152 pass"
+          },
+          {
+            "value": "pod",
+            "label": "Pod ≥ 30 mm",
+            "detail": "63 pass"
+          }
+        ],
+        "default": [
+          "yield",
+          "drought",
+          "rust"
+        ],
+        "min": 1,
+        "submit": "Filter on {count} traits",
+        "hint": "Prefilled from your goals · **186** F6 lines from 2025"
+      },
+      "progress": {
+        "understood": "proposed SQL · 3 thresholds · confidence 0.91",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · plots, lines",
+        "batches": [
+          "62 lines so far · batch 1",
+          "124 lines so far · batch 2",
+          "186 lines · 3 batches"
+        ],
+        "projecting": "ranking 23 lines that clear every trait",
+        "projected": "23 lines → table"
+      },
+      "answer": {
+        "text": "**23 of 186** F6 lines clear every trait you ticked. Most come from **BV-112 × LR-31** (14 lines); the best, **F6-0417**, yielded **2,390 kg/ha** with drought 8.",
+        "label": "table",
+        "title": "lines to advance",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "line",
+                "label": "Line"
+              },
+              {
+                "key": "cross",
+                "label": "Cross"
+              },
+              {
+                "key": "yield",
+                "label": "kg/ha",
+                "align": "right"
+              },
+              {
+                "key": "drought",
+                "label": "Drought",
+                "align": "right"
+              },
+              {
+                "key": "rust",
+                "label": "Rust",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "line": "F6-0417",
+                "cross": "BV-112 × LR-31",
+                "yield": {
+                  "value": 2390,
+                  "strong": true
+                },
+                "drought": 8,
+                "rust": 7
+              },
+              {
+                "line": "F6-0233",
+                "cross": "BV-112 × LR-31",
+                "yield": 2340,
+                "drought": 7,
+                "rust": 8
+              },
+              {
+                "line": "F6-0582",
+                "cross": "BV-112 × LR-08",
+                "yield": 2310,
+                "drought": 7,
+                "rust": 8
+              },
+              {
+                "line": "F6-0129",
+                "cross": "BV-112 × LR-31",
+                "yield": 2280,
+                "drought": 8,
+                "rust": 6
+              },
+              {
+                "line": "F6-0661",
+                "cross": "BV-207 × BV-150",
+                "yield": 2230,
+                "drought": 7,
+                "rust": 6
+              }
+            ],
+            "total": 23,
+            "noun": "lines",
+            "sort": {
+              "key": "yield",
+              "dir": "desc"
+            },
+            "highlight": [
+              0
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 186 lines · LLM 1.0s · query 0.6s",
+        "envelope": {
+          "scope": [
+            "2025 F6 lines",
+            "2 semi-arid sites",
+            "Yield ≥ 2,200 · Drought ≥ 7 · Rust ≥ 6"
+          ],
+          "grounding": {
+            "records": 372,
+            "noun": "plots"
+          },
+          "freshness": "2025 harvest"
+        }
+      }
+    },
+    "confirm": {
+      "prompt": "Predict every untested cross among our 42 varieties and shortlist the best for the crossing block.",
+      "thinking": "42 varieties give 861 pairs; 858 are untested. Each needs a genomic prediction over 1,000 simulated F6 lines — a heavy run on the GPU pool.",
+      "waiting": "this simulates 858 crosses",
+      "ask": {
+        "preset": "confirm",
+        "question": "This simulates **858 crosses**, 1,000 lines each. Run it?",
+        "cost": [
+          {
+            "label": "simulated lines",
+            "value": "858k"
+          },
+          {
+            "label": "about",
+            "value": "6 min"
+          },
+          {
+            "label": "writes",
+            "value": "nothing"
+          }
+        ],
+        "costAs": "strip",
+        "yes": "Run all 858",
+        "no": "Just BV-112's crosses",
+        "default": true
+      },
+      "progress": {
+        "understood": "genomic prediction · 858 crosses · GBLUP",
+        "validating": "checking the run is read-only",
+        "validated": "read-only ✓ · markers, pedigrees",
+        "batches": [
+          "286 crosses simulated",
+          "572 crosses simulated",
+          "858 crosses simulated"
+        ],
+        "projecting": "ranking 858 crosses by weighted score",
+        "projected": "top 2 → proposal"
+      },
+      "answer": {
+        "text": "Two untested crosses beat everything in the plan: **BV-112 × LR-17** (weighted **0.81**, 38% of lines meet all goals) and **BV-150 × LR-31** (**0.79**, 35%). Both keep BV-112's or BV-150's rust resistance.",
+        "label": "proposal",
+        "title": "858 crosses predicted",
+        "blocks": [
+          {
+            "preset": "proposal",
+            "title": "from this answer",
+            "heading": "Add two untested crosses to the 2026 block",
+            "rows": [
+              {
+                "label": "Add to",
+                "value": "2026 crossing block"
+              },
+              {
+                "label": "Crosses",
+                "value": "BV-112 × LR-17, BV-150 × LR-31"
+              },
+              {
+                "label": "Pollinations",
+                "value": "40 each"
+              }
+            ],
+            "figures": [
+              {
+                "label": "Crosses",
+                "value": "2"
+              },
+              {
+                "label": "Pollinations",
+                "value": "80"
+              }
+            ],
+            "consequence": "Adds two crosses to the draft plan beside the two already there. Nothing is sown until the plan is published.",
+            "actions": [
+              {
+                "id": "add-to-plan",
+                "label": "Add to plan",
+                "variant": "primary"
+              },
+              {
+                "id": "edit",
+                "label": "Edit",
+                "variant": "secondary"
+              },
+              {
+                "id": "not-now",
+                "label": "Not now",
+                "variant": "ghost"
+              }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 858 crosses · 858k lines · run 5m 42s",
+        "envelope": {
+          "scope": [
+            "42 varieties",
+            "858 untested crosses",
+            "semi-arid weights"
+          ],
+          "grounding": {
+            "records": 42,
+            "noun": "pedigrees"
+          },
+          "freshness": "2025 marker panel",
+          "caveats": [
+            {
+              "label": "simulation",
+              "text": "Assumes additive effects and this season's marker estimates; rank crosses with it, don't predict a variety's yield."
+            },
+            {
+              "label": "thin data",
+              "text": "LR-17 has only 18 plots on semi-arid sites, so its drought estimate carries a wide interval."
+            }
+          ]
+        }
+      },
+      "narrowed": {
+        "understood": "narrowed to BV-112's 41 crosses",
+        "answer": {
+          "text": "Simulating only **BV-112's 41 crosses** instead: the best untested one, **BV-112 × LR-17**, scores **0.81**, above BV-112 × LR-31's 0.78.",
+          "label": "metric",
+          "title": "BV-112's crosses",
+          "blocks": [
+            {
+              "preset": "metric",
+              "label": "BV-112 × LR-17 · lines meeting all goals",
+              "value": "38%",
+              "delta": "▲ 4 pts vs BV-112 × LR-31",
+              "tone": "good",
+              "gauge": {
+                "value": 38,
+                "target": 30,
+                "min": 0,
+                "max": 60,
+                "unit": "%"
+              }
+            }
+          ],
+          "meta": "cloud · claude-sonnet-5 · 41 crosses · run 18s",
+          "envelope": {
+            "scope": [
+              "BV-112 as a parent",
+              "41 crosses"
+            ],
+            "grounding": {
+              "records": 41,
+              "noun": "crosses"
+            }
+          }
+        }
+      }
+    },
+    "fail": {
+      "prompt": "Join every plot since 2010 with its weather and marker data",
+      "understood": "proposed SQL · 4 joins · confidence 0.69",
+      "validated": "read-only ✓ · plots, weather, markers",
+      "retrying": "timeout after 60s",
+      "failed": "failed · timeout after 60s · 2 attempts",
+      "error": "transient · trials-db did not respond within the timeout",
+      "text": "Trials-db did not answer within 60s, twice. Joining **14,900 plots** to daily weather and 3,120 markers each builds about 46M rows before it groups them.",
+      "meta": "cloud · claude-sonnet-5 · LLM 1.1s · query timed out ×2",
+      "actions": [
+        {
+          "id": "retry",
+          "label": "Try again",
+          "variant": "secondary"
+        },
+        {
+          "id": "narrow",
+          "label": "Narrow to semi-arid sites",
+          "variant": "secondary"
+        },
+        {
+          "id": "seasonal",
+          "label": "Use seasonal weather",
+          "variant": "secondary"
+        }
+      ]
+    },
+    "long": {
+      "prompt": "Re-estimate genomic breeding values for every line in the programme",
+      "understood": "GBLUP · 3,120 SNPs · confidence 0.9",
+      "validated": "read-only ✓ · markers, plots",
+      "progress": "2,640 lines · {n}% estimated"
+    }
+  },
+  "steps": {
+    "execute": {
+      "key": "query_trials"
+    },
+    "project": {
+      "key": "shape_for_plan"
+    }
+  }
+}

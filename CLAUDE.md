@@ -32,7 +32,7 @@ Per-package scripts of note:
 - `@invana/stoybook`: `dev` = `storybook dev -p 6009`, `build-storybook` produces `storybook-static/`
 - `@invana/styling`: ships source CSS directly — no build step
 
-There is no test runner wired into root scripts; `vitest` is installed in `ui` and `storybook` but no `test` script exists. Don't claim test commands that aren't there.
+There is no test runner wired into root scripts. `@invana/assistant` has the one `test` script (`pnpm --filter @invana/assistant test`, vitest in node): it checks the grammar ids against the preset registry, runs `validate()` on every session fixture, and exercises `applyPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
 
 ## Workspace layout
 
@@ -41,11 +41,12 @@ packages/
   styling/   → @invana/styling   (Tailwind v4 design tokens, themes, source CSS only)
   ui/        → @invana/ui        (React component library, shadcn/Radix based)
   themes/    → @invana/themes    (App layout shells: AppLayoutBase, app-v1, app-v2)
+  assistant/ → @invana/assistant (JSON-driven analyst conversation: thread, asks, answers, follow-ups)
 apps/
   storybook/ → @invana/stoybook  (Storybook 10 + Vite consumer of the three packages)
 ```
 
-Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. Never invert this — `styling` must remain free of React, `ui` must not import from `themes`.
+Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. `assistant` depends on `ui`, `charts`, `tables`, `forms` and `styling` (peer + dev, workspace:*) and nothing depends on it — the dashboard included. Never invert this — `styling` must remain free of React, `ui` must not import from `themes` or `assistant`.
 
 ## Architecture
 
@@ -86,7 +87,7 @@ The **tag** (`v*`) is what completes a release — pushing the commit alone does
 | --- | --- | --- |
 | `resolve` | — | Works out the target ref/tag once, so the rest share one answer |
 | `publish` | `resolve` | `turbo run build --filter="./packages/*"` then `pnpm -r publish` to **npm** with provenance (workspace deps rewritten to `^<version>`); uploads `packages/*/dist` as an artifact |
-| `dist-branches` | `publish` | Matrix over all 8 packages — force-pushes each to `releases/<pkg>` |
+| `dist-branches` | `publish` | Matrix over all 9 packages — force-pushes each to `releases/<pkg>` |
 | `notes` | `resolve` | git-cliff (`cliff.toml`) over the tag range → creates/edits the **GitHub Release** |
 | `storybook` | `resolve` | Builds and deploys the Storybook site to GitHub Pages |
 
@@ -103,6 +104,15 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 - Components in `@invana/ui` follow shadcn structure (`components/ui/*` are primitives, `components/ui-extended/*` are higher-level compositions). When adding a new shadcn primitive, place it in `components/ui/` and re-export from `components/ui/index.ts`.
 - Use `cn` from `@invana/ui/lib/utils` (re-exported at the package root) for class merging — it wraps `clsx` + `tailwind-merge`.
 - **Type: three sizes, and the root is the dial.** A component declares no font size. Default text inherits the root (`html` is 13px in an application; a site can set 16px and every component follows). Text that is deliberately subordinate — a count, a timing, a row's subtitle — says `text-sm`; the genuinely small says `text-xs`. At a 13px root that ladder is **13 / 12 / 11**. `lg`/`xl` and up remain heading steps. **There is no `text-meta`** — it was a third name over the same 12px as `text-xs`, while `text-sm` was an alias of `base`, so four class names covered two sizes and `text-sm` did not mean small. The rename was 1:1 (`text-sm → text-base`, then `text-meta → text-sm` and `text-xs → text-sm`), so no pixel moved and `xs` became a rung that was never available before. A hard-coded size is what stops a component being body copy on a marketing page, which is the reason this rule exists. Every step is a ratio of the root (`rem`, never `px`, never `em`); see the ladder note at the top of `packages/styling/src/index.css`. **The scale only reaches a consumer that compiles that `@theme` block** — i.e. one that `@import`s `@invana/styling`; a consumer importing only the precompiled `@invana/ui/styles.css` gets custom properties, not tokens, and its own Tailwind regenerates `text-sm` at 0.875rem. Studio `@import`s `@invana/styling`.
+- **`seamless` is a prop, and the assistant passes it.** Anything that is cells divided by rules
+  — `Table`, `DataTable`, `CastTable`, a `joined` `MetricGrid`, `ScopeLine`, `ConfirmCard`'s cost
+  strip, `ProposalCard`'s evidence — takes `seamless`: no border or radius around it, no rule under
+  the last row, and its outer cells flush with the text around it (no outer padding). Off by
+  default, so a table standing alone keeps its box. The assistant's renderers pass `seamless`
+  (the card or answer is the frame), and so does the Assistant Presets canvas's shared stylesheet;
+  stories set the prop, never classes. Where the outer cells can't be known (an auto-fit grid that
+  wraps), the component reaches out by a cell's padding and clips it — with `overflow-hidden`, not
+  `clip-path`, whose anti-aliased edge shows the rule colour as a hairline.
 - Theme-aware colors come from CSS variables defined in `@invana/styling` (`background`, `foreground`, `primary`, `muted`, `accent`, `border`, etc.). Prefer these tokens over hardcoded Tailwind colors so themes (`default`, `tailwind`, `vite`) all work.
 - Do not create git commits unless the user explicitly asks for one. Stage and propose, but wait for an explicit "commit" instruction before running `git commit`.
 - Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/) — always prefix with a type and (where it applies) a package scope: `feat(ui): add DatePicker`, `fix(themes): correct header height`, `docs(readme): …`. The changelog is generated from these prefixes by git-cliff (`cliff.toml`), so commits without a valid prefix are dropped and never appear in `CHANGELOG.md`. Type → section: `feat` → Features, `fix` → Bug Fixes, `perf` → Performance, `refactor` → Refactors, `docs` → Documentation. `test`, `chore`, `ci`, `build`, `style` are valid prefixes but intentionally skipped from the changelog. `CHANGELOG.md` is regenerated by `release.sh` and the GitHub Release notes in CI (see Release pipeline), both from `cliff.toml` — so a commit's subject line *is* its changelog entry, and only the subject appears (bodies are not rendered). `pnpm changelog` (`git-cliff -o CHANGELOG.md`) previews the same output at any time.
@@ -123,7 +133,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
-- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
+- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, every story under `assistant/conversations/` renders `<ChatSession spec={fixture} />` and nothing else, with its JSON in `fixtures/conversations/`; and `assistant/playground.stories.tsx` (`Assistant/Playground`) — the whole assistant in an `AppLayoutV2` shell, and the one place each user's experience is shown (there are no per-user stories): pick a user (or link to one with the `user` arg, e.g. `&args=user:journalist;variant:cli`), a variant (`web`/`cli`) and a width, and play recorded runs (send, needs input, a costly question, failure, stop, open a step, tasks view) into their thread. Its data is one JSON file per user in `packages/assistant/src/data/conversations/` — the thread they open on plus their recorded runs, built into patch scripts by `fixtures/scripts/runs.ts`; a new moment or user goes there, and `runs.test.ts` checks that the users together show every built ask and block), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The forms section follows the same rule — `"Forms/Manual/Composed Form"`, `"Forms/Generated/Dialog"`.
 
 ## Where demand comes from
@@ -136,12 +146,39 @@ gap in the kit, not a one-off in the design.
 - `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
+- The **Assistant Presets** canvas (https://claude.ai/artifact/DFrcsV7JSR2Ef7PSJAHztz) is the design reference for asks and
+  answer blocks. Each preset with a renderer has **one story that replicates its whole board**:
+  every variant, captioned as the board captions it, laid out by the story-only `Board` helper
+  (`apps/storybook/stories/assistant/board.tsx`, four 320px columns; the 280px variant draws at
+  280px). A variant the renderer cannot draw is a gap in the renderer, not a story workaround.
+  A design change goes to the canvas first.
+- `docs/TODO.md` tracks every component the assistant needs, across packages:
+  folder, change, status, tier, and the assistant's preset registry. Flip a row's `Status` in the
+  same commit that ships or changes the component.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
-- Invana-domain composites (emissions, thinkings, citations) belong in
-  `@invana/ui/components/ui-extended/` — they need no external dep, and the whole kit is Invana's.
-  Only a component needing an external JS library gets its own package (see the placement rule
-  above); `@invana/editor` (CodeMirror 6) and `@invana/charts` (uPlot) are the current examples.
+- **Where a component goes** — ask in order and stop at the first yes:
+  needs an external JS library the other packages don't have → its own package
+  (`@invana/editor`, `@invana/charts`); encodes numbers as marks → `@invana/charts`; rows and
+  columns of records → `@invana/tables`; only meaningful inside a conversation turn, relative to
+  a prompt → `@invana/assistant`; anything else, including anything a dashboard, run view,
+  review queue or report also shows → `@invana/ui`. So `TraceList`, `ExchangeRecord`,
+  `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
+- **`@invana/assistant` is JSON only.** Studio renders `<ChatSession spec variant="cli" | "web" />`
+  (`packages/assistant/src/styles/`); the API sends a `ConversationSpec` then patches
+  (`applyPatch`, or handed over as `stream` / `useChatSession().stream`), the UI sends
+  `ConversationEvent`s — to `onEvent` and to a typed callback per event (`onReply`, `onAction`,
+  `onOpenRun`, …). The variants share one base (`styles/base/`) and **name no preset**: every ask
+  and block is drawn through the registry, and how one sits (an ask bare or in the question card, a
+  block in the answer card or its own) is a trait registered beside its renderer, never a check on
+  its id in a variant.
+  Presets, patterns and flows are ids in `packages/assistant/src/grammar/` — a new preset
+  gets a board on the Assistant Presets canvas and an id in the grammar first, then its
+  renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
+  `conversations/registry.ts`. An unbuilt preset renders a labelled placeholder; a renderer reads
+  only its preset's options — a screen that needs more is a grammar change, not a prop.
+  Envelope fields (scope, grounding, freshness, method, caveats) sit on the answer, never as
+  blocks. Answer patterns are typed recipes and stories, not exports.
 - **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
   charts → ui, and ui gets no re-exports. Time series are uPlot on the internal chart frame
   (`packages/charts/src/base/`), which resolves tokens for the canvas and redraws on theme or

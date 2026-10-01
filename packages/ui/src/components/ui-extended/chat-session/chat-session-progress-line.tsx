@@ -27,6 +27,8 @@ function RingSpinner() {
  * A transient "work in flight" line in the transcript — spinner in the shared
  * gutter, label, and an optional right-aligned elapsed readout. Replace it with
  * a settled {@link ChatSessionActivityRow} when the run finishes.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionProgressLine({
   children,

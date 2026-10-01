@@ -5,16 +5,33 @@ import { cn } from "../../lib/utils"
 export interface CitationRowProps
   extends Omit<React.HTMLAttributes<HTMLLIElement>, "children"> {
   /** What kind of record this is — `Article`, `Bar`, `Event`. */
-  kind: React.ReactNode
+  kind?: React.ReactNode
+  /**
+   * The number an answer cites it by — `1` renders as `[1]`. Numbered rows are
+   * how an answer's markers are resolved, so the number leads the row.
+   */
+  marker?: React.ReactNode
   /** The record itself, in the words it was stored with. */
   children?: React.ReactNode
   /** Where it came from — the dataset, the publisher, the timestamp. */
   source?: React.ReactNode
+  /** How many records it contributed — `3,406`, `5 days`. Mono, at the right. */
+  count?: React.ReactNode
+  /** A second line under the record — what kind of source it is and how fresh: `table · loaded 28 Sep`. */
+  detail?: React.ReactNode
+  /** The row the reader is on — the one a lit marker in the prose points to. */
+  active?: boolean
 }
 
 export interface CitationListProps
   extends React.HTMLAttributes<HTMLUListElement> {
   children?: React.ReactNode
+  /**
+   * A line under the sources. `warning` when it says the answer rests on no
+   * records — which is said out loud, never left for the zeros to imply.
+   */
+  note?: React.ReactNode
+  noteTone?: "muted" | "warning"
 }
 
 /**
@@ -33,26 +50,63 @@ export interface CitationListProps
 export const CitationList = React.forwardRef<
   HTMLUListElement,
   CitationListProps
->(({ className, children, ...props }, ref) => (
-  <ul ref={ref} className={cn("flex flex-col", className)} {...props}>
-    {children}
-  </ul>
-))
+>(({ note, noteTone = "muted", className, children, ...props }, ref) => {
+  const list = (
+    <ul ref={note != null ? undefined : ref} className={cn("flex flex-col", note == null && className)} {...(note != null ? {} : props)}>
+      {children}
+    </ul>
+  )
+  if (note == null) return list
+  return (
+    <div className={cn("flex flex-col gap-1.5", className)}>
+      {list}
+      <p className={cn("text-xs", noteTone === "warning" ? "text-warning" : "text-muted-foreground")}>
+        {note}
+      </p>
+    </div>
+  )
+})
 CitationList.displayName = "CitationList"
 
 export const CitationRow = React.forwardRef<HTMLLIElement, CitationRowProps>(
-  ({ kind, source, className, children, ...props }, ref) => (
+  ({ kind, marker, source, count, detail, active, className, children, ...props }, ref) => (
     <li
       ref={ref}
-      className={cn("flex min-h-[26px] items-center gap-2 py-0.5", className)}
+      data-active={active || undefined}
+      className={cn(
+        "flex gap-2 py-0.5",
+        detail != null ? "items-baseline" : "items-center",
+        active && "bg-info/15",
+        // A numbered row is an answer's source line, set in the answer's
+        // secondary size; a kind row is a record in a list of its own.
+        marker != null ? "text-sm" : "min-h-[26px]",
+        className,
+      )}
       {...props}
     >
-      <span className="shrink-0 border border-border px-1 text-sm text-muted-foreground">
-        {kind}
-      </span>
-      <span className="min-w-0 flex-1 truncate">{children}</span>
+      {marker != null ? (
+        <span className="w-6 shrink-0 font-mono text-xs text-info">[{marker}]</span>
+      ) : null}
+      {kind != null ? (
+        <span className="shrink-0 border border-border px-1 text-sm text-muted-foreground">
+          {kind}
+        </span>
+      ) : null}
+      {detail != null ? (
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="truncate">{children}</span>
+          <span className="truncate text-xs text-muted-foreground">{detail}</span>
+        </span>
+      ) : (
+        <span className="min-w-0 flex-1 truncate">{children}</span>
+      )}
       {source != null ? (
         <span className="shrink-0 text-sm text-muted-foreground">{source}</span>
+      ) : null}
+      {count != null ? (
+        <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+          {count}
+        </span>
       ) : null}
     </li>
   ),

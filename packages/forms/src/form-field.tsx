@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
   Badge,
   cn,
+  Eyebrow,
 } from '@invana/ui';
 import {
   FormField as FormFieldBase,
@@ -17,6 +18,11 @@ import {
   FormMessage,
 } from './components/form';
 import { Input } from './components/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from './components/input-group';
 import { PasswordInput } from './components/password-input';
 import { Textarea } from './components/textarea';
 import { Switch } from './components/switch';
@@ -74,6 +80,10 @@ interface BaseFieldProps {
   orientation?: FieldOrientation;
   /** Wrap a `switch` boolean in a bordered, padded box. Defaults to `false`. */
   boxed?: boolean;
+  /** Unit at the end of a text or number input. */
+  unit?: string;
+  /** Note at the end of a text or number input, after the unit. */
+  aside?: string;
 }
 
 /**
@@ -92,6 +102,8 @@ const SIZE: Record<
     select: string;
     textarea: string;
     label: string;
+    /** a field's own label, over or beside its control (not a choice's) */
+    fieldLabel: string;
     desc: string;
     /** field-grid gaps */
     gap: string;
@@ -113,11 +125,16 @@ const SIZE: Record<
     radio: string;
   }
 > = {
+  // The dense tier — an ask in a conversation, an inspector. Controls are 28px,
+  // in px because a rem height drifts with the root, and the text stays at the
+  // 13px floor; the field label is muted and regular
+  // so the values, not the labels, carry the weight.
   xs: {
-    input: 'h-9',
-    select: 'h-9',
+    input: 'h-[28px] py-0',
+    select: 'h-[28px] py-0',
     textarea: '',
     label: 'text-base',
+    fieldLabel: 'font-normal text-muted-foreground',
     desc: 'text-base',
     gap: 'gap-x-3 gap-y-2.5',
     section: 'space-y-3',
@@ -134,6 +151,7 @@ const SIZE: Record<
     select: 'h-9',
     textarea: '',
     label: 'text-base',
+    fieldLabel: '',
     desc: 'text-base',
     gap: 'gap-x-3 gap-y-2',
     section: 'space-y-3',
@@ -150,6 +168,7 @@ const SIZE: Record<
     select: '',
     textarea: '',
     label: 'text-base',
+    fieldLabel: '',
     desc: 'text-base',
     gap: 'gap-4',
     section: 'space-y-4',
@@ -169,8 +188,10 @@ function itemClasses(
   className?: string
 ) {
   return cn(
+    // `space-y-0` undoes FormItem's own stacking, whose margin would push the
+    // control below its label in a row.
     labelPosition === 'side' &&
-      cn('grid grid-cols-3 items-center', SIZE[size].sideGap),
+      cn('grid grid-cols-3 items-center space-y-0', SIZE[size].sideGap),
     labelPosition === 'top' && SIZE[size].stack,
     className
   );
@@ -211,12 +232,34 @@ function FieldLabel({
 }) {
   if (!label && !badge) return null;
   return (
-    <FormLabel className={cn(SIZE[size].label, className)}>
+    <FormLabel className={cn(SIZE[size].label, SIZE[size].fieldLabel, className)}>
       {label}
       {badge && <StatusPill badge={badge} />}
     </FormLabel>
   );
 }
+
+/**
+ * An input with its unit and a short note drawn at its end — `30 %`,
+ * `17 d  quoted 14 d`. Without either it is the plain `Input`. Props other than
+ * `className` reach the `<input>`, so `FormControl` wires its id and aria there.
+ */
+const AffixedInput = React.forwardRef<
+  HTMLInputElement,
+  React.ComponentProps<'input'> & { unit?: string; aside?: string }
+>(({ unit, aside, className, ...props }, ref) => {
+  if (!unit && !aside) return <Input ref={ref} className={className} {...props} />;
+  return (
+    <InputGroup className={cn('bg-background dark:bg-background', className)}>
+      <InputGroupInput ref={ref} className="h-full" {...props} />
+      <InputGroupAddon align="inline-end" className="font-mono font-normal">
+        {unit && <span>{unit}</span>}
+        {aside && <span>{aside}</span>}
+      </InputGroupAddon>
+    </InputGroup>
+  );
+});
+AffixedInput.displayName = 'AffixedInput';
 
 export const InputField: React.FC<BaseFieldProps> = ({
   label,
@@ -224,6 +267,8 @@ export const InputField: React.FC<BaseFieldProps> = ({
   placeholder,
   value,
   onChange,
+  unit,
+  aside,
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
@@ -234,8 +279,10 @@ export const InputField: React.FC<BaseFieldProps> = ({
     <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
-        <Input
+        <AffixedInput
           className={SIZE[size].input}
+          unit={unit}
+          aside={aside}
           placeholder={placeholder}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
@@ -569,6 +616,8 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   min,
   max,
   step,
+  unit,
+  aside,
   labelPosition = 'side',
   size = 'sm',
   labelClassName,
@@ -579,13 +628,31 @@ export const NumberField: React.FC<BaseFieldProps> = ({
     <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
-        <SliderNumber
-          value={typeof value === 'number' ? value : 0}
-          onChange={onChange}
-          min={min}
-          max={max}
-          step={step}
-        />
+        {/* A bounded number gets the slider; an open one, such as a scenario
+            input, is typed, with its unit at the end. */}
+        {min != null && max != null ? (
+          <SliderNumber
+            value={typeof value === 'number' ? value : 0}
+            onChange={onChange}
+            min={min}
+            max={max}
+            step={step}
+          />
+        ) : (
+          <AffixedInput
+            type="number"
+            className={SIZE[size].input}
+            unit={unit}
+            aside={aside}
+            min={min}
+            max={max}
+            step={step}
+            value={typeof value === 'number' ? value : ''}
+            onChange={(e) =>
+              onChange?.(e.target.value === '' ? undefined : Number(e.target.value))
+            }
+          />
+        )}
       </FormControl>
       {description && (
         <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
@@ -658,6 +725,7 @@ function renderField(
       control={control}
       name={`${parentName}.${field.name}`}
       defaultValue={field.defaultValue as AnyValue}
+      rules={field.rules}
       render={({ field: rhf }) => {
         const common: BaseFieldProps = {
           label: field.label ?? humanize(field.name),
@@ -674,6 +742,8 @@ function renderField(
           boxed: field.boxed,
           labelClassName: field.labelClassName,
           badge: field.badge,
+          unit: field.unit,
+          aside: field.aside,
           labelPosition,
           size,
           value: rhf.value,
@@ -742,11 +812,34 @@ function renderGrid(
   labelPosition: LabelPosition,
   size: FieldSize,
   columns: number,
-  key?: string
+  key?: string,
+  fit: 'viewport' | 'container' = 'viewport'
 ) {
   // Default 2-col layout keeps the plain `md:grid-cols-2` utility; custom
   // counts drive the template from `--ff-cols`.
   const customCols = columns !== 2;
+  if (fit === 'container') {
+    // A form in a card answers to the card, not the screen: two columns once
+    // it is 280px wide, and a lone last field takes the whole row.
+    return (
+      <div key={key} className="@container">
+        <div
+          className={cn(
+            'grid grid-cols-1',
+            SIZE[size].gap,
+            columns > 1 &&
+              '@min-[280px]:grid-cols-2 @min-[280px]:[&>*:last-child:nth-child(odd)]:col-span-2'
+          )}
+        >
+          {fields.map((f) => (
+            <div key={f.name} className={f.className}>
+              {renderField(f, parentName, control, labelPosition, size)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       key={key}
@@ -790,10 +883,11 @@ function renderRows(
   control: any,
   labelPosition: LabelPosition,
   size: FieldSize,
-  columns: number
+  columns: number,
+  fit: 'viewport' | 'container' = 'viewport'
 ) {
   if (!rowConfig || rowConfig.length === 0) {
-    return renderGrid(fields, parentName, control, labelPosition, size, columns);
+    return renderGrid(fields, parentName, control, labelPosition, size, columns, undefined, fit);
   }
   const used = new Set(rowConfig.flatMap((r) => r.fields));
   const unassigned = fields.filter((f) => !used.has(f.name));
@@ -813,7 +907,8 @@ function renderRows(
           labelPosition,
           size,
           columns,
-          row.id
+          row.id,
+          fit
         );
       })}
       {unassigned.length > 0 &&
@@ -824,7 +919,8 @@ function renderRows(
           labelPosition,
           size,
           columns,
-          '_unassigned'
+          '_unassigned',
+          fit
         )}
     </div>
   );
@@ -839,6 +935,8 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   labelPosition = 'side',
   size = 'sm',
   columns = 2,
+  fit = 'viewport',
+  groupAs = 'accordion',
 }) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
@@ -864,12 +962,24 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
             control,
             labelPosition,
             size,
-            columns
+            columns,
+            fit
           )}
         </div>
       )}
 
-      {groupedEntries.length > 0 && (
+      {groupedEntries.length > 0 && groupAs === 'section' && (
+        <div className={SIZE[size].section}>
+          {groupedEntries.map(([group, gFields]) => (
+            <section key={group} className={SIZE[size].stack}>
+              <Eyebrow>{groupConfigById.get(group)?.label ?? humanize(group)}</Eyebrow>
+              {renderRows(gFields, rowConfig, name, control, labelPosition, size, columns, fit)}
+            </section>
+          ))}
+        </div>
+      )}
+
+      {groupedEntries.length > 0 && groupAs === 'accordion' && (
         <Accordion
           type="multiple"
           defaultValue={groupedEntries.map(([k]) => k)}
@@ -909,7 +1019,8 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
                     control,
                     labelPosition,
                     size,
-                    columns
+                    columns,
+                    fit
                   )}
                 </div>
               </AccordionContent>

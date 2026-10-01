@@ -92,7 +92,8 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      // The error ink goes last, so a label a size tier mutes still turns red.
+      className={cn(className, error && "text-destructive")}
       htmlFor={formItemId}
       {...props}
     />

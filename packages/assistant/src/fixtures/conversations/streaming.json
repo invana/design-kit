@@ -1,0 +1,106 @@
+{
+  "id": "streaming",
+  "title": "Summarising the airports graph",
+  "assistant": "Analyst",
+  "composer": {
+    "placeholder": "Ask anything about your graph…",
+    "controls": [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "options": [
+          {
+            "value": "nl",
+            "label": "Natural Language"
+          },
+          {
+            "value": "ql",
+            "label": "Query Language",
+            "placeholder": "MATCH (n) WHERE … RETURN n",
+            "mono": true
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "Model",
+        "quiet": true,
+        "options": [
+          {
+            "value": "qwen",
+            "label": "local · qwen3-27b"
+          },
+          {
+            "value": "gpt",
+            "label": "openai · gpt-4o-mini"
+          }
+        ]
+      },
+      {
+        "id": "timeout",
+        "label": "LLM + query timeout",
+        "align": "end",
+        "quiet": true,
+        "default": "120",
+        "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+        "options": [
+          {
+            "value": "30",
+            "label": "30s"
+          },
+          {
+            "value": "60",
+            "label": "1m"
+          },
+          {
+            "value": "120",
+            "label": "2m"
+          },
+          {
+            "value": "300",
+            "label": "5m"
+          }
+        ]
+      }
+    ],
+    "attach": true
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Summarise the airports graph for me.",
+      "at": "2026-09-30T09:00:00.000Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "running",
+      "label": "prose",
+      "trace": [
+        {
+          "id": "read",
+          "key": "read_schema",
+          "label": "Read",
+          "state": "done",
+          "detail": "8,412 nodes · 4 labels",
+          "duration": 420
+        },
+        {
+          "id": "write",
+          "key": "write_summary",
+          "label": "Write",
+          "state": "running",
+          "detail": "streaming the summary"
+        }
+      ],
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}

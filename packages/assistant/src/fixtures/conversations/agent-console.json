@@ -1,0 +1,207 @@
+{
+  "id": "agent-console",
+  "title": "Schema sync",
+  "assistant": "Analyst",
+  "composer": {
+    "placeholder": "Ask anything about your graph…",
+    "controls": [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "options": [
+          {
+            "value": "nl",
+            "label": "Natural Language"
+          },
+          {
+            "value": "ql",
+            "label": "Query Language",
+            "placeholder": "MATCH (n) WHERE … RETURN n",
+            "mono": true
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "Model",
+        "quiet": true,
+        "options": [
+          {
+            "value": "qwen",
+            "label": "local · qwen3-27b"
+          },
+          {
+            "value": "gpt",
+            "label": "openai · gpt-4o-mini"
+          }
+        ]
+      },
+      {
+        "id": "timeout",
+        "label": "LLM + query timeout",
+        "align": "end",
+        "quiet": true,
+        "default": "120",
+        "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+        "options": [
+          {
+            "value": "30",
+            "label": "30s"
+          },
+          {
+            "value": "60",
+            "label": "1m"
+          },
+          {
+            "value": "120",
+            "label": "2m"
+          },
+          {
+            "value": "300",
+            "label": "5m"
+          }
+        ]
+      }
+    ],
+    "attach": true
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Rename HideShowLayersPanel to LayersPanel across the graph",
+      "at": "2026-09-30T08:10:00.000Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "running",
+      "blocks": [],
+      "trace": [
+        {
+          "id": "find",
+          "key": "find_references",
+          "label": "rename-review",
+          "state": "waiting",
+          "detail": "keep current behaviour?",
+          "duration": 1800
+        },
+        {
+          "id": "apply",
+          "key": "apply_rename",
+          "label": "Apply",
+          "state": "pending"
+        }
+      ]
+    },
+    {
+      "id": "q1",
+      "role": "assistant",
+      "kind": "ask",
+      "stage": "check",
+      "state": "pending",
+      "waiting": "parked 38d",
+      "ask": {
+        "preset": "confirm",
+        "question": "HideShowLayersPanel also auto-shows hidden elements on select. **Keep that behaviour** in LayersPanel?",
+        "yes": "Keep it",
+        "no": "Drop it",
+        "default": true
+      }
+    },
+    {
+      "id": "u2",
+      "role": "analyst",
+      "text": "stop all the background tasks and summarise what changed",
+      "at": "2026-09-30T09:20:00.000Z"
+    },
+    {
+      "id": "a2",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "startedAt": "2026-09-30T09:20:00.000Z",
+      "at": "2026-09-30T09:20:06.000Z",
+      "duration": 6200,
+      "meta": "local · qwen3-27b · 50 rows · 12ms",
+      "trace": [
+        {
+          "id": "schema",
+          "key": "schema_agent",
+          "label": "schema-agent",
+          "state": "done",
+          "detail": "Collect affected node types · ↑ 18.4k tokens",
+          "duration": 2000
+        },
+        {
+          "id": "stop",
+          "key": "stop_tasks",
+          "label": "Stop tasks",
+          "state": "done",
+          "detail": "2 background tasks stopped",
+          "duration": 900
+        },
+        {
+          "id": "summarise",
+          "key": "summarise",
+          "label": "Summarise",
+          "state": "done",
+          "detail": "2 label counts changed",
+          "duration": 3300
+        }
+      ],
+      "envelope": {
+        "method": "MATCH (n)-[r]-(m)\nWHERE elementId(n) = \"4:08b0…:3933\"\nRETURN n, r, m LIMIT 50",
+        "caveats": [
+          {
+            "label": "API error",
+            "text": "Could not reach the query server once (ENOTFOUND); the retry succeeded."
+          }
+        ]
+      },
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "All background tasks are stopped. **Two label counts changed** while the sync ran; nothing else was touched."
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "role": "analyst",
+      "text": "Which airports lost routes in the sync?",
+      "at": "2026-09-30T09:24:00.000Z"
+    },
+    {
+      "id": "a3",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "running",
+      "blocks": [],
+      "trace": [
+        {
+          "id": "understand",
+          "key": "translate_thought",
+          "label": "Understand",
+          "state": "done",
+          "detail": "proposed Cypher · 4 lines",
+          "duration": 850
+        },
+        {
+          "id": "execute",
+          "key": "execute_graph_query",
+          "label": "query-agent",
+          "state": "running",
+          "detail": "Translate prompt and run it"
+        },
+        {
+          "id": "project",
+          "key": "shape_for_canvas",
+          "label": "Project",
+          "state": "pending"
+        }
+      ]
+    }
+  ]
+}

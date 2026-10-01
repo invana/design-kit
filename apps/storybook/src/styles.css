@@ -36,3 +36,4 @@
 @source "../../../packages/editor/src/**/*.{js,ts,jsx,tsx}";
 @source "../../../packages/dashboard/src/**/*.{js,ts,jsx,tsx}";
 @source "../../../packages/charts/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../packages/assistant/src/**/*.{js,ts,jsx,tsx}";

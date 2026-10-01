@@ -1,0 +1,117 @@
+{
+  "id": "turn-labels",
+  "title": "Who is speaking",
+  "analyst": "Planner",
+  "assistant": "Assistant",
+  "composer": {
+    "placeholder": "Ask anything about your graph…",
+    "controls": [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "options": [
+          {
+            "value": "nl",
+            "label": "Natural Language"
+          },
+          {
+            "value": "ql",
+            "label": "Query Language",
+            "placeholder": "MATCH (n) WHERE … RETURN n",
+            "mono": true
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "Model",
+        "quiet": true,
+        "options": [
+          {
+            "value": "qwen",
+            "label": "local · qwen3-27b"
+          },
+          {
+            "value": "gpt",
+            "label": "openai · gpt-4o-mini"
+          }
+        ]
+      },
+      {
+        "id": "timeout",
+        "label": "LLM + query timeout",
+        "align": "end",
+        "quiet": true,
+        "default": "120",
+        "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+        "options": [
+          {
+            "value": "30",
+            "label": "30s"
+          },
+          {
+            "value": "60",
+            "label": "1m"
+          },
+          {
+            "value": "120",
+            "label": "2m"
+          },
+          {
+            "value": "300",
+            "label": "5m"
+          }
+        ]
+      }
+    ],
+    "attach": true
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Which suppliers are late this month?",
+      "at": "2026-09-30T09:00:00.000Z"
+    },
+    {
+      "id": "q1",
+      "role": "assistant",
+      "kind": "ask",
+      "stage": "frame",
+      "state": "answered",
+      "answeredAt": "2026-09-30T09:00:20.000Z",
+      "ask": {
+        "preset": "single",
+        "question": "Late against **which date**?",
+        "label": "Late against",
+        "options": [
+          {
+            "value": "promised",
+            "label": "The promised date"
+          },
+          {
+            "value": "requested",
+            "label": "The requested date"
+          }
+        ],
+        "default": "promised"
+      },
+      "value": "promised"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "startedAt": "2026-09-30T09:00:20.000Z",
+      "at": "2026-09-30T09:00:22.000Z",
+      "duration": 1900,
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "**7 of 42 suppliers** delivered after the promised date this month; Apex Components alone is 11 days late on average."
+        }
+      ]
+    }
+  ]
+}

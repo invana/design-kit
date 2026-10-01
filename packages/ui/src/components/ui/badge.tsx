@@ -45,6 +45,8 @@ const badgeVariants = cva(
           "[--badge-solid:var(--color-warning)] [--badge-on-solid:var(--color-warning-foreground)] [--badge-ink:var(--color-warning)]",
         info:
           "[--badge-solid:var(--color-info)] [--badge-on-solid:var(--color-info-foreground)] [--badge-ink:var(--color-info)]",
+        destructive:
+          "[--badge-solid:var(--color-destructive)] [--badge-on-solid:var(--color-destructive-foreground)] [--badge-ink:var(--color-destructive)]",
         muted:
           "[--badge-solid:var(--color-muted-foreground)] [--badge-on-solid:var(--color-background)] [--badge-ink:var(--color-muted-foreground)]",
       },

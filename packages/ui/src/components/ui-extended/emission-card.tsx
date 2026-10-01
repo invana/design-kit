@@ -6,6 +6,9 @@ import { cn } from "../../lib/utils"
  * How an answer's records are rendered. A kind is a *body inside* the emission
  * card, never a block of its own (DS9) — so this names the body, it does not
  * pick a different container.
+ *
+ * Open: the names below are the common ones, and an assistant answer labels
+ * its card in the grammar's own words — `ranked`, `scenario`, `model check`.
  */
 export type EmissionKind =
   | "metric"
@@ -15,10 +18,14 @@ export type EmissionKind =
   | "prose"
   | "empty"
   | "html"
+  | (string & {})
 
 export interface EmissionHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+  // `title` is what the card shows, not the element's tooltip attribute.
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   kind: EmissionKind
+  /** What the card shows, in words — `Apex Components, weekly lead time`. */
+  title?: React.ReactNode
   /** The projection template that rendered it — `table-compact@3`. Shown in mono. */
   template?: React.ReactNode
   /**
@@ -38,6 +45,7 @@ export interface EmissionHeaderProps
 export interface EmissionCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
     Omit<EmissionHeaderProps, keyof React.HTMLAttributes<HTMLDivElement>> {
+  title?: React.ReactNode
   /** Set false to render the body alone, where a surface supplies its own header. */
   showHeader?: boolean
   children?: React.ReactNode
@@ -50,20 +58,25 @@ export interface EmissionCardProps
  * result, a scheduled answer (DS7). It is exported on its own so a surface that
  * already owns its container can still show the same header rather than
  * inventing a second one that drifts.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const EmissionHeader = React.forwardRef<
   HTMLDivElement,
   EmissionHeaderProps
->(({ kind, template, citation, note, actions, className, ...props }, ref) => (
+>(({ kind, title, template, citation, note, actions, className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted/40 px-2 text-sm",
+      "flex h-6 shrink-0 items-center gap-2 border-b border-border bg-muted px-2 text-sm",
       className,
     )}
     {...props}
   >
     <span className="shrink-0 font-medium">{kind}</span>
+    {title != null ? (
+      <span className="truncate text-muted-foreground">{title}</span>
+    ) : null}
     {template != null ? (
       <span className="truncate font-mono text-muted-foreground">{template}</span>
     ) : null}
@@ -93,11 +106,14 @@ EmissionHeader.displayName = "EmissionHeader"
  * object (DS6). It does not know what an Observation is, and it does not fetch,
  * re-render or re-query anything; switching templates is the caller's job,
  * handed in through `actions`.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
   (
     {
       kind,
+      title,
       template,
       citation,
       note,
@@ -118,6 +134,7 @@ export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
       {showHeader ? (
         <EmissionHeader
           kind={kind}
+          title={title}
           template={template}
           citation={citation}
           note={note}
@@ -131,8 +148,22 @@ export const EmissionCard = React.forwardRef<HTMLDivElement, EmissionCardProps>(
 EmissionCard.displayName = "EmissionCard"
 
 /**
+ * The card's body: its blocks in one padded column, each a step apart.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
+ */
+export const EmissionBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("flex min-w-0 flex-col gap-2 p-2", className)} {...props} />
+  ),
+)
+EmissionBody.displayName = "EmissionBody"
+
+/**
  * The `prose` body's citation marker — the superscript that ties a clause to
- * the records behind it.
+ * the records behind it. Set `data-active` while its source is the one in view.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export const CitationMarker = React.forwardRef<
   HTMLElement,
@@ -140,7 +171,11 @@ export const CitationMarker = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <sup
     ref={ref}
-    className={cn("px-0.5 align-super text-[0.7em] text-primary", className)}
+    className={cn(
+      "ml-px rounded-sm align-super font-mono text-xs leading-none text-info",
+      "data-[active=true]:bg-info/15 data-[active=true]:px-0.5",
+      className,
+    )}
     {...props}
   >
     {children}

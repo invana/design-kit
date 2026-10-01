@@ -40,6 +40,8 @@ export interface ChatSessionComposerProps {
  * Deliberately dependency-free — no query-language editor or provider selects
  * are baked in. Drop your own controls into `toolbarStart` / `toolbarEnd` (and
  * a QL editor into a custom layout if you need one).
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionComposer({
   value,

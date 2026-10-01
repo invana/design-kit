@@ -8,6 +8,7 @@ export type {
   ColumnFiltersState,
   ColumnOrderState,
   ColumnPinningState,
+  ExpandedState,
   PaginationState,
   SortingState,
   VisibilityState,

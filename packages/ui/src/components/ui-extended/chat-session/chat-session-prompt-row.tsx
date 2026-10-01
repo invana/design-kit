@@ -20,6 +20,8 @@ export interface ChatSessionPromptRowProps {
  * Full bleed assumes the default `ChatSession` body padding (`p-3`) — the
  * negative margins here cancel it. If you override `bodyClassName` with a
  * different horizontal padding, pass matching `-mx-*`/`px-*` via `className`.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionPromptRow({
   children,

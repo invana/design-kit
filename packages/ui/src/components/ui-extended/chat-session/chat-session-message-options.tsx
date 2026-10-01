@@ -43,6 +43,8 @@ export interface ChatSessionMessageOptionsProps {
  *
  * Purely presentational and icon-agnostic: you supply the icons and handlers, so
  * it slots into any backend.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSessionMessageOptions({
   actions,

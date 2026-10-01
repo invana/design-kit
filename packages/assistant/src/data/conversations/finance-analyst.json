@@ -1,0 +1,812 @@
+{
+  "id": "finance-analyst",
+  "name": "Finance Analyst",
+  "role": "Runs FP&A and the month-end close for a mid-size group: explains variance to budget, books accruals, reforecasts and watches cash.",
+  "model": "cloud · claude-sonnet-5",
+  "steps": {
+    "understand": { "key": "translate_to_sql" },
+    "validate": { "key": "check_sql" },
+    "execute": { "key": "execute_ledger_query" },
+    "project": { "key": "shape_for_pack" }
+  },
+  "record": {
+    "understand": {
+      "input": [
+        { "label": "schema", "value": "finance warehouse v7 · gl_lines, cost_centres, budgets, accruals, ap_invoices, ar_ledger, bank_balances" },
+        { "label": "context", "value": "14 prior turns (5 answers, 4 asks, 1 proposal)" },
+        { "label": "model", "value": "cloud · claude-sonnet-5 · timeout 120s" }
+      ],
+      "output": [
+        {
+          "label": "query",
+          "value": "SELECT date_trunc('week', b.value_date) AS wk,\n       sum(b.closing_gbp) AS cash_gbp\nFROM bank_balances b\nJOIN entities e USING (entity_id)\nWHERE e.group_code = 'HALDEN'\n  AND b.value_date BETWEEN DATE '2026-08-01' AND DATE '2026-09-30'\nGROUP BY 1\nORDER BY 1",
+          "code": true
+        },
+        { "label": "tokens", "value": "3,140 in · 124 out" }
+      ]
+    },
+    "validate": {
+      "input": [{ "label": "query", "value": "sha256:7c2e…41ab" }],
+      "output": [
+        { "label": "verdict", "value": "read-only · no INSERT / UPDATE / DELETE / MERGE" },
+        { "label": "tables", "value": "bank_balances, entities — both in finance warehouse v7" },
+        { "label": "entitlement", "value": "group consolidated · FP&A view" }
+      ]
+    },
+    "execute": {
+      "input": [
+        { "label": "query", "value": "sha256:7c2e…41ab" },
+        { "label": "connection", "value": "snowflake · fin_wh · FPA_RO role" },
+        { "label": "limits", "value": "timeout 60s · 50,000 rows" }
+      ],
+      "output": [
+        { "label": "rows", "value": "427 · 2 batches" },
+        { "label": "scanned", "value": "3.4 MB · 0.6 s warehouse time" }
+      ]
+    },
+    "project": {
+      "input": [{ "label": "rows", "value": "sha256:e05d…9b12" }],
+      "output": [{ "label": "pack", "value": "9 weekly balances · 13-week forecast · 4 tiles" }]
+    }
+  },
+  "session": {
+    "id": "session-finance-analyst",
+    "title": "Q3 opex over budget, then the reforecast",
+    "analyst": "FP&A",
+    "assistant": "Analyst",
+    "composer": {
+      "placeholder": "Ask about the ledger, a budget line or the forecast…",
+      "controls": [
+        {
+          "id": "entity",
+          "label": "Entity",
+          "options": [
+            { "value": "group", "label": "Group, consolidated" },
+            { "value": "uk", "label": "Halden UK Ltd" },
+            { "value": "ie", "label": "Halden Ireland DAC" },
+            { "value": "us", "label": "Halden US Inc" }
+          ]
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "quiet": true,
+          "options": [
+            { "value": "claude", "label": "cloud · claude-sonnet-5" },
+            { "value": "gpt", "label": "openai · gpt-4o-mini" },
+            { "value": "qwen", "label": "local · qwen3-27b" }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "LLM + query timeout",
+          "align": "end",
+          "quiet": true,
+          "default": "120",
+          "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+          "options": [
+            { "value": "30", "label": "30s" },
+            { "value": "60", "label": "1m" },
+            { "value": "120", "label": "2m" },
+            { "value": "300", "label": "5m" }
+          ]
+        }
+      ],
+      "attach": { "accept": ".xlsx,.csv,.pdf", "multiple": true }
+    },
+    "turns": [
+      {
+        "id": "t1",
+        "role": "analyst",
+        "text": "Why did Q3 opex come in 6% over budget?"
+      },
+      {
+        "id": "t2",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "frame",
+        "state": "answered",
+        "ask": {
+          "preset": "single",
+          "question": "Which **budget version** should I measure against?",
+          "label": "Budget",
+          "options": [
+            { "value": "b26", "label": "B26 original budget", "detail": "approved Feb", "description": "Q3 opex £24.00M" },
+            { "value": "rf2", "label": "RF2, the Q2 reforecast", "detail": "approved Jul", "description": "Q3 opex £24.65M" },
+            { "value": "rf1", "label": "RF1, the Q1 reforecast", "detail": "approved Apr", "description": "Q3 opex £24.20M" }
+          ],
+          "default": "b26",
+          "hint": "Default: **B26**, the version the board pack reports against"
+        },
+        "value": "b26"
+      },
+      {
+        "id": "t3",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "scope",
+        "state": "answered",
+        "ask": {
+          "preset": "period",
+          "question": "September is only soft-closed. Which period?",
+          "options": [
+            { "value": "q3-soft", "label": "Q3, September soft close", "from": "2026-07-01", "to": "2026-09-30" },
+            { "value": "jul-aug", "label": "July and August, hard closed", "from": "2026-07-01", "to": "2026-08-31" },
+            { "value": "ytd", "label": "Year to date", "from": "2026-01-01", "to": "2026-09-30" }
+          ],
+          "default": "q3-soft",
+          "custom": true,
+          "hint": "September journals still open until WD5, 7 Oct"
+        },
+        "value": { "from": "2026-07-01", "to": "2026-09-30", "label": "Q3, September soft close" }
+      },
+      {
+        "id": "t4",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "diagnose",
+        "pattern": "bridge",
+        "label": "chart",
+        "title": "Q3 opex, budget to actual, £M",
+        "trace": [
+          { "id": "load", "label": "Loaded Q3 GL lines and the B26 budget", "detail": "48,212 lines · 14 cost centres", "state": "done" },
+          { "id": "map", "label": "Mapped accounts to the management P&L", "detail": "212 accounts → 9 opex lines", "state": "done" },
+          { "id": "bridge", "label": "Bridged budget to actual by driver", "detail": "6 drivers · reconciles to £0.00M", "state": "done" }
+        ],
+        "envelope": {
+          "scope": ["Q3 2026, Jul–Sep", "Group, consolidated", "Opex only", "vs B26 original budget"],
+          "grounding": { "records": 48212, "noun": "GL lines" },
+          "freshness": "1 Oct 06:00",
+          "caveats": [
+            { "label": "soft close", "text": "September includes £0.64M of estimated accruals. Journals stay open until WD5, so the actual may still move by a few tens of thousands." }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "Opex came in at **£25.44M** against a budget of £24.00M, **▲ £1.44M (6.0%)** over. Contractors (**£0.62M**) and cloud hosting (**£0.41M**) explain most of it; the brand campaign pulled forward from Q4 and the Project Kestrel legal fees add another **£0.67M**. Travel and a weaker dollar gave back £0.26M."
+          },
+          {
+            "preset": "waterfall",
+            "unit": "£M",
+            "start": { "label": "B26 budget", "value": 24.0 },
+            "steps": [
+              { "label": "Contractors", "value": 0.62 },
+              { "label": "Cloud hosting", "value": 0.41 },
+              { "label": "Brand campaign", "value": 0.38 },
+              { "label": "Legal fees", "value": 0.29 },
+              { "label": "Travel & other", "value": -0.12 },
+              { "label": "FX on USD spend", "value": -0.14 }
+            ],
+            "end": { "label": "Q3 actual", "value": 25.44 }
+          },
+          {
+            "preset": "ranked",
+            "diverging": { "below": "under budget", "above": "over budget" },
+            "items": [
+              { "label": "Engineering", "value": 0.71, "display": "+£0.71M" },
+              { "label": "Marketing", "value": 0.42, "display": "+£0.42M" },
+              { "label": "Legal & Finance", "value": 0.31, "display": "+£0.31M" },
+              { "label": "Operations", "value": 0.08, "display": "+£0.08M" },
+              { "label": "G&A", "value": -0.08, "display": "−£0.08M" }
+            ]
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              { "label": "General ledger, Q3 2026", "count": "48,212", "detail": "gl_lines · soft close 30 Sep" },
+              { "label": "B26 budget, opex by cost centre", "count": "14 cost centres", "detail": "budgets · approved 18 Feb" },
+              { "label": "Accruals register, September", "count": "37", "detail": "accruals · 1 Oct 06:00" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t5",
+        "role": "analyst",
+        "text": "Break Engineering down. Is it the contractors?"
+      },
+      {
+        "id": "t6",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "rank",
+        "pattern": "ranking",
+        "label": "ranked",
+        "title": "Engineering, Q3 variance by cost line",
+        "trace": [
+          { "id": "load", "label": "Loaded Engineering cost centres", "detail": "CC 410–418 · 11,064 lines", "state": "done" },
+          { "id": "match", "label": "Matched contractor invoices to open POs", "detail": "23 contractors · 6 backfilling vacancies", "state": "done" },
+          { "id": "rank", "label": "Ranked cost lines by variance", "state": "done" }
+        ],
+        "envelope": {
+          "scope": ["Q3 2026", "Engineering, CC 410–418", "vs B26"],
+          "grounding": { "records": 11064, "noun": "GL lines" },
+          "freshness": "1 Oct 06:00"
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "Partly. Contractors are **▲ £0.52M** over, but six of them backfill vacant roles, so salaries sit **▼ £0.18M** under; the net people cost is ▲ £0.34M. Cloud hosting is the other half, **▲ £0.34M**, of which £0.21M is September's AWS accrual."
+          },
+          {
+            "preset": "ranked",
+            "diverging": { "below": "under budget", "above": "over budget" },
+            "items": [
+              { "label": "Contractors", "value": 0.52, "display": "+£0.52M" },
+              { "label": "Cloud hosting", "value": 0.34, "display": "+£0.34M" },
+              { "label": "Software licences", "value": 0.06, "display": "+£0.06M" },
+              { "label": "Recruitment fees", "value": -0.03, "display": "−£0.03M" },
+              { "label": "Salaries & benefits", "value": -0.18, "display": "−£0.18M" }
+            ]
+          },
+          {
+            "preset": "table",
+            "columns": [
+              { "key": "line", "label": "Cost line" },
+              { "key": "budget", "label": "Budget", "align": "right" },
+              { "key": "actual", "label": "Actual", "align": "right" },
+              { "key": "var", "label": "Variance", "align": "right" },
+              { "key": "pct", "label": "Var %", "align": "right" }
+            ],
+            "rows": [
+              { "line": "Salaries & benefits", "budget": "£5.40M", "actual": "£5.22M", "var": { "value": "−£0.18M", "tone": "good" }, "pct": "−3.3%" },
+              { "line": "Contractors", "budget": "£0.60M", "actual": "£1.12M", "var": { "value": "+£0.52M", "tone": "bad", "strong": true }, "pct": "+86.7%" },
+              { "line": "Cloud hosting", "budget": "£1.30M", "actual": "£1.64M", "var": { "value": "+£0.34M", "tone": "bad" }, "pct": "+26.2%" },
+              { "line": "Software licences", "budget": "£0.62M", "actual": "£0.68M", "var": { "value": "+£0.06M", "tone": "bad" }, "pct": "+9.7%" },
+              { "line": "Recruitment fees", "budget": "£0.28M", "actual": "£0.25M", "var": { "value": "−£0.03M", "tone": "good" }, "pct": "−10.7%" }
+            ],
+            "noun": "cost lines",
+            "sort": { "key": "var", "dir": "desc" },
+            "highlight": [1],
+            "totals": { "line": "Engineering", "budget": "£8.20M", "actual": "£8.91M", "var": { "value": "+£0.71M", "tone": "bad" }, "pct": "+8.7%" }
+          }
+        ]
+      },
+      {
+        "id": "t7",
+        "role": "analyst",
+        "text": "How much of the £1.44M is timing or one-off? Check the accruals."
+      },
+      {
+        "id": "t8",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "check",
+        "state": "answered",
+        "ask": {
+          "preset": "multi",
+          "question": "Which of these should I treat as **timing or one-off**?",
+          "description": "Ticked items come out of the underlying run-rate; the rest stays in.",
+          "label": "Excluded",
+          "options": [
+            { "value": "campaign", "label": "Brand campaign pulled forward from Q4", "description": "Timing · Q4 budget releases the same amount", "figure": { "value": "£0.38M", "unit": "Marketing" } },
+            { "value": "kestrel", "label": "Project Kestrel legal due diligence", "description": "One-off · Harrow & Pike LLP", "figure": { "value": "£0.29M", "unit": "Legal" } },
+            { "value": "aws", "label": "September AWS accrual", "description": "Estimate · invoice due 5 Oct", "figure": { "value": "£0.21M", "unit": "Engineering" } },
+            { "value": "contractors", "label": "Contractor rate uplift", "description": "Recurring · POs extended to December", "figure": { "value": "£0.14M", "unit": "Engineering", "tone": "warn" } }
+          ],
+          "default": ["campaign", "kestrel", "aws"],
+          "submit": "Exclude {count}",
+          "hint": "From the September accruals register and the Q3 journals tagged **non-recurring**"
+        },
+        "value": ["campaign", "kestrel", "aws"]
+      },
+      {
+        "id": "t9",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "label": "accruals",
+        "title": "Q3 opex variance, reported and underlying",
+        "trace": [
+          { "id": "accruals", "label": "Read the September accruals register", "detail": "37 accruals · £0.64M", "state": "done" },
+          { "id": "tags", "label": "Pulled journals tagged non-recurring", "detail": "12 journals", "state": "done" },
+          { "id": "adjust", "label": "Removed 3 items from the run-rate", "detail": "£0.88M", "state": "done" }
+        ],
+        "envelope": {
+          "scope": ["Q3 2026", "Group, consolidated", "vs B26", "3 items excluded"],
+          "grounding": { "records": 49, "noun": "accruals and journals" },
+          "freshness": "1 Oct 06:00",
+          "caveats": [
+            { "label": "estimate", "text": "The AWS accrual is last month's usage plus 4%. The invoice lands on 5 Oct; a true-up of ±£30k is typical." }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "**£0.88M** of the overspend is timing or one-off. Take it out and the underlying variance is **▲ £0.56M (2.3%)**, driven by contractors and cloud usage that will recur in Q4."
+          },
+          {
+            "preset": "grid",
+            "tiles": [
+              { "label": "Reported variance", "value": "+£1.44M", "delta": "6.0% over B26", "tone": "bad" },
+              { "label": "Timing & one-off", "value": "£0.88M", "delta": "3 items" },
+              { "label": "Underlying variance", "value": "+£0.56M", "delta": "2.3% over B26", "tone": "warn", "flag": true }
+            ]
+          },
+          {
+            "preset": "timeline",
+            "events": [
+              { "when": "3 Jul", "text": "Project Kestrel NDA signed; Harrow & Pike engaged", "detail": "£0.29M billed Jul–Sep", "section": "One-off" },
+              { "when": "14 Aug", "text": "Brand campaign launched, moved up from October", "detail": "£0.38M · Q4 budget releases it", "section": "Timing" },
+              { "when": "29 Sep", "text": "AWS September usage accrued", "detail": "£0.21M estimate · invoice due 5 Oct", "section": "Timing", "tone": "warn", "highlight": true },
+              { "when": "30 Sep", "text": "Contractor POs extended to 31 Dec", "detail": "11 of 23 contractors · stays in the run-rate", "section": "Recurring", "tone": "bad" }
+            ]
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              { "label": "Accruals register, September", "count": "37", "detail": "accruals · 1 Oct 06:00" },
+              { "label": "Journals tagged non-recurring, Q3", "count": "12", "detail": "gl_lines · soft close" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t10",
+        "role": "analyst",
+        "text": "What does this do to the full-year forecast?"
+      },
+      {
+        "id": "t11",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "forecast",
+        "pattern": "forecast",
+        "label": "forecast",
+        "title": "Group opex by month, £M",
+        "trace": [
+          { "id": "actuals", "label": "Loaded monthly actuals, Jan–Sep", "detail": "9 months · £73.14M", "state": "done" },
+          { "id": "runrate", "label": "Projected Q4 from the Q3 underlying run-rate", "detail": "£24.56M base", "state": "done" },
+          { "id": "adjust", "label": "Added contractor extensions and cloud growth", "detail": "+£0.82M", "state": "done" }
+        ],
+        "envelope": {
+          "scope": ["FY 2026, Jan–Dec", "Group, consolidated", "vs B26", "Q4 at Q3 underlying run-rate"],
+          "grounding": { "records": 9, "noun": "closed months" },
+          "freshness": "1 Oct 06:00",
+          "method": "Q4 = Q3 underlying (£24.56M) + contractors to 31 Dec (£0.45M) + cloud growth at 6% a quarter (£0.37M)",
+          "caveats": [
+            { "label": "Kestrel", "text": "If the Kestrel deal proceeds to signing, legal and advisory fees add a further £0.4–0.6M in Q4. None of it is in this forecast." }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "Full-year opex lands at **£98.52M**, **▲ £2.52M (2.6%)** over the £96.00M budget. Year to date is £1.14M over; Q4 adds another £1.38M at the current run-rate."
+          },
+          {
+            "preset": "timeseries",
+            "unit": "£M",
+            "forecastFrom": "2026-09-01",
+            "forecastLabel": "Sep soft close",
+            "series": [
+              {
+                "name": "Actual",
+                "points": [
+                  ["2026-01-01", 7.82], ["2026-02-01", 7.79], ["2026-03-01", 7.99],
+                  ["2026-04-01", 8.02], ["2026-05-01", 7.96], ["2026-06-01", 8.12],
+                  ["2026-07-01", 8.31], ["2026-08-01", 8.49], ["2026-09-01", 8.64]
+                ]
+              },
+              {
+                "name": "Forecast",
+                "points": [["2026-09-01", 8.64], ["2026-10-01", 8.52], ["2026-11-01", 8.47], ["2026-12-01", 8.39]]
+              },
+              {
+                "name": "B26 budget",
+                "points": [
+                  ["2026-01-01", 8.0], ["2026-02-01", 8.0], ["2026-03-01", 8.0],
+                  ["2026-04-01", 8.0], ["2026-05-01", 8.0], ["2026-06-01", 8.0],
+                  ["2026-07-01", 8.0], ["2026-08-01", 8.0], ["2026-09-01", 8.0],
+                  ["2026-10-01", 8.0], ["2026-11-01", 8.0], ["2026-12-01", 8.0]
+                ]
+              }
+            ],
+            "marks": [{ "at": "2026-08-01", "label": "campaign pulled forward", "tone": "warn" }]
+          },
+          {
+            "preset": "record",
+            "rows": [
+              { "label": "FY budget, B26", "value": "£96.00M", "source": "budgets" },
+              { "label": "Actual, Jan–Sep", "value": "£73.14M", "source": "general ledger" },
+              { "label": "Forecast, Q4", "value": "£25.38M", "source": "Q3 run-rate" },
+              { "label": "FY forecast", "value": "£98.52M" },
+              { "label": "Variance to budget", "value": "+£2.52M · 2.6%" },
+              { "label": "Range", "value": "£97.9M – £99.1M", "source": "±1 month's cloud and contractor swing" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t12",
+        "role": "analyst",
+        "text": "Draft an RF3 reforecast on this basis."
+      },
+      {
+        "id": "t13",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "act",
+        "state": "answered",
+        "ask": {
+          "preset": "form",
+          "question": "RF3 assumptions",
+          "description": "Everything else carries the Q3 underlying run-rate forward.",
+          "labels": "side",
+          "fields": [
+            { "name": "contractorsEnd", "label": "Contractors end", "type": "date", "default": "2026-12-31", "group": "People", "hint": "11 POs currently run to 31 Dec" },
+            { "name": "awsDiscount", "label": "AWS commit discount", "type": "number", "unit": "%", "default": 12, "group": "Cloud", "aside": "from 1 Nov", "above": 0, "below": 40 },
+            { "name": "kestrel", "label": "Kestrel provision", "type": "number", "unit": "£k", "default": 450, "group": "One-offs", "hint": "Midpoint of the £0.4–0.6M advisers' estimate" },
+            { "name": "fx", "label": "USD rate", "type": "number", "unit": "$/£", "default": 1.31, "group": "Rates", "aside": "spot 1.31" }
+          ],
+          "submit": "Draft RF3"
+        },
+        "value": { "contractorsEnd": "2026-12-31", "awsDiscount": 12, "kestrel": 450, "fx": 1.31 }
+      },
+      {
+        "id": "t14",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "label": "proposal",
+        "title": "from this thread",
+        "trace": [
+          { "id": "copy", "label": "Copied RF2 as the RF3 base", "detail": "14 cost centres · 168 lines", "state": "done" },
+          { "id": "apply", "label": "Applied 4 assumptions to Q4", "detail": "+£0.38M on the run-rate forecast", "state": "done" },
+          { "id": "pack", "label": "Wrote the draft workbook and commentary", "detail": "2 files", "state": "done" }
+        ],
+        "envelope": {
+          "scope": ["FY 2026", "Group, consolidated", "RF3 draft"],
+          "freshness": "1 Oct 06:00"
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "RF3 puts full-year opex at **£98.90M**, **▲ £2.90M (3.0%)** over B26: the £98.52M run-rate forecast, plus the **£0.45M** Kestrel provision, less **£0.07M** from the AWS commit discount."
+          },
+          {
+            "preset": "proposal",
+            "heading": "Submit RF3 as the working forecast",
+            "rows": [
+              { "label": "Version", "value": "RF3 · FY 2026 · draft" },
+              { "label": "FY opex", "value": "£98.90M · +£2.90M vs B26" },
+              { "label": "Q4 opex", "value": "£25.76M · +£1.76M vs B26" },
+              { "label": "Approvers", "value": "Head of FP&A, then the CFO" }
+            ],
+            "figures": [
+              { "label": "Cost centres", "value": "14" },
+              { "label": "Lines changed", "value": "38" },
+              { "label": "Approvers", "value": "2" }
+            ],
+            "consequence": "Writes RF3 to the planning system as a draft and sends it for approval. RF2 stays the reported forecast until the CFO approves.",
+            "actions": [
+              { "id": "submit-rf3", "label": "Submit for approval", "variant": "primary" },
+              { "id": "save-draft", "label": "Save as draft", "variant": "secondary" },
+              { "id": "not-now", "label": "Not now", "variant": "ghost" }
+            ]
+          },
+          {
+            "preset": "files",
+            "download": true,
+            "files": [
+              { "name": "RF3_opex_draft_FY26.xlsx", "size": "412 KB", "digest": "a4c19e07", "note": "14 cost centres · monthly · RF3 vs B26 vs RF2" },
+              { "name": "Q3_opex_variance_commentary.docx", "size": "38 KB", "digest": "5f02bd81", "note": "board-pack commentary · 2 pages" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t15",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "explain",
+        "state": "pending",
+        "ask": {
+          "preset": "suggestions",
+          "groups": [
+            { "label": "Go deeper", "items": ["What's our cash runway, and how is working capital moving?", "Which contractors could convert to permanent hires?"] },
+            { "label": "Act", "items": ["Set an alert if October cloud spend passes £0.60M"] }
+          ]
+        }
+      }
+    ]
+  },
+  "runs": {
+    "send": {
+      "prompt": "What's our cash runway, and how is working capital moving?",
+      "thinking": "Runway is closing cash over average monthly net burn. Use the group's bank balances at 30 Sep, Q3's burn as the rate, and the treasury 13-week forecast for the shape ahead. Working capital: debtor days from the AR ledger against trailing revenue, compared with June.",
+      "progress": {
+        "understood": "proposed SQL · 9 lines · confidence 0.92",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · bank_balances, entities, ar_ledger",
+        "batches": [
+          "212 balances so far · batch 1",
+          "427 balances so far · batch 2",
+          "427 rows · 2 batches"
+        ],
+        "projecting": "rolling daily balances into weeks",
+        "projected": "9 weeks actual · 13 weeks forecast · 4 tiles"
+      },
+      "answer": {
+        "text": "Cash closed September at **£18.6M**. At Q3's net burn of **£1.55M a month** that is **12.0 months** of runway, and £13.6M of headroom over the £5M covenant minimum. Debtor days rose to **52** from 46 in June, which tied up £2.5M.",
+        "blocks": [
+          {
+            "preset": "grid",
+            "tiles": [
+              { "label": "Cash, 30 Sep", "value": "£18.6M", "delta": "▼ £4.65M vs 30 Jun", "trend": [23.25, 22.4, 21.9, 20.2, 20.6, 19.9, 18.6] },
+              { "label": "Net burn", "value": "£1.55M", "delta": "a month, Q3 average" },
+              { "label": "Runway", "value": "12.0 mo", "delta": "at Q3 burn", "tone": "warn" },
+              { "label": "Debtor days", "value": "52", "delta": "▲ 6 vs June", "tone": "bad" }
+            ]
+          },
+          {
+            "preset": "metric",
+            "label": "Headroom over covenant minimum",
+            "value": "£13.6M",
+            "delta": "minimum liquidity £5.0M · tested quarterly",
+            "tone": "good",
+            "gauge": { "value": 18.6, "target": 5, "min": 0, "max": 25, "unit": "£M" }
+          },
+          {
+            "preset": "timeseries",
+            "unit": "£M",
+            "forecastFrom": "2026-09-25",
+            "forecastLabel": "today",
+            "series": [
+              {
+                "name": "Cash, actual",
+                "points": [
+                  ["2026-08-07", 21.9], ["2026-08-14", 21.4], ["2026-08-21", 22.3], ["2026-08-28", 20.2],
+                  ["2026-09-04", 20.6], ["2026-09-11", 19.9], ["2026-09-18", 20.4], ["2026-09-25", 18.6]
+                ]
+              },
+              {
+                "name": "13-week forecast",
+                "points": [
+                  ["2026-09-25", 18.6], ["2026-10-02", 18.9], ["2026-10-09", 18.1], ["2026-10-16", 18.5],
+                  ["2026-10-23", 18.8], ["2026-10-30", 16.9], ["2026-11-06", 17.3], ["2026-11-13", 17.6],
+                  ["2026-11-20", 17.9], ["2026-11-27", 16.0], ["2026-12-04", 16.4], ["2026-12-11", 16.6],
+                  ["2026-12-18", 16.1], ["2026-12-24", 14.9]
+                ]
+              }
+            ],
+            "marks": [
+              { "at": "2026-10-09", "label": "VAT quarter", "tone": "neutral" },
+              { "at": "2026-12-24", "label": "December payroll, paid early", "tone": "warn" }
+            ]
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              { "label": "Bank balances, 7 accounts", "count": "427", "detail": "bank_balances · 1 Oct 06:00" },
+              { "label": "Treasury 13-week forecast", "count": "13 weeks", "detail": "cash_forecast · 29 Sep" },
+              { "label": "AR ledger, open items", "count": "3,812", "detail": "ar_ledger · 30 Sep" }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 427 rows · LLM 1.2s · query 0.6s",
+        "envelope": {
+          "scope": ["30 Sep 2026", "Group, consolidated", "7 bank accounts", "13-week forecast to 24 Dec"],
+          "grounding": { "records": 427, "noun": "daily balances" },
+          "freshness": "1 Oct 06:00",
+          "method": "runway = closing cash ÷ Q3 average monthly net burn (£4.65M ÷ 3) · debtor days = AR ÷ trailing 12-month revenue × 365"
+        },
+        "followUps": {
+          "groups": [
+            { "label": "Working capital", "items": ["Which customers are driving the DSO increase?", "How much would a 5-day DSO cut release?"] },
+            { "label": "Check", "items": ["Rescan the full general ledger for duplicate supplier payments this year"] }
+          ]
+        }
+      }
+    },
+    "clarify": {
+      "prompt": "Which customers are driving the DSO increase?",
+      "thinking": "Debtor days rose from 46 to 52. That could be more overdue debt or simply larger current invoices. Ask whether to rank by overdue balance or total balance, and whether to look at the UK entity alone or the whole group, before querying the AR ledger.",
+      "waiting": "rank by what, and where?",
+      "stage": "frame",
+      "ask": {
+        "preset": "quick",
+        "question": "**Which balance** should I rank customers by?",
+        "label": "Rank by",
+        "options": [
+          { "value": "over60", "label": "Over 60 days", "sub": "£1.8M" },
+          { "value": "overdue", "label": "All overdue", "sub": "£8.5M" },
+          { "value": "change", "label": "Rise since June", "sub": "+£2.5M" }
+        ],
+        "default": "over60",
+        "stretch": true,
+        "more": [
+          {
+            "id": "entity",
+            "question": "Across",
+            "label": "Entity",
+            "options": [
+              { "value": "group", "label": "Group", "sub": "3,812 items" },
+              { "value": "uk", "label": "UK Ltd", "sub": "2,944 items" }
+            ],
+            "default": "group"
+          }
+        ],
+        "hint": "Receivables at 30 Sep: **£21.4M**, up from £18.9M in June"
+      },
+      "progress": {
+        "understood": "rank by balance over 60 days · group · AR at 30 Sep",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · ar_ledger, customers",
+        "batches": [
+          "1,900 open items so far · batch 1",
+          "3,812 open items · batch 2",
+          "3,812 rows · 42 customers over 60 days"
+        ],
+        "projecting": "ageing into buckets and ranking customers",
+        "projected": "5 buckets · 42 customers → top 4"
+      },
+      "answer": {
+        "text": "Four customers hold **£1.60M** of the **£1.80M** over 60 days. **Northmere Retail** alone owes £0.62M, disputed since its July price review. The rest of the rise is current debt from larger Q3 invoices, which is not a collection problem.",
+        "blocks": [
+          {
+            "preset": "ranked",
+            "items": [
+              { "label": "Northmere Retail", "value": 0.62, "display": "£0.62M" },
+              { "label": "Calder Health Trust", "value": 0.41, "display": "£0.41M" },
+              { "label": "Brightwater Councils", "value": 0.33, "display": "£0.33M" },
+              { "label": "Osprey Logistics", "value": 0.24, "display": "£0.24M" },
+              { "label": "38 others", "value": 0.2, "display": "£0.20M", "muted": true }
+            ]
+          },
+          {
+            "preset": "bars",
+            "unit": "£M",
+            "groups": ["Current", "1–30", "31–60", "61–90", "90+"],
+            "series": [
+              { "name": "30 Jun", "values": [11.8, 4.1, 1.7, 0.8, 0.5], "muted": true },
+              { "name": "30 Sep", "values": [12.9, 4.6, 2.1, 1.1, 0.7] }
+            ],
+            "highlight": "61–90",
+            "caption": "Receivables by age in days · £18.9M in June, £21.4M in September"
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 3,812 rows · LLM 0.9s · query 0.7s",
+        "envelope": {
+          "scope": ["30 Sep 2026", "Group, consolidated", "Open receivables", "Over 60 days"],
+          "grounding": { "records": 3812, "noun": "open items" },
+          "freshness": "1 Oct 06:00",
+          "caveats": [
+            { "label": "dispute", "text": "Northmere's £0.62M is flagged as disputed in the AR ledger. It is not provided for; a specific provision would hit Q3 opex." }
+          ]
+        }
+      }
+    },
+    "confirm": {
+      "prompt": "Rescan the full general ledger for duplicate supplier payments this year",
+      "thinking": "Duplicate payments show up as the same supplier, amount and invoice reference paid twice within 30 days, or near matches where the reference is transposed. That needs every AP payment journal this year, not the summary tables — a full ledger scan.",
+      "waiting": "this scans every journal line this year",
+      "ask": {
+        "preset": "confirm",
+        "question": "A duplicate check scans **3.1M journal lines** across 7 entities since 1 Jan. Run it?",
+        "cost": [
+          { "label": "journal lines", "value": "3.1M" },
+          { "label": "about", "value": "4 min" },
+          { "label": "warehouse credits", "value": "≈ 18" },
+          { "label": "writes", "value": "nothing" }
+        ],
+        "costAs": "strip",
+        "yes": "Scan the full ledger",
+        "no": "Q3 payments over £10k only",
+        "default": true,
+        "settled": { "no": "Narrowed to Q3 payments over £10k" }
+      },
+      "progress": {
+        "understood": "full GL scan · AP payments · 1 Jan–30 Sep · 7 entities",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · gl_lines, ap_invoices, suppliers",
+        "batches": [
+          "1.0M lines scanned",
+          "2.1M lines scanned",
+          "3.1M lines scanned",
+          "3.1M lines · 41,806 payments · 14 suspect pairs"
+        ],
+        "projecting": "scoring matches and ranking by amount",
+        "projected": "14 pairs → table and exception file"
+      },
+      "answer": {
+        "text": "**14 suspected duplicate pairs** totalling **£186,420**. Nine are exact matches (£158,300) and should be recovered; five are near matches (£28,120) where the invoice reference differs by a character and need a check with the supplier.",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              { "key": "supplier", "label": "Supplier" },
+              { "key": "ref", "label": "Invoice" },
+              { "key": "paid", "label": "Paid" },
+              { "key": "amount", "label": "Amount", "align": "right" },
+              { "key": "match", "label": "Match" }
+            ],
+            "rows": [
+              { "supplier": "Atlas Couriers", "ref": "AC-55310", "paid": "4 Sep, 18 Sep", "amount": { "value": "£40,880", "tone": "bad", "strong": true }, "match": "exact" },
+              { "supplier": "Brookline Facilities", "ref": "INV-40211", "paid": "12 Mar, 19 Mar", "amount": { "value": "£38,400", "tone": "bad" }, "match": "exact" },
+              { "supplier": "Tessera Cloud Ltd", "ref": "88213", "paid": "3 Jun, 3 Jun", "amount": { "value": "£27,960", "tone": "bad" }, "match": "exact" },
+              { "supplier": "Harrow & Pike LLP", "ref": "HP-2291", "paid": "22 Jul, 14 Aug", "amount": { "value": "£24,500", "tone": "bad" }, "match": "exact" },
+              { "supplier": "Quayside Print", "ref": "Q-1187", "paid": "8 Aug, 29 Aug", "amount": { "value": "£19,040", "tone": "bad" }, "match": "exact" },
+              { "supplier": "Mercer Temps", "ref": "MT-7730 / MT-7703", "paid": "5 Sep, 26 Sep", "amount": "£12,880", "match": "near" }
+            ],
+            "total": 14,
+            "noun": "pairs",
+            "sort": { "key": "amount", "dir": "desc" },
+            "totals": { "supplier": "14 pairs", "amount": "£186,420" }
+          },
+          {
+            "preset": "files",
+            "download": true,
+            "files": [
+              { "name": "duplicate_payments_FY26_YTD.csv", "size": "6 KB", "digest": "d7e3a0c4", "note": "14 pairs · 28 payments · with bank refs" }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 3.1M lines · LLM 1.0s · query 3m 52s",
+        "envelope": {
+          "scope": ["1 Jan – 30 Sep 2026", "7 entities", "AP payments"],
+          "grounding": { "records": 41806, "noun": "supplier payments" },
+          "freshness": "1 Oct 06:00",
+          "method": "exact: same supplier, amount and invoice reference paid twice within 30 days · near: same supplier and amount, reference within one edit"
+        }
+      },
+      "narrowed": {
+        "understood": "narrowed to Q3 AP payments over £10k",
+        "answer": {
+          "text": "Q3 payments over £10k only: **4 suspected pairs**, **£97,300**. Smaller payments and the first half-year were not checked.",
+          "blocks": [
+            {
+              "preset": "table",
+              "columns": [
+                { "key": "supplier", "label": "Supplier" },
+                { "key": "ref", "label": "Invoice" },
+                { "key": "amount", "label": "Amount", "align": "right" },
+                { "key": "match", "label": "Match" }
+              ],
+              "rows": [
+                { "supplier": "Atlas Couriers", "ref": "AC-55310", "amount": { "value": "£40,880", "tone": "bad", "strong": true }, "match": "exact" },
+                { "supplier": "Harrow & Pike LLP", "ref": "HP-2291", "amount": { "value": "£24,500", "tone": "bad" }, "match": "exact" },
+                { "supplier": "Quayside Print", "ref": "Q-1187", "amount": { "value": "£19,040", "tone": "bad" }, "match": "exact" },
+                { "supplier": "Mercer Temps", "ref": "MT-7730 / MT-7703", "amount": "£12,880", "match": "near" }
+              ],
+              "noun": "pairs",
+              "totals": { "supplier": "4 pairs", "amount": "£97,300" }
+            },
+            {
+              "preset": "cannot",
+              "partial": true,
+              "reason": "Payments before 1 Jul and under £10k were not scanned, so this is a floor, not the year's total.",
+              "remedy": "Run the full ledger scan, about 4 minutes, to cover the rest of the year.",
+              "nearest": ["Rescan the full general ledger for duplicate supplier payments this year"]
+            }
+          ],
+          "meta": "cloud · claude-sonnet-5 · 2,318 payments · query 6.1s"
+        }
+      }
+    },
+    "fail": {
+      "prompt": "Export every purchase-order line from the ERP since 2022, with GL coding",
+      "understood": "proposed SQL · 14 lines · confidence 0.78",
+      "validated": "read-only ✓ · erp_po_lines, gl_lines",
+      "retrying": "timeout after 60s",
+      "failed": "failed · timeout after 60s · 2 attempts",
+      "error": "transient · the ERP export view did not respond within the timeout",
+      "text": "The ERP export did not answer within 60s, twice. Purchase-order lines since 2022 are **6.8M rows**, and the join to GL coding runs against the live ERP view rather than the nightly warehouse copy.",
+      "meta": "cloud · claude-sonnet-5 · LLM 1.3s · export timed out ×2",
+      "actions": [
+        { "id": "retry", "label": "Try again", "variant": "secondary" },
+        { "id": "narrow-year", "label": "Only this year", "variant": "secondary" },
+        { "id": "use-warehouse", "label": "Use last night's warehouse copy", "variant": "secondary" }
+      ]
+    },
+    "long": {
+      "prompt": "Reconcile every intercompany entry across all 7 entities for September",
+      "understood": "IC matching · 7 entities · 21 counterparty pairs · September",
+      "validated": "read-only ✓ · ic_ledger, gl_lines, fx_rates",
+      "progress": "18,420 IC lines · {n}% matched"
+    }
+  }
+}

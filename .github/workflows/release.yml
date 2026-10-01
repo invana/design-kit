@@ -6,7 +6,7 @@ name: Release
 #
 # and the tag push drives every stage below:
 #
-#   resolve ─┬─ publish ──── dist-branches (matrix: 8 packages)
+#   resolve ─┬─ publish ──── dist-branches (matrix: 9 packages)
 #            ├─ notes
 #            └─ storybook
 #
@@ -134,7 +134,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pkg: [ui, styling, themes, dashboard, editor, forms, tables, charts]
+        pkg: [ui, styling, themes, dashboard, editor, forms, tables, charts, assistant]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

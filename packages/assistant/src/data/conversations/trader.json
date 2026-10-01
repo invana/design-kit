@@ -1,0 +1,1201 @@
+{
+  "id": "trader",
+  "name": "Equity Trader",
+  "role": "Runs a European long/short equity book: explains P&L, sizes hedges and positions into macro prints.",
+  "model": "cloud · claude-sonnet-5",
+  "steps": {
+    "understand": {
+      "key": "translate_to_sql"
+    },
+    "validate": {
+      "key": "check_sql"
+    },
+    "execute": {
+      "key": "execute_sql",
+      "label": "Execute"
+    },
+    "project": {
+      "key": "shape_for_blotter"
+    }
+  },
+  "record": {
+    "understand": {
+      "input": [
+        {
+          "label": "schema",
+          "value": "risk warehouse v12 · positions, fills, factor_exposures, factor_returns, risk_grid"
+        },
+        {
+          "label": "context",
+          "value": "12 prior turns (4 answers, 3 asks, 1 proposal)"
+        },
+        {
+          "label": "model",
+          "value": "cloud · claude-sonnet-5 · timeout 120s"
+        }
+      ],
+      "output": [
+        {
+          "label": "query",
+          "value": "SELECT p.ticker, p.name, p.mv_gbp,\n       e.momentum AS mom_z,\n       p.mv_gbp * e.momentum AS mom_gbp\nFROM positions p\nJOIN factor_exposures e USING (ticker, asof)\nWHERE p.book = 'EQ-EU-LS' AND p.asof = DATE '2026-09-26'\nORDER BY abs(mom_gbp) DESC",
+          "code": true
+        },
+        {
+          "label": "tokens",
+          "value": "2,860 in · 118 out"
+        }
+      ]
+    },
+    "validate": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:3b7d…e019"
+        }
+      ],
+      "output": [
+        {
+          "label": "verdict",
+          "value": "read-only · no INSERT / UPDATE / DELETE / MERGE"
+        },
+        {
+          "label": "tables",
+          "value": "positions, factor_exposures — both in warehouse v12"
+        },
+        {
+          "label": "entitlement",
+          "value": "book EQ-EU-LS · trader view"
+        }
+      ]
+    },
+    "execute": {
+      "input": [
+        {
+          "label": "query",
+          "value": "sha256:3b7d…e019"
+        },
+        {
+          "label": "connection",
+          "value": "snowflake · risk_wh · RISK_RO role"
+        },
+        {
+          "label": "limits",
+          "value": "timeout 60s · 10,000 rows"
+        }
+      ],
+      "output": [
+        {
+          "label": "rows",
+          "value": "64 · 2 batches"
+        },
+        {
+          "label": "scanned",
+          "value": "1.9 MB · 0.4 s warehouse time"
+        }
+      ]
+    },
+    "project": {
+      "input": [
+        {
+          "label": "rows",
+          "value": "sha256:a91f…07c4"
+        }
+      ],
+      "output": [
+        {
+          "label": "blotter",
+          "value": "64 positions · ranked by momentum £ · top 8 shown"
+        }
+      ]
+    }
+  },
+  "session": {
+    "id": "session-equity-trader",
+    "title": "Explaining a bad week, then positioning into the CPI print",
+    "analyst": "Trader",
+    "composer": {
+      "placeholder": "Ask about your book, a name or a scenario…",
+      "controls": [
+        {
+          "id": "book",
+          "label": "Book",
+          "options": [
+            {
+              "value": "EQ-EU-LS",
+              "label": "EQ-EU-LS"
+            },
+            {
+              "value": "EQ-EU-MN",
+              "label": "EQ-EU-MN"
+            },
+            {
+              "value": "EQ-UK-LO",
+              "label": "EQ-UK-LO"
+            }
+          ]
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "quiet": true,
+          "options": [
+            {
+              "value": "claude",
+              "label": "cloud · claude-sonnet-5"
+            },
+            {
+              "value": "gpt",
+              "label": "openai · gpt-4o-mini"
+            },
+            {
+              "value": "qwen",
+              "label": "local · qwen3-27b"
+            }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "LLM + query timeout",
+          "align": "end",
+          "quiet": true,
+          "default": "120",
+          "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+          "options": [
+            {
+              "value": "30",
+              "label": "30s"
+            },
+            {
+              "value": "60",
+              "label": "1m"
+            },
+            {
+              "value": "120",
+              "label": "2m"
+            },
+            {
+              "value": "300",
+              "label": "5m"
+            }
+          ]
+        }
+      ],
+      "attach": {
+        "accept": ".csv,.xlsx,.pdf",
+        "multiple": true
+      }
+    },
+    "turns": [
+      {
+        "id": "t1",
+        "role": "analyst",
+        "text": "My book lost £1.4M this week while the model portfolio was flat. What happened?"
+      },
+      {
+        "id": "t2",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "frame",
+        "state": "answered",
+        "ask": {
+          "preset": "single",
+          "question": "Which P&L should I explain?",
+          "options": [
+            {
+              "value": "total",
+              "label": "Total, mark-to-market plus realised",
+              "detail": "pnl.total"
+            },
+            {
+              "value": "mtm",
+              "label": "Mark-to-market only",
+              "detail": "pnl.mtm"
+            },
+            {
+              "value": "realised",
+              "label": "Realised only",
+              "detail": "pnl.realised"
+            }
+          ],
+          "default": "total",
+          "hint": "Default: total, which matches the desk report"
+        },
+        "value": "total"
+      },
+      {
+        "id": "t3",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "diagnose",
+        "pattern": "bridge",
+        "label": "chart",
+        "title": "P&L attribution, £M",
+        "trace": [
+          {
+            "id": "load",
+            "label": "Loaded positions and fills",
+            "detail": "64 positions",
+            "state": "done"
+          },
+          {
+            "id": "attribute",
+            "label": "Attributed with factor model v4",
+            "detail": "1.2 s",
+            "state": "done"
+          },
+          {
+            "id": "compare",
+            "label": "Compared with the model portfolio",
+            "state": "done"
+          }
+        ],
+        "envelope": {
+          "scope": [
+            "22–26 Sep",
+            "Book EQ-EU-LS",
+            "64 positions",
+            "vs model portfolio"
+          ],
+          "grounding": {
+            "records": 3406,
+            "noun": "fills"
+          },
+          "freshness": "Fri 17:30 CET"
+        },
+        "blocks": [
+          {
+            "preset": "narrative",
+            "text": "The loss is mostly the **semiconductor sleeve (−£0.9M)**. Market beta cost £0.3M, other stock-specific moves £0.4M, and FX gave back £0.2M."
+          },
+          {
+            "preset": "waterfall",
+            "unit": "£M",
+            "steps": [
+              {
+                "label": "beta",
+                "value": -0.3
+              },
+              {
+                "label": "semis",
+                "value": -0.9
+              },
+              {
+                "label": "other",
+                "value": -0.4
+              },
+              {
+                "label": "FX",
+                "value": 0.2
+              }
+            ],
+            "end": {
+              "label": "week",
+              "value": -1.4
+            }
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              {
+                "label": "OMS fills, 22–26 Sep",
+                "count": "3,406"
+              },
+              {
+                "label": "Risk factor returns, v4",
+                "count": "5 days"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t4",
+        "role": "analyst",
+        "text": "Is the semis hit just beta, or something specific?"
+      },
+      {
+        "id": "t5",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "flow": "drivers",
+        "pattern": "drivers",
+        "label": "ranked",
+        "title": "semis sleeve, −£0.9M by source",
+        "envelope": {
+          "method": "returns = Σ exposure × factor return + specific",
+          "caveats": [
+            {
+              "label": "model fit",
+              "text": "Factor model v4 explains 71% of this book's daily variance over 60 days. Treat the split as approximate."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "ranked",
+            "items": [
+              {
+                "label": "Momentum",
+                "value": -0.35,
+                "display": "−0.35"
+              },
+              {
+                "label": "Industry",
+                "value": -0.3,
+                "display": "−0.30"
+              },
+              {
+                "label": "Helix Semi",
+                "value": -0.2,
+                "display": "−0.20"
+              },
+              {
+                "label": "Other names",
+                "value": -0.05,
+                "display": "−0.05"
+              }
+            ]
+          },
+          {
+            "preset": "narrative",
+            "text": "About **70%** is factor exposure: the momentum unwind on Tuesday and a sector sell-off. The one stock-specific hit is **Helix Semi**, which cut guidance on Wednesday."
+          }
+        ]
+      },
+      {
+        "id": "t6",
+        "role": "analyst",
+        "text": "How would the book do if Thursday's CPI print surprises?"
+      },
+      {
+        "id": "t7",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "analyse",
+        "state": "answered",
+        "ask": {
+          "preset": "form",
+          "question": "Scenario inputs",
+          "fields": [
+            {
+              "name": "surprise",
+              "label": "CPI surprise",
+              "type": "text",
+              "unit": "pp",
+              "default": "±0.3"
+            },
+            {
+              "name": "moves",
+              "label": "Market moves",
+              "type": "select",
+              "default": "From past prints"
+            },
+            {
+              "name": "horizon",
+              "label": "Horizon",
+              "type": "select",
+              "default": "1 day"
+            }
+          ],
+          "hint": "Past prints: 14 releases since 2022"
+        },
+        "value": {
+          "surprise": "±0.3",
+          "moves": "From past prints",
+          "horizon": "1 day"
+        }
+      },
+      {
+        "id": "t8",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "check",
+        "state": "answered",
+        "ask": {
+          "preset": "confirm",
+          "question": "A full revaluation reprices 64 positions and 1,812 option legs on the risk grid.",
+          "cost": [
+            {
+              "label": "to run",
+              "value": "about **3 min**"
+            }
+          ],
+          "yes": "Full revaluation",
+          "no": "Greeks first, instant",
+          "default": false,
+          "hint": "Default: greeks now, full revaluation in the background"
+        },
+        "value": false
+      },
+      {
+        "id": "t9",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "partial",
+        "flow": "scenario",
+        "pattern": "scenariot",
+        "label": "scenario",
+        "title": "CPI surprise, 1-day P&L",
+        "envelope": {
+          "caveats": [
+            {
+              "label": "history",
+              "text": "Market moves are drawn from 14 prints since 2022. The 2022 prints were larger shocks than any this year."
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "scenario",
+                "label": "Scenario"
+              },
+              {
+                "key": "bund",
+                "label": "Bund 10y",
+                "align": "right"
+              },
+              {
+                "key": "stoxx",
+                "label": "Stoxx 600",
+                "align": "right"
+              },
+              {
+                "key": "pnl",
+                "label": "Book P&L",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "scenario": "Hot, +0.3 pp",
+                "bund": "+12 bp",
+                "stoxx": "−1.8%",
+                "pnl": {
+                  "value": "−£620k",
+                  "tone": "bad"
+                }
+              },
+              {
+                "scenario": "In line",
+                "bund": "+1 bp",
+                "stoxx": "+0.2%",
+                "pnl": "+£40k"
+              },
+              {
+                "scenario": "Soft, −0.3 pp",
+                "bund": "−10 bp",
+                "stoxx": "+1.1%",
+                "pnl": {
+                  "value": "+£410k",
+                  "tone": "good"
+                }
+              }
+            ]
+          },
+          {
+            "preset": "grid",
+            "tiles": [
+              {
+                "label": "1-day VaR, 99%",
+                "value": "£1.1M",
+                "delta": "73% of limit"
+              },
+              {
+                "label": "Net beta",
+                "value": "0.38",
+                "delta": "▲ 0.12 wk",
+                "tone": "good"
+              },
+              {
+                "label": "Worst case",
+                "value": "−£620k",
+                "delta": "within limit"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t10",
+        "role": "analyst",
+        "text": "What did we do the last time CPI came in hot, back in 2019?"
+      },
+      {
+        "id": "t11",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "cannot",
+        "flow": "entity",
+        "label": "outcome",
+        "blocks": [
+          {
+            "preset": "cannot",
+            "reason": "Trade history starts in March 2021, when the desk moved to the current order system. 2019 isn't held.",
+            "remedy": "Load the legacy order archive (2015–2021) to answer this.",
+            "nearest": [
+              "Use the five hot prints from 2022–2024 instead"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t12",
+        "role": "assistant",
+        "kind": "answer",
+        "state": "complete",
+        "label": "proposal",
+        "title": "from this thread",
+        "blocks": [
+          {
+            "preset": "proposal",
+            "rows": [
+              {
+                "label": "Draft order",
+                "value": "Sell 40 Stoxx 600 Dec futures"
+              },
+              {
+                "label": "Effect",
+                "value": "Net beta 0.38 → 0.21"
+              },
+              {
+                "label": "Hot-print P&L",
+                "value": "−£620k → −£350k"
+              },
+              {
+                "label": "Alert",
+                "value": "Momentum factor falls another 2σ"
+              }
+            ],
+            "consequence": "Creates a draft ticket in the order system and one alert. Nothing goes to market until you release the ticket.",
+            "actions": [
+              {
+                "id": "create-draft-and-alert",
+                "label": "Create draft and alert",
+                "variant": "primary"
+              },
+              {
+                "id": "alert-only",
+                "label": "Alert only",
+                "variant": "secondary"
+              },
+              {
+                "id": "not-now",
+                "label": "Not now",
+                "variant": "ghost"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t13",
+        "role": "assistant",
+        "kind": "ask",
+        "stage": "explain",
+        "state": "pending",
+        "ask": {
+          "preset": "suggestions",
+          "items": [
+            "Size the hedge to a VaR target instead",
+            "Which names are most exposed to momentum?"
+          ]
+        }
+      }
+    ]
+  },
+  "runs": {
+    "send": {
+      "prompt": "Which names are most exposed to momentum?",
+      "thinking": "Momentum exposure per name is the position's market value times its momentum z-score from factor model v4 — rank by the absolute £ figure, using Friday's close positions.",
+      "progress": {
+        "understood": "proposed SQL · 7 lines · confidence 0.91",
+        "validating": "checking the query is read-only",
+        "validated": "read-only ✓ · positions, factor_exposures",
+        "batches": [
+          "40 positions so far · batch 1",
+          "64 positions so far · batch 2",
+          "64 rows · 2 batches"
+        ],
+        "projecting": "ranking 64 positions by momentum £",
+        "projected": "64 positions → top 8 on the blotter"
+      },
+      "answer": {
+        "text": "Momentum is concentrated in **four semis longs**: Helix Semi, Nordwafer, ASM-style Lumen Litho and Kappa Micro carry **£3.2M** of the book's **£4.6M** net momentum exposure. The factor gave back 2.8σ on Tuesday 23 Sep, and the book tracked it.",
+        "blocks": [
+          {
+            "preset": "grid",
+            "tiles": [
+              {
+                "label": "Net momentum",
+                "value": "£4.6M",
+                "delta": "▲ £1.1M vs 4 wk",
+                "tone": "warn"
+              },
+              {
+                "label": "Top 4 names",
+                "value": "70%",
+                "delta": "of net exposure"
+              },
+              {
+                "label": "Book mom. beta",
+                "value": "0.34",
+                "delta": "▲ 0.09 wk",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "preset": "timeseries",
+            "unit": "%",
+            "series": [
+              {
+                "name": "Momentum factor, cum.",
+                "points": [
+                  [
+                    "2026-09-01",
+                    0.0
+                  ],
+                  [
+                    "2026-09-02",
+                    0.4
+                  ],
+                  [
+                    "2026-09-03",
+                    0.7
+                  ],
+                  [
+                    "2026-09-04",
+                    0.6
+                  ],
+                  [
+                    "2026-09-05",
+                    1.1
+                  ],
+                  [
+                    "2026-09-08",
+                    1.5
+                  ],
+                  [
+                    "2026-09-09",
+                    1.4
+                  ],
+                  [
+                    "2026-09-10",
+                    1.9
+                  ],
+                  [
+                    "2026-09-11",
+                    2.2
+                  ],
+                  [
+                    "2026-09-12",
+                    2.4
+                  ],
+                  [
+                    "2026-09-15",
+                    2.3
+                  ],
+                  [
+                    "2026-09-16",
+                    2.8
+                  ],
+                  [
+                    "2026-09-17",
+                    3.1
+                  ],
+                  [
+                    "2026-09-18",
+                    3.0
+                  ],
+                  [
+                    "2026-09-19",
+                    3.3
+                  ],
+                  [
+                    "2026-09-22",
+                    3.1
+                  ],
+                  [
+                    "2026-09-23",
+                    0.9
+                  ],
+                  [
+                    "2026-09-24",
+                    0.6
+                  ],
+                  [
+                    "2026-09-25",
+                    0.8
+                  ],
+                  [
+                    "2026-09-26",
+                    0.5
+                  ]
+                ]
+              },
+              {
+                "name": "Book, cum.",
+                "points": [
+                  [
+                    "2026-09-01",
+                    0.0
+                  ],
+                  [
+                    "2026-09-02",
+                    0.1
+                  ],
+                  [
+                    "2026-09-03",
+                    0.2
+                  ],
+                  [
+                    "2026-09-04",
+                    0.2
+                  ],
+                  [
+                    "2026-09-05",
+                    0.4
+                  ],
+                  [
+                    "2026-09-08",
+                    0.5
+                  ],
+                  [
+                    "2026-09-09",
+                    0.5
+                  ],
+                  [
+                    "2026-09-10",
+                    0.7
+                  ],
+                  [
+                    "2026-09-11",
+                    0.8
+                  ],
+                  [
+                    "2026-09-12",
+                    0.9
+                  ],
+                  [
+                    "2026-09-15",
+                    0.8
+                  ],
+                  [
+                    "2026-09-16",
+                    1.0
+                  ],
+                  [
+                    "2026-09-17",
+                    1.1
+                  ],
+                  [
+                    "2026-09-18",
+                    1.1
+                  ],
+                  [
+                    "2026-09-19",
+                    1.2
+                  ],
+                  [
+                    "2026-09-22",
+                    1.1
+                  ],
+                  [
+                    "2026-09-23",
+                    0.4
+                  ],
+                  [
+                    "2026-09-24",
+                    0.2
+                  ],
+                  [
+                    "2026-09-25",
+                    0.3
+                  ],
+                  [
+                    "2026-09-26",
+                    0.1
+                  ]
+                ]
+              }
+            ],
+            "marks": [
+              {
+                "at": "2026-09-23",
+                "label": "momentum unwind",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "preset": "citations",
+            "sources": [
+              {
+                "label": "Positions, EQ-EU-LS, close 26 Sep",
+                "count": "64"
+              },
+              {
+                "label": "Factor exposures, model v4",
+                "count": "64 names"
+              },
+              {
+                "label": "Factor returns, model v4",
+                "count": "20 days"
+              }
+            ]
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 64 rows · LLM 1.1s · query 0.4s",
+        "envelope": {
+          "scope": [
+            "Close 26 Sep",
+            "Book EQ-EU-LS",
+            "64 positions",
+            "factor model v4"
+          ],
+          "grounding": {
+            "records": 64,
+            "noun": "positions"
+          },
+          "freshness": "Fri 17:30 CET",
+          "method": "SELECT p.ticker, p.name, p.mv_gbp,\n       e.momentum AS mom_z,\n       p.mv_gbp * e.momentum AS mom_gbp\nFROM positions p\nJOIN factor_exposures e USING (ticker, asof)\nWHERE p.book = 'EQ-EU-LS' AND p.asof = DATE '2026-09-26'\nORDER BY abs(mom_gbp) DESC"
+        },
+        "followUps": {
+          "groups": [
+            {
+              "label": "Hedge",
+              "items": [
+                "Size the hedge to a VaR target instead",
+                "What does a momentum-neutral basket cost?"
+              ]
+            },
+            {
+              "label": "Dig in",
+              "items": [
+                "Show Helix Semi's fills this week",
+                "How did these names trade on past CPI days?"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "clarify": {
+      "prompt": "Size the hedge to a VaR target instead",
+      "thinking": "Sizing needs a VaR target and an instrument. The desk limit is £1.5M, but the trader may want headroom; and index futures hedge beta, not the semis concentration. Ask for both before solving.",
+      "waiting": "which target, which hedge?",
+      "stage": "frame",
+      "ask": {
+        "preset": "quick",
+        "question": "**Which 1-day VaR (99%)** should the hedge bring the book to?",
+        "label": "VaR target",
+        "options": [
+          {
+            "value": "0.9",
+            "label": "£0.9M",
+            "sub": "60% of limit"
+          },
+          {
+            "value": "0.8",
+            "label": "£0.8M",
+            "sub": "53% of limit"
+          },
+          {
+            "value": "0.7",
+            "label": "£0.7M",
+            "sub": "47% of limit"
+          }
+        ],
+        "default": "0.9",
+        "stretch": true,
+        "more": [
+          {
+            "id": "instrument",
+            "question": "Hedge with",
+            "label": "Hedge",
+            "options": [
+              {
+                "value": "sxxp",
+                "label": "Stoxx 600 fut.",
+                "sub": "beta"
+              },
+              {
+                "value": "sx8p",
+                "label": "Tech sector fut.",
+                "sub": "sector"
+              },
+              {
+                "value": "basket",
+                "label": "Semis basket",
+                "sub": "swap"
+              }
+            ],
+            "default": "sxxp"
+          }
+        ],
+        "hint": "Today: £1.1M, 73% of the £1.5M limit"
+      },
+      "progress": {
+        "understood": "VaR target £0.9M · Stoxx 600 Dec futures · 1-day 99%",
+        "validating": "checking the risk request is read-only",
+        "validated": "read-only ✓ · risk_grid, positions",
+        "batches": [
+          "solving hedge size · 20 contracts tried",
+          "solving hedge size · 48 contracts tried",
+          "converged at 52 contracts"
+        ],
+        "projecting": "comparing VaR by scenario before and after",
+        "projected": "3 scenarios · before / after"
+      },
+      "answer": {
+        "text": "**Sell 52 Stoxx 600 Dec futures** (about £2.9M notional) to bring 1-day VaR from £1.1M to **£0.9M**. It takes net beta to 0.16 but leaves the semis concentration, so the hot-print loss only falls to **−£410k**.",
+        "blocks": [
+          {
+            "preset": "bars",
+            "unit": "£k",
+            "groups": [
+              "1-day VaR",
+              "Hot print",
+              "Momentum −2σ"
+            ],
+            "series": [
+              {
+                "name": "Now",
+                "values": [
+                  1100,
+                  620,
+                  540
+                ],
+                "muted": true
+              },
+              {
+                "name": "With 52 futures",
+                "values": [
+                  900,
+                  410,
+                  500
+                ]
+              }
+            ],
+            "target": {
+              "value": 900,
+              "label": "VaR target"
+            }
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 52 contracts · LLM 0.8s · risk 2.1s",
+        "envelope": {
+          "scope": [
+            "Book EQ-EU-LS",
+            "1-day VaR 99%",
+            "Stoxx 600 Dec"
+          ],
+          "grounding": {
+            "records": 500,
+            "noun": "historical days"
+          },
+          "freshness": "Fri 17:30 CET",
+          "caveats": [
+            {
+              "label": "residual risk",
+              "text": "Index futures hedge beta, not momentum. About £500k of momentum-driven loss survives the hedge; a semis basket would take more of it at higher carry."
+            }
+          ]
+        }
+      }
+    },
+    "confirm": {
+      "prompt": "Rerun the CPI scenarios with a full revaluation",
+      "thinking": "The earlier table used greeks. A full revaluation reprices every position and option leg on the risk grid under each scenario — slower, but it captures the convexity greeks miss.",
+      "waiting": "this reprices the whole book",
+      "ask": {
+        "preset": "confirm",
+        "question": "A full revaluation reprices **64 positions and 1,812 option legs** under 3 scenarios. Run it?",
+        "cost": [
+          {
+            "label": "option legs",
+            "value": "1,812"
+          },
+          {
+            "label": "about",
+            "value": "3 min"
+          },
+          {
+            "label": "grid cores",
+            "value": "96"
+          },
+          {
+            "label": "writes",
+            "value": "nothing"
+          }
+        ],
+        "costAs": "strip",
+        "yes": "Full revaluation",
+        "no": "Just the option legs' greeks",
+        "default": true
+      },
+      "progress": {
+        "understood": "full revaluation · 3 CPI scenarios · 1-day",
+        "validating": "checking the risk request is read-only",
+        "validated": "read-only ✓ · risk_grid",
+        "batches": [
+          "604 legs repriced",
+          "1,208 legs repriced",
+          "1,812 legs repriced",
+          "1,812 legs · 64 positions · 3 scenarios"
+        ],
+        "projecting": "comparing full revaluation with greeks",
+        "projected": "3 scenarios → table"
+      },
+      "answer": {
+        "text": "The full revaluation is **worse on a hot print**: **−£710k** against −£620k from greeks, because the short index puts gain less than delta implies. The soft case barely moves.",
+        "blocks": [
+          {
+            "preset": "table",
+            "columns": [
+              {
+                "key": "scenario",
+                "label": "Scenario"
+              },
+              {
+                "key": "greeks",
+                "label": "Greeks",
+                "align": "right"
+              },
+              {
+                "key": "full",
+                "label": "Full reval",
+                "align": "right"
+              },
+              {
+                "key": "gap",
+                "label": "Gap",
+                "align": "right"
+              }
+            ],
+            "rows": [
+              {
+                "scenario": "Hot, +0.3 pp",
+                "greeks": "−£620k",
+                "full": {
+                  "value": "−£710k",
+                  "tone": "bad",
+                  "strong": true
+                },
+                "gap": "−£90k"
+              },
+              {
+                "scenario": "In line",
+                "greeks": "+£40k",
+                "full": "+£35k",
+                "gap": "−£5k"
+              },
+              {
+                "scenario": "Soft, −0.3 pp",
+                "greeks": "+£410k",
+                "full": {
+                  "value": "+£395k",
+                  "tone": "good"
+                },
+                "gap": "−£15k"
+              }
+            ],
+            "noun": "scenarios"
+          }
+        ],
+        "meta": "cloud · claude-sonnet-5 · 1,812 legs · LLM 0.9s · risk grid 2m 48s",
+        "envelope": {
+          "scope": [
+            "Book EQ-EU-LS",
+            "3 CPI scenarios",
+            "1-day horizon"
+          ],
+          "grounding": {
+            "records": 1876,
+            "noun": "instruments repriced"
+          },
+          "freshness": "Fri 17:30 CET",
+          "method": "full revaluation · risk grid v9 · local-vol surface 26 Sep · moves from 14 prints since 2022"
+        }
+      },
+      "narrowed": {
+        "understood": "narrowed to option-leg greeks",
+        "answer": {
+          "text": "Greeks only, instantly: the hot-print loss is dominated by **short gamma in the Stoxx 50 puts**, which a full revaluation would price more precisely.",
+          "blocks": [
+            {
+              "preset": "ranked",
+              "items": [
+                {
+                  "label": "Stoxx 50 Dec puts · gamma",
+                  "value": -260,
+                  "display": "−£260k"
+                },
+                {
+                  "label": "Semis longs · delta",
+                  "value": -210,
+                  "display": "−£210k"
+                },
+                {
+                  "label": "Vega, all legs",
+                  "value": -95,
+                  "display": "−£95k"
+                },
+                {
+                  "label": "Banks shorts · delta",
+                  "value": 60,
+                  "display": "+£60k"
+                },
+                {
+                  "label": "1,790 other legs",
+                  "value": -115,
+                  "display": "−£115k",
+                  "muted": true
+                }
+              ]
+            }
+          ],
+          "meta": "cloud · claude-sonnet-5 · 1,812 legs · greeks 0.6s"
+        }
+      }
+    },
+    "fail": {
+      "prompt": "Pull every fill in Helix Semi across all books since 2021",
+      "understood": "proposed SQL · 11 lines · confidence 0.74",
+      "validated": "read-only ✓ · fills, books",
+      "retrying": "timeout after 60s",
+      "failed": "failed · timeout after 60s · 2 attempts",
+      "error": "transient · the warehouse did not respond within the timeout",
+      "text": "The warehouse did not answer within 60s, twice. Fills since 2021 are **41M rows** across 38 books, and the query filters on ticker without the date-clustered partition.",
+      "meta": "cloud · claude-sonnet-5 · LLM 1.2s · query timed out ×2",
+      "actions": [
+        {
+          "id": "retry",
+          "label": "Try again",
+          "variant": "secondary"
+        },
+        {
+          "id": "narrow-book",
+          "label": "Only EQ-EU-LS",
+          "variant": "secondary"
+        },
+        {
+          "id": "narrow-period",
+          "label": "Only this year",
+          "variant": "secondary"
+        }
+      ]
+    },
+    "long": {
+      "prompt": "Backtest the hedge over every CPI print since 2021",
+      "understood": "hedged vs unhedged book · 22 prints · full revaluation",
+      "validated": "read-only ✓ · risk_grid, factor_returns",
+      "progress": "22 prints · {n}% revalued"
+    }
+  }
+}

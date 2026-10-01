@@ -31,6 +31,8 @@ export interface ChatSessionProps {
  * ResizeObserver watches the message column), but only while the user is already
  * near the bottom — scroll up to read history and the view stays put. Layout and
  * scroll behaviour only; it owns no session state.
+ *
+ * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
 export function ChatSession({
   children,

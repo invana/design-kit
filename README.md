@@ -14,6 +14,7 @@ monorepo built on React, [Tailwind CSS v4](https://tailwindcss.com/), and
 | [`packages/forms`](packages/forms) | `@invana/forms` | Composable form building blocks — `FormField` (+ `ObjectField` and leaf inputs) on top of `react-hook-form`. Unopinionated: consumers own `useForm` and the form chrome. |
 | [`packages/tables`](packages/tables) | `@invana/tables` | Data table components. |
 | [`packages/charts`](packages/charts) | `@invana/charts` | Every chart: time series on uPlot (`LineChart`, `StackedBarChartV`, `StackedAreaChart`) and in-row marks in DOM/SVG (`Sparkline`, `InlineMeter`, `SegmentedBar`). |
+| [`packages/assistant`](packages/assistant) | `@invana/assistant` | The analyst assistant, driven by JSON: `<Conversation spec onEvent />` renders a thread of asks and answers from a `ConversationSpec`, following Analyst Flow Grammar. |
 | [`packages/themes`](packages/themes) | `@invana/themes` | App layout shells (`AppLayoutBase`, `app-v1`, `app-v2`) built on `@invana/ui`. |
 | [`apps/storybook`](apps/storybook) | `@invana/stoybook` | Storybook 10 showcase and dev environment consuming all packages. Not published. |
 
@@ -32,6 +33,7 @@ Packages are published to npm under the `@invana/` namespace. Install whichever 
 | `@invana/forms` | `pnpm add @invana/forms` |
 | `@invana/tables` | `pnpm add @invana/tables` |
 | `@invana/themes` | `pnpm add @invana/themes` |
+| `@invana/assistant` | `pnpm add @invana/assistant` |
 
 Or install them all at once:
 
@@ -108,7 +110,7 @@ Pushing a `v*` git tag runs [`release.yml`](.github/workflows/release.yml) — a
 workflow whose jobs are the stages of a release:
 
 ```
-resolve ─┬─ publish ──── dist-branches (matrix: all 8 packages)
+resolve ─┬─ publish ──── dist-branches (matrix: all 9 packages)
          ├─ notes
          └─ storybook
 ```

@@ -1,0 +1,280 @@
+{
+  "id": "graph-expansions",
+  "title": "Expanding around Frankfurt",
+  "assistant": "Analyst",
+  "composer": {
+    "placeholder": "Ask anything about your graph…",
+    "controls": [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "options": [
+          {
+            "value": "nl",
+            "label": "Natural Language"
+          },
+          {
+            "value": "ql",
+            "label": "Query Language",
+            "placeholder": "MATCH (n) WHERE … RETURN n",
+            "mono": true
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "Model",
+        "quiet": true,
+        "options": [
+          {
+            "value": "qwen",
+            "label": "local · qwen3-27b"
+          },
+          {
+            "value": "gpt",
+            "label": "openai · gpt-4o-mini"
+          }
+        ]
+      },
+      {
+        "id": "timeout",
+        "label": "LLM + query timeout",
+        "align": "end",
+        "quiet": true,
+        "default": "120",
+        "icon": "M8 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM8 5.5V8.5l1.8 1.2M6.5 1.5h3",
+        "options": [
+          {
+            "value": "30",
+            "label": "30s"
+          },
+          {
+            "value": "60",
+            "label": "1m"
+          },
+          {
+            "value": "120",
+            "label": "2m"
+          },
+          {
+            "value": "300",
+            "label": "5m"
+          }
+        ]
+      }
+    ],
+    "attach": true
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Expand neighbours of \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:3933\"",
+      "at": "2026-09-30T09:02:00.000Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "label": "canvas",
+      "startedAt": "2026-09-30T09:02:00.000Z",
+      "at": "2026-09-30T09:02:00.000Z",
+      "duration": 712,
+      "meta": "Cypher · 50 rows · 12ms",
+      "trace": [
+        {
+          "id": "understand",
+          "key": "translate_thought",
+          "label": "Understand",
+          "state": "done",
+          "detail": "proposed Cypher · 3 lines",
+          "duration": 640
+        },
+        {
+          "id": "validate",
+          "key": "validate_query",
+          "label": "Validate",
+          "state": "done",
+          "detail": "read-only ✓ · Airport, Route",
+          "duration": 9
+        },
+        {
+          "id": "execute",
+          "key": "execute_graph_query",
+          "label": "Execute",
+          "state": "done",
+          "detail": "50 rows · 1 batch",
+          "duration": 12
+        },
+        {
+          "id": "project",
+          "key": "shape_for_canvas",
+          "label": "Project",
+          "state": "done",
+          "detail": "100 nodes · 50 relationships → canvas",
+          "duration": 30
+        }
+      ],
+      "envelope": {
+        "method": "MATCH (n)-[r]-(m)\nWHERE elementId(n) = \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:3933\"\nRETURN n, r, m LIMIT 50"
+      },
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "Added **100 nodes** and **50 relationships**."
+        }
+      ],
+      "outcome": {
+        "text": "100 nodes · 50 relationships",
+        "actions": [
+          {
+            "id": "load-canvas",
+            "label": "Load to canvas",
+            "variant": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "u2",
+      "role": "analyst",
+      "text": "Expand neighbours of \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:4818\"",
+      "at": "2026-09-30T09:03:00.000Z"
+    },
+    {
+      "id": "a2",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "label": "canvas",
+      "startedAt": "2026-09-30T09:03:00.000Z",
+      "at": "2026-09-30T09:03:00.000Z",
+      "duration": 716,
+      "meta": "Cypher · 50 rows · 16ms",
+      "trace": [
+        {
+          "id": "understand",
+          "key": "translate_thought",
+          "label": "Understand",
+          "state": "done",
+          "detail": "proposed Cypher · 3 lines",
+          "duration": 640
+        },
+        {
+          "id": "validate",
+          "key": "validate_query",
+          "label": "Validate",
+          "state": "done",
+          "detail": "read-only ✓ · Airport, Route",
+          "duration": 9
+        },
+        {
+          "id": "execute",
+          "key": "execute_graph_query",
+          "label": "Execute",
+          "state": "done",
+          "detail": "50 rows · 1 batch",
+          "duration": 16
+        },
+        {
+          "id": "project",
+          "key": "shape_for_canvas",
+          "label": "Project",
+          "state": "done",
+          "detail": "100 nodes · 50 relationships → canvas",
+          "duration": 30
+        }
+      ],
+      "envelope": {
+        "method": "MATCH (n)-[r]-(m)\nWHERE elementId(n) = \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:4818\"\nRETURN n, r, m LIMIT 50"
+      },
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "Added **100 nodes** and **50 relationships**."
+        }
+      ],
+      "outcome": {
+        "text": "100 nodes · 50 relationships",
+        "actions": [
+          {
+            "id": "load-canvas",
+            "label": "Load to canvas",
+            "variant": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "u3",
+      "role": "analyst",
+      "text": "Expand neighbours of \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:4819\"",
+      "at": "2026-09-30T09:04:00.000Z"
+    },
+    {
+      "id": "a3",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "label": "canvas",
+      "startedAt": "2026-09-30T09:04:00.000Z",
+      "at": "2026-09-30T09:04:00.000Z",
+      "duration": 705,
+      "meta": "Cypher · 12 rows · 5ms",
+      "trace": [
+        {
+          "id": "understand",
+          "key": "translate_thought",
+          "label": "Understand",
+          "state": "done",
+          "detail": "proposed Cypher · 3 lines",
+          "duration": 640
+        },
+        {
+          "id": "validate",
+          "key": "validate_query",
+          "label": "Validate",
+          "state": "done",
+          "detail": "read-only ✓ · Airport, Route",
+          "duration": 9
+        },
+        {
+          "id": "execute",
+          "key": "execute_graph_query",
+          "label": "Execute",
+          "state": "done",
+          "detail": "50 rows · 1 batch",
+          "duration": 5
+        },
+        {
+          "id": "project",
+          "key": "shape_for_canvas",
+          "label": "Project",
+          "state": "done",
+          "detail": "100 nodes · 50 relationships → canvas",
+          "duration": 30
+        }
+      ],
+      "envelope": {
+        "method": "MATCH (n)-[r]-(m)\nWHERE elementId(n) = \"4:08b0108e-03ff-4806-87cc-8c26275ed31b:4819\"\nRETURN n, r, m LIMIT 50"
+      },
+      "blocks": [
+        {
+          "preset": "narrative",
+          "text": "Added **24 nodes** and **12 relationships**."
+        }
+      ],
+      "outcome": {
+        "text": "24 nodes · 12 relationships",
+        "actions": [
+          {
+            "id": "load-canvas",
+            "label": "Load to canvas",
+            "variant": "secondary"
+          }
+        ]
+      }
+    }
+  ]
+}
