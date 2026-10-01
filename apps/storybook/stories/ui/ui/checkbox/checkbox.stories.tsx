@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Checkbox as CheckboxRoot } from '@invana/forms';
 // The layout `Field` is shadowed at the package root by the generator's `Field` namespace.
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms/components/field';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms';
 
 import data from '../../../../fixtures/ui/checkbox.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -39,7 +39,7 @@ const meta = {
           snippets(
             [
               "import { Checkbox } from '@invana/forms';",
-              "import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms/components/field';",
+              "import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms';",
             ],
             picked.map((v) => ({
               comment: v.caption,

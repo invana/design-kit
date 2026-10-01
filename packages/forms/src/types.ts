@@ -152,9 +152,9 @@ export type GroupConfig = {
   showCount?: boolean;
 };
 
-export interface ObjectFieldProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
+export interface ObjectFieldProps<T extends FieldValues = FieldValues> {
+  /** `form.control` of the consumer's `useForm`, typed or not. */
+  control: Control<T>;
   name: string;
   fields: FieldConfig[];
   rowConfig?: RowConfig[];

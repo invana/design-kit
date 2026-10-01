@@ -6,8 +6,27 @@ import { Button } from "@invana/ui"
 import { Input } from "./input"
 import { Textarea } from "./textarea"
 
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+/**
+ * What a `FormControl` hands the group — the field's id and its description and
+ * error wiring — passed on to the group's own input, so the `FormLabel` names
+ * the input and not the box around it.
+ */
+type ControlWiring = Pick<React.ComponentProps<"input">, "id" | "aria-describedby" | "aria-invalid">
+const InputGroupControl = React.createContext<ControlWiring>({})
+
+function InputGroup({
+  className,
+  id,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid,
+  ...props
+}: React.ComponentProps<"div">) {
+  const wiring = React.useMemo<ControlWiring>(
+    () => ({ id, "aria-describedby": describedBy, "aria-invalid": invalid }),
+    [id, describedBy, invalid]
+  )
   return (
+    <InputGroupControl.Provider value={wiring}>
     <div
       data-slot="input-group"
       role="group"
@@ -31,6 +50,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
+    </InputGroupControl.Provider>
   )
 }
 
@@ -130,8 +150,10 @@ function InputGroupInput({
   className,
   ...props
 }: React.ComponentProps<"input">) {
+  const wiring = React.useContext(InputGroupControl)
   return (
     <Input
+      {...wiring}
       data-slot="input-group-control"
       className={cn(
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
@@ -146,8 +168,10 @@ function InputGroupTextarea({
   className,
   ...props
 }: React.ComponentProps<"textarea">) {
+  const wiring = React.useContext(InputGroupControl)
   return (
     <Textarea
+      {...wiring}
       data-slot="input-group-control"
       className={cn(
         "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent",

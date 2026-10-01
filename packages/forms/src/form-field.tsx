@@ -50,6 +50,7 @@ import type {
   ObjectFieldProps,
   RowConfig,
 } from './types';
+import type { FieldValues } from 'react-hook-form';
 
 /* -------------------------------------------------------------------------- */
 /*  Field.X — leaf field components                                            */
@@ -926,7 +927,8 @@ function renderRows(
   );
 }
 
-const ObjectField: React.FC<ObjectFieldProps> = ({
+// Generic over the form's values, so a typed `useForm` control is accepted as it is.
+const ObjectField = <T extends FieldValues = FieldValues>({
   control,
   name,
   fields,
@@ -937,7 +939,7 @@ const ObjectField: React.FC<ObjectFieldProps> = ({
   columns = 2,
   fit = 'viewport',
   groupAs = 'accordion',
-}) => {
+}: ObjectFieldProps<T>) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
     (acc[key] ??= []).push(f);

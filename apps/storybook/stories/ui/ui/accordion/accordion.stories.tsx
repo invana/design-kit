@@ -74,7 +74,7 @@ const meta = {
             [
               "import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@invana/ui';",
               "import { Checkbox, Input } from '@invana/forms';",
-              "import { Field, FieldGroup, FieldLabel } from '@invana/forms/components/field';",
+              "import { Field, FieldGroup, FieldLabel } from '@invana/forms';",
             ],
             picked.map(source),
           ),

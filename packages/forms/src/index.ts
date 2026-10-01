@@ -1,6 +1,8 @@
+// The generators are `FormField.Input`, `FormField.Select`, … (and each by its
+// own name below); `Field` is the layout's — `Field`, `FieldLabel`, `FieldGroup`
+// from `./components` — so a hand-built row and a generated one share a root.
 export {
   FormField,
-  Field,
   ObjectField,
   InputField,
   PasswordField,

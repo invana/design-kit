@@ -14,7 +14,7 @@ import {
 } from '@invana/ui';
 import { Input } from '@invana/forms';
 // The layout `Field` is shadowed at the package root by the generator's `Field` namespace.
-import { Field, FieldGroup, FieldLabel } from '@invana/forms/components/field';
+import { Field, FieldGroup, FieldLabel } from '@invana/forms';
 
 import data from '../../../../fixtures/ui/dialog.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -52,7 +52,7 @@ const meta = {
             [
               "import {\n  Button, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,\n} from '@invana/ui';",
               "import { Input } from '@invana/forms';",
-              "import { Field, FieldGroup, FieldLabel } from '@invana/forms/components/field';",
+              "import { Field, FieldGroup, FieldLabel } from '@invana/forms';",
             ],
             picked.map((v) => ({
               comment: v.caption,

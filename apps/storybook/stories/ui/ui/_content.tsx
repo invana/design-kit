@@ -30,7 +30,7 @@ import {
 import { Checkbox, Input, Switch } from '@invana/forms';
 // The layout `Field` is shadowed at the package root by the generator's `Field` namespace,
 // so its family is imported from its file (a kit gap, reported).
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms/components/field';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms';
 import {
   AlertCircle,
   Bell,

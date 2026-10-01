@@ -318,8 +318,7 @@ export const ComposedForm: Story = {
     });
     await step('Fill the required fields and save', async () => {
       await userEvent.type(cell.getByRole('textbox', { name: 'Name' }), 'Customer analysis');
-      // FormControl labels the InputGroup, not the input inside it, so the URI is found by its placeholder.
-      await userEvent.type(cell.getByPlaceholderText('bolt://localhost:7687'), 'bolt://localhost:7687');
+      await userEvent.type(cell.getByRole('textbox', { name: 'URI' }), 'bolt://localhost:7687');
       await userEvent.click(cell.getByRole('combobox', { name: 'Connector' }));
       await userEvent.click(await screen.findByRole('option', { name: 'Neo4j' }));
       await userEvent.click(cell.getByRole('button', { name: 'Save' }));
