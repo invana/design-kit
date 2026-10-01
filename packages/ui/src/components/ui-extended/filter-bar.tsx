@@ -21,6 +21,12 @@ export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
    * filters ask, so it belongs on the same line as them and nowhere else.
    */
   summary?: React.ReactNode
+  /**
+   * No rule under it and no padding at its ends: whatever holds it is the
+   * frame — a table's border under it, the table's edges either side. Off by
+   * default, so a bar over a bare list keeps the rule that divides the two.
+   */
+  seamless?: boolean
 }
 
 export interface FilterChipProps
@@ -57,11 +63,12 @@ export interface FilterChipProps
  * that nothing here changes their data.
  */
 export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
-  ({ summary, className, children, ...props }, ref) => (
+  ({ summary, seamless, className, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "flex h-[30px] shrink-0 items-center gap-1.5 border-b border-border px-2",
+        "flex shrink-0 items-center gap-1.5",
+        !seamless && "h-[30px] border-b border-border px-2",
         className,
       )}
       {...props}
@@ -79,8 +86,9 @@ FilterBar.displayName = "FilterBar"
 /**
  * One dimension, as a chip that opens a menu.
  *
- * The caret is drawn rather than iconised so the chip stays 22px and reads as
- * one token — `status ▾` — instead of a control with an icon glued to it.
+ * The caret is drawn rather than iconised so the chip reads as
+ * one token — `status ▾` — instead of a control with an icon glued to it. It is
+ * 26px and the root size, as the `sm` search beside it and the rows it narrows.
  */
 export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
   ({ label, value, active, onRemove, removeLabel, className, ...props }, ref) => {
@@ -89,10 +97,9 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         ref={ref}
         type="button"
         variant="outline"
-        size="xs"
         data-active={active || undefined}
         className={cn(
-          "h-[22px] gap-1 px-1.5 font-normal",
+          "h-[26px] gap-1 px-1.5 py-0 text-base font-normal",
           active && "border-primary/40 text-primary",
           onRemove && "rounded-r-none border-r-0",
           className,
@@ -115,14 +122,13 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         <Button
           type="button"
           variant="outline"
-          size="xs"
           onClick={onRemove}
           aria-label={
             removeLabel ??
             `Clear ${typeof label === "string" ? label : "filter"}`
           }
           className={cn(
-            "h-[22px] rounded-l-none px-1 font-normal text-muted-foreground hover:text-foreground",
+            "h-[26px] rounded-l-none px-1 py-0 text-base font-normal text-muted-foreground hover:text-foreground",
             active && "border-primary/40",
           )}
         >
