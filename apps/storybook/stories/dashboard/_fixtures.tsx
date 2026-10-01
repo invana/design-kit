@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { PanelRendererProps } from '@invana/dashboard';
+import type { ActionSpec, PanelRendererProps } from '@invana/dashboard';
 import {
   TaskNode,
   type Bound,
@@ -150,6 +150,29 @@ export const RUN_LOG = [
   { time: '02.15', level: 'info' as const, source: 'import_dataset', message: 'fan-out · 3 lanes of 402' },
   { time: '05.50', level: 'info' as const, source: 'import_dataset', message: 'lane 3 · 400 Order, 400 FOR' },
 ];
+
+// ── answering an action, as a consumer patches its own spec ────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyPanel = { id?: string; options?: any; actions?: ActionSpec[] };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySpec = { rows: { panels: any[] }[]; tabs?: { rows: { panels: any[] }[] }[] };
+
+/** `spec` with every panel passed through `fn` — on the page and on every tab. */
+export function mapPanels<S extends AnySpec>(spec: S, fn: (panel: AnyPanel) => AnyPanel): S {
+  const rows = (rs: AnySpec['rows']) => rs.map((row) => ({ ...row, panels: row.panels.map(fn) }));
+  return { ...spec, rows: rows(spec.rows), tabs: spec.tabs?.map((tab) => ({ ...tab, rows: rows(tab.rows) })) };
+}
+
+/** `spec` with one panel's options merged — a picked row selected, an edited value kept. */
+export function patchPanel<S extends AnySpec>(spec: S, panelId: string | undefined, patch: Record<string, unknown>): S {
+  return mapPanels(spec, (p) => (p.id === panelId ? { ...p, options: { ...p.options, ...patch } } : p));
+}
+
+/** Every panel of `spec`, on the page and on every tab. */
+export function panelsOf(spec: AnySpec): AnyPanel[] {
+  return [...spec.rows, ...(spec.tabs?.flatMap((t) => t.rows) ?? [])].flatMap((r) => r.panels);
+}
 
 // ── the shell the stories render into ──────────────────────────────────
 
