@@ -1,0 +1,487 @@
+[
+  {
+    "caption": "Step 1 · single choice, rich options",
+    "turn": { "id": "step1", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Step 2 · number with a unit",
+    "turn": { "id": "step2", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Step 3 · multiple choice",
+    "turn": { "id": "step3", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Review before submit",
+    "turn": { "id": "review", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Required step unanswered",
+    "turn": { "id": "required", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            { "value": "semi-arid", "label": "Semi-arid", "detail": "3 sites" },
+            { "value": "rainfed", "label": "Rainfed", "detail": "2 sites" },
+            { "value": "irrigated", "label": "Irrigated", "detail": "1 site" }
+          ],
+          "required": true
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Answered",
+    "turn": { "id": "answered", "stage": "scope", "answeredAt": "2026-09-29T10:00:20Z" },
+    "now": "2026-09-29T10:00:45Z",
+    "state": "answered",
+    "value": { "environment": "semi-arid", "yield": 2200, "keep": ["rust", "maturity"] },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "description": "Lines below this are dropped from the shortlist.",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season's goal: **2,100**"
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "label": "Environment",
+          "question": "Which environment is the new line for?",
+          "description": "Sets which trial sites the analysis reads.",
+          "options": [
+            {
+              "value": "semi-arid",
+              "label": "Semi-arid",
+              "description": "Under 400 mm rainfall",
+              "figure": { "value": "3", "unit": "sites" },
+              "summary": "Semi-arid, 3 sites"
+            },
+            {
+              "value": "rainfed",
+              "label": "Rainfed",
+              "description": "400–700 mm rainfall",
+              "figure": { "value": "2", "unit": "sites" },
+              "summary": "Rainfed, 2 sites"
+            },
+            {
+              "value": "irrigated",
+              "label": "Irrigated",
+              "description": "Any rainfall",
+              "figure": { "value": "1", "unit": "site" },
+              "summary": "Irrigated, 1 site"
+            }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "yield",
+          "kind": "number",
+          "label": "Yield floor",
+          "question": "Yield floor",
+          "unit": "kg/ha",
+          "default": 2200,
+          "hint": "Last season: **2,100**",
+          "required": true
+        },
+        {
+          "id": "keep",
+          "kind": "multi",
+          "label": "Must keep",
+          "question": "Traits the new line must keep",
+          "options": [
+            { "value": "rust", "label": "Rust score", "detail": "≥ 6", "summary": "Rust ≥ 6" },
+            {
+              "value": "maturity",
+              "label": "Maturity",
+              "detail": "≤ 115 d",
+              "summary": "maturity ≤ 115 d"
+            },
+            { "value": "pod", "label": "Pod length", "detail": "≥ 28 mm", "summary": "pod ≥ 28 mm" }
+          ],
+          "default": ["rust", "maturity"]
+        }
+      ],
+      "review": true
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "stage": "scope" },
+    "spec": {
+      "steps": [
+        {
+          "id": "environment",
+          "kind": "single",
+          "question": "Which environment is the new line for?",
+          "options": [
+            { "value": "semi-arid", "label": "Semi-arid", "detail": "3 sites" },
+            { "value": "rainfed", "label": "Rainfed", "detail": "2 sites" },
+            { "value": "irrigated", "label": "Irrigated", "detail": "1 site" }
+          ],
+          "default": "semi-arid"
+        },
+        {
+          "id": "traits",
+          "kind": "multi",
+          "question": "Which traits must it keep?",
+          "options": [
+            { "value": "drought", "label": "Drought tolerance" },
+            { "value": "rust", "label": "Rust resistance" },
+            { "value": "pods", "label": "Pod length" }
+          ]
+        }
+      ],
+      "review": true
+    }
+  }
+]

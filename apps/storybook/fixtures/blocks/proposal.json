@@ -1,0 +1,85 @@
+[
+  {
+    "caption": "What it writes + consequence",
+    "turn": { "id": "writes", "label": "answer" },
+    "spec": {
+      "title": "from this answer",
+      "rows": [
+        { "label": "Alert", "value": "Refunds > 2σ by store" },
+        { "label": "Checks", "value": "Daily, 07:00" },
+        { "label": "Notify", "value": "Store managers" }
+      ],
+      "consequence": "Creates one alert rule. It would have fired 3 times in September.",
+      "actions": [
+        { "id": "create", "label": "Create alert", "variant": "primary" },
+        { "id": "edit", "label": "Edit" }
+      ]
+    }
+  },
+  {
+    "caption": "Impact as figures",
+    "turn": { "id": "figures", "label": "answer" },
+    "spec": {
+      "title": "from this answer",
+      "heading": "Alert on refunds above 2σ by store",
+      "figures": [
+        { "label": "Rules", "value": "1" },
+        { "label": "Fired in Sep", "value": "3" },
+        { "label": "Recipients", "value": "214" }
+      ],
+      "actions": [
+        { "id": "later", "label": "Not now", "variant": "ghost" },
+        { "id": "edit", "label": "Edit", "push": true },
+        { "id": "create", "label": "Create alert", "variant": "primary" }
+      ]
+    }
+  },
+  {
+    "caption": "A scheduled report",
+    "turn": { "id": "schedule", "label": "answer" },
+    "spec": {
+      "title": "from this thread",
+      "rows": [
+        { "label": "Report", "value": "Q3 margin bridge — North" },
+        { "label": "Schedule", "value": "Mondays, 08:00" },
+        { "label": "Send to", "value": "You, 6 regional managers" }
+      ],
+      "consequence": "Sends the answer above each week with fresh data.",
+      "actions": [
+        { "id": "schedule", "label": "Schedule", "variant": "primary" },
+        { "id": "edit", "label": "Edit" },
+        { "id": "later", "label": "Not now", "variant": "ghost" }
+      ]
+    }
+  },
+  {
+    "caption": "Created",
+    "turn": { "id": "created", "label": "answer" },
+    "spec": {
+      "title": "from this answer",
+      "done": { "label": "Alert created", "at": "14:02" },
+      "rows": [
+        { "label": "Alert", "value": "Refunds > 2σ by store" },
+        { "label": "First check", "value": "Tomorrow, 07:00" }
+      ],
+      "actions": [{ "id": "open", "label": "Open alert", "variant": "link" }]
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "answer" },
+    "spec": {
+      "rows": [
+        { "label": "Alert", "value": "Refunds > 2σ by store" },
+        { "label": "Checks", "value": "Daily, 07:00" },
+        { "label": "Notify", "value": "Store managers" }
+      ],
+      "consequence": "Creates one alert rule. It would have fired 3 times in September.",
+      "actions": [
+        { "id": "create", "label": "Create alert", "variant": "primary" },
+        { "id": "edit", "label": "Edit" }
+      ]
+    }
+  }
+]

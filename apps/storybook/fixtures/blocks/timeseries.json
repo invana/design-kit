@@ -1,0 +1,26 @@
+[
+  {
+    "caption": "Actuals + forecast band",
+    "turn": { "id": "forecast", "label": "chart", "title": "weekly demand, units" },
+    "spec": {
+      "unit": "units",
+      "series": [
+        {
+          "name": "Weekly demand",
+          "points": [
+            ["Jul", 6800],
+            ["Aug", 7400],
+            ["Sep", 8200],
+            ["Oct", 8900],
+            ["Nov", 9600],
+            ["Dec", 10400]
+          ]
+        }
+      ],
+      "band": { "label": "80% interval", "lower": 8000, "upper": 11000 },
+      "forecastFrom": "Oct",
+      "forecastLabel": "today",
+      "marks": [{ "at": "Aug", "tone": "warn" }]
+    }
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "caption": "Label / value pairs",
+    "turn": { "id": "r1", "label": "record" },
+    "spec": {
+      "rows": [
+        { "label": "Customer", "value": "Acme Holdings" },
+        { "label": "Segment", "value": "Enterprise" },
+        { "label": "ARR", "value": "£412,000" },
+        { "label": "Renewal", "value": "14 Jan 2027" },
+        { "label": "Health", "value": "At risk · 3 signals" }
+      ]
+    }
+  },
+  {
+    "caption": "With a header + status",
+    "turn": { "id": "r2", "label": "record", "title": "customer" },
+    "spec": {
+      "header": {
+        "title": "Acme Holdings",
+        "initials": "AH",
+        "status": { "label": "at risk", "tone": "bad" }
+      },
+      "rows": [
+        { "label": "Segment", "value": "Enterprise" },
+        { "label": "ARR", "value": "£412,000" },
+        { "label": "Renewal", "value": "14 Jan 2027 · in 107 days" }
+      ]
+    }
+  },
+  {
+    "caption": "Grouped",
+    "turn": { "id": "r3", "label": "record", "title": "variety" },
+    "spec": {
+      "groups": [
+        {
+          "label": "Identity",
+          "rows": [{ "label": "Variety", "value": "BV-112" }, { "label": "Released", "value": "2022" }]
+        },
+        {
+          "label": "Performance, semi-arid",
+          "rows": [
+            { "label": "Yield", "value": "2,480 kg/ha" },
+            { "label": "Drought", "value": "4 of 9" },
+            { "label": "Rust", "value": "8 of 9" },
+            { "label": "Maturity", "value": "104 days" }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Assumptions behind an answer",
+    "turn": { "id": "r4", "label": "record", "title": "assumptions" },
+    "spec": {
+      "rows": [
+        { "label": "Elasticity", "value": "1.3", "source": "last year's promotions" },
+        { "label": "Price change", "value": "−5%", "source": "your input" },
+        { "label": "Stores", "value": "188", "source": "store master" },
+        { "label": "Horizon", "value": "8 weeks", "source": "default" }
+      ]
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "r5", "label": "record", "state": "running" },
+    "spec": { "status": "loading" }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "r6", "label": "record" },
+    "spec": {
+      "status": "empty",
+      "emptyText": "No customer matches “Acme Holdings”.",
+      "emptySuggestions": ["Search “Acme”"]
+    }
+  },
+  {
+    "caption": "At 280px · long values wrap",
+    "narrow": true,
+    "turn": { "id": "r7", "label": "record" },
+    "spec": {
+      "rows": [
+        { "label": "Customer", "value": "Acme Holdings International Group plc" },
+        {
+          "label": "Health",
+          "value": "At risk · usage down 40%, two open escalations, champion left"
+        },
+        { "label": "Renewal", "value": "14 Jan 2027" }
+      ]
+    }
+  }
+]

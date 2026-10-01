@@ -1,0 +1,58 @@
+[
+  {
+    "caption": "Editable in place",
+    "turn": { "id": "editable", "label": "scope" },
+    "spec": {
+      "parts": ["Q3 2026", "vs Q2", "Stores, Online", "214 stores", "as of 06:00"],
+      "hint": "Click any part to change it and re-run"
+    }
+  },
+  {
+    "caption": "Carried, one part changed",
+    "turn": { "id": "carried", "label": "scope" },
+    "spec": {
+      "parts": [
+        "Q3 2026",
+        { "text": "vs Q3 2025", "mark": "changed" },
+        "Stores, Online",
+        "214 stores",
+        "as of 06:00"
+      ],
+      "hint": "Carried from your first question · baseline changed"
+    }
+  },
+  {
+    "caption": "A part opened",
+    "turn": { "id": "opened", "label": "scope" },
+    "spec": {
+      "parts": [
+        "Q3 2026",
+        "vs Q2",
+        {
+          "text": "Stores, Online",
+          "choices": [
+            { "value": "stores-online", "label": "Stores, Online", "detail": "2 of 3" },
+            { "value": "stores", "label": "Stores only", "detail": "188" },
+            { "value": "all", "label": "All channels", "detail": "3 of 3" }
+          ]
+        },
+        "214 stores"
+      ],
+      "openPart": 2
+    }
+  },
+  {
+    "caption": "Stale data",
+    "turn": { "id": "stale", "label": "scope" },
+    "spec": {
+      "parts": ["Q3 2026", "vs Q2", "214 stores", { "text": "as of 25 Sep", "mark": "stale" }],
+      "hint": "The ledger hasn't loaded for 4 days. Figures may move."
+    }
+  },
+  {
+    "caption": "At 280px · wraps",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "scope" },
+    "spec": { "parts": ["Q3 2026", "vs Q2", "Stores, Online", "214 stores", "North region", "as of 06:00"] }
+  }
+]

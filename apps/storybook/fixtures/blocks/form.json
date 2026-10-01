@@ -1,0 +1,170 @@
+[
+  {
+    "caption": "Labels left",
+    "turn": { "id": "side", "stage": "analyse" },
+    "spec": {
+      "question": "Scenario inputs",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "Heading + description · labels on top",
+    "turn": { "id": "top", "stage": "analyse" },
+    "spec": {
+      "question": "Scenario inputs",
+      "description": "These only make sense together, so I ask them together.",
+      "labels": "top",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0,
+          "hint": "From last year's promotions"
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "A field in error",
+    "turn": { "id": "error", "stage": "analyse" },
+    "spec": {
+      "question": "Scenario inputs",
+      "heading": true,
+      "labels": "top",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "Grouped fields",
+    "turn": { "id": "grouped", "stage": "analyse" },
+    "spec": {
+      "question": "Scenario inputs",
+      "heading": true,
+      "labels": "top",
+      "fields": [
+        {
+          "name": "price",
+          "label": "Change",
+          "type": "number",
+          "unit": "%",
+          "default": -5,
+          "group": "Price"
+        },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0,
+          "group": "Price"
+        },
+        {
+          "name": "starts",
+          "label": "Starts",
+          "type": "date",
+          "default": "1 Nov 2026",
+          "group": "Timing"
+        },
+        {
+          "name": "weeks",
+          "label": "Runs for",
+          "type": "number",
+          "unit": "weeks",
+          "default": 8,
+          "group": "Timing"
+        }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "Answered",
+    "turn": { "id": "answered", "stage": "analyse", "answeredAt": "2026-09-29T10:00:20Z" },
+    "now": "2026-09-29T10:00:45Z",
+    "state": "answered",
+    "value": { "price": -5, "elasticity": 1.3, "starts": "1 Nov 2026" },
+    "spec": {
+      "question": "Scenario inputs",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "stage": "analyse" },
+    "spec": {
+      "question": "Scenario inputs",
+      "heading": true,
+      "labels": "top",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
+      ],
+      "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "stage": "scope" },
+    "spec": {
+      "question": "Scenario inputs",
+      "fields": [
+        { "name": "price", "label": "Price change", "type": "number", "unit": "%", "default": -5 },
+        {
+          "name": "elasticity",
+          "label": "Elasticity",
+          "type": "number",
+          "default": 1.3,
+          "above": 0
+        },
+        { "name": "starts", "label": "Starts", "type": "date", "default": "2026-11-01" }
+      ],
+      "submit": "Run scenario"
+    }
+  }
+]

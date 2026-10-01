@@ -1,0 +1,79 @@
+[
+  {
+    "caption": "Labelled caveats",
+    "turn": { "id": "labelled", "label": "caveat" },
+    "spec": {
+      "items": [
+        {
+          "label": "indicative",
+          "text": "Based on 38 of 42 stores. Four with incomplete September data are excluded."
+        },
+        {
+          "label": "association",
+          "text": "Delivery speed moves with repeat rate, but this does not show it causes it."
+        }
+      ]
+    }
+  },
+  {
+    "caption": "With the excluded rows",
+    "turn": { "id": "excluded", "label": "caveat" },
+    "spec": {
+      "label": "excluded",
+      "text": "4 stores with incomplete September data.",
+      "action": { "id": "show-excluded", "label": "Show the 4 stores" }
+    }
+  },
+  {
+    "caption": "Three tones",
+    "turn": { "id": "tones", "label": "caveat" },
+    "spec": {
+      "items": [
+        {
+          "label": "imputed",
+          "text": "Two missing weeks filled from the regional average.",
+          "tone": "info"
+        },
+        {
+          "label": "indicative",
+          "text": "North rests on 9 stores. Treat it as a direction, not a figure."
+        },
+        { "label": "stale", "text": "The ledger last loaded on 25 Sep.", "tone": "bad" }
+      ]
+    }
+  },
+  {
+    "caption": "Folded",
+    "turn": { "id": "folded", "label": "caveat" },
+    "spec": {
+      "items": [
+        {
+          "label": "indicative",
+          "text": "Based on 38 of 42 stores. Four with incomplete September data are excluded."
+        },
+        {
+          "label": "association",
+          "text": "Delivery speed moves with repeat rate, but this does not show it causes it."
+        }
+      ],
+      "folded": true
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "caveat" },
+    "spec": {
+      "items": [
+        {
+          "label": "indicative",
+          "text": "Based on 38 of 42 stores. Four with incomplete September data are excluded."
+        },
+        {
+          "label": "association",
+          "text": "Delivery speed moves with repeat rate, but this does not show it causes it."
+        }
+      ]
+    }
+  }
+]

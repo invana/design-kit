@@ -1,0 +1,136 @@
+[
+  {
+    "caption": "Two picks · default set",
+    "turn": { "id": "two", "stage": "scope" },
+    "spec": {
+      "question": "Show the trend by",
+      "label": "Trend by",
+      "options": [
+        { "value": "day", "label": "Day" },
+        { "value": "week", "label": "Week" },
+        { "value": "month", "label": "Month" }
+      ],
+      "default": "week",
+      "hint": "Week gives 26 points over the window",
+      "more": [
+        {
+          "id": "confidence",
+          "question": "Confidence level",
+          "label": "Confidence",
+          "options": [
+            { "value": "90", "label": "90%" },
+            { "value": "95", "label": "95%" },
+            { "value": "99", "label": "99%" }
+          ],
+          "default": "95"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Heading + description · no default",
+    "turn": { "id": "none", "stage": "act" },
+    "spec": {
+      "question": "How should I return the result?",
+      "description": "Nothing is picked until you choose.",
+      "options": [
+        { "value": "table", "label": "Table" },
+        { "value": "chart", "label": "Chart" },
+        { "value": "both", "label": "Both" }
+      ]
+    }
+  },
+  {
+    "caption": "Options with a sub-label",
+    "turn": { "id": "sub", "stage": "analyse" },
+    "spec": {
+      "question": "Confidence level",
+      "heading": true,
+      "stretch": true,
+      "options": [
+        { "value": "90", "label": "90%", "sub": "±1.2 pp" },
+        { "value": "95", "label": "95%", "sub": "±1.4 pp" },
+        { "value": "99", "label": "99%", "sub": "±1.9 pp" }
+      ],
+      "default": "95",
+      "hint": "Width of the interval on the lift estimate"
+    }
+  },
+  {
+    "caption": "Five options · full width",
+    "turn": { "id": "five", "stage": "scope" },
+    "spec": {
+      "question": "Show the trend by",
+      "stretch": true,
+      "options": [
+        { "value": "day", "label": "Day" },
+        { "value": "week", "label": "Week" },
+        { "value": "month", "label": "Month" },
+        { "value": "quarter", "label": "Quarter" },
+        { "value": "year", "label": "Year" }
+      ],
+      "default": "week",
+      "hint": "Week gives 26 points over the window"
+    }
+  },
+  {
+    "caption": "Answered",
+    "turn": { "id": "answered", "stage": "scope", "answeredAt": "2026-09-29T10:00:20Z" },
+    "now": "2026-09-29T10:00:45Z",
+    "state": "answered",
+    "value": { "Trend by": "week", "confidence": "95" },
+    "spec": {
+      "question": "Show the trend by",
+      "label": "Trend by",
+      "options": [
+        { "value": "day", "label": "Day" },
+        { "value": "week", "label": "Week" },
+        { "value": "month", "label": "Month" }
+      ],
+      "default": "week",
+      "hint": "Week gives 26 points over the window",
+      "more": [
+        {
+          "id": "confidence",
+          "question": "Confidence level",
+          "label": "Confidence",
+          "options": [
+            { "value": "90", "label": "90%" },
+            { "value": "95", "label": "95%" },
+            { "value": "99", "label": "99%" }
+          ],
+          "default": "95"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "stage": "scope" },
+    "spec": {
+      "question": "Show the trend by",
+      "stretch": true,
+      "options": [
+        { "value": "day", "label": "Day" },
+        { "value": "week", "label": "Week" },
+        { "value": "month", "label": "Month" }
+      ],
+      "default": "week",
+      "hint": "Week gives 26 points"
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "stage": "scope" },
+    "spec": {
+      "question": "How should I return the result?",
+      "options": [
+        { "value": "table", "label": "Table" },
+        { "value": "chart", "label": "Chart" },
+        { "value": "both", "label": "Both" }
+      ],
+      "default": "table"
+    }
+  }
+]
