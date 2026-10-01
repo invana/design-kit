@@ -66,7 +66,6 @@ export function QuickAsk({ turn, options, onEvent }: AskRendererProps<"quick">) 
           <SegmentedControl
             aria-label={r.question}
             variant="solid"
-            size="xs"
             stretch={options.stretch}
             options={r.options}
             defaultValue={picked[r.key] ?? null}

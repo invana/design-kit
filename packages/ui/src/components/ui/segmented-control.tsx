@@ -26,8 +26,6 @@ export interface SegmentedControlProps
    */
   defaultValue?: string | null
   onValueChange?: (value: string) => void
-  /** `xs` is 22px — a pagehead slot. `sm` is 26px, for a panel header. */
-  size?: "xs" | "sm"
   /** Fill the width given, each option an equal share of it. */
   stretch?: boolean
   /**
@@ -73,7 +71,6 @@ export const SegmentedControl = React.forwardRef<
       value,
       defaultValue,
       onValueChange,
-      size = "xs",
       stretch,
       variant = "tint",
       readOnly,
@@ -150,7 +147,9 @@ export const SegmentedControl = React.forwardRef<
                 // Stretched, each option has its share already; padding would only truncate it.
                 variant === "solid" ? (stretch ? "px-1" : "px-3") : "px-2",
                 "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
-                size === "xs" ? "h-[22px] text-sm" : "h-[26px]",
+                // 26px at the root size: the height of the `sm` search and the
+                // filter chips it shares a toolbar with.
+                "h-[26px] text-base",
                 // Two lines take the height they need.
                 option.sub != null && "h-auto py-1",
                 stretch && "flex-1",

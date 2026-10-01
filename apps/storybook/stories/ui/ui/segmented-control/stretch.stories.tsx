@@ -36,7 +36,6 @@ export const Stretch: Story = {
           aside={
             <SegmentedControl
               aria-label="Filter by level"
-              size="xs"
               stretch
               value={level}
               onValueChange={setLevel}

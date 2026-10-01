@@ -170,7 +170,6 @@ export const InlineEdit: Story = {
         onCellEdit={onCellEdit}
         toolbar={
           <SegmentedControl
-            size="sm"
             options={DENSITIES}
             value={density}
             onValueChange={(v) => setDensity(v as TableDensity)}

@@ -125,7 +125,6 @@ export const Density: Story = {
         density={density}
         toolbar={
           <SegmentedControl
-            size="sm"
             options={DENSITIES}
             value={density}
             onValueChange={(v) => setDensity(v as TableDensity)}
