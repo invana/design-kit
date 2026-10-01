@@ -13,14 +13,15 @@ const SelectValue = SelectPrimitive.Value
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
-    /** Matches `Input`'s `inputSize` — `sm` is the 26px application field. */
-    triggerSize?: "default" | "sm"
+    /** Matches `Input`'s `inputSize` — the control scale, `sm` 26 / `default` 32 / `lg` 40. */
+    triggerSize?: "sm" | "default" | "lg"
   }
 >(({ className, children, triggerSize = "default", ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      triggerSize === "sm" ? "h-[26px] px-2 py-0" : "h-9 px-3 py-2",
+      "py-0",
+      triggerSize === "sm" ? "h-control-sm px-2" : triggerSize === "lg" ? "h-control-lg px-3" : "h-control-md px-2.5",
       "flex w-full items-center justify-between whitespace-nowrap rounded-control border border-input bg-transparent  shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
