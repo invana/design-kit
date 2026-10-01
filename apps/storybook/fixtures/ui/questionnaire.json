@@ -1,0 +1,148 @@
+[
+  {
+    "caption": "Default",
+    "width": 420,
+    "progress": true,
+    "actions": ["previous", "next", "submit"],
+    "items": [
+      {
+        "name": "source",
+        "required": true,
+        "prompt": "Where does the data come from?",
+        "description": "Pick the system the model will read first.",
+        "choices": [
+          { "value": "warehouse", "label": "Warehouse", "description": "Snowflake, BigQuery or Postgres." },
+          { "value": "files", "label": "Files", "description": "CSV or Parquet uploads." },
+          { "value": "api", "label": "An API", "description": "A REST endpoint polled on a schedule." }
+        ]
+      },
+      {
+        "name": "cadence",
+        "required": true,
+        "prompt": "How often should it refresh?",
+        "description": "You can change this later in the source settings.",
+        "choices": [
+          { "value": "hourly", "label": "Hourly" },
+          { "value": "daily", "label": "Daily" },
+          { "value": "manual", "label": "Only when I ask" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Freeform",
+    "width": 420,
+    "actions": ["submit"],
+    "items": [
+      {
+        "name": "direction",
+        "required": true,
+        "prompt": "What should we prototype next?",
+        "description": "Choose a direction or write your own.",
+        "freeform": { "label": "Another answer", "placeholder": "Type another answer…" },
+        "choices": [
+          { "value": "delegation", "label": "Delegation", "description": "Show how work moves to a specialist." },
+          { "value": "questions", "label": "Question prompts", "description": "Show choices while the interface waits." },
+          { "value": "both", "label": "Both together" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Keyboard shortcuts",
+    "width": 420,
+    "shortcuts": "letters",
+    "progress": true,
+    "actions": ["previous", "skip", "next", "submit"],
+    "items": [
+      {
+        "name": "audience",
+        "required": true,
+        "prompt": "Who reads this dashboard?",
+        "description": "Press a letter to choose, Enter to continue.",
+        "choices": [
+          { "value": "analysts", "label": "Analysts" },
+          { "value": "leadership", "label": "Leadership" }
+        ]
+      },
+      {
+        "name": "detail",
+        "required": false,
+        "prompt": "How much detail should it include?",
+        "description": "Skip this if you are not sure yet.",
+        "choices": [
+          { "value": "focused", "label": "Focused" },
+          { "value": "complete", "label": "Complete flow" }
+        ]
+      },
+      {
+        "name": "alerts",
+        "required": false,
+        "prompt": "Should it send alerts?",
+        "description": "Optional.",
+        "choices": [
+          { "value": "yes", "label": "Yes" },
+          { "value": "no", "label": "No" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Multiple choice",
+    "width": 420,
+    "actions": ["submit"],
+    "items": [
+      {
+        "name": "layers",
+        "required": true,
+        "multiple": true,
+        "prompt": "Which layers should the agent read?",
+        "description": "Pick every layer that applies.",
+        "choices": [
+          { "value": "raw", "label": "Raw" },
+          { "value": "staged", "label": "Staged" },
+          { "value": "modelled", "label": "Modelled" },
+          { "value": "published", "label": "Published" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Skippable",
+    "width": 420,
+    "progress": true,
+    "actions": ["previous", "skip", "next", "submit"],
+    "items": [
+      {
+        "name": "audience",
+        "required": true,
+        "prompt": "Who reads this dashboard?",
+        "description": "Required — the layout depends on it.",
+        "choices": [
+          { "value": "analysts", "label": "Analysts" },
+          { "value": "leadership", "label": "Leadership" }
+        ]
+      },
+      {
+        "name": "detail",
+        "required": false,
+        "prompt": "How much detail should it include?",
+        "description": "Skip this if you are not sure yet.",
+        "choices": [
+          { "value": "focused", "label": "Focused" },
+          { "value": "complete", "label": "Complete flow" }
+        ]
+      },
+      {
+        "name": "alerts",
+        "required": false,
+        "prompt": "Should it send alerts?",
+        "description": "Optional.",
+        "choices": [
+          { "value": "yes", "label": "Yes" },
+          { "value": "no", "label": "No" }
+        ]
+      }
+    ]
+  }
+]

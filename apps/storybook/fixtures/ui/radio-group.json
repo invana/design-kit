@@ -1,0 +1,12 @@
+[
+  {
+    "caption": "Default",
+    "name": "density",
+    "value": "comfortable",
+    "options": [
+      { "value": "default", "label": "Default" },
+      { "value": "comfortable", "label": "Comfortable" },
+      { "value": "compact", "label": "Compact" }
+    ]
+  }
+]

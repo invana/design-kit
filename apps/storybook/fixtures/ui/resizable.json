@@ -1,0 +1,92 @@
+[
+  {
+    "caption": "Simple horizontal",
+    "wide": true,
+    "height": 240,
+    "group": {
+      "orientation": "horizontal",
+      "handle": true,
+      "panels": [
+        { "id": "left", "size": 50, "min": 20, "title": "Left panel", "body": "Try to resize me!" },
+        { "id": "right", "size": 50, "min": 20, "title": "Right panel" }
+      ]
+    }
+  },
+  {
+    "caption": "Simple vertical",
+    "wide": true,
+    "height": 320,
+    "group": {
+      "orientation": "vertical",
+      "handle": true,
+      "panels": [
+        { "id": "top", "size": 50, "min": 20, "title": "Top panel", "body": "Try to resize me!" },
+        { "id": "bottom", "size": 50, "min": 20, "title": "Bottom panel" }
+      ]
+    }
+  },
+  {
+    "caption": "Nested",
+    "wide": true,
+    "height": 320,
+    "group": {
+      "orientation": "horizontal",
+      "handle": true,
+      "panels": [
+        {
+          "id": "left",
+          "size": 50,
+          "min": 20,
+          "group": {
+            "orientation": "vertical",
+            "handle": true,
+            "panels": [
+              { "id": "top-left", "size": 50, "min": 20, "title": "Top left" },
+              { "id": "bottom-left", "size": 50, "min": 20, "title": "Bottom left" }
+            ]
+          }
+        },
+        { "id": "right", "size": 50, "min": 20, "title": "Right panel" }
+      ]
+    }
+  },
+  {
+    "caption": "Nested, no handle",
+    "wide": true,
+    "height": 320,
+    "group": {
+      "orientation": "horizontal",
+      "handle": false,
+      "panels": [
+        {
+          "id": "left",
+          "size": 50,
+          "min": 20,
+          "group": {
+            "orientation": "vertical",
+            "handle": false,
+            "panels": [
+              { "id": "top-left", "size": 50, "min": 20, "title": "Top left" },
+              { "id": "bottom-left", "size": 50, "min": 20, "title": "Bottom left" }
+            ]
+          }
+        },
+        { "id": "right", "size": 50, "min": 20, "title": "Right panel" }
+      ]
+    }
+  },
+  {
+    "caption": "Direct import",
+    "wide": true,
+    "height": 240,
+    "direct": true,
+    "group": {
+      "orientation": "horizontal",
+      "handle": false,
+      "panels": [
+        { "id": "left", "size": 50, "min": 20, "title": "Left panel (direct import)", "body": "Try dragging the handle →" },
+        { "id": "right", "size": 50, "min": 20, "title": "Right panel", "body": "If this works, the library is fine" }
+      ]
+    }
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "caption": "Default",
+    "label": "Uploading…",
+    "feed": [13, 28, 41, 60, 74, 88, 100]
+  },
+  {
+    "caption": "Meter",
+    "width": 240,
+    "label": "tokens this month",
+    "value": 64,
+    "figure": "38.4k",
+    "note": "64% of 60k · 15 trading days left"
+  }
+]

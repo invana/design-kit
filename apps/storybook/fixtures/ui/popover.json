@@ -1,0 +1,13 @@
+[
+  {
+    "caption": "Default",
+    "trigger": "Dimensions",
+    "icon": "settings",
+    "title": "Dimensions",
+    "description": "Set the dimensions for the layer.",
+    "fields": [
+      { "id": "width", "label": "Width", "value": "100%" },
+      { "id": "height", "label": "Height", "value": "25px" }
+    ]
+  }
+]
