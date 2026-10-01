@@ -774,7 +774,6 @@ const AppV2Demo = ({ bottomSpan }: Pick<AppLayoutV2Props, 'bottomSpan'>) => {
         ) : (
           <EditorContent />
         ),
-      defaultSize: "600px",
       minSize: "400px",
     },
     bottomSection:

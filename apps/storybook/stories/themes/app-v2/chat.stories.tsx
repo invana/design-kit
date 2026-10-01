@@ -379,7 +379,6 @@ export const Chat: Story = {
     },
     mainSection: {
       content: <ChatCanvas />,
-      defaultSize: "700px",
       minSize: "400px",
     },
     rightSection: {

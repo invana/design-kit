@@ -521,7 +521,6 @@ function ExplorerShellDemo() {
 
     // ── Main: the canvas tab strip, then the canvas ─────────────────────────
     mainSection: {
-      defaultSize: '600px',
       minSize: '300px',
       content: (
         <div className="flex h-full min-h-0 w-full flex-col">
