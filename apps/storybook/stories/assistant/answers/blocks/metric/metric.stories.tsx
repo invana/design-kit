@@ -32,7 +32,7 @@ export const Metric: Story = {
       {
         caption: 'Figure + comparison',
         turn: answer('m1', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Net revenue retention',
           value: '108%',
           delta: '▲ 3 pts vs Q2 · target 110%',
@@ -42,7 +42,7 @@ export const Metric: Story = {
       {
         caption: 'Against a target',
         turn: answer('m2', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Net revenue retention',
           value: '108%',
           delta: '▲ 3 pts vs Q2',
@@ -53,7 +53,7 @@ export const Metric: Story = {
       {
         caption: 'With a trend',
         turn: answer('m3', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Weekly sales',
           value: '£4.82M',
           delta: '▼ 3.1% vs LY',
@@ -65,7 +65,7 @@ export const Metric: Story = {
       {
         caption: 'No comparison',
         turn: answer('m4', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Open tickets',
           value: '412',
           delta: 'as of 06:00',
@@ -74,7 +74,7 @@ export const Metric: Story = {
       {
         caption: 'No data',
         turn: answer('m5', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Net revenue retention',
           value: null,
           delta: 'No renewals fell due in September',
@@ -84,7 +84,7 @@ export const Metric: Story = {
         caption: 'Loading',
         turn: answer(
           'm6',
-          { preset: 'metric', label: 'Net revenue retention', value: null, status: 'loading' },
+          { kind: 'metric', label: 'Net revenue retention', value: null, status: 'loading' },
           { state: 'running' },
         ),
       },
@@ -92,7 +92,7 @@ export const Metric: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: answer('m7', {
-          preset: 'metric',
+          kind: 'metric',
           label: 'Net revenue retention',
           value: '108%',
           delta: '▲ 3 pts vs Q2',

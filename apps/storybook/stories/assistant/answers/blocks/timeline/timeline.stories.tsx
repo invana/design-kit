@@ -33,7 +33,7 @@ export const Timeline: Story = {
       {
         caption: 'Dated events',
         turn: answer('l1', {
-          preset: 'timeline',
+          kind: 'timeline',
           events: [
             { when: '12 Sep', text: 'Loaded at Rotterdam', tone: 'good' },
             { when: '19 Sep', text: 'Held at customs · 3 days', tone: 'warn' },
@@ -45,7 +45,7 @@ export const Timeline: Story = {
       {
         caption: 'With detail lines',
         turn: answer('l2', {
-          preset: 'timeline',
+          kind: 'timeline',
           events: [
             { when: '12 Sep', text: 'Loaded at Rotterdam', detail: 'Vessel departs on schedule', tone: 'good' },
             { when: '19 Sep', text: 'Held at customs', detail: 'Missing certificate of origin · 3 days', tone: 'warn' },
@@ -59,7 +59,7 @@ export const Timeline: Story = {
         turn: answer(
           'l3',
           {
-            preset: 'timeline',
+            kind: 'timeline',
             events: [
               { when: '11 Sep', text: 'Price change on 40 SKUs', section: 'Before' },
               { when: '13 Sep', text: 'New returns policy live', section: 'Before' },
@@ -72,12 +72,12 @@ export const Timeline: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('l4', { preset: 'timeline', events: [], status: 'loading' }, { state: 'running' }),
+        turn: answer('l4', { kind: 'timeline', events: [], status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'No data',
         turn: answer('l5', {
-          preset: 'timeline',
+          kind: 'timeline',
           events: [],
           status: 'empty',
           emptyText: 'No events recorded for this container yet.',
@@ -89,7 +89,7 @@ export const Timeline: Story = {
         turn: answer(
           'l6',
           {
-            preset: 'timeline',
+            kind: 'timeline',
             events: [
               { when: '12 Sep', text: 'Loaded at Rotterdam', tone: 'good' },
               { when: '19 Sep', text: 'Held at customs · 3 days', tone: 'warn' },

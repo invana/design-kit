@@ -62,7 +62,7 @@
       "state": "pending",
       "waiting": "parked 38d",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "Keep **auto-show on select**?",
         "yes": "Keep it",
         "no": "Drop it"

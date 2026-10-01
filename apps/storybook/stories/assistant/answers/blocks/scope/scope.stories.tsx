@@ -35,7 +35,7 @@ export const ScopeLine: Story = {
       {
         caption: 'Editable in place',
         turn: scope('editable', {
-          preset: 'scope',
+          kind: 'scope',
           parts: ['Q3 2026', 'vs Q2', 'Stores, Online', '214 stores', 'as of 06:00'],
           hint: 'Click any part to change it and re-run',
         }),
@@ -43,7 +43,7 @@ export const ScopeLine: Story = {
       {
         caption: 'Carried, one part changed',
         turn: scope('carried', {
-          preset: 'scope',
+          kind: 'scope',
           parts: ['Q3 2026', { text: 'vs Q3 2025', mark: 'changed' }, 'Stores, Online', '214 stores', 'as of 06:00'],
           hint: 'Carried from your first question · baseline changed',
         }),
@@ -51,7 +51,7 @@ export const ScopeLine: Story = {
       {
         caption: 'A part opened',
         turn: scope('opened', {
-          preset: 'scope',
+          kind: 'scope',
           parts: [
             'Q3 2026',
             'vs Q2',
@@ -71,7 +71,7 @@ export const ScopeLine: Story = {
       {
         caption: 'Stale data',
         turn: scope('stale', {
-          preset: 'scope',
+          kind: 'scope',
           parts: ['Q3 2026', 'vs Q2', '214 stores', { text: 'as of 25 Sep', mark: 'stale' }],
           hint: "The ledger hasn't loaded for 4 days. Figures may move.",
         }),
@@ -80,7 +80,7 @@ export const ScopeLine: Story = {
         caption: 'At 280px · wraps',
         narrow: true,
         turn: scope('narrow', {
-          preset: 'scope',
+          kind: 'scope',
           parts: ['Q3 2026', 'vs Q2', 'Stores, Online', '214 stores', 'North region', 'as of 06:00'],
         }),
       },

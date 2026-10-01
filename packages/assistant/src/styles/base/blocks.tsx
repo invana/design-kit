@@ -16,16 +16,16 @@ export interface BlockViewProps {
 }
 
 /**
- * One block, drawn by whatever the registry holds for its preset — a built-in,
+ * One block, drawn by whatever the registry holds for its block — a built-in,
  * a renderer of your own, or a labelled placeholder when there is none. Its
  * loading and empty states and its caption are the protocol's, so they look
  * the same under every renderer.
  */
 export function BlockView({ block, turn, registry, onEvent }: BlockViewProps) {
-  const Renderer = registry.blocks[block.preset]
+  const Renderer = registry.blocks[block.kind]
   const body =
     block.status === "loading" ? (
-      <BlockSkeleton preset={block.preset} />
+      <BlockSkeleton kind={block.kind} />
     ) : block.status === "empty" ? (
       <BlockEmpty
         text={block.emptyText ?? "Nothing to show."}
@@ -33,7 +33,7 @@ export function BlockView({ block, turn, registry, onEvent }: BlockViewProps) {
         onSuggest={(text) => onEvent({ type: "prompt", text })}
       />
     ) : !Renderer ? (
-      <Placeholder kind="block" preset={block.preset} options={block} />
+      <Placeholder kind={block.kind} options={block} />
     ) : (
       <Renderer block={block} turn={turn} onEvent={onEvent} />
     )
@@ -48,7 +48,7 @@ export function BlockView({ block, turn, registry, onEvent }: BlockViewProps) {
 }
 
 /**
- * The envelope, drawn by the presets a block would use so it looks the same
+ * The envelope, drawn by the blocks a block would use so it looks the same
  * everywhere: scope and freshness over the evidence, method and caveats under.
  * These are the protocol's envelope fields, not answer types.
  */
@@ -56,10 +56,10 @@ export function envelopeBlocks(turn: AnswerTurn): { top: BlockSpec[]; bottom: Bl
   const env = turn.envelope
   if (!env) return { top: [], bottom: [] }
   const parts = [...(env.scope ?? []), ...(env.freshness ? [`as of ${env.freshness}`] : [])]
-  const top: BlockSpec[] = parts.length ? [{ preset: "scope", parts }] : []
+  const top: BlockSpec[] = parts.length ? [{ kind: "scope", parts }] : []
   const bottom: BlockSpec[] = [
-    ...(env.method ? [{ preset: "method" as const, label: "method", code: env.method }] : []),
-    ...(env.caveats ?? []).map((c) => ({ preset: "caveat" as const, label: c.label, text: c.text })),
+    ...(env.method ? [{ kind: "method" as const, label: "method", code: env.method }] : []),
+    ...(env.caveats ?? []).map((c) => ({ kind: "caveat" as const, label: c.label, text: c.text })),
   ]
   return { top, bottom }
 }
@@ -70,8 +70,8 @@ export function envelopeBlocks(turn: AnswerTurn): { top: BlockSpec[]; bottom: Bl
  */
 export function splitBlocks(turn: AnswerTurn, registry: ResolvedRegistry) {
   const { top, bottom } = envelopeBlocks(turn)
-  const own = turn.blocks.filter((b) => registry.blockTraits(b.preset).placement === "own")
-  const inCard = turn.blocks.filter((b) => registry.blockTraits(b.preset).placement !== "own")
+  const own = turn.blocks.filter((b) => registry.blockTraits(b.kind).placement === "own")
+  const inCard = turn.blocks.filter((b) => registry.blockTraits(b.kind).placement !== "own")
   return { inCard: [...top, ...inCard, ...bottom], own, hasEvidence: inCard.length > 0 }
 }
 

@@ -19,7 +19,7 @@ export const EmissionBody = UiEmissionBody
 export const EmissionHeader = UiEmissionHeader
 /** The superscript that ties a clause to the records behind it. */
 export const CitationMarker = UiCitationMarker
-/** Re-render the same records as another preset. */
+/** Re-render the same records as another block. */
 export const TemplatePicker = UiTemplatePicker
 
 export type {

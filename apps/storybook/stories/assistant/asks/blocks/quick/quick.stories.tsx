@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn, StageId } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Quick',
+  title: 'Assistant/Asks/Blocks/Quick',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -36,7 +36,7 @@ const confidence = [
 
 /** Two rows in one card: the trend's granularity, then the confidence level. */
 const twoPicks: AskSpec = {
-  preset: 'quick',
+  kind: 'quick',
   question: 'Show the trend by',
   label: 'Trend by',
   options: trend,
@@ -55,7 +55,7 @@ export const QuickPick: Story = {
       {
         caption: 'Heading + description · no default',
         turn: ask('none', 'act', {
-          preset: 'quick',
+          kind: 'quick',
           question: 'How should I return the result?',
           description: 'Nothing is picked until you choose.',
           options: [
@@ -68,7 +68,7 @@ export const QuickPick: Story = {
       {
         caption: 'Options with a sub-label',
         turn: ask('sub', 'analyse', {
-          preset: 'quick',
+          kind: 'quick',
           question: 'Confidence level',
           heading: true,
           stretch: true,
@@ -84,7 +84,7 @@ export const QuickPick: Story = {
       {
         caption: 'Five options · full width',
         turn: ask('five', 'scope', {
-          preset: 'quick',
+          kind: 'quick',
           question: 'Show the trend by',
           stretch: true,
           options: [...trend, { value: 'quarter', label: 'Quarter' }, { value: 'year', label: 'Year' }],
@@ -105,7 +105,7 @@ export const QuickPick: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: ask('narrow', 'scope', {
-          preset: 'quick',
+          kind: 'quick',
           question: 'Show the trend by',
           stretch: true,
           options: trend,

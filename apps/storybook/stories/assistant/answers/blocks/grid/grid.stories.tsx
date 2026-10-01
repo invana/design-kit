@@ -34,12 +34,12 @@ export const MetricGrid: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'Three across', turn: answer('g1', { preset: 'grid', tiles: [revenue, orders, aov] }) },
-      { caption: 'Two by two', turn: answer('g2', { preset: 'grid', tiles: [revenue, orders, aov, returns] }) },
+      { caption: 'Three across', turn: answer('g1', { kind: 'grid', tiles: [revenue, orders, aov] }) },
+      { caption: 'Two by two', turn: answer('g2', { kind: 'grid', tiles: [revenue, orders, aov, returns] }) },
       {
         caption: 'Six in two rows',
         turn: answer('g3', {
-          preset: 'grid',
+          kind: 'grid',
           tiles: [
             revenue,
             orders,
@@ -53,7 +53,7 @@ export const MetricGrid: Story = {
       {
         caption: 'One tile flagged',
         turn: answer('g4', {
-          preset: 'grid',
+          kind: 'grid',
           tiles: [revenue, orders, { label: 'North', value: '£0.9M', delta: '▼ 6%', tone: 'bad', flag: true }],
           caption: 'North rests on 9 stores · indicative',
           captionTone: 'warn',
@@ -61,19 +61,19 @@ export const MetricGrid: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('g5', { preset: 'grid', tiles: [], status: 'loading' }, { state: 'running' }),
+        turn: answer('g5', { kind: 'grid', tiles: [], status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'No data',
         turn: answer('g6', {
-          preset: 'grid',
+          kind: 'grid',
           tiles: [revenue, { label: 'Returns', value: null, delta: 'Not loaded for Q3' }],
         }),
       },
       {
         caption: 'At 280px · four become two by two',
         narrow: true,
-        turn: answer('g7', { preset: 'grid', tiles: [revenue, orders, aov, returns] }),
+        turn: answer('g7', { kind: 'grid', tiles: [revenue, orders, aov, returns] }),
       },
     ],
   },

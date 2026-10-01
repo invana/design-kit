@@ -111,7 +111,7 @@
         "stage": "check",
         "state": "answered",
         "ask": {
-          "preset": "single",
+          "kind": "single",
           "question": "“Apex” matches two suppliers. Which one?",
           "options": [
             {
@@ -152,7 +152,7 @@
         },
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "Lead time",
@@ -174,7 +174,7 @@
             ]
           },
           {
-            "preset": "timeseries",
+            "kind": "timeseries",
             "unit": "d",
             "series": [
               {
@@ -260,7 +260,7 @@
             ]
           },
           {
-            "preset": "timeline",
+            "kind": "timeline",
             "events": [
               {
                 "when": "wk 8",
@@ -288,7 +288,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "form",
+          "kind": "form",
           "question": "Scenario inputs",
           "fields": [
             {
@@ -349,7 +349,7 @@
         },
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "shift",
@@ -396,11 +396,11 @@
             ]
           },
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "Moving 30% removes most of the risk: **12 fewer stock-out days for £84k**. The next 20% saves three more days for another £56k."
           },
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "title": "recommendation",
             "rows": [
               {
@@ -444,11 +444,11 @@
         "stage": "monitor",
         "state": "answered",
         "ask": {
-          "preset": "multistep",
+          "kind": "multistep",
           "steps": [
             {
               "id": "report",
-              "preset": "single",
+              "kind": "single",
               "question": "When should the report go out?",
               "options": [
                 {
@@ -464,7 +464,7 @@
             },
             {
               "id": "to",
-              "preset": "multi",
+              "kind": "multi",
               "question": "Who should receive it?",
               "options": [
                 {
@@ -483,14 +483,14 @@
             },
             {
               "id": "alert",
-              "preset": "number",
+              "kind": "number",
               "question": "Alert when Apex on time falls below",
               "unit": "%",
               "default": 55
             },
             {
               "id": "until",
-              "preset": "single",
+              "kind": "single",
               "question": "Until when?",
               "options": [
                 {
@@ -526,7 +526,7 @@
         "label": "files",
         "blocks": [
           {
-            "preset": "files",
+            "kind": "files",
             "files": [
               {
                 "name": "supplier-shift-scenario.xlsx",
@@ -549,7 +549,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "Check Brightline's capacity for 50%",
             "Which SKUs are single-sourced?"
@@ -631,7 +631,7 @@
         "text": "Cover on Apex SKUs stands at **13.4 days** today and falls to **7.4 days** in wk 44, below the 10-day safety floor for three weeks before Brightline's first delivery lands. **6 SKUs** at Daventry DC run out before then.",
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "Cover today",
@@ -654,7 +654,7 @@
             ]
           },
           {
-            "preset": "timeseries",
+            "kind": "timeseries",
             "unit": "d",
             "series": [
               {
@@ -767,7 +767,7 @@
       "waiting": "what should the order aim for?",
       "stage": "frame",
       "ask": {
-        "preset": "form",
+        "kind": "form",
         "question": "How should the expedite order be sized?",
         "label": "Expedite",
         "labels": "top",
@@ -834,7 +834,7 @@
         "text": "**8,640 units** across 6 SKUs bring Daventry to 14 days of cover by 20 Oct. Air freight costs **£31.8k**, inside the £40k cap.",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "sku",
@@ -913,7 +913,7 @@
             }
           },
           {
-            "preset": "files",
+            "kind": "files",
             "download": true,
             "files": [
               {
@@ -931,7 +931,7 @@
             ]
           },
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "title": "from this answer",
             "heading": "Raise an expedite PO to Apex Components",
             "rows": [
@@ -984,7 +984,7 @@
       "thinking": "Refitting demand-forecast v4 across the full catalogue, not just Apex SKUs, reads two years of daily sales for every SKU-DC pair. It writes a new forecast version, so it needs a yes.",
       "waiting": "this refits the whole catalogue",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "This refits the forecast for **all 2,318 SKUs** across 3 DCs. Run it?",
         "cost": [
           {
@@ -1028,7 +1028,7 @@
         "text": "Forecast **v5** is live for all 2,318 SKUs. Demand for the next 13 weeks rises **4.2%** overall; Apex SKUs rise **9.1%**, led by the PSU range.",
         "blocks": [
           {
-            "preset": "timeline",
+            "kind": "timeline",
             "events": [
               {
                 "when": "09:02",
@@ -1083,7 +1083,7 @@
           "text": "Previewing the refit on the **43 Apex SKUs** only, without writing v5. The PSU range rises most; enclosures fall.",
           "blocks": [
             {
-              "preset": "ranked",
+              "kind": "ranked",
               "diverging": {
                 "below": "lower than v4",
                 "above": "higher than v4"

@@ -5,7 +5,7 @@ import type { AskTurn, MultistepOptions } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Multistep',
+  title: 'Assistant/Asks/Blocks/Multistep',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -17,7 +17,7 @@ type Step = MultistepOptions['steps'][number];
 
 const environment: Step = {
   id: 'environment',
-  preset: 'single',
+  kind: 'single',
   label: 'Environment',
   question: 'Which environment is the new line for?',
   description: 'Sets which trial sites the analysis reads.',
@@ -30,7 +30,7 @@ const environment: Step = {
 };
 const yieldFloor: Step = {
   id: 'yield',
-  preset: 'number',
+  kind: 'number',
   label: 'Yield floor',
   question: 'Yield floor',
   description: 'Lines below this are dropped from the shortlist.',
@@ -40,7 +40,7 @@ const yieldFloor: Step = {
 };
 const mustKeep: Step = {
   id: 'keep',
-  preset: 'multi',
+  kind: 'multi',
   label: 'Must keep',
   question: 'Traits the new line must keep',
   options: [
@@ -57,7 +57,7 @@ const ask = (id: string, options: MultistepOptions, settled?: Partial<AskTurn>):
   kind: 'ask',
   stage: 'scope',
   state: 'pending',
-  ask: { preset: 'multistep', ...options },
+  ask: { kind: 'multistep', ...options },
   ...settled,
 });
 

@@ -1,12 +1,13 @@
 // Ids follow the Design Kit Spec (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5).
 // Do not edit by hand: change the spec first, then copy the ids here.
-// grammar.test.ts fails when these ids and the preset registry disagree.
+// grammar.test.ts fails when these kinds and the block registry disagree.
 
 /**
- * Ask presets: the control the analyst answers with. Each fixes the type of
- * the value that comes back (`returns`, as the grammar's → labels).
+ * Every block, by kind. A block that returns a value names its type in
+ * `returns` (as the spec writes it) and is what an ask turn holds; the rest
+ * only show data and are what an answer turn holds. Both are blocks.
  */
-export const ASK_PRESETS = [
+export const BLOCKS = [
   { id: "confirm", name: "Confirm", returns: "boolean", tier: "today" },
   { id: "single", name: "Single choice", returns: "string", tier: "today" },
   { id: "multi", name: "Multiple choice", returns: "string[]", tier: "today" },
@@ -28,12 +29,6 @@ export const ASK_PRESETS = [
   { id: "hypothesis", name: "Hypothesis", returns: "{test, tails, alpha}", tier: "next" },
   { id: "range", name: "Range", returns: "{min, max}", tier: "next" },
   { id: "suggestions", name: "Suggestions", returns: "string", tier: "today" },
-] as const
-
-export type AskPresetId = (typeof ASK_PRESETS)[number]["id"]
-
-/** Block presets: the building blocks an answer is made of. */
-export const BLOCK_PRESETS = [
   { id: "narrative", name: "Narrative", tier: "today" },
   { id: "metric", name: "Metric", tier: "today" },
   { id: "grid", name: "Metric grid", tier: "today" },
@@ -77,4 +72,15 @@ export const BLOCK_PRESETS = [
   { id: "quantiles", name: "Quantiles", tier: "today" },
 ] as const
 
-export type BlockPresetId = (typeof BLOCK_PRESETS)[number]["id"]
+type Block = (typeof BLOCKS)[number]
+
+/** Every block's kind. */
+export type BlockKind = Block["id"]
+/** The kinds an ask turn can hold: the blocks that return a value. */
+export type AskKind = Extract<Block, { returns: string }>["id"]
+/** The kinds an answer turn can hold: the blocks that only show data. */
+export type AnswerKind = Exclude<BlockKind, AskKind>
+
+/** The blocks that return a value, and those that only show data. */
+export const ASK_KINDS: readonly AskKind[] = BLOCKS.filter((b): b is Extract<Block, { returns: string }> => "returns" in b).map((b) => b.id)
+export const ANSWER_KINDS: readonly AnswerKind[] = BLOCKS.filter((b) => !("returns" in b)).map((b) => b.id as AnswerKind)

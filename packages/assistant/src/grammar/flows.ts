@@ -1,8 +1,8 @@
 // Ids follow the Design Kit Spec (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5).
 // Do not edit by hand: change the spec first, then copy the ids here.
-// grammar.test.ts fails when these ids and the preset registry disagree.
+// grammar.test.ts fails when these ids and the block registry disagree.
 
-import type { AskId } from "./asks"
+import type { AskIntentId } from "./asks"
 import type { PatternId } from "./patterns"
 import type { StageId } from "./stages"
 
@@ -39,7 +39,7 @@ export const FLOWS = [
   name: string
   template: string
   stages: readonly StageId[]
-  asks: readonly AskId[]
+  asks: readonly AskIntentId[]
   pattern: PatternId
 }[]
 

@@ -56,7 +56,7 @@ export function WebAnswer({ turn, chrome = true }: { turn: AnswerTurn; chrome?: 
   const live = outcome === "live" || outcome === "waiting"
   const { inCard, own, hasEvidence } = splitBlocks(turn, ctx.registry)
   const block = (b: (typeof inCard)[number], i: number) => (
-    <BlockView key={`${b.preset}-${i}`} block={b} turn={turn} registry={ctx.registry} onEvent={ctx.emit} />
+    <BlockView key={`${b.kind}-${i}`} block={b} turn={turn} registry={ctx.registry} onEvent={ctx.emit} />
   )
   const steps = !!turn.trace?.length && (live || ctx.stepsOpen(turn.id, outcome === "failed"))
 

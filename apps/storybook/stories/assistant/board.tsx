@@ -17,7 +17,7 @@ export interface BoardProps {
 }
 
 /**
- * Story chrome, not a kit component: lays a preset's variants out as its artboard on the
+ * Story chrome, not a kit component: lays a block's variants out as its artboard on the
  * Design Kit Spec does — four 320px columns, a caption over each cell — so a story
  * reads one-to-one against its board.
  */

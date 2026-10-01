@@ -198,7 +198,7 @@
         "stage": "frame",
         "state": "answered",
         "ask": {
-          "preset": "single",
+          "kind": "single",
           "question": "Which P&L should I explain?",
           "options": [
             {
@@ -265,11 +265,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "The loss is mostly the **semiconductor sleeve (−£0.9M)**. Market beta cost £0.3M, other stock-specific moves £0.4M, and FX gave back £0.2M."
           },
           {
-            "preset": "waterfall",
+            "kind": "waterfall",
             "unit": "£M",
             "steps": [
               {
@@ -295,7 +295,7 @@
             }
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "OMS fills, 22–26 Sep",
@@ -334,7 +334,7 @@
         },
         "blocks": [
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               {
                 "label": "Momentum",
@@ -359,7 +359,7 @@
             ]
           },
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "About **70%** is factor exposure: the momentum unwind on Tuesday and a sector sell-off. The one stock-specific hit is **Helix Semi**, which cut guidance on Wednesday."
           }
         ]
@@ -376,7 +376,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "form",
+          "kind": "form",
           "question": "Scenario inputs",
           "fields": [
             {
@@ -414,7 +414,7 @@
         "stage": "check",
         "state": "answered",
         "ask": {
-          "preset": "confirm",
+          "kind": "confirm",
           "question": "A full revaluation reprices 64 positions and 1,812 option legs on the risk grid.",
           "cost": [
             {
@@ -448,7 +448,7 @@
         },
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "scenario",
@@ -498,7 +498,7 @@
             ]
           },
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "1-day VaR, 99%",
@@ -534,7 +534,7 @@
         "label": "outcome",
         "blocks": [
           {
-            "preset": "cannot",
+            "kind": "cannot",
             "reason": "Trade history starts in March 2021, when the desk moved to the current order system. 2019 isn't held.",
             "remedy": "Load the legacy order archive (2015–2021) to answer this.",
             "nearest": [
@@ -552,7 +552,7 @@
         "title": "from this thread",
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "rows": [
               {
                 "label": "Draft order",
@@ -599,7 +599,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "Size the hedge to a VaR target instead",
             "Which names are most exposed to momentum?"
@@ -628,7 +628,7 @@
         "text": "Momentum is concentrated in **four semis longs**: Helix Semi, Nordwafer, ASM-style Lumen Litho and Kappa Micro carry **£3.2M** of the book's **£4.6M** net momentum exposure. The factor gave back 2.8σ on Tuesday 23 Sep, and the book tracked it.",
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "Net momentum",
@@ -650,7 +650,7 @@
             ]
           },
           {
-            "preset": "timeseries",
+            "kind": "timeseries",
             "unit": "%",
             "series": [
               {
@@ -833,7 +833,7 @@
             ]
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "Positions, EQ-EU-LS, close 26 Sep",
@@ -891,7 +891,7 @@
       "waiting": "which target, which hedge?",
       "stage": "frame",
       "ask": {
-        "preset": "quick",
+        "kind": "quick",
         "question": "**Which 1-day VaR (99%)** should the hedge bring the book to?",
         "label": "VaR target",
         "options": [
@@ -956,7 +956,7 @@
         "text": "**Sell 52 Stoxx 600 Dec futures** (about £2.9M notional) to bring 1-day VaR from £1.1M to **£0.9M**. It takes net beta to 0.16 but leaves the semis concentration, so the hot-print loss only falls to **−£410k**.",
         "blocks": [
           {
-            "preset": "bars",
+            "kind": "bars",
             "unit": "£k",
             "groups": [
               "1-day VaR",
@@ -1014,7 +1014,7 @@
       "thinking": "The earlier table used greeks. A full revaluation reprices every position and option leg on the risk grid under each scenario — slower, but it captures the convexity greeks miss.",
       "waiting": "this reprices the whole book",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "A full revaluation reprices **64 positions and 1,812 option legs** under 3 scenarios. Run it?",
         "cost": [
           {
@@ -1056,7 +1056,7 @@
         "text": "The full revaluation is **worse on a hot print**: **−£710k** against −£620k from greeks, because the short index puts gain less than delta implies. The soft case barely moves.",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "scenario",
@@ -1129,7 +1129,7 @@
           "text": "Greeks only, instantly: the hot-print loss is dominated by **short gamma in the Stoxx 50 puts**, which a full revaluation would price more precisely.",
           "blocks": [
             {
-              "preset": "ranked",
+              "kind": "ranked",
               "items": [
                 {
                   "label": "Stoxx 50 Dec puts · gamma",

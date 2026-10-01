@@ -32,7 +32,7 @@ export const Record: Story = {
       {
         caption: 'Label / value pairs',
         turn: answer('r1', {
-          preset: 'record',
+          kind: 'record',
           rows: [
             { label: 'Customer', value: 'Acme Holdings' },
             { label: 'Segment', value: 'Enterprise' },
@@ -47,7 +47,7 @@ export const Record: Story = {
         turn: answer(
           'r2',
           {
-            preset: 'record',
+            kind: 'record',
             header: { title: 'Acme Holdings', initials: 'AH', status: { label: 'at risk', tone: 'bad' } },
             rows: [
               { label: 'Segment', value: 'Enterprise' },
@@ -63,7 +63,7 @@ export const Record: Story = {
         turn: answer(
           'r3',
           {
-            preset: 'record',
+            kind: 'record',
             groups: [
               {
                 label: 'Identity',
@@ -91,7 +91,7 @@ export const Record: Story = {
         turn: answer(
           'r4',
           {
-            preset: 'record',
+            kind: 'record',
             rows: [
               { label: 'Elasticity', value: '1.3', source: "last year's promotions" },
               { label: 'Price change', value: '−5%', source: 'your input' },
@@ -104,12 +104,12 @@ export const Record: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('r5', { preset: 'record', status: 'loading' }, { state: 'running' }),
+        turn: answer('r5', { kind: 'record', status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'No data',
         turn: answer('r6', {
-          preset: 'record',
+          kind: 'record',
           status: 'empty',
           emptyText: 'No customer matches “Acme Holdings”.',
           emptySuggestions: ['Search “Acme”'],
@@ -119,7 +119,7 @@ export const Record: Story = {
         caption: 'At 280px · long values wrap',
         narrow: true,
         turn: answer('r7', {
-          preset: 'record',
+          kind: 'record',
           rows: [
             { label: 'Customer', value: 'Acme Holdings International Group plc' },
             { label: 'Health', value: 'At risk · usage down 40%, two open escalations, champion left' },

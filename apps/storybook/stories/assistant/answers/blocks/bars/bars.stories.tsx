@@ -25,7 +25,7 @@ const answer = (id: string, block: BlockSpec, extra?: Partial<AnswerTurn>): Answ
 });
 
 const byPlant: BlockSpec = {
-  preset: 'bars',
+  kind: 'bars',
   unit: '%',
   groups: ['A', 'B', 'C', 'D'],
   series: [
@@ -47,7 +47,7 @@ export const BarComparison: Story = {
         turn: answer(
           'b2',
           {
-            preset: 'bars',
+            kind: 'bars',
             unit: '%',
             groups: ['A', 'B', 'C', 'D', 'E', 'F'],
             series: [{ name: 'Q3 margin', values: [15.0, 18.6, 11.4, 21.0, 13.8, 16.5] }],
@@ -62,7 +62,7 @@ export const BarComparison: Story = {
         turn: answer(
           'b3',
           {
-            preset: 'bars',
+            kind: 'bars',
             groups: ['North', 'South', 'East', 'Wales', 'Scot.'],
             series: [{ name: 'shipped', values: [60, 64, 66, 32, 54] }],
             plan: { name: 'plan', values: [70, 60, 64, 50, 56] },

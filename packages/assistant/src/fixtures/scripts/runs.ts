@@ -90,7 +90,7 @@ export interface ConfirmRun {
   prompt: string
   thinking: string
   waiting: string
-  ask: AskSpec & { preset: "confirm" }
+  ask: AskSpec & { kind: "confirm" }
   /** Yes: the full run. */
   progress: Progress
   answer: AnswerData
@@ -205,7 +205,7 @@ class Recorder {
     return this
   }
   write(ms: number, text: string, every = 30) {
-    this.at(ms, { op: "add-block", turn: this.turn, block: { preset: "narrative", text: "" } })
+    this.at(ms, { op: "add-block", turn: this.turn, block: { kind: "narrative", text: "" } })
     this.steps.push(...textDeltas(this.turn, text, { from: ms + 1, every }))
     return ms + 1 + text.split(/\s+/).length * every
   }
@@ -277,7 +277,7 @@ function write(r: Recorder, from: number, answer: AnswerData) {
       kind: "ask",
       stage: "explain",
       state: "pending",
-      ask: { preset: "suggestions", ...answer.followUps },
+      ask: { kind: "suggestions", ...answer.followUps },
     }
     r.at(ms + 40, { op: "add-turn", turn: next })
   }
@@ -374,14 +374,14 @@ export function respond(
           { op: "update-turn", turn: ask.id, fields: { answeredAt: iso(start) } },
         ],
       }
-      if (ask.ask.preset === "suggestions") return [answered, ...sendRun(user, nextId(), start + 50, String(event.value))]
+      if (ask.ask.kind === "suggestions") return [answered, ...sendRun(user, nextId(), start + 50, String(event.value))]
       const answer = answerOf(ask.id)
       const run = spec.turns.find((t) => t.id === answer)
       if (answer === ask.id || !run) return [answered]
       const prompt = promptOf(spec, answer)
       const r = new Recorder(user, answer, start, prompt?.role === "analyst" ? prompt.text : "")
       r.steps.push(answered)
-      if (ask.ask.preset === "confirm") {
+      if (ask.ask.kind === "confirm") {
         const { confirm } = user.runs
         if (event.value === false) {
           r.done(200, "understand", confirm.narrowed.understood, 900)

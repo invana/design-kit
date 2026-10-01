@@ -187,7 +187,7 @@
         "stage": "frame",
         "state": "answered",
         "ask": {
-          "preset": "interpretation",
+          "kind": "interpretation",
           "question": "I read this as",
           "slots": [
             {
@@ -226,7 +226,7 @@
         "stage": "frame",
         "state": "answered",
         "ask": {
-          "preset": "fork",
+          "kind": "fork",
           "question": "Which retention?",
           "readings": [
             {
@@ -274,7 +274,7 @@
         },
         "blocks": [
           {
-            "preset": "bars",
+            "kind": "bars",
             "unit": "%",
             "caption": "before 2 Jun and after · % of accounts active on day 30",
             "groups": [
@@ -305,7 +305,7 @@
             ]
           },
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "channel",
@@ -359,7 +359,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "modelspec",
+          "kind": "modelspec",
           "question": "Model",
           "outcome": {
             "field": "active_d30",
@@ -394,7 +394,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "plan",
+          "kind": "plan",
           "question": "I'll run these steps",
           "steps": [
             {
@@ -454,7 +454,7 @@
         },
         "blocks": [
           {
-            "preset": "coef",
+            "kind": "coef",
             "caption": "Log-odds · baseline organic, solo plan · 0.21 is about +3.6 pts for the average account",
             "terms": [
               {
@@ -493,7 +493,7 @@
             ]
           },
           {
-            "preset": "forest",
+            "kind": "forest",
             "nullAt": 0,
             "unit": "pts",
             "rows": [
@@ -544,7 +544,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "hypothesis",
+          "kind": "hypothesis",
           "question": "Paid search, checklist done vs not: which test?",
           "test": "Two-proportion z",
           "suggested": true,
@@ -581,7 +581,7 @@
         },
         "blocks": [
           {
-            "preset": "test",
+            "kind": "test",
             "verdict": "The difference is unlikely to be noise",
             "evidence": "moderate",
             "groups": "85.1% (n = 3,904) vs 80.3% (n = 2,540)",
@@ -607,7 +607,7 @@
             ]
           },
           {
-            "preset": "box",
+            "kind": "box",
             "unit": "d",
             "caption": "Active days in the first 30 · median 13 vs 16",
             "groups": [
@@ -662,7 +662,7 @@
         },
         "blocks": [
           {
-            "preset": "survival",
+            "kind": "survival",
             "unit": "d",
             "curves": [
               {
@@ -748,7 +748,7 @@
             ]
           },
           {
-            "preset": "quantiles",
+            "kind": "quantiles",
             "label": "Done",
             "p10": 12,
             "p50": 38,
@@ -757,7 +757,7 @@
             "max": 120
           },
           {
-            "preset": "quantiles",
+            "kind": "quantiles",
             "label": "Not done",
             "p10": 9,
             "p50": 31,
@@ -767,7 +767,7 @@
             "caption": "Days to churn among accounts that churned · P10, P50, P90 on a 0–120 day scale"
           },
           {
-            "preset": "dumbbell",
+            "kind": "dumbbell",
             "a": "not done",
             "b": "done",
             "unit": "%",
@@ -803,7 +803,7 @@
         "stage": "scope",
         "state": "answered",
         "ask": {
-          "preset": "range",
+          "kind": "range",
           "question": "Evaluate the churn score across which thresholds?",
           "default": {
             "min": 0.3,
@@ -839,7 +839,7 @@
         },
         "blocks": [
           {
-            "preset": "modeleval",
+            "kind": "modeleval",
             "threshold": 0.45,
             "caption": "At 0.45: catches 66% of churners, 39% of flags are right · gains curve over 0.30–0.60",
             "labels": {
@@ -880,7 +880,7 @@
             ]
           },
           {
-            "preset": "profile",
+            "kind": "profile",
             "columns": [
               {
                 "name": "logins_wk1",
@@ -919,7 +919,7 @@
             ]
           },
           {
-            "preset": "pivot",
+            "kind": "pivot",
             "rowLabel": "Churners missed",
             "rows": [
               "Checklist done",
@@ -959,7 +959,7 @@
             }
           },
           {
-            "preset": "tornado",
+            "kind": "tornado",
             "base": 10,
             "unit": "%",
             "inputs": [
@@ -1002,7 +1002,7 @@
         "title": "from this thread",
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "rows": [
               {
                 "label": "Retrain",
@@ -1045,7 +1045,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "Design a holdout test of the checklist",
             "Which checklist steps matter most?"
@@ -1075,7 +1075,7 @@
         "text": "**Inviting a teammate** matters most: accounts that did it were **+9.4 pts** more likely to be active on day 30 (84.1% vs 74.7%). Connecting a data source follows at **+6.2 pts**; the profile photo step moves nothing.",
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "Invite a teammate",
@@ -1098,7 +1098,7 @@
             ]
           },
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "step",
@@ -1228,13 +1228,13 @@
       "waiting": "which metric, what holdout, which guardrails?",
       "stage": "frame",
       "ask": {
-        "preset": "multistep",
+        "kind": "multistep",
         "review": true,
         "steps": [
           {
             "id": "metric",
             "required": true,
-            "preset": "single",
+            "kind": "single",
             "question": "What should the test **decide on**?",
             "label": "Primary metric",
             "options": [
@@ -1261,7 +1261,7 @@
           },
           {
             "id": "holdout",
-            "preset": "quick",
+            "kind": "quick",
             "question": "Hold out what share of new self-serve signups?",
             "label": "Holdout",
             "options": [
@@ -1286,7 +1286,7 @@
           },
           {
             "id": "guardrails",
-            "preset": "multi",
+            "kind": "multi",
             "question": "Which guardrails should **stop** the test?",
             "label": "Guardrails",
             "options": [
@@ -1337,7 +1337,7 @@
         "text": "At a **20% holdout** the test needs **4,120 accounts per arm** to detect a 3-pt lift at 80% power — about **5 weeks** of self-serve signups, then 30 days to read. A 10% holdout takes 9 weeks; 50% takes 3 but withholds the checklist from half of new users.",
         "blocks": [
           {
-            "preset": "bars",
+            "kind": "bars",
             "unit": "wk",
             "groups": [
               "10%",
@@ -1358,7 +1358,7 @@
             "caption": "Weeks of signups to reach 80% power for a 3-pt lift, by holdout share · plus 30 days to read"
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "analytics.accounts",
@@ -1397,7 +1397,7 @@
       "thinking": "Retraining means a full feature rebuild over every account since June, a training job and a new entry in the model registry. It writes, so say what it costs first.",
       "waiting": "this starts a training job",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "This rebuilds features for **18,412 accounts** and trains churn score v3. Run it?",
         "cost": [
           {
@@ -1445,7 +1445,7 @@
         "text": "Churn score **v3** is trained and registered in shadow. On the held-out fold it catches **78%** of churners at 0.45, up from 66% for v2, with **AUC 0.84** against 0.79. checklist_done is its fourth most important feature.",
         "blocks": [
           {
-            "preset": "record",
+            "kind": "record",
             "header": {
               "title": "churn-score v3",
               "initials": "v3",
@@ -1540,7 +1540,7 @@
           "text": "Without retraining I can't say how much **checklist_done** would add to the score. Alone, it separates churners: 19% of accounts that finished it churned by day 60, against 31% that did not.",
           "blocks": [
             {
-              "preset": "cannot",
+              "kind": "cannot",
               "partial": true,
               "reason": "What the feature adds to v2's recall can only be measured by training a model that uses it; the check read the feature alone.",
               "remedy": "Train v3 in shadow, or run a 1-fold quick fit on a 20% sample (about 40 s).",

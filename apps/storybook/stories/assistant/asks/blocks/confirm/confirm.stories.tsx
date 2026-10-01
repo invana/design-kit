@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn, StageId } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Confirm',
+  title: 'Assistant/Asks/Blocks/Confirm',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -24,7 +24,7 @@ const ask = (id: string, stage: StageId, spec: AskSpec, settled?: Partial<AskTur
 });
 
 const backtest: AskSpec = {
-  preset: 'confirm',
+  kind: 'confirm',
   question: 'Run the full backtest?',
   description: 'Replays every fill since 2019 through factor model v4.',
   costAs: 'strip',
@@ -48,7 +48,7 @@ export const Confirm: Story = {
       {
         caption: 'Cost inline · default named',
         turn: ask('inline', 'check', {
-          preset: 'confirm',
+          kind: 'confirm',
           question: 'This scans every store and every day since 2019. Run it as asked?',
           cost: [
             { label: 'rows scanned', value: '2.3B' },
@@ -65,7 +65,7 @@ export const Confirm: Story = {
       {
         caption: 'Writes records',
         turn: ask('writes', 'act', {
-          preset: 'confirm',
+          kind: 'confirm',
           question: 'Add two crosses to the 2026 crossing block?',
           description: 'Nothing is sown until the plan is published.',
           costAs: 'strip',
@@ -83,7 +83,7 @@ export const Confirm: Story = {
       {
         caption: 'Minimal yes / no',
         turn: ask('minimal', 'scope', {
-          preset: 'confirm',
+          kind: 'confirm',
           question: "Use last season's breeding goals as the defaults?",
           yes: 'Yes',
           no: 'No',
@@ -92,7 +92,7 @@ export const Confirm: Story = {
       {
         caption: 'With a caveat',
         turn: ask('caveat', 'check', {
-          preset: 'confirm',
+          kind: 'confirm',
           question: 'This window includes the March outage. Leave those days out?',
           caveat: { label: 'data gap', text: 'Stores 12–18 reported no sales from 3 to 9 Mar.' },
           yes: 'Leave them out',
@@ -106,7 +106,7 @@ export const Confirm: Story = {
           'answered',
           'check',
           {
-            preset: 'confirm',
+            kind: 'confirm',
             question: 'This scans every store and every day since 2019. Run it as asked?',
             label: 'Decision',
             yes: 'Run it',

@@ -53,10 +53,10 @@ function StepItem({
   onStatusChange: (status: Status) => void
 }) {
   const item = { name: step.id, required: step.required, onStatusChange }
-  switch (step.preset) {
+  switch (step.kind) {
     case "single":
     case "multi": {
-      const multiple = step.preset === "multi"
+      const multiple = step.kind === "multi"
       const chosen = (v: string) =>
         multiple ? Array.isArray(value) && value.includes(v) : value === v
       return (
@@ -88,11 +88,11 @@ function StepItem({
         <QuestionnaireItem {...item}>
           <StepTitle step={step} />
           <QuestionnaireInput
-            type={step.preset === "number" ? "number" : "text"}
-            unit={step.preset === "number" ? step.unit : undefined}
-            min={step.preset === "number" ? step.min : undefined}
-            max={step.preset === "number" ? step.max : undefined}
-            step={step.preset === "number" ? step.step : undefined}
+            type={step.kind === "number" ? "number" : "text"}
+            unit={step.kind === "number" ? step.unit : undefined}
+            min={step.kind === "number" ? step.min : undefined}
+            max={step.kind === "number" ? step.max : undefined}
+            step={step.kind === "number" ? step.step : undefined}
             defaultValue={value == null ? undefined : String(value)}
             aria-label={step.question}
           />
@@ -102,7 +102,7 @@ function StepItem({
     default:
       return (
         <QuestionnaireItem {...item}>
-          <Placeholder kind="ask" preset={step.preset} options={step} />
+          <Placeholder kind={step.kind} options={step} />
         </QuestionnaireItem>
       )
   }
@@ -119,7 +119,7 @@ function numberText(value: unknown, unit?: string) {
 /** What each step's answer reads as in the review and the settled summary. */
 function answerText(step: Step, value: unknown): string {
   if (value == null || value === "" || (Array.isArray(value) && !value.length)) return "—"
-  switch (step.preset) {
+  switch (step.kind) {
     case "single":
     case "quick": {
       const o = step.options.find((x) => x.value === value)
@@ -140,15 +140,15 @@ function answerText(step: Step, value: unknown): string {
 const labelOf = (step: Step) =>
   ("label" in step && step.label) || step.id.charAt(0).toUpperCase() + step.id.slice(1)
 
-/** The form's answers, typed by each step's preset. */
+/** The form's answers, typed by each step's block. */
 function collect(steps: Step[], form: HTMLFormElement): Answers {
   const data = new FormData(form)
   const out: Answers = {}
   for (const step of steps) {
     const all = data.getAll(step.id).map(String).filter(Boolean)
-    if (step.preset === "multi") out[step.id] = all
+    if (step.kind === "multi") out[step.id] = all
     else if (!all.length) continue
-    else if (step.preset === "number") out[step.id] = Number(all[0])
+    else if (step.kind === "number") out[step.id] = Number(all[0])
     else out[step.id] = all[0]
   }
   return out

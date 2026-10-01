@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Suggestions',
+  title: 'Assistant/Asks/Blocks/Suggestions',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -35,12 +35,12 @@ export const Suggestions: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'Chips', turn: next('chips', { preset: 'suggestions', items }) },
-      { caption: 'Stacked · for narrow widths', turn: next('stacked', { preset: 'suggestions', items, layout: 'stack' }) },
+      { caption: 'Chips', turn: next('chips', { kind: 'suggestions', items }) },
+      { caption: 'Stacked · for narrow widths', turn: next('stacked', { kind: 'suggestions', items, layout: 'stack' }) },
       {
         caption: 'Grouped',
         turn: next('grouped', {
-          preset: 'suggestions',
+          kind: 'suggestions',
           groups: [
             { label: 'Go deeper', items: ['Break freight down by carrier', 'Which stores drove it?'] },
             { label: 'Act', items: ['Alert me if it gets worse', 'Send this to the North team'] },
@@ -49,7 +49,7 @@ export const Suggestions: Story = {
       },
       {
         caption: 'One already sent',
-        turn: next('sent', { preset: 'suggestions', items }, { state: 'answered', value: 'Break freight down by carrier' }),
+        turn: next('sent', { kind: 'suggestions', items }, { state: 'answered', value: 'Break freight down by carrier' }),
       },
     ],
   },

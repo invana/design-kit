@@ -90,7 +90,7 @@
       },
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "Operating margin was **18.2%** across regions; North led at **21.4%**. Open **method** under the answer for the query that computed it."
         }
       ]

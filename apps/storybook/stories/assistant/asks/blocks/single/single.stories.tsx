@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn, StageId } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Single',
+  title: 'Assistant/Asks/Blocks/Single',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -49,12 +49,12 @@ export const SingleChoice: Story = {
     variants: [
       {
         caption: 'Plain · source on the right',
-        turn: ask('plain', 'frame', { preset: 'single', question: 'Which margin did you mean?', options: margins, default: 'op' }, { waiting: 'parked 1 min' }),
+        turn: ask('plain', 'frame', { kind: 'single', question: 'Which margin did you mean?', options: margins, default: 'op' }, { waiting: 'parked 1 min' }),
       },
       {
         caption: 'Heading + description',
         turn: ask('heading', 'scope', {
-          preset: 'single',
+          kind: 'single',
           question: 'Which environment is the new line for?',
           description: 'Sets which trial sites the analysis reads.',
           options: [
@@ -70,7 +70,7 @@ export const SingleChoice: Story = {
       {
         caption: 'Description only + default',
         turn: ask('default', 'frame', {
-          preset: 'single',
+          kind: 'single',
           question: 'The desk report counts P&L as mark-to-market plus realised. Should I explain the same figure?',
           options: [
             { value: 'total', label: 'Total, as the desk report', detail: 'pnl.total' },
@@ -84,7 +84,7 @@ export const SingleChoice: Story = {
       {
         caption: 'Title + description options',
         turn: ask('rich', 'frame', {
-          preset: 'single',
+          kind: 'single',
           question: 'Compare against which baseline?',
           heading: true,
           options: [
@@ -99,7 +99,7 @@ export const SingleChoice: Story = {
       {
         caption: 'Leading tag + figure on the right',
         turn: ask('tag', 'scope', {
-          preset: 'single',
+          kind: 'single',
           question: 'Which variety is the yield benchmark?',
           heading: true,
           options: [
@@ -113,7 +113,7 @@ export const SingleChoice: Story = {
       {
         caption: 'Leading icon + change on the right',
         turn: ask('icon', 'explain', {
-          preset: 'single',
+          kind: 'single',
           question: 'Which store should I drill into?',
           description: 'The three largest falls in weekly sales.',
           options: [
@@ -126,7 +126,7 @@ export const SingleChoice: Story = {
       },
       {
         caption: OTHER,
-        turn: ask('other', 'frame', { preset: 'single', question: 'Which margin did you mean?', options: margins.slice(0, 2), other: true }),
+        turn: ask('other', 'frame', { kind: 'single', question: 'Which margin did you mean?', options: margins.slice(0, 2), other: true }),
       },
       {
         caption: 'Answered',
@@ -134,14 +134,14 @@ export const SingleChoice: Story = {
         turn: ask(
           'answered',
           'frame',
-          { preset: 'single', question: 'Which margin did you mean?', label: 'Margin', options: margins, default: 'op' },
+          { kind: 'single', question: 'Which margin did you mean?', label: 'Margin', options: margins, default: 'op' },
           { state: 'answered', value: 'op', answeredAt: '2026-09-29T10:00:20Z' },
         ),
       },
       {
         caption: 'At 280px',
         narrow: true,
-        turn: ask('narrow', 'frame', { preset: 'single', question: 'Which margin did you mean?', options: margins, default: 'op' }),
+        turn: ask('narrow', 'frame', { kind: 'single', question: 'Which margin did you mean?', options: margins, default: 'op' }),
       },
     ],
   },

@@ -81,7 +81,7 @@
       "state": "answered",
       "answeredAt": "2026-09-30T09:00:20.000Z",
       "ask": {
-        "preset": "single",
+        "kind": "single",
         "question": "Late against **which date**?",
         "label": "Late against",
         "options": [
@@ -108,7 +108,7 @@
       "duration": 1900,
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "**7 of 42 suppliers** delivered after the promised date this month; Apex Components alone is 11 days late on average."
         }
       ]

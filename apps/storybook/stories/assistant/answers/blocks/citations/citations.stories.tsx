@@ -39,14 +39,14 @@ export const Citations: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'Sources with counts', turn: answer('counts', [{ preset: 'citations', sources }]) },
+      { caption: 'Sources with counts', turn: answer('counts', [{ kind: 'citations', sources }]) },
       {
         caption: 'Type + freshness',
         turn: answer(
           'freshness',
           [
             {
-              preset: 'citations',
+              kind: 'citations',
               sources: [
                 { label: 'General ledger, Q3', count: 12408, detail: 'table · loaded 28 Sep 06:00' },
                 { label: 'Carrier invoices', count: 3911, detail: 'file · uploaded 26 Sep' },
@@ -62,18 +62,18 @@ export const Citations: Story = {
         turn: answer(
           'linked',
           [
-            { preset: 'narrative', text: 'Freight per order rose 22% after the July carrier change.[2]', active: 2 },
-            { preset: 'citations', sources, active: 2 },
+            { kind: 'narrative', text: 'Freight per order rose 22% after the July carrier change.[2]', active: 2 },
+            { kind: 'citations', sources, active: 2 },
           ],
           { label: 'prose' },
         ),
       },
-      { caption: 'Folded', turn: answer('folded', [{ preset: 'citations', sources, folded: true }]) },
+      { caption: 'Folded', turn: answer('folded', [{ kind: 'citations', sources, folded: true }]) },
       {
         caption: 'No records · said out loud',
         turn: answer('none', [
           {
-            preset: 'citations',
+            kind: 'citations',
             sources: [{ label: 'Returns log, Q3', count: 0 }],
             note: 'No returns matched these filters. The answer rests on no records.',
           },
@@ -84,7 +84,7 @@ export const Citations: Story = {
         narrow: true,
         turn: answer('narrow', [
           {
-            preset: 'citations',
+            kind: 'citations',
             sources: [
               { label: 'General ledger, Q3', count: 12408, detail: 'table · 28 Sep' },
               { label: 'Carrier invoices', count: 3911, detail: 'file · 26 Sep' },

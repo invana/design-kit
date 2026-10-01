@@ -105,7 +105,7 @@ export function applyPatch(spec: ConversationSpec, patch: ConversationPatch): Co
         const block = answer.blocks[patch.block]
         if (!block) throw new PatchError(`"update-block": turn "${answer.id}" has no block ${patch.block}.`)
         const blocks = answer.blocks.slice()
-        blocks[patch.block] = { ...block, ...patch.fields, preset: block.preset } as BlockSpec
+        blocks[patch.block] = { ...block, ...patch.fields, kind: block.kind } as BlockSpec
         return { ...answer, blocks }
       })
     case "append-text":

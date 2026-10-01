@@ -48,14 +48,14 @@ export const TablePreview: Story = {
     variants: [
       {
         caption: 'First rows + open all',
-        turn: answer('t1', { preset: 'table', columns: margin, rows: firstThree, total: 214 }, cited(214)),
+        turn: answer('t1', { kind: 'table', columns: margin, rows: firstThree, total: 214 }, cited(214)),
       },
       {
         caption: 'Sorted · row called out',
         turn: answer(
           't2',
           {
-            preset: 'table',
+            kind: 'table',
             columns: margin,
             rows: [
               { store: 'North Mall', margin: '11.4%', delta: down('−3.1') },
@@ -77,7 +77,7 @@ export const TablePreview: Story = {
         turn: answer(
           't3',
           {
-            preset: 'table',
+            kind: 'table',
             columns: [
               { key: 'store', label: 'Store' },
               { key: 'revenue', label: 'Revenue', align: 'right' },
@@ -103,7 +103,7 @@ export const TablePreview: Story = {
         turn: answer(
           't4',
           {
-            preset: 'table',
+            kind: 'table',
             columns: [
               { key: 'region', label: 'Region' },
               { key: 'revenue', label: 'Revenue', align: 'right' },
@@ -125,7 +125,7 @@ export const TablePreview: Story = {
         turn: answer(
           't5',
           {
-            preset: 'table',
+            kind: 'table',
             columns: margin,
             rows: [],
             status: 'empty',
@@ -137,12 +137,12 @@ export const TablePreview: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('t6', { preset: 'table', columns: margin, rows: [], status: 'loading' }, { state: 'running' }),
+        turn: answer('t6', { kind: 'table', columns: margin, rows: [], status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'At 280px',
         narrow: true,
-        turn: answer('t7', { preset: 'table', columns: margin, rows: firstThree, total: 214 }, cited(214, '')),
+        turn: answer('t7', { kind: 'table', columns: margin, rows: firstThree, total: 214 }, cited(214, '')),
       },
     ],
   },

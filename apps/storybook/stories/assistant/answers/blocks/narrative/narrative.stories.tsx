@@ -41,18 +41,18 @@ export const Narrative: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'Lead with the number', turn: prose('lead', { preset: 'narrative', text: lead }) },
+      { caption: 'Lead with the number', turn: prose('lead', { kind: 'narrative', text: lead }) },
       {
         caption: 'With citation markers',
         turn: prose('cites', {
-          preset: 'narrative',
+          kind: 'narrative',
           text: 'Operating margin fell **1.8 pts** to **14.2%** in Q3.[1] Freight per order rose 22% after the July carrier change,[2] and the North region carried most of it.[3]',
         }, 'complete', { aside: '3 sources' }),
       },
       {
         caption: 'Figures carry their direction',
         turn: prose('direction', {
-          preset: 'narrative',
+          kind: 'narrative',
           text: 'Operating margin fell **▼ 1.8 pts** to **14.2%**. Gross margin held at **38.1%** ▲ 0.1 pts, so the fall sits below the gross line, in freight.',
         }),
       },
@@ -61,14 +61,14 @@ export const Narrative: Story = {
         turn: prose(
           'streaming',
           {
-            preset: 'narrative',
+            kind: 'narrative',
             text: 'Operating margin fell **1.8 pts** to **14.2%** in Q3. About two thirds of the fall came from',
           },
           'running',
         ),
       },
-      { caption: 'Loading', turn: prose('loading', { preset: 'narrative', text: '', status: 'loading' }) },
-      { caption: 'At 280px', narrow: true, turn: prose('narrow', { preset: 'narrative', text: lead }) },
+      { caption: 'Loading', turn: prose('loading', { kind: 'narrative', text: '', status: 'loading' }) },
+      { caption: 'At 280px', narrow: true, turn: prose('narrow', { kind: 'narrative', text: lead }) },
     ],
   },
 };

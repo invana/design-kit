@@ -10,7 +10,7 @@ export type ConversationEvent =
    * model: "qwen" }`; `files` what was attached, as the browser gave them.
    */
   | { type: "prompt"; text: string; context?: string[]; settings?: Record<string, string>; files?: File[] }
-  /** An ask was answered. `value` has the type its preset fixes. */
+  /** An ask was answered. `value` has the type its block fixes. */
   | { type: "reply"; turn: string; value: unknown }
   /** An ask was skipped; its default is used and recorded. */
   | { type: "skip"; turn: string }
@@ -25,8 +25,8 @@ export type ConversationEvent =
    * index in the turn's `blocks`.
    */
   | { type: "open"; turn: string; block: number }
-  /** Render the same records as another preset. */
-  | { type: "template"; turn: string; preset: string }
+  /** Render the same records as another block. */
+  | { type: "template"; turn: string; kind: string }
   /** Change the current answer in place — `by-region`. */
   | { type: "refine"; turn: string; refine: string }
   | { type: "rate"; turn: string; value: number }

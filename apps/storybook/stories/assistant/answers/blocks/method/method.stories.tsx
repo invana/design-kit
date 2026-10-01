@@ -35,7 +35,7 @@ export const Method: Story = {
       {
         caption: 'Folded · one line',
         turn: method('folded', {
-          preset: 'method',
+          kind: 'method',
           label: 'method',
           code: 'margin = op_income / net_revenue',
           meta: 'margin = op_income / net_revenue · 18 ms',
@@ -44,7 +44,7 @@ export const Method: Story = {
       {
         caption: 'Open · query',
         turn: method('query', {
-          preset: 'method',
+          kind: 'method',
           label: 'query',
           meta: '12,408 rows · 18 ms',
           open: true,
@@ -54,7 +54,7 @@ export const Method: Story = {
       {
         caption: 'Open · model',
         turn: method('model', {
-          preset: 'method',
+          kind: 'method',
           label: 'model',
           meta: 'mixed model · 0.4 s',
           open: true,
@@ -69,7 +69,7 @@ export const Method: Story = {
       {
         caption: 'Open · several steps',
         turn: method('steps', {
-          preset: 'method',
+          kind: 'method',
           label: '3 steps',
           meta: '4.2 s',
           open: true,
@@ -84,7 +84,7 @@ export const Method: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: method('narrow', {
-          preset: 'method',
+          kind: 'method',
           label: 'query',
           meta: '18 ms',
           open: true,

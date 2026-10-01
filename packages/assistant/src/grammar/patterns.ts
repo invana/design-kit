@@ -1,8 +1,8 @@
 // Ids follow the Design Kit Spec (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5).
 // Do not edit by hand: change the spec first, then copy the ids here.
-// grammar.test.ts fails when these ids and the preset registry disagree.
+// grammar.test.ts fails when these ids and the block registry disagree.
 
-import type { BlockPresetId } from "./presets"
+import type { AnswerKind } from "./blocks"
 
 /**
  * Answer patterns: which blocks an answer has, in order. The flow picks the
@@ -35,6 +35,6 @@ export const PATTERNS = [
   { id: "spc", name: "Control report", blocks: ["control", "pareto", "decomposition"] },
   { id: "timeto", name: "Time to event", blocks: ["survival", "quantiles", "dumbbell", "caveat"] },
   { id: "modelcheck", name: "Model check", blocks: ["modeleval", "profile", "pivot", "tornado"] },
-] as const satisfies readonly { id: string; name: string; blocks: readonly BlockPresetId[] }[]
+] as const satisfies readonly { id: string; name: string; blocks: readonly AnswerKind[] }[]
 
 export type PatternId = (typeof PATTERNS)[number]["id"]

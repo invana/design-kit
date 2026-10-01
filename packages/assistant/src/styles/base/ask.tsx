@@ -18,14 +18,14 @@ export interface AskViewProps {
 }
 
 /**
- * An ask, drawn by whatever the registry holds for its preset. Its traits say
+ * An ask, drawn by whatever the registry holds for its block. Its traits say
  * how it sits: in the ask card — its state, the stage that asked, when it was
- * answered, the header word the preset names — or bare, as its renderer draws
+ * answered, the header word the block names — or bare, as its renderer draws
  * it. An ask with no renderer is a labelled placeholder in the card.
  */
 export function AskView({ turn, registry, onEvent, now }: AskViewProps) {
-  const Renderer = registry.asks[turn.ask.preset]
-  const traits = registry.askTraits(turn.ask.preset)
+  const Renderer = registry.asks[turn.ask.kind]
+  const traits = registry.askTraits(turn.ask.kind)
   if (Renderer && traits.frame === "none") {
     return <Renderer turn={turn} options={turn.ask} onEvent={onEvent} />
   }
@@ -42,7 +42,7 @@ export function AskView({ turn, registry, onEvent, now }: AskViewProps) {
       {Renderer ? (
         <Renderer turn={turn} options={turn.ask} onEvent={onEvent} />
       ) : (
-        <Placeholder kind="ask" preset={turn.ask.preset} options={turn.ask} />
+        <Placeholder kind={turn.ask.kind} options={turn.ask} />
       )}
     </ClarifyCard>
   )

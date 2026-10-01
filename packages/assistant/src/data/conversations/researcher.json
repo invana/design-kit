@@ -192,7 +192,7 @@
         "stage": "frame",
         "state": "answered",
         "ask": {
-          "preset": "confirm",
+          "kind": "confirm",
           "question": "I'll count a readmission as any **unplanned** admission within **30 days** of discharge, at any of our three hospitals.",
           "yes": "Use this",
           "no": "Change definition",
@@ -207,7 +207,7 @@
         "stage": "check",
         "state": "answered",
         "ask": {
-          "preset": "single",
+          "kind": "single",
           "question": "318 of 4,912 episodes have a discharge date but no time. The day of the week is still known.",
           "options": [
             {
@@ -247,7 +247,7 @@
         },
         "blocks": [
           {
-            "preset": "bars",
+            "kind": "bars",
             "unit": "%",
             "highlight": "F",
             "groups": [
@@ -279,7 +279,7 @@
             }
           },
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               {
                 "label": "Friday",
@@ -312,7 +312,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "multi",
+          "kind": "multi",
           "question": "Adjust for",
           "options": [
             {
@@ -358,7 +358,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "quick",
+          "kind": "quick",
           "question": "Confidence level",
           "options": [
             {
@@ -398,13 +398,13 @@
         },
         "blocks": [
           {
-            "preset": "metric",
+            "kind": "metric",
             "label": "Adjusted odds ratio",
             "value": "1.29",
             "delta": "95% CI 1.04–1.60 · p = 0.02"
           },
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "After adjustment the gap narrows but **stays**. Case mix explains about a quarter of it."
           }
         ]
@@ -437,7 +437,7 @@
         },
         "blocks": [
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               {
                 "label": "No physio visit",
@@ -458,11 +458,11 @@
             ]
           },
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "“No physio until Tuesday, couldn't manage the stairs” is the most common story. Most readmissions happen on day 3 or 4, which is the weekend."
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "Readmission clerking notes",
@@ -485,7 +485,7 @@
         "title": "from this thread",
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "rows": [
               {
                 "label": "Pilot",
@@ -523,7 +523,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "How many patients would the pilot need to detect a 2-point drop?",
             "Does the same pattern hold for knees?"
@@ -553,14 +553,14 @@
         "text": "Not for knees. Friday discharges are readmitted at **5.9 per 100** against 5.4 on Mon–Thu, and after the same adjustment the odds ratio is **1.07 (95% CI 0.86–1.33)** — no clear difference. Knee patients are less often sent home needing stairs practice, which fits the physio story from the hips.",
         "blocks": [
           {
-            "preset": "metric",
+            "kind": "metric",
             "label": "Adjusted odds ratio, Friday vs Mon–Thu",
             "value": "1.07",
             "delta": "95% CI 0.86–1.33 · p = 0.54",
             "tone": "neutral"
           },
           {
-            "preset": "bars",
+            "kind": "bars",
             "unit": "%",
             "highlight": "F",
             "groups": [
@@ -606,7 +606,7 @@
             "caption": "Readmissions per 100 discharges · hips shown behind"
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "Inpatient episodes, elective primary knee",
@@ -663,7 +663,7 @@
       "thinking": "The three hospitals changed their weekend physiotherapy rotas at different times, so a pooled trend would blur three separate steps. The question needs one hospital before the monthly series means anything.",
       "waiting": "which hospital?",
       "ask": {
-        "preset": "single",
+        "kind": "single",
         "question": "Each hospital changed its weekend physio cover at a different time. **Which one should I trace?**",
         "label": "Hospital",
         "options": [
@@ -718,7 +718,7 @@
         "text": "At Hospital B the gap opened with the **April 2024** rota change. Before it, Friday discharges were readmitted at 6.4 per 100 against 6.0 on Mon–Thu; after it, **10.1 per 100** against 6.2.",
         "blocks": [
           {
-            "preset": "timeline",
+            "kind": "timeline",
             "events": [
               {
                 "section": "Before",
@@ -784,7 +784,7 @@
       "thinking": "Physio visits after discharge live in the community services dataset, not the hospital warehouse. Answering means linking every Friday discharge to it on the pseudonymised NHS number — a large linkage job.",
       "waiting": "this links the community dataset",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "This links **1,061 Friday discharges** to the community services dataset. Run it?",
         "cost": [
           {
@@ -827,7 +827,7 @@
         "text": "Yes. Friday patients with **no physio contact within 72 hours** were readmitted at **12.8 per 100**, against 5.1 for those who had one — about two and a half times the rate.",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "group",
@@ -916,7 +916,7 @@
           "text": "Using the hospital data alone, I can say who was **referred** for community physio, but not who was seen.",
           "blocks": [
             {
-              "preset": "cannot",
+              "kind": "cannot",
               "partial": true,
               "reason": "Physio visits after discharge are recorded only in the community services dataset, which this run was asked not to link.",
               "remedy": "Run the linkage, or ask a question the discharge letters can answer.",

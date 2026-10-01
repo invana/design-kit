@@ -37,11 +37,11 @@ export const CannotAnswer: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'Reason + what would change it', turn: outcome('reason', { preset: 'cannot', ...held }) },
+      { caption: 'Reason + what would change it', turn: outcome('reason', { kind: 'cannot', ...held }) },
       {
         caption: 'With what I can answer instead',
         turn: outcome('nearest', {
-          preset: 'cannot',
+          kind: 'cannot',
           ...held,
           nearest: ['Compare 2023 with 2025', 'Trend since Jan 2023'],
         }),
@@ -51,7 +51,7 @@ export const CannotAnswer: Story = {
         turn: outcome(
           'partial',
           {
-            preset: 'cannot',
+            kind: 'cannot',
             reason: 'The answer below covers 2023–2026. 2021 and 2022 are not held.',
             remedy: 'Import the archive to extend it.',
             partial: true,
@@ -62,7 +62,7 @@ export const CannotAnswer: Story = {
       {
         caption: 'No access',
         turn: outcome('access', {
-          preset: 'cannot',
+          kind: 'cannot',
           reason: "Payroll data needs the Finance role, which you don't have.",
           remedy: 'Ask a workspace admin to grant Finance.',
         }),
@@ -70,7 +70,7 @@ export const CannotAnswer: Story = {
       {
         caption: 'At 280px',
         narrow: true,
-        turn: outcome('narrow', { preset: 'cannot', ...held, nearest: ['Compare 2023 with 2025'] }),
+        turn: outcome('narrow', { kind: 'cannot', ...held, nearest: ['Compare 2023 with 2025'] }),
       },
     ],
   },

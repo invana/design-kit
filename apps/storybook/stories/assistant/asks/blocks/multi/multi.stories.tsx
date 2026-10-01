@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn, StageId } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Multi',
+  title: 'Assistant/Asks/Blocks/Multi',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -44,7 +44,7 @@ export const MultipleChoice: Story = {
       {
         caption: 'Plain · count on the right',
         turn: ask('plain', 'scope', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Which channels should I include?',
           options: channels,
           default: ['stores', 'online'],
@@ -53,7 +53,7 @@ export const MultipleChoice: Story = {
       {
         caption: 'Heading + description · at most 3',
         turn: ask('max', 'analyse', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Which inputs should the scenario hold fixed?',
           description: 'Pick up to three. The rest move with price.',
           options: [
@@ -70,7 +70,7 @@ export const MultipleChoice: Story = {
       {
         caption: 'Phrase question · title + figure',
         turn: ask('phrase', 'analyse', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Adjust for',
           description: 'Confounders to control in the model.',
           selectAll: true,
@@ -86,7 +86,7 @@ export const MultipleChoice: Story = {
       {
         caption: 'Leading icon + figure on the right',
         turn: ask('icon', 'scope', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Which sources should I search?',
           heading: true,
           options: [
@@ -101,7 +101,7 @@ export const MultipleChoice: Story = {
       {
         caption: 'Limit reached',
         turn: ask('limit', 'analyse', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Which crosses should I simulate?',
           description: 'Up to two, to keep the run short.',
           options: [
@@ -120,7 +120,7 @@ export const MultipleChoice: Story = {
         turn: ask(
           'answered',
           'scope',
-          { preset: 'multi', question: 'Which channels should I include?', label: 'Channels', options: channels },
+          { kind: 'multi', question: 'Which channels should I include?', label: 'Channels', options: channels },
           { state: 'answered', value: ['stores', 'online'], answeredAt: '2026-09-29T10:00:20Z' },
         ),
       },
@@ -128,7 +128,7 @@ export const MultipleChoice: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: ask('narrow', 'scope', {
-          preset: 'multi',
+          kind: 'multi',
           question: 'Which channels should I include?',
           options: channels,
           default: ['stores', 'online'],

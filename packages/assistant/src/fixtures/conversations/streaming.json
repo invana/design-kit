@@ -97,7 +97,7 @@
       ],
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": ""
         }
       ]

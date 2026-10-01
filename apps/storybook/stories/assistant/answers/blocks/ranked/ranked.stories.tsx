@@ -39,12 +39,12 @@ export const RankedList: Story = {
     variants: [
       {
         caption: 'Contribution · signed',
-        turn: answer('k1', { preset: 'ranked', items: contribution, caption: 'Margin points, Q2 → Q3' }),
+        turn: answer('k1', { kind: 'ranked', items: contribution, caption: 'Margin points, Q2 → Q3' }),
       },
       {
         caption: 'Diverging from zero',
         turn: answer('k2', {
-          preset: 'ranked',
+          kind: 'ranked',
           items: contribution,
           diverging: { below: '− pulls margin down', above: 'lifts it +' },
         }),
@@ -54,7 +54,7 @@ export const RankedList: Story = {
         turn: answer(
           'k3',
           {
-            preset: 'ranked',
+            kind: 'ranked',
             items: [
               { label: 'Drought +1', value: 96, display: '+96' },
               { label: 'Rust +1', value: 38, display: '+38' },
@@ -70,12 +70,12 @@ export const RankedList: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('k4', { preset: 'ranked', items: [], status: 'loading' }, { state: 'running' }),
+        turn: answer('k4', { kind: 'ranked', items: [], status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'No data',
         turn: answer('k5', {
-          preset: 'ranked',
+          kind: 'ranked',
           items: [],
           status: 'empty',
           emptyText: 'No cost line moved between Q2 and Q3.',
@@ -84,7 +84,7 @@ export const RankedList: Story = {
       {
         caption: 'At 280px · labels narrow',
         narrow: true,
-        turn: answer('k6', { preset: 'ranked', items: contribution }, { title: 'Δ margin' }),
+        turn: answer('k6', { kind: 'ranked', items: contribution }, { title: 'Δ margin' }),
       },
     ],
   },

@@ -14,7 +14,7 @@ const ROWS: Bar[] = [[0.92], [0.74], [0.55], [0.38], [0.4, 7]]
 
 /**
  * The skeleton each block draws while its data is on the way, shaped like the
- * block so the card does not jump when it lands. A preset not named here gets
+ * block so the card does not jump when it lands. A block not named here gets
  * text lines.
  */
 const SHAPE: Record<string, Bar[]> = {
@@ -50,8 +50,8 @@ const SHAPE: Record<string, Bar[]> = {
 }
 
 /** A block whose data is on the way. */
-export function BlockSkeleton({ preset }: { preset: string }) {
-  const bars = SHAPE[preset] ?? LINES
+export function BlockSkeleton({ kind }: { kind: string }) {
+  const bars = SHAPE[kind] ?? LINES
   return (
     <div role="status" aria-label="Loading" className="flex flex-col gap-1.5 py-0.5">
       {bars.map(([width, height], i) => (

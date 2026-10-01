@@ -41,7 +41,7 @@ export const Proposal: Story = {
       {
         caption: 'What it writes + consequence',
         turn: proposal('writes', {
-          preset: 'proposal',
+          kind: 'proposal',
           title: 'from this answer',
           rows: alert,
           consequence,
@@ -54,7 +54,7 @@ export const Proposal: Story = {
       {
         caption: 'Impact as figures',
         turn: proposal('figures', {
-          preset: 'proposal',
+          kind: 'proposal',
           title: 'from this answer',
           heading: 'Alert on refunds above 2σ by store',
           figures: [
@@ -72,7 +72,7 @@ export const Proposal: Story = {
       {
         caption: 'A scheduled report',
         turn: proposal('schedule', {
-          preset: 'proposal',
+          kind: 'proposal',
           title: 'from this thread',
           rows: [
             { label: 'Report', value: 'Q3 margin bridge — North' },
@@ -90,7 +90,7 @@ export const Proposal: Story = {
       {
         caption: 'Created',
         turn: proposal('created', {
-          preset: 'proposal',
+          kind: 'proposal',
           title: 'from this answer',
           done: { label: 'Alert created', at: '14:02' },
           rows: [
@@ -104,7 +104,7 @@ export const Proposal: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: proposal('narrow', {
-          preset: 'proposal',
+          kind: 'proposal',
           rows: alert,
           consequence,
           actions: [

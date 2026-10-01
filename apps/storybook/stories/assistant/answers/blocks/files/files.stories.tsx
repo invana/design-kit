@@ -35,15 +35,15 @@ export const Files: Story = {
   args: {
     onEvent: fn(),
     variants: [
-      { caption: 'By digest', turn: answer('f1', { preset: 'files', files: three }) },
+      { caption: 'By digest', turn: answer('f1', { kind: 'files', files: three }) },
       {
         caption: 'Icons + download',
-        turn: answer('f2', { preset: 'files', files: three, download: true }, { aside: '3 files · 166 KB' }),
+        turn: answer('f2', { kind: 'files', files: three, download: true }, { aside: '3 files · 166 KB' }),
       },
       {
         caption: 'One file',
         turn: answer('f3', {
-          preset: 'files',
+          kind: 'files',
           files: [{ name: 'margin-bridge-q3.xlsx', note: '48 KB · kept for 7 days' }],
           download: true,
         }),
@@ -51,7 +51,7 @@ export const Files: Story = {
       {
         caption: 'Rejected rows',
         turn: answer('f4', {
-          preset: 'files',
+          kind: 'files',
           files: [
             {
               name: 'rejected-rows.csv',
@@ -64,12 +64,12 @@ export const Files: Story = {
       },
       {
         caption: 'Loading',
-        turn: answer('f5', { preset: 'files', files: [], status: 'loading' }, { state: 'running' }),
+        turn: answer('f5', { kind: 'files', files: [], status: 'loading' }, { state: 'running' }),
       },
       {
         caption: 'No data',
         turn: answer('f6', {
-          preset: 'files',
+          kind: 'files',
           files: [],
           status: 'empty',
           emptyText: 'No files were produced. The answer is above.',
@@ -81,7 +81,7 @@ export const Files: Story = {
         turn: answer(
           'f7',
           {
-            preset: 'files',
+            kind: 'files',
             files: three.map(({ name, size }) => ({ name, size })),
             caption: 'Digests in the file details',
           },

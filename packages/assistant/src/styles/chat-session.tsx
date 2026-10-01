@@ -90,8 +90,8 @@ function useStreamedSpec(
  *
  * The API sends a {@link ConversationSpec}, then patches — pass the patched
  * spec, or the patches themselves as `stream`. Every ask and block is drawn by
- * the preset registry, so templates of your own draw exactly like the
- * built-ins; the session itself knows no preset. Everything the analyst does
+ * the block registry, so templates of your own draw exactly like the
+ * built-ins; the session itself knows no block. Everything the analyst does
  * comes back as a typed event: to its own callback (`onReply`, `onAction`,
  * `onOpenRun`, …) and then to `onEvent`.
  */

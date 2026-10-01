@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { type PresetRegistry, resolveRegistry } from "../../conversations/registry"
+import { type RegistryOverrides, resolveRegistry } from "../../conversations/registry"
 import { ChatSessionMessage } from "../../conversations/thread"
 import type { ConversationEvent } from "../../protocol/events"
 import type { Turn } from "../../protocol/types"
@@ -11,7 +11,7 @@ import { WebAnswer } from "./web-session"
 export interface ChatSessionTurnProps {
   turn: Turn
   onEvent?: (event: ConversationEvent) => void
-  registry?: PresetRegistry
+  registry?: RegistryOverrides
   /** The clock an answered ask's time is read against, in ms. Defaults to the time of render. */
   now?: number
 }
@@ -19,7 +19,7 @@ export interface ChatSessionTurnProps {
 /**
  * One turn on its own, as the web variant draws it — the analyst's prompt,
  * an ask in its frame, or an answer's cards — without the thread around it.
- * For a preset's board, where each cell is one turn.
+ * For a block's board, where each cell is one turn.
  */
 export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTurnProps) {
   const resolved = React.useMemo(() => resolveRegistry(registry), [registry])

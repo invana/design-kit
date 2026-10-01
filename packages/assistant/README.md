@@ -8,8 +8,8 @@ and `web`, the chat (labelled turns, answer cards, `Answered in 1.4 s`). The com
 both, configured by the spec's `composer`.
 
 The contract is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): 29 ask
-intents on 21 ask presets, 14 answer intents on 41 block presets, and 26 answer patterns. Its ids
-are copied into `src/grammar/`, and a test fails when the preset registry and the grammar disagree.
+intents on 21 blocks that return a value, 14 answer intents on 41 blocks that show data, and 26 answer patterns. Its ids
+are copied into `src/grammar/`, and a test fails when the block registry and the grammar disagree.
 
 ```bash
 pnpm add @invana/assistant
@@ -69,10 +69,10 @@ name (`retry`, `copy`, `steps`, `rate`) and your own as `{ id, label, icon }`, s
 />
 ```
 
-`validate(spec)` checks a payload the compiler cannot see: unknown presets and broken turns are
+`validate(spec)` checks a payload the compiler cannot see: unknown kinds and broken turns are
 errors, and an answer that does not match its pattern is a warning.
 
-A preset with no renderer yet renders as a labelled placeholder with its JSON. Register your own
+A block with no renderer yet renders as a labelled placeholder with its JSON. Register your own
 renderer, or replace a built-in one, with the traits that say how it sits:
 
 ```tsx
@@ -88,7 +88,7 @@ renderer, or replace a built-in one, with the traits that say how it sits:
 ```
 
 `ChatSessionFrame` is the layout alone (a scrolling stack with a footer), and `ChatSessionTurn`
-draws one turn outside a thread — for a preset's board.
+draws one turn outside a thread — for a block's board.
 
 ## Moving from `@invana/ui`
 

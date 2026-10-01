@@ -102,7 +102,7 @@
         "stage": "frame",
         "state": "answered",
         "ask": {
-          "preset": "single",
+          "kind": "single",
           "question": "Harrow Holdings Ltd has four directors, but the register holds **three officers named John Mercer**. Which one is Harrow's?",
           "description": "Officer records carry no unique ID across companies, so I match on name, birth month and service address.",
           "label": "Officer",
@@ -137,11 +137,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "Harrow's four directors hold **21 other directorships** between them. **John Mercer** holds 11 of them, and two of those companies also share Colin Hale: Tees Valley Care Partners and Linthorpe Capital SA."
           },
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               { "label": "John Mercer", "value": 11, "display": "11 boards" },
               { "label": "Colin Hale", "value": 6, "display": "6 boards" },
@@ -151,7 +151,7 @@
             "caption": "Other companies each director is or was an officer of, excluding Harrow's own subsidiaries"
           },
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               { "key": "company", "label": "Company" },
               { "key": "jurisdiction", "label": "Registered" },
@@ -186,7 +186,7 @@
         "stage": "scope",
         "state": "answered",
         "ask": {
-          "preset": "quick",
+          "kind": "quick",
           "question": "How far should I follow ownership from each subsidiary?",
           "label": "Depth",
           "options": [
@@ -238,11 +238,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "Every path offshore runs through **Harrow Care Services Ltd**, the subsidiary that holds the council care contracts. It pays management fees to **Linthorpe Capital SA** in Luxembourg, which is owned by **Calder Bay Trading Ltd** in the British Virgin Islands."
           },
           {
-            "preset": "subgraph",
+            "kind": "subgraph",
             "nodes": [
               { "id": "harrow", "label": "Harrow Holdings Ltd · UK" },
               { "id": "care", "label": "Harrow Care Services Ltd · UK" },
@@ -269,7 +269,7 @@
             "caption": "Edges are ownership, directorship or a recorded payment · 9 of 138 nodes shown"
           },
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               { "label": "Linthorpe Capital SA · LU", "value": 7, "display": "7 paths" },
               { "label": "Calder Bay Trading Ltd · BVI", "value": 5, "display": "5 paths" },
@@ -312,11 +312,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "Linthorpe Capital was incorporated **11 weeks before** Harrow Care won its first council contract, and Calder Bay **five weeks before** that. The management-fee agreement with Linthorpe was signed the month the contract started."
           },
           {
-            "preset": "record",
+            "kind": "record",
             "header": { "title": "Harrow Care Services Ltd", "initials": "HC", "status": { "label": "Active", "tone": "neutral" } },
             "rows": [
               { "label": "Company number", "value": "10177453", "source": "Companies House" },
@@ -327,7 +327,7 @@
             ]
           },
           {
-            "preset": "timeline",
+            "kind": "timeline",
             "events": [
               { "when": "Jan 2019", "text": "Calder Bay Trading Ltd incorporated in the BVI", "detail": "Meridian Papers · registered-agent file", "section": "Before the contracts" },
               { "when": "Feb 2019", "text": "Linthorpe Capital SA incorporated in Luxembourg", "detail": "Luxembourg RCS B231904", "section": "Before the contracts" },
@@ -339,7 +339,7 @@
             ]
           },
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               { "key": "company", "label": "Company" },
               { "key": "jurisdiction", "label": "Registered" },
@@ -380,7 +380,7 @@
         },
         "blocks": [
           {
-            "preset": "cannot",
+            "kind": "cannot",
             "reason": "The BVI's beneficial-ownership register is not public, and the Meridian Papers hold Calder Bay's incorporation papers but no ownership declaration.",
             "remedy": "A request through the registered agent, or a court filing that names the owners, would answer this. I can flag Calder Bay for the legal team's disclosure request.",
             "nearest": [
@@ -402,12 +402,12 @@
         "stage": "scope",
         "state": "answered",
         "ask": {
-          "preset": "multistep",
+          "kind": "multistep",
           "steps": [
             {
               "id": "sources",
               "required": true,
-              "preset": "multi",
+              "kind": "multi",
               "question": "Which collections should I search?",
               "label": "Sources",
               "options": [
@@ -421,7 +421,7 @@
             },
             {
               "id": "match",
-              "preset": "single",
+              "kind": "single",
               "question": "How strict should the name match be?",
               "label": "Match",
               "options": [
@@ -465,11 +465,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "**Seven documents** name both. The strongest is a 2019 registered-agent form that lists Mercer as Calder Bay's **authorised signatory** [1]. Harrow's own accounts show the fees to Linthorpe but do not name Calder Bay [2]; a 2023 Jersey judgment names both in passing [3]."
           },
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               { "label": "Documents", "value": "7", "delta": "of 31 name matches" },
               { "label": "Confirmed on date of birth", "value": "5", "tone": "good" },
@@ -477,7 +477,7 @@
             ]
           },
           {
-            "preset": "bars",
+            "kind": "bars",
             "groups": ["2019", "2020", "2021", "2022", "2023"],
             "series": [
               { "name": "Documents naming both", "values": [3, 1, 0, 1, 2] }
@@ -487,7 +487,7 @@
             "caption": "By document date"
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               { "label": "Meridian Papers · Calder Bay registered-agent file", "count": 4, "detail": "leak · indexed 18 Sep" },
               { "label": "Harrow Care Services Ltd accounts 2019–2023", "count": 5, "detail": "Companies House · loaded 30 Sep 06:00" },
@@ -495,7 +495,7 @@
             ]
           },
           {
-            "preset": "files",
+            "kind": "files",
             "files": [
               { "name": "calder-bay-agent-form-2019.pdf", "size": "412 KB", "digest": "7c41e09a", "note": "Meridian Papers · names Mercer as signatory" },
               { "name": "harrow-care-accounts-2019.pdf", "size": "1.8 MB", "digest": "b02d6f3e", "note": "Companies House · note 21, management fees" },
@@ -517,7 +517,7 @@
         "stage": "act",
         "state": "answered",
         "ask": {
-          "preset": "form",
+          "kind": "form",
           "question": "Where should it go?",
           "labels": "side",
           "fields": [
@@ -548,7 +548,7 @@
         },
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "heading": "Save the Harrow offshore subgraph as a frozen, cited snapshot",
             "rows": [
               { "label": "Workspace", "value": "Harrow care contracts › Offshore links" },
@@ -578,7 +578,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "Which other companies share Calder Bay's registered agent?",
             "Check every officer in the subgraph against the sanctions lists",
@@ -606,7 +606,7 @@
         "title": "Companies at Harrow's registered addresses",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               { "key": "address", "label": "Address" },
               { "key": "subsidiary", "label": "Harrow company" },
@@ -650,7 +650,7 @@
       "waiting": "which \"Deborah Strand\"?",
       "stage": "frame",
       "ask": {
-        "preset": "single",
+        "kind": "single",
         "question": "The register holds **two officers named Deborah Strand**. Which one do you mean?",
         "label": "Officer",
         "options": [
@@ -675,7 +675,7 @@
         "title": "Deborah Strand's appointments since 2015",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               { "key": "company", "label": "Company" },
               { "key": "role", "label": "Role" },
@@ -704,7 +704,7 @@
       "thinking": "Three hops of OWNS and DIRECTOR_OF from a BVI company fans out through registered agents that front thousands of companies. That is a large walk, and most of it will be agent noise, so ask first.",
       "waiting": "this walks about 18,000 companies",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "Three hops from Calder Bay passes through its **registered agent**, which fronts thousands of companies. Run it?",
         "cost": [
           { "label": "companies walked", "value": "~18,000" },
@@ -732,7 +732,7 @@
         "title": "Calder Bay, 3 hops",
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               { "label": "Companies walked", "value": "17,862" },
               { "label": "Non-agent links", "value": "212" },
@@ -740,7 +740,7 @@
             ]
           },
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               { "label": "Linthorpe Capital SA · LU", "value": 9, "display": "9 links" },
               { "label": "Ostrava Nominees Ltd · CY", "value": 4, "display": "4 links" },
@@ -768,7 +768,7 @@
           "title": "Calder Bay, 1 hop",
           "blocks": [
             {
-              "preset": "ranked",
+              "kind": "ranked",
               "items": [
                 { "label": "Linthorpe Capital SA · owns 100%", "value": 3, "display": "owns" },
                 { "label": "Greyfriars Trust Company · trustee", "value": 2, "display": "trustee" },

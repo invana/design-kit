@@ -1,6 +1,6 @@
 import type * as React from "react"
 
-import type { PresetRegistry } from "../conversations/registry"
+import type { RegistryOverrides } from "../conversations/registry"
 import type { ConversationEvent, ConversationEventType } from "../protocol/events"
 import type { PatchSource } from "../protocol/stream"
 import type { AnswerState, ConversationSpec } from "../protocol/types"
@@ -93,7 +93,7 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /** A patch did not apply, or the source failed. The stream stops there. */
   onStreamError?: (error: unknown) => void
   /** Renderers and traits of your own asks and blocks, merged over the built-ins. */
-  registry?: PresetRegistry
+  registry?: RegistryOverrides
   icons?: Partial<ChatSessionIcons>
   /**
    * The actions beside a settled answer's time, in order — the built-ins by

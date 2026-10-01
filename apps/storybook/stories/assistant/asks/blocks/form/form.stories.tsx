@@ -5,7 +5,7 @@ import type { AskSpec, AskTurn, FormOptions } from '@invana/assistant';
 import { Board } from '../../../board';
 
 const meta: Meta<typeof Board> = {
-  title: 'Assistant/Asks/Presets/Form',
+  title: 'Assistant/Asks/Blocks/Form',
   component: Board,
   parameters: { layout: 'padded' },
 };
@@ -45,12 +45,12 @@ export const Form: Story = {
     variants: [
       {
         caption: 'Labels left',
-        turn: ask('side', { preset: 'form', question: 'Scenario inputs', fields: [price, elasticity, starts], submit: 'Run scenario' }),
+        turn: ask('side', { kind: 'form', question: 'Scenario inputs', fields: [price, elasticity, starts], submit: 'Run scenario' }),
       },
       {
         caption: 'Heading + description · labels on top',
         turn: ask('top', {
-          preset: 'form',
+          kind: 'form',
           question: 'Scenario inputs',
           description: 'These only make sense together, so I ask them together.',
           labels: 'top',
@@ -61,7 +61,7 @@ export const Form: Story = {
       {
         caption: ERROR,
         turn: ask('error', {
-          preset: 'form',
+          kind: 'form',
           question: 'Scenario inputs',
           heading: true,
           labels: 'top',
@@ -72,7 +72,7 @@ export const Form: Story = {
       {
         caption: 'Grouped fields',
         turn: ask('grouped', {
-          preset: 'form',
+          kind: 'form',
           question: 'Scenario inputs',
           heading: true,
           labels: 'top',
@@ -90,7 +90,7 @@ export const Form: Story = {
         now: Date.parse('2026-09-29T10:00:45Z'),
         turn: ask(
           'answered',
-          { preset: 'form', question: 'Scenario inputs', fields: [price, elasticity, starts], submit: 'Run scenario' },
+          { kind: 'form', question: 'Scenario inputs', fields: [price, elasticity, starts], submit: 'Run scenario' },
           { state: 'answered', value: { price: -5, elasticity: 1.3, starts: '1 Nov 2026' }, answeredAt: '2026-09-29T10:00:20Z' },
         ),
       },
@@ -98,7 +98,7 @@ export const Form: Story = {
         caption: 'At 280px',
         narrow: true,
         turn: ask('narrow', {
-          preset: 'form',
+          kind: 'form',
           question: 'Scenario inputs',
           heading: true,
           labels: 'top',

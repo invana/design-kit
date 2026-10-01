@@ -53,7 +53,7 @@ export const ProgressTrace: Story = {
       {
         caption: 'Done · folded into the method',
         turn: record('done', 'done', {
-          preset: 'trace',
+          kind: 'trace',
           folded: true,
           summary: '4.2 s · 16,319 rows',
           steps: [
@@ -67,7 +67,7 @@ export const ProgressTrace: Story = {
       {
         caption: 'A step failed',
         turn: record('failed', 'stopped', {
-          preset: 'trace',
+          kind: 'trace',
           steps: [
             { id: 'gl', label: 'Read general ledger', detail: '12,408 rows', state: 'done' },
             {
@@ -88,7 +88,7 @@ export const ProgressTrace: Story = {
       {
         caption: 'Waiting on you',
         turn: record('waiting', 'paused', {
-          preset: 'trace',
+          kind: 'trace',
           steps: [
             { id: 'gl', label: 'Read general ledger', detail: '12,408 rows', state: 'done' },
             { id: 'ask', label: 'Which margin did you mean?', detail: 'your turn', state: 'waiting' },

@@ -87,7 +87,7 @@ function CliAnswer({ turn }: { turn: AnswerTurn }) {
     ) : blocks.length ? (
       <BlockStack className="whitespace-normal">
         {blocks.map((b, i) => (
-          <BlockView key={`${b.preset}-${i}`} block={b} turn={turn} registry={ctx.registry} onEvent={ctx.emit} />
+          <BlockView key={`${b.kind}-${i}`} block={b} turn={turn} registry={ctx.registry} onEvent={ctx.emit} />
         ))}
       </BlockStack>
     ) : outcome === "failed" ? (
@@ -169,7 +169,7 @@ const WEIGHT = { running: 0, waiting: 1, settled: 2 } as const
 function CliTasks() {
   const ctx = useChatSessionContext()
   const jump = useJump()
-  const blocks = (ask: AskTurn) => ctx.registry.askTraits(ask.ask.preset).frame === "card"
+  const blocks = (ask: AskTurn) => ctx.registry.askTraits(ask.ask.kind).frame === "card"
   const groups = exchangesOf(ctx.spec)
     .filter((e) => e.replies.some((r) => isAnswer(r) && r.trace?.length))
     .reverse()
@@ -244,7 +244,7 @@ export interface CliSessionProps {
  */
 export function CliSession({ running, onStop, header, onClose, emptyState, className }: CliSessionProps) {
   const ctx = useChatSessionContext()
-  const counts = threadCounts(ctx.spec, (ask) => ctx.registry.askTraits(ask.ask.preset).frame === "card")
+  const counts = threadCounts(ctx.spec, (ask) => ctx.registry.askTraits(ask.ask.kind).frame === "card")
   const tasks = ctx.view === "tasks"
   const viewButton = (target: "chat" | "tasks", label: string) => (
     <button

@@ -154,11 +154,11 @@
         "stage": "scope",
         "state": "answered",
         "ask": {
-          "preset": "multistep",
+          "kind": "multistep",
           "steps": [
             {
               "id": "environment",
-              "preset": "single",
+              "kind": "single",
               "question": "Which environment is the new line for?",
               "options": [
                 {
@@ -181,14 +181,14 @@
             },
             {
               "id": "floor",
-              "preset": "number",
+              "kind": "number",
               "question": "What yield must the new line keep?",
               "unit": "kg/ha",
               "default": 2200
             },
             {
               "id": "keep",
-              "preset": "multi",
+              "kind": "multi",
               "question": "What else must it keep?",
               "options": [
                 {
@@ -242,11 +242,11 @@
         },
         "blocks": [
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "No variety clears **2,200 kg/ha** and scores **7+** on drought. The high-yield lines lack tolerance, and the tolerant landraces lack yield, which makes them natural parents to cross."
           },
           {
-            "preset": "attr",
+            "kind": "attr",
             "total": 42,
             "noun": "varieties",
             "caption": "drought and rust scored 1–9 · shade per column, fewer days is better",
@@ -371,7 +371,7 @@
         },
         "blocks": [
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "caption": "kg/ha per step of each trait, other traits held constant",
             "items": [
               {
@@ -410,7 +410,7 @@
         "stage": "analyse",
         "state": "answered",
         "ask": {
-          "preset": "weights",
+          "kind": "weights",
           "question": "How much does each goal matter?",
           "objectives": [
             {
@@ -453,7 +453,7 @@
         "stage": "scope",
         "state": "answered",
         "ask": {
-          "preset": "entity",
+          "kind": "entity",
           "question": "Which crosses should I simulate?",
           "results": [
             {
@@ -509,7 +509,7 @@
         },
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "cross",
@@ -578,7 +578,7 @@
             ]
           },
           {
-            "preset": "histogram",
+            "kind": "histogram",
             "unit": "kg/ha",
             "caption": "BV-112 × LR-31 · predicted yield of simulated lines, kg/ha",
             "threshold": {
@@ -661,7 +661,7 @@
         "title": "rust pressure × 2",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "cross",
@@ -700,7 +700,7 @@
             ]
           },
           {
-            "preset": "narrative",
+            "kind": "narrative",
             "text": "The order holds. **BV-207 × BV-150** falls away because BV-207 carries little rust resistance (score 3), while BV-112's score of 8 protects both of its crosses."
           }
         ]
@@ -714,7 +714,7 @@
         "title": "from this thread",
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "rows": [
               {
                 "label": "Add to",
@@ -757,7 +757,7 @@
         "stage": "explain",
         "state": "pending",
         "ask": {
-          "preset": "suggestions",
+          "kind": "suggestions",
           "items": [
             "Which markers are linked to drought score?",
             "How much do these parents' pedigrees overlap?",
@@ -789,7 +789,7 @@
         "title": "LR-31 as a parent",
         "blocks": [
           {
-            "preset": "record",
+            "kind": "record",
             "header": {
               "title": "LR-31 · Kabuli landrace",
               "initials": "LR",
@@ -843,7 +843,7 @@
             ]
           },
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "caption": "mean yield of progeny, kg/ha, semi-arid F5 plots",
             "items": [
               {
@@ -875,7 +875,7 @@
             ]
           },
           {
-            "preset": "citations",
+            "kind": "citations",
             "sources": [
               {
                 "label": "Semi-arid yield trials",
@@ -935,7 +935,7 @@
       "thinking": "There are 186 F6 lines from 2025. Advancing depends on which traits must clear their thresholds — I should ask which ones gate advancement before filtering.",
       "waiting": "which traits gate advancement?",
       "ask": {
-        "preset": "multi",
+        "kind": "multi",
         "question": "Which traits must a line clear to **go forward**?",
         "description": "Lines failing any ticked trait are held back.",
         "options": [
@@ -992,7 +992,7 @@
         "title": "lines to advance",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               {
                 "key": "line",
@@ -1089,7 +1089,7 @@
       "thinking": "42 varieties give 861 pairs; 858 are untested. Each needs a genomic prediction over 1,000 simulated F6 lines — a heavy run on the GPU pool.",
       "waiting": "this simulates 858 crosses",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "This simulates **858 crosses**, 1,000 lines each. Run it?",
         "cost": [
           {
@@ -1128,7 +1128,7 @@
         "title": "858 crosses predicted",
         "blocks": [
           {
-            "preset": "proposal",
+            "kind": "proposal",
             "title": "from this answer",
             "heading": "Add two untested crosses to the 2026 block",
             "rows": [
@@ -1207,7 +1207,7 @@
           "title": "BV-112's crosses",
           "blocks": [
             {
-              "preset": "metric",
+              "kind": "metric",
               "label": "BV-112 × LR-17 · lines meeting all goals",
               "value": "38%",
               "delta": "▲ 4 pts vs BV-112 × LR-31",

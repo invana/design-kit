@@ -121,7 +121,7 @@
       },
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "Added **100 nodes** and **50 relationships**."
         }
       ],
@@ -191,7 +191,7 @@
       },
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "Added **100 nodes** and **50 relationships**."
         }
       ],
@@ -261,7 +261,7 @@
       },
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "Added **24 nodes** and **12 relationships**."
         }
       ],

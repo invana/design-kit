@@ -1,14 +1,14 @@
 # Components tracker
 
-Status of every component the assistant needs, across packages. The design reference is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): one board per ask and answer-block preset, each variant on a board is one story.
+Status of every component the assistant needs, across packages. The design reference is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): one board per ask and answer-block, each variant on a board is one story.
 
 **Update the row in the same commit that changes the component.** Edit only the `Status` cell unless the design changes; a design change goes to the canvas first.
 
-- **Change:** `stays` · `move in` · `move out` · `extend` · `new` · `compose` (preset from existing parts, story only) · `later` (needs a dependency)
+- **Change:** `stays` · `move in` · `move out` · `extend` · `new` · `compose` (block from existing parts, story only) · `later` (needs a dependency)
 - **Status:** `done` (in the repo and matches the row) · `partial` (exists, change not made) · `todo` (not started)
 - **Tier:** `today` · `next` · `later`
-- **Slice** (preset registry): 0 contract · 1 supply-chain · 2 health · 3 trader · 4 breeder · 5 statistics
-- Folders are relative to the repo root; renderer files in the preset registry are relative to `packages/assistant/src/`.
+- **Slice** (block registry): 0 contract · 1 supply-chain · 2 health · 3 trader · 4 breeder · 5 statistics
+- Folders are relative to the repo root; renderer files in the block registry are relative to `packages/assistant/src/`.
 
 
 ## @invana/assistant
@@ -29,7 +29,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | Recorded runs (every user) | `packages/assistant/src/fixtures/scripts/runs.ts` | new | done | today |
 | Conversation fixtures (the conversations/ stories' JSON, with a streaming script) | `packages/assistant/src/fixtures/conversations/` | new | done | today |
 | Conversation, ConversationTurn | `packages/assistant/src/conversations/` | remove (→ ChatSession) | done | today |
-| Preset registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
+| Block registry | `packages/assistant/src/conversations/registry.ts` | new | done | today |
 | Protocol types | `packages/assistant/src/protocol/types.ts` | new | done | today |
 | Events | `packages/assistant/src/protocol/events.ts` | new | done | today |
 | applyPatch | `packages/assistant/src/protocol/reduce.ts` | new | done | today |
@@ -55,7 +55,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | ChatSessionStatusBar | `packages/assistant/src/conversations/chat-session-status-bar.tsx` | move in | done | today |
 | ChatSessionTaskRow | `packages/assistant/src/conversations/chat-session-task-row.tsx` | move in | done | today |
 
-### Asks: shells the ask presets render into
+### Asks: shells the blocks in an ask render into
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
@@ -69,7 +69,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | InterpretationFork | `packages/assistant/src/asks/interpretation-fork.tsx` | new | todo | next |
 | PlanPreview | `packages/assistant/src/asks/plan-preview.tsx` | new | todo | next |
 | ModelSpec | `packages/assistant/src/asks/model-spec.tsx` | new | todo | next |
-| Ask renderers (21) | `packages/assistant/src/asks/presets/` | new | partial | today |
+| Ask renderers (21) | `packages/assistant/src/asks/blocks/` | new | partial | today |
 
 ### Answers: the card and what goes inside it
 
@@ -264,40 +264,40 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | apps/storybook | Assistant section | `apps/storybook/stories/assistant/` | new | done | today |
 | release.yml | dist-branches matrix | `.github/workflows/release.yml` | extend | done | today |
 
-## Preset registry
+## Block registry
 
-One renderer file per preset id in `assistant/src/`. `proposed` ids get a board on the canvas before they are built.
+One renderer file per kind in `assistant/src/`. `proposed` ids get a board on the canvas before they are built.
 
 
-### Ask presets
+### Blocks in asks
 
-| Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
+| Kind | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
-| confirm | `boolean` | ConfirmCard · assistant | `asks/presets/confirm.tsx` | done | today | 2 |
-| single | `string` | ClarifyCard · assistant | `asks/presets/single.tsx` | done | today | 1 |
-| multi | `string[]` | ClarifyCard, multiple · assistant | `asks/presets/multi.tsx` | done | today | 2 |
-| quick | `string` | SegmentedControl · ui | `asks/presets/quick.tsx` | done | today | 2 |
-| period | `{ from, to, label }` | PeriodPicker · ui | `asks/presets/period.tsx` | todo | today | – |
-| number | `number` | Questionnaire input with unit · ui | `asks/presets/number.tsx` | todo | today | 4 |
-| short | `string` | Questionnaire input · ui | `asks/presets/short.tsx` | todo | today | – |
-| long | `string` | Questionnaire freeform · ui | `asks/presets/long.tsx` | todo | today | – |
-| entity | `id[]` | RichSelect + SearchInput · ui | `asks/presets/entity.tsx` | todo | next | 4 |
-| scale | `1–5` | RatingControl · ui | `asks/presets/scale.tsx` | todo | today | – |
-| multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `asks/presets/multistep.tsx` | done | today | 1 |
-| form | `Record<field, value>` | ObjectField · forms | `asks/presets/form.tsx` | done | next | 1 |
-| weights | `Record<objective, 0–100>` | WeightControl · ui | `asks/presets/weights.tsx` | todo | today | 4 |
-| approval | `approve \| reject` | ProposalCard · ui | `asks/presets/approval.tsx` | todo | today | – |
-| interpretation (proposed) | `Record<slot, value>` | InterpretationStrip · assistant | `asks/presets/interpretation.tsx` | todo | today | 5 |
-| fork (proposed) | `readingId` | InterpretationFork · assistant | `asks/presets/fork.tsx` | todo | next | 5 |
-| plan (proposed) | `stepId[]` | PlanPreview · assistant | `asks/presets/plan.tsx` | todo | next | 5 |
-| modelspec (proposed) | `{ outcome, predictors[], group?, controls[] }` | ModelSpec · assistant | `asks/presets/modelspec.tsx` | todo | next | 5 |
-| hypothesis (proposed) | `{ test, tails, alpha }` | ClarifyCard + SegmentedControl + number | `asks/presets/hypothesis.tsx` | todo | next | 5 |
-| range (proposed) | `{ min, max }` | RangeInput · ui | `asks/presets/range.tsx` | todo | next | 5 |
-| suggestions | `string` | SuggestionChips · assistant | `asks/presets/suggestions.tsx` | done | today | 1 |
+| confirm | `boolean` | ConfirmCard · assistant | `asks/blocks/confirm.tsx` | done | today | 2 |
+| single | `string` | ClarifyCard · assistant | `asks/blocks/single.tsx` | done | today | 1 |
+| multi | `string[]` | ClarifyCard, multiple · assistant | `asks/blocks/multi.tsx` | done | today | 2 |
+| quick | `string` | SegmentedControl · ui | `asks/blocks/quick.tsx` | done | today | 2 |
+| period | `{ from, to, label }` | PeriodPicker · ui | `asks/blocks/period.tsx` | todo | today | – |
+| number | `number` | Questionnaire input with unit · ui | `asks/blocks/number.tsx` | todo | today | 4 |
+| short | `string` | Questionnaire input · ui | `asks/blocks/short.tsx` | todo | today | – |
+| long | `string` | Questionnaire freeform · ui | `asks/blocks/long.tsx` | todo | today | – |
+| entity | `id[]` | RichSelect + SearchInput · ui | `asks/blocks/entity.tsx` | todo | next | 4 |
+| scale | `1–5` | RatingControl · ui | `asks/blocks/scale.tsx` | todo | today | – |
+| multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `asks/blocks/multistep.tsx` | done | today | 1 |
+| form | `Record<field, value>` | ObjectField · forms | `asks/blocks/form.tsx` | done | next | 1 |
+| weights | `Record<objective, 0–100>` | WeightControl · ui | `asks/blocks/weights.tsx` | todo | today | 4 |
+| approval | `approve \| reject` | ProposalCard · ui | `asks/blocks/approval.tsx` | todo | today | – |
+| interpretation (proposed) | `Record<slot, value>` | InterpretationStrip · assistant | `asks/blocks/interpretation.tsx` | todo | today | 5 |
+| fork (proposed) | `readingId` | InterpretationFork · assistant | `asks/blocks/fork.tsx` | todo | next | 5 |
+| plan (proposed) | `stepId[]` | PlanPreview · assistant | `asks/blocks/plan.tsx` | todo | next | 5 |
+| modelspec (proposed) | `{ outcome, predictors[], group?, controls[] }` | ModelSpec · assistant | `asks/blocks/modelspec.tsx` | todo | next | 5 |
+| hypothesis (proposed) | `{ test, tails, alpha }` | ClarifyCard + SegmentedControl + number | `asks/blocks/hypothesis.tsx` | todo | next | 5 |
+| range (proposed) | `{ min, max }` | RangeInput · ui | `asks/blocks/range.tsx` | todo | next | 5 |
+| suggestions | `string` | SuggestionChips · assistant | `asks/blocks/suggestions.tsx` | done | today | 1 |
 
-### Block presets
+### Blocks in answers
 
-| Preset | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
+| Kind | Returns / reads | Renders with | Renderer file | Status | Tier | Slice |
 | --- | --- | --- | --- | --- | --- | --- |
 | narrative | `{ text, cites? }` | Prose with CitationMarker · assistant | `answers/blocks/narrative.tsx` | done | today | 1 |
 | metric | `{ label, value, delta, compare }` | MetricTile · ui | `answers/blocks/metric.tsx` | done | today | 2 |

@@ -103,7 +103,7 @@
       "state": "pending",
       "waiting": "parked 38d",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "HideShowLayersPanel also auto-shows hidden elements on select. **Keep that behaviour** in LayersPanel?",
         "yes": "Keep it",
         "no": "Drop it",
@@ -162,7 +162,7 @@
       },
       "blocks": [
         {
-          "preset": "narrative",
+          "kind": "narrative",
           "text": "All background tasks are stopped. **Two label counts changed** while the sync ran; nothing else was touched."
         }
       ]

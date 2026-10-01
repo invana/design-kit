@@ -44,15 +44,15 @@ export const Caveat: Story = {
       {
         caption: 'Labelled caveats',
         turn: caveats('labelled', [
-          { preset: 'caveat', ...indicative },
-          { preset: 'caveat', ...association },
+          { kind: 'caveat', ...indicative },
+          { kind: 'caveat', ...association },
         ]),
       },
       {
         caption: 'With the excluded rows',
         turn: caveats('excluded', [
           {
-            preset: 'caveat',
+            kind: 'caveat',
             label: 'excluded',
             text: '4 stores with incomplete September data.',
             action: { id: 'show-excluded', label: 'Show the 4 stores' },
@@ -62,21 +62,21 @@ export const Caveat: Story = {
       {
         caption: 'Three tones',
         turn: caveats('tones', [
-          { preset: 'caveat', label: 'imputed', text: 'Two missing weeks filled from the regional average.', tone: 'info' },
-          { preset: 'caveat', label: 'indicative', text: 'North rests on 9 stores. Treat it as a direction, not a figure.' },
-          { preset: 'caveat', label: 'stale', text: 'The ledger last loaded on 25 Sep.', tone: 'bad' },
+          { kind: 'caveat', label: 'imputed', text: 'Two missing weeks filled from the regional average.', tone: 'info' },
+          { kind: 'caveat', label: 'indicative', text: 'North rests on 9 stores. Treat it as a direction, not a figure.' },
+          { kind: 'caveat', label: 'stale', text: 'The ledger last loaded on 25 Sep.', tone: 'bad' },
         ]),
       },
       {
         caption: 'Folded',
-        turn: caveats('folded', [{ preset: 'caveat', items: [indicative, association], folded: true }]),
+        turn: caveats('folded', [{ kind: 'caveat', items: [indicative, association], folded: true }]),
       },
       {
         caption: 'At 280px',
         narrow: true,
         turn: caveats('narrow', [
-          { preset: 'caveat', ...indicative },
-          { preset: 'caveat', ...association },
+          { kind: 'caveat', ...indicative },
+          { kind: 'caveat', ...association },
         ]),
       },
     ],

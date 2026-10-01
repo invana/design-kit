@@ -101,7 +101,7 @@
         "text": "Found **14 airlines**. Lufthansa alone reaches 74 countries from Frankfurt; the next, Condor, 41. Added 14 nodes and 212 relationships to the canvas.",
         "blocks": [
           {
-            "preset": "table",
+            "kind": "table",
             "columns": [
               { "key": "airline", "label": "Airline" },
               { "key": "countries", "label": "Countries", "align": "right" },
@@ -138,7 +138,7 @@
       "thinking": "\"Frankfurt\" matches two Airport nodes — FRA and HHN. The question needs one of them before a query makes sense.",
       "waiting": "which \"Frankfurt\"?",
       "ask": {
-        "preset": "single",
+        "kind": "single",
         "question": "Frankfurt matches two airports here. **Which one do you mean?**",
         "options": [
           { "value": "FRA", "label": "Frankfurt am Main", "detail": "FRA", "description": "Hub · 3,504 routes" },
@@ -159,7 +159,7 @@
         "text": "**3,504 routes** leave Frankfurt am Main, to 312 airports in 104 countries. Lufthansa flies 61% of them.",
         "blocks": [
           {
-            "preset": "grid",
+            "kind": "grid",
             "tiles": [
               { "label": "Routes", "value": "3,504", "delta": "▲ 4% vs last season", "tone": "good" },
               { "label": "Airports", "value": "312" },
@@ -176,7 +176,7 @@
       "thinking": "This is betweenness over the whole route network, weighted by seats — a full scan.",
       "waiting": "this reads the whole graph",
       "ask": {
-        "preset": "confirm",
+        "kind": "confirm",
         "question": "This scores **every airport** against every route. Run it?",
         "cost": [
           { "label": "rows scanned", "value": "2.3M" },
@@ -200,7 +200,7 @@
         "text": "Closing **Frankfurt** would strand the most: 0.31 of all seat-weighted shortest paths pass through it. Istanbul and Dubai follow.",
         "blocks": [
           {
-            "preset": "ranked",
+            "kind": "ranked",
             "items": [
               { "label": "FRA · Frankfurt", "value": 0.31, "display": "0.31" },
               { "label": "IST · Istanbul", "value": 0.27, "display": "0.27" },
@@ -219,7 +219,7 @@
           "text": "Scoring only the 20 busiest hubs instead: this reads 4% of the graph.",
           "blocks": [
             {
-              "preset": "ranked",
+              "kind": "ranked",
               "items": [
                 { "label": "FRA · Frankfurt", "value": 0.31, "display": "0.31" },
                 { "label": "IST · Istanbul", "value": 0.27, "display": "0.27" },

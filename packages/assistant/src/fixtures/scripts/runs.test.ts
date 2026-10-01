@@ -45,7 +45,7 @@ describe.each(Object.entries(USERS))("user %s", (_, user: UserData) => {
   it("the streamed answer text joins back whole", () => {
     const a = answer(settle(opening, sendRun(user, "r1", NOW)), "r1-a")
     expect(a.state).toBe("complete")
-    expect(a.blocks[0]).toEqual({ preset: "narrative", text: user.runs.send.answer.text })
+    expect(a.blocks[0]).toEqual({ kind: "narrative", text: user.runs.send.answer.text })
     expect(a.trace?.every((s) => s.state === "done")).toBe(true)
   })
 
@@ -76,23 +76,23 @@ describe.each(Object.entries(USERS))("user %s", (_, user: UserData) => {
   })
 })
 
-/** Every preset with a renderer, drawn somewhere in the users' threads and runs. */
+/** Every block with a renderer, drawn somewhere in the users' threads and runs. */
 describe("the users together", () => {
   it("show every built ask and block", () => {
-    const presets = new Set<string>()
+    const drawn = new Set<string>()
     const collect = (spec: ConversationSpec) => {
       for (const t of spec.turns) {
         if (t.role !== "assistant") continue
         if (t.kind === "ask") {
-          presets.add(`ask:${t.ask.preset}`)
-          if (t.ask.preset === "multistep") t.ask.steps.forEach((s) => presets.add(`ask:${s.preset}`))
+          drawn.add(`ask:${t.ask.kind}`)
+          if (t.ask.kind === "multistep") t.ask.steps.forEach((s) => drawn.add(`ask:${s.kind}`))
         } else {
-        t.blocks.forEach((b) => presets.add(`block:${b.preset}`))
+        t.blocks.forEach((b) => drawn.add(`block:${b.kind}`))
         // Carried on the answer, never sent as blocks: drawn from the envelope and the trace.
-        if (t.envelope?.scope?.length) presets.add("block:scope")
-        if (t.envelope?.method) presets.add("block:method")
-        if (t.envelope?.caveats?.length) presets.add("block:caveat")
-        if (t.trace?.length) presets.add("block:trace")
+        if (t.envelope?.scope?.length) drawn.add("block:scope")
+        if (t.envelope?.method) drawn.add("block:method")
+        if (t.envelope?.caveats?.length) drawn.add("block:caveat")
+        if (t.trace?.length) drawn.add("block:trace")
       }
       }
     }
@@ -113,6 +113,6 @@ describe("the users together", () => {
       ...Object.entries(BUILT_IN_ASKS).filter(([, r]) => r).map(([id]) => `ask:${id}`),
       ...Object.entries(BUILT_IN_BLOCKS).filter(([, r]) => r).map(([id]) => `block:${id}`),
     ]
-    expect(built.filter((id) => !presets.has(id))).toEqual([])
+    expect(built.filter((id) => !drawn.has(id))).toEqual([])
   })
 })

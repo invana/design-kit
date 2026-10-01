@@ -10,7 +10,7 @@ import { isLive } from "../../protocol/stream"
 import { elapsedSince } from "./format"
 
 /**
- * The view model both variants draw from. Nothing here knows a preset: it
+ * The view model both variants draw from. Nothing here knows a kind: it
  * reads only the protocol's own fields — roles, kinds, states, the trace —
  * so an ask or a block of your own flows through exactly like a built-in.
  */
@@ -92,7 +92,7 @@ export function stepCount(answer: AnswerTurn): { done: number; total: number } {
 /**
  * Whether an ask holds the thread until it is answered. The session passes
  * the registry's answer — an ask drawn in the question card does; bare
- * follow-up chips do not — so no preset is named here.
+ * follow-up chips do not — so no block is named here.
  */
 export type BlocksThread = (ask: AskTurn) => boolean
 
@@ -129,7 +129,7 @@ export function threadCounts(spec: ConversationSpec, blocks?: BlocksThread) {
 
 /**
  * The words of a turn, for Copy: every string field named `text` on its
- * blocks, in order. Read by field, not by preset, so a block of your own that
+ * blocks, in order. Read by field, not by block, so a block of your own that
  * says something in `text` is copied too.
  */
 export function plainText(answer: AnswerTurn): string {

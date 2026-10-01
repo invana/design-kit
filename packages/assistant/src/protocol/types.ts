@@ -1,6 +1,6 @@
 import type {
-  AskPresetId,
-  BlockPresetId,
+  AskKind,
+  AnswerKind,
   FlowId,
   PatternId,
   StageId,
@@ -12,10 +12,10 @@ import type {
  * JSON-serialisable: the API sends a {@link ConversationSpec}, then patches;
  * the component renders whatever spec it is given and sends events back.
  *
- * The shapes are fixed by Analyst Flow Grammar. An ask preset fixes the type of
- * the value that comes back; a block preset fixes the options it reads; a
+ * The shapes are fixed by the Design Kit Spec. An block fixes the type of
+ * the value that comes back; a block fixes the options it reads; a
  * pattern fixes which blocks an answer has. A screen that needs more is a
- * grammar change or a new preset, never an extra field here.
+ * grammar change or a new block, never an extra field here.
  */
 
 // ── values ──────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ export type Cell = Figure | null | { value: Figure; tone?: "good" | "bad"; stron
 
 export type Tone = "good" | "bad" | "warn" | "neutral"
 
-// ── ask presets: options in, value out ──────────────────────────────────────
+// ── ask kinds: options in, value out ──────────────────────────────────────
 
 /**
  * What every ask says before its control. `hint`, where an ask has one, is the
@@ -312,11 +312,11 @@ export interface SuggestionsOptions {
 }
 
 /**
- * Ask preset → the options it reads.
+ * Kind → the options it reads.
  *
- * Keyed by exactly the grammar's ask preset ids; `grammar.test.ts` checks it.
+ * Keyed by exactly the grammar's ask kinds; `grammar.test.ts` checks it.
  */
-export interface AskOptionsByPreset {
+export interface AskOptionsByKind {
   confirm: ConfirmOptions
   single: SingleOptions
   multi: MultiOptions
@@ -340,8 +340,8 @@ export interface AskOptionsByPreset {
   suggestions: SuggestionsOptions
 }
 
-/** Ask preset → the type of the value the analyst's reply carries. */
-export interface AskValueByPreset {
+/** Kind → the type of the value the analyst's reply carries. */
+export interface AskValueByKind {
   confirm: boolean
   single: string
   multi: string[]
@@ -368,10 +368,10 @@ export interface AskValueByPreset {
 }
 
 export type AskSpec = {
-  [P in AskPresetId]: { preset: P } & AskOptionsByPreset[P]
-}[AskPresetId]
+  [P in AskKind]: { kind: P } & AskOptionsByKind[P]
+}[AskKind]
 
-// ── block presets: the options each block reads ─────────────────────────────
+// ── block kinds: the options each block reads ─────────────────────────────
 
 export interface ActionOption {
   id: string
@@ -537,7 +537,7 @@ export interface RecordRow {
   source?: string
 }
 
-export interface BlockOptionsByPreset {
+export interface AnswerOptionsByKind {
   narrative: NarrativeOptions
   metric: MetricOptions
   grid: { tiles: MetricOptions[] }
@@ -674,8 +674,8 @@ export interface BlockBase {
 }
 
 export type BlockSpec = {
-  [P in BlockPresetId]: BlockBase & { preset: P } & BlockOptionsByPreset[P]
-}[BlockPresetId]
+  [P in AnswerKind]: BlockBase & { kind: P } & AnswerOptionsByKind[P]
+}[AnswerKind]
 
 // ── the envelope ────────────────────────────────────────────────────────────
 
@@ -762,7 +762,7 @@ export interface AskTurn {
   stage: StageId
   state: AskState
   ask: AskSpec
-  /** The analyst's reply, once answered. Its type is fixed by the preset. */
+  /** The analyst's reply, once answered. Its type is fixed by the block. */
   value?: unknown
   /** When it was answered, as an ISO 8601 time. Shown as `just now`, `2 min ago`. */
   answeredAt?: string

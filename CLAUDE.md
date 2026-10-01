@@ -32,7 +32,23 @@ Per-package scripts of note:
 - `@invana/stoybook`: `dev` = `storybook dev -p 6009`, `build-storybook` produces `storybook-static/`
 - `@invana/styling`: ships source CSS directly — no build step
 
-There is no test runner wired into root scripts. `@invana/assistant` has the one `test` script (`pnpm --filter @invana/assistant test`, vitest in node): it checks the grammar ids against the preset registry, runs `validate()` on every session fixture, and exercises `applyPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
+There is no test runner wired into root scripts. `@invana/assistant` has the one `test` script (`pnpm --filter @invana/assistant test`, vitest in node): it checks the grammar ids against the block registry, runs `validate()` on every session fixture, and exercises `applyPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
+
+## Terms
+
+One word per idea, the same in code, docs, stories and the Design Kit Spec (full table in
+`docs/design-kit-spec.md`):
+
+- **block**: one reusable drawing built from a JSON spec, shown in a conversation turn or a
+  dashboard panel. No sub-types: a block that returns a value and one that only shows data are
+  both blocks. Its id is its **kind** (`{ kind: "timeseries", … }`).
+- **part**: a plain component a block is built from (`ui`, `charts`, `tables`, `forms`).
+- **shell**: what frames a block and maps its actions: the conversation (`ChatSession`) or the
+  dashboard (`PanelBox`).
+- **ask** / **answer**: the two kinds of conversation turn, never the name of a block.
+- **intent**: why a turn uses a block; conversation-only (`ASK_INTENTS`, `ANSWER_INTENTS`).
+- Retired: *preset*, *intent block*, *answer block*, *ask preset*. In code: `BLOCKS` (with
+  `BlockKind`, `AskKind`, `AnswerKind`), the `kind` key, `ASK_INTENTS`, `asks/blocks/`.
 
 ## Workspace layout
 
@@ -147,20 +163,20 @@ gap in the kit, not a one-off in the design.
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
 - The **Design Kit Spec** (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5) is the one design
-  reference for asks and answers; code follows it and no other canvas. Its model: an **intent**
-  (what a turn asks for or tells — `ASKS` and `ANSWER_INTENTS` in `grammar/`) is drawn by an
-  **intent block** (a preset renderer in `@invana/assistant`), which is composed of **parts**
-  (`ui-extended`, `charts`, `tables`, `forms`) that know nothing of intents and take size,
-  density, `palette` and `seamless` as props. Several intents may share one block and differ only
-  in options. Each block board's header names its intents, parts, status and knobs; the
-  Customisation page shows the knobs live and the Playground shows the blocks in `AppLayoutV2`.
-  Each preset with a renderer has **one story that replicates its whole board**: every variant,
+  reference for blocks; code follows it and no other canvas. Its model (see Terms): a **block**
+  is drawn from its JSON spec and composed of **parts** (`ui-extended`, `charts`, `tables`,
+  `forms`) that know nothing of blocks and take size, density, `palette` and `seamless` as props;
+  a **shell** (conversation or dashboard) frames it. In a conversation an **intent** says why a
+  turn uses a block, and several intents may share one block with different options. Each block
+  board's header names its intents, parts, status and knobs; the Shared blocks page shows one spec
+  in both shells, the Customisation page shows the knobs live and the Playground shows the blocks
+  in `AppLayoutV2`. Each block with a renderer has **one story that replicates its whole board**: every variant,
   captioned as the board captions it, laid out by the story-only `Board` helper
   (`apps/storybook/stories/assistant/board.tsx`, four 320px columns; the 280px variant draws at
   280px). A variant the renderer cannot draw is a gap in the renderer, not a story workaround.
   A design change goes to the spec first; its Needs review page holds changes not yet decided.
 - `docs/TODO.md` tracks every component the assistant needs, across packages:
-  folder, change, status, tier, and the assistant's preset registry. Flip a row's `Status` in the
+  folder, change, status, tier, and the assistant's block registry. Flip a row's `Status` in the
   same commit that ships or changes the component.
 - New components land here **with a story** before the design or Studio uses them. A component
   without a story is not done.
@@ -175,15 +191,15 @@ gap in the kit, not a one-off in the design.
   (`packages/assistant/src/styles/`); the API sends a `ConversationSpec` then patches
   (`applyPatch`, or handed over as `stream` / `useChatSession().stream`), the UI sends
   `ConversationEvent`s — to `onEvent` and to a typed callback per event (`onReply`, `onAction`,
-  `onOpenRun`, …). The variants share one base (`styles/base/`) and **name no preset**: every ask
+  `onOpenRun`, …). The variants share one base (`styles/base/`) and **name no block**: every ask
   and block is drawn through the registry, and how one sits (an ask bare or in the question card, a
   block in the answer card or its own) is a trait registered beside its renderer, never a check on
   its id in a variant.
-  Presets, patterns and flows are ids in `packages/assistant/src/grammar/` — a new preset
+  Kinds, patterns and flows are ids in `packages/assistant/src/grammar/` — a new block
   gets a board on the Design Kit Spec and an id in the grammar first, then its
-  renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
-  `conversations/registry.ts`. An unbuilt preset renders a labelled placeholder; a renderer reads
-  only its preset's options — a screen that needs more is a grammar change, not a prop.
+  renderer (`asks/blocks/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
+  `conversations/registry.ts`. An unbuilt block renders a labelled placeholder; a renderer reads
+  only its block's options — a screen that needs more is a grammar change, not a prop.
   Envelope fields (scope, grounding, freshness, method, caveats) sit on the answer, never as
   blocks. Answer patterns are typed recipes and stories, not exports.
 - **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
