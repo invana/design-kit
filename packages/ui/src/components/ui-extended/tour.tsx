@@ -84,45 +84,36 @@ export function useTour(options: UseTourOptions): TourController {
   const lastIndex = Math.max(total - 1, 0)
   const clamped = Math.min(Math.max(current, 0), lastIndex)
 
-  const goTo = React.useCallback(
-    (index: number) => {
-      setCurrent((prev) => {
-        const next = Math.min(Math.max(index, 0), lastIndex)
-        if (next !== prev) onStepChange?.(next)
-        return next
-      })
+  // The step the handlers read: the latest render's, so a callback fires once
+  // per move — never from inside a state updater, which React may run twice.
+  const at = React.useRef(clamped)
+  at.current = clamped
+
+  const move = React.useCallback(
+    (to: number) => {
+      if (to === at.current) return
+      at.current = to
+      setCurrent(to)
+      onStepChange?.(to)
     },
-    [lastIndex, onStepChange]
+    [onStepChange]
+  )
+
+  const goTo = React.useCallback(
+    (index: number) => move(Math.min(Math.max(index, 0), lastIndex)),
+    [lastIndex, move]
   )
 
   const next = React.useCallback(() => {
-    setCurrent((prev) => {
-      if (prev >= lastIndex) {
-        if (loop && total > 0) {
-          onStepChange?.(0)
-          return 0
-        }
-        onComplete?.()
-        return prev
-      }
-      onStepChange?.(prev + 1)
-      return prev + 1
-    })
-  }, [lastIndex, total, loop, onComplete, onStepChange])
+    if (at.current < lastIndex) return move(at.current + 1)
+    if (loop && total > 0) return move(0)
+    onComplete?.()
+  }, [lastIndex, total, loop, onComplete, move])
 
   const prev = React.useCallback(() => {
-    setCurrent((p) => {
-      if (p <= 0) {
-        if (loop && total > 0) {
-          onStepChange?.(lastIndex)
-          return lastIndex
-        }
-        return p
-      }
-      onStepChange?.(p - 1)
-      return p - 1
-    })
-  }, [lastIndex, total, loop, onStepChange])
+    if (at.current > 0) return move(at.current - 1)
+    if (loop && total > 0) move(lastIndex)
+  }, [lastIndex, total, loop, move])
 
   const exit = React.useCallback(() => {
     onExit?.()

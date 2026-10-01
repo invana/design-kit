@@ -1,1 +1,21 @@
-[{ "caption": "Searchable" }]
+[
+  {
+    "caption": "Canvas",
+    "items": [
+      { "id": "lock", "label": "Lock canvas", "icon": "lock", "pressed": true },
+      { "id": "fit", "label": "Fit to screen", "icon": "fit" },
+      { "separator": true },
+      { "id": "docs", "label": "Docs" },
+      { "id": "source", "label": "Source" }
+    ]
+  },
+  {
+    "caption": "Words only",
+    "items": [
+      { "id": "run", "label": "Run" },
+      { "id": "stop", "label": "Stop", "disabled": true },
+      { "separator": true },
+      { "id": "export", "label": "Export" }
+    ]
+  }
+]

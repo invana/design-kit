@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { NestedMenu, TypographyMuted, type MenuItem } from '@invana/ui';
 import { Bell, File, FolderOpen, Mail, Settings, Shield, Users } from 'lucide-react';
 
@@ -107,5 +107,15 @@ export const NestedMenuStory: Story = {
     await userEvent.click(cell.getByRole('button', { name: /Messages/ }));
     await expect(args.onClick).toHaveBeenCalledWith('messages');
     await expect(cell.getByText('Opened messages')).toBeInTheDocument();
+    // A submenu opens from the keyboard on its first row, and closes back to its row.
+    const files = cell.getByRole('menuitem', { name: /Files/ });
+    files.focus();
+    fireEvent.keyDown(files, { key: 'ArrowRight' });
+    await expect(files).toHaveAttribute('aria-expanded', 'true');
+    const shared = cell.getByRole('button', { name: /Shared Files/ });
+    await waitFor(() => expect(shared).toHaveFocus());
+    fireEvent.keyDown(shared, { key: 'Escape' });
+    await expect(files).toHaveAttribute('aria-expanded', 'false');
+    await expect(files).toHaveFocus();
   },
 };

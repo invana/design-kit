@@ -18,6 +18,8 @@ const Progress = React.forwardRef<
 >(({ className, value, size = "default", ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
+    // Radix reads it for `aria-valuenow` and the data-state; the indicator only moves.
+    value={value}
     className={cn(
       "relative w-full overflow-hidden rounded-full bg-secondary",
       size === "sm" ? "h-1" : "h-4",

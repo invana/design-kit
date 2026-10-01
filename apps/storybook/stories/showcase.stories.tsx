@@ -1321,7 +1321,14 @@ const ThemeShowcase = ({
           </Section>
 
           <Section title="Toolbar">
-            <Toolbar />
+            <Toolbar
+              items={[
+                { id: 'run', label: 'Run' },
+                { id: 'stop', label: 'Stop', disabled: true },
+                { separator: true },
+                { id: 'docs', label: 'Docs' },
+              ]}
+            />
           </Section>
 
           <Section title="Tree View">
