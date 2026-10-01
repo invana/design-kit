@@ -1,0 +1,56 @@
+[
+  { "caption": "Default", "choices": [{ "id": "checkbox-default", "label": "Accept", "hideLabel": true }] },
+  { "caption": "With label", "choices": [{ "id": "checkbox-terms", "label": "Accept terms and conditions" }] },
+  { "caption": "Disabled", "choices": [{ "id": "checkbox-disabled", "label": "Disabled checkbox", "disabled": true }] },
+  { "caption": "Default checked", "choices": [{ "id": "checkbox-checked", "label": "Checked by default", "checked": true }] },
+  {
+    "caption": "Multiple",
+    "choices": [
+      { "id": "checkbox-option-1", "label": "Option 1" },
+      { "id": "checkbox-option-2", "label": "Option 2", "checked": true },
+      { "id": "checkbox-option-3", "label": "Option 3" }
+    ]
+  },
+  {
+    "caption": "All states",
+    "choices": [
+      { "id": "checkbox-state-unchecked", "label": "Unchecked" },
+      { "id": "checkbox-state-checked", "label": "Checked", "checked": true },
+      { "id": "checkbox-state-disabled", "label": "Disabled (unchecked)", "disabled": true },
+      { "id": "checkbox-state-disabled-checked", "label": "Disabled (checked)", "disabled": true, "checked": true }
+    ]
+  },
+  {
+    "caption": "Form example",
+    "choices": [
+      { "id": "checkbox-form-terms", "label": "I agree to the terms and conditions" },
+      { "id": "checkbox-form-marketing", "label": "Send me marketing emails" },
+      { "id": "checkbox-form-newsletter", "label": "Subscribe to newsletter", "checked": true }
+    ]
+  },
+  {
+    "caption": "With descriptions",
+    "choices": [
+      { "id": "checkbox-notifications", "label": "Enable notifications", "description": "Receive push notifications about updates and activity." },
+      { "id": "checkbox-analytics", "label": "Share analytics", "description": "Help us improve by sharing anonymous usage data.", "checked": true }
+    ]
+  },
+  {
+    "caption": "Feature selection",
+    "choices": [
+      { "id": "checkbox-feature-dark", "label": "Dark mode", "checked": true },
+      { "id": "checkbox-feature-notifications", "label": "Notifications", "checked": true },
+      { "id": "checkbox-feature-analytics", "label": "Advanced analytics" },
+      { "id": "checkbox-feature-2fa", "label": "Two-factor authentication" }
+    ]
+  },
+  {
+    "caption": "Task list",
+    "choices": [
+      { "id": "checkbox-task-review", "label": "Review pull request", "checked": true },
+      { "id": "checkbox-task-docs", "label": "Update documentation", "checked": true },
+      { "id": "checkbox-task-tests", "label": "Write unit tests" },
+      { "id": "checkbox-task-deploy", "label": "Deploy to production" }
+    ]
+  }
+]

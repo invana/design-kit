@@ -1,0 +1,229 @@
+[
+  {
+    "caption": "Basic",
+    "cards": [{ "title": "Card title", "description": "Card description goes here", "content": [{ "text": "This is the main content area of the card." }] }]
+  },
+  {
+    "caption": "With footer",
+    "cards": [
+      {
+        "title": "Complete card",
+        "description": "With all card sections",
+        "content": [{ "text": "This card shows the header, content and footer sections." }],
+        "footer": [{ "label": "Cancel", "variant": "outline" }, { "label": "Continue" }]
+      }
+    ]
+  },
+  { "caption": "Header only", "cards": [{ "title": "Header only" }] },
+  { "caption": "Header and content", "cards": [{ "title": "Header and content", "content": [{ "text": "Content area with text." }] }] },
+  {
+    "caption": "Primary header",
+    "cards": [
+      {
+        "header": "primary",
+        "title": "Primary header card",
+        "description": "Card with a primary coloured header",
+        "content": [{ "text": "This card has a primary coloured header." }],
+        "footer": [{ "label": "Action", "variant": "outline" }]
+      }
+    ]
+  },
+  {
+    "caption": "Success header",
+    "cards": [
+      {
+        "header": "success",
+        "title": "Success state",
+        "description": "Operation completed successfully",
+        "content": [{ "items": [
+          { "title": "All items processed", "icon": "check-circle" },
+          { "title": "Data synchronized", "icon": "check-circle" },
+          { "title": "Notifications sent", "icon": "check-circle" }
+        ] }]
+      }
+    ]
+  },
+  {
+    "caption": "Danger header",
+    "cards": [
+      {
+        "header": "destructive",
+        "title": "Critical alert",
+        "description": "Immediate action required",
+        "content": [{ "text": "Your account has exceeded the storage limit. Upgrade your plan or remove some files." }],
+        "footer": [{ "label": "Dismiss", "variant": "outline" }, { "label": "Upgrade now", "variant": "destructive" }]
+      }
+    ]
+  },
+  {
+    "caption": "Muted header",
+    "cards": [
+      {
+        "header": "muted",
+        "title": "Settings",
+        "description": "Manage your preferences",
+        "content": [{ "switches": [
+          { "id": "card-muted-notifications", "label": "Notifications", "checked": true },
+          { "id": "card-muted-autosave", "label": "Auto-save", "checked": true },
+          { "id": "card-muted-dark", "label": "Dark mode" }
+        ] }],
+        "footer": [{ "label": "Save changes" }]
+      }
+    ]
+  },
+  {
+    "caption": "Accent header",
+    "cards": [
+      {
+        "header": "accent",
+        "title": "Premium feature",
+        "description": "Unlock advanced capabilities",
+        "content": [{ "items": [
+          { "title": "Advanced analytics", "icon": "sparkles" },
+          { "title": "Priority support", "icon": "sparkles" },
+          { "title": "Custom integrations", "icon": "sparkles" }
+        ] }],
+        "footer": [{ "label": "Upgrade to premium" }]
+      }
+    ]
+  },
+  {
+    "caption": "Gradient header",
+    "cards": [
+      {
+        "header": "gradient",
+        "title": "Gradient header",
+        "description": "Modern gradient design",
+        "content": [
+          { "text": "This card's gradient header draws attention and adds visual interest." },
+          { "badges": [{ "label": "Feature", "variant": "soft", "tone": "info" }, { "label": "New", "variant": "soft", "tone": "primary" }] }
+        ],
+        "footer": [{ "label": "Explore" }]
+      }
+    ]
+  },
+  {
+    "caption": "Colored header variants",
+    "cards": [
+      { "header": "info", "title": "Info", "description": "General information", "content": [{ "text": "Info header for informational content." }] },
+      { "header": "success", "title": "Success", "description": "Completed tasks", "content": [{ "text": "Success header for success states." }] },
+      { "header": "warning", "title": "Warning", "description": "Needs attention", "content": [{ "text": "Warning header for warnings." }] },
+      { "header": "destructive", "title": "Error", "description": "Critical issue", "content": [{ "text": "Destructive header for errors and alerts." }] },
+      { "header": "accent", "title": "Premium", "description": "Exclusive content", "content": [{ "text": "Accent header for premium features." }] },
+      { "header": "inverse", "title": "Dark", "description": "Inverse card", "content": [{ "text": "Inverse header for contrast." }] }
+    ]
+  },
+  {
+    "caption": "Feature card",
+    "cards": [
+      {
+        "content": [
+          { "item": { "icon": "zap", "title": "Lightning fast", "description": "Optimized for performance" } },
+          { "muted": "Experience fast load times and smooth interactions. Our platform is built for speed from the ground up." }
+        ],
+        "footer": [{ "label": "Learn more", "variant": "link" }]
+      }
+    ]
+  },
+  {
+    "caption": "Settings card",
+    "cards": [
+      {
+        "title": "Email notifications",
+        "description": "Manage how you receive email notifications",
+        "content": [{ "switches": [
+          { "id": "card-settings-marketing", "label": "Marketing emails", "description": "Receive emails about new features" },
+          { "id": "card-settings-security", "label": "Security alerts", "description": "Get notified about account activity", "checked": true },
+          { "id": "card-settings-digest", "label": "Weekly digest", "description": "Summary of your weekly activity" }
+        ] }],
+        "footer": [{ "label": "Cancel", "variant": "outline" }, { "label": "Save changes" }]
+      }
+    ]
+  },
+  {
+    "caption": "Pricing card",
+    "cards": [
+      {
+        "title": "Professional",
+        "description": "For growing teams",
+        "content": [
+          { "metric": { "label": "Per month", "value": "$29" } },
+          { "list": ["Unlimited projects", "Advanced analytics", "Priority support", "Custom integrations"] },
+          { "muted": "White-label options are not included." }
+        ],
+        "footer": [{ "label": "Get started" }]
+      }
+    ]
+  },
+  {
+    "caption": "Interactive card — with a custom class",
+    "cards": [
+      {
+        "interactive": true,
+        "className": "cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg",
+        "title": "Interactive card",
+        "description": "Hover to see the effect, click to open",
+        "content": [{ "muted": "This card lifts on hover with a stronger shadow — for clickable cards in grids or lists." }]
+      }
+    ]
+  },
+  {
+    "caption": "Card grid",
+    "cards": [
+      { "content": [{ "metric": { "label": "Active users", "value": "2,543", "caption": "↑ 12% vs last week", "captionTone": "success" } }] },
+      { "content": [{ "metric": { "label": "Revenue", "value": "$12.4K", "caption": "↑ 8% vs last week", "captionTone": "success" } }] },
+      { "content": [{ "metric": { "label": "Conversion", "value": "3.24%", "caption": "↓ 2% vs last week", "captionTone": "error" } }] }
+    ]
+  },
+  {
+    "caption": "Metrics card",
+    "cards": [
+      {
+        "content": [{ "metric": { "label": "Total revenue", "value": "$45,231.89", "caption": "↑ 20.1% from last month · 75% of the monthly target", "captionTone": "success", "meter": 0.75 } }]
+      }
+    ]
+  },
+  {
+    "caption": "Notification card",
+    "cards": [
+      {
+        "content": [
+          { "item": { "icon": "bell", "title": "New comment on your post", "description": "2 minutes ago", "dismiss": "Dismiss" } },
+          { "text": "John Doe commented: \"Great work on this feature! Looking forward to seeing it in production.\"" }
+        ],
+        "footer": [{ "label": "Mark as read", "variant": "outline", "size": "sm" }, { "label": "Reply", "size": "sm" }]
+      }
+    ]
+  },
+  {
+    "caption": "Product card",
+    "cards": [
+      {
+        "title": "Wireless headphones",
+        "description": "Premium noise-cancelling",
+        "content": [
+          { "metric": { "label": "Price", "value": "$299", "caption": "was $399" } },
+          { "badges": [{ "label": "25% off", "variant": "soft", "tone": "destructive" }] },
+          { "muted": "★★★★★ (128 reviews)" }
+        ],
+        "footer": [{ "label": "Add to cart", "variant": "outline" }, { "label": "Buy now" }]
+      }
+    ]
+  },
+  {
+    "caption": "User profile",
+    "cards": [
+      {
+        "content": [
+          { "item": { "initials": "SJ", "title": "Sarah Johnson", "description": "Product designer" } },
+          { "properties": [
+            { "label": "Email", "value": "sarah.j@company.com" },
+            { "label": "Location", "value": "San Francisco, CA" },
+            { "label": "Joined", "value": "Jan 2023" }
+          ] }
+        ],
+        "footer": [{ "label": "View profile" }]
+      }
+    ]
+  }
+]

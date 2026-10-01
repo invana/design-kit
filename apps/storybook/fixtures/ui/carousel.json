@@ -1,0 +1,13 @@
+[
+  {
+    "caption": "Default",
+    "align": "start",
+    "slides": [
+      { "label": "Slide", "value": "1" },
+      { "label": "Slide", "value": "2" },
+      { "label": "Slide", "value": "3" },
+      { "label": "Slide", "value": "4" },
+      { "label": "Slide", "value": "5" }
+    ]
+  }
+]

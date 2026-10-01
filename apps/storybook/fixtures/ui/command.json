@@ -1,0 +1,26 @@
+[
+  {
+    "caption": "Default",
+    "width": 420,
+    "placeholder": "Type a command or search...",
+    "empty": "No results found.",
+    "groups": [
+      {
+        "heading": "Suggestions",
+        "items": [
+          { "value": "calendar", "label": "Calendar", "icon": "calendar" },
+          { "value": "emoji", "label": "Search emoji", "icon": "smile" },
+          { "value": "calculator", "label": "Calculator", "icon": "calculator" }
+        ]
+      },
+      {
+        "heading": "Settings",
+        "items": [
+          { "value": "profile", "label": "Profile", "icon": "user", "shortcut": "⌘P" },
+          { "value": "billing", "label": "Billing", "icon": "credit-card", "shortcut": "⌘B" },
+          { "value": "settings", "label": "Settings", "icon": "settings", "shortcut": "⌘S" }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,75 @@
+[
+  { "caption": "Default", "badges": [{ "label": "Badge", "variant": "default" }] },
+  { "caption": "Secondary", "badges": [{ "label": "Secondary", "variant": "secondary" }] },
+  { "caption": "Destructive", "badges": [{ "label": "Error", "variant": "destructive" }] },
+  { "caption": "Outline", "badges": [{ "label": "Outline", "variant": "outline" }] },
+  {
+    "caption": "Multiple badges",
+    "badges": [
+      { "label": "New", "variant": "default" },
+      { "label": "In progress", "variant": "secondary" },
+      { "label": "Critical", "variant": "destructive" },
+      { "label": "Draft", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "All variants",
+    "badges": [
+      { "label": "Default", "variant": "default" },
+      { "label": "Secondary", "variant": "secondary" },
+      { "label": "Destructive", "variant": "destructive" },
+      { "label": "Outline", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "Sizes",
+    "sizes": [
+      { "badge": { "label": "staged", "variant": "outline", "tone": "success", "size": "xs" }, "why": "22px, the default — the row chip: a status beside an entity name" },
+      { "badge": { "label": "staged", "variant": "outline", "tone": "success", "size": "sm" }, "why": "26px — beside a search or a filter chip" }
+    ]
+  },
+  {
+    "caption": "Tones",
+    "width": 480,
+    "tones": {
+      "variants": ["default", "soft", "outline"],
+      "tones": ["primary", "success", "warning", "info", "muted"]
+    }
+  },
+  {
+    "caption": "Status badges",
+    "badges": [
+      { "label": "Active", "variant": "default" },
+      { "label": "Pending", "variant": "secondary" },
+      { "label": "Failed", "variant": "destructive" },
+      { "label": "Draft", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "Priority badges",
+    "badges": [
+      { "label": "High", "variant": "destructive" },
+      { "label": "Medium", "variant": "default" },
+      { "label": "Low", "variant": "secondary" }
+    ]
+  },
+  {
+    "caption": "Category tags",
+    "badges": [
+      { "label": "Design", "variant": "outline" },
+      { "label": "Development", "variant": "outline" },
+      { "label": "Marketing", "variant": "outline" },
+      { "label": "Sales", "variant": "outline" },
+      { "label": "Support", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "With counts",
+    "badges": [
+      { "label": "New 3", "variant": "default" },
+      { "label": "Updates 12", "variant": "secondary" },
+      { "label": "Errors 5", "variant": "destructive" },
+      { "label": "Comments 24", "variant": "outline" }
+    ]
+  }
+]

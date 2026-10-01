@@ -1,0 +1,11 @@
+[
+  {
+    "caption": "Default",
+    "trigger": { "label": "@invana", "variant": "link" },
+    "openDelay": 200,
+    "content": [
+      { "item": { "initials": "IN", "title": "@invana", "description": "The open-source graph visualization and analytics platform." } },
+      { "items": [{ "icon": "calendar-days", "title": "Joined December 2021" }] }
+    ]
+  }
+]

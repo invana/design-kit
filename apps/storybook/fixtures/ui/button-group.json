@@ -1,0 +1,12 @@
+[
+  {
+    "caption": "Default",
+    "items": [
+      { "label": "Bold", "icon": "bold", "size": "icon", "variant": "outline" },
+      { "label": "Italic", "icon": "italic", "size": "icon", "variant": "outline" },
+      { "label": "Underline", "icon": "underline", "size": "icon", "variant": "outline" },
+      { "separator": true },
+      { "label": "Clear", "variant": "outline" }
+    ]
+  }
+]

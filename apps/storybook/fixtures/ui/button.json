@@ -1,0 +1,82 @@
+[
+  { "caption": "Default", "rows": [[{ "label": "Button", "variant": "default", "size": "default" }]] },
+  { "caption": "Destructive", "rows": [[{ "label": "Destructive", "variant": "destructive" }]] },
+  { "caption": "Outline", "rows": [[{ "label": "Outline", "variant": "outline" }]] },
+  { "caption": "Secondary", "rows": [[{ "label": "Secondary", "variant": "secondary" }]] },
+  { "caption": "Ghost", "rows": [[{ "label": "Ghost", "variant": "ghost" }]] },
+  { "caption": "Link", "rows": [[{ "label": "Link", "variant": "link" }]] },
+  { "caption": "Small", "rows": [[{ "label": "Small button", "size": "sm" }]] },
+  { "caption": "Large", "rows": [[{ "label": "Large button", "size": "lg" }]] },
+  { "caption": "Icon", "rows": [[{ "label": "Launch", "size": "icon", "icon": "rocket" }]] },
+  { "caption": "Disabled", "rows": [[{ "label": "Disabled button", "disabled": true }]] },
+  {
+    "caption": "With icon",
+    "rows": [[
+      { "label": "Login with email", "icon": "mail" },
+      { "label": "Download", "variant": "outline", "iconEnd": "download" }
+    ]]
+  },
+  {
+    "caption": "All variants",
+    "rows": [[
+      { "label": "Default", "variant": "default" },
+      { "label": "Destructive", "variant": "destructive" },
+      { "label": "Outline", "variant": "outline" },
+      { "label": "Secondary", "variant": "secondary" },
+      { "label": "Ghost", "variant": "ghost" },
+      { "label": "Soft", "variant": "soft" },
+      { "label": "Link", "variant": "link" }
+    ]]
+  },
+  {
+    "caption": "All sizes",
+    "rows": [[
+      { "label": "Small", "size": "sm" },
+      { "label": "Default", "size": "default" },
+      { "label": "Large", "size": "lg" },
+      { "label": "Palette", "size": "icon", "icon": "palette" }
+    ]]
+  },
+  {
+    "caption": "Extra small",
+    "rows": [
+      [
+        { "label": "Declare link", "size": "xs", "variant": "soft", "icon": "plus" },
+        { "label": "Introspect", "size": "xs", "variant": "outline" },
+        { "label": "Search", "size": "icon-xs", "variant": "ghost", "icon": "search" },
+        { "label": "Settings", "size": "icon-xs", "variant": "ghost", "icon": "settings-2" }
+      ],
+      [
+        { "label": "xs", "size": "xs" },
+        { "label": "sm", "size": "sm" },
+        { "label": "default", "size": "default" },
+        { "label": "lg", "size": "lg" }
+      ]
+    ],
+    "legend": [
+      { "label": "xs / icon-xs", "value": "22px — inside a row" },
+      { "label": "sm / icon-sm", "value": "26px — a toolbar, beside a search" },
+      { "label": "default / icon", "value": "32px — a form or dialog" },
+      { "label": "lg", "value": "40px — a page action" }
+    ]
+  },
+  {
+    "caption": "Glass — data-glass on a container",
+    "glass": "scope",
+    "rows": [[
+      { "label": "default", "variant": "default" },
+      { "label": "secondary", "variant": "secondary" },
+      { "label": "outline", "variant": "outline" },
+      { "label": "ghost", "variant": "ghost" },
+      { "label": "soft", "variant": "soft" },
+      { "label": "destructive", "variant": "destructive" }
+    ]]
+  },
+  {
+    "caption": "Glass — data-glass on one button",
+    "rows": [[
+      { "label": "opaque", "variant": "default" },
+      { "label": "glass", "variant": "default", "glass": true }
+    ]]
+  }
+]
