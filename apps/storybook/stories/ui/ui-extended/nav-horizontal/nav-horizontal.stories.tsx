@@ -193,5 +193,13 @@ export const NavHorizontalStory: Story = {
       await expect(args.onSelect).toHaveBeenCalledWith('Notifications', 'read');
       await expect(cell.queryByText('3')).toBeNull();
     });
+    await step('A submenu opens beside its row, and its rows are the choices', async () => {
+      const cell = within(board.getByRole('group', { name: 'Center search' }));
+      await userEvent.click(cell.getByRole('button', { name: 'Export' }));
+      const menu = within(document.body);
+      await userEvent.click(await menu.findByRole('menuitem', { name: 'Send to' }));
+      await userEvent.click(await menu.findByRole('menuitem', { name: 'Email' }));
+      await expect(args.onSelect).toHaveBeenCalledWith('Export', 'send-email');
+    });
   },
 };

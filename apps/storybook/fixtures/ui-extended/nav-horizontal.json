@@ -30,6 +30,16 @@
         "menuItems": [
           { "id": "json", "label": "Export as JSON", "icon": "file-json" },
           { "id": "csv", "label": "Export as CSV", "icon": "file-spreadsheet" },
+          {
+            "id": "share-to",
+            "label": "Send to",
+            "icon": "share-2",
+            "children": [
+              { "id": "send-slack", "label": "Slack" },
+              { "id": "send-email", "label": "Email" },
+              { "id": "send-sheets", "label": "Google Sheets" }
+            ]
+          },
           { "id": "clipboard", "label": "Copy result to clipboard", "icon": "copy", "shortcut": "⌘⇧C", "separatorBefore": true }
         ]
       },

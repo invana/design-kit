@@ -13,6 +13,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { cn } from "../../lib/utils";
@@ -39,6 +42,12 @@ export interface NavMenuItem {
   /** Draw a separator immediately above this row. */
   separatorBefore?: boolean;
   onSelect?: () => void;
+  /**
+   * A submenu: the row opens these beside it (hover, → or Enter; ← or Escape
+   * closes it). Its own `onSelect` is not called — the rows inside are the
+   * choices.
+   */
+  children?: NavMenuItem[];
 }
 
 /**
@@ -640,6 +649,21 @@ function renderMenuRows(menuItems: NavMenuItem[] | undefined): React.ReactNode {
   const gutter = menuItems?.some((m) => m.icon);
   return menuItems?.map((menuItem) => {
     const MenuIcon = menuItem.icon;
+    const icon = MenuIcon ? <MenuIcon /> : gutter ? <span aria-hidden className="size-4 shrink-0" /> : null;
+    if (menuItem.children?.length) {
+      return (
+        <React.Fragment key={menuItem.id}>
+          {menuItem.separatorBefore && <DropdownMenuSeparator />}
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger disabled={menuItem.disabled}>
+              {icon}
+              <span className="truncate">{menuItem.label}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>{renderMenuRows(menuItem.children)}</DropdownMenuSubContent>
+          </DropdownMenuSub>
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment key={menuItem.id}>
         {menuItem.separatorBefore && <DropdownMenuSeparator />}

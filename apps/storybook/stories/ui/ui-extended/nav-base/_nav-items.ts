@@ -120,9 +120,11 @@ export const ICONS: Record<string, React.ElementType> = {
 };
 
 /** A menu row as JSON holds it — `icon` is a name in {@link ICONS}. */
-export interface MenuJson extends Omit<NavMenuItem, 'icon' | 'onSelect'> {
+export interface MenuJson extends Omit<NavMenuItem, 'icon' | 'onSelect' | 'children'> {
   label: string;
   icon?: string;
+  /** A submenu, as more rows. */
+  children?: MenuJson[];
 }
 
 /**
@@ -143,7 +145,12 @@ export interface NavHandlers {
 }
 
 export const toMenu = (item: string, rows: MenuJson[] | undefined, on: NavHandlers): NavMenuItem[] | undefined =>
-  rows?.map((m) => ({ ...m, icon: m.icon ? ICONS[m.icon] : undefined, onSelect: () => on.onSelect?.(item, m.id) }));
+  rows?.map((m) => ({
+    ...m,
+    icon: m.icon ? ICONS[m.icon] : undefined,
+    onSelect: () => on.onSelect?.(item, m.id),
+    children: toMenu(item, m.children, on),
+  }));
 
 /** JSON items → `NavItemConfig[]`, every callback routed to `on`. */
 export function toNavItems(items: NavJson[], on: NavHandlers): NavItemConfig[] {

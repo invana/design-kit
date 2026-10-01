@@ -25,6 +25,8 @@ interface MenuItemData {
   separatorBefore?: boolean;
   /** Which panel the item shows or hides. */
   toggle?: 'left' | 'bottom' | 'right';
+  /** A submenu. */
+  items?: MenuItemData[];
 }
 
 export interface IdeData {
@@ -89,6 +91,7 @@ export function IdeShell({ v, on }: { v: IdeData; on: V2Handlers }) {
       label: i.label,
       shortcut: i.shortcut,
       separatorBefore: i.separatorBefore,
+      children: i.items ? menu(i.items) : undefined,
       onSelect: () => {
         on.onClick(i.label);
         if (i.toggle) toggle(i.toggle);

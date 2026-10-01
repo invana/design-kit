@@ -38,9 +38,10 @@
       {
         "name": "Layout",
         "items": [
-          { "label": "Split Editor: Split Right" },
-          { "label": "Split Editor: Split Down" },
-          { "label": "Split Editor: Split in Grid" },
+          {
+            "label": "Split Editor",
+            "items": [{ "label": "Split Right" }, { "label": "Split Down" }, { "label": "Split in Grid" }]
+          },
           { "label": "Toggle Sidebar", "shortcut": "⌘B", "separatorBefore": true, "toggle": "left" },
           { "label": "Toggle Panel", "shortcut": "⌘J", "toggle": "bottom" },
           { "label": "Toggle Auxiliary Bar", "toggle": "right" },
