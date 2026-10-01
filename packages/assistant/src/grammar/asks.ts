@@ -1,5 +1,5 @@
-// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 5).
-// Do not edit by hand: change the grammar first, then copy the ids here.
+// Ids follow the Design Kit Spec (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5).
+// Do not edit by hand: change the spec first, then copy the ids here.
 // grammar.test.ts fails when these ids and the preset registry disagree.
 
 import type { AskPresetId } from "./presets"
@@ -7,7 +7,7 @@ import type { StageId } from "./stages"
 
 /** The things the assistant asks back, each on one ask preset. */
 export const ASKS = [
-  { id: "intent", name: "Clarify intent", stage: "frame", preset: "single" },
+  { id: "clarify", name: "Clarify what was meant", stage: "frame", preset: "single" },
   { id: "measure", name: "Choose the measure", stage: "frame", preset: "single" },
   { id: "definition", name: "Confirm a definition", stage: "frame", preset: "confirm" },
   { id: "hunch", name: "Share a hunch", stage: "frame", preset: "long" },

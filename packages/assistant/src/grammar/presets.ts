@@ -1,5 +1,5 @@
-// Copied from Analyst Flow Grammar (https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo, version 5).
-// Do not edit by hand: change the grammar first, then copy the ids here.
+// Ids follow the Design Kit Spec (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5).
+// Do not edit by hand: change the spec first, then copy the ids here.
 // grammar.test.ts fails when these ids and the preset registry disagree.
 
 /**

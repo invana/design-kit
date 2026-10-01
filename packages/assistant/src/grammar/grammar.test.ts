@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import { BUILT_IN_ASKS, BUILT_IN_BLOCKS } from "../conversations/registry"
 import { EVENT_TYPES } from "../protocol/events"
-import { ASKS, ASK_PRESETS, BLOCK_PRESETS, FLOWS, PATTERNS, STAGES } from "./index"
+import { ANSWER_INTENTS, ASKS, ASK_PRESETS, BLOCK_PRESETS, FLOWS, PATTERNS, STAGES } from "./index"
 
 const sorted = (xs: Iterable<string>) => [...xs].sort()
 
@@ -38,8 +38,12 @@ describe("the grammar is internally consistent", () => {
       expect(patterns, f.id).toContain(f.pattern)
     }
   })
+  it("every block preset serves exactly one answer intent", () => {
+    const served = ANSWER_INTENTS.flatMap((i) => i.presets)
+    expect(sorted(served)).toEqual(sorted(blocks))
+  })
   it("ids are unique within each set", () => {
-    for (const ids of [ASK_PRESETS, BLOCK_PRESETS, ASKS, FLOWS, PATTERNS, STAGES].map((set) => set.map((x) => x.id))) {
+    for (const ids of [ASK_PRESETS, BLOCK_PRESETS, ASKS, ANSWER_INTENTS, FLOWS, PATTERNS, STAGES].map((set) => set.map((x) => x.id))) {
       expect(new Set(ids).size).toBe(ids.length)
     }
   })
@@ -50,8 +54,9 @@ describe("the grammar is internally consistent", () => {
       askPresets: ASK_PRESETS.length,
       blockPresets: BLOCK_PRESETS.length,
       asks: ASKS.length,
+      answerIntents: ANSWER_INTENTS.length,
       patterns: PATTERNS.length,
       events: EVENT_TYPES.length,
-    }).toEqual({ stages: 7, flows: 26, askPresets: 21, blockPresets: 41, asks: 29, patterns: 26, events: 16 })
+    }).toEqual({ stages: 7, flows: 26, askPresets: 21, blockPresets: 41, asks: 29, answerIntents: 14, patterns: 26, events: 16 })
   })
 })
