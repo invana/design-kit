@@ -1,0 +1,13 @@
+[
+  {
+    "caption": "Button shortcut — with the corner-hint class",
+    "buttons": [
+      { "label": "Start free", "kbd": "L", "hint": false },
+      { "label": "Get Demo", "kbd": "G", "hint": true }
+    ]
+  },
+  {
+    "caption": "List anchor — with the corner-hint class",
+    "links": ["Start Tracing", "Use Prompt Management", "Set up Evals"]
+  }
+]
