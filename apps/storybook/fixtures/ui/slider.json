@@ -1,0 +1,66 @@
+[
+  { "caption": "Default", "sections": [{ "fields": [{ "id": "default", "value": [50], "max": 100, "step": 1 }] }] },
+  { "caption": "With label", "sections": [{ "fields": [{ "id": "volume", "label": "Volume", "value": [75], "max": 100, "step": 1 }] }] },
+  { "caption": "Small range", "sections": [{ "fields": [{ "id": "rating", "label": "Rating (1-10)", "value": [7], "min": 1, "max": 10, "step": 1 }] }] },
+  { "caption": "With steps", "sections": [{ "fields": [{ "id": "price", "label": "Price ($0-$1000, step $50)", "value": [500], "max": 1000, "step": 50 }] }] },
+  { "caption": "Disabled", "sections": [{ "fields": [{ "id": "disabled", "label": "Disabled slider", "value": [50], "max": 100, "disabled": true }] }] },
+  {
+    "caption": "Multiple",
+    "sections": [
+      {
+        "fields": [
+          { "id": "red", "label": "Red", "value": [255], "max": 255, "step": 1 },
+          { "id": "green", "label": "Green", "value": [128], "max": 255, "step": 1 },
+          { "id": "blue", "label": "Blue", "value": [0], "max": 255, "step": 1 }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Complete showcase",
+    "width": 640,
+    "sections": [
+      {
+        "title": "Basic sliders",
+        "fields": [
+          { "id": "basic-default", "label": "Default (0-100)", "value": [50], "max": 100, "step": 1 },
+          { "id": "basic-range", "label": "Custom range (10-90)", "value": [50], "min": 10, "max": 90, "step": 1 }
+        ]
+      },
+      {
+        "title": "Different step values",
+        "fields": [
+          { "id": "step-1", "label": "Step: 1", "value": [50], "max": 100, "step": 1 },
+          { "id": "step-5", "label": "Step: 5", "value": [50], "max": 100, "step": 5 },
+          { "id": "step-10", "label": "Step: 10", "value": [50], "max": 100, "step": 10 },
+          { "id": "step-25", "label": "Step: 25", "value": [50], "max": 100, "step": 25 }
+        ]
+      },
+      {
+        "title": "States",
+        "fields": [
+          { "id": "normal", "label": "Normal", "value": [50], "max": 100, "step": 1 },
+          { "id": "state-disabled", "label": "Disabled", "value": [50], "max": 100, "step": 1, "disabled": true }
+        ]
+      },
+      {
+        "title": "Common use cases",
+        "fields": [
+          { "id": "uc-volume", "label": "Volume", "value": [75], "max": 100, "step": 1, "suffix": "%" },
+          { "id": "uc-brightness", "label": "Brightness", "value": [60], "max": 100, "step": 1, "suffix": "%" },
+          { "id": "uc-zoom", "label": "Zoom", "value": [100], "min": 50, "max": 200, "step": 10, "suffix": "%" },
+          { "id": "uc-price", "label": "Price range", "value": [500], "max": 1000, "step": 50, "prefix": "$" },
+          { "id": "uc-rating", "label": "Rating", "value": [4], "min": 1, "max": 5, "step": 1 }
+        ]
+      },
+      {
+        "title": "RGB color mixer",
+        "fields": [
+          { "id": "mix-red", "label": "Red", "value": [255], "max": 255, "step": 1 },
+          { "id": "mix-green", "label": "Green", "value": [128], "max": 255, "step": 1 },
+          { "id": "mix-blue", "label": "Blue", "value": [0], "max": 255, "step": 1 }
+        ]
+      }
+    ]
+  }
+]
