@@ -45,7 +45,7 @@ function Chips({
             className={cn(
               // A follow-up is a whole prompt and can outrun the line: it wraps
               // within the thread rather than running past it.
-              "h-auto min-h-6 max-w-full items-start whitespace-normal py-0.5 text-left font-normal",
+              "h-auto min-h-control-xs max-w-full items-start whitespace-normal py-0.5 text-left font-normal",
               stack
                 ? "w-full justify-start"
                 : "rounded-full @max-[22rem]:w-full @max-[22rem]:justify-start @max-[22rem]:rounded-control",
