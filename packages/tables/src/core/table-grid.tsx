@@ -198,6 +198,8 @@ export interface TableGridProps<TData extends RowData>
   table: TanstackTable<TData>;
   /** Dim the rows under a spinner — a page on its way. */
   loading?: boolean;
+  /** Rows that just streamed in, drawn with a brief tint that fades. */
+  isRowFresh?: (row: TData) => boolean;
 }
 
 /**
@@ -208,6 +210,7 @@ export interface TableGridProps<TData extends RowData>
 export function TableGrid<TData extends RowData>({
   table,
   loading = false,
+  isRowFresh,
   footer,
   emptyState,
   groupBy,
@@ -346,6 +349,7 @@ export function TableGrid<TData extends RowData>({
                   if (expandOnRowClick && canExpand) row.toggleExpanded();
                 };
                 const selected = isRowSelected?.(row.original) ?? false;
+                const fresh = isRowFresh?.(row.original) ?? false;
                 return (
                   <React.Fragment key={row.id}>
                     {startsGroup ? (
@@ -369,6 +373,7 @@ export function TableGrid<TData extends RowData>({
                     ) : null}
                     <TableRow
                       data-selected={selected || undefined}
+                      data-streamed={fresh || undefined}
                       aria-selected={isRowSelected ? selected : undefined}
                       tabIndex={activates ? 0 : undefined}
                       onClick={activates ? activate : undefined}
@@ -384,6 +389,12 @@ export function TableGrid<TData extends RowData>({
                           : undefined
                       }
                       className={cn(
+                        // A streamed row arrives tinted and fades to its own
+                        // ground. An animation, not a longer transition: the
+                        // duration a transition sets is inherited by every
+                        // `transition-colors` inside the row, so its badges
+                        // would lag a second behind their own rows.
+                        fresh && "animate-row-in motion-reduce:animate-none",
                         isRowHighlighted?.(row.original) &&
                           `${HIGHLIGHT} hover:bg-primary/15`,
                         isTotalRow?.(row.original) &&

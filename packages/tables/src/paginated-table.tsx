@@ -16,14 +16,19 @@ import {
   type TableBaseProps,
   type TableFilterProps,
 } from "./core/props";
+import { useStreamedRows, type TableStreamProps } from "./core/stream";
 import type { FilterValues } from "./types";
 import { TableGrid } from "./core/table-grid";
 import { useControllable, useTableModel } from "./core/use-table-model";
 
 export interface PaginatedTableProps<TData extends RowData>
   extends TableBaseProps<TData>,
-    TableFilterProps<TData> {
-  /** Every row; the table searches and pages them itself. */
+    TableFilterProps<TData>,
+    TableStreamProps<TData> {
+  /**
+   * Every row; the table searches and pages them itself. Streamed rows join
+   * them, and the page, search and filters stay where they are.
+   */
   data: TData[];
   /** Dim the rows under a spinner. */
   loading?: boolean;
@@ -60,7 +65,6 @@ export function PaginatedTable<TData extends RowData>(
   props: PaginatedTableProps<TData>,
 ) {
   const {
-    data,
     loading,
     toolbar,
     className,
@@ -86,6 +90,7 @@ export function PaginatedTable<TData extends RowData>(
     enableColumnVisibility = true,
     enableColumnPinning = false,
   } = props;
+  const { rows: data, isRowFresh } = useStreamedRows(props.data, props);
 
   const [pagination, setPagination] = useControllable<PaginationState>(
     paginationProp,
@@ -165,7 +170,12 @@ export function PaginatedTable<TData extends RowData>(
         {toolbar}
       </DataTableToolbar>
 
-      <TableGrid table={table} loading={loading} {...pickViewProps(props)} />
+      <TableGrid
+        table={table}
+        loading={loading}
+        isRowFresh={isRowFresh}
+        {...pickViewProps(props)}
+      />
 
       <DataTablePagination
         table={table}

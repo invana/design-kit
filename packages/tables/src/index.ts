@@ -5,6 +5,11 @@ export {
   type RemotePaginatedTableProps,
 } from './remote-paginated-table';
 export type { TableBaseProps, TableFilterProps } from './core/props';
+export type {
+  StreamMode,
+  TableStream,
+  TableStreamProps,
+} from './core/stream';
 export { DataTablePagination } from './data-table-pagination';
 export { DataTableToolbar } from './data-table-toolbar';
 export { EditableCell } from './editable-cell';

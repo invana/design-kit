@@ -3,11 +3,14 @@ import type { RowData } from "@tanstack/react-table";
 import { Button, cn } from "@invana/ui";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { pickViewProps, type TableBaseProps } from "./core/props";
+import { useStreamedRows, type TableStreamProps } from "./core/stream";
 import { TableGrid } from "./core/table-grid";
 import { useTableModel } from "./core/use-table-model";
 
 export interface DataTableProps<TData extends RowData>
-  extends TableBaseProps<TData> {
+  extends TableBaseProps<TData>,
+    TableStreamProps<TData> {
+  /** The rows — where a `stream` starts from, when there is one. */
   data: TData[];
   /** Dim the rows under a spinner. */
   loading?: boolean;
@@ -39,7 +42,6 @@ export interface DataTableProps<TData extends RowData>
  */
 export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
   const {
-    data,
     loading,
     preview,
     toolbar,
@@ -48,6 +50,7 @@ export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
     enableColumnVisibility = false,
     enableColumnPinning = false,
   } = props;
+  const { rows: data, isRowFresh } = useStreamedRows(props.data, props);
   const table = useTableModel({ ...props, data });
 
   const shown = isTotalRow ? data.filter((r) => !isTotalRow(r)).length : data.length;
@@ -62,7 +65,12 @@ export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
         {toolbar}
       </DataTableToolbar>
 
-      <TableGrid table={table} loading={loading} {...pickViewProps(props)} />
+      <TableGrid
+        table={table}
+        loading={loading}
+        isRowFresh={isRowFresh}
+        {...pickViewProps(props)}
+      />
 
       {preview && (preview.total != null || preview.action || preview.onOpen) ? (
         <div className="flex items-baseline justify-between gap-2 text-sm text-muted-foreground">
