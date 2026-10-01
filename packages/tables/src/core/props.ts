@@ -105,6 +105,13 @@ export interface TableBaseProps<TData extends RowData> {
    */
   isTotalRow?: (row: TData) => boolean;
   /**
+   * Extra class(es) for a body row, asked per row and applied after the
+   * table's own, so they win — a stream tinted by each event's verdict.
+   */
+  rowClassName?: (row: TData) => string | undefined;
+  /** Extra class(es) for the header row. */
+  headerRowClassName?: string;
+  /**
    * The narrowest the table may draw, in px. A wide table keeps its columns
    * legible and scrolls sideways instead of squeezing them.
    */
@@ -160,6 +167,8 @@ export type TableViewProps<TData extends RowData> = Pick<
   | "isRowHighlighted"
   | "isCellHighlighted"
   | "isTotalRow"
+  | "rowClassName"
+  | "headerRowClassName"
   | "minWidth"
   | "onRowClick"
   | "getSubRows"
@@ -186,6 +195,8 @@ export function pickViewProps<TData extends RowData>(
     isRowHighlighted: props.isRowHighlighted,
     isCellHighlighted: props.isCellHighlighted,
     isTotalRow: props.isTotalRow,
+    rowClassName: props.rowClassName,
+    headerRowClassName: props.headerRowClassName,
     minWidth: props.minWidth,
     onRowClick: props.onRowClick,
     getSubRows: props.getSubRows,

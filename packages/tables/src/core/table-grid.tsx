@@ -219,6 +219,8 @@ export function TableGrid<TData extends RowData>({
   isRowHighlighted,
   isCellHighlighted,
   isTotalRow,
+  rowClassName,
+  headerRowClassName,
   minWidth,
   onRowClick,
   getSubRows,
@@ -286,7 +288,10 @@ export function TableGrid<TData extends RowData>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               // The header is not a row a reader picks, so it does not light up.
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              <TableRow
+                key={headerGroup.id}
+                className={cn("hover:bg-transparent", headerRowClassName)}
+              >
                 <SortableContext
                   items={visibleLeafColumnIds}
                   strategy={horizontalListSortingStrategy}
@@ -395,6 +400,7 @@ export function TableGrid<TData extends RowData>({
                         // The panel reads as the row's own continuation, so
                         // no rule between them.
                         panel != null && "border-b-0",
+                        rowClassName?.(row.original),
                       )}
                     >
                       {row.getVisibleCells().map((cell, cellIndex) => {
@@ -441,7 +447,9 @@ export function TableGrid<TData extends RowData>({
                               meta?.mono && "font-mono",
                               meta?.control && CONTROL_CELL,
                               highlighted && HIGHLIGHT,
-                              meta?.cellClassName,
+                              typeof meta?.cellClassName === "function"
+                                ? meta.cellClassName(row.original)
+                                : meta?.cellClassName,
                             )}
                           >
                             {first && expandable ? (

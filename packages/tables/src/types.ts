@@ -21,9 +21,10 @@ declare module '@tanstack/react-table' {
     /**
      * Extra class(es) applied to this column's body `<td>`. Use to control
      * padding, vertical alignment, or background when rendering your own
-     * always-on controls (Switch/Select/Input) inside `cell()`.
+     * always-on controls (Switch/Select/Input) inside `cell()`. A function is
+     * asked per row — a verdict column coloured by its own verdict.
      */
-    cellClassName?: string;
+    cellClassName?: string | ((row: TData) => string | undefined);
     /** Extra class(es) applied to this column's header `<th>`. */
     headerClassName?: string;
     /**
