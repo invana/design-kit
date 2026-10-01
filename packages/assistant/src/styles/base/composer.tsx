@@ -43,7 +43,7 @@ export function ComposerSelect({ control, value, onValueChange, grow }: Composer
         aria-label={control.label}
         title={control.label}
         className={cn(
-          "h-7 gap-1 border-0 bg-transparent px-2 shadow-none hover:bg-accent",
+          "h-control-sm gap-1 border-0 bg-transparent px-2 shadow-none hover:bg-accent",
           grow ? "w-full min-w-0" : "w-auto shrink-0",
           control.quiet && "text-muted-foreground",
         )}

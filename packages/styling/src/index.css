@@ -198,6 +198,31 @@
      --radius-control. Prefer `rounded-control` — it says what it is for. */
   --radius-2px: 2px;
 
+  /* ------------------------------------------------------------------------
+   * Control heights — one scale, and a size name means one height.
+   *
+   *   xs   22px   a badge or an icon button inside a row
+   *   sm   26px   the application control: search, input, select, filter
+   *              chip, segmented control, tab, toolbar button
+   *   md   32px   a standalone form, a dialog's buttons — `default` sizes
+   *   lg   40px   a page form, a page's primary action
+   *
+   * Before this, every component picked its own number for each name — a
+   * `sm` badge was 22px, a `sm` button 32px, a `sm` input 26px — so two
+   * controls of the same size never lined up in a toolbar. Every component
+   * with a `size` now maps the name onto these, and nothing else.
+   *
+   * Spacing tokens, so they generate `h-control-sm`, `min-h-control-sm`,
+   * `size-control-sm` and `w-control-sm`. Ratios of the root like the type:
+   * the px above are at the 13px application root, and a 16px site gets
+   * proportionally taller controls. `cn` registers the names with
+   * tailwind-merge, which does not otherwise know them.
+   * ---------------------------------------------------------------------- */
+  --spacing-control-xs: calc(22rem / 13);
+  --spacing-control-sm: calc(26rem / 13);
+  --spacing-control-md: calc(32rem / 13);
+  --spacing-control-lg: calc(40rem / 13);
+
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;

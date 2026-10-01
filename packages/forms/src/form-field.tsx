@@ -91,7 +91,8 @@ interface BaseFieldProps {
  * but the surrounding density — grid gaps, section rhythm, label stacking, the
  * boolean box padding, the switch scale and the group accordion header — so a
  * single `size` prop reshapes the whole form from airy (`md`) to a dense
- * inspector panel (`xs`). `md` leaves the control tokens empty to fall back to
+ * inspector panel (`xs`). The control heights are the control scale from
+ * `@invana/styling`, one step per tier: `xs` 26, `sm` 32, `md` 40.
  * the underlying components' natural full-size defaults.
  */
 const SIZE: Record<
@@ -125,13 +126,12 @@ const SIZE: Record<
     radio: string;
   }
 > = {
-  // The dense tier — an ask in a conversation, an inspector. Controls are 28px,
-  // in px because a rem height drifts with the root, and the text stays at the
-  // 13px floor; the field label is muted and regular
-  // so the values, not the labels, carry the weight.
+  // The dense tier — an ask in a conversation, an inspector. Controls are the
+  // scale's `sm` (26px), the text stays at the 13px floor; the field label is
+  // muted and regular so the values, not the labels, carry the weight.
   xs: {
-    input: 'h-[28px] py-0',
-    select: 'h-[28px] py-0',
+    input: 'h-control-sm py-0',
+    select: 'h-control-sm py-0',
     textarea: '',
     label: 'text-base',
     fieldLabel: 'font-normal text-muted-foreground',
@@ -147,8 +147,8 @@ const SIZE: Record<
     radio: 'h-4 w-4',
   },
   sm: {
-    input: 'h-9',
-    select: 'h-9',
+    input: 'h-control-md',
+    select: 'h-control-md',
     textarea: '',
     label: 'text-base',
     fieldLabel: '',
@@ -164,8 +164,8 @@ const SIZE: Record<
     radio: 'h-4 w-4',
   },
   md: {
-    input: '',
-    select: '',
+    input: 'h-control-lg px-3',
+    select: 'h-control-lg px-3',
     textarea: '',
     label: 'text-base',
     fieldLabel: '',

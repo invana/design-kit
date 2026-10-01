@@ -26,6 +26,11 @@ export interface SegmentedControlProps
    */
   defaultValue?: string | null
   onValueChange?: (value: string) => void
+  /**
+   * The control scale: `xs` (22px) inside a row, `sm` (26px, the default)
+   * beside a search or filter chips, `md` (32px) in a standalone form.
+   */
+  size?: "xs" | "sm" | "md"
   /** Fill the width given, each option an equal share of it. */
   stretch?: boolean
   /**
@@ -40,6 +45,15 @@ export interface SegmentedControlProps
    */
   readOnly?: boolean
 }
+
+// Written out whole so Tailwind finds them: a class built from a template
+// string is never generated.
+const GROUP_HEIGHT = { xs: "h-control-xs", sm: "h-control-sm", md: "h-control-md" } as const
+const GROUP_MIN_HEIGHT = {
+  xs: "min-h-control-xs",
+  sm: "min-h-control-sm",
+  md: "min-h-control-md",
+} as const
 
 /**
  * One page, read another way.
@@ -71,6 +85,7 @@ export const SegmentedControl = React.forwardRef<
       value,
       defaultValue,
       onValueChange,
+      size = "sm",
       stretch,
       variant = "tint",
       readOnly,
@@ -121,6 +136,10 @@ export const SegmentedControl = React.forwardRef<
         aria-readonly={readOnly || undefined}
         className={cn(
           "inline-flex overflow-hidden rounded-control border border-border",
+          // The height is the group's, border included, so it matches every
+          // other control of the same size; the options stretch to fill it.
+          // An option with a second line sets a floor instead.
+          (options.some((o) => o.sub != null) ? GROUP_MIN_HEIGHT : GROUP_HEIGHT)[size],
           // Its own width, even as the child of a column that stretches.
           stretch ? "flex w-full" : "self-start",
           className,
@@ -147,11 +166,8 @@ export const SegmentedControl = React.forwardRef<
                 // Stretched, each option has its share already; padding would only truncate it.
                 variant === "solid" ? (stretch ? "px-1" : "px-3") : "px-2",
                 "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring",
-                // 26px at the root size: the height of the `sm` search and the
-                // filter chips it shares a toolbar with.
-                "h-[26px] text-base",
                 // Two lines take the height they need.
-                option.sub != null && "h-auto py-1",
+                option.sub != null && "py-1",
                 stretch && "flex-1",
                 variant === "solid"
                   ? cn(

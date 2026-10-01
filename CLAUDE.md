@@ -185,4 +185,11 @@ gap in the kit, not a one-off in the design.
   density change; in-row marks (sparkline, meter, segmented bar) are DOM/SVG. `Legend`,
   `MetricTile`, `MetricGrid` and `Progress` stay in `@invana/ui`.
 - Density is a **token axis, not a prop**. `@invana/styling` ships `data-density="compact"`;
-  components read `--control-h*` / `--font-size-*` rather than hard-coding `h-8`/`h-9`.
+  components read the control scale rather than hard-coding `h-8`/`h-9`.
+- **One size name, one height.** `@invana/styling` defines the control scale as spacing tokens
+  `--spacing-control-xs|sm|md|lg` — **22 / 26 / 32 / 40px** at a 13px root, in `rem` so they
+  follow the root. Every component with a `size` maps its names onto `h-control-*` /
+  `size-control-*` and nothing else: `Button`, `Badge`, `SearchInput`, forms `Input` / `Select`,
+  `SegmentedControl`, `Toggle`, `Tabs`, `FilterChip`. `default` is `md`. `cn` registers the
+  names with tailwind-merge — a new `--spacing-*` name must be added there too, or a conflicting
+  height survives the merge. A control's text is the root size; only `Badge` stays `text-sm`.
