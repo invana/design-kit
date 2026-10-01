@@ -22,6 +22,8 @@ export interface TabConfig {
   content: React.ReactNode
   /** Whether this tab should be disabled */
   disabled?: boolean
+  /** Draw a close button on the tab; pressing it calls the panel's `onTabClose`. */
+  closable?: boolean
 }
 
 export interface TabbedPanelProps {
@@ -33,6 +35,11 @@ export interface TabbedPanelProps {
   activeTab?: string
   /** Callback when tab changes */
   onTabChange?: (value: string) => void
+  /**
+   * A `closable` tab's close was pressed, by its value. The tabs are yours, so
+   * closing is too: drop it from `tabs`, and move `activeTab` if it was open.
+   */
+  onTabClose?: (value: string) => void
 
   /**
    * Actions on the right of the tab bar, as `NavHorizontal` items. A panel
@@ -118,6 +125,7 @@ export function TabbedPanel({
   defaultTab,
   activeTab,
   onTabChange,
+  onTabClose,
   headerActions,
   headerContent,
   overflow = false,
@@ -154,8 +162,9 @@ export function TabbedPanel({
         label: tab.label,
         icon: tab.icon,
         disabled: tab.disabled,
+        onClose: tab.closable && onTabClose ? () => onTabClose(tab.value) : undefined,
       })),
-    [tabs]
+    [tabs, onTabClose]
   )
 
   return (

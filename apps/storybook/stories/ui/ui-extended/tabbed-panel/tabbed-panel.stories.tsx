@@ -119,6 +119,8 @@ interface Tab {
   label: string;
   icon?: string;
   disabled?: boolean;
+  /** A close button on the tab; closing it is `onTabClose(value)`. */
+  closable?: boolean;
   body: Body;
 }
 
@@ -147,6 +149,8 @@ interface Args {
   variant: string;
   /** The tab's `value`. */
   onTabChange: (value: string) => void;
+  /** A closable tab's `value`, when its × (or Delete) is pressed. */
+  onTabClose: (value: string) => void;
   /** A header action's `onClick` — the story passes the action's name. */
   onAction: (name: string) => void;
   /** A tree row's `onClick(id, label)`. */
@@ -290,6 +294,7 @@ function TabBody({ body, span, h }: { body: Body; span: string; h: Handlers }) {
 /** Holds what a consumer holds: the active tab, the header control's value, whether the panel is open. */
 function Live({ v, ...h }: { v: Variant } & Handlers) {
   const [tab, setTab] = React.useState(v.defaultTab);
+  const [tabs, setTabs] = React.useState(v.tabs);
   const [span, setSpan] = React.useState(v.headerContent?.value ?? '');
   const [open, setOpen] = React.useState(true);
 
@@ -308,11 +313,12 @@ function Live({ v, ...h }: { v: Variant } & Handlers) {
 
   return (
     <TabbedPanel
-      tabs={v.tabs.map((t) => ({
+      tabs={tabs.map((t) => ({
         value: t.value,
         label: t.label,
         icon: t.icon ? ICONS[t.icon] : undefined,
         disabled: t.disabled,
+        closable: t.closable,
         content: <TabBody body={t.body} span={span} h={h} />,
       }))}
       activeTab={tab}
@@ -320,6 +326,15 @@ function Live({ v, ...h }: { v: Variant } & Handlers) {
         h.onTabChange(value);
         h.log('onTabChange', value);
         setTab(value);
+      }}
+      onTabClose={(value) => {
+        h.onTabClose(value);
+        h.log('onTabClose', value);
+        // What an editor does: drop the tab, and open its neighbour if it was the open one.
+        const at = tabs.findIndex((t) => t.value === value);
+        const rest = tabs.filter((t) => t.value !== value);
+        setTabs(rest);
+        if (value === tab) setTab(rest[Math.min(at, rest.length - 1)]?.value ?? '');
       }}
       headerActions={v.actions?.map((a) => ({
         name: a.name,
@@ -367,6 +382,7 @@ function code(v: Variant) {
     '  tabs={tabs.map((t) => ({ ...t, icon: ICONS[t.icon], content: <TabBody body={t.body} /> }))}',
     '  activeTab={tab}',
     '  onTabChange={setTab}',
+    v.tabs.some((t) => t.closable) ? '  onTabClose={(value) => setTabs((all) => all.filter((t) => t.value !== value))}' : '',
     v.actions
       ? '  headerActions={actions.map((a) => ({ ...a, icon: ICONS[a.icon], tooltip: a.name, onClick: () => onAction(a.name) }))}'
       : '',
@@ -422,6 +438,7 @@ const meta = {
   args: {
     variant: VARIANTS[0]!.caption,
     onTabChange: fn(),
+    onTabClose: fn(),
     onAction: fn(),
     onItemClick: fn(),
     onValueChange: fn(),

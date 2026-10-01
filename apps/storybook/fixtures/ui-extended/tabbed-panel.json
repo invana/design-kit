@@ -10,6 +10,16 @@
     ]
   },
   {
+    "caption": "Closable tabs",
+    "width": 600,
+    "defaultTab": "orders",
+    "tabs": [
+      { "value": "orders", "label": "orders.sql", "closable": true, "body": { "kind": "empty", "title": "orders.sql", "description": "SELECT * FROM orders WHERE region = 'north'" } },
+      { "value": "returns", "label": "returns.sql", "closable": true, "body": { "kind": "empty", "title": "returns.sql", "description": "SELECT * FROM returns WHERE reason IS NOT NULL" } },
+      { "value": "notes", "label": "notes.md", "closable": true, "body": { "kind": "empty", "title": "notes.md", "description": "Margin fell in two northern stores." } }
+    ]
+  },
+  {
     "caption": "With icons",
     "width": 600,
     "defaultTab": "files",

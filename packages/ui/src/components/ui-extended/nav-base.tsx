@@ -393,6 +393,16 @@ export const NavItems: React.FC<NavItemsProps> = ({
           "aria-selected": isActive,
           "aria-controls": panelId?.(key),
           tabIndex: isActive || (activeIndex < 0 && index === 0) ? 0 : -1,
+          // A closable tab closes from the keyboard with Delete — its × is
+          // pointer-only, so the strip stays one tab stop.
+          onKeyDown: item.onClose
+            ? (e: React.KeyboardEvent) => {
+                if (e.key === "Delete") {
+                  e.preventDefault();
+                  item.onClose?.();
+                }
+              }
+            : undefined,
         }
       : {};
 
