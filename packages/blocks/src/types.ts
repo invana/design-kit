@@ -125,7 +125,11 @@ interface SharedAnswerOptions {
     diverging?: { below: string; above: string }
   }
   timeseries: {
-    /** A point with no value — `null` — breaks the line rather than bridging the gap. */
+    /**
+     * The first is the line; the rest are drawn behind it to read it against —
+     * last year beside this — each named at its right end. A point with no
+     * value — `null` — breaks the line rather than bridging the gap.
+     */
     series: { name: string; points: [string, number | null][] }[]
     band?: { label?: string; lower: number; upper: number }
     /**

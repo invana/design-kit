@@ -45,9 +45,26 @@ export interface LineChartHighlight {
   color?: string
 }
 
+/** A line read against the main one — last year beside this — drawn behind it. */
+export interface LineChartSeries {
+  /** Named at the line's right end, in the hover and in the table. */
+  name: string
+  /** One per period, as `values`; `null` where nothing was measured. */
+  values: (number | null)[]
+  /** A CSS colour or token. Default: the muted foreground. */
+  color?: string
+}
+
 export interface LineChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   /** One per period; `null` where nothing was measured. */
   values: (number | null)[]
+  /**
+   * The main line's name. Needed once there is a `compare`: every line is then
+   * named at its right end, where it finishes, instead of in a legend.
+   */
+  name?: string
+  /** Lines to read the main one against, drawn behind it without its marks or forecast. */
+  compare?: LineChartSeries[]
   /** One per period — what the hover and a tick name it. */
   labels: string[]
   /** How a value is written on the axis and in the hover — `6.0s`. */
@@ -85,6 +102,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
     {
       values,
+      name,
+      compare = NONE,
       labels,
       format = String,
       max,
@@ -116,6 +135,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
     const forecast = forecastFrom != null && forecastFrom >= 0 && forecastFrom < n ? forecastFrom : null
     // Inline arrays; keyed by value so a parent's re-render keeps the canvas.
     const highlightsKey = JSON.stringify(highlights)
+    const compareKey = JSON.stringify(compare)
+    const named = compare.length > 0
 
     const build = React.useCallback(
       (theme: ChartTheme, host: HTMLElement) => {
@@ -124,7 +145,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           .filter((h) => h.index >= 0 && h.index < n)
           .map((h) => ({ index: h.index, color: h.color ? resolveColor(host, h.color) : stroke }))
         const ringed = new Set(rings.map((r) => r.index))
-        const measured = values.filter((v): v is number => v != null)
+        const others = (JSON.parse(compareKey) as LineChartSeries[]).map((c) => ({
+          ...c,
+          stroke: resolveColor(host, c.color ?? "var(--color-muted-foreground)"),
+        }))
+        const measured = [...values, ...others.flatMap((c) => c.values)].filter((v): v is number => v != null)
         const edges = [...(lower ?? []), ...(upper ?? [])].filter((v): v is number => v != null)
         const top = Math.max(...measured, ...edges, referenceValue ?? -Infinity)
         const bottom = Math.min(...measured, ...edges, referenceValue ?? Infinity)
@@ -214,7 +239,53 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           }
         }
 
+        // Every line named at its right end, where it finishes; labels that
+        // would collide are nudged apart, the main line's first.
+        const lastOf = (vs: (number | null)[]) => vs.reduce<number>((at, v, i) => (v != null ? i : at), -1)
+        const endLabels = named
+          ? [{ name: name ?? "", values, stroke, main: true }, ...others.map((c) => ({ ...c, main: false }))]
+          : []
+        const font = `600 ${theme.size.xs}px ${theme.family}`
+        const padRight = named
+          ? Math.ceil(
+              Math.max(
+                0,
+                ...endLabels.map((l) => {
+                  const m = document.createElement("canvas").getContext("2d")
+                  if (!m) return l.name.length * 7
+                  m.font = font
+                  return m.measureText(l.name).width
+                }),
+              ),
+            ) + 12
+          : undefined
+        const drawLabels = (u: uPlot) => {
+          if (!named) return
+          const ctx = u.ctx
+          const pr = uPlot.pxRatio
+          const x = u.bbox.left + u.bbox.width + 6 * pr
+          const step = theme.size.xs * pr + 2 * pr
+          const placed = endLabels
+            .map((l) => {
+              const at = lastOf(l.values)
+              return at < 0 ? null : { ...l, y: u.valToPos(l.values[at] as number, "y", true) }
+            })
+            .filter((l): l is NonNullable<typeof l> => l != null)
+            .sort((a, b) => a.y - b.y)
+          for (let i = 1; i < placed.length; i++) placed[i].y = Math.max(placed[i].y, placed[i - 1].y + step)
+          ctx.save()
+          ctx.font = `600 ${theme.size.xs * pr}px ${theme.family}`
+          ctx.textBaseline = "middle"
+          ctx.textAlign = "left"
+          for (const l of placed) {
+            ctx.fillStyle = l.main ? theme.foreground : l.stroke
+            ctx.fillText(l.name, x, l.y)
+          }
+          ctx.restore()
+        }
+
         const draw = (u: uPlot) => {
+          drawLabels(u)
           if (!rings.length) return
           const ctx = u.ctx
           const pr = uPlot.pxRatio
@@ -231,9 +302,14 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           ctx.restore()
         }
 
+        // The lines it is read against go behind the main one, plain.
+        const behind = others.map(
+          (c): uPlot.Series => ({ stroke: c.stroke, width: 2, spanGaps: false, points: { show: false } }),
+        )
         return {
-          series: ahead ? [line(), line([6, 4])] : [line()],
-          data: ahead ? [actual, ahead] : [actual],
+          series: [...behind, ...(ahead ? [line(), line([6, 4])] : [line()])],
+          data: [...others.map((c) => c.values), ...(ahead ? [actual, ahead] : [actual])],
+          padRight,
           floor: scale.floor,
           ceiling,
           splits: gridlines.length ? gridlines : max != null ? fixedSplits(max) : scale.splits,
@@ -244,7 +320,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           draw,
         }
       },
-      [values, color, max, gridlines, referenceValue, fmt, zero, lower, upper, band?.lower, band?.upper, band?.color, band?.label, forecast, highlightsKey, n],
+      [values, name, compareKey, named, color, max, gridlines, referenceValue, fmt, zero, lower, upper, band?.lower, band?.upper, band?.color, band?.label, forecast, highlightsKey, n],
     )
 
     const measured = values.filter((v): v is number => v != null)
@@ -271,8 +347,12 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       const named = marks.filter((m) => m.label)
       if (named.length) parts.push(`Marked: ${named.map((m) => `${m.label} (${labels[m.index]})`).join(", ")}.`)
       if (reference) parts.push(`Reference ${reference.label} at ${f(reference.value)}.`)
+      for (const c of compare) {
+        const at = c.values.reduce<number>((last, v, i) => (v != null ? i : last), -1)
+        if (at >= 0) parts.push(`Against ${c.name}: ${f(c.values[at] as number)} on ${labels[at]}.`)
+      }
       return parts.join(" ")
-    }, [blank, values, labels, marks, reference, measured.length, format, forecast, band, highlights])
+    }, [blank, values, labels, marks, reference, measured.length, format, forecast, band, highlights, compare])
 
     // The forecast boundary is a mark: a dashed rule, named only if asked.
     const allMarks = React.useMemo(
@@ -295,10 +375,14 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
         build={build}
         tooltip={(i) => ({
           title: labels[i],
-          rows:
-            values[i] != null
-              ? [{ key: "value", label: "", color, value: format(values[i] as number) }]
-              : [],
+          rows: [
+            ...(values[i] != null ? [{ key: "value", label: named ? (name ?? "") : "", color, value: format(values[i] as number) }] : []),
+            ...compare.flatMap((c, k) =>
+              c.values[i] != null
+                ? [{ key: `compare-${k}`, label: c.name, color: c.color ?? "var(--color-muted-foreground)", value: format(c.values[i] as number) }]
+                : [],
+            ),
+          ],
           note:
             values[i] == null
               ? "nothing ran"
@@ -312,12 +396,14 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
         table={{
           columns: [
             { accessorKey: "period", header: "Period" },
-            { accessorKey: "value", header: "Value" },
+            { accessorKey: "value", header: name ?? "Value" },
+            ...compare.map((c, k) => ({ accessorKey: `compare${k}`, header: c.name })),
             ...(band ? [{ accessorKey: "band", header: band.label ?? "Band" }] : []),
           ],
           rows: values.map((v, i) => ({
             period: labels[i],
             value: v != null ? `${format(v)}${forecast != null && i > forecast ? " (forecast)" : ""}` : "—",
+            ...Object.fromEntries(compare.map((c, k) => [`compare${k}`, c.values[i] != null ? format(c.values[i] as number) : "—"])),
             band: bandText(i) || "—",
           })),
         }}

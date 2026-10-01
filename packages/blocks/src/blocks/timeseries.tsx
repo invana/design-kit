@@ -16,7 +16,8 @@ const RING_COLOR: Record<Tone, string> = {
  * against shaded in primary beneath it, and the periods that stand out ringed
  * in their tone. A reference — an alert level, a budget — is a dashed rule,
  * and every point over it is ringed as a breach; a missing point breaks the
- * line. The first series is drawn; a period is named by its label.
+ * line. The first series is the line; any others are drawn behind it to read
+ * it against, each named at its right end. A period is named by its label.
  */
 export function TimeseriesBlock({ spec }: BlockProps<"timeseries">) {
   const series = spec.series[0]
@@ -37,6 +38,12 @@ export function TimeseriesBlock({ spec }: BlockProps<"timeseries">) {
     <LineChart
       aria-label={series.name}
       values={values}
+      name={series.name}
+      compare={spec.series.slice(1).map((other) => ({
+        name: other.name,
+        // Aligned on the first series' periods: a period it lacks is a gap.
+        values: labels.map((label) => other.points.find(([at]) => at === label)?.[1] ?? null),
+      }))}
       labels={labels}
       format={format}
       zero={false}

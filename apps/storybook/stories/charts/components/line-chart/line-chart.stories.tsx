@@ -111,6 +111,8 @@ function Streaming({ variant }: { variant: ChartVariant<Props> }) {
  * - **With highlights** — weeks above the range ringed; a ring carries no label.
  * - **With marks** — each publish a dashed rule labelled at the top: an event, not a value.
  * - **With reference** — a dashed rule to compare against, on the same axis — never a second axis.
+ * - **Against last year** — `compare` draws other lines behind the main one, and every line is
+ *   named at its right end instead of in a legend.
  */
 export const LineChart: Story = {
   render: ({ variant }) => (

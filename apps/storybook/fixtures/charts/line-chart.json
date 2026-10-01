@@ -126,5 +126,16 @@
       "marks": [{ "index": 17, "label": "import" }],
       "reference": { "value": 1.4, "label": "Graph p95" }
     }
+  },
+  {
+    "caption": "Against last year",
+    "panel": { "title": "Weekly sales, £M", "aside": "2026 vs 2025" },
+    "props": {
+      "name": "2026",
+      "values": [3.9, 4.1, 4.0, 4.4, 4.3, 4.6, 4.5, 4.8, 4.7, 5.0, 4.9, 5.2, 5.4],
+      "compare": [{ "name": "2025", "values": [4.2, 4.3, 4.4, 4.5, 4.55, 4.6, 4.7, 4.75, 4.85, 4.9, 5.0, 5.05, 5.0] }],
+      "labels": ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13"],
+      "zero": false
+    }
   }
 ]
