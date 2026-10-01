@@ -94,11 +94,13 @@ function Live({ row, args, log }: { row: Row; args: Args; log: Log }) {
           />
         );
       case 'search':
-        return <SearchInput key={c} inputSize={fromSm} value={q} onChange={change('onChange', setQ)} placeholder="Search" />;
+        // Kit gap: SearchInput and Input fill their row and take no width prop, so the row sets one.
+        return <SearchInput key={c} className="w-40" inputSize={fromSm} value={q} onChange={change('onChange', setQ)} placeholder="Search" />;
       case 'input':
         return (
           <Input
             key={c}
+            className="w-32"
             inputSize={fromSm}
             placeholder="Input"
             value={text}

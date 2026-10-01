@@ -73,7 +73,7 @@ function PreviewCard({ preview }: { preview: Preview }) {
       </CardHeader>
       <CardContent>
         {/* Unstyled wrappers: inline controls flow side by side, a space apart. */}
-        <p>
+        <div>
           {preview.buttons.map((b, i) => (
             <React.Fragment key={b.label}>
               {i > 0 ? ' ' : null}
@@ -82,8 +82,8 @@ function PreviewCard({ preview }: { preview: Preview }) {
               </Button>
             </React.Fragment>
           ))}
-        </p>
-        <p>
+        </div>
+        <div>
           {preview.badges.map((b) => (
             <React.Fragment key={b.label}>
               <Badge variant={b.variant}>{b.label}</Badge>{' '}
@@ -92,7 +92,7 @@ function PreviewCard({ preview }: { preview: Preview }) {
           <Link href="#" variant="underlined">
             {preview.link}
           </Link>
-        </p>
+        </div>
       </CardContent>
       {preview.footer ? (
         <CardFooter>
