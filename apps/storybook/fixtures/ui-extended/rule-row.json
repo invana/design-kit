@@ -1,0 +1,31 @@
+[
+  {
+    "caption": "A world's rules — the slice each one narrows",
+    "width": 520,
+    "rules": [
+      {
+        "match": "graph_data/model/Deals@*",
+        "allow": true,
+        "select": {
+          "time": { "axis": "signed_at", "from": "2026-01-01", "to": "2026-06-30" },
+          "geo": { "axis": "country_iso", "vocab": "iso2", "in": ["DE", "FR", "NL", "ES", "CH"] }
+        }
+      },
+      {
+        "match": "graph_data/model/NewsArticles@*",
+        "allow": true,
+        "select": { "time": { "axis": "published_at", "from": "2026-01-01", "to": "2026-06-30" } }
+      },
+      { "match": "graph_data/model/AirRoutes@*", "allow": true }
+    ]
+  },
+  {
+    "caption": "A guardrail's rules — properties, egress and a deny",
+    "width": 520,
+    "rules": [
+      { "match": "graph_data/model/Deals@*", "allow": true, "properties": { "exclude": ["revenue", "contract_value"] } },
+      { "match": "llm/**", "allow": true, "egress": { "may_send": ["type_names", "the_question"] } },
+      { "match": "third_party/**", "allow": false, "readOnly": true }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "caption": "Default",
+    "props": { "parts": ["Q3 2026", "vs Q2", "Stores, Online", "214 stores", "as of 06:00"] }
+  },
+  {
+    "caption": "Editable — click a part, Enter sends it",
+    "props": { "parts": ["Q3 2026", "vs Q2", "Stores, Online", "214 stores", "as of 06:00"], "fixedParts": [4] },
+    "editable": true
+  },
+  {
+    "caption": "A part with choices",
+    "props": {
+      "parts": [
+        {
+          "text": "Q3 2026",
+          "choices": [
+            { "value": "Q3 2026", "label": "Q3 2026", "detail": "open" },
+            { "value": "Q2 2026", "label": "Q2 2026", "detail": "closed" },
+            { "value": "H1 2026", "label": "H1 2026", "detail": "closed" }
+          ]
+        },
+        "vs Q2",
+        "214 stores",
+        "as of 06:00"
+      ],
+      "note": "Changing the period runs the question again."
+    },
+    "editable": true
+  },
+  {
+    "caption": "Seamless",
+    "props": { "parts": ["Q3 2026", "vs Q2", "Stores, Online", "214 stores", "as of 06:00"], "seamless": true }
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "caption": "Default",
+    "rows": [
+      { "label": "kind", "value": "thesis" },
+      { "label": "direction", "value": "long" },
+      { "label": "horizon", "value": "intraday" },
+      { "label": "confidence", "value": "0.72" },
+      { "label": "agent", "value": "Intraday Analyst" },
+      { "label": "thinking", "value": "7e21", "mono": true }
+    ]
+  },
+  {
+    "caption": "Auto label width",
+    "labelWidth": "auto",
+    "rows": [
+      { "label": "Report", "value": "Mondays, 08:00", "mono": true },
+      { "label": "To", "value": "You, Procurement lead", "mono": true },
+      { "label": "Alert", "value": "55%", "mono": true },
+      { "label": "Until", "value": "End of Q1 2027", "mono": true }
+    ]
+  },
+  {
+    "caption": "Summary",
+    "labelWidth": "auto",
+    "variant": "summary",
+    "rows": [
+      { "label": "Report", "value": "Mondays, 08:00", "mono": true },
+      { "label": "To", "value": "You, Procurement lead", "mono": true },
+      { "label": "Alert", "value": "55%", "mono": true },
+      { "label": "Until", "value": "End of Q1 2027", "mono": true }
+    ]
+  }
+]

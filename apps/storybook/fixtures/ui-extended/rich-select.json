@@ -1,0 +1,101 @@
+[
+  {
+    "caption": "Default — rich rows",
+    "selects": [
+      {
+        "label": "Layout",
+        "value": "force",
+        "options": [
+          { "value": "force", "label": "Force-directed", "description": "Physics-based, organic clusters", "icon": "network" },
+          { "value": "grid", "label": "Grid", "description": "Evenly spaced rows and columns", "icon": "grid" },
+          { "value": "tree", "label": "Hierarchy", "description": "Top-down parent → child tree", "icon": "tree" },
+          { "value": "circular", "label": "Circular", "description": "Nodes arranged on a ring", "icon": "circle" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Multiple — checkboxes and counts",
+    "selects": [
+      {
+        "multiple": true,
+        "label": "Filters",
+        "placeholder": "All events",
+        "value": ["errors", "perf"],
+        "options": [
+          { "value": "errors", "label": "Errors", "description": "Failed requests and exceptions", "icon": "bug", "badge": { "text": "128", "variant": "destructive" } },
+          { "value": "perf", "label": "Performance", "description": "Slow traces over threshold", "icon": "zap", "badge": { "text": "42", "variant": "secondary" } },
+          { "value": "db", "label": "Database", "description": "Queries and connections", "icon": "database", "badge": { "text": "17", "variant": "secondary" } },
+          { "value": "security", "label": "Security", "description": "Auth and access events", "icon": "shield", "badge": { "text": "3", "variant": "secondary" } },
+          { "value": "audit", "label": "Audit log", "description": "Read-only — coming soon", "icon": "eye", "disabled": true }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Custom render — renderOption and renderValue",
+    "selects": [
+      {
+        "label": "Assignee",
+        "value": "ravi",
+        "render": "person",
+        "options": [
+          { "value": "ravi", "label": "Ravi Merugu", "description": "Maintainer" },
+          { "value": "aria", "label": "Aria Chen", "description": "Designer" },
+          { "value": "kofi", "label": "Kofi Mensah", "description": "Engineer" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Open upward — side=\"top\", align=\"end\"",
+    "selects": [
+      {
+        "label": "Layout",
+        "side": "top",
+        "align": "end",
+        "value": "force",
+        "options": [
+          { "value": "force", "label": "Force-directed", "description": "Physics-based, organic clusters", "icon": "network" },
+          { "value": "grid", "label": "Grid", "description": "Evenly spaced rows and columns", "icon": "grid" },
+          { "value": "tree", "label": "Hierarchy", "description": "Top-down parent → child tree", "icon": "tree" },
+          { "value": "circular", "label": "Circular", "description": "Nodes arranged on a ring", "icon": "circle" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Composer toolbar — inline, toggles and actions",
+    "width": 560,
+    "composer": { "placeholder": "Ask anything about your graph…" },
+    "selects": [
+      {
+        "appearance": "inline",
+        "side": "top",
+        "triggerAriaLabel": "Ask kind",
+        "value": "nl",
+        "options": [
+          { "value": "nl", "label": "Natural language" },
+          { "value": "ql", "label": "Query language" }
+        ]
+      },
+      {
+        "appearance": "inline",
+        "side": "top",
+        "label": "Ask in",
+        "triggerAriaLabel": "World",
+        "triggerIcon": "globe",
+        "value": "eu-h1",
+        "options": [
+          { "value": "everything", "label": "Everything", "description": "inside the guardrails" },
+          { "value": "eu-h1", "label": "EU · H1 2026", "description": "3 models · no third party" },
+          { "value": "us", "label": "US carriers", "description": "2 models · no stitches" },
+          { "value": "nothing-leaves", "label": "Nothing leaves", "description": "no external model, no third party" },
+          { "value": "h1-2025", "label": "H1 · 2025 review", "disabled": true, "disabledReason": "names airways v3, which is unpublished" }
+        ],
+        "toggles": [{ "id": "next-only", "label": "Next ask only", "tag": "next ask only" }],
+        "actions": [{ "id": "manage", "label": "Manage worlds…", "icon": "settings" }]
+      }
+    ]
+  }
+]

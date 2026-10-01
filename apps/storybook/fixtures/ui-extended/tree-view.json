@@ -1,0 +1,85 @@
+[
+  {
+    "caption": "Searchable",
+    "searchable": true,
+    "items": [
+      {
+        "id": 0,
+        "label": "Root",
+        "icon": "folder",
+        "isExpanded": true,
+        "children": [
+          {
+            "id": "1",
+            "label": "Root 1",
+            "icon": "folder",
+            "isExpanded": true,
+            "children": [
+              {
+                "id": "1-1",
+                "label": "Child 1-1",
+                "icon": "folder",
+                "children": [
+                  { "id": "1-1-1", "label": "Clickable Grandchild 1-1-1", "icon": "file" },
+                  { "id": "1-1-2", "label": "Grandchild 1-1-2", "icon": "file" }
+                ]
+              },
+              { "id": "1-2", "label": "Child 1-2", "icon": "file" }
+            ]
+          },
+          {
+            "id": "2",
+            "label": "Root 2",
+            "icon": "folder",
+            "children": [
+              { "id": "2-1", "label": "Child 2-1", "icon": "file" },
+              { "id": "2-2", "label": "Child 2-2", "icon": "file" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Header",
+    "searchable": true,
+    "header": { "title": "Workspace files", "count": "2 folders · 6 files" },
+    "items": [
+      {
+        "id": 0,
+        "label": "Root",
+        "icon": "folder",
+        "isExpanded": true,
+        "children": [
+          {
+            "id": "1",
+            "label": "Root 1",
+            "icon": "folder",
+            "isExpanded": true,
+            "children": [
+              {
+                "id": "1-1",
+                "label": "Child 1-1",
+                "icon": "folder",
+                "children": [
+                  { "id": "1-1-1", "label": "Clickable Grandchild 1-1-1", "icon": "file" },
+                  { "id": "1-1-2", "label": "Grandchild 1-1-2", "icon": "file" }
+                ]
+              },
+              { "id": "1-2", "label": "Child 1-2", "icon": "file" }
+            ]
+          },
+          {
+            "id": "2",
+            "label": "Root 2",
+            "icon": "folder",
+            "children": [
+              { "id": "2-1", "label": "Child 2-1", "icon": "file" },
+              { "id": "2-2", "label": "Child 2-2", "icon": "file" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "caption": "The run — in order",
+    "wide": true,
+    "aside": "seq ↓ · 6.4s of work, 2m 45s of waiting",
+    "selected": "7-execute_query",
+    "items": [
+      {
+        "type": "loop",
+        "label": "↻ 2 of 3 rounds — understood on round 2",
+        "summary": "3 events · 42.8s",
+        "steps": [
+          { "type": "step", "seq": 1, "name": "parse_intent", "description": "Two readings: late by ship date, or by promise date", "layer": "llm", "role": "extract", "duration": "0.9s", "note": "round 1" },
+          { "type": "step", "seq": 2, "name": "ask_user", "description": "ravi chose — by promise date", "layer": "human", "role": "clarification", "duration": "41.2s", "note": "answered", "mark": { "label": "⏸ 1 of 3" } },
+          { "type": "step", "seq": 3, "name": "parse_intent", "description": "One reading now — 12 entities named", "layer": "llm", "role": "extract", "duration": "0.7s", "note": "round 2" }
+        ]
+      },
+      { "type": "step", "seq": 4, "name": "resolve_schema", "description": "Routes@v4, Carriers@v2 — Deal@v3 allowed, never needed", "layer": "graph_data", "role": "schema", "duration": "0.2s", "note": "2 models" },
+      { "type": "step", "seq": 5, "name": "build_query", "description": "A read over Routes · H1 2026 · IE·DE·FR", "layer": "llm", "role": "decide", "duration": "1.4s", "note": "ok" },
+      { "type": "step", "seq": 6, "name": "validate_query", "description": "Inside the read subset", "layer": "agent", "role": "check", "duration": "0.1s", "note": "passed" },
+      { "type": "gate", "label": "approval — approved by ravi", "note": "est. 1.2M rows > 500,000 · waited 2m 04s · nothing was spent while it waited" },
+      { "type": "step", "seq": 7, "name": "execute_query", "description": "The first try timed out; the second returned", "layer": "graph_data", "role": "read_only", "duration": "2.1s", "note": "1,284 rows", "mark": { "label": "↺ 2 of 3" } },
+      { "type": "step", "seq": 8, "name": "summarise", "description": "Six carriers account for 71% of the lateness", "layer": "llm", "role": "extract", "duration": "0.9s", "note": "ok" },
+      { "type": "step", "seq": 9, "name": "deliver", "description": "Rows and summary handed to the canvas", "layer": "agent", "role": "spine", "duration": "0.1s", "note": "done" }
+    ],
+    "legend": [
+      { "kind": "stripe", "color": "var(--color-data-1)", "label": "the stripe is the layer — a step touches exactly one" },
+      { "kind": "bracket", "color": "var(--color-warning)", "label": "a bounded repetition contains its rounds" },
+      { "kind": "rule", "color": "var(--color-destructive)", "label": "a gate lies between rows — above it, nothing is spent" }
+    ]
+  },
+  {
+    "caption": "In flight",
+    "width": 480,
+    "aside": "step 5 of 9 · 43s elapsed",
+    "items": [
+      { "type": "step", "seq": 4, "name": "resolve_schema", "description": "Routes@v4, Carriers@v2", "layer": "graph_data", "role": "schema", "duration": "0.2s", "note": "2 models" },
+      { "type": "step", "seq": 5, "name": "build_query", "description": "Writing the query now…", "layer": "llm", "role": "decide", "duration": "—", "note": "running", "mark": { "label": "live", "tone": "info" } },
+      { "type": "step", "seq": 6, "name": "validate_query", "description": "Queued — nothing dispatched yet", "layer": "agent", "role": "check", "duration": "—", "note": "queued", "dim": true }
+    ]
+  },
+  {
+    "caption": "Failed — the bound was exhausted",
+    "width": 480,
+    "aside": "failed · 3 of 3 attempts",
+    "items": [
+      { "type": "step", "seq": 6, "name": "validate_query", "description": "Inside the read subset", "layer": "agent", "role": "check", "duration": "0.1s", "note": "passed" },
+      { "type": "step", "seq": 7, "name": "execute_query", "description": "Timed out three times — the bound is spent", "layer": "graph_data", "role": "read_only", "duration": "90.4s", "note": "failed", "mark": { "label": "↺ 3 of 3", "tone": "destructive" }, "struck": true },
+      { "type": "step", "seq": 8, "name": "summarise", "description": "Never dispatched", "layer": "llm", "role": "extract", "duration": "—", "note": "skipped", "dim": true }
+    ]
+  },
+  {
+    "caption": "Parked at a gate",
+    "width": 480,
+    "aside": "awaiting_approval · 2m 04s so far",
+    "items": [
+      { "type": "step", "seq": 6, "name": "validate_query", "description": "Inside the read subset", "layer": "agent", "role": "check", "duration": "0.1s", "note": "passed" },
+      { "type": "gate", "label": "approval — waiting on ravi", "note": "est. 1.2M rows > 500,000", "tone": "warning" },
+      { "type": "step", "seq": 7, "name": "execute_query", "description": "Held — the gate is above it", "layer": "graph_data", "role": "read_only", "duration": "—", "note": "held", "dim": true }
+    ]
+  },
+  {
+    "caption": "A step that delegated",
+    "width": 480,
+    "aside": "run:7d3184f1 → run:9c02",
+    "items": [
+      { "type": "step", "seq": 8, "name": "summarise", "description": "Handed the shaping to a Researcher", "layer": "llm", "role": "extract", "duration": "3.4s", "note": "1 child", "mark": { "label": "↳ delegates", "tone": "info" } },
+      { "type": "step", "seq": 1, "name": "rank_carriers", "description": "Six carriers carry 71% of it", "layer": "llm", "role": "decide", "duration": "1.8s", "note": "ok", "depth": 1 },
+      { "type": "step", "seq": 2, "name": "draft_summary", "description": "Three sentences, each citing a row", "layer": "llm", "role": "extract", "duration": "1.4s", "note": "ok", "depth": 1 }
+    ]
+  },
+  {
+    "caption": "Progress — streamed live",
+    "width": 420,
+    "live": true,
+    "aside": "",
+    "items": []
+  }
+]

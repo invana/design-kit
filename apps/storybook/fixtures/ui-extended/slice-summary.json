@@ -1,0 +1,41 @@
+[
+  {
+    "caption": "line — under a rule",
+    "width": 560,
+    "props": {
+      "select": {
+        "time": { "axis": "signed_at", "from": "2026-01-01", "to": "2026-06-30" },
+        "geo": { "axis": "country_iso", "vocab": "iso2", "in": ["DE", "FR", "NL", "ES", "CH"] },
+        "dims": { "channel": ["direct", "agency"] }
+      },
+      "declaredAxes": {
+        "time": { "property": "signed_at" },
+        "geo": { "property": "country_iso", "vocab": "iso2" },
+        "dims": ["channel", "segment", "stage"]
+      }
+    }
+  },
+  {
+    "caption": "block — W3 and R2",
+    "width": 560,
+    "props": {
+      "variant": "block",
+      "select": { "time": { "axis": "published_at", "from": "2026-01-01", "to": "2026-06-30" } },
+      "declaredAxes": { "time": { "property": "published_at" } }
+    }
+  },
+  {
+    "caption": "the refusal — an axis the model never declared",
+    "width": 560,
+    "props": {
+      "variant": "block",
+      "modelLabel": "AirRoutes@1.0.1",
+      "select": { "time": { "axis": "started_at", "from": "2026-01-01", "to": "2026-06-30" } },
+      "declaredAxes": { "geo": { "property": "country", "vocab": "iso2" }, "dims": ["type", "region"] }
+    }
+  },
+  {
+    "caption": "not sliced",
+    "props": {}
+  }
+]

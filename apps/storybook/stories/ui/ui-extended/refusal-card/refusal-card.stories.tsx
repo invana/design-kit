@@ -1,25 +1,87 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RefusalCard } from '@invana/ui';
+import { expect, within } from 'storybook/test';
+import { RefusalCard, TypographyInlineCode } from '@invana/ui';
 
-const meta: Meta<typeof RefusalCard> = {
+import VARIANTS from '../../../../fixtures/ui-extended/refusal-card.json';
+import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
+import { VariantBoard } from '../../../_story/variant-board';
+
+interface Args {
+  variant: string;
+}
+
+/** The body is a sentence with emphasis in it: JSON holds it as runs of text, strong and code. */
+type Run = { text?: string; strong?: string; code?: string };
+
+function Body({ runs }: { runs: Run[] }) {
+  return (
+    <>
+      {runs.map((r, i) =>
+        r.strong ? (
+          <strong key={i}>{r.strong}</strong>
+        ) : r.code ? (
+          <TypographyInlineCode key={i}>{r.code}</TypographyInlineCode>
+        ) : (
+          r.text
+        ),
+      )}
+    </>
+  );
+}
+
+const asJsx = (runs: Run[]) =>
+  runs.map((r) => (r.strong ? `<b>${r.strong}</b>` : r.code ? `<code>${r.code}</code>` : r.text)).join('');
+
+const meta = {
   title: 'UI/UI Extended/RefusalCard',
-  component: RefusalCard,
-  parameters: { layout: 'padded' },
-};
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        language: 'tsx',
+        transform: sourceFor(VARIANTS, (picked) =>
+          snippets(
+            ["import { RefusalCard } from '@invana/ui';"],
+            picked.map((v) => ({
+              comment: v.caption,
+              call: jsx('RefusalCard', {
+                label: { literal: v.label },
+                remedy: v.remedy ? { literal: v.remedy } : undefined,
+              }).replace(' />', '>').replace(/\n\/>$/, '\n>') + `\n  ${asJsx(v.body)}\n</RefusalCard>`,
+            })),
+          ),
+        ),
+      },
+    },
+  },
+  args: { variant: 'All' },
+  argTypes: { variant: variantArg(VARIANTS) },
+} satisfies Meta<Args>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<Args>;
 
-/** A bound refused the ask before it ran — the card names whose rule said no. */
-export const Default: Story = {
-  render: () => (
-    <RefusalCard
-      label="refused · the agent's own guardrail"
-      remedy="Ask in a world whose models this guardrail allows, or ask an agent without it."
-    >
-      <b>This ask was not run.</b> In <b>Everything</b>, <code>decide</code> is cast to{' '}
-      <code>llm/anthropic-prod/claude-opus-5</code>, and the agent's own guardrail <b>Nothing leaves</b>{' '}
-      does not allow it.
-    </RefusalCard>
+/**
+ * A bound refused the ask **before it ran** — the card names whose rule said no, so the reader
+ * knows whose rule to change, from `fixtures/ui-extended/refusal-card.json`. No retry: running it
+ * again under the same bounds would be refused again.
+ */
+export const RefusalCardStory: Story = {
+  name: 'RefusalCard',
+  render: ({ variant }) => (
+    <VariantBoard variants={VARIANTS} variant={variant}>
+      {(v) => (
+        <RefusalCard label={v.label} remedy={v.remedy}>
+          <Body runs={v.body} />
+        </RefusalCard>
+      )}
+    </VariantBoard>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const v of VARIANTS) {
+      const cell = within(canvas.getByRole('group', { name: v.caption }));
+      await expect(cell.getByRole('note')).toHaveTextContent(v.label);
+    }
+  },
 };

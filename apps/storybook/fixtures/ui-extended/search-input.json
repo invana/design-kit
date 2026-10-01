@@ -1,0 +1,36 @@
+[
+  { "caption": "Default", "fields": [{ "value": "" }] },
+  { "caption": "With initial value", "fields": [{ "value": "Initial search text" }] },
+  {
+    "caption": "Panel search — inputSize=\"sm\" · 26px",
+    "fields": [{ "value": "", "inputSize": "sm", "placeholder": "Search types" }]
+  },
+  {
+    "caption": "Compact — inputSize=\"sm\" at 250px",
+    "width": 250,
+    "fields": [{ "value": "", "inputSize": "sm" }]
+  },
+  {
+    "caption": "Standalone — inputSize=\"default\" · 32px",
+    "fields": [{ "value": "", "placeholder": "Search graphs" }]
+  },
+  {
+    "caption": "Page — inputSize=\"lg\" · 40px",
+    "fields": [{ "value": "", "inputSize": "lg", "placeholder": "Search everything" }]
+  },
+  { "caption": "Full width", "wide": true, "fields": [{ "value": "" }] },
+  { "caption": "With clear button", "clear": true, "fields": [{ "value": "carrier" }] },
+  {
+    "caption": "With filtering",
+    "fields": [{ "value": "", "placeholder": "Search fruit" }],
+    "items": ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Kiwi", "Lemon"]
+  },
+  {
+    "caption": "Multiple search inputs",
+    "fields": [
+      { "name": "Name", "value": "", "placeholder": "Search by name" },
+      { "name": "Email", "value": "", "placeholder": "Search by email" },
+      { "name": "Location", "value": "", "placeholder": "Search by location" }
+    ]
+  }
+]

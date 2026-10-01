@@ -1,0 +1,74 @@
+[
+  {
+    "caption": "Default",
+    "height": 360,
+    "topNavItems": [
+      { "name": "Home", "icon": "home", "action": true },
+      { "name": "Search", "icon": "search", "href": "#search" },
+      { "name": "Apps", "icon": "layout-grid", "action": true, "showSeperator": true }
+    ],
+    "bottomNavItems": [
+      { "name": "Settings", "icon": "settings", "action": true },
+      { "name": "Profile", "icon": "user", "href": "#profile" }
+    ]
+  },
+  {
+    "caption": "With badges",
+    "height": 360,
+    "middle": { "status": "running", "label": "Live" },
+    "topNavItems": [
+      { "name": "Graph", "icon": "network", "action": true },
+      { "name": "Tasks", "icon": "list-checks", "badge": 7, "tooltip": "7 tasks waiting on you", "action": true },
+      {
+        "name": "Notifications",
+        "icon": "bell",
+        "badge": 3,
+        "menuItems": [
+          { "id": "read", "label": "Mark all as read", "icon": "check-check" },
+          { "id": "mute", "label": "Mute for an hour", "icon": "bell-off" }
+        ]
+      },
+      { "name": "Alerts", "icon": "alert-triangle", "badge": 1, "tooltip": "1 ingestion failed overnight", "action": true, "showSeperator": true }
+    ],
+    "bottomNavItems": [{ "name": "Settings", "icon": "settings", "action": true }]
+  },
+  {
+    "caption": "With menus",
+    "height": 360,
+    "topNavItems": [
+      {
+        "name": "New",
+        "icon": "plus",
+        "showSeperator": true,
+        "menuItems": [
+          { "id": "query", "label": "New query", "icon": "file-code", "shortcut": "⌘N" },
+          { "id": "dashboard", "label": "New dashboard", "icon": "layout-dashboard" },
+          { "id": "import", "label": "Import dataset…", "icon": "upload", "separatorBefore": true }
+        ]
+      },
+      { "name": "Graph", "icon": "network", "action": true },
+      { "name": "Tables", "icon": "table-2", "action": true },
+      { "name": "Datasets", "icon": "database", "action": true },
+      { "name": "Console", "icon": "terminal", "action": true }
+    ],
+    "bottomNavItems": [
+      {
+        "name": "Help",
+        "icon": "help-circle",
+        "menuItems": [
+          { "id": "docs", "label": "Documentation", "icon": "book-open" },
+          { "id": "keys", "label": "Keyboard shortcuts", "icon": "keyboard", "shortcut": "⌘K" },
+          { "id": "ask", "label": "Ask the team", "icon": "message-circle-question", "separatorBefore": true }
+        ]
+      },
+      {
+        "name": "Account",
+        "icon": "user",
+        "menuItems": [
+          { "id": "profile", "label": "Profile", "icon": "user-cog" },
+          { "id": "signout", "label": "Sign out", "icon": "log-out", "destructive": true, "separatorBefore": true }
+        ]
+      }
+    ]
+  }
+]

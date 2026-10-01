@@ -1,0 +1,36 @@
+[
+  {
+    "caption": "Secondary",
+    "menuItems": [
+      {
+        "id": "files",
+        "label": "Files",
+        "icon": "file",
+        "shortcut": "⌘F",
+        "children": [
+          { "id": "shared", "label": "Shared Files", "icon": "folder-open", "shortcut": "⌘S" },
+          { "id": "recent", "label": "Recent Files", "icon": "file", "shortcut": "⌘R" }
+        ]
+      },
+      {
+        "id": "settings",
+        "label": "Settings",
+        "icon": "settings",
+        "shortcut": "⌘,",
+        "children": [
+          {
+            "id": "account",
+            "label": "Account Settings",
+            "icon": "users",
+            "children": [
+              { "id": "profile", "label": "Profile", "icon": "users", "shortcut": "⌘P" },
+              { "id": "security", "label": "Security", "icon": "shield", "shortcut": "⌘L" }
+            ]
+          },
+          { "id": "notifications", "label": "Notifications", "icon": "bell", "shortcut": "⌘N" }
+        ]
+      },
+      { "id": "messages", "label": "Messages", "icon": "mail", "shortcut": "⌘M" }
+    ]
+  }
+]

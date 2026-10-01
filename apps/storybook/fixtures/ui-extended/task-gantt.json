@@ -1,0 +1,169 @@
+[
+  {
+    "caption": "Finished — what each task produced, on hover",
+    "width": 460,
+    "title": "Performance",
+    "aside": "6.3s",
+    "selected": "import_dataset",
+    "detailProps": { "side": "right", "align": "start", "width": 320 },
+    "tasks": [
+      { "key": "check_bundle", "status": "succeeded", "startMs": 0, "durationMs": 4, "result": { "datasets": 1, "manifest": "orders-2026-09.yaml" }, "log": "manifest read · 1 dataset" },
+      {
+        "key": "fetch_source",
+        "status": "succeeded",
+        "startMs": 320,
+        "durationMs": 900,
+        "attempts": [{ "startMs": 40, "durationMs": 270, "status": "failed", "title": "refused · 429, retried after 50ms" }],
+        "summary": "refused once, then 200",
+        "result": { "bytes": "1.4 MB", "source": "https://erp.internal/orders.csv", "etag": "W/\"3f1c\"" },
+        "log": "refused once, then 200 · 1.4 MB"
+      },
+      {
+        "key": "validate_records",
+        "status": "succeeded",
+        "startMs": 1220,
+        "durationMs": 1200,
+        "result": { "read": 1251, "valid": 1204, "reported": 47, "reasons": { "missing_sku": 31, "bad_date": 12, "duplicate": 4 } },
+        "log": "1,204 of 1,251 valid · 47 reported"
+      },
+      {
+        "key": "import_dataset",
+        "status": "succeeded",
+        "startMs": 2420,
+        "durationMs": 3400,
+        "result": { "lanes": 3, "nodes_written": 1204, "edges_written": 1204, "node_label": "Order", "edge_type": "FOR" },
+        "log": "3 lanes · 1,204 Order, 1,204 FOR"
+      },
+      { "key": "verify_counts", "status": "succeeded", "startMs": 5820, "durationMs": 8, "result": { "expected": 1204, "found": 1204 }, "log": "1,204 = 1,204" },
+      {
+        "key": "notify_owner",
+        "status": "failed",
+        "startMs": 5830,
+        "durationMs": 60,
+        "error": {
+          "code": "webhook_unreachable",
+          "message": "The dataset owner’s webhook did not answer.",
+          "detail": "POST https://hooks.internal/imports → ECONNREFUSED after 3 attempts"
+        },
+        "summary": "the import stands; only the notice failed",
+        "log": "gave up after 3 attempts"
+      },
+      { "key": "triage", "status": "skipped", "duration": "—", "summary": "counts matched, so there was nothing to triage" },
+      { "key": "import_report", "status": "succeeded", "startMs": 5900, "durationMs": 40, "result": { "rejections": 47, "reasons": 3, "report": "reported.csv" }, "log": "47 rejections, 3 reasons" }
+    ]
+  },
+  {
+    "caption": "In flight — the run's steps as the trace hands them over",
+    "width": 420,
+    "title": "Performance",
+    "aside": "now 5.1s",
+    "origin": "2026-09-16T11:12:00.000Z",
+    "spanMs": 8000,
+    "nowMs": 5100,
+    "openEnded": true,
+    "density": "compact",
+    "labelWidth": 104,
+    "steps": [
+      { "task_key": "understand", "status": "succeeded", "started_at": "2026-09-16T11:12:00.000Z", "finished_at": "2026-09-16T11:12:00.700Z", "duration_ms": 700, "last_log": "asked back once · answered" },
+      { "task_key": "plan_queries", "status": "succeeded", "started_at": "2026-09-16T11:12:00.700Z", "finished_at": "2026-09-16T11:12:01.900Z", "duration_ms": 1200, "last_log": "drafted 5 queries · 2 lanes" },
+      { "task_key": "translate_thought", "status": "succeeded", "started_at": "2026-09-16T11:12:01.900Z", "finished_at": "2026-09-16T11:12:03.600Z", "duration_ms": 1700, "last_log": "cypher · 5 of 5 validated" },
+      { "task_key": "execute_graph_query", "status": "running", "started_at": "2026-09-16T11:12:03.600Z", "finished_at": null, "duration_ms": null, "last_log": "lane 2 of 5 · 1,880 rows so far" },
+      { "task_key": "verify_result", "status": "queued", "started_at": null, "finished_at": null, "duration_ms": null, "last_log": "waiting on execute_graph_query" },
+      { "task_key": "summarise", "status": "queued", "started_at": null, "finished_at": null, "duration_ms": null, "last_log": "not started" },
+      { "task_key": "emit_table", "status": "queued", "started_at": null, "finished_at": null, "duration_ms": null, "last_log": "not started" }
+    ]
+  },
+  {
+    "caption": "Loop and gate — on the clock, not beside it",
+    "wide": true,
+    "title": "Waterfall",
+    "aside": "6.4s of work · 2m 45s of waiting",
+    "selected": null,
+    "ticks": 6,
+    "tasks": [
+      { "key": "parse_intent", "label": "parse_intent", "status": "succeeded", "startMs": 0, "durationMs": 900 },
+      { "key": "ask_user", "status": "succeeded", "startMs": 900, "durationMs": 41200, "summary": "ravi chose — by promise date" },
+      { "key": "parse_intent·2", "label": "parse_intent", "status": "succeeded", "startMs": 42100, "durationMs": 700 },
+      { "key": "resolve_schema", "status": "succeeded", "startMs": 42800, "durationMs": 200 },
+      { "key": "build_query", "status": "succeeded", "startMs": 43000, "durationMs": 1400 },
+      { "key": "validate_query", "status": "succeeded", "startMs": 44400, "durationMs": 100 },
+      {
+        "key": "execute_query",
+        "status": "succeeded",
+        "startMs": 168500,
+        "durationMs": 2100,
+        "attempts": [{ "startMs": 166000, "durationMs": 2400, "status": "failed", "title": "timed out — retried" }]
+      },
+      { "key": "summarise", "status": "succeeded", "startMs": 170600, "durationMs": 900 },
+      { "key": "deliver", "status": "succeeded", "startMs": 171500, "durationMs": 100 }
+    ],
+    "brackets": [{ "from": "parse_intent", "to": "parse_intent·2", "label": "↻ 2 of 3 rounds — understood on round 2" }],
+    "seams": [
+      { "after": "validate_query", "label": "approval", "note": "approved by ravi · nothing spent while it waited", "startMs": 44500, "durationMs": 124000 }
+    ]
+  },
+  {
+    "caption": "Custom detail — a chart for one row, context for the rest",
+    "width": 460,
+    "title": "Performance",
+    "aside": "5.3s",
+    "detailProps": { "side": "right", "align": "start", "width": 300, "openDelay": 120 },
+    "partOf": "market-brief v1",
+    "tasks": [
+      { "key": "plan_queries", "status": "succeeded", "startMs": 0, "durationMs": 1200, "result": { "queries": 5, "lanes": 2 }, "log": "drafted 5 queries · 2 lanes" },
+      {
+        "key": "execute_graph_query",
+        "status": "succeeded",
+        "startMs": 1200,
+        "durationMs": 3400,
+        "chart": {
+          "caption": "rows per lane",
+          "labelWidth": 52,
+          "data": [
+            { "label": "lane 1", "value": 1204, "display": "1,204" },
+            { "label": "lane 2", "value": 676, "display": "676" },
+            { "label": "lane 3", "value": 412, "display": "412" }
+          ]
+        },
+        "action": "Open the result"
+      },
+      {
+        "key": "summarise",
+        "status": "needs_input",
+        "startMs": 4600,
+        "durationMs": 700,
+        "summary": "two suppliers matched no route — which one did you mean?",
+        "result": { "tokens_in": 4210, "tokens_out": 380, "model": "claude-opus-5" },
+        "log": "asked back · awaiting an answer"
+      }
+    ]
+  },
+  {
+    "caption": "Live — a run streaming its steps",
+    "width": 420,
+    "live": true,
+    "title": "Performance",
+    "aside": "",
+    "spanMs": 8000,
+    "density": "compact",
+    "labelWidth": 104,
+    "keys": ["understand", "plan_queries", "translate_thought", "execute_graph_query", "verify_result", "summarise", "emit_table"],
+    "events": [
+      { "nowMs": 0, "task": "understand", "status": "running", "log": "reading the question" },
+      { "nowMs": 700, "task": "understand", "status": "succeeded", "log": "asked back once · answered" },
+      { "nowMs": 700, "task": "plan_queries", "status": "running" },
+      { "nowMs": 1900, "task": "plan_queries", "status": "succeeded", "log": "drafted 5 queries · 2 lanes" },
+      { "nowMs": 1900, "task": "translate_thought", "status": "running" },
+      { "nowMs": 3600, "task": "translate_thought", "status": "succeeded", "log": "cypher · 5 of 5 validated" },
+      { "nowMs": 3600, "task": "execute_graph_query", "status": "running", "log": "lane 1 of 5" },
+      { "nowMs": 5100, "task": "execute_graph_query", "status": "running", "log": "lane 2 of 5 · 1,880 rows so far" },
+      { "nowMs": 6900, "task": "execute_graph_query", "status": "succeeded", "log": "5 lanes · 4,210 rows" },
+      { "nowMs": 6900, "task": "verify_result", "status": "running" },
+      { "nowMs": 7300, "task": "verify_result", "status": "succeeded", "log": "4,210 = 4,210" },
+      { "nowMs": 7300, "task": "summarise", "status": "running" },
+      { "nowMs": 8100, "task": "summarise", "status": "succeeded", "log": "three sentences" },
+      { "nowMs": 8100, "task": "emit_table", "status": "running" },
+      { "nowMs": 8300, "task": "emit_table", "status": "succeeded", "log": "table handed to the canvas" }
+    ]
+  }
+]

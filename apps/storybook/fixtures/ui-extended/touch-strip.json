@@ -1,0 +1,41 @@
+{
+  "palette": {
+    "graph_data": { "swatch": "bg-data-1" },
+    "llm": { "swatch": "bg-data-7" },
+    "third_party": { "swatch": "bg-data-8" },
+    "cache": { "swatch": "bg-data-3" },
+    "human": { "swatch": "bg-data-6" }
+  },
+  "variants": [
+    {
+      "caption": "Row — one line above a run's trace",
+      "wide": true,
+      "orientation": "row",
+      "title": "What it touched",
+      "aside": "declared 4 · touched 4 · refused 1",
+      "items": [
+        { "layer": "llm", "note": "3 calls" },
+        { "layer": "graph_data", "note": "1,284 rows" },
+        { "layer": "agent", "note": "2 checks" },
+        { "layer": "human", "note": "asked + approved" },
+        { "layer": "third_party", "note": "refused", "refused": true },
+        { "layer": "cache", "note": "miss", "dim": true }
+      ]
+    },
+    {
+      "caption": "Column — read down a narrow panel",
+      "width": 360,
+      "orientation": "column",
+      "title": "What it touched",
+      "aside": "1 refused",
+      "items": [
+        { "layer": "llm", "note": "3 calls" },
+        { "layer": "graph_data", "note": "1,284 rows" },
+        { "layer": "agent", "note": "2 checks" },
+        { "layer": "human", "note": "asked + approved" },
+        { "layer": "third_party", "note": "refused", "refused": true },
+        { "layer": "cache", "note": "miss", "dim": true }
+      ]
+    }
+  ]
+}

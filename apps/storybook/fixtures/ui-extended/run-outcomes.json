@@ -1,0 +1,38 @@
+[
+  {
+    "caption": "repair · the query went back once",
+    "steps": [
+      { "row": { "status": "success", "name": "Validate", "meta": "repaired once" } },
+      { "repair": { "from": "Theme.velocity5d", "to": "Theme.velocity_5d" } },
+      { "row": { "status": "success", "name": "Execute", "meta": "3 records" } }
+    ]
+  },
+  {
+    "caption": "retry · the database was slow, not wrong",
+    "steps": [
+      { "row": { "status": "success", "name": "Execute", "meta": "retry 1 of 2" } },
+      { "retry": { "attempt": "retry 1 of 2", "text": "no response in 2.0s; the second attempt returned in 0.6s" } },
+      { "row": { "status": "success", "name": "Verify", "meta": "served" } }
+    ]
+  },
+  {
+    "caption": "cannot answer · the graph does not hold it",
+    "cannotAnswer": {
+      "text": "This graph holds no bars and no news for SUZLON-BE.",
+      "remedy": { "before": "What would change that: import the ticker into ", "code": "market-data", "after": "." }
+    }
+  },
+  {
+    "caption": "failure · something broke, and it is named",
+    "diagnosis": {
+      "code": "execute · connection_refused",
+      "attempted": "MATCH (t:Theme)<-[:IN]-(s:Stock) WHERE t.velocity_5d < 2.0 RETURN s.symbol",
+      "target": "bolt://neo4j.internal:7687 · 2 attempts · 4.1s",
+      "text": "The database did not accept a connection on either attempt.",
+      "actions": [
+        { "id": "open-trace", "label": "Open the trace" },
+        { "id": "retry", "label": "Retry", "variant": "outline" }
+      ]
+    }
+  }
+]

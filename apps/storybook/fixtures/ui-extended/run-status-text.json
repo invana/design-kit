@@ -1,0 +1,27 @@
+[
+  {
+    "caption": "Every status, with its dot",
+    "width": 560,
+    "dot": true,
+    "statuses": [
+      { "status": "queued", "what": "nothing dispatched yet" },
+      { "status": "running", "what": "in flight — the only tone that moves" },
+      { "status": "succeeded", "what": "finished, and the result stands" },
+      { "status": "cannot_answer", "what": "the machinery succeeded; the graph cannot answer inside this world" },
+      { "status": "awaiting_approval", "what": "parked at a gate, spending nothing" },
+      { "status": "failed", "what": "a bound was spent, or a step could not run" },
+      { "status": "cancelled", "what": "a person stopped it" },
+      { "status": "purged", "what": "kept 90 days — the counts stay, the documents do not" },
+      { "status": "reconciling", "what": "a status the kit has never heard of, in the neutral" }
+    ]
+  },
+  {
+    "caption": "The word alone — inline in a sentence or a cell",
+    "dot": false,
+    "statuses": [
+      { "status": "succeeded", "what": "result stands" },
+      { "status": "cannot_answer", "what": "no answer in this world" },
+      { "status": "failed", "what": "bound spent" }
+    ]
+  }
+]

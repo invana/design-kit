@@ -1,0 +1,35 @@
+[
+  {
+    "caption": "Columns — when is a column",
+    "width": 480,
+    "variant": "columns",
+    "entries": [
+      { "when": "today 08:00", "tone": "running", "title": "Trade day 8 Sep", "detail": "3 sub-tasks", "badge": { "label": "in progress", "tone": "info" } },
+      { "when": "Fri 08:00", "tone": "success", "title": "Trade day 5 Sep", "detail": "accepted 15:52" },
+      { "when": "Wed 08:00", "tone": "muted", "title": "Trade day 3 Sep", "detail": "skipped — previous instance still open" }
+    ]
+  },
+  {
+    "caption": "Compact — dated events inside an answer",
+    "variant": "compact",
+    "entries": [
+      { "when": "12 Sep", "tone": "success", "text": "Loaded at Rotterdam" },
+      { "when": "19 Sep", "tone": "warning", "text": "Held at customs · 3 days" },
+      { "when": "23 Sep", "text": "Arrived Felixstowe" },
+      { "when": "26 Sep", "text": "Delivered, 4 days late" }
+    ]
+  },
+  {
+    "caption": "Rail — when above the title, in a narrow card",
+    "width": 340,
+    "variant": "rail",
+    "heading": "Latest from our changelog",
+    "entries": [
+      { "when": "14 hours ago", "tone": "muted", "link": "Refreshed repository pull requests page in public preview" },
+      { "when": "15 hours ago", "tone": "muted", "link": "AI Scan for pull request APIs in public preview" },
+      { "when": "18 hours ago", "tone": "muted", "link": "Control GitHub Actions cache access with cache-mode" },
+      { "when": "19 hours ago", "tone": "muted", "link": "MAI-Code-1-Flash deprecated" }
+    ],
+    "footer": "View changelog →"
+  }
+]

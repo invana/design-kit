@@ -1,0 +1,98 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "left": "Invana",
+    "leftNavItems": [
+      { "name": "Home", "label": "Home", "icon": "home", "action": true },
+      { "name": "Apps", "label": "Apps", "icon": "layout-grid", "href": "#apps" }
+    ],
+    "rightNavItems": [
+      { "name": "Notifications", "icon": "bell", "action": true },
+      { "name": "Settings", "icon": "settings", "action": true },
+      { "name": "Profile", "icon": "user", "href": "#profile" }
+    ]
+  },
+  {
+    "caption": "Center search",
+    "wide": true,
+    "left": "Explorer",
+    "search": { "placeholder": "Search nodes, edges, saved queries…" },
+    "leftNavItems": [
+      { "name": "Run query", "label": "Run", "icon": "play", "action": true },
+      { "name": "Save query", "icon": "save", "action": true }
+    ],
+    "rightNavItems": [
+      { "name": "Query history", "icon": "history", "action": true },
+      {
+        "name": "Export",
+        "icon": "download",
+        "menuItems": [
+          { "id": "json", "label": "Export as JSON", "icon": "file-json" },
+          { "id": "csv", "label": "Export as CSV", "icon": "file-spreadsheet" },
+          { "id": "clipboard", "label": "Copy result to clipboard", "icon": "copy", "shortcut": "⌘⇧C", "separatorBefore": true }
+        ]
+      },
+      { "name": "Share", "icon": "share-2", "action": true },
+      {
+        "name": "More options",
+        "icon": "more-horizontal",
+        "menuItems": [
+          { "id": "duplicate", "label": "Duplicate query", "icon": "copy" },
+          { "id": "delete", "label": "Delete query", "icon": "trash-2", "destructive": true, "separatorBefore": true }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "With badges",
+    "wide": true,
+    "status": "Synced 2 minutes ago",
+    "leftNavItems": [
+      { "name": "Inbox", "label": "Inbox", "icon": "inbox", "badge": 12, "action": true },
+      { "name": "Pull requests", "label": "Reviews", "icon": "git-pull-request", "badge": 4, "action": true },
+      { "name": "Discussions", "label": "Discussions", "icon": "message-square", "action": true, "showSeperator": true },
+      { "name": "Failing checks", "label": "Checks", "icon": "alert-triangle", "badge": 2, "tooltip": "2 checks failing on main", "action": true }
+    ],
+    "rightNavItems": [
+      { "name": "Filter", "icon": "filter", "action": true },
+      { "name": "Sort", "icon": "arrow-down-up", "action": true },
+      {
+        "name": "More options",
+        "icon": "more-horizontal",
+        "menuItems": [
+          { "id": "read", "label": "Mark all as read", "icon": "check-check" },
+          { "id": "archive", "label": "Archive read items", "icon": "archive" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "With menus",
+    "wide": true,
+    "left": "Invana",
+    "workspaces": ["ravi-merugu", "invana-labs", "nse-research"],
+    "unread": 3,
+    "leftNavItems": [],
+    "rightNavItems": [
+      {
+        "name": "Settings",
+        "icon": "settings",
+        "menuItems": [
+          { "id": "appearance", "label": "Appearance", "icon": "palette" },
+          { "id": "keys", "label": "Keyboard shortcuts", "icon": "keyboard", "shortcut": "⌘K" },
+          { "id": "reset", "label": "Reset preferences", "icon": "rotate-ccw", "destructive": true, "separatorBefore": true }
+        ]
+      },
+      {
+        "name": "Account",
+        "icon": "user",
+        "menuItems": [
+          { "id": "profile", "label": "Profile", "icon": "user-cog" },
+          { "id": "billing", "label": "Billing", "icon": "credit-card" },
+          { "id": "signout", "label": "Sign out", "icon": "log-out", "destructive": true, "separatorBefore": true }
+        ]
+      }
+    ]
+  }
+]
