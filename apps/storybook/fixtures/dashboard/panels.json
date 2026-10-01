@@ -1,0 +1,290 @@
+[
+  {
+    "caption": "Trace",
+    "wide": true,
+    "panel": {
+      "id": "trace",
+      "kind": "trace",
+      "title": "The run, in order",
+      "aside": "pick a step",
+      "options": {
+        "selectAction": "select-step",
+        "selectedId": null,
+        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "human": { "swatch": "bg-data-6" } },
+        "entries": [
+          { "id": "parse_intent", "seq": 1, "name": "parse_intent", "layer": "llm", "role": "decide", "duration": "1.2s" },
+          { "kind": "gate", "label": "asked the analyst", "note": "two readings of “exposed”", "tone": "warning" },
+          {
+            "kind": "loop",
+            "label": "clarify",
+            "summary": "2 rounds · 41.2s",
+            "tone": "info",
+            "rounds": [
+              { "id": "ask_user", "seq": 2, "name": "ask_user", "layer": "human", "duration": "38.0s", "depth": 1 },
+              { "id": "read_reply", "seq": 3, "name": "read_reply", "layer": "llm", "role": "extract", "duration": "3.2s", "depth": 1 }
+            ]
+          },
+          { "id": "execute_query", "seq": 4, "name": "execute_query", "layer": "graph_data", "duration": "32.4s", "mark": "↺ 2 of 3", "markTone": "warning" },
+          { "id": "summarise", "seq": 5, "name": "summarise", "layer": "llm", "role": "write", "duration": "4.1s" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Gantt",
+    "wide": true,
+    "panel": {
+      "id": "performance",
+      "kind": "gantt",
+      "title": "Performance",
+      "aside": "pick a task",
+      "options": {
+        "labelWidth": 124,
+        "selectAction": "select-task",
+        "selectedKey": null,
+        "tasks": [
+          { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
+          { "key": "fetch_source", "startMs": 40, "durationMs": 900, "status": "succeeded", "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed" }] },
+          { "key": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded" },
+          { "key": "import_dataset", "startMs": 2150, "durationMs": 3400, "status": "succeeded" },
+          { "key": "triage", "status": "skipped" },
+          { "key": "announce", "startMs": 5600, "durationMs": 300, "status": "needs_input" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "List",
+    "wide": true,
+    "panel": {
+      "id": "artifacts-list",
+      "kind": "list",
+      "title": "Recent runs",
+      "options": {
+        "items": [
+          { "id": "run-7d31", "tone": "success", "title": "run:7d3184f1", "mono": true, "meta": "12.9s", "chip": { "label": "served" }, "action": "open-run" },
+          { "id": "run-4a02", "tone": "error", "title": "run:4a02c9e3", "mono": true, "meta": "0.4s", "chip": { "label": "failed", "tone": "error" }, "action": "open-run" },
+          { "id": "result", "icon": "file", "title": "result.json", "mono": true, "meta": "1.4 MB" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Params",
+    "wide": true,
+    "panel": {
+      "id": "params",
+      "kind": "params",
+      "title": "Parameters · import_dataset",
+      "options": {
+        "changeAction": "edit-param",
+        "params": [
+          { "name": "dataset", "type": "str · required", "source": "binding", "value": "${lane.dataset}", "note": "one lane per entry in ${datasets}" },
+          { "name": "mode", "type": "enum · default upsert", "source": "literal", "value": "upsert", "note": "upsert · append" },
+          { "name": "batch_size", "type": "int · optional", "source": "literal", "value": "5000", "note": "left at the catalogue default" },
+          { "name": "when", "type": "expr", "source": "literal", "value": "—", "note": "always runs", "disabled": true }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Code",
+    "wide": true,
+    "panel": {
+      "kind": "code",
+      "title": "plan.yml",
+      "flush": true,
+      "options": {
+        "language": "yaml",
+        "showLineNumbers": true,
+        "value": "name: nightly-load\ntasks:\n  - key: fetch_source\n    bound: network\n  - key: import_dataset\n    bound: ingest\n    map_over: ${args.datasets}\n"
+      }
+    }
+  },
+  {
+    "caption": "Text",
+    "wide": true,
+    "panel": {
+      "id": "notice",
+      "kind": "text",
+      "title": "Validation",
+      "options": {
+        "tone": "warning",
+        "callout": true,
+        "text": "fetch_source was refused once (503) and retried. The run carried on.",
+        "actions": [
+          { "id": "retry", "label": "Retry now", "variant": "outline" },
+          { "id": "dismiss", "label": "Dismiss", "variant": "ghost" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Log",
+    "wide": true,
+    "panel": {
+      "kind": "log",
+      "title": "Log",
+      "aside": "tailing",
+      "flush": true,
+      "options": {
+        "lines": [
+          { "time": "00.00", "level": "info", "source": "check_bundle", "message": "manifest read · 1 dataset" },
+          { "time": "00.35", "level": "warn", "source": "fetch_source", "message": "refused · 503 · retrying (2 of 3)" },
+          { "time": "00.95", "level": "info", "source": "fetch_source", "message": "200 · 1.4 MB in 0.6s" },
+          { "time": "02.10", "level": "error", "source": "validate_records", "message": "47 of 1,251 rejected" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "JSON",
+    "wide": true,
+    "panel": {
+      "kind": "json",
+      "title": "result.json",
+      "flush": true,
+      "options": { "maxHeight": 180, "value": { "run": "9f2c…a41", "status": "running", "tasks": { "done": 4, "total": 7 }, "citations": 12 } }
+    }
+  },
+  {
+    "caption": "Exchange",
+    "wide": true,
+    "panel": {
+      "kind": "exchange",
+      "title": "What went in, what came out",
+      "options": {
+        "blocks": [
+          { "label": "Prompt · 1,204 tokens", "value": "Which suppliers are exposed to the Red Sea route?" },
+          { "label": "Completion · 86 tokens", "language": "json", "value": "{ \"suppliers\": [\"Apex Components\", \"Delta Freight\"] }" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Touched",
+    "wide": true,
+    "panel": {
+      "kind": "touched",
+      "title": "What it touched",
+      "aside": "declared 4 · touched 3 · refused 1",
+      "options": {
+        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "third_party": { "swatch": "bg-data-8" }, "cache": { "swatch": "bg-data-3" } },
+        "items": [
+          { "layer": "llm", "note": "3 calls" },
+          { "layer": "graph_data", "note": "1,284 rows" },
+          { "layer": "third_party", "note": "refused", "refused": true },
+          { "layer": "cache", "note": "miss", "dim": true }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Attempts",
+    "wide": true,
+    "panel": {
+      "kind": "attempts",
+      "title": "Its clock — attempt by attempt",
+      "flush": true,
+      "options": {
+        "summary": "elapsed 32.4s · working 2.3s — the gap is the attempt that timed out",
+        "rows": [
+          { "label": "attempt 1", "started": "+44.5s", "took": "30.0s", "what": "timed out — the connector never answered", "tone": "destructive", "struck": true },
+          { "label": "attempt 2", "started": "+74.6s", "took": "2.1s", "what": "cursor drained · 1,284 rows", "tone": "success" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Artifacts",
+    "wide": true,
+    "panel": {
+      "id": "files",
+      "kind": "artifacts",
+      "title": "What it left",
+      "flush": true,
+      "options": {
+        "openAction": "open-file",
+        "downloadAction": "download-file",
+        "files": [
+          { "name": "result.json", "kind": "json", "size": "1.4 MB", "digest": "9f2ca41b", "written": "step 7" },
+          { "name": "rejections.csv", "kind": "csv", "size": "4 KB", "digest": "51e0c7d2", "written": "step 3" },
+          { "name": "raw.parquet", "kind": "parquet", "size": "—", "digest": "0b7713aa", "written": "step 2", "gone": true }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Layers",
+    "wide": true,
+    "panel": {
+      "id": "layers",
+      "kind": "layers",
+      "title": "Where the time went",
+      "actions": [{ "id": "fit", "label": "Fit", "pressed": true }],
+      "options": {
+        "scale": "elapsed",
+        "fit": true,
+        "selectAction": "select-item",
+        "selectedItem": null,
+        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "human": { "swatch": "bg-data-6" } },
+        "bands": [
+          { "layer": "human", "note": "1 round", "parts": [{ "id": "clarify", "label": "human/form/clarify" }] },
+          { "layer": "agent", "spine": true },
+          { "layer": "llm", "note": "2 roles", "parts": [{ "id": "decide", "label": "role: decide" }, { "id": "extract", "label": "role: extract" }] },
+          { "layer": "graph_data", "note": "1 model", "parts": [{ "id": "orders", "label": "model/Orders@v2" }] }
+        ],
+        "items": [
+          { "id": "open", "label": "open", "layer": "agent", "start": 0, "end": 3000, "state": "out" },
+          { "id": "plan", "label": "plan", "layer": "llm", "part": "decide", "start": 3000, "end": 25000, "state": "out" },
+          { "id": "ask", "label": "ask", "layer": "human", "part": "clarify", "start": 25000, "end": 63000, "state": "in" },
+          { "id": "fetch", "label": "fetch", "layer": "graph_data", "part": "orders", "start": 63000, "end": 95000, "state": "out" },
+          { "id": "read", "label": "read", "layer": "llm", "part": "extract", "start": 95000, "end": 99000, "state": "out" }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Lens",
+    "wide": true,
+    "panel": {
+      "kind": "lens",
+      "title": "What the world allowed",
+      "options": {
+        "palette": { "graph_data": { "swatch": "bg-data-1", "text": "text-data-1" }, "third_party": { "swatch": "bg-data-8", "text": "text-data-8" } },
+        "sections": [
+          {
+            "layer": "graph_data",
+            "summary": "2 allowed · 1 touched",
+            "participants": [
+              { "address": "model/Orders@v2", "verdict": "touched", "note": "1,284 rows · step 4" },
+              { "address": "model/Suppliers@v1", "verdict": "never touched" }
+            ]
+          },
+          {
+            "layer": "third_party",
+            "summary": "1 allowed · refused",
+            "participants": [{ "address": "third_party/app/email", "verdict": "refused", "note": "egress closed at 03:00" }]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Clarification",
+    "wide": true,
+    "panel": {
+      "kind": "clarification",
+      "title": "The ask it settled",
+      "options": {
+        "asker": "the agent asks",
+        "question": "Which reading of “exposed” do you mean?",
+        "why": "parse_intent found two readings and was told not to guess",
+        "options": [{ "label": "ships via the Red Sea" }, { "label": "any leg within 200 nm", "chosen": true }],
+        "answerer": "ravi answers",
+        "answer": "any leg within 200 nm",
+        "answerNote": "after 41.2s · resumed on round 2"
+      }
+    }
+  }
+]

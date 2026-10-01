@@ -1,0 +1,39 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "props": {
+      "items": [
+        { "id": "1", "op": "add", "name": "airport.timezone", "note": "property" },
+        { "id": "2", "op": "add", "name": "airport_city", "note": "index on airport.city" },
+        { "id": "3", "op": "change", "name": "route.dist", "note": "integer → float" }
+      ],
+      "hint": "⌘↵ publish"
+    }
+  },
+  {
+    "caption": "Every op",
+    "wide": true,
+    "props": {
+      "items": [
+        { "id": "a", "op": "add", "name": "country.iso3", "note": "property" },
+        { "id": "r", "op": "remove", "name": "route.legacy_code", "note": "property" },
+        { "id": "c", "op": "change", "name": "airport.elev", "note": "string → integer" }
+      ],
+      "hint": "⌘↵ publish",
+      "discardAllLabel": "Revert all"
+    }
+  },
+  {
+    "caption": "Read-only",
+    "wide": true,
+    "readOnly": true,
+    "props": {
+      "items": [
+        { "id": "1", "op": "add", "name": "airport.timezone", "note": "property" },
+        { "id": "3", "op": "change", "name": "route.dist", "note": "integer → float" }
+      ],
+      "hint": "awaiting review"
+    }
+  }
+]

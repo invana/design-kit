@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { PanelRendererProps } from '@invana/dashboard';
+import type { ActionContext, ActionSpec, PanelRendererProps } from '@invana/dashboard';
 import {
   TaskNode,
   type Bound,
@@ -18,12 +18,13 @@ import {
 import { EventLog, type Logged } from '../_story/variant-board';
 
 /**
- * Shared scaffolding for the dashboard stories — two reports, two forms.
+ * Shared scaffolding for the dashboard stories — the code-only bits JSON cannot hold.
  *
- * The stories share everything the surfaces share — the flow renderer, the
- * icon set, the run's own trace — and each file carries only what makes its
- * surface different. If a fixture has to be forked to render one of them, that
- * is a difference the schema is not expressing yet.
+ * The specs themselves are JSON in `fixtures/dashboards/` (screens) and
+ * `fixtures/dashboard/` (components). What lives here is what every screen
+ * shares: the icon set, the stand-in `flow` renderer, the helpers a consumer
+ * uses to patch its spec when it answers an action, and the `Surface` that
+ * writes what `onAction` received.
  */
 
 export const ICONS = {
@@ -93,91 +94,57 @@ export function FlowPanel({ options }: PanelRendererProps<FlowOptions>) {
 
 export type WithFlow = { flow: FlowOptions };
 
-// ── the run this whole page 4 describes ────────────────────────────────────
+// ── answering an action, as a consumer patches its own spec ────────────────
 
-/** `orders.csv → Brokerage.Order`, as the Gantt reads it. */
-export const RUN_TRACE = [
-  { key: 'check_bundle', startMs: 0, durationMs: 40, status: 'succeeded' as const },
-  {
-    key: 'fetch_source',
-    startMs: 40,
-    durationMs: 900,
-    status: 'succeeded' as const,
-    attempts: [{ startMs: 40, durationMs: 310, status: 'failed' as const }],
-  },
-  { key: 'validate_records', startMs: 950, durationMs: 1200, status: 'succeeded' as const },
-  { key: 'import_dataset', startMs: 2150, durationMs: 3400, status: 'succeeded' as const },
-  { key: 'verify_counts', startMs: 5550, durationMs: 8, status: 'succeeded' as const },
-  { key: 'triage', status: 'skipped' as const },
-  { key: 'import_report', startMs: 5560, durationMs: 40, status: 'succeeded' as const },
-  { key: 'announce', startMs: 5600, durationMs: 300, status: 'needs_input' as const },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyPanel = { id?: string; options?: any; actions?: ActionSpec[]; [field: string]: unknown };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySpec = { rows: { panels: any[] }[]; tabs?: { rows: { panels: any[] }[] }[] };
 
-/** The same eight tasks as a flow, positioned as the artboards place them. */
-export const RUN_FLOW: FlowNode[] = [
-  { col: 1, row: 1, taskKey: 'check_bundle', bound: 'ingest', status: 'success', meta: '1 dataset · 4ms' },
-  {
-    col: 2,
-    row: 1,
-    taskKey: 'fetch_source',
-    bound: 'network',
-    status: 'success',
-    meta: 'orders.csv · 0.9s',
-    tags: [{ label: 'attempt 2', tone: 'warning' }],
-  },
-  { col: 3, row: 1, taskKey: 'validate_records', bound: 'ingest', status: 'success', meta: '1,204 of 1,251 · 1.2s' },
-  {
-    col: 4,
-    row: 1,
-    taskKey: 'import_dataset',
-    bound: 'ingest',
-    status: 'success',
-    meta: 'Brokerage.Order@v2',
-    tags: [{ label: '3 lanes' }],
-  },
-  { col: 3, row: 2, taskKey: 'triage', bound: 'work_write', meta: 'never ran', dim: true },
-  { col: 4, row: 2, taskKey: 'verify_counts', bound: 'none', status: 'success', meta: '1,204 = 1,204' },
-  { col: 3, row: 3, taskKey: 'announce', bound: 'work_write', status: 'success', gate: true, meta: 'approved by ravi' },
-  { col: 4, row: 3, taskKey: 'import_report', bound: 'ingest', status: 'success', meta: '47 rejections' },
-];
+/** `spec` with every panel passed through `fn` — on the page and on every tab. */
+export function mapPanels<S extends AnySpec>(spec: S, fn: (panel: AnyPanel) => AnyPanel): S {
+  const rows = (rs: AnySpec['rows']) => rs.map((row) => ({ ...row, panels: row.panels.map(fn) }));
+  return { ...spec, rows: rows(spec.rows), tabs: spec.tabs?.map((tab) => ({ ...tab, rows: rows(tab.rows) })) };
+}
 
-export const RUN_LOG = [
-  { time: '00.00', level: 'info' as const, source: 'check_bundle', message: 'manifest read · 1 dataset' },
-  { time: '00.04', level: 'info' as const, source: 'fetch_source', message: 'GET s3://drops/orders.csv' },
-  { time: '00.35', level: 'warn' as const, source: 'fetch_source', message: 'refused · 503 · retrying (2 of 3)' },
-  { time: '00.95', level: 'info' as const, source: 'fetch_source', message: '200 · 1.4 MB in 0.6s' },
-  { time: '02.10', level: 'warn' as const, source: 'validate_records', message: '47 of 1,251 reported' },
-  { time: '02.15', level: 'info' as const, source: 'import_dataset', message: 'fan-out · 3 lanes of 402' },
-  { time: '05.50', level: 'info' as const, source: 'import_dataset', message: 'lane 3 · 400 Order, 400 FOR' },
-];
+/** `spec` with one panel's options merged — a picked row selected, an edited value kept. */
+export function patchPanel<S extends AnySpec>(spec: S, panelId: string | undefined, patch: Record<string, unknown>): S {
+  return mapPanels(spec, (p) => (p.id === panelId ? { ...p, options: { ...p.options, ...patch } } : p));
+}
+
+/** Every panel of `spec`, on the page and on every tab. */
+export function panelsOf(spec: AnySpec): AnyPanel[] {
+  return [...spec.rows, ...(spec.tabs?.flatMap((t) => t.rows) ?? [])].flatMap((r) => r.panels);
+}
 
 // ── the shell the stories render into ──────────────────────────────────
 
-export function Surface({
-  children,
-  last,
-  sent,
-}: {
-  children: React.ReactNode;
-  /** The last action, as one line. */
-  last?: string;
-  /** Or the last few, with their payloads — what `onAction` received. */
-  sent?: Logged[];
-}) {
+/**
+ * Story chrome: the dashboard filling the canvas, and under it what `onAction` received — the
+ * last few actions with their payloads.
+ */
+export function Surface({ children, sent }: { children: React.ReactNode; sent: Logged[] }) {
   return (
     <div className="flex h-screen flex-col">
       {children}
       <div className="shrink-0 border-t border-border bg-card px-4 py-1.5 text-sm text-muted-foreground">
-        {sent ? (
-          sent.length ? <EventLog sent={sent} /> : 'No action yet.'
-        ) : (
-          <>
-            last action: <span className="font-mono text-foreground">{last}</span>
-          </>
-        )}
+        {sent.length ? <EventLog sent={sent} /> : 'No action yet.'}
       </div>
     </div>
   );
+}
+
+/**
+ * What a screen sent, for its `Surface`: `record(id, ctx)` passes the action to the story's
+ * `onAction` arg (the Actions panel) and keeps the last three.
+ */
+export function useSent(onAction: (id: string, ctx?: ActionContext) => void) {
+  const [sent, setSent] = React.useState<Logged[]>([]);
+  const record = (id: string, ctx?: ActionContext) => {
+    onAction(id, ctx);
+    setSent((s) => [...s, { name: `onAction("${id}")`, payload: ctx ?? {} }].slice(-3));
+  };
+  return [sent, record] as const;
 }
 
 // ── a record that arrives, for the form stories ────────────────────────────

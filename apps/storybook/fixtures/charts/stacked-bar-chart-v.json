@@ -1,0 +1,196 @@
+[
+  {
+    "caption": "Runs a day",
+    "width": 680,
+    "panel": { "title": "Runs a day", "aside": "hover a day for its runs" },
+    "props": {
+      "data": [
+        { "label": "28 Aug", "values": { "served": 33, "failed": 1 } },
+        { "label": "29 Aug", "values": { "served": 36, "failed": 2 } },
+        { "label": "30 Aug", "values": { "served": 40, "failed": 1 } },
+        { "label": "31 Aug", "values": { "served": 28, "failed": 1 } },
+        { "label": "1 Sept", "values": { "served": 22, "failed": 0 } },
+        { "label": "2 Sept", "values": { "served": 38, "failed": 2 } },
+        { "label": "3 Sept", "values": { "served": 43, "failed": 1 } },
+        { "label": "4 Sept", "values": { "served": 44, "failed": 3 } },
+        { "label": "5 Sept", "values": { "served": 38, "failed": 1 } },
+        { "label": "6 Sept", "values": { "served": 41, "failed": 1 } },
+        { "label": "7 Sept", "values": { "served": 43, "failed": 2 } },
+        { "label": "8 Sept", "values": { "served": 30, "failed": 1 } },
+        { "label": "9 Sept", "values": { "served": 24, "failed": 0 } },
+        { "label": "10 Sept", "values": { "served": 42, "failed": 1 } },
+        { "label": "11 Sept", "values": { "served": 44, "failed": 2 } },
+        { "label": "12 Sept", "values": { "served": 47, "failed": 1 } },
+        { "label": "13 Sept", "values": { "served": 40, "failed": 1 } },
+        { "label": "14 Sept", "values": { "served": 38, "failed": 6 } },
+        { "label": "15 Sept", "values": { "served": 46, "failed": 4 } },
+        { "label": "16 Sept", "values": { "served": 32, "failed": 1 } },
+        { "label": "17 Sept", "values": { "served": 26, "failed": 0 } },
+        { "label": "18 Sept", "values": { "served": 44, "failed": 1 } },
+        { "label": "19 Sept", "values": { "served": 48, "failed": 1 } },
+        { "label": "20 Sept", "values": { "served": 50, "failed": 2 } },
+        { "label": "21 Sept", "values": { "served": 46, "failed": 1 } },
+        { "label": "22 Sept", "values": { "served": 43, "failed": 1 } },
+        { "label": "23 Sept", "values": { "served": 45, "failed": 1 } },
+        { "label": "24 Sept", "values": { "served": 30, "failed": 0 } },
+        { "label": "25 Sept", "values": { "served": 24, "failed": 1 } },
+        { "label": "today", "values": { "served": 44, "failed": 1 } }
+      ],
+      "series": [
+        { "key": "served", "label": "served or answered", "color": "var(--color-success)" },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [1, 8, 15, 22, 29],
+      "gridlines": [0, 20, 40, 60]
+    }
+  },
+  {
+    "caption": "Queries by caller",
+    "width": 680,
+    "panel": { "title": "Queries a day, by caller", "aside": "55,200 · 30 days" },
+    "props": {
+      "data": [
+        { "label": "28 Aug", "values": { "agent": 1130, "plan": 396, "explorer": 237, "api": 10 } },
+        { "label": "29 Aug", "values": { "agent": 960, "plan": 336, "explorer": 202, "api": 17 } },
+        { "label": "30 Aug", "values": { "agent": 1260, "plan": 441, "explorer": 265, "api": 24 } },
+        { "label": "31 Aug", "values": { "agent": 1090, "plan": 382, "explorer": 229, "api": 31 } },
+        { "label": "1 Sept", "values": { "agent": 920, "plan": 322, "explorer": 193, "api": 38 } },
+        { "label": "2 Sept", "values": { "agent": 960, "plan": 336, "explorer": 202, "api": 14 } },
+        { "label": "3 Sept", "values": { "agent": 790, "plan": 277, "explorer": 166, "api": 21 } },
+        { "label": "4 Sept", "values": { "agent": 880, "plan": 308, "explorer": 185, "api": 28 } },
+        { "label": "5 Sept", "values": { "agent": 1180, "plan": 413, "explorer": 248, "api": 35 } },
+        { "label": "6 Sept", "values": { "agent": 1010, "plan": 354, "explorer": 212, "api": 11 } },
+        { "label": "7 Sept", "values": { "agent": 1310, "plan": 458, "explorer": 275, "api": 18 } },
+        { "label": "8 Sept", "values": { "agent": 1130, "plan": 396, "explorer": 237, "api": 25 } },
+        { "label": "9 Sept", "values": { "agent": 710, "plan": 248, "explorer": 149, "api": 32 } },
+        { "label": "10 Sept", "values": { "agent": 1010, "plan": 354, "explorer": 212, "api": 39 } },
+        { "label": "11 Sept", "values": { "agent": 1090, "plan": 382, "explorer": 229, "api": 15 } },
+        { "label": "12 Sept", "values": { "agent": 920, "plan": 322, "explorer": 193, "api": 22 } },
+        { "label": "13 Sept", "values": { "agent": 1220, "plan": 427, "explorer": 256, "api": 29 } },
+        { "label": "14 Sept", "values": { "agent": 1050, "plan": 368, "explorer": 221, "api": 36 } },
+        { "label": "15 Sept", "values": { "agent": 880, "plan": 308, "explorer": 185, "api": 12 } },
+        { "label": "16 Sept", "values": { "agent": 920, "plan": 322, "explorer": 193, "api": 19 } },
+        { "label": "17 Sept", "values": { "agent": 750, "plan": 263, "explorer": 158, "api": 26 } },
+        { "label": "18 Sept", "values": { "agent": 1310, "plan": 458, "explorer": 275, "api": 33 } },
+        { "label": "19 Sept", "values": { "agent": 1130, "plan": 396, "explorer": 237, "api": 40 } },
+        { "label": "20 Sept", "values": { "agent": 960, "plan": 336, "explorer": 202, "api": 16 } },
+        { "label": "21 Sept", "values": { "agent": 1260, "plan": 441, "explorer": 265, "api": 23 } },
+        { "label": "22 Sept", "values": { "agent": 1090, "plan": 382, "explorer": 229, "api": 30 } },
+        { "label": "23 Sept", "values": { "agent": 660, "plan": 231, "explorer": 139, "api": 37 } },
+        { "label": "24 Sept", "values": { "agent": 960, "plan": 336, "explorer": 202, "api": 13 } },
+        { "label": "25 Sept", "values": { "agent": 1050, "plan": 368, "explorer": 221, "api": 20 } },
+        { "label": "today", "values": { "agent": 880, "plan": 308, "explorer": 185, "api": 27 } }
+      ],
+      "series": [
+        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+      ],
+      "ticks": [1, 8, 15, 22, 29],
+      "height": 140
+    }
+  },
+  {
+    "caption": "All zero",
+    "width": 680,
+    "panel": { "title": "Runs a day", "aside": "none in 30 days" },
+    "props": {
+      "data": [
+        { "label": "28 Aug", "values": { "served": 0, "failed": 0 } },
+        { "label": "29 Aug", "values": { "served": 0, "failed": 0 } },
+        { "label": "30 Aug", "values": { "served": 0, "failed": 0 } },
+        { "label": "31 Aug", "values": { "served": 0, "failed": 0 } },
+        { "label": "1 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "2 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "3 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "4 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "5 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "6 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "7 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "8 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "9 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "10 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "11 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "12 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "13 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "14 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "15 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "16 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "17 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "18 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "19 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "20 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "21 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "22 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "23 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "24 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "25 Sept", "values": { "served": 0, "failed": 0 } },
+        { "label": "today", "values": { "served": 0, "failed": 0 } }
+      ],
+      "series": [
+        { "key": "served", "label": "served or answered", "color": "var(--color-success)" },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [1, 8, 15, 22, 29]
+    }
+  },
+  {
+    "caption": "One day only",
+    "width": 680,
+    "panel": { "title": "Runs a day", "aside": "1 run" },
+    "props": {
+      "data": [{ "label": "today", "values": { "served": 1 } }],
+      "series": [
+        { "key": "served", "label": "served or answered", "color": "var(--color-success)" },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ]
+    }
+  },
+  {
+    "caption": "Live · a day at a time",
+    "width": 680,
+    "panel": { "title": "Runs a day", "aside": "live" },
+    "props": {
+      "data": [
+        { "label": "28 Aug", "values": { "served": 33, "failed": 1 } },
+        { "label": "29 Aug", "values": { "served": 36, "failed": 2 } },
+        { "label": "30 Aug", "values": { "served": 40, "failed": 1 } },
+        { "label": "31 Aug", "values": { "served": 28, "failed": 1 } },
+        { "label": "1 Sept", "values": { "served": 22, "failed": 0 } },
+        { "label": "2 Sept", "values": { "served": 38, "failed": 2 } },
+        { "label": "3 Sept", "values": { "served": 43, "failed": 1 } },
+        { "label": "4 Sept", "values": { "served": 44, "failed": 3 } },
+        { "label": "5 Sept", "values": { "served": 38, "failed": 1 } },
+        { "label": "6 Sept", "values": { "served": 41, "failed": 1 } },
+        { "label": "7 Sept", "values": { "served": 43, "failed": 2 } },
+        { "label": "8 Sept", "values": { "served": 30, "failed": 1 } },
+        { "label": "9 Sept", "values": { "served": 24, "failed": 0 } },
+        { "label": "10 Sept", "values": { "served": 42, "failed": 1 } },
+        { "label": "11 Sept", "values": { "served": 44, "failed": 2 } },
+        { "label": "12 Sept", "values": { "served": 47, "failed": 1 } },
+        { "label": "13 Sept", "values": { "served": 40, "failed": 1 } },
+        { "label": "14 Sept", "values": { "served": 38, "failed": 6 } },
+        { "label": "15 Sept", "values": { "served": 46, "failed": 4 } },
+        { "label": "16 Sept", "values": { "served": 32, "failed": 1 } },
+        { "label": "17 Sept", "values": { "served": 26, "failed": 0 } },
+        { "label": "18 Sept", "values": { "served": 44, "failed": 1 } },
+        { "label": "19 Sept", "values": { "served": 48, "failed": 1 } },
+        { "label": "20 Sept", "values": { "served": 50, "failed": 2 } },
+        { "label": "21 Sept", "values": { "served": 46, "failed": 1 } },
+        { "label": "22 Sept", "values": { "served": 43, "failed": 1 } },
+        { "label": "23 Sept", "values": { "served": 45, "failed": 1 } },
+        { "label": "24 Sept", "values": { "served": 30, "failed": 0 } },
+        { "label": "25 Sept", "values": { "served": 24, "failed": 1 } },
+        { "label": "today", "values": { "served": 44, "failed": 1 } }
+      ],
+      "series": [
+        { "key": "served", "label": "served or answered", "color": "var(--color-success)" },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [1, 8, 15, 22, 29],
+      "gridlines": [0, 20, 40, 60]
+    },
+    "live": { "every": 400, "reveal": { "props": ["data"], "seed": 8 } }
+  }
+]

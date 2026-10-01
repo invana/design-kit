@@ -1,0 +1,104 @@
+[
+  {
+    "caption": "In a table with legend",
+    "width": 680,
+    "panel": { "title": "Usage" },
+    "columns": ["Model", "Queries", "By caller"],
+    "props": {
+      "series": [
+        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+      ],
+      "rows": [
+        {
+          "model": "AirRoutes",
+          "total": 33670,
+          "values": { "agent": 19529, "plan": 8418, "explorer": 4714, "api": 1010 }
+        },
+        {
+          "model": "NewsArticles",
+          "total": 13250,
+          "values": { "agent": 9275, "plan": 2650, "explorer": 1060, "api": 265 }
+        },
+        { "model": "Twitter", "total": 7730, "values": { "agent": 3092, "plan": 773, "explorer": 3710, "api": 155 } },
+        { "model": "Deals", "total": 0, "values": { "agent": 0, "plan": 0, "explorer": 0, "api": 0 } }
+      ]
+    }
+  },
+  {
+    "caption": "One category",
+    "width": 680,
+    "panel": { "title": "Usage · 7 days" },
+    "columns": ["Model", "Queries", "By caller"],
+    "props": {
+      "series": [
+        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+      ],
+      "rows": [
+        { "model": "AirRoutes", "total": 21, "values": { "explorer": 21 } },
+        { "model": "NewsArticles", "total": 7, "values": { "explorer": 7 } },
+        { "model": "Twitter", "total": 3, "values": { "explorer": 3 } }
+      ]
+    }
+  },
+  {
+    "caption": "Live · queries arriving",
+    "width": 680,
+    "panel": { "title": "Usage · today, live" },
+    "columns": ["Model", "Queries", "By caller"],
+    "props": {
+      "series": [
+        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+      ],
+      "rows": [
+        { "model": "AirRoutes", "total": 400, "values": { "agent": 232, "plan": 100, "explorer": 56, "api": 12 } },
+        { "model": "Twitter", "total": 90, "values": { "agent": 36, "plan": 9, "explorer": 43, "api": 2 } }
+      ]
+    },
+    "live": {
+      "every": 900,
+      "frames": [
+        {
+          "rows": [
+            { "model": "AirRoutes", "total": 800, "values": { "agent": 464, "plan": 200, "explorer": 112, "api": 24 } },
+            { "model": "Twitter", "total": 184, "values": { "agent": 74, "plan": 18, "explorer": 88, "api": 4 } }
+          ]
+        },
+        {
+          "rows": [
+            { "model": "AirRoutes", "total": 1300, "values": { "agent": 754, "plan": 325, "explorer": 182, "api": 39 } },
+            { "model": "Twitter", "total": 299, "values": { "agent": 120, "plan": 30, "explorer": 144, "api": 6 } }
+          ]
+        },
+        {
+          "rows": [
+            {
+              "model": "AirRoutes",
+              "total": 1900,
+              "values": { "agent": 1102, "plan": 475, "explorer": 266, "api": 57 }
+            },
+            { "model": "Twitter", "total": 437, "values": { "agent": 175, "plan": 44, "explorer": 210, "api": 9 } }
+          ]
+        },
+        {
+          "rows": [
+            {
+              "model": "AirRoutes",
+              "total": 2600,
+              "values": { "agent": 1508, "plan": 650, "explorer": 364, "api": 78 }
+            },
+            { "model": "Twitter", "total": 598, "values": { "agent": 239, "plan": 60, "explorer": 287, "api": 12 } }
+          ]
+        }
+      ]
+    }
+  }
+]

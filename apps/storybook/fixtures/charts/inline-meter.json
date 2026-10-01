@@ -1,0 +1,32 @@
+[
+  {
+    "caption": "In a table",
+    "width": 680,
+    "panel": { "title": "Each step, across 1,204 runs" },
+    "columns": ["Step", "Share of work"],
+    "props": {
+      "max": 0.32,
+      "label": "share of work",
+      "rows": [
+        { "name": "parse_intent", "value": 0.13 },
+        { "name": "ask_user", "value": null },
+        { "name": "resolve_schema", "value": 0.05 },
+        { "name": "build_query", "value": 0.18 },
+        { "name": "validate_query", "value": 0.02 },
+        { "name": "execute_query", "value": 0.32 },
+        { "name": "summarise", "value": 0.15 },
+        { "name": "deliver", "value": 0.02 },
+        { "name": "call_enrichment", "value": 0.01 }
+      ]
+    }
+  },
+  { "caption": "Zero", "props": { "value": 0, "label": "share of queries" } },
+  {
+    "caption": "Live · a share filling",
+    "props": { "value": 0.05, "max": 1, "label": "share of the budget spent" },
+    "live": {
+      "every": 600,
+      "frames": [{ "value": 0.12 }, { "value": 0.2 }, { "value": 0.31 }, { "value": 0.38 }, { "value": 0.46 }, { "value": 0.52 }]
+    }
+  }
+]

@@ -1,0 +1,8 @@
+[
+  { "caption": "Default", "props": { "values": [79, 81, 84, 83, 86, 88, 91], "label": "accepted rate, 7 weeks" } },
+  {
+    "caption": "Live · a week at a time",
+    "props": { "values": [79, 81, 84, 83, 86, 88, 91], "label": "accepted rate, live" },
+    "live": { "every": 700, "reveal": { "props": ["values"], "seed": 2 } }
+  }
+]

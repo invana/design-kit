@@ -1,0 +1,83 @@
+{
+  "record": {
+    "name": "AirRoutes",
+    "description": "Airports, countries and continents, and the routes flown between them",
+    "validation": "strict",
+    "origin": "starter",
+    "retentionDays": 90,
+    "versioned": true
+  },
+  "loading": [{ "kind": "text", "title": "Model", "options": { "text": "Fetching the record…" } }],
+  "spec": {
+    "header": {
+      "tone": "success",
+      "crumbs": ["Models", "AirRoutes"],
+      "chips": [{ "label": "v1 · saved", "variant": "outline" }],
+      "actions": [
+        { "id": "save", "label": "Save", "icon": "check", "variant": "default", "disabled": true },
+        { "id": "discard", "label": "Discard", "variant": "outline", "disabled": true }
+      ],
+      "description": "Airports, countries and continents, and the routes flown between them",
+      "details": [
+        { "label": "Validation", "value": "strict", "mono": true, "field": "validation" },
+        { "label": "Origin", "value": "starter", "field": "origin" }
+      ]
+    },
+    "tab": "details",
+    "tabAction": "tab",
+    "tabs": [
+      {
+        "id": "details",
+        "label": "Details",
+        "rows": [
+          {
+            "panels": [
+              {
+                "id": "form",
+                "kind": "form",
+                "title": "Model",
+                "aside": "edits stage until you save",
+                "options": {
+                  "name": "record",
+                  "fields": [
+                    { "name": "name", "type": "text", "label": "Name" },
+                    {
+                      "name": "validation",
+                      "type": "select",
+                      "label": "Validation",
+                      "options": [
+                        { "label": "Strict", "value": "strict" },
+                        { "label": "Lenient", "value": "lenient" },
+                        { "label": "Off", "value": "off" }
+                      ]
+                    },
+                    { "name": "description", "type": "textarea", "label": "Description", "rows": 2, "colSpan": 2 },
+                    {
+                      "name": "origin",
+                      "type": "select",
+                      "label": "Origin",
+                      "options": [
+                        { "label": "Starter", "value": "starter" },
+                        { "label": "Imported", "value": "imported" },
+                        { "label": "Hand-built", "value": "custom" }
+                      ]
+                    },
+                    { "name": "retentionDays", "type": "number", "label": "Retention (days)", "min": 1, "max": 365 },
+                    { "name": "versioned", "type": "boolean", "label": "Keep every version", "colSpan": 2 }
+                  ],
+                  "rowConfig": [
+                    { "id": "identity", "fields": ["name", "validation"] },
+                    { "id": "keeping", "fields": ["origin", "retentionDays"] }
+                  ]
+                }
+              },
+              { "id": "saved", "kind": "json", "title": "record.json", "aside": "as saved · v1", "width": 340, "flush": true, "options": { "value": {} } }
+            ]
+          }
+        ]
+      },
+      { "id": "usage", "label": "Usage", "locked": true, "rows": [] }
+    ],
+    "rows": []
+  }
+}

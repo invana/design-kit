@@ -1,0 +1,44 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "panel": { "title": "Its clock — attempt by attempt", "aside": "elapsed 32.4s · working 2.3s" },
+    "props": {
+      "summary": "elapsed 32.4s · working 2.3s — the gap is the attempt that timed out",
+      "rows": [
+        { "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" },
+        { "label": "attempt 1", "started": "+44.5s", "took": "30.0s", "what": "timed out — the connector never answered", "tone": "destructive", "struck": true },
+        { "label": "attempt 2", "started": "+74.6s", "took": "2.1s", "what": "cursor drained · 1,284 rows · the one that stuck", "tone": "success" },
+        { "label": "settled", "started": "+76.7s", "took": "—", "what": "result.json written by the interpreter", "tone": "muted" }
+      ]
+    }
+  },
+  {
+    "caption": "Live · attempts arriving",
+    "wide": true,
+    "panel": { "title": "Its clock — live", "aside": "execute_query" },
+    "props": { "summary": "each attempt lands as the engine writes it", "rows": [] },
+    "frames": [
+      [{ "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" }],
+      [
+        { "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" },
+        { "label": "attempt 1", "started": "+44.5s", "took": "4.2s…", "what": "waiting on the connector", "tone": "info" }
+      ],
+      [
+        { "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" },
+        { "label": "attempt 1", "started": "+44.5s", "took": "30.0s", "what": "timed out — the connector never answered", "tone": "destructive", "struck": true }
+      ],
+      [
+        { "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" },
+        { "label": "attempt 1", "started": "+44.5s", "took": "30.0s", "what": "timed out — the connector never answered", "tone": "destructive", "struck": true },
+        { "label": "attempt 2", "started": "+74.6s", "took": "1.0s…", "what": "cursor draining", "tone": "info" }
+      ],
+      [
+        { "label": "queued", "started": "+44.3s", "took": "0.2s", "what": "dispatched to the graph connector", "tone": "muted" },
+        { "label": "attempt 1", "started": "+44.5s", "took": "30.0s", "what": "timed out — the connector never answered", "tone": "destructive", "struck": true },
+        { "label": "attempt 2", "started": "+74.6s", "took": "2.1s", "what": "cursor drained · 1,284 rows · the one that stuck", "tone": "success" },
+        { "label": "settled", "started": "+76.7s", "took": "—", "what": "result.json written by the interpreter", "tone": "muted" }
+      ]
+    ]
+  }
+]

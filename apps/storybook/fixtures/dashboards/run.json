@@ -1,0 +1,151 @@
+{
+  "title": "Red Sea exposure",
+  "header": {
+    "tone": "info",
+    "crumbs": ["Which suppliers are exposed to the Red Sea route?"],
+    "chips": [{ "label": "ask" }, { "label": "running", "tone": "info" }, { "label": "run dashboard" }],
+    "actions": [
+      { "id": "view", "options": ["Dashboard", "dashboard.yml"], "value": "Dashboard" },
+      { "id": "cancel", "label": "Cancel", "variant": "outline" },
+      { "id": "more", "icon": "more", "variant": "ghost" }
+    ]
+  },
+  "rows": [
+    {
+      "panels": [
+        {
+          "kind": "grid",
+          "options": {
+            "minTileWidth": 130,
+            "tiles": [
+              { "label": "Tasks", "value": "4 / 7", "delta": "running", "gauge": { "value": 4, "max": 7 } },
+              { "label": "Elapsed", "value": "12s", "delta": "no timeout yet" },
+              { "label": "Tokens", "value": "8.2k", "delta": "of 40k ceiling", "gauge": { "value": 8.2, "max": 40 } },
+              { "label": "Cost", "value": "$0.04", "delta": "of $2.00 budget", "gauge": { "value": 0.04, "max": 2 } },
+              { "label": "Rows", "value": "1,880", "delta": "so far" },
+              { "label": "Lanes", "value": "2 / 5", "delta": "execute_graph_query", "gauge": { "value": 2, "max": 5 } }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "height": 348,
+      "panels": [
+        {
+          "kind": "flow",
+          "title": "The flow · status as it ran",
+          "aside": "click a task for its step detail ›",
+          "flush": true,
+          "options": {
+            "nodes": [
+              { "col": 1, "row": 1, "taskKey": "check_bundle", "bound": "ingest", "status": "success", "meta": "1 dataset · 4ms" },
+              { "col": 2, "row": 1, "taskKey": "fetch_source", "bound": "network", "status": "success", "meta": "orders.csv · 0.9s", "tags": [{ "label": "attempt 2", "tone": "warning" }] },
+              { "col": 3, "row": 1, "taskKey": "validate_records", "bound": "ingest", "status": "success", "meta": "1,204 of 1,251 · 1.2s" },
+              { "col": 4, "row": 1, "taskKey": "import_dataset", "bound": "ingest", "status": "success", "meta": "Brokerage.Order@v2", "tags": [{ "label": "3 lanes" }] },
+              { "col": 3, "row": 2, "taskKey": "triage", "bound": "work_write", "meta": "never ran", "dim": true },
+              { "col": 4, "row": 2, "taskKey": "verify_counts", "bound": "none", "status": "success", "meta": "1,204 = 1,204" },
+              { "col": 3, "row": 3, "taskKey": "announce", "bound": "work_write", "status": "success", "gate": true, "meta": "approved by ravi" },
+              { "col": 4, "row": 3, "taskKey": "import_report", "bound": "ingest", "status": "success", "meta": "47 rejections" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "panels": [
+        {
+          "id": "performance",
+          "kind": "gantt",
+          "title": "Performance",
+          "aside": "pick a task to open it",
+          "options": {
+            "labelWidth": 124,
+            "selectAction": "open-step",
+            "tasks": [
+              { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
+              { "key": "fetch_source", "startMs": 40, "durationMs": 900, "status": "succeeded", "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed" }] },
+              { "key": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded" },
+              { "key": "import_dataset", "startMs": 2150, "durationMs": 3400, "status": "succeeded" },
+              { "key": "verify_counts", "startMs": 5550, "durationMs": 8, "status": "succeeded" },
+              { "key": "triage", "status": "skipped" },
+              { "key": "import_report", "startMs": 5560, "durationMs": 40, "status": "succeeded" },
+              { "key": "announce", "startMs": 5600, "durationMs": 300, "status": "needs_input" }
+            ]
+          }
+        },
+        {
+          "kind": "record",
+          "title": "Reported",
+          "asideChip": { "label": "47", "tone": "warning" },
+          "width": 340,
+          "options": {
+            "rows": [
+              { "label": "unresolved isin", "value": "31" },
+              { "label": "bad quantity", "value": "12" },
+              { "label": "out of window", "value": "4" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "panels": [
+        {
+          "kind": "record",
+          "title": "Input · what opened this run",
+          "aside": "rendered from result.json",
+          "options": {
+            "rows": [
+              { "label": "trigger", "value": "session · message #214" },
+              { "label": "asked", "value": "\"Which suppliers are exposed to the Red Sea route?\"", "mono": false },
+              { "label": "plan", "value": "market-brief v1 · reused" },
+              { "label": "agent", "value": "Scout · envelope Analyst-2" },
+              { "label": "lens", "value": "4 models · 6 stitches · frozen" },
+              { "label": "budget", "value": "$2.00 · 40k tokens · 5 lanes" }
+            ]
+          }
+        },
+        {
+          "kind": "json",
+          "title": "result.json · so far",
+          "aside": "every task merges into it",
+          "flush": true,
+          "options": {
+            "maxHeight": 150,
+            "value": {
+              "run": "9f2c…a41",
+              "status": "running",
+              "tasks": { "done": 4, "total": 7 },
+              "emissions": [{ "kind": "table", "rows": 1880 }, { "kind": "subgraph", "nodes": 62 }],
+              "citations": 12,
+              "spend": { "tokens": 8200, "usd": 0.04 }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "panels": [
+        {
+          "id": "log",
+          "kind": "log",
+          "title": "Log",
+          "aside": "214 lines · tailing",
+          "flush": true,
+          "options": {
+            "lines": [
+              { "time": "00.00", "level": "info", "source": "check_bundle", "message": "manifest read · 1 dataset" },
+              { "time": "00.04", "level": "info", "source": "fetch_source", "message": "GET s3://drops/orders.csv" },
+              { "time": "00.35", "level": "warn", "source": "fetch_source", "message": "refused · 503 · retrying (2 of 3)" },
+              { "time": "00.95", "level": "info", "source": "fetch_source", "message": "200 · 1.4 MB in 0.6s" },
+              { "time": "02.10", "level": "warn", "source": "validate_records", "message": "47 of 1,251 reported" },
+              { "time": "02.15", "level": "info", "source": "import_dataset", "message": "fan-out · 3 lanes of 402" },
+              { "time": "05.50", "level": "info", "source": "import_dataset", "message": "lane 3 · 400 Order, 400 FOR" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

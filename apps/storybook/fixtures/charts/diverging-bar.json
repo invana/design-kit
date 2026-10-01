@@ -1,0 +1,76 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "caption": "net learning weight · 90 d",
+      "data": [
+        { "label": "gap-continuation", "value": 11 },
+        { "label": "macro-to-sector", "value": 7 },
+        { "label": "theme-early", "value": 5 },
+        { "label": "theme-late", "value": -4 },
+        { "label": "event-day-entry", "value": -6 },
+        { "label": "gap-no-delivery", "value": -9 }
+      ]
+    }
+  },
+  {
+    "caption": "Live · weights move",
+    "props": {
+      "caption": "net learning weight · live",
+      "max": 12,
+      "data": [
+        { "label": "gap-continuation", "value": 0 },
+        { "label": "macro-to-sector", "value": 0 },
+        { "label": "theme-early", "value": 0 },
+        { "label": "theme-late", "value": 0 },
+        { "label": "event-day-entry", "value": 0 },
+        { "label": "gap-no-delivery", "value": 0 }
+      ]
+    },
+    "live": {
+      "every": 900,
+      "frames": [
+        {
+          "data": [
+            { "label": "gap-continuation", "value": 3 },
+            { "label": "macro-to-sector", "value": 2 },
+            { "label": "theme-early", "value": 1 },
+            { "label": "theme-late", "value": -1 },
+            { "label": "event-day-entry", "value": -1 },
+            { "label": "gap-no-delivery", "value": -2 }
+          ]
+        },
+        {
+          "data": [
+            { "label": "gap-continuation", "value": 6 },
+            { "label": "macro-to-sector", "value": 4 },
+            { "label": "theme-early", "value": 3 },
+            { "label": "theme-late", "value": -2 },
+            { "label": "event-day-entry", "value": -3 },
+            { "label": "gap-no-delivery", "value": -4 }
+          ]
+        },
+        {
+          "data": [
+            { "label": "gap-continuation", "value": 8 },
+            { "label": "macro-to-sector", "value": 5 },
+            { "label": "theme-early", "value": 4 },
+            { "label": "theme-late", "value": -3 },
+            { "label": "event-day-entry", "value": -4 },
+            { "label": "gap-no-delivery", "value": -7 }
+          ]
+        },
+        {
+          "data": [
+            { "label": "gap-continuation", "value": 11 },
+            { "label": "macro-to-sector", "value": 7 },
+            { "label": "theme-early", "value": 5 },
+            { "label": "theme-late", "value": -4 },
+            { "label": "event-day-entry", "value": -6 },
+            { "label": "gap-no-delivery", "value": -9 }
+          ]
+        }
+      ]
+    }
+  }
+]
