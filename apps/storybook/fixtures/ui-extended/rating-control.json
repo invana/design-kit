@@ -1,0 +1,19 @@
+[
+  {
+    "caption": "Appreciate, with a note",
+    "width": 420,
+    "props": { "verdict": "appreciate", "weight": 2, "refines": "macro-to-sector" },
+    "by": "ravi",
+    "note": "clean read of the crude move into OMCs"
+  },
+  {
+    "caption": "Depreciate, weight 1 of 5",
+    "width": 420,
+    "props": { "verdict": "depreciate", "weight": 1, "maxWeight": 5, "refines": "gap-no-delivery" },
+    "by": "ravi"
+  },
+  {
+    "caption": "No verdict yet",
+    "props": { "weight": 0 }
+  }
+]

@@ -1,0 +1,78 @@
+[
+  {
+    "caption": "Default — the draft and its evidence",
+    "width": 560,
+    "props": {
+      "title": "Draft pattern",
+      "source": "from the agent's result",
+      "evidenceTitle": "The instances",
+      "evidenceMeta": "30 days",
+      "consequence": "Authoring writes a Pattern node with these observations as its first instances. An agent proposes; a person publishes."
+    },
+    "labelWidth": 74,
+    "draft": [
+      { "label": "key", "value": "gap-no-delivery", "mono": true },
+      { "label": "if", "value": "gap ≥ 1.5% at open AND delivery % < 30" },
+      { "label": "then", "value": "fades to VWAP by 11:00; never a long" },
+      { "label": "direction", "value": "avoid" }
+    ],
+    "evidence": {
+      "columns": ["date", "ticker", "gap", "delivery", "learning"],
+      "rows": [
+        ["2 Sep", "INFY", "+1.7%", "24%", "depreciate 2"],
+        ["4 Sep", "TATAMOTORS", "+2.1%", "28%", "depreciate 1"],
+        ["5 Sep", "ONGC", "+1.6%", "19%", "depreciate 1"]
+      ]
+    },
+    "size": "sm",
+    "actions": [
+      { "id": "author", "label": "Author pattern", "done": "Pattern authored" },
+      { "id": "reject", "label": "Reject with note", "variant": "outline", "done": "Rejected" }
+    ]
+  },
+  {
+    "caption": "Flush — no title, under an answer",
+    "props": {
+      "flush": true,
+      "consequence": "Creates one alert rule. It would have fired 3 times in September."
+    },
+    "labelWidth": "auto",
+    "draft": [
+      { "label": "Alert", "value": "Refunds > 2σ by store", "mono": true },
+      { "label": "Checks", "value": "Daily, 07:00", "mono": true },
+      { "label": "Notify", "value": "Store managers", "mono": true }
+    ],
+    "size": "xs",
+    "actions": [
+      { "id": "create-alert", "label": "Create alert", "done": "Alert created" },
+      { "id": "edit", "label": "Edit", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "Seamless — the evidence is a seamless table",
+    "props": {
+      "flush": true,
+      "seamless": true,
+      "evidenceTitle": "The three instances",
+      "evidenceMeta": "30 days",
+      "consequence": "Creates one alert rule. It would have fired 3 times in September."
+    },
+    "labelWidth": "auto",
+    "draft": [
+      { "label": "Alert", "value": "Refunds > 2σ by store", "mono": true },
+      { "label": "Checks", "value": "Daily, 07:00", "mono": true }
+    ],
+    "evidence": {
+      "seamless": true,
+      "density": "compact",
+      "columns": ["Store", "Day", "Refunds"],
+      "rows": [
+        ["North Mall", "14 Sep", "£3,120"],
+        ["Northgate", "19 Sep", "£2,840"],
+        ["Riverside", "26 Sep", "£2,410"]
+      ]
+    },
+    "size": "xs",
+    "actions": [{ "id": "create-alert", "label": "Create alert", "done": "Alert created" }]
+  }
+]

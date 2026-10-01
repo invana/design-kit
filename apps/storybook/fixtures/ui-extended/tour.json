@@ -1,0 +1,74 @@
+[
+  {
+    "caption": "Default — driven by useTour",
+    "steps": [
+      {
+        "id": "overview",
+        "title": "Service Overview",
+        "body": "Welcome to the codebase tour. Each step walks through a service, why it exists, and the files that implement it. Use Prev / Next to move between steps."
+      },
+      {
+        "id": "product-catalog",
+        "title": "Product Catalog Service",
+        "body": "The product catalog is one of the most depended-upon services in the system, referenced by the frontend, checkout, and recommendation services. It implements ListProducts, GetProduct, and SearchProducts RPCs, reading product data from a JSON file.",
+        "callout": {
+          "label": "Language Lesson",
+          "content": "Go's struct embedding and interface satisfaction are on display here: the productCatalog struct implements the generated gRPC server interface without explicit declaration."
+        },
+        "references": {
+          "label": "Referenced Components",
+          "items": [{ "label": "server.go" }, { "label": "product_catalog.go" }, { "label": "catalog_loader.go" }]
+        }
+      },
+      {
+        "id": "cart",
+        "title": "Cart Service",
+        "body": "The cart service stores items added to a shopping cart, backed by an in-memory or Redis store depending on configuration.",
+        "references": {
+          "label": "Referenced Components",
+          "items": [{ "label": "cart.go" }, { "label": "redis_store.go" }]
+        }
+      }
+    ]
+  },
+  {
+    "caption": "Custom content — a step's `content`",
+    "steps": [
+      {
+        "id": "typed",
+        "title": "Typed step",
+        "body": "This step uses the standard typed fields (body + callout).",
+        "callout": { "label": "Note", "content": "Mix typed and custom steps freely." }
+      },
+      {
+        "id": "custom",
+        "title": "Custom content step",
+        "content": "metrics",
+        "metrics": [
+          { "label": "requests", "value": "12.4k" },
+          { "label": "uptime", "value": "99.98%" }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Floating — pinned bottom-right, with progress",
+    "position": "bottom-right",
+    "showProgressBar": true,
+    "startClosed": true,
+    "steps": [
+      {
+        "id": "welcome",
+        "title": "Welcome aboard",
+        "body": "This is a floating tour panel pinned to a corner of the viewport.",
+        "callout": { "label": "Tip", "content": "Use the `position` prop to pin the panel to any corner or the center." }
+      },
+      {
+        "id": "projects",
+        "title": "Your projects live here",
+        "body": "The progress bar under the header shows how far along the tour you are.",
+        "references": { "label": "Related Docs", "items": [{ "label": "Getting Started" }, { "label": "Concepts" }] }
+      }
+    ]
+  }
+]
