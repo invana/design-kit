@@ -88,7 +88,8 @@ FilterBar.displayName = "FilterBar"
  *
  * The caret is drawn rather than iconised so the chip reads as
  * one token — `status ▾` — instead of a control with an icon glued to it. It is
- * 26px and the root size, as the `sm` search beside it and the rows it narrows.
+ * a `sm` button: the control scale's 26px, the height of the `sm` search
+ * beside it.
  */
 export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
   ({ label, value, active, onRemove, removeLabel, className, ...props }, ref) => {
@@ -97,9 +98,10 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         ref={ref}
         type="button"
         variant="outline"
+        size="sm"
         data-active={active || undefined}
         className={cn(
-          "h-[26px] gap-1 px-1.5 py-0 text-base font-normal",
+          "gap-1 px-1.5 font-normal",
           active && "border-primary/40 text-primary",
           onRemove && "rounded-r-none border-r-0",
           className,
@@ -122,13 +124,14 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         <Button
           type="button"
           variant="outline"
+          size="sm"
           onClick={onRemove}
           aria-label={
             removeLabel ??
             `Clear ${typeof label === "string" ? label : "filter"}`
           }
           className={cn(
-            "h-[26px] rounded-l-none px-1 py-0 text-base font-normal text-muted-foreground hover:text-foreground",
+            "rounded-l-none px-1 font-normal text-muted-foreground hover:text-foreground",
             active && "border-primary/40",
           )}
         >

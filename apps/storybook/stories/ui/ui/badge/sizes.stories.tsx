@@ -11,9 +11,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SIZES = [
-  ['xs', '18px — inline in a title, or a count against a label'],
-  ['sm', '22px — the row chip: a status beside an entity name'],
-  ['default', 'sizes from its text — unchanged from before `size` existed'],
+  ['xs', '22px, the default — the row chip: a status beside an entity name'],
+  ['sm', '26px — beside a search or a filter chip'],
 ] as const;
 
 export const Sizes: Story = {

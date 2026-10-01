@@ -1,24 +1,32 @@
 import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { extendTailwindMerge } from "tailwind-merge"
 
 /**
- * `clsx` + `tailwind-merge`, and nothing else.
+ * `clsx` + `tailwind-merge`, with the control heights registered.
  *
- * This used to be an `extendTailwindMerge` that registered one class group.
- * `text-*` is ambiguous — it is both the font-size scale and the text-colour
- * scale — so tailwind-merge decides which group a class belongs to by matching
- * its value against Tailwind's built-in size names. `meta` was not one of them,
- * so `text-meta` was read as a *colour* and silently dropped whatever colour
- * class came before it:
+ * tailwind-merge decides which group a class belongs to by matching its value
+ * against Tailwind's built-in names. The control heights (`h-control-sm`,
+ * `size-control-xs`, … from `--spacing-control-*` in `@invana/styling`) are
+ * not built-ins, so unregistered it keeps both sides of a conflict:
  *
- *   cn("text-[var(--badge-ink)]", "text-meta")  →  "text-meta"   // colour lost
+ *   cn("h-control-sm", "h-8")  →  "h-control-sm h-8"   // whichever CSS wins
  *
- * The type ladder is now `base · sm · xs` (`@invana/styling`), every one of
- * them a Tailwind built-in, so there is nothing left to register and the
- * footgun is gone with the token that caused it. If a future `--text-*` token
- * invents a name Tailwind does not know, bring the `extend` back in the same
- * breath — it will eat colours at a distance and the cause will not be obvious.
+ * Registering them as spacing values puts them in every spacing group, so the
+ * later class wins as it does for any other height.
+ *
+ * The type ladder needs nothing here: `base · sm · xs` are all Tailwind
+ * built-ins. If a future `--text-*` token invents a name Tailwind does not
+ * know, register it in the same breath — `text-*` is both size and colour, and
+ * an unknown size is read as a colour that silently drops the one before it.
  */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      spacing: ["control-xs", "control-sm", "control-md", "control-lg"],
+    },
+  },
+})
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

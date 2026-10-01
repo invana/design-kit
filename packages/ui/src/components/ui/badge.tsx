@@ -51,22 +51,20 @@ const badgeVariants = cva(
           "[--badge-solid:var(--color-muted-foreground)] [--badge-on-solid:var(--color-background)] [--badge-ink:var(--color-muted-foreground)]",
       },
       size: {
-        /** 18px — inline in a title, or a count against a label. */
-        xs: "h-[18px] px-1.5 text-sm",
-        /** 22px — the row chip: a status beside an entity name. */
-        sm: "h-[22px] px-2 text-sm",
         /**
-         * Unchanged from before `size` existed: no explicit height, so it sizes
-         * from its text. Every badge already written keeps rendering exactly as
-         * it did — the two tiers above are additions, not a re-baseline.
+         * The control scale's `xs` (22px) — the row chip: a status beside an
+         * entity name, a count against a label. The default, because a badge
+         * labels a row and must fit inside a compact one.
          */
-        default: "px-2.5 py-0.5 text-sm",
+        xs: "h-control-xs px-2 text-sm",
+        /** The control scale's `sm` (26px) — beside a search or a filter chip. */
+        sm: "h-control-sm px-2 text-sm",
       },
     },
     defaultVariants: {
       variant: "default",
       tone: "primary",
-      size: "default",
+      size: "xs",
     },
   }
 )

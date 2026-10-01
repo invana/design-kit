@@ -13,8 +13,9 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * `inputSize="sm"` — the 26px application field, for a search box docked in a
- * panel header beside a 30px tab strip. The 40px `default` beside it is the
- * page size; at panel density it reads as a form dropped into a sidebar.
+ * panel header beside a 30px tab strip. The 32px `default` beside it is the
+ * standalone-form size; at panel density it reads as a form dropped into a
+ * sidebar.
  *
  * `placeholder` says what *this* box searches. A panel that lists node types
  * and one that lists sessions both saying "Search..." is a box that has stopped
@@ -39,7 +40,7 @@ export const PanelSearch: Story = {
           </div>
         </div>
         <div className="space-y-1.5">
-          <p className="text-sm text-muted-foreground">inputSize="default" · 40px</p>
+          <p className="text-sm text-muted-foreground">inputSize="default" · 32px</p>
           <SearchInput value={page} onChange={setPage} placeholder="Search graphs" />
         </div>
       </div>
