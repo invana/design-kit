@@ -1,0 +1,205 @@
+[
+  {
+    "caption": "Basic",
+    "type": "single",
+    "collapsible": true,
+    "items": [
+      { "value": "item-1", "title": "What is this component?", "content": [{ "text": "This is an accordion component built with Radix UI. It allows you to show and hide content in collapsible sections." }] },
+      { "value": "item-2", "title": "How do I use it?", "content": [{ "text": "Import Accordion, AccordionItem, AccordionTrigger and AccordionContent and compose them together." }] },
+      { "value": "item-3", "title": "Is it accessible?", "content": [{ "text": "Yes. It is built with Radix UI primitives, which follow the WAI-ARIA design patterns for accessibility." }] }
+    ]
+  },
+  {
+    "caption": "Multiple",
+    "type": "multiple",
+    "items": [
+      { "value": "item-1", "title": "Can multiple items be open?", "content": [{ "text": "Yes. With type=\"multiple\", users can expand several items at the same time." }] },
+      { "value": "item-2", "title": "Try opening this one too", "content": [{ "text": "Both items stay open — useful for comparing content or referencing several sections." }] },
+      { "value": "item-3", "title": "And this one as well", "content": [{ "text": "All three items can be open at once with type=\"multiple\"." }] }
+    ]
+  },
+  {
+    "caption": "Default expanded",
+    "type": "single",
+    "collapsible": true,
+    "defaultValue": "item-2",
+    "items": [
+      { "value": "item-1", "title": "First item", "content": [{ "text": "This item is collapsed by default." }] },
+      { "value": "item-2", "title": "Second item (open by default)", "content": [{ "text": "This item is open because defaultValue=\"item-2\" is set on the Accordion." }] },
+      { "value": "item-3", "title": "Third item", "content": [{ "text": "This item is also collapsed by default." }] }
+    ]
+  },
+  {
+    "caption": "FAQ",
+    "type": "single",
+    "collapsible": true,
+    "width": 600,
+    "items": [
+      {
+        "value": "shipping",
+        "title": "What are the shipping options?",
+        "content": [
+          { "text": "We offer several shipping options:" },
+          { "list": ["Standard shipping (5–7 business days) — free", "Express shipping (2–3 business days) — $9.99", "Overnight shipping (1 business day) — $24.99"] }
+        ]
+      },
+      { "value": "returns", "title": "What is your return policy?", "content": [{ "text": "We accept returns within 30 days of purchase. Items must be unused and in original packaging. Refunds are processed within 5–7 business days after we receive your return." }] },
+      { "value": "payment", "title": "What payment methods do you accept?", "content": [{ "text": "All major credit cards, PayPal, Apple Pay, Google Pay and Shop Pay." }] },
+      { "value": "warranty", "title": "Do you offer warranties?", "content": [{ "text": "All products come with a 1-year manufacturer's warranty. Extended warranty options are available at checkout for up to 3 additional years." }] }
+    ]
+  },
+  {
+    "caption": "Product specs",
+    "type": "multiple",
+    "width": 600,
+    "items": [
+      {
+        "value": "features",
+        "title": "Features & benefits",
+        "content": [{ "list": ["High-performance processor for fast operations", "Battery with up to 20 hours of use", "Sleek, lightweight design for portability", "Fingerprint reader and other security features"] }]
+      },
+      {
+        "value": "specs",
+        "title": "Technical specifications",
+        "content": [
+          {
+            "properties": [
+              { "label": "Processor", "value": "Intel Core i7-12700H" },
+              { "label": "RAM", "value": "16GB DDR5" },
+              { "label": "Storage", "value": "512GB NVMe SSD" },
+              { "label": "Display", "value": "15.6\" FHD (1920×1080)" },
+              { "label": "Graphics", "value": "NVIDIA RTX 3060" },
+              { "label": "Weight", "value": "4.2 lbs (1.9 kg)" }
+            ]
+          }
+        ]
+      },
+      {
+        "value": "compatibility",
+        "title": "Compatibility & requirements",
+        "content": [
+          { "properties": [
+            { "label": "Operating systems", "value": "Windows 11 Pro, Windows 10, Linux" },
+            { "label": "Connectivity", "value": "Wi-Fi 6E, Bluetooth 5.2, 3× USB-C, 2× USB-A, HDMI 2.1" }
+          ] }
+        ]
+      },
+      { "value": "package", "title": "What's in the box", "content": [{ "list": ["Laptop computer", "Power adapter and cable", "Quick start guide", "Warranty card", "Cleaning cloth"] }] }
+    ]
+  },
+  {
+    "caption": "Settings panel",
+    "type": "single",
+    "collapsible": true,
+    "width": 500,
+    "items": [
+      {
+        "value": "account",
+        "title": "Account settings",
+        "content": [
+          { "fields": [
+            { "id": "accordion-email", "label": "Email address", "type": "email", "value": "user@example.com" },
+            { "id": "accordion-username", "label": "Username", "value": "johndoe" }
+          ] },
+          { "buttons": [{ "label": "Save changes" }] }
+        ]
+      },
+      {
+        "value": "notifications",
+        "title": "Notification preferences",
+        "content": [
+          { "checks": [
+            { "id": "accordion-notify-email", "label": "Email notifications", "checked": true },
+            { "id": "accordion-notify-push", "label": "Push notifications", "checked": true },
+            { "id": "accordion-notify-sms", "label": "SMS notifications" },
+            { "id": "accordion-notify-digest", "label": "Weekly digest", "checked": true }
+          ] }
+        ]
+      },
+      {
+        "value": "privacy",
+        "title": "Privacy & security",
+        "content": [
+          { "checks": [
+            { "id": "accordion-public", "label": "Make profile public", "checked": true },
+            { "id": "accordion-2fa", "label": "Two-factor authentication", "checked": true },
+            { "id": "accordion-activity", "label": "Share activity status" }
+          ] },
+          { "buttons": [{ "label": "Delete account", "variant": "destructive" }] }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Documentation",
+    "type": "single",
+    "collapsible": true,
+    "width": 680,
+    "items": [
+      {
+        "value": "getting-started",
+        "title": "Getting started",
+        "content": [
+          { "text": "Welcome! Here's how to get started with our platform:" },
+          { "list": ["Create your account and verify your email", "Complete your profile", "Explore the dashboard", "Check out the tutorials section", "Join the community forum"] },
+          { "note": { "title": "Pro tip", "text": "Start with the interactive tutorial to learn the basics in five minutes.", "icon": "info" } }
+        ]
+      },
+      {
+        "value": "api",
+        "title": "API documentation",
+        "content": [
+          { "text": "Our REST API lets you integrate our services into your applications." },
+          { "properties": [
+            { "label": "Base URL", "value": "https://api.example.com/v1", "mono": true },
+            { "label": "Authentication", "value": "Authorization: Bearer YOUR_API_KEY", "mono": true }
+          ] },
+          { "muted": "Visit the full API documentation for detailed endpoint information." }
+        ]
+      },
+      {
+        "value": "troubleshooting",
+        "title": "Troubleshooting",
+        "content": [
+          { "items": [
+            { "title": "Can't log in?", "description": "Try resetting your password or clearing your browser cache." },
+            { "title": "Features not loading?", "description": "Check your internet connection and refresh the page." },
+            { "title": "Need more help?", "description": "Contact support at support@example.com or use the chat widget." }
+          ] }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Section counts",
+    "type": "single",
+    "collapsible": true,
+    "defaultValue": "connection",
+    "width": 480,
+    "items": [
+      {
+        "value": "info",
+        "title": "Info",
+        "badges": [{ "label": "3", "variant": "outline", "tone": "muted" }, { "label": "saved", "variant": "soft", "tone": "success" }],
+        "content": [{ "text": "Name, owner and description." }]
+      },
+      {
+        "value": "connection",
+        "title": "Connection",
+        "badges": [{ "label": "5", "variant": "outline", "tone": "muted" }, { "label": "tested", "variant": "soft", "tone": "success" }],
+        "content": [{ "text": "Connector, URI, database, credentials." }]
+      }
+    ]
+  },
+  {
+    "caption": "With a custom class",
+    "type": "single",
+    "collapsible": true,
+    "width": 500,
+    "items": [
+      { "value": "item-1", "title": "Bordered item", "className": "mb-2 rounded-lg border border-border px-4", "content": [{ "text": "This item has rounded borders and padding, passed through className." }] },
+      { "value": "item-2", "title": "With a background", "className": "mb-2 rounded-lg border border-border bg-primary/5 px-4", "content": [{ "text": "A subtle primary tint makes this item stand out." }] },
+      { "value": "item-3", "title": "Highlighted item", "className": "rounded-lg border border-primary px-4 text-primary", "content": [{ "text": "Primary colour draws attention to this item." }] }
+    ]
+  }
+]

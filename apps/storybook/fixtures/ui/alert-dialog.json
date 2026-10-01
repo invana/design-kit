@@ -1,0 +1,10 @@
+[
+  {
+    "caption": "Default",
+    "trigger": { "label": "Delete project", "variant": "destructive", "icon": "trash" },
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone. This will permanently delete the project and remove its data from our servers.",
+    "cancel": "Cancel",
+    "action": "Delete"
+  }
+]

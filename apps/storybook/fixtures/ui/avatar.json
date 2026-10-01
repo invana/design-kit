@@ -1,0 +1,55 @@
+[
+  { "caption": "With image", "avatars": [{ "src": "https://github.com/shadcn.png", "alt": "User avatar", "initials": "CN" }] },
+  { "caption": "Fallback", "avatars": [{ "initials": "JD" }] },
+  {
+    "caption": "Fallback only (initials)",
+    "row": "spaced",
+    "avatars": [{ "initials": "AB" }, { "initials": "CD" }, { "initials": "EF" }, { "initials": "GH" }]
+  },
+  {
+    "caption": "With images",
+    "row": "spaced",
+    "avatars": [
+      { "src": "https://github.com/shadcn.png", "initials": "CN" },
+      { "src": "https://github.com/vercel.png", "initials": "VC" },
+      { "src": "https://github.com/microsoft.png", "initials": "MS" }
+    ]
+  },
+  {
+    "caption": "Small — with a custom class",
+    "avatars": [{ "src": "https://github.com/shadcn.png", "alt": "User avatar", "initials": "SM", "className": "h-8 w-8" }]
+  },
+  {
+    "caption": "Large — with a custom class",
+    "avatars": [{ "src": "https://github.com/shadcn.png", "alt": "User avatar", "initials": "LG", "className": "h-20 w-20" }]
+  },
+  {
+    "caption": "Sizes — with a custom class",
+    "row": "spaced",
+    "avatars": [
+      { "src": "https://github.com/shadcn.png", "initials": "XS", "className": "h-6 w-6" },
+      { "src": "https://github.com/shadcn.png", "initials": "SM", "className": "h-8 w-8" },
+      { "src": "https://github.com/shadcn.png", "initials": "MD" },
+      { "src": "https://github.com/shadcn.png", "initials": "LG", "className": "h-16 w-16" },
+      { "src": "https://github.com/shadcn.png", "initials": "XL", "className": "h-24 w-24" }
+    ]
+  },
+  {
+    "caption": "Group — with a custom class",
+    "row": "overlap",
+    "avatars": [
+      { "src": "https://github.com/shadcn.png", "initials": "U1", "className": "border-2 border-background" },
+      { "initials": "U2", "className": "border-2 border-background" },
+      { "initials": "U3", "className": "border-2 border-background" },
+      { "initials": "U4", "className": "border-2 border-background" },
+      { "initials": "+5", "className": "border-2 border-background" }
+    ]
+  },
+  {
+    "caption": "In a row",
+    "people": [
+      { "initials": "SJ", "image": "https://github.com/shadcn.png", "name": "Sarah Johnson", "detail": "sarah.j@company.com" },
+      { "initials": "MC", "name": "Michael Chen", "detail": "Product Manager" }
+    ]
+  }
+]

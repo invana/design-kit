@@ -1,0 +1,11 @@
+[
+  {
+    "caption": "Default",
+    "items": [
+      { "label": "Home", "href": "#home" },
+      { "ellipsis": true },
+      { "label": "Projects", "href": "#projects" },
+      { "label": "Graph Explorer", "current": true }
+    ]
+  }
+]
