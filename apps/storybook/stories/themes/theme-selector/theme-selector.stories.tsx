@@ -1,125 +1,294 @@
-import type { StoryObj } from '@storybook/react-vite';
-import { ThemeProvider, ThemeSelector, ThemeScope } from '@invana/themes';
-import { Sun, Moon, Monitor } from 'lucide-react';
-import { Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Link, Separator } from '@invana/ui';
+import * as React from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
+import {
+  ThemeProvider,
+  ThemeScope,
+  ThemeSelector as Selector,
+  ThemeSettingsActions,
+  ThemeSettingsCard,
+  type ThemeMode,
+  type ThemeSelection,
+} from '@invana/themes';
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Link,
+  NavHorizontal,
+  Separator,
+  Typography,
+} from '@invana/ui';
+import { Monitor, Moon, Sun } from 'lucide-react';
 
-const meta = {
-  title: 'Themes/Theme Selector/Theme Selector',
-  parameters: {
-    layout: 'fullscreen',
-    // This story owns its theme via <ThemeProvider> — opt out of the toolbar decorator.
-    selfThemed: true,
-    docs: {
-      description: {
-        component:
-          'A reusable `ThemeSelector` (theme picker · light/dark/system toggle · accent ' +
-          'swatches) from `@invana/themes`. Use `layout="inline"` in a header or `layout="form"` ' +
-          'in a settings panel. The theme picker renders as `themeVariant="cards"` (every theme ' +
-          'shown inline, like the mode toggle) or `themeVariant="select"` (compact dropdown) — ' +
-          'both are demonstrated below. Inside a `<ThemeProvider>` it drives + persists the theme; ' +
-          'the accent is scoped — wrap any subtree in `<ThemeScope>` to re-tint only that section.',
-      },
-    },
-  },
-};
+import data from '../../../fixtures/themes/theme-selector.json';
+import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
+import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
 
-export default meta;
+type ButtonVariant = 'default' | 'secondary' | 'outline' | 'ghost';
 
-/** A small block that reacts to the active theme + accent. */
-function Preview() {
+interface Preview {
+  title: string;
+  description: string;
+  buttons: { variant: ButtonVariant; label: string }[];
+  badges: { variant: 'default' | 'secondary' | 'outline'; label: string }[];
+  link: string;
+  footer?: string;
+}
+
+interface SelectorVariant extends Variant {
+  brand?: string;
+  form?: { title: string; description: string; pickers: { themeVariant: 'cards' | 'select'; label: string }[] };
+  card?: { title: string; description: string; dirty: string; clean: string };
+  preview: Preview;
+  note?: string;
+}
+
+const VARIANTS = data as SelectorVariant[];
+
+/** Icons are injected — the package never bundles an icon library. */
+const MODE_ICONS = { light: Sun, dark: Moon, system: Monitor };
+
+interface Args {
+  variant: string;
+  onThemeChange: (theme: string) => void;
+  onModeChange: (mode: ThemeMode) => void;
+  onAccentChange: (accent: string | null) => void;
+  onSave: (selection: ThemeSelection) => void;
+  onReset: (selection: ThemeSelection) => void;
+}
+
+/** A block that reacts to the active theme and (scoped) accent. */
+function PreviewCard({ preview }: { preview: Preview }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-heading">Live preview</CardTitle>
-        <CardDescription>
-          This card sits inside a <code>&lt;ThemeScope&gt;</code>, so the accent swatch re-tints it.
-        </CardDescription>
+        <CardTitle>{preview.title}</CardTitle>
+        <CardDescription>{preview.description}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm">Primary</Button>
-          <Button size="sm" variant="secondary">Secondary</Button>
-          <Button size="sm" variant="outline">Outline</Button>
-          <Button size="sm" variant="ghost">Ghost</Button>
+      <CardContent>
+        {/* Unstyled wrappers: inline controls flow side by side, a space apart. */}
+        <div>
+          {preview.buttons.map((b, i) => (
+            <React.Fragment key={b.label}>
+              {i > 0 ? ' ' : null}
+              <Button size="sm" variant={b.variant}>
+                {b.label}
+              </Button>
+            </React.Fragment>
+          ))}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge>Default</Badge>
-          <Badge variant="secondary">Secondary</Badge>
-          <Badge variant="outline">Outline</Badge>
-          <Link href="#" variant="underlined">A themed link</Link>
+        <div>
+          {preview.badges.map((b) => (
+            <React.Fragment key={b.label}>
+              <Badge variant={b.variant}>{b.label}</Badge>{' '}
+            </React.Fragment>
+          ))}
+          <Link href="#" variant="underlined">
+            {preview.link}
+          </Link>
         </div>
       </CardContent>
-      <CardFooter>
-        <span className="text-base text-muted-foreground">
-          Focus rings, links and the primary button follow the accent.
-        </span>
-      </CardFooter>
+      {preview.footer ? (
+        <CardFooter>
+          <Typography.Muted>{preview.footer}</Typography.Muted>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 }
 
-export const ThemeSelectorStory: StoryObj = {
-  name: 'Theme Selector',
-  render: () => (
-    <ThemeProvider persist="manual">
-      <div className="min-h-screen bg-background text-foreground">
-        {/* Header bar — inline layout */}
-        <header className="flex items-center justify-between border-b px-6 py-3">
-          <span className="font-heading text-lg">Invana</span>
-          {/* Icons are injected — the package never bundles an icon library. */}
-          <ThemeSelector layout="inline" modeIcons={{ light: Sun, dark: Moon, system: Monitor }} />
-        </header>
+/** Every callback goes to the Actions panel and the cell's log. */
+function handlers(args: Args, log: Log) {
+  const wire =
+    <T,>(name: keyof Args, cb: (v: T) => void) =>
+    (v: T) => {
+      cb(v);
+      log(name, v);
+    };
+  return {
+    onThemeChange: wire('onThemeChange', args.onThemeChange),
+    onModeChange: wire('onModeChange', args.onModeChange),
+    onAccentChange: wire('onAccentChange', args.onAccentChange),
+    onSave: wire('onSave', args.onSave),
+    onReset: wire('onReset', args.onReset),
+  };
+}
 
-        <div className="mx-auto grid max-w-5xl gap-6 p-6 md:grid-cols-2">
-          {/* Settings panel — form layout, both themeVariant options */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-heading">Appearance</CardTitle>
-              <CardDescription>
-                Settings-style stacked fields (<code>layout="form"</code>). Both
-                {' '}<code>themeVariant</code> options drive the same provider state.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* themeVariant="cards" — every theme shown inline like the mode toggle */}
-              <ThemeSelector
+function Draw({ v, args, log }: { v: SelectorVariant; args: Args; log: Log }) {
+  const on = handlers(args, log);
+  if (v.card) {
+    const card = v.card;
+    // One provider shared by the settings card and the preview, so live edits recolour it.
+    return (
+      <ThemeProvider persist="manual">
+        <ThemeSettingsCard
+          modeIcons={MODE_ICONS}
+          onSave={on.onSave}
+          onReset={on.onReset}
+          header={
+            <>
+              <CardTitle>{card.title}</CardTitle>
+              <CardDescription>{card.description}</CardDescription>
+            </>
+          }
+          // Render-prop footer: the live state, with the ready-made Save / Reset actions.
+          footer={(state) => (
+            <>
+              <Typography.Muted>{state.isDirty ? card.dirty : card.clean}</Typography.Muted>
+              <ThemeSettingsActions state={state} />
+            </>
+          )}
+        />
+        <ThemeScope>
+          <PreviewCard preview={v.preview} />
+        </ThemeScope>
+      </ThemeProvider>
+    );
+  }
+  const form = v.form!;
+  const selector = { onThemeChange: on.onThemeChange, onModeChange: on.onModeChange, onAccentChange: on.onAccentChange };
+  return (
+    <ThemeProvider persist="manual">
+      <NavHorizontal
+        leftNavItems={[{ name: v.brand!, label: v.brand }]}
+        right={<Selector layout="inline" modeIcons={MODE_ICONS} {...selector} />}
+      />
+      <Card>
+        <CardHeader>
+          <CardTitle>{form.title}</CardTitle>
+          <CardDescription>{form.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {form.pickers.map((p) => (
+            <React.Fragment key={p.themeVariant}>
+              <Selector
                 layout="form"
-                themeVariant="cards"
+                themeVariant={p.themeVariant}
                 showMode={false}
                 showAccent={false}
-                labels={{ theme: 'Theme — themeVariant="cards"' }}
-              />
-              {/* themeVariant="select" — compact RichSelect dropdown */}
-              <ThemeSelector
-                layout="form"
-                themeVariant="select"
-                showMode={false}
-                showAccent={false}
-                labels={{ theme: 'Theme — themeVariant="select"' }}
+                labels={{ theme: p.label }}
+                {...selector}
               />
               <Separator />
-              {/* Mode + accent shown once (shared across the pickers above) */}
-              <ThemeSelector
-                layout="form"
-                showTheme={false}
-                modeIcons={{ light: Sun, dark: Moon, system: Monitor }}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Scoped preview — only this subtree picks up the accent override */}
-          <ThemeScope>
-            <Preview />
-          </ThemeScope>
-        </div>
-
-        <Separator />
-        <p className="mx-auto max-w-5xl px-6 py-4 text-base text-muted-foreground">
-          The header selector and the settings form share the same provider state. Picking an
-          accent recolours only the <strong>Live preview</strong> (wrapped in <code>ThemeScope</code>),
-          leaving the rest of the page on the theme's own accent.
-        </p>
-      </div>
+            </React.Fragment>
+          ))}
+          {/* Mode + accent shown once, shared across the pickers above. */}
+          <Selector layout="form" showTheme={false} modeIcons={MODE_ICONS} {...selector} />
+        </CardContent>
+      </Card>
+      {/* Only this subtree picks up the accent override. */}
+      <ThemeScope>
+        <PreviewCard preview={v.preview} />
+      </ThemeScope>
+      <Typography.Muted>{v.note}</Typography.Muted>
     </ThemeProvider>
+  );
+}
+
+const meta = {
+  title: 'Themes/ThemeSelector',
+  parameters: {
+    layout: 'padded',
+    // Each cell owns its theme via <ThemeProvider> — opt out of the toolbar decorator.
+    selfThemed: true,
+    docs: {
+      description: {
+        component:
+          'A reusable `ThemeSelector` (theme picker · light/dark/system toggle · accent swatches) and ' +
+          '`ThemeSettingsCard` (the same fields in a `Card`, with Save / Reset) from `@invana/themes`. ' +
+          'Use `layout="inline"` in a header or `layout="form"` in a settings panel. Inside a ' +
+          '`<ThemeProvider>` it drives the theme; the accent is scoped — wrap any subtree in ' +
+          '`<ThemeScope>` to re-tint only that section. One cell at a time: each owns a provider.',
+      },
+      source: {
+        language: 'tsx',
+        transform: sourceFor(VARIANTS, (picked) =>
+          snippets(
+            [
+              "import { ThemeProvider, ThemeScope, ThemeSelector, ThemeSettingsCard, ThemeSettingsActions } from '@invana/themes';",
+              "import { Sun, Moon, Monitor } from 'lucide-react';",
+            ],
+            picked.map((v) =>
+              v.card
+                ? {
+                    comment: v.caption,
+                    setup: '// onSave / onReset receive { theme, mode, accent }.\nconst modeIcons = { light: Sun, dark: Moon, system: Monitor };',
+                    call: [
+                      '<ThemeProvider persist="manual">',
+                      '  <ThemeSettingsCard',
+                      '    modeIcons={modeIcons}',
+                      '    onSave={onSave}',
+                      '    onReset={onReset}',
+                      `    header={<><CardTitle>${v.card.title}</CardTitle><CardDescription>${v.card.description}</CardDescription></>}`,
+                      '    footer={(state) => <ThemeSettingsActions state={state} />}',
+                      '  />',
+                      '  <ThemeScope>{/* the part the accent re-tints */}</ThemeScope>',
+                      '</ThemeProvider>',
+                    ].join('\n'),
+                  }
+                : {
+                    comment: v.caption,
+                    setup:
+                      '// onThemeChange receives the theme id, onModeChange "light" | "dark" | "system",\n// onAccentChange the accent id or null (the theme\'s own).',
+                    call: [
+                      '<ThemeProvider persist="manual">',
+                      `  ${jsx('ThemeSelector', { layout: { literal: 'inline' }, modeIcons: 'modeIcons', onThemeChange: 'onThemeChange', onModeChange: 'onModeChange', onAccentChange: 'onAccentChange' }).replace(/\n/g, '\n  ')}`,
+                      ...v.form!.pickers.map(
+                        (p) =>
+                          `  <ThemeSelector layout="form" themeVariant="${p.themeVariant}" showMode={false} showAccent={false} />`,
+                      ),
+                      '  <ThemeSelector layout="form" showTheme={false} modeIcons={modeIcons} />',
+                      '  <ThemeScope>{/* the part the accent re-tints */}</ThemeScope>',
+                      '</ThemeProvider>',
+                    ].join('\n'),
+                  },
+            ),
+          ),
+        ),
+      },
+    },
+  },
+  args: {
+    variant: VARIANTS[0].caption,
+    onThemeChange: fn(),
+    onModeChange: fn(),
+    onAccentChange: fn(),
+    onSave: fn(),
+    onReset: fn(),
+  },
+  argTypes: { variant: variantArg(VARIANTS) },
+} satisfies Meta<Args>;
+
+export default meta;
+type Story = StoryObj<Args>;
+
+/**
+ * The theme picker in a header and in a settings form, and the settings card with Save / Reset —
+ * from `fixtures/themes/theme-selector.json`. Pick a theme, mode or accent: the page recolours
+ * live and the callback is written under the cell.
+ */
+export const ThemeSelector: Story = {
+  render: (args) => (
+    <VariantBoard variants={VARIANTS} variant={args.variant}>
+      {(v, log) => <Draw v={v} args={args} log={log} />}
+    </VariantBoard>
   ),
+  play: async ({ canvasElement, args, step }) => {
+    const cell = within(within(canvasElement).getByRole('group', { name: 'Theme selector' }));
+    await step('Switch the header selector to dark', async () => {
+      await userEvent.click(cell.getAllByRole('radio', { name: 'Dark' })[0]);
+      await expect(args.onModeChange).toHaveBeenCalledWith('dark');
+      await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('onModeChange"dark"');
+    });
+    await step('Back to light', async () => {
+      await userEvent.click(cell.getAllByRole('radio', { name: 'Light' })[0]);
+      await expect(args.onModeChange).toHaveBeenCalledWith('light');
+    });
+  },
 };

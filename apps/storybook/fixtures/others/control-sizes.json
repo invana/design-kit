@@ -1,0 +1,21 @@
+{
+  "options": [
+    { "value": "day", "label": "Day" },
+    { "value": "week", "label": "Week" }
+  ],
+  "rows": [
+    { "caption": "xs · 22px", "wide": true, "size": "xs", "controls": ["button", "icon-button", "badge", "segmented"] },
+    {
+      "caption": "sm · 26px",
+      "wide": true,
+      "size": "sm",
+      "controls": ["search", "input", "filter-chip", "button", "icon-button", "badge", "segmented", "tabs", "toggle"]
+    },
+    {
+      "caption": "default · 32px",
+      "wide": true,
+      "controls": ["search", "input", "button", "icon-button", "segmented", "tabs", "toggle"]
+    },
+    { "caption": "lg · 40px", "wide": true, "size": "lg", "controls": ["search", "input", "button", "toggle"] }
+  ]
+}

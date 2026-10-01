@@ -1,0 +1,85 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "leftNav": {
+      "top": [
+        { "name": "Dashboard", "icon": "home", "tooltip": "Go to Dashboard" },
+        { "name": "Projects", "icon": "folder", "tooltip": "View Projects" },
+        { "name": "Settings", "icon": "settings", "tooltip": "Adjust Settings" }
+      ],
+      "bottom": [
+        { "name": "Profile", "icon": "user", "tooltip": "View Profile" },
+        { "name": "Logout", "icon": "logout", "tooltip": "Log Out" }
+      ]
+    },
+    "header": {
+      "brand": { "name": "Enterprise Suite", "mark": "E" },
+      "search": "Search across all modules...",
+      "actions": [
+        { "name": "Notifications", "icon": "bell", "badge": 3 },
+        { "name": "Help", "icon": "help" }
+      ],
+      "user": { "name": "Admin User", "avatar": "https://github.com/shadcn.png", "initials": "AU", "label": true }
+    },
+    "page": {
+      "title": "Dashboard",
+      "subtitle": "Welcome to your application dashboard",
+      "metrics": [
+        { "label": "Total Users", "value": "2,345", "caption": "+12%" },
+        { "label": "Active Sessions", "value": "1,234", "caption": "+8%" },
+        { "label": "Revenue", "value": "$45,231", "caption": "+23%" },
+        { "label": "Conversions", "value": "573", "caption": "+5%" }
+      ],
+      "panels": [
+        {
+          "title": "Recent Activity",
+          "activity": [
+            { "title": "User 1 completed an action", "when": "1 minutes ago", "avatar": "https://i.pravatar.cc/150?img=1", "initials": "U1" },
+            { "title": "User 2 completed an action", "when": "2 minutes ago", "avatar": "https://i.pravatar.cc/150?img=2", "initials": "U2" },
+            { "title": "User 3 completed an action", "when": "3 minutes ago", "avatar": "https://i.pravatar.cc/150?img=3", "initials": "U3" },
+            { "title": "User 4 completed an action", "when": "4 minutes ago", "avatar": "https://i.pravatar.cc/150?img=4", "initials": "U4" },
+            { "title": "User 5 completed an action", "when": "5 minutes ago", "avatar": "https://i.pravatar.cc/150?img=5", "initials": "U5" }
+          ]
+        }
+      ]
+    },
+    "footer": { "left": [{ "name": "App Footer" }] }
+  },
+  {
+    "caption": "No left nav",
+    "wide": true,
+    "header": {
+      "brand": { "name": "Enterprise Suite", "mark": "E" },
+      "search": "Search across all modules...",
+      "actions": [
+        { "name": "Notifications", "icon": "bell", "badge": 3 },
+        { "name": "Help", "icon": "help" }
+      ],
+      "user": { "name": "Admin User", "avatar": "https://github.com/shadcn.png", "initials": "AU", "label": true }
+    },
+    "page": {
+      "title": "Dashboard",
+      "subtitle": "No left activity bar — content spans the full width.",
+      "metrics": [
+        { "label": "Total Users", "value": "2,345", "caption": "+12%" },
+        { "label": "Active Sessions", "value": "1,234", "caption": "+8%" },
+        { "label": "Revenue", "value": "$45,231", "caption": "+23%" },
+        { "label": "Conversions", "value": "573", "caption": "+5%" }
+      ],
+      "panels": [
+        {
+          "title": "Recent Activity",
+          "activity": [
+            { "title": "User 1 completed an action", "when": "1 minutes ago", "avatar": "https://i.pravatar.cc/150?img=1", "initials": "U1" },
+            { "title": "User 2 completed an action", "when": "2 minutes ago", "avatar": "https://i.pravatar.cc/150?img=2", "initials": "U2" },
+            { "title": "User 3 completed an action", "when": "3 minutes ago", "avatar": "https://i.pravatar.cc/150?img=3", "initials": "U3" },
+            { "title": "User 4 completed an action", "when": "4 minutes ago", "avatar": "https://i.pravatar.cc/150?img=4", "initials": "U4" },
+            { "title": "User 5 completed an action", "when": "5 minutes ago", "avatar": "https://i.pravatar.cc/150?img=5", "initials": "U5" }
+          ]
+        }
+      ]
+    },
+    "footer": { "left": [{ "name": "App Footer" }] }
+  }
+]

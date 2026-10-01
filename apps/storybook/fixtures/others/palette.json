@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Core Colors",
+    "colors": [
+      { "name": "Background", "cssVar": "--background", "description": "Main background color" },
+      { "name": "Foreground", "cssVar": "--foreground", "description": "Primary text color" },
+      { "name": "Card", "cssVar": "--card", "description": "Card background" },
+      { "name": "Card Foreground", "cssVar": "--card-foreground", "description": "Card text color" },
+      { "name": "Muted", "cssVar": "--muted", "description": "Muted background" },
+      { "name": "Muted Foreground", "cssVar": "--muted-foreground", "description": "Muted text color" }
+    ]
+  },
+  {
+    "title": "Interactive Colors",
+    "colors": [
+      { "name": "Primary", "cssVar": "--primary", "description": "Primary action color" },
+      { "name": "Primary Foreground", "cssVar": "--primary-foreground", "description": "Text on primary" },
+      { "name": "Secondary", "cssVar": "--secondary", "description": "Secondary action color" },
+      { "name": "Secondary Foreground", "cssVar": "--secondary-foreground", "description": "Text on secondary" },
+      { "name": "Accent", "cssVar": "--accent", "description": "Accent color for highlights" },
+      { "name": "Accent Foreground", "cssVar": "--accent-foreground", "description": "Text on accent" }
+    ]
+  },
+  {
+    "title": "Feedback & Utility",
+    "colors": [
+      { "name": "Destructive", "cssVar": "--destructive", "description": "Error/destructive color" },
+      { "name": "Destructive Foreground", "cssVar": "--destructive-foreground", "description": "Text on destructive" },
+      { "name": "Border", "cssVar": "--border", "description": "Border color" },
+      { "name": "Input", "cssVar": "--input", "description": "Input border color" },
+      { "name": "Ring", "cssVar": "--ring", "description": "Focus ring color" }
+    ]
+  }
+]

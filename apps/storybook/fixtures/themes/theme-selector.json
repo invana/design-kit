@@ -1,0 +1,57 @@
+[
+  {
+    "caption": "Theme selector",
+    "wide": true,
+    "brand": "Invana",
+    "form": {
+      "title": "Appearance",
+      "description": "Settings-style stacked fields (layout=\"form\"). Both themeVariant options drive the same provider state.",
+      "pickers": [
+        { "themeVariant": "cards", "label": "Theme — themeVariant=\"cards\"" },
+        { "themeVariant": "select", "label": "Theme — themeVariant=\"select\"" }
+      ]
+    },
+    "preview": {
+      "title": "Live preview",
+      "description": "This card sits inside a ThemeScope, so the accent swatch re-tints it.",
+      "buttons": [
+        { "variant": "default", "label": "Primary" },
+        { "variant": "secondary", "label": "Secondary" },
+        { "variant": "outline", "label": "Outline" },
+        { "variant": "ghost", "label": "Ghost" }
+      ],
+      "badges": [
+        { "variant": "default", "label": "Default" },
+        { "variant": "secondary", "label": "Secondary" },
+        { "variant": "outline", "label": "Outline" }
+      ],
+      "link": "A themed link",
+      "footer": "Focus rings, links and the primary button follow the accent."
+    },
+    "note": "The header selector and the settings form share the same provider state. Picking an accent recolours only the Live preview (wrapped in ThemeScope), leaving the rest of the page on the theme's own accent."
+  },
+  {
+    "caption": "Themes settings card",
+    "wide": true,
+    "card": {
+      "title": "Appearance",
+      "description": "Pick a theme, mode and accent. Save to set as default.",
+      "dirty": "Unsaved changes",
+      "clean": "Saved"
+    },
+    "preview": {
+      "title": "Live preview",
+      "description": "Inside a ThemeScope — edits in the settings card apply here instantly.",
+      "buttons": [
+        { "variant": "default", "label": "Primary" },
+        { "variant": "secondary", "label": "Secondary" },
+        { "variant": "outline", "label": "Outline" }
+      ],
+      "badges": [
+        { "variant": "default", "label": "Default" },
+        { "variant": "secondary", "label": "Secondary" }
+      ],
+      "link": "A themed link"
+    }
+  }
+]
