@@ -18,6 +18,7 @@ import type { Log } from './variant-board';
 
 /** A block variant as the ask turn the API would send for it. */
 export function askTurn<K extends AskKind>(kind: K, v: BlockVariant<K>): AskTurn {
+  const { id: _id, stage: _stage, ...rest } = v.turn;
   return {
     id: v.turn.id,
     role: 'assistant',
@@ -26,8 +27,9 @@ export function askTurn<K extends AskKind>(kind: K, v: BlockVariant<K>): AskTurn
     state: v.state ?? 'pending',
     ask: { kind, ...v.spec } as AskSpec,
     ...(v.value !== undefined ? { value: v.value } : {}),
-    ...(v.turn.answeredAt ? { answeredAt: v.turn.answeredAt } : {}),
-  };
+    // Any other turn field the variant sets — `answeredAt`, `waiting`.
+    ...rest,
+  } as AskTurn;
 }
 
 /**

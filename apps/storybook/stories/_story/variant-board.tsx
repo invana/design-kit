@@ -10,9 +10,15 @@ export interface Variant {
   narrow?: boolean;
   /** Take the board's whole row — a table, a panel, an app shell. */
   wide?: boolean;
-  /** A width in px other than the board's 320. */
+  /** A width in px other than the board's 320; the cell spans as many columns as it needs. */
   width?: number;
+  /** A fixed height in px, for a component that fills its parent — a panel stack, a rail. */
+  height?: number;
 }
+
+/** The board's column and gap, so a wider cell spans whole columns. */
+const COLUMN = 320;
+const GAP = 40;
 
 /** One thing a cell sent: the callback's name and what it carried. */
 export interface Logged {
@@ -72,7 +78,13 @@ function Cell<V extends Variant>({
       style={
         variant.wide
           ? { gridColumn: '1 / -1' }
-          : { width: variant.narrow ? 280 : (variant.width ?? 320), gridColumn: variant.width ? 'span 2' : undefined }
+          : {
+              width: variant.narrow ? 280 : (variant.width ?? COLUMN),
+              gridColumn:
+                variant.width && variant.width > COLUMN
+                  ? `span ${Math.ceil((variant.width + GAP) / (COLUMN + GAP))}`
+                  : undefined,
+            }
       }
     >
       <div className="flex items-center justify-between">
@@ -83,7 +95,13 @@ function Cell<V extends Variant>({
           </Button>
         ) : null}
       </div>
-      <React.Fragment key={runs}>{children(variant, log)}</React.Fragment>
+      {variant.height ? (
+        <div key={runs} className="flex min-h-0 flex-col" style={{ height: variant.height }}>
+          {children(variant, log)}
+        </div>
+      ) : (
+        <React.Fragment key={runs}>{children(variant, log)}</React.Fragment>
+      )}
       <EventLog sent={sent} />
     </div>
   );

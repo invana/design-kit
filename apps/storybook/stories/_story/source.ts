@@ -33,8 +33,30 @@ export function jsx(tag: string, props: Record<string, string | { literal: strin
   const attrs = Object.entries(props)
     .filter(([, v]) => v !== undefined)
     .map(([k, v]) => (typeof v === 'string' ? `${k}={${v}}` : `${k}="${v!.literal}"`));
+  if (!attrs.length) return `<${tag} />`;
   if (attrs.length <= 2) return `<${tag} ${attrs.join(' ')} />`;
   return `<${tag}\n${attrs.map((a) => `  ${a}`).join('\n')}\n/>`;
+}
+
+/**
+ * JSON props as `jsx()` attributes: a string is written as a literal (`label="Run it"`), anything
+ * else as code (`count={3}`, `items={[…]}`). Name a prop in `refs` to write it as a variable
+ * instead — `onChange={onChange}`.
+ */
+export function attrs(props: Record<string, unknown>, refs: string[] = []) {
+  const out: Record<string, string | { literal: string }> = {};
+  for (const [k, v] of Object.entries(props)) {
+    if (v === undefined || k === 'children') continue;
+    out[k] = typeof v === 'string' && !v.includes('"') ? { literal: v } : json(v);
+  }
+  for (const r of refs) out[r] = r;
+  return out;
+}
+
+/** A JSX element with children — `<Badge tone="good">Ready</Badge>`. */
+export function jsxWith(tag: string, props: Record<string, string | { literal: string } | undefined>, children: string) {
+  const open = jsx(tag, props).replace(/\s*\/>$/, '>');
+  return children.includes('\n') ? `${open}\n  ${children.split('\n').join('\n  ')}\n</${tag}>` : `${open}${children}</${tag}>`;
 }
 
 export interface Snippet {
