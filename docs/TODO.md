@@ -1,6 +1,6 @@
 # Components tracker
 
-Status of every component the assistant needs, across packages. The design reference is the [Assistant Presets](https://claude.ai/artifact/DFrcsV7JSR2Ef7PSJAHztz) canvas: one board per ask and answer-block preset, each variant on a board is one story.
+Status of every component the assistant needs, across packages. The design reference is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): one board per ask and answer-block preset, each variant on a board is one story.
 
 **Update the row in the same commit that changes the component.** Edit only the `Status` cell unless the design changes; a design change goes to the canvas first.
 

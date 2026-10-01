@@ -31,7 +31,7 @@ const contribution = [
   { label: 'Mix', value: 0.2, display: '+0.2' },
 ];
 
-/** The Ranked list board on the Assistant Presets canvas, variant for variant. */
+/** The Ranked list board on the Design Kit Spec, variant for variant. */
 export const RankedList: Story = {
   name: 'Ranked list',
   args: {

@@ -39,7 +39,7 @@ const backtest: AskSpec = {
   align: 'end',
 };
 
-/** The Confirm board of the Assistant Presets canvas, variant for variant. */
+/** The Confirm board of the Design Kit Spec, variant for variant. */
 export const Confirm: Story = {
   name: 'Confirm',
   args: {

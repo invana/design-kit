@@ -45,7 +45,7 @@ const twoPicks: AskSpec = {
   more: [{ id: 'confidence', question: 'Confidence level', label: 'Confidence', options: confidence, default: '95' }],
 };
 
-/** The Quick pick board of the Assistant Presets canvas, variant for variant. */
+/** The Quick pick board of the Design Kit Spec, variant for variant. */
 export const QuickPick: Story = {
   name: 'Quick pick',
   args: {

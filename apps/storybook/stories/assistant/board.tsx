@@ -1,7 +1,7 @@
 import { Eyebrow } from '@invana/ui';
 import { ChatSessionTurn, type ConversationEvent, type Turn } from '@invana/assistant';
 
-/** One cell of an artboard: the caption the Assistant Presets canvas gives it, and the turn it draws. */
+/** One cell of an artboard: the caption the Design Kit Spec gives it, and the turn it draws. */
 export interface BoardVariant {
   caption: string;
   turn: Turn;
@@ -18,7 +18,7 @@ export interface BoardProps {
 
 /**
  * Story chrome, not a kit component: lays a preset's variants out as its artboard on the
- * Assistant Presets canvas does — four 320px columns, a caption over each cell — so a story
+ * Design Kit Spec does — four 320px columns, a caption over each cell — so a story
  * reads one-to-one against its board.
  */
 export function Board({ variants, onEvent }: BoardProps) {

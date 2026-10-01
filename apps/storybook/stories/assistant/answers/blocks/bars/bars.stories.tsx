@@ -35,7 +35,7 @@ const byPlant: BlockSpec = {
   target: { value: 16.6, label: 'target 16%' },
 };
 
-/** The Bar comparison board on the Assistant Presets canvas, variant for variant. */
+/** The Bar comparison board on the Design Kit Spec, variant for variant. */
 export const BarComparison: Story = {
   name: 'Bar comparison',
   args: {

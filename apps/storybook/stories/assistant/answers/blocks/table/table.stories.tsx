@@ -40,7 +40,7 @@ const firstThree = [
   { store: 'Riverside', margin: '15.8%', delta: up('+0.4') },
 ];
 
-/** The Table preview board on the Assistant Presets canvas, variant for variant. */
+/** The Table preview board on the Design Kit Spec, variant for variant. */
 export const TablePreview: Story = {
   name: 'Table preview',
   args: {

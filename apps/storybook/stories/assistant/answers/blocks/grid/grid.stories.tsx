@@ -28,7 +28,7 @@ const orders: MetricOptions = { label: 'Orders', value: '61.2k', delta: '▲ 7%'
 const aov: MetricOptions = { label: 'AOV', value: '£67', delta: '▼ 3%', tone: 'bad' };
 const returns: MetricOptions = { label: 'Returns', value: '4.2%', delta: 'flat' };
 
-/** The Metric grid board on the Assistant Presets canvas, variant for variant. */
+/** The Metric grid board on the Design Kit Spec, variant for variant. */
 export const MetricGrid: Story = {
   name: 'Metric grid',
   args: {

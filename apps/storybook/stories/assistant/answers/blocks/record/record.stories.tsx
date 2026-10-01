@@ -23,7 +23,7 @@ const answer = (id: string, block: BlockSpec, extra?: Partial<AnswerTurn>): Answ
   ...extra,
 });
 
-/** The Record board on the Assistant Presets canvas, variant for variant. */
+/** The Record board on the Design Kit Spec, variant for variant. */
 export const Record: Story = {
   name: 'Record',
   args: {

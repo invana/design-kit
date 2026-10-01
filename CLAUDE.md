@@ -109,7 +109,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   strip, `ProposalCard`'s evidence — takes `seamless`: no border or radius around it, no rule under
   the last row, and its outer cells flush with the text around it (no outer padding). Off by
   default, so a table standing alone keeps its box. The assistant's renderers pass `seamless`
-  (the card or answer is the frame), and so does the Assistant Presets canvas's shared stylesheet;
+  (the card or answer is the frame), and so does the Design Kit Spec's shared stylesheet;
   stories set the prop, never classes. Where the outer cells can't be known (an auto-fit grid that
   wraps), the component reaches out by a cell's padding and clips it — with `overflow-hidden`, not
   `clip-path`, whose anti-aliased edge shows the rule colour as a hairline.
@@ -146,12 +146,19 @@ gap in the kit, not a one-off in the design.
 - `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
-- The **Assistant Presets** canvas (https://claude.ai/artifact/DFrcsV7JSR2Ef7PSJAHztz) is the design reference for asks and
-  answer blocks. Each preset with a renderer has **one story that replicates its whole board**:
-  every variant, captioned as the board captions it, laid out by the story-only `Board` helper
+- The **Design Kit Spec** (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5) is the one design
+  reference for asks and answers; code follows it and no other canvas. Its model: an **intent**
+  (what a turn asks for or tells — `ASKS` and `ANSWER_INTENTS` in `grammar/`) is drawn by an
+  **intent block** (a preset renderer in `@invana/assistant`), which is composed of **parts**
+  (`ui-extended`, `charts`, `tables`, `forms`) that know nothing of intents and take size,
+  density, `palette` and `seamless` as props. Several intents may share one block and differ only
+  in options. Each block board's header names its intents, parts, status and knobs; the
+  Customisation page shows the knobs live and the Playground shows the blocks in `AppLayoutV2`.
+  Each preset with a renderer has **one story that replicates its whole board**: every variant,
+  captioned as the board captions it, laid out by the story-only `Board` helper
   (`apps/storybook/stories/assistant/board.tsx`, four 320px columns; the 280px variant draws at
   280px). A variant the renderer cannot draw is a gap in the renderer, not a story workaround.
-  A design change goes to the canvas first.
+  A design change goes to the spec first; its Needs review page holds changes not yet decided.
 - `docs/TODO.md` tracks every component the assistant needs, across packages:
   folder, change, status, tier, and the assistant's preset registry. Flip a row's `Status` in the
   same commit that ships or changes the component.
@@ -173,7 +180,7 @@ gap in the kit, not a one-off in the design.
   block in the answer card or its own) is a trait registered beside its renderer, never a check on
   its id in a variant.
   Presets, patterns and flows are ids in `packages/assistant/src/grammar/` — a new preset
-  gets a board on the Assistant Presets canvas and an id in the grammar first, then its
+  gets a board on the Design Kit Spec and an id in the grammar first, then its
   renderer (`asks/presets/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
   `conversations/registry.ts`. An unbuilt preset renders a labelled placeholder; a renderer reads
   only its preset's options — a screen that needs more is a grammar change, not a prop.

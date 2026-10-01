@@ -23,7 +23,7 @@ const answer = (id: string, block: BlockSpec, extra?: Partial<AnswerTurn>): Answ
   ...extra,
 });
 
-/** The Metric board on the Assistant Presets canvas, variant for variant. */
+/** The Metric board on the Design Kit Spec, variant for variant. */
 export const Metric: Story = {
   name: 'Metric',
   args: {

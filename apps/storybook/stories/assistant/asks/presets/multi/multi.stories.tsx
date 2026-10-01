@@ -35,7 +35,7 @@ const PEDIGREE =
   'M6.2 3.5a1.8 1.8 0 1 0 3.6 0a1.8 1.8 0 1 0-3.6 0M1.7 12.5a1.8 1.8 0 1 0 3.6 0a1.8 1.8 0 1 0-3.6 0M10.7 12.5a1.8 1.8 0 1 0 3.6 0a1.8 1.8 0 1 0-3.6 0M8 5.3v3M8 8.3L4.5 11M8 8.3l3.5 2.7';
 const MARKERS = 'M3 2v12M13 2v12M3 5h10M3 8h10M3 11h10';
 
-/** The Multiple choice board of the Assistant Presets canvas, variant for variant. */
+/** The Multiple choice board of the Design Kit Spec, variant for variant. */
 export const MultipleChoice: Story = {
   name: 'Multiple choice',
   args: {

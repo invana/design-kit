@@ -41,7 +41,7 @@ const cellOf = (canvasElement: HTMLElement, caption: string) => {
   return within(el ?? canvasElement);
 };
 
-/** The Single choice board of the Assistant Presets canvas, variant for variant. */
+/** The Single choice board of the Design Kit Spec, variant for variant. */
 export const SingleChoice: Story = {
   name: 'Single choice',
   args: {

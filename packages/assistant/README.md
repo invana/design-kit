@@ -7,9 +7,9 @@ the same spec: `cli`, the console (caret prompts, status-dotted replies, step ro
 and `web`, the chat (labelled turns, answer cards, `Answered in 1.4 s`). The composer is the same in
 both, configured by the spec's `composer`.
 
-The contract is [Analyst Flow Grammar](https://claude.ai/artifact/JQyqjKUTyrADw5vFvsFVzo): 20 ask
-presets, 42 block presets and 26 answer patterns. Its ids are copied into `src/grammar/`, and a
-test fails when the preset registry and the grammar disagree.
+The contract is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): 29 ask
+intents on 21 ask presets, 14 answer intents on 41 block presets, and 26 answer patterns. Its ids
+are copied into `src/grammar/`, and a test fails when the preset registry and the grammar disagree.
 
 ```bash
 pnpm add @invana/assistant

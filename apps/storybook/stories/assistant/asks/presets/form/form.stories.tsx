@@ -37,7 +37,7 @@ const cellOf = (canvasElement: HTMLElement, caption: string) => {
   return within(el ?? canvasElement);
 };
 
-/** The Form board of the Assistant Presets canvas, variant for variant. */
+/** The Form board of the Design Kit Spec, variant for variant. */
 export const Form: Story = {
   name: 'Form',
   args: {

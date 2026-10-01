@@ -24,7 +24,7 @@ const answer = (id: string, block: BlockSpec, extra?: Partial<AnswerTurn>): Answ
   ...extra,
 });
 
-/** The Timeline board on the Assistant Presets canvas, variant for variant. */
+/** The Timeline board on the Design Kit Spec, variant for variant. */
 export const Timeline: Story = {
   name: 'Timeline',
   args: {

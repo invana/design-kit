@@ -75,7 +75,7 @@ const cellOf = (canvasElement: HTMLElement, caption: string) => {
   return within(el ?? canvasElement);
 };
 
-/** The Multi-step board of the Assistant Presets canvas, variant for variant. */
+/** The Multi-step board of the Design Kit Spec, variant for variant. */
 export const MultiStep: Story = {
   name: 'Multi-step',
   args: {

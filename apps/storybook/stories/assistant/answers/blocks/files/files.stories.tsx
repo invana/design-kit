@@ -29,7 +29,7 @@ const three: FileItem[] = [
   { name: 'chart-freight.png', size: '112 KB', digest: 'c0d45a9b' },
 ];
 
-/** The Files board on the Assistant Presets canvas, variant for variant. */
+/** The Files board on the Design Kit Spec, variant for variant. */
 export const Files: Story = {
   name: 'Files',
   args: {
