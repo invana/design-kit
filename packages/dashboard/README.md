@@ -82,8 +82,8 @@ names render nothing, so this package pulls in no icon set of its own.
 - **Panels only a dashboard has:** `json` · `code` · `exchange` · `gantt` · `log` · `list` ·
   `params` · `text`.
 
-A panel with a `title` is wrapped in a `PanelBox`; without one it renders bare, which is how a
-tile strip sits directly on the surface.
+Every panel is drawn in a `PanelBox`, as an answer card frames every block, so one spec draws the
+same in a dashboard and a conversation. `title` adds the label bar; `flush` drops the padding.
 
 ### From the old panels
 

@@ -285,10 +285,9 @@ void builtInsAreNotBlocks
 export interface PanelBase {
   id?: string
   /**
-   * **`title` is what puts a panel in a box.** With one, the panel renders
-   * inside a `PanelBox`; without one it renders bare, which is how a strip of
-   * tiles sits directly on the dashboard rather than in a card labelled
-   * "Metrics".
+   * The label bar over the panel. Every panel is drawn in a `PanelBox` — the
+   * dashboard frames what it draws, as an answer card frames a block — and
+   * `title` only adds the bar. Without it the box frames its content alone.
    */
   title?: string
   /** The fact on the right of the box header. Ignored without a `title`. */

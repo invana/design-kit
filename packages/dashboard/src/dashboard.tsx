@@ -101,16 +101,8 @@ function Panel({
     ? { width: panel.width, flexShrink: 0 }
     : { flexGrow: panel.grow ?? 1, flexBasis: 0, minWidth: 0 }
 
-  // `title` is what puts a panel in a box — so a strip of tiles sits directly
-  // on the dashboard instead of inside a card labelled "Figures".
-  if (!panel.title) {
-    return (
-      <div style={style} className="min-w-0">
-        {body}
-      </div>
-    )
-  }
-
+  // Every panel is framed, as an answer card frames every block: the same JSON
+  // draws the same in either shell. `title` adds the label bar, nothing more.
   return (
     <PanelBox
       title={panel.title}

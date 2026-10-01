@@ -6,8 +6,12 @@ import { Eyebrow } from "./eyebrow"
 
 export interface PanelBoxProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
-  /** What this band is — `Input · what opened this run`, `result.json`, `Log`. */
-  title: React.ReactNode
+  /**
+   * What this band is — `Input · what opened this run`, `result.json`, `Log`.
+   * Without one there is no label bar: the box still frames its content, which
+   * is how a band of figures sits on a dashboard as it sits in an answer card.
+   */
+  title?: React.ReactNode
   /**
    * The fact on the right of the header — `214 lines · tailing`, `rendered from
    * result.json`, a `<Badge>`, a count.
@@ -27,7 +31,8 @@ export interface PanelBoxProps
 }
 
 /**
- * One band of a dashboard: a bordered box with a label bar over it.
+ * One band of a dashboard: a bordered box, with a label bar over it when it
+ * has a `title`.
  *
  * A dashboard is a scrolling column of these — tiles, then the flow, then
  * Input beside `result.json`, then the Log. Each box is **content-height and
@@ -61,23 +66,26 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
       )}
       {...props}
     >
+      {title != null ? (
+        <div
+          className={cn(
+            "flex h-control-md shrink-0 items-center border-b border-border px-2.5",
+            headerClassName,
+          )}
+        >
+          <Eyebrow aside={aside} className="w-full">
+            {title}
+          </Eyebrow>
+        </div>
+      ) : null}
       <div
-        className={cn(
-          "flex h-control-md shrink-0 items-center border-b border-border px-2.5",
-          headerClassName,
-        )}
-      >
-        <Eyebrow aside={aside} className="w-full">
-          {title}
-        </Eyebrow>
-      </div>
-      <div
-        // 10/12 rather than a uniform 12: a band's header rule is already
-        // holding the top edge, so equal padding all round reads as too much
-        // air above the first row and not enough between bands.
+        // 10/12 under a label bar rather than a uniform 12: the header rule is
+        // already holding the top edge, so equal padding all round reads as
+        // too much air above the first row. With no bar, the box's own border
+        // holds every edge alike.
         className={cn(
           "flex min-w-0 flex-col",
-          flush ? "p-0" : "px-2.5 py-2",
+          flush ? "p-0" : title != null ? "px-2.5 py-2" : "p-2.5",
           bodyClassName,
         )}
       >

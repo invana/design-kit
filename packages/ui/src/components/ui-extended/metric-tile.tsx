@@ -133,8 +133,8 @@ export const MetricTile = React.forwardRef<HTMLDivElement, MetricTileProps>(
       className={cn(
         "flex min-w-0 flex-col gap-px",
         !hero && "border border-border bg-card",
-        // Mixed onto the card rather than translucent: a joined grid's rules are
-        // its background showing through, and would tint the tile too.
+        // Mixed onto the card rather than translucent, so the tile reads the
+        // same on whatever ground the grid sits on.
         flagged && "bg-[color-mix(in_srgb,var(--color-warning)_15%,var(--color-card))]",
         variant === "tile" && "px-3 py-2.5",
         figure && "px-2 py-1.5",
@@ -255,9 +255,11 @@ export const MetricGrid = React.forwardRef<HTMLDivElement, MetricGridProps>(
         : `repeat(auto-fit, minmax(${minTileWidth}px, 1fr))`,
       ...style,
     }
-    // The rules are the border colour showing through a 1px gap, so they
-    // follow the tiles when the grid wraps to a second row.
-    const rules = "gap-px bg-border [&>*]:border-0"
+    // The rules are each tile's 1px ring filling the 1px gap, so they follow
+    // the tiles when the grid wraps — and a short last row leaves its empty
+    // slots in the card's colour, where a border-coloured grid background
+    // would show through as a grey block.
+    const rules = "gap-px [&>*]:border-0 [&>*]:shadow-[0_0_0_1px_var(--color-border)]"
     if (!(joined && seamless)) {
       return (
         <div

@@ -64,7 +64,10 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 draw a labelled placeholder. Assistant registers them from `blocks` through one adapter. Dashboard
 draws every kind in `PanelBox`: a panel's `options` are the block's, its title and aside are the
 panel's, and a block's `onAction(action, value)` arrives as `onAction(action, { panelId, value })`.
-A kind the consumer registers wins over the block of that name. No backward compatibility is kept.
+A kind the consumer registers wins over the block of that name. **The shell always frames a
+block:** the answer card in a conversation, a `PanelBox` on a dashboard (every panel has one; a
+`title` only adds its label bar). A block draws seamless and never its own border, so one spec
+draws the same in both. No backward compatibility is kept.
 
 ## To do
 

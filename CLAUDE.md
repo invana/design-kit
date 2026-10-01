@@ -126,7 +126,9 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   strip, `ProposalCard`'s evidence — takes `seamless`: no border or radius around it, no rule under
   the last row, and its outer cells flush with the text around it (no outer padding). Off by
   default, so a table standing alone keeps its box. The assistant's renderers pass `seamless`
-  (the card or answer is the frame), and so does the Design Kit Spec's shared stylesheet;
+  (the card or answer is the frame), and so does the Design Kit Spec's shared stylesheet; the
+  dashboard draws every panel in a `PanelBox` (a `title` only adds the label bar), so a block is
+  framed alike in both shells;
   stories set the prop, never classes. Where the outer cells can't be known (an auto-fit grid that
   wraps), the component reaches out by a cell's padding and clips it — with `overflow-hidden`, not
   `clip-path`, whose anti-aliased edge shows the rule colour as a hairline.
