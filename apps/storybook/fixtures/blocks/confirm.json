@@ -1,0 +1,108 @@
+[
+  {
+    "caption": "Cost inline · default named",
+    "turn": { "id": "inline", "stage": "check" },
+    "spec": {
+      "question": "This scans every store and every day since 2019. Run it as asked?",
+      "cost": [
+        { "label": "rows scanned", "value": "2.3B" },
+        { "label": "to run", "value": "about **40 s**" },
+        { "label": "records written", "value": "0" }
+      ],
+      "yes": "Run it",
+      "no": "Narrow to Q3 first",
+      "default": false,
+      "hint": "Default: narrow first"
+    }
+  },
+  {
+    "caption": "Heading + description · cost strip",
+    "turn": { "id": "strip", "stage": "check" },
+    "spec": {
+      "question": "Run the full backtest?",
+      "description": "Replays every fill since 2019 through factor model v4.",
+      "costAs": "strip",
+      "cost": [
+        { "label": "Rows", "value": "2.3B" },
+        { "label": "Time", "value": "~40 s" },
+        { "label": "Writes", "value": "0" }
+      ],
+      "yes": "Run it",
+      "no": "Narrow to Q3 first",
+      "default": true,
+      "align": "end"
+    }
+  },
+  {
+    "caption": "Writes records",
+    "turn": { "id": "writes", "stage": "act" },
+    "spec": {
+      "question": "Add two crosses to the 2026 crossing block?",
+      "description": "Nothing is sown until the plan is published.",
+      "costAs": "strip",
+      "cost": [
+        { "label": "Crosses", "value": "2" },
+        { "label": "Pollinations", "value": "80" },
+        { "label": "Writes", "value": "2", "tone": "warn" }
+      ],
+      "yes": "Add to plan",
+      "no": "Not now",
+      "dismiss": true,
+      "align": "end"
+    }
+  },
+  {
+    "caption": "Minimal yes / no",
+    "turn": { "id": "minimal", "stage": "scope" },
+    "spec": {
+      "question": "Use last season's breeding goals as the defaults?",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  {
+    "caption": "With a caveat",
+    "turn": { "id": "caveat", "stage": "check" },
+    "spec": {
+      "question": "This window includes the March outage. Leave those days out?",
+      "caveat": { "label": "data gap", "text": "Stores 12–18 reported no sales from 3 to 9 Mar." },
+      "yes": "Leave them out",
+      "no": "Include anyway"
+    }
+  },
+  {
+    "caption": "Answered",
+    "turn": { "id": "answered", "stage": "check", "answeredAt": "2026-09-29T10:00:20Z" },
+    "now": "2026-09-29T10:00:45Z",
+    "state": "answered",
+    "value": false,
+    "spec": {
+      "question": "This scans every store and every day since 2019. Run it as asked?",
+      "label": "Decision",
+      "yes": "Run it",
+      "no": "Narrow to Q3 first",
+      "default": false,
+      "settled": { "no": "Narrowed to Q3 first" },
+      "hint": "Scanned **180M** rows in **6 s**"
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "stage": "check" },
+    "spec": {
+      "question": "Run the full backtest?",
+      "heading": true,
+      "costAs": "strip",
+      "cost": [
+        { "label": "Rows", "value": "2.3B" },
+        { "label": "Time", "value": "~40 s" },
+        { "label": "Writes", "value": "0" }
+      ],
+      "yes": "Run it",
+      "no": "Narrow first",
+      "default": true,
+      "align": "end"
+    }
+  }
+]

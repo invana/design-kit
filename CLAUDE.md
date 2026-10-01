@@ -151,6 +151,28 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 - **A story that cannot be written without classes is a gap in the kit.** Build the missing
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
+- **How a story is written** (the standard; pilots: `Blocks/Confirm`, `Assistant/Asks/Blocks/Confirm`,
+  `Charts/LineChart` Streaming, `UI/UI Extended/TraceList` Progress, `Dashboard/Blocks/From Blocks`).
+  The story-only helpers are in `apps/storybook/stories/_story/`; none of them is a kit component.
+  - **Data is JSON** in `apps/storybook/fixtures/<area>/` (`blocks/<kind>.json`, `charts/`, `runs/`,
+    `dashboards/`), never inline in the story — and never in a package (no dummy data ships). A
+    block's file is `[{ caption, spec, state?, value?, narrow?, turn, now? }]`, typed in
+    `fixtures/blocks/index.ts`; `Blocks/<Kind>`, its conversation board and a dashboard panel all read
+    the same file.
+  - **One story per component, showing its variants**: `VariantBoard` lays them out as the spec's
+    board does, with a `variant` select (`variantArg`) to draw one.
+  - **The Code tab shows the data and the call**, written from that JSON with `snippet` / `snippets`
+    / `jsx` into `parameters.docs.source` (`transform: sourceFor(…)` when there is a `variant`
+    select, so the Code tab follows it). Callbacks are named (`onAction={onAction}`) with what they
+    receive in a comment.
+  - **Interactions answer back.** Every callback is an `fn()` arg (the Actions panel) and is written
+    to the cell's `EventLog` with its payload; the story then does what a consumer would — an ask
+    settles (`LiveBlock`), a conversation event gets the API's patch (`LiveTurn`), a picked row
+    moves the selection. `Reset` draws a cell fresh.
+  - **Live data is replayed**: `useReplay` + `ReplayFrame` feed a stream (chart points, run events)
+    as new props, with play / pause / skip to end.
+  - **A `play` function checks the interaction** — click, then assert the payload and what changed.
+    Run them with `pnpm --filter @invana/stoybook exec vitest run --project storybook <path>`.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
 - Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, every story under `assistant/conversations/` renders `<ChatSession spec={fixture} />` and nothing else, with its JSON in `fixtures/conversations/`; and `assistant/playground.stories.tsx` (`Assistant/Playground`) — the whole assistant in an `AppLayoutV2` shell, and the one place each user's experience is shown (there are no per-user stories): pick a user (or link to one with the `user` arg, e.g. `&args=user:journalist;variant:cli`), a variant (`web`/`cli`) and a width, and play recorded runs (send, needs input, a costly question, failure, stop, open a step, tasks view) into their thread. Its data is one JSON file per user in `packages/assistant/src/data/conversations/` — the thread they open on plus their recorded runs, built into patch scripts by `fixtures/scripts/runs.ts`; a new moment or user goes there, and `runs.test.ts` checks that the users together show every built ask and block), `blocks/` (`@invana/blocks`: one folder per block or `page/`, titled `Blocks/<Name>`; the conversation's board stories for the same blocks stay under `assistant/asks/blocks/` and `assistant/answers/blocks/`), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The forms section follows the same rule — `"Forms/Manual/Composed Form"`, `"Forms/Generated/Dialog"`.

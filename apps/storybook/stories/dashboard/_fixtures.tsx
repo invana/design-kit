@@ -15,6 +15,8 @@ import {
   Upload,
 } from 'lucide-react';
 
+import { EventLog, type Logged } from '../_story/variant-board';
+
 /**
  * Shared scaffolding for the dashboard stories — two reports, two forms.
  *
@@ -154,15 +156,25 @@ export const RUN_LOG = [
 export function Surface({
   children,
   last,
+  sent,
 }: {
   children: React.ReactNode;
-  last: string;
+  /** The last action, as one line. */
+  last?: string;
+  /** Or the last few, with their payloads — what `onAction` received. */
+  sent?: Logged[];
 }) {
   return (
     <div className="flex h-screen flex-col">
       {children}
       <div className="shrink-0 border-t border-border bg-card px-4 py-1.5 text-sm text-muted-foreground">
-        last action: <span className="font-mono text-foreground">{last}</span>
+        {sent ? (
+          sent.length ? <EventLog sent={sent} /> : 'No action yet.'
+        ) : (
+          <>
+            last action: <span className="font-mono text-foreground">{last}</span>
+          </>
+        )}
       </div>
     </div>
   );

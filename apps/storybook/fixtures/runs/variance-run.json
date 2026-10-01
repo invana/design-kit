@@ -1,0 +1,25 @@
+{
+  "title": "Why did freight cost rise in Q3?",
+  "steps": [
+    { "id": "gl", "name": "Read general ledger" },
+    { "id": "inv", "name": "Joined carrier invoices" },
+    { "id": "fx", "name": "Converted to GBP" },
+    { "id": "dec", "name": "Decomposing the change" },
+    { "id": "sum", "name": "Write summary" }
+  ],
+  "events": [
+    { "step": "gl", "status": "running", "duration": "0 rows" },
+    { "step": "gl", "status": "running", "duration": "6,120 rows" },
+    { "step": "gl", "status": "done", "duration": "12,408 rows" },
+    { "step": "inv", "status": "running" },
+    { "step": "inv", "status": "done", "duration": "3,911 rows" },
+    { "step": "fx", "status": "running" },
+    { "step": "fx", "status": "retrying", "duration": "attempt 2", "error": "Rates service timed out — retrying" },
+    { "step": "fx", "status": "done", "duration": "0.4 s", "error": null },
+    { "step": "dec", "status": "running", "duration": "0.9 s" },
+    { "step": "dec", "status": "running", "duration": "2.1 s" },
+    { "step": "dec", "status": "done", "duration": "3.4 s" },
+    { "step": "sum", "status": "running" },
+    { "step": "sum", "status": "done", "duration": "1.2 s" }
+  ]
+}
