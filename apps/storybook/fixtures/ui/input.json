@@ -1,0 +1,59 @@
+[
+  { "caption": "Default", "fields": [{ "id": "input-default", "ariaLabel": "Text", "type": "text", "placeholder": "Enter text..." }] },
+  { "caption": "With label", "fields": [{ "id": "input-email", "label": "Email", "type": "email", "placeholder": "you@example.com" }] },
+  { "caption": "Disabled", "fields": [{ "id": "input-disabled", "ariaLabel": "Disabled", "placeholder": "Disabled input", "disabled": true }] },
+  { "caption": "Password", "fields": [{ "id": "input-password", "label": "Password", "type": "password", "placeholder": "Enter password" }] },
+  { "caption": "Number", "fields": [{ "id": "input-age", "label": "Age", "type": "number", "placeholder": "25" }] },
+  { "caption": "Search", "fields": [{ "id": "input-search", "label": "Search", "type": "search", "placeholder": "Search..." }] },
+  { "caption": "With value", "fields": [{ "id": "input-with-value", "ariaLabel": "Pre-filled", "value": "Pre-filled value" }] },
+  {
+    "caption": "Input types",
+    "fields": [
+      { "id": "input-type-text", "label": "Text", "type": "text", "placeholder": "Enter text..." },
+      { "id": "input-type-email", "label": "Email", "type": "email", "placeholder": "you@example.com" },
+      { "id": "input-type-password", "label": "Password", "type": "password", "placeholder": "Enter password" },
+      { "id": "input-type-number", "label": "Number", "type": "number", "placeholder": "0" },
+      { "id": "input-type-tel", "label": "Telephone", "type": "tel", "placeholder": "+1 (555) 123-4567" },
+      { "id": "input-type-url", "label": "URL", "type": "url", "placeholder": "https://example.com" },
+      { "id": "input-type-search", "label": "Search", "type": "search", "placeholder": "Search..." },
+      { "id": "input-type-date", "label": "Date", "type": "date" },
+      { "id": "input-type-time", "label": "Time", "type": "time" },
+      { "id": "input-type-datetime", "label": "DateTime", "type": "datetime-local" }
+    ]
+  },
+  {
+    "caption": "States",
+    "fields": [
+      { "id": "input-state-normal", "label": "Normal", "placeholder": "Normal input" },
+      { "id": "input-state-value", "label": "With value", "value": "Some value" },
+      { "id": "input-state-disabled", "label": "Disabled", "placeholder": "Disabled input", "disabled": true },
+      { "id": "input-state-disabled-value", "label": "Disabled with value", "value": "Disabled value", "disabled": true },
+      { "id": "input-state-readonly", "label": "Read-only", "value": "Read-only value", "readOnly": true }
+    ]
+  },
+  {
+    "caption": "Sizes",
+    "fields": [
+      { "id": "input-size-sm", "label": "sm — 26px, an application field", "inputSize": "sm", "placeholder": "Small" },
+      { "id": "input-size-default", "label": "default — 32px, a form or dialog", "placeholder": "Default" },
+      { "id": "input-size-lg", "label": "lg — 40px, a form page", "inputSize": "lg", "placeholder": "Large" }
+    ]
+  },
+  {
+    "caption": "Widths — with a custom class",
+    "width": 480,
+    "fields": [
+      { "id": "input-width-full", "label": "Full width", "placeholder": "Full width input", "className": "w-full" },
+      { "id": "input-width-medium", "label": "Medium width", "placeholder": "Medium width", "className": "w-72" },
+      { "id": "input-width-small", "label": "Small width", "placeholder": "Small", "className": "w-48" }
+    ]
+  },
+  {
+    "caption": "With helper text",
+    "fields": [
+      { "id": "input-help", "label": "Email address", "type": "email", "placeholder": "you@example.com", "help": "We'll never share your email." },
+      { "id": "input-error", "label": "Password", "type": "password", "placeholder": "Enter password", "error": "Password must be at least 8 characters." },
+      { "id": "input-success", "label": "Username", "value": "johndoe", "help": "Username is available!" }
+    ]
+  }
+]
