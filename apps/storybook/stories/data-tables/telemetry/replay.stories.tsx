@@ -125,7 +125,6 @@ export const Replay: Story = {
           </Button>
         </ButtonGroup>
         <SegmentedControl
-          size="sm"
           options={SPEEDS}
           value={speed}
           onValueChange={setSpeed}
@@ -164,8 +163,6 @@ export const Replay: Story = {
             data={tail}
             density="compact"
             seamless
-            enablePagination={false}
-            enableColumnVisibility={false}
             onRowClick={(e) => {
               setPlaying(false);
               setNow(e.offsetMs);

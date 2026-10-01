@@ -138,7 +138,7 @@ export const RatingControl = React.forwardRef<
               aria-checked={verdict === v}
               onClick={() => onVerdictChange?.(v)}
               className={cn(
-                "h-[22px] px-2 text-sm capitalize",
+                "h-[26px] px-2 text-base capitalize",
                 verdict === v
                   ? v === "appreciate"
                     ? "bg-success text-success-foreground"

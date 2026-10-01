@@ -162,7 +162,7 @@ const COLUMNS: ColumnDef<Node, unknown>[] = [
 ];
 
 const meta: Meta = {
-  title: "Data Tables/Static/DataTable",
+  title: "Data Tables/DataTable",
   parameters: { layout: "padded" },
 };
 
@@ -175,9 +175,11 @@ type Story = StoryObj<typeof meta>;
  * each level steps in, and a leaf keeps the chevron's room so names line up.
  *
  * Click a row (or its chevron) to open it. Sort by Rows and each level sorts
- * among its siblings, so a table never leaves its dataset. The table pages by
- * datasets — three to a page — so opening one grows this page rather than
- * pushing a dataset onto the next.
+ * among its siblings, so a table never leaves its dataset.
+ *
+ * The same prop on `PaginatedTable`, which pages by top-level rows — opening
+ * a dataset grows its page rather than pushing one onto the next — and whose
+ * search keeps a parent when anything under it matches.
  */
 export const NestedRows: Story = {
   render: () => (
@@ -187,8 +189,6 @@ export const NestedRows: Story = {
       getSubRows={(n) => n.children}
       getRowId={(n) => n.id}
       expandOnRowClick
-      enableColumnVisibility={false}
-      pageSize={3}
     />
   ),
 };

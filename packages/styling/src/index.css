@@ -201,6 +201,7 @@
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-row-in: row-in 1s ease-out;
 }
 
 /*
@@ -323,6 +324,13 @@
   }
   to {
     height: 0;
+  }
+}
+
+/* A row that just streamed in: arrives tinted, fades to its own ground. */
+@keyframes row-in {
+  from {
+    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
   }
 }
 

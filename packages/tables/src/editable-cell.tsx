@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '@invana/forms';
 import type { CellContext } from '@tanstack/react-table';
+import { setAtPath } from './apply-cell-edit';
 import type { CellEditHandler, EditOption, EditType } from './types';
 
 export interface EditableCellProps<TData> {
@@ -79,11 +80,19 @@ export function EditableCell<TData>({
   const commit = (next: unknown, focusCell: boolean) => {
     close(focusCell);
     if (next === initial) return;
+    const row = ctx.row.original;
+    const key = (ctx.column.columnDef as { accessorKey?: unknown }).accessorKey;
+    const field = key != null ? String(key) : undefined;
     const result = onCellEdit?.({
-      rowIndex: ctx.row.index,
-      columnId: ctx.column.id,
       value: next,
-      row: ctx.row.original,
+      previousValue: initial,
+      row,
+      updatedRow: field === undefined ? row : setAtPath(row, field, next),
+      rowId: ctx.row.id,
+      columnId: ctx.column.id,
+      field,
+      ancestors: ctx.row.getParentRows().map((r) => r.original),
+      rowIndex: ctx.row.index,
     });
     if (result && typeof (result as Promise<unknown>).then === 'function') {
       setSave({ state: 'saving', value: next });

@@ -22,7 +22,6 @@ export const Solid: Story = {
       <SegmentedControl
         aria-label="Confidence level"
         variant="solid"
-        size="sm"
         value={value}
         onValueChange={setValue}
         options={[

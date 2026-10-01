@@ -170,7 +170,7 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
-| DataTable | `packages/tables/src/data-table.tsx` | stays | done | today |
+| DataTable (every row at once; no search, no pages) | `packages/tables/src/data-table.tsx` | stays | done | today |
 | DataTablePagination | `packages/tables/src/data-table-pagination.tsx` | stays | done | today |
 | DataTableToolbar | `packages/tables/src/data-table-toolbar.tsx` | stays | done | today |
 | EditableCell | `packages/tables/src/editable-cell.tsx` | stays | done | today |
@@ -181,11 +181,17 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 | --- | --- | --- | --- | --- |
 | DataTable preview mode (on DataTable) | `packages/tables/src/data-table.tsx` | extend | done | today |
 | DataTable column scale (on DataTable) | `packages/tables/src/data-table.tsx` | extend | partial | today |
+| Cell highlight (`isCellHighlighted`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
+| Control cells (`meta.control`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
+| Filter chips (`filters`: in memory on PaginatedTable, sent to `fetchPage` on RemotePaginatedTable) | `packages/tables/src/core/filters.ts` | extend | done | today |
 
 ### New
 
 | Component | Folder | Change | Status | Tier |
 | --- | --- | --- | --- | --- |
+| Table core (shared model + grid behind the three tables) | `packages/tables/src/core/` | new | done | today |
+| PaginatedTable (client search, column picker, pages) | `packages/tables/src/paginated-table.tsx` | new | done | today |
+| RemotePaginatedTable (`fetchPage`: server pages, sort, search) | `packages/tables/src/remote-paginated-table.tsx` | new | done | today |
 | CoefficientTable | `packages/tables/src/coefficient-table.tsx` | new | todo | next |
 | PivotTable | `packages/tables/src/pivot-table.tsx` | new | todo | next |
 | Reorder ask | `packages/tables/src/` | later | todo | later |

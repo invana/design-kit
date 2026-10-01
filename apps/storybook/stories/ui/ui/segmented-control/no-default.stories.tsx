@@ -19,7 +19,6 @@ export const NoDefault: Story = {
   args: {
     'aria-label': 'Granularity',
     variant: 'solid',
-    size: 'sm',
     defaultValue: null,
     onValueChange: fn(),
     options: [

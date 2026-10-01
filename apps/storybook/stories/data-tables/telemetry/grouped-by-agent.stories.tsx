@@ -39,7 +39,6 @@ export const GroupedByAgent: Story = {
         columns={COLUMNS}
         data={BY_AGENT}
         density="compact"
-        enablePagination={false}
         groupBy={(e) => e.agent}
         renderGroupHeader={(agent, rows) => `${agent} · ${rows.length} events`}
         rowIndent={(e) => taskDepth(e.taskKey)}

@@ -18,7 +18,7 @@ const columns: ColumnDef<Store>[] = [
 ];
 
 const meta: Meta<typeof DataTable<Store>> = {
-  title: 'Data Tables/Static/Preview Open All',
+  title: 'Data Tables/DataTable',
   component: DataTable<Store>,
   parameters: { layout: 'padded' },
 };
@@ -37,7 +37,6 @@ export const PreviewOpenAll: Story = {
     density: 'compact',
     seamless: true,
     enableSorting: false,
-    enableColumnVisibility: false,
     preview: { total: 214, noun: 'stores', onOpen: fn() },
   },
 };

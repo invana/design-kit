@@ -11,14 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@invana/forms';
-import { BarChart3, Box, Clock, Star } from 'lucide-react';
 
 /**
- * Always-on inline-editing grid built purely from per-column `cell()` render
- * functions — no built-in editors. The table only supplies plumbing:
- * `meta.cellClassName` / `meta.headerClassName` to control padding + alignment,
- * and the `footer` slot for the summary bar. Every control (Checkbox, Select,
- * Input) is wired by the consumer against their own `useState` data.
+ * A grid of controls that are always on — each column's `cell()` renders a
+ * `Checkbox`, a `Select` or an `Input` at its `sm` size, wired to the story's
+ * own state, rather than the click-to-edit `meta.editable`.
+ *
+ * `meta.control` is what makes it read as a table: the cell gives up the
+ * vertical padding the control's own border already provides, so a row of
+ * controls is the height of a row of text. The summary is the `footer`.
  */
 
 type SemanticType = 'fact' | 'dimension' | 'time' | 'metric';
@@ -33,14 +34,11 @@ type Field = {
   synonyms: string;
 };
 
-const SEMANTIC: Record<
-  SemanticType,
-  { label: string; icon: React.ComponentType<{ className?: string }>; tone: string }
-> = {
-  fact: { label: 'Fact', icon: Star, tone: 'text-cyan-500' },
-  dimension: { label: 'Dimension', icon: Box, tone: 'text-blue-500' },
-  time: { label: 'Time dimension', icon: Clock, tone: 'text-orange-500' },
-  metric: { label: 'Metric', icon: BarChart3, tone: 'text-green-500' },
+const SEMANTIC: Record<SemanticType, string> = {
+  fact: 'Fact',
+  dimension: 'Dimension',
+  time: 'Time dimension',
+  metric: 'Metric',
 };
 
 const DATA_TYPES: Field['dataType'][] = ['int', 'string', 'datetime'];
@@ -93,16 +91,7 @@ const seed: Field[] = [
   },
 ];
 
-function SemanticIcon({ type }: { type: SemanticType }) {
-  const { icon: Icon, tone } = SEMANTIC[type];
-  return (
-    <span className={`inline-flex h-5 w-5 items-center justify-center rounded ${tone}`}>
-      <Icon className="h-4 w-4" />
-    </span>
-  );
-}
-
-function MetadataGrid(
+function MetadataGridDemo(
   args: Partial<React.ComponentProps<typeof DataTable<Field>>>,
 ) {
   const [data, setData] = React.useState<Field[]>(seed);
@@ -113,48 +102,30 @@ function MetadataGrid(
     [],
   );
 
-  // Cell padding is owned by the consumer via meta.cellClassName so the
-  // always-on controls sit flush; the default `p-2` is replaced with `px-3 py-2`.
-  const cellCls = 'px-3 py-2 align-middle';
-
   const columns: ColumnDef<Field, unknown>[] = React.useMemo(
     () => [
-      {
-        id: 'name',
-        accessorKey: 'name',
-        header: '',
-        size: 240,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2.5">
-            <SemanticIcon type={row.original.semanticType} />
-            <span className="font-medium">{row.original.name}</span>
-          </div>
-        ),
-      },
+      { id: 'name', accessorKey: 'name', header: 'Field', size: 200, meta: { mono: true } },
       {
         id: 'include',
-        header: 'Include in semantic model',
-        size: 200,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
+        header: 'Include',
+        size: 90,
+        meta: { control: true, align: 'center' },
         cell: ({ row }) => (
-          <label className="flex items-center gap-2">
-            <Checkbox
-              checked={row.original.include}
-              onCheckedChange={(v) => patch(row.original.id, { include: v === true })}
-            />
-            <span>Include</span>
-          </label>
+          <Checkbox
+            aria-label={`Include ${row.original.name}`}
+            checked={row.original.include}
+            onCheckedChange={(v) => patch(row.original.id, { include: v === true })}
+          />
         ),
       },
       {
         id: 'dataType',
         header: 'Data type',
-        size: 160,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
+        size: 140,
+        meta: { control: true },
         cell: ({ row }) =>
           row.original.dataType === '' ? (
-            <span className="pl-1 text-muted-foreground">—</span>
+            '—'
           ) : (
             <Select
               value={row.original.dataType}
@@ -162,12 +133,12 @@ function MetadataGrid(
                 patch(row.original.id, { dataType: v as Field['dataType'] })
               }
             >
-              <SelectTrigger className="h-8 font-mono">
+              <SelectTrigger triggerSize="sm" aria-label="Data type">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {DATA_TYPES.map((t) => (
-                  <SelectItem key={t} value={t} className="font-mono">
+                  <SelectItem key={t} value={t}>
                     {t}
                   </SelectItem>
                 ))}
@@ -179,20 +150,21 @@ function MetadataGrid(
         id: 'logicalName',
         header: 'Logical name',
         size: 200,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
+        meta: { control: true },
         cell: ({ row }) => (
           <Input
+            inputSize="sm"
+            aria-label="Logical name"
             value={row.original.logicalName}
             onChange={(e) => patch(row.original.id, { logicalName: e.target.value })}
-            className="h-8"
           />
         ),
       },
       {
         id: 'semanticType',
         header: 'Semantic type',
-        size: 220,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
+        size: 180,
+        meta: { control: true },
         cell: ({ row }) => (
           <Select
             value={row.original.semanticType}
@@ -200,31 +172,20 @@ function MetadataGrid(
               patch(row.original.id, { semanticType: v as SemanticType })
             }
           >
-            <SelectTrigger className="h-8">
+            <SelectTrigger triggerSize="sm" aria-label="Semantic type">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {(Object.keys(SEMANTIC) as SemanticType[]).map((t) => (
                 <SelectItem key={t} value={t}>
-                  <span className="flex items-center gap-2">
-                    <SemanticIcon type={t} />
-                    {SEMANTIC[t].label}
-                  </span>
+                  {SEMANTIC[t]}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         ),
       },
-      {
-        id: 'synonyms',
-        header: 'Synonyms',
-        size: 220,
-        meta: { cellClassName: cellCls, headerClassName: 'px-3' },
-        cell: ({ row }) => (
-          <span className="text-muted-foreground">{row.original.synonyms}</span>
-        ),
-      },
+      { id: 'synonyms', accessorKey: 'synonyms', header: 'Synonyms', size: 220 },
     ],
     [patch],
   );
@@ -237,8 +198,6 @@ function MetadataGrid(
       columns={columns}
       data={data}
       enableSorting={false}
-      enablePagination={false}
-      enableColumnVisibility={false}
       footer={
         <span>
           {data.length} fields · {metrics} metric · 1 filter
@@ -249,7 +208,7 @@ function MetadataGrid(
 }
 
 const meta: Meta<typeof DataTable<Field>> = {
-  title: 'Data Tables/Static/Metadata Grid',
+  title: 'Data Tables/DataTable',
   component: DataTable<Field>,
   parameters: { layout: 'padded' },
 };
@@ -257,7 +216,6 @@ const meta: Meta<typeof DataTable<Field>> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const MetadataGridStory: Story = {
-  name: 'Metadata Grid',
-  render: () => <MetadataGrid />,
+export const MetadataGrid: Story = {
+  render: () => <MetadataGridDemo />,
 };

@@ -1,8 +1,7 @@
-import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DataTable } from "@invana/tables";
+import { PaginatedTable } from "@invana/tables";
 import { EVENTS, type TelemetryEvent } from "./fixtures";
-import { EMPTY_FILTER, LOG_COLUMNS, LogFilterBar, applyLogFilter } from "./log";
+import { LOG_COLUMNS, LOG_FILTERS, LOG_SEARCH_COLUMNS } from "./log";
 
 const meta: Meta = {
   title: "Data Tables/Telemetry/Event Log",
@@ -22,30 +21,18 @@ type Story = StoryObj<typeof meta>;
  * Narrow by kind, agent or level, or search a task or a detail.
  */
 export const EventLog: Story = {
-  render: function Render() {
-    const [filter, setFilter] = React.useState(EMPTY_FILTER);
-    const rows = React.useMemo(() => applyLogFilter(EVENTS, filter), [filter]);
-
-    return (
-      <DataTable<TelemetryEvent>
-        columns={LOG_COLUMNS}
-        data={rows}
-        density="compact"
-        enableSorting
-        enablePagination
-        enableColumnVisibility
-        enableColumnPinning
-        pageSize={25}
-        pageSizeOptions={[25, 50, 100]}
-        toolbar={
-          <LogFilterBar
-            filter={filter}
-            onChange={setFilter}
-            shown={rows.length}
-            total={EVENTS.length}
-          />
-        }
-      />
-    );
-  },
+  render: () => (
+    <PaginatedTable<TelemetryEvent>
+      columns={LOG_COLUMNS}
+      data={EVENTS}
+      density="compact"
+      filters={LOG_FILTERS}
+      searchColumns={LOG_SEARCH_COLUMNS}
+      searchPlaceholder="Search task or detail…"
+      noun="events"
+      enableColumnPinning
+      pageSize={25}
+      pageSizeOptions={[25, 50, 100]}
+    />
+  ),
 };

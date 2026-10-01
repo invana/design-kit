@@ -15,7 +15,6 @@ export const ReadOnly: Story = {
   args: {
     'aria-label': 'Confidence level',
     variant: 'solid',
-    size: 'sm',
     readOnly: true,
     defaultValue: '95',
     options: [

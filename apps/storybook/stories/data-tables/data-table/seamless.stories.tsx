@@ -19,7 +19,7 @@ const columns: ColumnDef<Ceiling>[] = [
 ];
 
 const meta: Meta<typeof DataTable<Ceiling>> = {
-  title: 'Data Tables/Static/Seamless',
+  title: 'Data Tables/DataTable',
   component: DataTable<Ceiling>,
   parameters: { layout: 'padded' },
 };
@@ -40,8 +40,6 @@ export const Seamless: StoryObj<typeof meta> = {
           data={rows}
           seamless
           enableSorting={false}
-          enablePagination={false}
-          enableColumnVisibility={false}
         />
       </CardContent>
     </Card>

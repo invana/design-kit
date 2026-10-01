@@ -123,7 +123,7 @@ const COLUMNS: ColumnDef<Run, unknown>[] = [
 ];
 
 const meta: Meta = {
-  title: "Data Tables/Static/DataTable",
+  title: "Data Tables/DataTable",
   parameters: { layout: "padded" },
 };
 
@@ -148,7 +148,6 @@ export const ExpandableDetail: Story = {
       canExpand={(r) => r.status !== "queued"}
       defaultExpanded={{ run_7f3c: true }}
       expandOnRowClick
-      enableColumnVisibility={false}
       renderExpanded={(r) => (
         <PropertyList labelWidth={72}>
           <PropertyRow label="trigger">{r.trigger}</PropertyRow>
