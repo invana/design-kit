@@ -3,10 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Dashboard, type ActionContext, type DashboardSpec } from '@invana/dashboard';
 
-import forecastRun from '../../../fixtures/dashboards/forecast-run.json';
-import { jsx, snippet } from '../../_story/source';
-import type { Logged } from '../../_story/variant-board';
-import { ICONS, Surface } from '../_fixtures';
+import forecastRun from '../../../../fixtures/dashboards/forecast-run.json';
+import { jsx, snippet } from '../../../_story/source';
+import { ICONS, Surface, patchPanel, useSent } from '../../_fixtures';
 
 // JSON widens the literal unions (`"running"`, `"right"`); the shape is the dashboard's own.
 const SPEC = forecastRun as DashboardSpec;
@@ -16,7 +15,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Blocks/From Blocks',
+  title: 'Dashboard/Examples/From Blocks',
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -46,20 +45,35 @@ const meta = {
 export default meta;
 type Story = StoryObj<Args>;
 
-/** `spec` with the steps table's picked row moved — what a consumer patches into its own spec. */
-function withStep(spec: DashboardSpec, step: unknown): DashboardSpec {
-  return ({
+type Point = [string, number];
+
+/**
+ * The scenario, answered: the forecast after `forecastFrom` moved by price × elasticity — what
+ * the API would send back, done here without one.
+ */
+function withScenario(spec: DashboardSpec, value: { price?: number; elasticity?: number }): DashboardSpec {
+  const lift = 1 - ((value.price ?? 0) * (value.elasticity ?? 1)) / 100;
+  return {
     ...spec,
     rows: spec.rows.map((row) => ({
       ...row,
-      panels: row.panels.map((p) => (p.id === 'steps' ? { ...p, options: { ...p.options, selected: step } } : p)),
+      panels: row.panels.map((p) => {
+        if (p.id !== 'demand') return p;
+        const options = p.options as { forecastFrom: string; series: { name: string; points: Point[] }[] };
+        const from = options.series[0].points.findIndex(([at]) => at === options.forecastFrom);
+        const series = options.series.map((s) => ({
+          ...s,
+          points: s.points.map(([at, v], i): Point => [at, i > from ? Math.round(v * lift) : v]),
+        }));
+        return { ...p, aside: `scenario · price ${value.price}% · elasticity ${value.elasticity}`, options: { ...options, series } };
+      }),
     })),
-  }) as DashboardSpec;
+  } as DashboardSpec;
 }
 
 function Live({ onAction }: Args) {
   const [spec, setSpec] = React.useState(SPEC);
-  const [sent, setSent] = React.useState<Logged[]>([]);
+  const [sent, record] = useSent(onAction);
   return (
     <Surface sent={sent}>
       <Dashboard
@@ -67,9 +81,11 @@ function Live({ onAction }: Args) {
         spec={spec}
         icons={ICONS}
         onAction={(id, ctx) => {
-          onAction(id, ctx);
-          setSent((s) => [...s, { name: `onAction("${id}")`, payload: ctx }].slice(-3));
-          if (id === 'select' && ctx?.panelId === 'steps') setSpec((s) => withStep(s, ctx.value));
+          record(id, ctx);
+          // A picked step moves the table's selection — what a consumer patches into its own spec.
+          if (id === 'select' && ctx?.panelId === 'steps') setSpec((s) => patchPanel(s, 'steps', { selected: ctx.value }));
+          // The scenario's inputs re-draw the forecast.
+          if (id === 'reply' && ctx?.panelId === 'scenario') setSpec((s) => withScenario(s, ctx.value as { price?: number }));
         }}
       />
     </Surface>
@@ -79,8 +95,9 @@ function Live({ onAction }: Args) {
 /**
  * A dashboard drawn only from blocks — one `DashboardSpec` in `fixtures/dashboards/forecast-run.json`,
  * whose panels hold the same block options a conversation turn draws. Pick a step or run the
- * scenario: each arrives as `onAction(id, { panelId, value })`, written in the footer, and a
- * picked step moves the table's selection, as the consumer's own spec would.
+ * scenario: each arrives as `onAction(id, { panelId, value })`, written in the footer, and is
+ * answered as the consumer's own spec would be — a picked step moves the table's selection, and
+ * the scenario's inputs re-draw the forecast after today.
  */
 export const FromBlocks: Story = {
   render: (args) => <Live {...args} />,
@@ -97,6 +114,7 @@ export const FromBlocks: Story = {
         expect.objectContaining({ panelId: 'scenario', value: expect.objectContaining({ price: -5 }) }),
       );
       await expect(canvas.getByRole('list', { name: 'Events' })).toHaveTextContent('"panelId": "scenario"');
+      await expect(canvas.getByText('scenario · price -5% · elasticity 1.3')).toBeInTheDocument();
     });
   },
 };
