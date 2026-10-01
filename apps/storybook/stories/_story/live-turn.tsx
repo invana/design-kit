@@ -1,10 +1,12 @@
 import * as React from 'react';
-import type { AskKind } from '@invana/blocks';
+import type { AnswerKind, AskKind } from '@invana/blocks';
 import {
   applyPatch,
   ChatSessionTurn,
+  type AnswerTurn,
   type AskSpec,
   type AskTurn,
+  type BlockSpec,
   type ConversationEvent,
   type ConversationPatch,
   type ConversationSpec,
@@ -29,6 +31,23 @@ export function askTurn<K extends AskKind>(kind: K, v: BlockVariant<K>): AskTurn
 }
 
 /**
+ * A block variant as the answer turn the API would send for it: the block alone, with the
+ * card's fields (`label`, `title`, `state`, the envelope) from the variant's `turn`.
+ */
+export function answerTurn<K extends AnswerKind>(kind: K, v: BlockVariant<K>): AnswerTurn {
+  const { id, stage: _stage, answeredAt: _at, ...card } = v.turn;
+  return {
+    id,
+    role: 'assistant',
+    kind: 'answer',
+    state: 'complete',
+    label: kind,
+    blocks: [{ kind, ...v.spec } as BlockSpec],
+    ...card,
+  } as AnswerTurn;
+}
+
+/**
  * The patch the API answers an event with, for the events a turn settles on. A story
  * stands in for the server here; anything else is logged and left for the API.
  */
@@ -49,7 +68,7 @@ export function LiveTurn({
   onEvent,
   log,
 }: {
-  turn: AskTurn;
+  turn: AskTurn | AnswerTurn;
   now?: string;
   onEvent?: (event: ConversationEvent) => void;
   log: Log;

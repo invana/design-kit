@@ -3,10 +3,15 @@ import { Button, Eyebrow } from '@invana/ui';
 
 import { ALL, inline } from './source';
 
-/** One cell of a board: the caption the Design Kit Spec gives it, and whether it draws at 280px. */
+/** One cell of a board: the caption the Design Kit Spec gives it, and how wide it draws. */
 export interface Variant {
   caption: string;
+  /** Draw at 280px — the narrowest a chat column gets. */
   narrow?: boolean;
+  /** Take the board's whole row — a table, a panel, an app shell. */
+  wide?: boolean;
+  /** A width in px other than the board's 320. */
+  width?: number;
 }
 
 /** One thing a cell sent: the callback's name and what it carried. */
@@ -64,7 +69,11 @@ function Cell<V extends Variant>({
       role="group"
       aria-label={variant.caption}
       className="flex min-w-0 flex-col gap-2"
-      style={{ width: variant.narrow ? 280 : 320 }}
+      style={
+        variant.wide
+          ? { gridColumn: '1 / -1' }
+          : { width: variant.narrow ? 280 : (variant.width ?? 320), gridColumn: variant.width ? 'span 2' : undefined }
+      }
     >
       <div className="flex items-center justify-between">
         <Eyebrow>{variant.caption}</Eyebrow>

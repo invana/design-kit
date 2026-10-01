@@ -15,8 +15,11 @@ export interface BlockVariant<K extends BlockKind> {
   spec: BlockOptionsByKind[K];
   state?: AskState;
   value?: unknown;
-  /** The conversation turn around it: its id, and an ask's stage and answer time. */
-  turn: { id: string; stage?: string; answeredAt?: string };
+  /**
+   * The conversation turn around it: its id, an ask's stage and answer time, and for an answer
+   * the card's own fields (`label`, `title`, `state`, `scope`, …) — anything `AnswerTurn` takes.
+   */
+  turn: { id: string; stage?: string; answeredAt?: string; [field: string]: unknown };
   /** The clock an answered ask's time is read against (ISO 8601), so it reads the same every run. */
   now?: string;
 }
