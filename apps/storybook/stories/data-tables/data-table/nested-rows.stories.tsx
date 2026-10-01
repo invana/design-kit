@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PaginatedTable, type ColumnDef } from "@invana/tables";
+import { DataTable, type ColumnDef } from "@invana/tables";
 import { Badge } from "@invana/ui";
 
 type Node = {
@@ -162,7 +162,7 @@ const COLUMNS: ColumnDef<Node, unknown>[] = [
 ];
 
 const meta: Meta = {
-  title: "Data Tables/PaginatedTable",
+  title: "Data Tables/DataTable",
   parameters: { layout: "padded" },
 };
 
@@ -175,22 +175,20 @@ type Story = StoryObj<typeof meta>;
  * each level steps in, and a leaf keeps the chevron's room so names line up.
  *
  * Click a row (or its chevron) to open it. Sort by Rows and each level sorts
- * among its siblings, so a table never leaves its dataset. The table pages by
- * datasets — three to a page — so opening one grows this page rather than
- * pushing a dataset onto the next.
+ * among its siblings, so a table never leaves its dataset.
  *
- * The search reads every level: a dataset stays when it or anything under it
- * matches, so searching `fx` finds the table and the dataset it lives in.
+ * The same prop on `PaginatedTable`, which pages by top-level rows — opening
+ * a dataset grows its page rather than pushing one onto the next — and whose
+ * search keeps a parent when anything under it matches.
  */
 export const NestedRows: Story = {
   render: () => (
-    <PaginatedTable<Node>
+    <DataTable<Node>
       columns={COLUMNS}
       data={DATA}
       getSubRows={(n) => n.children}
       getRowId={(n) => n.id}
       expandOnRowClick
-      pageSize={3}
     />
   ),
 };
