@@ -42,9 +42,6 @@
       ],
       "@invana/forms": [
         "../forms/src"
-      ],
-      "@invana/blocks": [
-        "../blocks/src"
       ]
     }
   },

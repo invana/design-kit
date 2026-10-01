@@ -44,6 +44,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
+    "@invana/blocks": "workspace:*",
     "@invana/charts": "workspace:*",
     "@invana/forms": "workspace:*",
     "@invana/styling": "workspace:*",
@@ -54,6 +55,7 @@
     "react-hook-form": "^7"
   },
   "devDependencies": {
+    "@invana/blocks": "workspace:*",
     "@invana/charts": "workspace:*",
     "@invana/forms": "workspace:*",
     "@invana/styling": "workspace:*",

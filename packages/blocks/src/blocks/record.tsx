@@ -1,8 +1,7 @@
 import { Avatar, AvatarFallback, Badge, Eyebrow, PropertyList, PropertyRow } from "@invana/ui"
 
-import type { BlockRendererProps } from "../../conversations/registry"
-import type { RecordRow } from "../../protocol/types"
-import { BADGE_TONE } from "./tone"
+import { BADGE_TONE } from "../format"
+import type { BlockProps, RecordRow } from "../types"
 
 function Rows({ rows }: { rows: RecordRow[] }) {
   return (
@@ -22,8 +21,8 @@ function Rows({ rows }: { rows: RecordRow[] }) {
  * who it is and its state above them, rows under headings, and where each
  * value came from when that is the point.
  */
-export function RecordBlock({ block }: BlockRendererProps<"record">) {
-  const { header } = block
+export function RecordBlock({ spec }: BlockProps<"record">) {
+  const { header } = spec
   return (
     <div className="flex min-w-0 flex-col gap-1.5">
       {header ? (
@@ -48,9 +47,9 @@ export function RecordBlock({ block }: BlockRendererProps<"record">) {
           ) : null}
         </div>
       ) : null}
-      {block.rows?.length ? <Rows rows={block.rows} /> : null}
-      {block.groups?.map((group, i) => (
-        <div key={group.label} className={i > 0 || block.rows?.length ? "mt-1 flex flex-col gap-1" : "flex flex-col gap-1"}>
+      {spec.rows?.length ? <Rows rows={spec.rows} /> : null}
+      {spec.groups?.map((group, i) => (
+        <div key={group.label} className={i > 0 || spec.rows?.length ? "mt-1 flex flex-col gap-1" : "flex flex-col gap-1"}>
           <Eyebrow>{group.label}</Eyebrow>
           <Rows rows={group.rows} />
         </div>

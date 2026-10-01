@@ -1,16 +1,16 @@
 import { MetricGrid, MetricTile } from "@invana/ui"
 
-import type { BlockRendererProps } from "../../conversations/registry"
-import { CAPTION_TONE, metricValue } from "./metric"
+import { CAPTION_TONE, metricValue } from "../format"
+import type { BlockProps } from "../types"
 
 /** Three across; four sit two by two rather than three and one; more wrap in threes. */
 const columnsFor = (n: number) => (n === 4 ? 2 : Math.min(n, 3))
 
 /** A band of figures that belong to one answer, each with its change beneath it. */
-export function GridBlock({ block }: BlockRendererProps<"grid">) {
+export function GridBlock({ spec }: BlockProps<"grid">) {
   return (
-    <MetricGrid joined seamless columns={columnsFor(block.tiles.length)}>
-      {block.tiles.map((tile) => (
+    <MetricGrid joined seamless columns={columnsFor(spec.tiles.length)}>
+      {spec.tiles.map((tile) => (
         <MetricTile
           key={tile.label}
           variant="figure"

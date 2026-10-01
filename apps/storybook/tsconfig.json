@@ -30,6 +30,8 @@
       "@invana/forms": ["../../packages/forms/src"],
       "@invana/forms/*": ["../../packages/forms/src/*"],
       "@invana/charts": ["../../packages/charts/src"],
+
+      "@invana/blocks": ["../../packages/blocks/src"],
       "@invana/charts/*": ["../../packages/charts/src/*"],
       "@invana/tables": ["../../packages/tables/src"],
       "@invana/tables/*": ["../../packages/tables/src/*"],

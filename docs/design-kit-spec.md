@@ -60,9 +60,10 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 6. Only meaningful in a dashboard (rows, panel layout) → `dashboard`.
 7. Anything else → `ui`.
 
-First slice of `blocks`: `metric`, `grid`, `record`, `table`, `timeseries`, `bars`, `ranked`,
-`form`. Assistant registers them from `blocks`; dashboard draws them in `PanelBox` and drops its
-`metrics`, `properties` and `table` panels. No backward compatibility is kept.
+First slice of `blocks`: `narrative`, `metric`, `grid`, `record`, `table`, `timeseries`, `bars`,
+`ranked`, and `Page`. `form` stays in assistant: it is tied to the ask turn's state. Assistant
+registers them from `blocks`. Dashboard draws them in `PanelBox` once each clash with its own
+panels is decided (see To do). No backward compatibility is kept.
 
 ## To do
 
@@ -70,7 +71,12 @@ First slice of `blocks`: `metric`, `grid`, `record`, `table`, `timeseries`, `bar
       spec: `ASK_PRESETS` + `BLOCK_PRESETS` → one `BLOCKS` (with `BlockKind`, `AskKind`,
       `AnswerKind`), `ASKS` → `ASK_INTENTS`, the `preset` key → `kind`, `asks/presets/` →
       `asks/blocks/`.
-- [ ] **Create `@invana/blocks`** with the first slice; assistant and dashboard switch to it.
+- [x] **Create `@invana/blocks`** with `narrative`, `metric`, `grid`, `record`, `table`,
+      `timeseries`, `bars`, `ranked`, plus `Page`. Assistant draws these kinds from it, and
+      `answerToPage(turn)` opens a long answer as a page.
+- [ ] **Dashboard draws blocks.** Decide each clash first: dashboard `table` (row selection) vs the
+      `table` block; `metrics` vs `grid` (tones, `meter`); `properties` vs `record` (`mono`,
+      `labelWidth`); `text` (callout, actions) is not `narrative` and stays.
 - [ ] **Triage Needs review.** Keep only the generic variants and merge them into their block
       boards: line with reference + forecast (`timeseries`), tile with a mark (`grid`), stacked
       (`bars`), one flagged cell (`matrix`), proposal tag + scope note (`proposal`), compact

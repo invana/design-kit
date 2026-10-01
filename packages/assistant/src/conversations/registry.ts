@@ -1,22 +1,15 @@
 import type * as React from "react"
 
-import { BarsBlock } from "../answers/blocks/bars"
 import { CannotBlock } from "../answers/blocks/cannot"
 import { CaveatBlock } from "../answers/blocks/caveat"
 import { CitationsBlock } from "../answers/blocks/citations"
 import { FilesBlock } from "../answers/blocks/files"
-import { GridBlock } from "../answers/blocks/grid"
 import { MethodBlock } from "../answers/blocks/method"
-import { MetricBlock } from "../answers/blocks/metric"
-import { NarrativeBlock } from "../answers/blocks/narrative"
 import { ProposalBlock } from "../answers/blocks/proposal"
-import { RankedBlock } from "../answers/blocks/ranked"
-import { RecordBlock } from "../answers/blocks/record"
 import { ScopeBlock } from "../answers/blocks/scope"
-import { TableBlock } from "../answers/blocks/table"
 import { TimelineBlock } from "../answers/blocks/timeline"
-import { TimeseriesBlock } from "../answers/blocks/timeseries"
 import { TraceBlock } from "../answers/blocks/trace"
+import { NarrativeAnswer, shared } from "../answers/shared"
 import { ConfirmAsk } from "../asks/blocks/confirm"
 import { FormAsk } from "../asks/blocks/form"
 import { MultiAsk } from "../asks/blocks/multi"
@@ -91,15 +84,15 @@ export const BUILT_IN_ASKS: AskRegistry = {
 }
 
 export const BUILT_IN_BLOCKS: BlockRegistry = {
-  narrative: NarrativeBlock,
-  metric: MetricBlock,
-  grid: GridBlock,
-  table: TableBlock,
+  narrative: NarrativeAnswer,
+  metric: shared("metric"),
+  grid: shared("grid"),
+  table: shared("table"),
   attr: null,
-  record: RecordBlock,
-  ranked: RankedBlock,
-  timeseries: TimeseriesBlock,
-  bars: BarsBlock,
+  record: shared("record"),
+  ranked: shared("ranked"),
+  timeseries: shared("timeseries"),
+  bars: shared("bars"),
   waterfall: null,
   matrix: null,
   funnel: null,

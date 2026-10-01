@@ -13,7 +13,7 @@ import {
 import { ClarifyActions } from ".."
 import type { AskRendererProps } from "../../conversations/registry"
 import { AskHint, AskLink, AskSummary, choiceParts, hintText, isHeading, joinPicks } from "../parts"
-import { strong } from "../../prose"
+import { strong } from "@invana/blocks"
 
 /**
  * The submit's words, from the ask's `submit` or else from the question. A

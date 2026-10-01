@@ -4,7 +4,7 @@ import { CitationList, CitationRow } from "@invana/ui"
 import { ChatSessionDisclosure } from "../../conversations/thread"
 import type { BlockRendererProps } from "../../conversations/registry"
 import { useCiteFocus } from "./cite-focus"
-import { figureText } from "./figure"
+import { figureText } from "@invana/blocks"
 
 /**
  * The sources an answer rests on, numbered as its markers cite them, with

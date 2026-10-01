@@ -22,7 +22,7 @@ import {
 import type { AskRendererProps } from "../../conversations/registry"
 import { Placeholder } from "../../conversations/placeholder"
 import type { MultistepOptions } from "../../protocol/types"
-import { strong } from "../../prose"
+import { strong } from "@invana/blocks"
 import { AskHint, AskLink, AskSummary, choiceParts, joinPicks } from "../parts"
 
 type Step = MultistepOptions["steps"][number]

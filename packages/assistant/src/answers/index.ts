@@ -29,3 +29,5 @@ export type {
   TemplateOption,
   TemplatePickerProps,
 } from "@invana/ui"
+
+export { answerToPage } from "./page"

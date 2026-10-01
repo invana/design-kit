@@ -134,7 +134,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pkg: [ui, styling, themes, dashboard, editor, forms, tables, charts, assistant]
+        pkg: [ui, styling, themes, dashboard, editor, forms, tables, charts, blocks, assistant]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -77,15 +77,16 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
+    "@invana/assistant": "workspace:*",
+    "@invana/blocks": "workspace:*",
+    "@invana/charts": "workspace:*",
+    "@invana/dashboard": "workspace:*",
+    "@invana/editor": "workspace:*",
     "@invana/forms": "workspace:*",
     "react-day-picker": "^10.0.1",
     "react-hook-form": "^7.81.0",
     "react-resizable-panels": "^4.12.1",
     "sonner": "^2.0.7",
-    "zod": "^4.4.3",
-    "@invana/editor": "workspace:*",
-    "@invana/dashboard": "workspace:*",
-    "@invana/charts": "workspace:*",
-    "@invana/assistant": "workspace:*"
+    "zod": "^4.4.3"
   }
 }

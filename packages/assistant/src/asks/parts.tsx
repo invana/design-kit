@@ -12,7 +12,7 @@ import {
 
 import { ClarifyActions, ClarifyFootnote } from "."
 import type { AskText, ChoiceOption, Tone } from "../protocol/types"
-import { strong } from "../prose"
+import { strong } from "@invana/blocks"
 
 /*
  * The parts every ask shares, so the six renderers draw one language: the

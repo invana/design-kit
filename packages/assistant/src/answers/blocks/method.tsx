@@ -7,7 +7,7 @@ import {
   ChatSessionDisclosureSteps,
 } from "../../conversations/thread"
 import type { BlockRendererProps } from "../../conversations/registry"
-import { strong } from "../../prose"
+import { strong } from "@invana/blocks"
 
 /**
  * The query, formula or model behind the figure, folded. Closed, the line

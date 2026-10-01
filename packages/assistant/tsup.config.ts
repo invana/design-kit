@@ -15,6 +15,7 @@ export default defineConfig({
     'react-dom',
     'react-hook-form',
     '@invana/ui',
+    '@invana/blocks',
     '@invana/charts',
     '@invana/tables',
     '@invana/forms',

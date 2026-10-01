@@ -3,7 +3,7 @@ import { Button, CaveatNote } from "@invana/ui"
 import { ConfirmCard, type ConfirmCost } from "../confirm-card"
 import type { AskRendererProps } from "../../conversations/registry"
 import type { ConfirmOptions } from "../../protocol/types"
-import { strong } from "../../prose"
+import { strong } from "@invana/blocks"
 import { AskHint, AskSummary, hintText } from "../parts"
 
 /** The grammar's cost, as the card's figures. A value with `**…**` bolds only that part. */

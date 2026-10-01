@@ -2,7 +2,7 @@ import { ArtifactCard, ArtifactTable, Badge, Button } from "@invana/ui"
 
 import type { BlockRendererProps } from "../../conversations/registry"
 import type { FileItem } from "../../protocol/types"
-import { BADGE_TONE } from "./tone"
+import { BADGE_TONE } from "@invana/blocks"
 
 /** A page with its corner folded — a file, whatever its type. */
 function FileGlyph() {

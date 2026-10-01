@@ -14,7 +14,7 @@ import {
 import { ClarifyActions } from ".."
 import type { AskRendererProps } from "../../conversations/registry"
 import { AskHint, AskSummary, choiceParts, isHeading, pickText } from "../parts"
-import { strong } from "../../prose"
+import { strong } from "@invana/blocks"
 
 /** The value an “Other…” pick holds until its words are typed. */
 const OTHER = "\u0000other"
