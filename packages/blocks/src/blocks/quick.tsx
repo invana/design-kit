@@ -63,6 +63,7 @@ export function QuickAsk({ spec, state = "pending", value: given, onAction }: Bl
         <React.Fragment key={r.key}>
           {i === 0 ? <AskQuestion text={spec} /> : <p className="mt-1">{r.question}</p>}
           <SegmentedControl
+            size="sm"
             aria-label={r.question}
             variant="solid"
             stretch={spec.stretch}

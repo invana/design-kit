@@ -6,13 +6,14 @@ import { cn } from "../../lib/utils"
  * How much room a row gets. The type size never moves — a row is the root size
  * at every density — only the height and the cell padding do.
  *
- * - `compact` — 26px rows: a journal, a trace, a step's output, a log.
- * - `default` — 34px rows at a 13px root: a list in an application.
- * - `comfortable` — 44px rows at a 13px root: a table standing alone on a
- *   page, a settings list.
+ * - `compact` — the control scale's `sm`, 26px: a journal, a trace, a
+ *   step's output, a log.
+ * - `default` — `md`, 32px: a list in an application.
+ * - `comfortable` — `lg`, 40px: a table standing alone on a page, a settings
+ *   list.
  *
- * `default` and `comfortable` are ratios of the root, like the type, so a
- * site that sets a 16px root gets proportionally roomier rows.
+ * The px are at a 13px root. Every density is a ratio of the root, like the
+ * type, so a site that sets a 16px root gets proportionally roomier rows.
  */
 export type TableDensity = "compact" | "default" | "comfortable"
 
@@ -111,13 +112,17 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "h-control-md px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
       // Density: `<Table density>` marks the wrapper, and every cell follows
       // from there. One prop on the table rather than a size on <TableHead>
       // and <TableCell> individually — four places to forget, and a table with
       // two densities in it is always a mistake.
-      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:text-sm",
-      "group-data-[density=comfortable]/table:h-[3.375rem] group-data-[density=comfortable]/table:px-3",
+      //
+      // Each density is a step of the control scale — compact `sm` (26px),
+      // default `md` (32px), comfortable `lg` (40px) — and the header is the
+      // row's height, so a toolbar control of the same size lines up with a row.
+      "group-data-[density=compact]/table:h-control-sm group-data-[density=compact]/table:text-sm",
+      "group-data-[density=comfortable]/table:h-control-lg group-data-[density=comfortable]/table:px-3",
       className
     )}
     {...props}
@@ -132,9 +137,9 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "h-[2.625rem] px-2 py-1.5 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-      "group-data-[density=compact]/table:h-[26px] group-data-[density=compact]/table:py-1",
-      "group-data-[density=comfortable]/table:h-[3.375rem] group-data-[density=comfortable]/table:px-3 group-data-[density=comfortable]/table:py-2.5",
+      "h-control-md px-2 py-1 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      "group-data-[density=compact]/table:h-control-sm group-data-[density=compact]/table:py-0",
+      "group-data-[density=comfortable]/table:h-control-lg group-data-[density=comfortable]/table:px-3 group-data-[density=comfortable]/table:py-2.5",
       className
     )}
     {...props}

@@ -44,6 +44,7 @@ export const Default: Story = {
           actions={
             <>
               <SegmentedControl
+                size="sm"
                 aria-label="How to read this step"
                 options={[
                   { value: 'overview', label: 'Overview' },

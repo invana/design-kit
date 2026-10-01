@@ -125,6 +125,7 @@ export const Replay: Story = {
           </Button>
         </ButtonGroup>
         <SegmentedControl
+          size="sm"
           options={SPEEDS}
           value={speed}
           onValueChange={setSpeed}

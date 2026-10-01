@@ -8,6 +8,9 @@ import {
   PropertyRow,
   SearchInput,
   SegmentedControl,
+  Tabs,
+  TabsList,
+  TabsTrigger,
   Toggle,
 } from '@invana/ui';
 import { Input } from '@invana/forms';
@@ -30,7 +33,8 @@ const OPTIONS = [
  * One size name, one height, in every component — the control scale from
  * `@invana/styling` (`--spacing-control-*`). Each row lines its controls up on
  * one baseline; a control taller or shorter than its row is a component that
- * has stopped reading the scale.
+ * has stopped reading the scale. The `default` row passes no size at all —
+ * every control's default is `md`.
  */
 export const Scale: Story = {
   render: function Render() {
@@ -57,7 +61,13 @@ export const Scale: Story = {
               <Settings2 />
             </Button>
             <Badge size="sm" variant="outline">badge</Badge>
-            <SegmentedControl aria-label="Range" options={OPTIONS} />
+            <SegmentedControl size="sm" aria-label="Range" options={OPTIONS} />
+            <Tabs size="sm" defaultValue="day">
+              <TabsList>
+                <TabsTrigger value="day">Day</TabsTrigger>
+                <TabsTrigger value="week">Week</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <Toggle size="sm" variant="outline">B</Toggle>
           </div>
         </PropertyRow>
@@ -69,7 +79,13 @@ export const Scale: Story = {
             <Button size="icon" variant="ghost" aria-label="Settings">
               <Settings2 />
             </Button>
-            <SegmentedControl size="md" aria-label="Range" options={OPTIONS} />
+            <SegmentedControl aria-label="Range" options={OPTIONS} />
+            <Tabs defaultValue="day">
+              <TabsList>
+                <TabsTrigger value="day">Day</TabsTrigger>
+                <TabsTrigger value="week">Week</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <Toggle variant="outline">B</Toggle>
           </div>
         </PropertyRow>

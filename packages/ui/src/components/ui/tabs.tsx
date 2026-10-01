@@ -39,7 +39,9 @@ const TabsList = React.forwardRef<
       ref={ref}
       className={cn(
         "inline-flex items-center justify-center text-muted-foreground",
-        size === "sm" ? "h-[30px] gap-1" : "rounded-lg bg-muted p-1",
+        // The list is the control: its height is on the scale, so it lines up
+        // with a button or search beside it. The default's triggers sit inset.
+        size === "sm" ? "h-control-sm gap-1" : "h-control-md rounded-lg bg-muted p-0.5",
         className,
       )}
       {...props}
@@ -57,7 +59,7 @@ const TabsTrigger = React.forwardRef<
     <TabsPrimitive.Trigger
       ref={ref}
       className={cn(
-        size === "sm" ? "h-control-sm px-2" : "px-3 py-1",
+        size === "sm" ? "h-control-sm px-2" : "h-full px-3",
         "inline-flex items-center justify-center whitespace-nowrap rounded-control font-medium ring-offset-background transition-colors text-muted-foreground hover:text-foreground hover:bg-background/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:ring-1 data-[state=active]:ring-primary/25 data-[state=active]:shadow-sm",
         className,
       )}

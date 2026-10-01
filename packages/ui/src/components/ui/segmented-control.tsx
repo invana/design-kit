@@ -27,8 +27,9 @@ export interface SegmentedControlProps
   defaultValue?: string | null
   onValueChange?: (value: string) => void
   /**
-   * The control scale: `xs` (22px) inside a row, `sm` (26px, the default)
-   * beside a search or filter chips, `md` (32px) in a standalone form.
+   * The control scale: `xs` (22px) inside a row, `sm` (26px) beside a search
+   * or filter chips, `md` (32px, the default — as for every control) in a
+   * standalone form.
    */
   size?: "xs" | "sm" | "md"
   /** Fill the width given, each option an equal share of it. */
@@ -85,7 +86,7 @@ export const SegmentedControl = React.forwardRef<
       value,
       defaultValue,
       onValueChange,
-      size = "sm",
+      size = "md",
       stretch,
       variant = "tint",
       readOnly,

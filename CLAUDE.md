@@ -241,7 +241,12 @@ gap in the kit, not a one-off in the design.
   `--spacing-control-xs|sm|md|lg` — **22 / 26 / 32 / 40px** at a 13px root, in `rem` so they
   follow the root. Every component with a `size` maps its names onto `h-control-*` /
   `size-control-*` and nothing else: `Button`, `Badge`, `SearchInput`, forms `Input` / `Select`,
-  `SegmentedControl`, `Toggle`, `Tabs`, `FilterChip`. `default` is `md`. `cn` registers the
+  `SegmentedControl`, `Toggle`, `Tabs`, `FilterChip`. A control given no size is `md` — every
+  one, so an unsized toolbar lines up; a toolbar beside a search passes `sm`. The one exception is
+  `Badge`, which defaults to `xs` because it labels a row. Callers pass `size` (or a table's
+  `density`), never an `h-control-*` class. Table `density` is the same scale — `compact` = `sm`,
+  `default` = `md`, `comfortable` = `lg`, header and rows alike — and a cell's padding is kept
+  small enough that the row holds that height with a `xs` badge or an open editor in it. `cn` registers the
   names with tailwind-merge — a new `--spacing-*` name must be added there too, or a conflicting
   height survives the merge. A control's text is the root size; only `Badge` stays `text-sm`.
   **A bar is a control's height too**: `lg` — `AppLayoutBase` header, `RecordHeader` (default);

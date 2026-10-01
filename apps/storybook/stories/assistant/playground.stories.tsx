@@ -273,6 +273,7 @@ function AssistantPlayground({ user: initialUser = 'network', variant: initialVa
         right: (
           <>
             <SegmentedControl
+              size="sm"
               value={variant}
               onValueChange={(v) => setVariant(v as ChatSessionVariant)}
               options={[
@@ -281,6 +282,7 @@ function AssistantPlayground({ user: initialUser = 'network', variant: initialVa
               ]}
             />
             <SegmentedControl
+              size="sm"
               value={width}
               onValueChange={setWidth}
               options={WIDTHS.map((w) => ({ value: w, label: w === 'fill' ? 'Fill' : `${w} px` }))}
