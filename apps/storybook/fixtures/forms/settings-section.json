@@ -1,0 +1,50 @@
+{
+  "defaultTab": "basic",
+  "sections": [
+    {
+      "name": "basic",
+      "label": "Basic",
+      "icon": "info",
+      "fields": [
+        { "name": "name", "type": "text", "label": "Name", "placeholder": "Customer analysis", "colSpan": 2 },
+        { "name": "description", "type": "textarea", "label": "Description", "description": "A short summary of this graph.", "rows": 3, "colSpan": 2 },
+        {
+          "name": "instructions",
+          "type": "textarea",
+          "label": "Instructions",
+          "description": "What this graph is for and how its agents should behave. Grounds every prompt it runs.",
+          "rows": 8,
+          "colSpan": 2
+        }
+      ],
+      "initial": {
+        "name": "Customer analysis",
+        "description": "Accounts, orders and the people behind them.",
+        "instructions": ""
+      }
+    },
+    {
+      "name": "agents",
+      "label": "Agents",
+      "icon": "bot",
+      "fields": [
+        { "name": "maxRuns", "type": "number", "label": "Concurrent runs", "min": 1, "max": 32, "step": 1 },
+        {
+          "name": "overflow",
+          "type": "select",
+          "label": "When full",
+          "options": [
+            { "label": "Queue the run", "value": "queue" },
+            { "label": "Reject the run", "value": "reject" }
+          ]
+        },
+        { "name": "pauseOnError", "type": "boolean", "label": "Pause the queue when a run fails" }
+      ],
+      "rowConfig": [
+        { "id": "limits", "fields": ["maxRuns", "overflow"] },
+        { "id": "errors", "fields": ["pauseOnError"] }
+      ],
+      "initial": { "maxRuns": 4, "overflow": "queue", "pauseOnError": false }
+    }
+  ]
+}

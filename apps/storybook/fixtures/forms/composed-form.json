@@ -1,0 +1,20 @@
+{
+  "connectors": [
+    { "label": "Neo4j", "value": "neo4j" },
+    { "label": "JanusGraph", "value": "janusgraph" },
+    { "label": "Amazon Neptune", "value": "neptune" }
+  ],
+  "validationModes": ["inherit", "strict", "permissive"],
+  "uriPattern": "^[a-z+]+://",
+  "defaultValues": {
+    "name": "",
+    "uri": "",
+    "password": "",
+    "description": "",
+    "connector": "",
+    "validation": "inherit",
+    "readOnly": false,
+    "abstract": false,
+    "maxRuns": [4]
+  }
+}

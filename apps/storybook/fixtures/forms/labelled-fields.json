@@ -1,0 +1,32 @@
+{
+  "rows": [
+    { "name": "name", "row": "Input", "label": "Name", "required": "Name is required." },
+    {
+      "name": "instructions",
+      "row": "Textarea",
+      "label": "Instructions",
+      "description": "What this graph is for. Grounds every prompt it runs.",
+      "rows": 6
+    },
+    {
+      "name": "connector",
+      "row": "Select",
+      "label": "Connector",
+      "options": [
+        { "label": "Neo4j", "value": "neo4j" },
+        { "label": "JanusGraph", "value": "janusgraph" }
+      ]
+    },
+    { "name": "maxRuns", "row": "Number", "label": "Concurrent runs", "min": 1, "max": 32, "step": 1 },
+    { "name": "pauseOnError", "row": "Boolean", "label": "Pause the queue when a run fails" },
+    { "name": "accent", "row": "Color", "label": "Accent" }
+  ],
+  "defaultValues": {
+    "name": "Customer analysis",
+    "instructions": "",
+    "connector": "neo4j",
+    "maxRuns": 4,
+    "pauseOnError": false,
+    "accent": "#3b82f6"
+  }
+}

@@ -1,80 +1,128 @@
-import React from 'react';
-import { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Link } from '@invana/ui';
-import { Form, FormField, type FieldConfig } from '@invana/forms';
+import { FieldDescription, FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
 
-const meta: Meta = {
-  title: 'Forms/Generated/Sign In',
-  parameters: { layout: 'centered' },
-};
-export default meta;
-type Story = StoryObj;
+import spec from '../../../fixtures/forms/sign-in.json';
+import { snippet } from '../../_story/source';
+import { VariantBoard, type Log } from '../../_story/variant-board';
+import { USE_FORM, indent, objectField } from '../form-source';
 
-/* The whole form is described as JSON and rendered by FormField.ObjectField. */
-const loginFields: FieldConfig[] = [
-  { name: 'email', type: 'text', label: 'Email', placeholder: 'you@example.com' },
-  { name: 'password', type: 'password', label: 'Password', placeholder: '••••••••' },
-  { name: 'remember', type: 'boolean', control: 'checkbox', label: 'Remember me' },
-];
+const FIELDS = spec.fields as FieldConfig[];
+const VARIANTS = [{ caption: 'Sign In', width: 380 }];
 
-const defaultValues = {
-  login: { email: '', password: '', remember: true },
-};
+interface Args {
+  onSubmit: (values: FieldValues) => void;
+  onLinkClick: (link: string) => void;
+}
 
-export const SignIn: Story = {
-  render: function Render() {
-    const form = useForm({ defaultValues, mode: 'onTouched' });
-    const [submitted, setSubmitted] = React.useState<Record<string, unknown> | null>(null);
+function Live({ log, onSubmit, onLinkClick }: Args & { log: Log }) {
+  const form = useForm<FieldValues>({ defaultValues: spec.defaultValues, mode: 'onTouched' });
+  const link = (name: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    onLinkClick(name);
+    log('link', name);
+  };
 
-    return (
-      <Card className="w-[380px]">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(setSubmitted)}>
-            <CardHeader>
-              <CardTitle>Sign in</CardTitle>
-              <CardDescription>Welcome back. Enter your credentials to continue.</CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <FormField.ObjectField
-                control={form.control}
-                name="login"
-                fields={loginFields}
-                labelPosition="top"
-                size="md"
-              />
-
-              <Link
-                href="#"
-                variant="quiet"
-                className="block text-right"
-                onClick={(e) => e.preventDefault()}
-              >
+  return (
+    <Card>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit((values) => {
+            onSubmit(values);
+            log('onSubmit', values);
+          })}
+        >
+          <CardHeader>
+            <CardTitle>{spec.title}</CardTitle>
+            <CardDescription>{spec.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FieldGroup>
+              <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition="top" size="md" />
+              <Link href="#" variant="quiet" onClick={link('Forgot password?')}>
                 Forgot password?
               </Link>
-
-              {submitted && (
-                <pre className="overflow-auto rounded-md border bg-muted/40 p-2 text-[10px]">
-                  {JSON.stringify(submitted, null, 2)}
-                </pre>
-              )}
-            </CardContent>
-
-            <CardFooter className="flex-col gap-2">
-              <Button type="submit" className="w-full">
-                Sign in
-              </Button>
-              <p className="text-center text-sm text-muted-foreground">
+              <FieldDescription>
                 Don&apos;t have an account?{' '}
-                <Link href="#" variant="underlined" onClick={(e) => e.preventDefault()}>
+                <Link href="#" variant="underlined" onClick={link('Sign up')}>
                   Sign up
                 </Link>
-              </p>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    );
+              </FieldDescription>
+            </FieldGroup>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit">Sign in</Button>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
+  );
+}
+
+const meta = {
+  title: 'Forms/Generated/Sign In',
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        language: 'tsx',
+        code: snippet({
+          imports: [
+            "import { useForm } from 'react-hook-form';",
+            "import { FieldDescription, FieldGroup, Form, FormField } from '@invana/forms';",
+            "import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle, Link } from '@invana/ui';",
+          ],
+          comment: 'The whole form is JSON, rendered by one ObjectField',
+          data: { fields: spec.fields, defaultValues: spec.defaultValues },
+          setup: USE_FORM.replace('useForm({ defaultValues })', "useForm({ defaultValues, mode: 'onTouched' })"),
+          call: [
+            '<Card>',
+            '  <Form {...form}>',
+            '    <form onSubmit={onSubmit}>',
+            `      <CardHeader><CardTitle>${spec.title}</CardTitle></CardHeader>`,
+            '      <CardContent>',
+            '        <FieldGroup>',
+            `          ${indent(objectField(spec.name, 'fields', { size: { literal: 'md' } }), '          ')}`,
+            '          <Link href="/forgot" variant="quiet">Forgot password?</Link>',
+            '        </FieldGroup>',
+            '      </CardContent>',
+            '      <CardFooter>',
+            '        <Button type="submit">Sign in</Button>',
+            '      </CardFooter>',
+            '    </form>',
+            '  </Form>',
+            '</Card>',
+          ].join('\n'),
+        }),
+      },
+    },
+  },
+  args: { onSubmit: fn(), onLinkClick: fn() },
+} satisfies Meta<Args>;
+
+export default meta;
+type Story = StoryObj<Args>;
+
+/**
+ * The whole form is described as JSON (`fixtures/forms/sign-in.json`) and rendered by
+ * `FormField.ObjectField`; the page owns the card, the links and the submit. Sign in writes
+ * the credentials under the form.
+ */
+export const SignIn: Story = {
+  name: 'Sign In',
+  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  play: async ({ canvasElement, args, step }) => {
+    const cell = within(within(canvasElement).getByRole('group', { name: 'Sign In' }));
+    await step('Enter the credentials and sign in', async () => {
+      await userEvent.type(cell.getByRole('textbox', { name: 'Email' }), 'ada@invana.io');
+      await userEvent.type(cell.getByLabelText('Password'), 'engine');
+      await userEvent.click(cell.getByRole('button', { name: 'Sign in' }));
+    });
+    await step('The login is handed over', async () => {
+      await expect(args.onSubmit).toHaveBeenCalledWith({ login: { email: 'ada@invana.io', password: 'engine', remember: true } });
+      await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('"email": "ada@invana.io"');
+    });
   },
 };
