@@ -1,0 +1,83 @@
+{
+  "variants": [
+    {
+      "caption": "Tiles",
+      "width": 420,
+      "grid": {},
+      "tiles": [
+        { "label": "accepted", "value": "31 of 38", "caption": "tasks you reviewed" },
+        { "label": "rejected", "value": "7", "caption": "each a new Thought" },
+        { "label": "served", "value": "91%", "caption": "of thinkings" },
+        { "label": "avg thinking", "value": "9.6 s", "caption": "wall clock" }
+      ]
+    },
+    {
+      "caption": "Figure",
+      "width": 520,
+      "grid": { "joined": true },
+      "tiles": [
+        { "variant": "figure", "label": "Friday", "value": "8.2%", "caption": "n = 1,061" },
+        { "variant": "figure", "label": "Mon–Thu", "value": "6.1%", "caption": "n = 3,322" },
+        { "variant": "figure", "label": "Unadjusted OR", "value": "1.38", "caption": "95% CI 1.08–1.76" }
+      ]
+    },
+    {
+      "caption": "Hero",
+      "tiles": [
+        {
+          "variant": "hero",
+          "label": "Net revenue retention",
+          "value": "108%",
+          "caption": "▲ 3 pts vs Q2 · target 110%",
+          "captionTone": "success"
+        }
+      ]
+    },
+    {
+      "caption": "Joined",
+      "width": 520,
+      "grid": { "joined": true },
+      "tiles": [
+        { "label": "Lead time", "value": "26 d", "caption": "▲ 8 d vs normal", "captionTone": "error" },
+        { "label": "On time", "value": "61%", "caption": "▼ 22 pts", "captionTone": "error" },
+        { "label": "Open POs", "value": "142", "caption": "£2.3M" }
+      ]
+    },
+    {
+      "caption": "Seamless, inside a card",
+      "width": 520,
+      "card": true,
+      "grid": { "joined": true, "seamless": true, "columns": 3 },
+      "tiles": [
+        { "variant": "figure", "label": "Revenue", "value": "£4.1M", "caption": "▲ 4%", "captionTone": "success" },
+        { "variant": "figure", "label": "Orders", "value": "61.2k", "caption": "▲ 7%", "captionTone": "success" },
+        { "variant": "figure", "label": "AOV", "value": "£67", "caption": "▼ 3%", "captionTone": "error" }
+      ]
+    },
+    {
+      "caption": "With meter",
+      "wide": true,
+      "grid": { "minTileWidth": 130 },
+      "tiles": [
+        { "label": "Tasks", "value": "4 / 7", "caption": "running", "tone": "running", "meter": 0.5714 },
+        { "label": "Elapsed", "value": "12s", "caption": "no timeout yet" },
+        { "label": "Tokens", "value": "8.2k", "caption": "of 40k ceiling", "meter": 0.21 },
+        { "label": "Cost", "value": "$0.04", "caption": "of $2.00 budget", "meter": 0.02 },
+        { "label": "Rows", "value": "1,880", "caption": "so far" },
+        { "label": "Lanes", "value": "2 / 5", "caption": "execute_graph_query", "meter": 0.4 }
+      ]
+    },
+    {
+      "caption": "Live — tokens against a ceiling",
+      "width": 520,
+      "live": true
+    }
+  ],
+  "feed": {
+    "label": "Tokens",
+    "ceiling": 40000,
+    "caption": "of 40k ceiling",
+    "warnAt": 0.8,
+    "tokens": [0, 1200, 3400, 5100, 8200, 11800, 14900, 19300, 22600, 26100, 29800, 31500, 33900, 35200, 36800, 38100]
+  }
+}

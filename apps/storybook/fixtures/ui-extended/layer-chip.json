@@ -1,0 +1,19 @@
+[
+  {
+    "caption": "Six layers",
+    "width": 400,
+    "chips": [
+      { "layer": "graph_data", "count": 16, "note": "models, stitches and datasets" },
+      { "layer": "llm", "count": 1, "note": "a model on a configured provider row" },
+      { "layer": "third_party", "count": 0, "note": "nothing configured — not the same as denied" },
+      { "layer": "cache", "count": 3, "note": "answer · prefix · result" },
+      { "layer": "human", "count": 3, "note": "who may be asked" },
+      { "layer": "agent", "note": "the spine — never governed" }
+    ]
+  },
+  {
+    "caption": "Dim — closed by this lens",
+    "width": 400,
+    "chips": [{ "layer": "third_party", "dim": true, "note": "out of view for this lens — not in play, never not there" }]
+  }
+]

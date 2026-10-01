@@ -1,0 +1,7 @@
+[
+  {
+    "caption": "Icon button",
+    "icon": "settings",
+    "props": { "tooltip": "Open settings", "size": "icon", "aria-label": "Open settings" }
+  }
+]

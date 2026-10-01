@@ -1,0 +1,16 @@
+[
+  {
+    "caption": "Nothing loaded yet",
+    "width": 560,
+    "icon": "database",
+    "props": {
+      "title": "Nothing loaded yet",
+      "description": "Connect the database, publish a model, then import a dataset from the CLI."
+    },
+    "action": "Connect a database",
+    "locks": [
+      { "icon": "boxes", "text": "Modeller · unlocks after connection" },
+      { "icon": "search", "text": "Explorer · unlocks after the first import" }
+    ]
+  }
+]

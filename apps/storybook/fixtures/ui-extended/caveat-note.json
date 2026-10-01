@@ -1,0 +1,12 @@
+[
+  {
+    "caption": "Indicative",
+    "props": { "label": "indicative" },
+    "text": "Based on 38 of 42 stores. Four with incomplete September data are excluded."
+  },
+  {
+    "caption": "With an action",
+    "props": { "label": "indicative", "action": "Show the 4 stores" },
+    "text": "Based on 38 of 42 stores. Four with incomplete September data are excluded."
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "caption": "Default notice",
+    "error": "Intentional render error for demo"
+  },
+  {
+    "caption": "Reporting",
+    "error": "Intentional render error for demo",
+    "report": true,
+    "fallback": { "title": "This panel failed to load", "description": "The error has been reported." }
+  }
+]

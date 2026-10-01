@@ -1,0 +1,4 @@
+[
+  { "caption": "The same frame as the board", "windows": 60, "width": 520 },
+  { "caption": "Live", "live": true, "width": 520 }
+]

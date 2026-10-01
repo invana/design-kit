@@ -1,0 +1,15 @@
+[
+  {
+    "caption": "The exceptions a reader opened the trace for",
+    "width": 520,
+    "marks": [
+      { "mark": "↺ 2 of 3", "note": "it ran twice — the first attempt timed out" },
+      { "mark": "⏸ 1 of 3", "note": "a person was asked, and the round is bounded" },
+      { "mark": "live", "tone": "info", "note": "painting right now, in its place in the order" },
+      { "mark": "↳ delegates", "tone": "info", "note": "it opened a run of its own, nested under it" },
+      { "mark": "no answer", "tone": "warning", "note": "it succeeded, and the graph cannot answer inside this world" },
+      { "mark": "↺ 3 of 3", "tone": "destructive", "note": "the bound is spent — a fourth attempt is a change to the plan" },
+      { "mark": "stopped", "tone": "muted", "note": "cancelled mid-attempt, by a person" }
+    ]
+  }
+]

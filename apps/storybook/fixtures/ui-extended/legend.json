@@ -1,0 +1,27 @@
+[
+  {
+    "caption": "Node types",
+    "width": 420,
+    "items": [
+      { "label": "Stock", "color": "var(--color-data-1)", "count": "512" },
+      { "label": "Article", "color": "var(--color-data-2)", "count": "21,390" },
+      { "label": "Observation", "color": "var(--color-data-3)", "count": "1,912" },
+      { "label": "Learning", "color": "var(--color-data-4)", "count": "640" },
+      { "label": "Pattern", "color": "var(--color-data-5)", "count": "9" }
+    ]
+  },
+  {
+    "caption": "Swatch kinds",
+    "orientation": "column",
+    "items": [
+      { "kind": "dot", "color": "var(--color-success)", "label": "agent · active" },
+      { "kind": "ring", "label": "not yet run" },
+      { "kind": "line", "color": "var(--color-primary)", "label": "runs on success" },
+      { "kind": "dashed", "label": "proposed — does not exist yet" },
+      { "kind": "arrow", "color": "var(--color-data-7)", "label": "delegation" },
+      { "kind": "stripe", "color": "var(--color-data-1)", "label": "the stripe is the layer — a step spends exactly one" },
+      { "kind": "bracket", "color": "var(--color-warning)", "label": "a bounded repetition contains its rounds" },
+      { "kind": "rule", "color": "var(--color-destructive)", "label": "a gate lies between rows — above it, nothing is spent" }
+    ]
+  }
+]

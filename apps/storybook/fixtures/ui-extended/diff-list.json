@@ -1,0 +1,13 @@
+[
+  {
+    "caption": "A schema proposal",
+    "width": 420,
+    "rows": [
+      { "op": "add", "kind": "node", "text": "Pattern" },
+      { "op": "add", "kind": "node", "text": "Learning" },
+      { "op": "add", "kind": "edge", "text": "INSTANCE_OF · Observation → Pattern" },
+      { "op": "change", "kind": "property", "text": "confidence · float → decimal" },
+      { "op": "remove", "kind": "edge", "text": "MENTIONS · Article → Company" }
+    ]
+  }
+]

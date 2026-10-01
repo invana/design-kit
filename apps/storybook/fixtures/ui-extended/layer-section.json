@@ -1,0 +1,44 @@
+[
+  {
+    "caption": "EU · H1 2026, layer by layer",
+    "width": 560,
+    "sections": [
+      {
+        "layer": "graph_data",
+        "count": 16,
+        "summary": "closed · 4 models, 2 of them sliced",
+        "rules": [
+          {
+            "match": "graph_data/model/Deals@*",
+            "allow": true,
+            "select": {
+              "time": { "axis": "signed_at", "from": "2026-01-01", "to": "2026-06-30" },
+              "geo": { "axis": "country_iso", "vocab": "iso2", "in": ["DE", "FR", "NL"] }
+            }
+          },
+          {
+            "match": "graph_data/model/NewsArticles@*",
+            "allow": true,
+            "select": { "time": { "axis": "published_at", "from": "2026-01-01", "to": "2026-06-30" } }
+          },
+          { "match": "graph_data/model/AirRoutes@*", "allow": true },
+          { "match": "graph_data/model/Twitter@*", "allow": true }
+        ]
+      },
+      {
+        "layer": "llm",
+        "count": 1,
+        "summary": "permitted whole",
+        "rules": [{ "match": "llm/**", "allow": true, "egress": { "may_send": ["type_names", "the_question"] } }]
+      },
+      {
+        "layer": "third_party",
+        "count": 0,
+        "summary": "denied by a guardrail",
+        "rules": [{ "match": "third_party/**", "allow": false, "readOnly": true }]
+      },
+      { "layer": "cache", "count": 3, "summary": "permitted whole" },
+      { "layer": "human", "count": 3, "summary": "permitted whole", "dim": true }
+    ]
+  }
+]

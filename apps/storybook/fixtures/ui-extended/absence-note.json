@@ -1,0 +1,20 @@
+[
+  {
+    "caption": "Nothing recorded",
+    "panel": "result.json",
+    "props": { "reason": "unrecorded" },
+    "text": "The interpreter writes this document when the row settles. The step is still in flight, so nobody has recorded one yet."
+  },
+  {
+    "caption": "Purged",
+    "panel": "Log for this step",
+    "props": { "reason": "purged" },
+    "text": "Kept 90 days. The step’s counts and outcome stay on the record; its input, its output and its log were removed when the run aged out."
+  },
+  {
+    "caption": "None declared",
+    "panel": "What it wrote",
+    "props": { "reason": "declared-none", "label": "read_only: true" },
+    "text": "The step was dispatched read-only, and the world it ran under allows no write on the graph data layer. A read that changes a graph would be the bug; a read that says so is the record."
+  }
+]

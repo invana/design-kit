@@ -1,0 +1,18 @@
+[
+  {
+    "caption": "Kind first",
+    "width": 480,
+    "rows": [
+      { "kind": "Article", "source": "07:12", "text": "Brent slides 2% as OPEC+ signals October hike · Reuters" },
+      { "kind": "Bar", "source": "bars-5m", "text": "BPCL 09:15–09:45 · 5-min · volume 2.4×" },
+      { "kind": "Event", "source": "macro", "text": "none today · RBI policy is Wed 10 Sep" }
+    ]
+  },
+  {
+    "caption": "Numbered",
+    "rows": [
+      { "marker": 1, "count": "3,406", "text": "OMS fills, 22–26 Sep" },
+      { "marker": 2, "count": "5 days", "text": "Risk factor returns, v4" }
+    ]
+  }
+]

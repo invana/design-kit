@@ -1,0 +1,21 @@
+[
+  {
+    "caption": "Muted, with an aside",
+    "props": { "aside": "2 of 4" },
+    "text": "1 · Connected",
+    "body": "Explorer, Query, introspection and model authoring.",
+    "mutedBody": true
+  },
+  {
+    "caption": "Foreground",
+    "props": { "tone": "foreground" },
+    "text": "Why it matters",
+    "body": "Until records exist, the model is a shape with nothing in it."
+  },
+  {
+    "caption": "Accent",
+    "props": { "tone": "accent" },
+    "text": "Answers are grounded",
+    "body": "Every answer traces back to the record it came from."
+  }
+]

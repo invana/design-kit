@@ -1,0 +1,14 @@
+[
+  {
+    "caption": "Agents and a person",
+    "chips": [
+      { "props": { "name": "Intraday Analyst" }, "icon": "bot", "note": "an agent" },
+      { "props": { "name": "Market Scout" }, "icon": "bot", "note": "another — told apart by name" },
+      { "props": { "kind": "person", "name": "ravi" }, "icon": "user", "note": "a person" }
+    ]
+  },
+  {
+    "caption": "Inactive",
+    "chips": [{ "props": { "name": "Risk Checker", "inactive": true }, "icon": "bot", "note": "retired — still in lineage" }]
+  }
+]
