@@ -1,0 +1,87 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "cells": [
+        { "at": "9:00", "state": "served" },
+        { "at": "9:15", "state": "served" },
+        { "at": "9:30", "state": "served" },
+        { "at": "9:45", "state": "served" },
+        { "at": "10:00", "state": "served" },
+        { "at": "10:15", "state": "skipped" },
+        { "at": "10:30", "state": "served" },
+        { "at": "10:45", "state": "served" },
+        { "at": "11:00", "state": "served" },
+        { "at": "11:15", "state": "served" },
+        { "at": "11:30", "state": "served" },
+        { "at": "11:45", "state": "served" },
+        { "at": "12:00", "state": "served" },
+        { "at": "12:15", "state": "cannot" },
+        { "at": "12:30", "state": "served" },
+        { "at": "12:45", "state": "served" },
+        { "at": "13:00", "state": "served" },
+        { "at": "13:15", "state": "served" },
+        { "at": "13:30", "state": "failed" },
+        { "at": "13:45", "state": "served" },
+        { "at": "14:00", "state": "served" }
+      ],
+      "states": [
+        { "key": "served", "label": "served", "color": "var(--color-success)" },
+        { "key": "skipped", "label": "skipped · overlap", "color": "var(--color-muted-foreground)" },
+        { "key": "cannot", "label": "cannot answer", "color": "var(--color-warning)", "hollow": true },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [
+        { "at": 0, "label": "09" },
+        { "at": 4, "label": "10" },
+        { "at": 8, "label": "11" },
+        { "at": 12, "label": "12" },
+        { "at": 16, "label": "13" },
+        { "at": 20, "label": "14" }
+      ]
+    }
+  },
+  {
+    "caption": "Live · each firing lands",
+    "props": {
+      "cells": [
+        { "at": "9:00", "state": "served" },
+        { "at": "9:15", "state": "served" },
+        { "at": "9:30", "state": "served" },
+        { "at": "9:45", "state": "served" },
+        { "at": "10:00", "state": "served" },
+        { "at": "10:15", "state": "skipped" },
+        { "at": "10:30", "state": "served" },
+        { "at": "10:45", "state": "served" },
+        { "at": "11:00", "state": "served" },
+        { "at": "11:15", "state": "served" },
+        { "at": "11:30", "state": "served" },
+        { "at": "11:45", "state": "served" },
+        { "at": "12:00", "state": "served" },
+        { "at": "12:15", "state": "cannot" },
+        { "at": "12:30", "state": "served" },
+        { "at": "12:45", "state": "served" },
+        { "at": "13:00", "state": "served" },
+        { "at": "13:15", "state": "served" },
+        { "at": "13:30", "state": "failed" },
+        { "at": "13:45", "state": "served" },
+        { "at": "14:00", "state": "served" }
+      ],
+      "states": [
+        { "key": "served", "label": "served", "color": "var(--color-success)" },
+        { "key": "skipped", "label": "skipped · overlap", "color": "var(--color-muted-foreground)" },
+        { "key": "cannot", "label": "cannot answer", "color": "var(--color-warning)", "hollow": true },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [
+        { "at": 0, "label": "09" },
+        { "at": 4, "label": "10" },
+        { "at": 8, "label": "11" },
+        { "at": 12, "label": "12" },
+        { "at": 16, "label": "13" },
+        { "at": 20, "label": "14" }
+      ]
+    },
+    "live": { "every": 500, "reveal": { "props": ["cells"], "seed": 4 } }
+  }
+]

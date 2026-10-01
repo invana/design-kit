@@ -1,0 +1,130 @@
+[
+  {
+    "caption": "Thirty days",
+    "width": 680,
+    "panel": { "title": "Work p50, a day", "aside": "6.0s today" },
+    "props": {
+      "values": [6.3, 6.1, 6.4, 6, 5.9, 6.2, 6.1, 6.6, 6.2, 6, 6.1, 5.8, 5.9, 6, 6.2, 6.1, 6, 9.4, 8.1, 6.2, 6, 5.9, 5.8, 6, 6.1, 5.9, 6, 5.8, 5.9, 6],
+      "labels": ["28 Aug", "29 Aug", "30 Aug", "31 Aug", "1 Sept", "2 Sept", "3 Sept", "4 Sept", "5 Sept", "6 Sept", "7 Sept", "8 Sept", "9 Sept", "10 Sept", "11 Sept", "12 Sept", "13 Sept", "14 Sept", "15 Sept", "16 Sept", "17 Sept", "18 Sept", "19 Sept", "20 Sept", "21 Sept", "22 Sept", "23 Sept", "24 Sept", "25 Sept", "today"],
+      "ticks": [1, 8, 15, 22, 29],
+      "format": "seconds",
+      "gridlines": [0, 5, 10],
+      "max": 10
+    }
+  },
+  {
+    "caption": "Streaming",
+    "width": 680,
+    "stream": true,
+    "panel": { "title": "Query latency p50, live", "aside": "" },
+    "props": { "values": [], "labels": [], "max": 10, "format": "seconds" }
+  },
+  {
+    "caption": "Gaps",
+    "width": 680,
+    "panel": { "title": "Work p50, a day", "aside": "ran on 19 of 30 days" },
+    "props": {
+      "values": [6.3, 6.1, 6.4, 6, 5.9, null, null, 6.6, 6.2, 6, 6.1, 5.8, null, null, null, null, 6, null, null, null, null, 5.9, 5.8, 6, 6.1, 5.9, null, null, 5.9, 6],
+      "labels": ["28 Aug", "29 Aug", "30 Aug", "31 Aug", "1 Sept", "2 Sept", "3 Sept", "4 Sept", "5 Sept", "6 Sept", "7 Sept", "8 Sept", "9 Sept", "10 Sept", "11 Sept", "12 Sept", "13 Sept", "14 Sept", "15 Sept", "16 Sept", "17 Sept", "18 Sept", "19 Sept", "20 Sept", "21 Sept", "22 Sept", "23 Sept", "24 Sept", "25 Sept", "today"],
+      "ticks": [1, 8, 15, 22, 29],
+      "format": "seconds",
+      "gridlines": [0, 5, 10],
+      "max": 10
+    }
+  },
+  {
+    "caption": "Off zero",
+    "width": 680,
+    "panel": { "title": "Lead time, a week", "aside": "axis from 15 d" },
+    "props": {
+      "values": [18.4, 18.4, 19.4, 18.4, 20.5, 19.4, 21.5, 23.6, 22.6, 25.7, 27.8, 26],
+      "labels": ["wk 1", "wk 2", "wk 3", "wk 4", "wk 5", "wk 6", "wk 7", "wk 8", "wk 9", "wk 10", "wk 11", "wk 12"],
+      "format": "leadDays",
+      "zero": false
+    }
+  },
+  {
+    "caption": "Single point",
+    "width": 680,
+    "panel": { "title": "Work p50, a day", "aside": "6.0s today" },
+    "props": { "values": [6], "labels": ["today"], "format": "seconds" }
+  },
+  {
+    "caption": "With band",
+    "width": 680,
+    "panel": { "title": "Lead time, a week", "aside": "Apex Components" },
+    "props": {
+      "values": [18.4, 18.4, 19.4, 18.4, 20.5, 19.4, 21.5, 23.6, 22.6, 25.7, 27.8, 26],
+      "labels": ["wk 1", "wk 2", "wk 3", "wk 4", "wk 5", "wk 6", "wk 7", "wk 8", "wk 9", "wk 10", "wk 11", "wk 12"],
+      "format": "leadDays",
+      "zero": false,
+      "band": { "lower": 16.3, "upper": 21.5, "label": "normal range" }
+    }
+  },
+  {
+    "caption": "With forecast",
+    "width": 680,
+    "panel": { "title": "Demand, units a week", "aside": "forecast to year end" },
+    "props": {
+      "values": [410, 432, 418, 455, 447, 470, 462, 488, 481, 476, 502, 495, 510, 524, 518, 530, 536, 548, 561, 572, 580, 594, 603, 615, 628, 640],
+      "labels": ["wk 27", "wk 28", "wk 29", "wk 30", "wk 31", "wk 32", "wk 33", "wk 34", "wk 35", "wk 36", "wk 37", "wk 38", "wk 39", "wk 40", "wk 41", "wk 42", "wk 43", "wk 44", "wk 45", "wk 46", "wk 47", "wk 48", "wk 49", "wk 50", "wk 51", "wk 52"],
+      "format": "units",
+      "zero": false,
+      "band": {
+        "lower": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 530, 530, 536, 543, 548, 550, 558, 561, 567, 574, 580],
+        "upper": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 530, 542, 560, 579, 596, 610, 630, 645, 663, 682, 700]
+      },
+      "forecastFrom": 15,
+      "forecastLabel": "today"
+    }
+  },
+  {
+    "caption": "With highlights",
+    "width": 680,
+    "panel": { "title": "Lead time, a week", "aside": "flagged weeks ringed" },
+    "props": {
+      "values": [18.4, 18.4, 19.4, 18.4, 20.5, 19.4, 21.5, 23.6, 22.6, 25.7, 27.8, 26],
+      "labels": ["wk 1", "wk 2", "wk 3", "wk 4", "wk 5", "wk 6", "wk 7", "wk 8", "wk 9", "wk 10", "wk 11", "wk 12"],
+      "format": "leadDays",
+      "zero": false,
+      "color": "var(--color-foreground)",
+      "band": { "lower": 16.3, "upper": 21.5, "label": "normal range", "color": "var(--color-primary)" },
+      "highlights": [
+        { "index": 7, "color": "var(--color-warning)" },
+        { "index": 8, "color": "var(--color-warning)" },
+        { "index": 9, "color": "var(--color-warning)" },
+        { "index": 10, "color": "var(--color-warning)" },
+        { "index": 11, "color": "var(--color-warning)" }
+      ]
+    }
+  },
+  {
+    "caption": "With marks",
+    "width": 680,
+    "panel": { "title": "Work p50, a day", "aside": "versions marked" },
+    "props": {
+      "values": [6.3, 6.1, 6.4, 6, 5.9, 6.2, 6.1, 6.6, 6.2, 6, 6.1, 5.8, 5.9, 6, 6.2, 6.1, 6, 9.4, 8.1, 6.2, 6, 5.9, 5.8, 6, 6.1, 5.9, 6, 5.8, 5.9, 6],
+      "labels": ["28 Aug", "29 Aug", "30 Aug", "31 Aug", "1 Sept", "2 Sept", "3 Sept", "4 Sept", "5 Sept", "6 Sept", "7 Sept", "8 Sept", "9 Sept", "10 Sept", "11 Sept", "12 Sept", "13 Sept", "14 Sept", "15 Sept", "16 Sept", "17 Sept", "18 Sept", "19 Sept", "20 Sept", "21 Sept", "22 Sept", "23 Sept", "24 Sept", "25 Sept", "today"],
+      "ticks": [1, 8, 15, 22, 29],
+      "format": "seconds",
+      "gridlines": [0, 5, 10],
+      "max": 10,
+      "marks": [{ "index": 6, "label": "v4" }, { "index": 17, "label": "v5" }]
+    }
+  },
+  {
+    "caption": "With reference",
+    "width": 680,
+    "panel": { "title": "p95, a day", "aside": "1.9s today" },
+    "props": {
+      "values": [1.6, 1.95, 1.75, 1.55, 1.9, 1.4, 1.75, 1.85, 1.65, 2, 1.8, 1.6, 1.65, 1.45, 1.55, 1.9, 1.7, 3.45, 2.65, 1.35, 1.7, 1.8, 1.6, 1.95, 1.75, 1.55, 1.6, 1.4, 2.05, 1.85],
+      "labels": ["28 Aug", "29 Aug", "30 Aug", "31 Aug", "1 Sept", "2 Sept", "3 Sept", "4 Sept", "5 Sept", "6 Sept", "7 Sept", "8 Sept", "9 Sept", "10 Sept", "11 Sept", "12 Sept", "13 Sept", "14 Sept", "15 Sept", "16 Sept", "17 Sept", "18 Sept", "19 Sept", "20 Sept", "21 Sept", "22 Sept", "23 Sept", "24 Sept", "25 Sept", "today"],
+      "ticks": [1, 8, 15, 22, 29],
+      "format": "seconds",
+      "gridlines": [0, 2, 4],
+      "max": 4,
+      "marks": [{ "index": 17, "label": "import" }],
+      "reference": { "value": 1.4, "label": "Graph p95" }
+    }
+  }
+]

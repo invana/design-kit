@@ -1,0 +1,80 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "caption": "accepted ÷ reviewed · Intraday Analyst",
+      "gridlines": [50, 75, 100],
+      "max": 100,
+      "data": [
+        { "label": "wk 33", "sublabel": "11–15 Aug", "value": 79, "display": "79%" },
+        { "label": "wk 34", "sublabel": "18–22 Aug", "value": 84, "display": "84%" },
+        { "label": "wk 35", "sublabel": "25–29 Aug", "value": 86, "display": "86%" },
+        { "label": "wk 36", "sublabel": "1–5 Sep", "value": 91, "display": "91%" }
+      ]
+    }
+  },
+  {
+    "caption": "Comparison",
+    "props": {
+      "variant": "comparison",
+      "color": "var(--color-muted-foreground)",
+      "highlightColor": "var(--color-primary)",
+      "highlightIndex": 4,
+      "labelMode": "all",
+      "target": { "value": 6.1, "label": "avg" },
+      "data": [
+        { "label": "M", "value": 6.1 },
+        { "label": "T", "value": 5.8 },
+        { "label": "W", "value": 6, "display": "6.0" },
+        { "label": "T", "value": 6.4 },
+        { "label": "F", "value": 8.2 },
+        { "label": "S", "value": 7.9 },
+        { "label": "S", "value": 7.1 }
+      ]
+    }
+  },
+  {
+    "caption": "Grouped",
+    "props": {
+      "caption": "% of accounts active on day 30",
+      "labelMode": "all",
+      "series": [{ "name": "before 2 Jun" }, { "name": "after" }],
+      "target": { "value": 75, "label": "target", "color": "var(--color-warning)" },
+      "data": [
+        { "label": "paid", "values": [80, 83] },
+        { "label": "organic", "values": [71, 75] },
+        { "label": "referral", "values": [70, 72] },
+        { "label": "partner", "values": [58, 63] }
+      ]
+    }
+  },
+  {
+    "caption": "Target",
+    "props": {
+      "caption": "accepted ÷ reviewed · Intraday Analyst",
+      "max": 100,
+      "target": { "value": 85, "label": "target" },
+      "data": [
+        { "label": "wk 33", "sublabel": "11–15 Aug", "value": 79, "display": "79%" },
+        { "label": "wk 34", "sublabel": "18–22 Aug", "value": 84, "display": "84%" },
+        { "label": "wk 35", "sublabel": "25–29 Aug", "value": 86, "display": "86%" },
+        { "label": "wk 36", "sublabel": "1–5 Sep", "value": 91, "display": "91%" }
+      ]
+    }
+  },
+  {
+    "caption": "Live · a week lands",
+    "props": {
+      "caption": "accepted ÷ reviewed · Intraday Analyst",
+      "max": 100,
+      "target": { "value": 85, "label": "target" },
+      "data": [
+        { "label": "wk 33", "sublabel": "11–15 Aug", "value": 79, "display": "79%" },
+        { "label": "wk 34", "sublabel": "18–22 Aug", "value": 84, "display": "84%" },
+        { "label": "wk 35", "sublabel": "25–29 Aug", "value": 86, "display": "86%" },
+        { "label": "wk 36", "sublabel": "1–5 Sep", "value": 91, "display": "91%" }
+      ]
+    },
+    "live": { "every": 1000, "reveal": { "props": ["data"], "seed": 1 } }
+  }
+]
