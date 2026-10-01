@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AttemptClock, PanelBox } from '@invana/ui';
+import { PanelBox } from '@invana/ui';
+import { AttemptClock } from '@invana/dashboard';
 
 const meta: Meta<typeof AttemptClock> = {
-  title: 'UI/UI Extended/AttemptClock',
+  title: 'Dashboard/Parts/AttemptClock',
   component: AttemptClock,
   parameters: { layout: 'padded' },
 };

@@ -1,9 +1,7 @@
 import * as React from "react"
 import { X } from "lucide-react"
 
-import { Button } from "../ui/button"
-import { cn } from "../../lib/utils"
-import type { DiffOp } from "./diff-list"
+import { Button, cn, type DiffOp } from "@invana/ui"
 
 export interface StagedBarItem {
   id: string

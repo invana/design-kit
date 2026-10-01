@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RecordDescription, RecordHeader } from '@invana/ui';
+import { RecordHeader } from '@invana/ui';
+import { RecordDescription } from '@invana/dashboard';
 
 const meta: Meta<typeof RecordDescription> = {
-  title: 'UI/UI Extended/RecordDescription',
+  title: 'Dashboard/Parts/RecordDescription',
   component: RecordDescription,
   parameters: { layout: 'fullscreen' },
 };

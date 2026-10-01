@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { StagedBar } from '@invana/ui';
+import { StagedBar } from '@invana/dashboard';
 
 const meta: Meta<typeof StagedBar> = {
-  title: 'UI/UI Extended/StagedBar',
+  title: 'Dashboard/Parts/StagedBar',
   component: StagedBar,
   parameters: { layout: 'fullscreen' },
 };

@@ -259,6 +259,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/forms | FieldConfig `unit` and `aside`, typed number | `packages/forms/src/types.ts` | extend | done | next |
 | @invana/forms | `xs` tier at 28px, muted field labels | `packages/forms/src/form-field.tsx` | extend | done | today |
 | @invana/dashboard | Every block kind is a panel kind (`table`, `grid`, `record` replace `table`, `metrics`, `properties`) | `packages/dashboard/src/panels/block.tsx` | extend | done | today |
+| @invana/dashboard | `RecordDescription`, `StagedBar`, `AttemptClock` move from ui: only the dashboard draws them | `packages/dashboard/src/parts/` | move | done | today |
 | @invana/dashboard | One trace: `RUN_PANELS`' `trace` and the `trace` block are one idea in two shapes; the registered one wins today | `packages/dashboard/src/panels/run.tsx` | change | todo | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
 | @invana/themes | None | `packages/themes/src/` | stays | done | today |

@@ -6,9 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   PanelBox,
-  RecordDescription,
   RecordHeader,
-  StagedBar,
   StatusDot,
   TabbedPanel,
   cn,
@@ -16,6 +14,8 @@ import {
 import { Check, ChevronDown, Lock } from "lucide-react"
 
 import { SpecActions, SpecChip, SpecChips } from "./chips"
+import { RecordDescription } from "./parts/record-description"
+import { StagedBar } from "./parts/staged-bar"
 import { resolveRegistry } from "./registry"
 import type {
   ActionContext,

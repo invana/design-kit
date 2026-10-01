@@ -1,8 +1,6 @@
 import * as React from "react"
 
-import { Button } from "../ui/button"
-import { cn } from "../../lib/utils"
-import { PropertyList, PropertyRow } from "./property-list"
+import { Button, PropertyList, PropertyRow, cn } from "@invana/ui"
 
 export interface RecordDescriptionDetail {
   label: React.ReactNode

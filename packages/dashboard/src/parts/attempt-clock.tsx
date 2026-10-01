@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { cn } from "../../lib/utils"
 import {
   Table,
   TableBody,
@@ -8,7 +7,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table"
+  cn,
+} from "@invana/ui"
 
 export interface AttemptRow {
   /** `queued` · `attempt 1` · `attempt 2` · `settled`. */

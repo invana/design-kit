@@ -120,7 +120,9 @@ For a spec arriving off the wire, where nothing can be checked anyway, use `AnyD
 
 `Dashboard`, `BlockPanel` and `BLOCK_PANELS`, the panel components (`JsonPanel`, `CodePanel`,
 `ExchangePanel`, `GanttPanel`, `LogPanel`, `ListPanel`, `ParamsPanel`, `TextPanel`), `RUN_PANELS`,
-`SpecChip(s)` / `SpecAction(s)`, `BUILT_IN_PANELS`, `resolveRegistry`, and the spec types.
+`SpecChip(s)` / `SpecAction(s)`, `BUILT_IN_PANELS`, `resolveRegistry`, the spec types, and the
+parts only a dashboard draws: `RecordDescription` (the line under the header), `StagedBar` (`spec.staged`)
+and `AttemptClock` (the `attempts` run panel). They moved here from `@invana/ui`.
 
 ## License
 

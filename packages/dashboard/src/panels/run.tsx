@@ -1,7 +1,6 @@
 import * as React from "react"
 import {
   ArtifactTable,
-  AttemptClock,
   ExchangeRecord,
   LayerSection,
   LayerStrip,
@@ -13,7 +12,6 @@ import {
   TraceLoop,
   TraceStep,
   type Artifact,
-  type AttemptRow,
   type Layer,
   type LayerBand,
   type LayerBracket,
@@ -25,6 +23,8 @@ import {
   type Narrowing,
   type TouchItem,
 } from "@invana/ui"
+
+import { AttemptClock, type AttemptRow } from "../parts/attempt-clock"
 
 import type { PanelRendererProps } from "../types"
 
