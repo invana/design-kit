@@ -19,8 +19,11 @@ export interface PageSpec {
 
 export interface PageProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
   spec: PageSpec
-  /** A block's action, with where the block sits — `open` on a table in section 1. */
-  onAction?: (action: string, at: { section: number; block: number }) => void
+  /**
+   * A block's action, with where the block sits and what it carries — `open` on
+   * a table in section 1, `select` with the row's key as `value`.
+   */
+  onAction?: (action: string, at: { section: number; block: number; value?: unknown }) => void
 }
 
 /**
@@ -44,7 +47,12 @@ export const Page = React.forwardRef<HTMLElement, PageProps>(({ spec, onAction, 
           <Block
             key={b}
             spec={block}
-            onAction={onAction ? (action) => onAction(action, { section: s, block: b }) : undefined}
+            onAction={
+              onAction
+                ? (action, value) =>
+                    onAction(action, value === undefined ? { section: s, block: b } : { section: s, block: b, value })
+                : undefined
+            }
           />
         ))}
       </section>

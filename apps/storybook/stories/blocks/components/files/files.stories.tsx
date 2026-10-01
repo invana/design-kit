@@ -60,8 +60,8 @@ export const Files: Story = {
     const c = cell('Icons + download');
     await step('Download the first file', async () => {
       await userEvent.click(c.getAllByRole('button', { name: 'Download' })[0]);
-      await expect(args.onAction).toHaveBeenCalledWith('download:a91f03c2', undefined);
-      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["download:a91f03c2"]');
+      await expect(args.onAction).toHaveBeenCalledWith('download', 'a91f03c2');
+      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["download", "a91f03c2"]');
     });
   },
 };

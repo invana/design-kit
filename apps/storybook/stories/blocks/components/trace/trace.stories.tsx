@@ -60,8 +60,8 @@ export const Trace: Story = {
     const c = cell('A step failed');
     await step('Retry the failed step', async () => {
       await userEvent.click(c.getByRole('button', { name: 'Retry' }));
-      await expect(args.onAction).toHaveBeenCalledWith('retry', undefined);
-      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["retry"]');
+      await expect(args.onAction).toHaveBeenCalledWith('action', 'retry');
+      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["action", "retry"]');
     });
   },
 };

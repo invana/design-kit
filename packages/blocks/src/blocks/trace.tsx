@@ -26,7 +26,7 @@ export function TraceBlock({ spec, onAction }: BlockProps<"trace">) {
     </TraceList>
   )
   const actions = spec.actions?.length ? (
-    <ActionRow actions={spec.actions} onAction={(action) => onAction?.(action)} />
+    <ActionRow actions={spec.actions} onAction={(id) => onAction?.("action", id)} />
   ) : null
   if (!spec.folded) {
     return (

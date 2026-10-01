@@ -60,10 +60,9 @@ export const Table: Story = {
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));
     const c = cell('Selectable');
-    await step('Pick a row: the event names the action but not the row', async () => {
+    await step('Pick a row: the event carries its key', async () => {
       await userEvent.click(c.getByRole('cell', { name: 'translate' }));
-      // The key is lost on the way: `toEvent` has no `select` case, so it falls to `action`.
-      await expect(args.onEvent).toHaveBeenCalledWith({ type: 'action', turn: 'selectable', action: 'select' });
+      await expect(args.onEvent).toHaveBeenCalledWith({ type: 'action', turn: 'selectable', action: 'select', value: 'translate' });
     });
     await step('Open every row', async () => {
       await userEvent.click(cell('First rows + open all').getByRole('button', { name: /open all/i }));

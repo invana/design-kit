@@ -72,9 +72,9 @@ function withUnit(value: unknown, unit?: string): string {
  * Answered, it settles into its values as label/value pairs; Change inputs
  * reopens the form with them filled in, and sending again is a `change`.
  */
-export function FormAsk({ spec, state = "pending", value: given, id: idProp, onAction }: BlockProps<"form">) {
+export function FormAsk({ spec, state = "pending", value: given, onAction }: BlockProps<"form">) {
+  // The <form>'s element id: unique on the page, whatever the turn ids are.
   const auto = React.useId()
-  const id = idProp ?? auto
   const pending = state === "pending"
   const [editing, setEditing] = React.useState(false)
   const current = (given ?? {}) as Values
@@ -97,12 +97,12 @@ export function FormAsk({ spec, state = "pending", value: given, id: idProp, onA
   }
 
   // The <form> holds only the fields, so the question, hint and actions stay
-  // in the card's own rhythm; the submit reaches it through `form={id}`.
+  // in the card's own rhythm; the submit reaches it through `form`.
   return (
     <Form {...form}>
       <AskQuestion text={spec} />
       <form
-        id={id}
+        id={`${auto}-form`}
         onSubmit={form.handleSubmit(({ values }) => {
           onAction?.(editing ? "change" : "reply", values)
           setEditing(false)
@@ -123,7 +123,7 @@ export function FormAsk({ spec, state = "pending", value: given, id: idProp, onA
       <ClarifyActions>
         <Button
           type="submit"
-          form={id}
+          form={`${auto}-form`}
           size="xs"
           className={top ? "ms-auto" : undefined}
           disabled={!form.formState.isValid}

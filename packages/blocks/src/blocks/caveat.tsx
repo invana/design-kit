@@ -36,7 +36,7 @@ function Note({
  */
 export function CaveatBlock({ spec, onAction }: BlockProps<"caveat">) {
   const [open, setOpen] = React.useState(!spec.folded)
-  const act = (action: string) => onAction?.(action)
+  const act = (id: string) => onAction?.("action", id)
   if (!spec.items) return <Note note={spec} onAction={act} />
   const notes = spec.items.map((note, i) => <Note key={i} note={note} onAction={act} />)
   if (!spec.folded) return <>{notes}</>

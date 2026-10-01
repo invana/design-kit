@@ -61,8 +61,8 @@ export const Caveat: Story = {
     const c = cell('With the excluded rows');
     await step('Open the excluded rows', async () => {
       await userEvent.click(c.getByRole('button', { name: 'Show the 4 stores' }));
-      await expect(args.onAction).toHaveBeenCalledWith('show-excluded', undefined);
-      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["show-excluded"]');
+      await expect(args.onAction).toHaveBeenCalledWith('action', 'show-excluded');
+      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["action", "show-excluded"]');
     });
   },
 };

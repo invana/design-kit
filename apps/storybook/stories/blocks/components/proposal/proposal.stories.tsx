@@ -60,8 +60,8 @@ export const Proposal: Story = {
     const c = cell('What it writes + consequence');
     await step('Create the alert', async () => {
       await userEvent.click(c.getByRole('button', { name: 'Create alert' }));
-      await expect(args.onAction).toHaveBeenCalledWith('create', undefined);
-      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["create"]');
+      await expect(args.onAction).toHaveBeenCalledWith('action', 'create');
+      await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('["action", "create"]');
     });
   },
 };

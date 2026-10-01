@@ -39,14 +39,18 @@ function toEvent(turn: string, action: string, value: unknown, block: number): C
     case "prompt":
       return { type: "prompt", text: String(value) }
     case "scope": {
-      const { part, value: v } = value as { part: number; value: unknown }
-      return { type: "scope", turn, part, value: v }
+      const edit = value as { part?: number; value?: unknown } | undefined
+      return typeof edit?.part === "number" ? { type: "scope", turn, part: edit.part, value: edit.value } : undefined
     }
     case "open":
       // Only a block in the answer's own list can be opened; an envelope's has no index.
       return block >= 0 ? { type: "open", turn, block } : undefined
+    case "action":
+      // An action the spec declares, by its own id.
+      return { type: "action", turn, action: String(value) }
     default:
-      return { type: "action", turn, action }
+      // One the block names — `select` with a row's key, `download` with a file.
+      return value === undefined ? { type: "action", turn, action } : { type: "action", turn, action, value }
   }
 }
 

@@ -27,7 +27,7 @@ export function ProposalBlock({ spec, onAction }: BlockProps<"proposal">) {
         spec.actions.length ? (
           <ActionRow
             actions={spec.actions}
-            onAction={(action) => onAction?.(action)}
+            onAction={(id) => onAction?.("action", id)}
           />
         ) : undefined
       }

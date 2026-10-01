@@ -68,7 +68,7 @@ export function MultiAsk({ spec, state = "pending", value: given, id: idProp, on
   return (
     <>
       <Questionnaire
-        id={id}
+        id={`${auto}-form`}
         onSubmit={(e) => {
           e.preventDefault()
           if (short) return
@@ -119,7 +119,7 @@ export function MultiAsk({ spec, state = "pending", value: given, id: idProp, on
             <span className="text-xs text-muted-foreground">{hintText(`**${picked.length}** of ${spec.max}`)}</span>
           )
         ) : null}
-        <Button type="submit" form={id} size="xs" className="ms-auto" disabled={short}>
+        <Button type="submit" form={`${auto}-form`} size="xs" className="ms-auto" disabled={short}>
           {submitLabel(spec.question, picked.length, spec.submit)}
         </Button>
       </ClarifyActions>

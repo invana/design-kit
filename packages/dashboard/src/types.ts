@@ -1,5 +1,5 @@
 import type * as React from "react"
-import type { BlockKind, BlockOptionsByKind } from "@invana/blocks"
+import type { AskState, BlockKind, BlockOptionsByKind } from "@invana/blocks"
 import type { Bound, StatusDotProps, TaskGanttTask } from "@invana/ui"
 
 /**
@@ -306,6 +306,13 @@ export interface PanelBase {
   grow?: number
   /** Drop the box padding, so a table or a canvas meets the border. */
   flush?: boolean
+  /**
+   * Where a block that returns a value stands — a `form`, a `confirm` — and the
+   * value given. The consumer moves it on `reply`, as the API patches an ask
+   * turn; unset, the block is open.
+   */
+  state?: AskState
+  value?: unknown
   /**
    * **Nobody recorded this band** — draw why, instead of the panel.
    *

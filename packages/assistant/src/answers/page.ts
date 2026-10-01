@@ -8,8 +8,13 @@ import type { AnswerTurn } from "../protocol/types"
  * caveats, the trace — stays in the thread.
  */
 export function answerToPage(turn: AnswerTurn): PageSpec {
+  // Drawn only: a kind with a renderer, and data that has arrived — not still
+  // loading, and not empty (a page has no room for the thread's empty line).
   const blocks = turn.blocks.filter(
-    (b) => Object.hasOwn(BLOCK_RENDERERS, b.kind) && b.status !== "loading",
+    (b) =>
+      BLOCK_RENDERERS[b.kind as keyof typeof BLOCK_RENDERERS] != null &&
+      b.status !== "loading" &&
+      b.status !== "empty",
   ) as unknown as SharedBlockSpec[]
   return { title: turn.title, sections: [{ blocks }] }
 }

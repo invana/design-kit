@@ -734,8 +734,11 @@ export interface BlockProps<K extends BlockKind = BlockKind> {
   /**
    * Everything the reader does, by name, with what it carries: `reply` and
    * `change` with the value, `skip`, `open` on a table holding rows back,
-   * `prompt` with a follow-up's words, `scope` with `{ part, value }`, or an
-   * action's own id. The shell says what each means.
+   * `select` with a table row's key, `download` with a file's digest or name,
+   * `prompt` with a follow-up's words, `scope` with `{ part, value }`. An
+   * action the spec declares (`actions`, a caveat's `action`) is `action` with
+   * its id, so its id can never be mistaken for one of these. The shell says
+   * what each means.
    */
   onAction?: (action: string, value?: unknown) => void
   /** Where a block that returns a value stands. Unset, it is open. */

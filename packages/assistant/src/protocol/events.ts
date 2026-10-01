@@ -16,8 +16,12 @@ export type ConversationEvent =
   | { type: "skip"; turn: string }
   /** An answered ask was changed. Re-runs from that turn, not from scratch. */
   | { type: "change"; turn: string; value: unknown }
-  /** A proposal or approval action — `approve`, `create-drafts`. */
-  | { type: "action"; turn: string; action: string }
+  /**
+   * An action the answer's spec declares — `approve`, `create-drafts` — or one a
+   * block names with what it carries: `select` with a table row's key,
+   * `download` with a file's digest.
+   */
+  | { type: "action"; turn: string; action: string; value?: unknown }
   /** One part of an answer's scope line was edited. */
   | { type: "scope"; turn: string; part: number; value: unknown }
   /**

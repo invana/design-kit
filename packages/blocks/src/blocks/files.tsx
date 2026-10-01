@@ -22,7 +22,7 @@ const noteOf = (file: FileItem) => file.note ?? file.size
  */
 export function FilesBlock({ spec, onAction }: BlockProps<"files">) {
   const download = (file: FileItem) =>
-    onAction?.(`download:${file.digest ?? file.name}`)
+    onAction?.("download", file.digest ?? file.name)
 
   if (spec.files.length === 1) {
     const file = spec.files[0]!

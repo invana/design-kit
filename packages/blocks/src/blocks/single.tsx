@@ -72,7 +72,7 @@ export function SingleAsk({ spec, state = "pending", value: given, id: idProp, o
             if (text?.trim()) send(text.trim())
           } else if (picked) send(picked)
         }}
-        id={`${id}-form`}
+        id={`${auto}-form`}
       >
         <QuestionnaireItem name={id}>
           <QuestionnaireTitle className={isHeading(spec) ? "font-semibold" : undefined}>
@@ -112,7 +112,7 @@ export function SingleAsk({ spec, state = "pending", value: given, id: idProp, o
               Skip
             </Button>
           ) : null}
-          <Button type="submit" form={`${id}-form`} size="xs" disabled={!picked}>
+          <Button type="submit" form={`${auto}-form`} size="xs" disabled={!picked}>
             {other ? "Use this" : (spec.submit ?? "Use this")}
           </Button>
         </ClarifyActions>
