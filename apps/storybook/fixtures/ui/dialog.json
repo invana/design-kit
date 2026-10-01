@@ -1,0 +1,14 @@
+[
+  {
+    "caption": "Default",
+    "trigger": { "label": "Edit profile", "variant": "outline", "icon": "pencil" },
+    "title": "Edit profile",
+    "description": "Make changes to your profile here. Click save when you're done.",
+    "fields": [
+      { "id": "dialog-name", "label": "Name", "value": "Ada Lovelace" },
+      { "id": "dialog-username", "label": "Username", "value": "@ada" }
+    ],
+    "cancel": "Cancel",
+    "submit": "Save changes"
+  }
+]

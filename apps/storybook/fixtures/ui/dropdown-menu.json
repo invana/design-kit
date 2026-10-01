@@ -1,0 +1,26 @@
+[
+  {
+    "caption": "Default",
+    "trigger": { "label": "Open menu", "variant": "outline" },
+    "entries": [
+      { "heading": "My account" },
+      { "separator": true },
+      { "value": "profile", "label": "Profile", "icon": "user", "shortcut": "⇧⌘P" },
+      { "value": "billing", "label": "Billing", "icon": "credit-card", "shortcut": "⌘B" },
+      { "value": "settings", "label": "Settings", "icon": "settings", "shortcut": "⌘S" },
+      { "separator": true },
+      { "check": "email-notifications", "label": "Email notifications", "checked": true },
+      { "separator": true },
+      {
+        "label": "Invite users",
+        "icon": "user-plus",
+        "sub": [
+          { "value": "invite-email", "label": "Email", "icon": "mail" },
+          { "value": "invite-message", "label": "Message", "icon": "user" }
+        ]
+      },
+      { "separator": true },
+      { "value": "log-out", "label": "Log out", "icon": "log-out", "shortcut": "⇧⌘Q" }
+    ]
+  }
+]
