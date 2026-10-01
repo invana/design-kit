@@ -1,0 +1,51 @@
+{
+  "name": "connection",
+  "title": "Connect a database",
+  "description": "Invana reads your graph where it lives. Try a localhost URI.",
+  "fields": [
+    {
+      "name": "connector",
+      "type": "select",
+      "label": "Connector",
+      "placeholder": "Select a connector",
+      "options": [
+        { "label": "Neo4j", "value": "neo4j" },
+        { "label": "JanusGraph", "value": "janusgraph" },
+        { "label": "Amazon Neptune", "value": "neptune" }
+      ]
+    },
+    { "name": "uri", "type": "text", "label": "URI", "placeholder": "bolt://localhost:7687", "colSpan": 2 },
+    {
+      "name": "database",
+      "type": "text",
+      "label": "Database (optional)",
+      "placeholder": "neo4j",
+      "description": "Leave blank to use the connector's default.",
+      "colSpan": 2
+    },
+    { "name": "username", "type": "text", "label": "Username", "placeholder": "neo4j" },
+    { "name": "password", "type": "password", "label": "Password", "placeholder": "••••••••" },
+    { "name": "readOnly", "type": "boolean", "label": "Read-only connection" }
+  ],
+  "rowConfig": [
+    { "id": "connector", "fields": ["connector"] },
+    { "id": "uri", "fields": ["uri"] },
+    { "id": "database", "fields": ["database"] },
+    { "id": "auth", "fields": ["username", "password"] },
+    { "id": "readOnly", "fields": ["readOnly"] }
+  ],
+  "defaultValues": {
+    "connection": { "connector": "", "uri": "", "database": "", "username": "", "password": "", "readOnly": false }
+  },
+  "test": {
+    "delayMs": 600,
+    "passesWhenUriHas": "localhost",
+    "copy": {
+      "untested": "Test the connection to enable Create.",
+      "testing": "Testing…",
+      "passed": "Connection works · 12 ms",
+      "failed": "Could not reach the server. Check the URI and credentials."
+    }
+  },
+  "required": { "connector": "Connector is required", "uri": "URI is required" }
+}

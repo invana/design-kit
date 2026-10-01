@@ -1,0 +1,302 @@
+[
+  [
+    {
+      "at": "10:16:03",
+      "verdict": "denied",
+      "policy": "no-pii",
+      "sid": "s-07",
+      "text": "Person.email (raw) — read refused"
+    }
+  ],
+  [
+    {
+      "at": "10:16:04",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "api.crunchbase.com · company names × 5"
+    },
+    {
+      "at": "10:16:05",
+      "verdict": "masked",
+      "policy": "no-pii",
+      "sid": "s-05",
+      "text": "Person.name read masked for ownership chain"
+    }
+  ],
+  [
+    {
+      "at": "10:16:06",
+      "verdict": "warn",
+      "policy": "token-budget",
+      "sid": "s-03",
+      "text": "run at 82% of its token budget"
+    }
+  ],
+  [
+    {
+      "at": "10:16:07",
+      "verdict": "allow",
+      "policy": "prefer-internal",
+      "sid": "s-02",
+      "text": "graph chosen before third party"
+    },
+    {
+      "at": "10:16:08",
+      "verdict": "denied",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "sec.gov/edgar not on the allowlist"
+    }
+  ],
+  [
+    {
+      "at": "10:16:09",
+      "verdict": "approved",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "you · egress to api.crunchbase.com"
+    }
+  ],
+  [
+    {
+      "at": "10:16:10",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "companies-house.gov.uk · registry ids × 4"
+    },
+    {
+      "at": "10:16:11",
+      "verdict": "allow",
+      "policy": "review-threshold",
+      "sid": "s-09",
+      "text": "delivered without review · confidence 0.88"
+    }
+  ],
+  [
+    {
+      "at": "10:16:12",
+      "verdict": "denied",
+      "policy": "sandbox",
+      "sid": "s-06",
+      "text": "code_exec tried network access"
+    }
+  ],
+  [
+    {
+      "at": "10:16:13",
+      "verdict": "masked",
+      "policy": "no-pii",
+      "sid": "s-07",
+      "text": "Person.name read masked for ownership chain"
+    },
+    {
+      "at": "10:16:14",
+      "verdict": "warn",
+      "policy": "token-budget",
+      "sid": "s-06",
+      "text": "run at 82% of its token budget"
+    }
+  ],
+  [
+    {
+      "at": "10:16:15",
+      "verdict": "denied",
+      "policy": "token-budget",
+      "sid": "s-03",
+      "text": "run would pass 1M tokens — capped"
+    }
+  ],
+  [
+    {
+      "at": "10:16:16",
+      "verdict": "allow",
+      "policy": "prefer-internal",
+      "sid": "s-09",
+      "text": "graph chosen before third party"
+    },
+    {
+      "at": "10:16:17",
+      "verdict": "denied",
+      "policy": "no-pii",
+      "sid": "s-07",
+      "text": "Person.email (raw) — read refused"
+    }
+  ],
+  [
+    {
+      "at": "10:16:18",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "api.crunchbase.com · company names × 5"
+    }
+  ],
+  [
+    {
+      "at": "10:16:19",
+      "verdict": "masked",
+      "policy": "no-pii",
+      "sid": "s-05",
+      "text": "Person.name read masked for ownership chain"
+    },
+    {
+      "at": "10:16:20",
+      "verdict": "warn",
+      "policy": "token-budget",
+      "sid": "s-03",
+      "text": "run at 82% of its token budget"
+    }
+  ],
+  [
+    {
+      "at": "10:16:21",
+      "verdict": "allow",
+      "policy": "prefer-internal",
+      "sid": "s-02",
+      "text": "graph chosen before third party"
+    }
+  ],
+  [
+    {
+      "at": "10:16:22",
+      "verdict": "denied",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "sec.gov/edgar not on the allowlist"
+    },
+    {
+      "at": "10:16:23",
+      "verdict": "approved",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "you · egress to api.crunchbase.com"
+    }
+  ],
+  [
+    {
+      "at": "10:16:24",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "companies-house.gov.uk · registry ids × 4"
+    }
+  ],
+  [
+    {
+      "at": "10:16:25",
+      "verdict": "allow",
+      "policy": "review-threshold",
+      "sid": "s-09",
+      "text": "delivered without review · confidence 0.88"
+    },
+    {
+      "at": "10:16:26",
+      "verdict": "denied",
+      "policy": "sandbox",
+      "sid": "s-06",
+      "text": "code_exec tried network access"
+    }
+  ],
+  [
+    {
+      "at": "10:16:27",
+      "verdict": "masked",
+      "policy": "no-pii",
+      "sid": "s-07",
+      "text": "Person.name read masked for ownership chain"
+    }
+  ],
+  [
+    {
+      "at": "10:16:28",
+      "verdict": "warn",
+      "policy": "token-budget",
+      "sid": "s-06",
+      "text": "run at 82% of its token budget"
+    },
+    {
+      "at": "10:16:29",
+      "verdict": "denied",
+      "policy": "token-budget",
+      "sid": "s-03",
+      "text": "run would pass 1M tokens — capped"
+    }
+  ],
+  [
+    {
+      "at": "10:16:30",
+      "verdict": "allow",
+      "policy": "prefer-internal",
+      "sid": "s-09",
+      "text": "graph chosen before third party"
+    }
+  ],
+  [
+    {
+      "at": "10:16:31",
+      "verdict": "denied",
+      "policy": "no-pii",
+      "sid": "s-07",
+      "text": "Person.email (raw) — read refused"
+    },
+    {
+      "at": "10:16:32",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "api.crunchbase.com · company names × 5"
+    }
+  ],
+  [
+    {
+      "at": "10:16:33",
+      "verdict": "masked",
+      "policy": "no-pii",
+      "sid": "s-05",
+      "text": "Person.name read masked for ownership chain"
+    }
+  ],
+  [
+    {
+      "at": "10:16:34",
+      "verdict": "warn",
+      "policy": "token-budget",
+      "sid": "s-03",
+      "text": "run at 82% of its token budget"
+    },
+    {
+      "at": "10:16:35",
+      "verdict": "allow",
+      "policy": "prefer-internal",
+      "sid": "s-02",
+      "text": "graph chosen before third party"
+    }
+  ],
+  [
+    {
+      "at": "10:16:36",
+      "verdict": "denied",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "sec.gov/edgar not on the allowlist"
+    }
+  ],
+  [
+    {
+      "at": "10:16:37",
+      "verdict": "approved",
+      "policy": "egress-allowlist",
+      "sid": "s-01",
+      "text": "you · egress to api.crunchbase.com"
+    },
+    {
+      "at": "10:16:38",
+      "verdict": "egress",
+      "policy": "egress-allowlist",
+      "sid": "s-05",
+      "text": "companies-house.gov.uk · registry ids × 4"
+    }
+  ]
+]

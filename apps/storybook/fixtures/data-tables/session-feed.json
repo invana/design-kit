@@ -1,0 +1,182 @@
+[
+  {
+    "id": "s-01",
+    "tokens": 43337,
+    "runtime": 23,
+    "context": 0.5
+  },
+  {
+    "id": "s-07",
+    "tokens": 182674,
+    "runtime": 125,
+    "context": 0.35
+  },
+  {
+    "id": "s-05",
+    "tokens": 138011,
+    "runtime": 91,
+    "context": 0.61
+  },
+  {
+    "id": "s-02",
+    "tokens": 70348,
+    "runtime": 40,
+    "context": 0.27
+  },
+  {
+    "id": "s-09",
+    "tokens": 226685,
+    "runtime": 159,
+    "context": 0.49
+  },
+  {
+    "id": "s-06",
+    "tokens": 159022,
+    "runtime": 108,
+    "context": 0.82
+  },
+  {
+    "id": "s-03",
+    "tokens": 191359,
+    "runtime": 57,
+    "context": 0.87
+  },
+  {
+    "id": "s-01",
+    "tokens": 50033,
+    "runtime": 26,
+    "context": 0.51
+  },
+  {
+    "id": "s-07",
+    "tokens": 184707,
+    "runtime": 128,
+    "context": 0.36
+  },
+  {
+    "id": "s-05",
+    "tokens": 141381,
+    "runtime": 94,
+    "context": 0.62
+  },
+  {
+    "id": "s-02",
+    "tokens": 75055,
+    "runtime": 43,
+    "context": 0.28
+  },
+  {
+    "id": "s-09",
+    "tokens": 232729,
+    "runtime": 162,
+    "context": 0.5
+  },
+  {
+    "id": "s-06",
+    "tokens": 166403,
+    "runtime": 111,
+    "context": 0.83
+  },
+  {
+    "id": "s-03",
+    "tokens": 194077,
+    "runtime": 60,
+    "context": 0.88
+  },
+  {
+    "id": "s-01",
+    "tokens": 54088,
+    "runtime": 29,
+    "context": 0.52
+  },
+  {
+    "id": "s-07",
+    "tokens": 190099,
+    "runtime": 131,
+    "context": 0.37
+  },
+  {
+    "id": "s-05",
+    "tokens": 148110,
+    "runtime": 97,
+    "context": 0.63
+  },
+  {
+    "id": "s-02",
+    "tokens": 77121,
+    "runtime": 46,
+    "context": 0.29
+  },
+  {
+    "id": "s-09",
+    "tokens": 236132,
+    "runtime": 165,
+    "context": 0.51
+  },
+  {
+    "id": "s-06",
+    "tokens": 171143,
+    "runtime": 114,
+    "context": 0.84
+  },
+  {
+    "id": "s-03",
+    "tokens": 200154,
+    "runtime": 63,
+    "context": 0.89
+  },
+  {
+    "id": "s-01",
+    "tokens": 61502,
+    "runtime": 32,
+    "context": 0.53
+  },
+  {
+    "id": "s-07",
+    "tokens": 192850,
+    "runtime": 134,
+    "context": 0.38
+  },
+  {
+    "id": "s-05",
+    "tokens": 152198,
+    "runtime": 100,
+    "context": 0.64
+  },
+  {
+    "id": "s-02",
+    "tokens": 82546,
+    "runtime": 49,
+    "context": 0.3
+  },
+  {
+    "id": "s-09",
+    "tokens": 242894,
+    "runtime": 168,
+    "context": 0.52
+  },
+  {
+    "id": "s-06",
+    "tokens": 173242,
+    "runtime": 117,
+    "context": 0.85
+  },
+  {
+    "id": "s-03",
+    "tokens": 203590,
+    "runtime": 66,
+    "context": 0.9
+  },
+  {
+    "id": "s-01",
+    "tokens": 66275,
+    "runtime": 35,
+    "context": 0.54
+  },
+  {
+    "id": "s-07",
+    "tokens": 198960,
+    "runtime": 137,
+    "context": 0.39
+  }
+]

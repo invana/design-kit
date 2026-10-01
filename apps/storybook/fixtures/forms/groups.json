@@ -1,0 +1,105 @@
+{
+  "lists": {
+    "properties": [
+      { "label": "name", "value": "name" },
+      { "label": "label", "value": "label" },
+      { "label": "url", "value": "url" },
+      { "label": "lat_lng", "value": "lat_lng" },
+      { "label": "created_at", "value": "created_at" }
+    ],
+    "shapes": [
+      { "label": "Circle", "value": "circle" },
+      { "label": "Rectangle", "value": "rectangle" },
+      { "label": "Diamond", "value": "diamond" },
+      { "label": "Triangle", "value": "triangle" },
+      { "label": "Hexagon", "value": "hexagon" }
+    ],
+    "presets": [
+      { "label": "White", "value": "#ffffff" },
+      { "label": "Gray", "value": "#f3f4f6" },
+      { "label": "Primary", "value": "#3b82f6" }
+    ]
+  },
+  "important": {
+    "name": "fields",
+    "fields": [
+      { "name": "labelField", "type": "select", "options": "properties", "row": "basic" },
+      { "name": "imageField", "type": "select", "options": "properties", "row": "basic" },
+      { "name": "geoField", "type": "select", "options": "properties", "row": "basic" },
+      { "name": "timestampField", "type": "select", "options": "properties", "row": "basic" }
+    ],
+    "rowConfig": [
+      { "id": "imp-basic-1", "fields": ["labelField", "imageField"] },
+      { "id": "imp-basic-2", "fields": ["geoField", "timestampField"] }
+    ]
+  },
+  "tabs": [
+    {
+      "name": "shape",
+      "label": "Shape",
+      "fields": [
+        { "name": "type", "type": "select", "options": "shapes", "group": "general", "row": "basic" },
+        { "name": "size", "type": "number", "min": 0, "max": 500, "step": 1, "group": "general", "row": "basic" },
+        { "name": "animated", "type": "boolean", "boxed": true, "group": "general", "row": "basic" },
+        { "name": "bgColor", "type": "color", "group": "background", "row": "bg-main", "presetColors": "presets", "defaultValue": "#ffffff" },
+        { "name": "bgOpacity", "type": "number", "min": 0, "max": 1, "step": 0.1, "group": "background", "row": "bg-main" },
+        { "name": "bgPadding", "type": "number", "min": 0, "max": 50, "step": 1, "group": "background", "row": "bg-main" },
+        { "name": "borderColor", "type": "color", "group": "border", "row": "border-main", "presetColors": "presets", "defaultValue": "#3b82f6" },
+        { "name": "borderWidth", "type": "number", "min": 0, "max": 20, "step": 1, "group": "border", "row": "border-main" },
+        { "name": "borderRadius", "type": "number", "min": 0, "max": 50, "step": 1, "group": "border", "row": "border-main" },
+        { "name": "dottedBorder", "type": "boolean", "boxed": true, "group": "border", "row": "border-main" },
+        { "name": "iconText", "type": "icon", "group": "icon", "row": "icon-main" },
+        { "name": "iconSize", "type": "number", "min": 0, "max": 100, "step": 1, "group": "icon", "row": "icon-main" },
+        { "name": "iconColor", "type": "color", "group": "icon", "row": "icon-main", "presetColors": "presets", "defaultValue": "#ffffff" }
+      ],
+      "rowConfig": [
+        { "id": "general-1", "fields": ["type", "size"] },
+        { "id": "general-2", "fields": ["animated"] },
+        { "id": "bg-1", "fields": ["bgPadding", "bgOpacity"] },
+        { "id": "bg-2", "fields": ["bgColor"] },
+        { "id": "border-1", "fields": ["borderColor", "borderWidth"] },
+        { "id": "border-2", "fields": ["borderRadius", "dottedBorder"] },
+        { "id": "icon-1", "fields": ["iconText", "iconSize"] },
+        { "id": "icon-2", "fields": ["iconColor"] }
+      ]
+    },
+    {
+      "name": "label",
+      "label": "Label",
+      "fields": [
+        { "name": "bgColor", "type": "color", "group": "background", "row": "bg-main", "presetColors": "presets", "defaultValue": "#ffffff" },
+        { "name": "bgOpacity", "type": "number", "min": 0, "max": 1, "step": 0.1, "group": "background", "row": "bg-main" },
+        { "name": "bgPadding", "type": "number", "min": 0, "max": 50, "step": 1, "group": "background", "row": "bg-main" },
+        { "name": "borderColor", "type": "color", "group": "border", "row": "border-main", "presetColors": "presets", "defaultValue": "#e5e7eb" },
+        { "name": "borderWidth", "type": "number", "min": 0, "max": 20, "step": 1, "group": "border", "row": "border-main" },
+        { "name": "borderRadius", "type": "number", "min": 0, "max": 50, "step": 1, "group": "border", "row": "border-main" },
+        { "name": "textColor", "type": "color", "group": "text", "row": "text-main", "presetColors": "presets", "defaultValue": "#000000" },
+        { "name": "textFontSize", "type": "number", "min": 8, "max": 72, "step": 1, "group": "text", "row": "text-main" },
+        { "name": "textFontFamily", "type": "text", "group": "text", "row": "text-main" },
+        { "name": "textOpacity", "type": "number", "min": 0, "max": 1, "step": 0.1, "group": "text", "row": "text-main" }
+      ],
+      "rowConfig": [
+        { "id": "bg-1", "fields": ["bgColor", "bgOpacity"] },
+        { "id": "bg-2", "fields": ["bgPadding"] },
+        { "id": "border-1", "fields": ["borderColor", "borderWidth"] },
+        { "id": "border-2", "fields": ["borderRadius"] },
+        { "id": "text-1", "fields": ["textColor", "textFontSize"] },
+        { "id": "text-2", "fields": ["textFontFamily", "textOpacity"] }
+      ]
+    }
+  ],
+  "defaultValues": {
+    "fields": { "labelField": "name", "imageField": "", "geoField": "lat_lng", "timestampField": "created_at" },
+    "shape": {
+      "type": "circle", "size": 80, "animated": false,
+      "bgColor": "#ffffff", "bgOpacity": 1, "bgPadding": 8,
+      "borderColor": "#3b82f6", "borderWidth": 2, "borderRadius": 50, "dottedBorder": false,
+      "iconText": "", "iconSize": 16, "iconColor": "#ffffff"
+    },
+    "label": {
+      "bgColor": "#ffffff", "bgOpacity": 1, "bgPadding": 4,
+      "borderColor": "#e5e7eb", "borderWidth": 1, "borderRadius": 4,
+      "textColor": "#000000", "textFontSize": 12, "textFontFamily": "Inter", "textOpacity": 1
+    }
+  }
+}

@@ -1,239 +1,135 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
+import * as React from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, screen, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
-import {
-  SettingsPanel,
-  type ColorPreset,
-  type FieldConfig,
-  type GroupConfig,
-} from '@invana/forms';
+import { SettingsPanel, type FieldConfig, type FieldValues, type GroupConfig } from '@invana/forms';
+
+import spec from '../../../fixtures/forms/inspector.json';
+import { jsx, snippet } from '../../_story/source';
+import { VariantBoard, type Log } from '../../_story/variant-board';
+import { withLists } from '../form-source';
+
+type ShapeKind = keyof typeof spec.geometryByKind;
+
+const LISTS = { presets: spec.presets };
+const REST = withLists(spec.rest, LISTS);
+const [SIZE, ...STYLE] = REST;
+const GROUPS = spec.groupConfig as GroupConfig[];
+const VARIANTS = [{ caption: 'Inspector', width: 360 }];
 
 /**
- * A docked inspector: the dense side panel beside a canvas or a graph, built
- * with `SettingsPanel` at `size="xs"`. The field set
- * is the real `NodeStyle` editor schema (as used by the Invana canvas building
- * studio): grouped `FieldConfig`s across **Geometry**, **Background**,
- * **Stroke** and **Label** sections, mixing color pickers with presets, numeric
- * inputs with `min`/`max`/`step`, selects and text — each `group` renders as a
- * collapsible section with an uppercase header and a count badge.
- *
- * The **Geometry** section shows the discriminated-union pattern: changing the
- * `Shape` select swaps in that kind's geometry numerics (radius vs
- * width/height vs sides…), recomputed from the live form values via
- * `form.watch`.
+ * The full NodeStyle field set as one grouped `FieldConfig[]`. Geometry numerics vary with the
+ * current `shapeKind` (a discriminated union), so this is a function of the live values.
  */
-const meta: Meta = {
-  title: 'Forms/Generated/Inspector',
-  parameters: { layout: 'centered' },
-};
-export default meta;
-type Story = StoryObj;
-
-const COLOR_PRESETS: ColorPreset[] = [
-  { label: 'Blue', value: '#3b82f6' },
-  { label: 'Indigo', value: '#6366f1' },
-  { label: 'Violet', value: '#8b5cf6' },
-  { label: 'Emerald', value: '#10b981' },
-  { label: 'Amber', value: '#f59e0b' },
-  { label: 'Rose', value: '#f43f5e' },
-  { label: 'Slate', value: '#64748b' },
-  { label: 'White', value: '#ffffff', darkValue: '#0f172a' },
+const fieldsFor = (kind: ShapeKind): FieldConfig[] => [
+  spec.shapeKind as FieldConfig,
+  ...((spec.geometryByKind[kind] ?? []) as FieldConfig[]),
+  SIZE!,
+  ...STYLE,
 ];
 
-type ShapeKind = 'circle' | 'rect' | 'regular-polygon' | 'star';
-
-const SHAPE_KIND_FIELD: FieldConfig = {
-  name: 'shapeKind',
-  type: 'select',
-  label: 'Shape',
-  group: 'Geometry',
-  options: [
-    { value: 'circle', label: 'Circle' },
-    { value: 'rect', label: 'Rectangle' },
-    { value: 'regular-polygon', label: 'Regular polygon' },
-    { value: 'star', label: 'Star' },
-  ],
-};
-
-const SIZE_FIELD: FieldConfig = {
-  name: 'size',
-  type: 'number',
-  label: 'Size',
-  group: 'Geometry',
-  min: 0,
-  max: 200,
-  step: 1,
-  description: "Unified radius / half-extent. Overrides the shape's native size axis.",
-};
-
-/** Per-kind geometry numerics, keyed by shape kind. */
-const GEOMETRY_BY_KIND: Record<ShapeKind, FieldConfig[]> = {
-  circle: [{ name: 'radius', type: 'number', label: 'Radius', group: 'Geometry', min: 0, max: 200, step: 1 }],
-  rect: [
-    { name: 'width', type: 'number', label: 'Width', group: 'Geometry', min: 0, max: 400, step: 1 },
-    { name: 'height', type: 'number', label: 'Height', group: 'Geometry', min: 0, max: 400, step: 1 },
-    { name: 'cornerRadius', type: 'number', label: 'Corner radius', group: 'Geometry', min: 0, max: 200, step: 1 },
-  ],
-  'regular-polygon': [
-    { name: 'sides', type: 'number', label: 'Sides', group: 'Geometry', min: 3, max: 20, step: 1 },
-    { name: 'radius', type: 'number', label: 'Radius', group: 'Geometry', min: 0, max: 200, step: 1 },
-  ],
-  star: [
-    { name: 'points', type: 'number', label: 'Points', group: 'Geometry', min: 3, max: 20, step: 1 },
-    { name: 'innerRadius', type: 'number', label: 'Inner radius', group: 'Geometry', min: 0, max: 200, step: 1 },
-    { name: 'outerRadius', type: 'number', label: 'Outer radius', group: 'Geometry', min: 0, max: 200, step: 1 },
-  ],
-};
-
-const BACKGROUND_FIELDS: FieldConfig[] = [
-  {
-    name: 'bgFill',
-    type: 'color',
-    label: 'Fill color',
-    group: 'Background',
-    presetColors: COLOR_PRESETS,
-    description: 'Solid color. Use the engine API directly for stacked / image / glyph fills.',
-  },
-  { name: 'bgAlpha', type: 'number', label: 'Fill alpha', group: 'Background', min: 0, max: 1, step: 0.01 },
-];
-
-const STROKE_FIELDS: FieldConfig[] = [
-  { name: 'bgStrokeColor', type: 'color', label: 'Stroke color', group: 'Stroke', presetColors: COLOR_PRESETS },
-  { name: 'bgStrokeAlpha', type: 'number', label: 'Stroke alpha', group: 'Stroke', min: 0, max: 1, step: 0.01 },
-  { name: 'bgStrokeWidth', type: 'number', label: 'Stroke width', group: 'Stroke', min: 0, max: 50, step: 0.5 },
-  {
-    name: 'bgStrokeAlignment',
-    type: 'select',
-    label: 'Stroke alignment',
-    group: 'Stroke',
-    options: [
-      { value: 'inside', label: 'Inside' },
-      { value: 'center', label: 'Center' },
-      { value: 'outside', label: 'Outside' },
-    ],
-  },
-  {
-    name: 'bgStrokeDashLength',
-    type: 'number',
-    label: 'Dash length',
-    group: 'Stroke',
-    min: 0,
-    max: 50,
-    step: 1,
-    description: 'Leave dash + gap at 0 for a solid stroke.',
-  },
-  { name: 'bgStrokeDashGap', type: 'number', label: 'Dash gap', group: 'Stroke', min: 0, max: 50, step: 1 },
-  {
-    name: 'bgStrokeCap',
-    type: 'select',
-    label: 'Cap',
-    group: 'Stroke',
-    options: [
-      { value: 'butt', label: 'Butt' },
-      { value: 'round', label: 'Round' },
-      { value: 'square', label: 'Square' },
-    ],
-  },
-  {
-    name: 'bgStrokeJoin',
-    type: 'select',
-    label: 'Join',
-    group: 'Stroke',
-    options: [
-      { value: 'miter', label: 'Miter' },
-      { value: 'round', label: 'Round' },
-      { value: 'bevel', label: 'Bevel' },
-    ],
-  },
-];
-
-const LABEL_FIELDS: FieldConfig[] = [
-  { name: 'labelText', type: 'text', label: 'Text', group: 'Label', placeholder: '(uses node id / data field)' },
-  { name: 'labelColor', type: 'color', label: 'Color', group: 'Label', presetColors: COLOR_PRESETS },
-  { name: 'labelFontSize', type: 'number', label: 'Font size', group: 'Label', min: 1, max: 120, step: 1 },
-  { name: 'labelFontWeight', type: 'number', label: 'Font weight', group: 'Label', min: 100, max: 900, step: 100 },
-  {
-    name: 'labelPlacement',
-    type: 'select',
-    label: 'Placement',
-    group: 'Label',
-    description: 'inside-* placements clip / truncate to fit the shape.',
-    options: [
-      { value: 'center', label: 'Center (anchor)' },
-      { value: 'top', label: 'Top' },
-      { value: 'bottom', label: 'Bottom' },
-      { value: 'left', label: 'Left' },
-      { value: 'right', label: 'Right' },
-      { value: 'inside-center', label: 'Inside center (contained)' },
-    ],
-  },
-  { name: 'labelOffsetX', type: 'number', label: 'Offset X', group: 'Label', min: -200, max: 200, step: 1 },
-  { name: 'labelOffsetY', type: 'number', label: 'Offset Y', group: 'Label', min: -200, max: 200, step: 1 },
-];
-
-/**
- * The full NodeStyle field set as one grouped `FieldConfig[]`. Geometry
- * numerics vary with the current `shapeKind` (the discriminated union), so
- * this is a function of the live values.
- */
-function nodeStyleFields(shapeKind: ShapeKind): FieldConfig[] {
-  return [
-    SHAPE_KIND_FIELD,
-    ...(GEOMETRY_BY_KIND[shapeKind] ?? []),
-    SIZE_FIELD,
-    ...BACKGROUND_FIELDS,
-    ...STROKE_FIELDS,
-    ...LABEL_FIELDS,
-  ];
+interface Args {
+  onChange: (change: { name?: string; value: unknown }) => void;
 }
 
-const GROUP_CONFIG: GroupConfig[] = [
-  { id: 'Geometry', badges: [{ label: 'edited' }] },
-  { id: 'Label', badges: [{ label: 'optional', variant: 'outline' }] },
-];
+function Live({ log, onChange }: Args & { log: Log }) {
+  const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
+  // Watch the shape kind so the Geometry section swaps its numerics live.
+  const kind = form.watch(`${spec.name}.shapeKind`) as ShapeKind;
 
-const defaultValues = {
-  style: {
-    shapeKind: 'circle' as ShapeKind,
-    radius: 28,
-    size: 28,
-    bgFill: '#3b82f6',
-    bgAlpha: 1,
-    bgStrokeColor: '#1e3a8a',
-    bgStrokeAlpha: 1,
-    bgStrokeWidth: 3,
-    bgStrokeAlignment: 'center',
-    bgStrokeDashLength: 0,
-    bgStrokeDashGap: 0,
-    bgStrokeCap: 'butt',
-    bgStrokeJoin: 'miter',
-    labelText: 'Node',
-    labelColor: '#ffffff',
-    labelFontSize: 14,
-    labelFontWeight: 400,
-    labelPlacement: 'center',
-    labelOffsetX: 0,
-    labelOffsetY: 0,
+  // An inspector saves as you go: every change is the event.
+  React.useEffect(() => {
+    const sub = form.watch((values, { name }) => {
+      const value = name?.split('.').reduce<unknown>((v, k) => (v as Record<string, unknown>)?.[k], values);
+      onChange({ name, value });
+      log('onChange', { name, value });
+    });
+    return () => sub.unsubscribe();
+  }, [form, onChange, log]);
+
+  return (
+    <SettingsPanel
+      title={spec.title}
+      form={form}
+      name={spec.name}
+      fields={fieldsFor(kind)}
+      groupConfig={GROUPS}
+      labelPosition="top"
+      size="xs"
+      columns={2}
+    />
+  );
+}
+
+const meta = {
+  title: 'Forms/Generated/Inspector',
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        language: 'tsx',
+        code: snippet({
+          imports: ["import { useForm } from 'react-hook-form';", "import { SettingsPanel } from '@invana/forms';"],
+          comment: 'A docked inspector: grouped FieldConfigs, each `group` a collapsible section with a count badge',
+          data: {
+            shapeKind: spec.shapeKind,
+            geometryByKind: spec.geometryByKind,
+            style: REST,
+            groupConfig: GROUPS,
+            defaultValues: spec.defaultValues,
+          },
+          setup: [
+            'const form = useForm({ defaultValues });',
+            '// The shape picks its own geometry fields — recomputed from the live value.',
+            `const kind = form.watch("${spec.name}.shapeKind");`,
+            'const fields = [shapeKind, ...geometryByKind[kind], ...style];',
+            '// Saves as you go: hear every change with form.watch — { name: "style.shapeKind", value: "rect" }.',
+            'React.useEffect(() => form.watch((values, { name }) => save(name, values)).unsubscribe, [form]);',
+          ].join('\n'),
+          call: jsx('SettingsPanel', {
+            title: { literal: spec.title },
+            form: 'form',
+            name: { literal: spec.name },
+            fields: 'fields',
+            groupConfig: 'groupConfig',
+            labelPosition: { literal: 'top' },
+            size: { literal: 'xs' },
+            columns: '2',
+          }),
+        }),
+      },
+    },
   },
-};
+  args: { onChange: fn() },
+} satisfies Meta<Args>;
 
+export default meta;
+type Story = StoryObj<Args>;
+
+/**
+ * A docked inspector: the dense side panel beside a canvas or a graph, built with
+ * `SettingsPanel` at `size="xs"`, from `fixtures/forms/inspector.json`. The field set is the
+ * real `NodeStyle` editor schema: grouped `FieldConfig`s across **Geometry**, **Background**,
+ * **Stroke** and **Label**, mixing colour pickers with presets, numeric inputs with
+ * `min`/`max`/`step`, selects and text.
+ *
+ * **Geometry** shows the discriminated-union pattern: changing `Shape` swaps in that kind's
+ * numerics (radius vs width/height vs sides…), recomputed via `form.watch`. Every change is
+ * written under the panel.
+ */
 export const Inspector: Story = {
-  render: function Render() {
-    const form = useForm({ defaultValues });
-    // Watch the shape kind so the Geometry section swaps its numerics live.
-    const shapeKind = form.watch('style.shapeKind') as ShapeKind;
-
-    return (
-      <SettingsPanel
-        title="Node Style"
-        form={form}
-        name="style"
-        fields={nodeStyleFields(shapeKind)}
-        groupConfig={GROUP_CONFIG}
-        labelPosition="top"
-        size="xs"
-        columns={2}
-        className="w-[360px]"
-      />
-    );
+  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  play: async ({ canvasElement, args, step }) => {
+    const cell = within(within(canvasElement).getByRole('group', { name: 'Inspector' }));
+    await step('Change the shape to a rectangle', async () => {
+      await userEvent.click(cell.getByRole('combobox', { name: 'Shape' }));
+      await userEvent.click(await screen.findByRole('option', { name: 'Rectangle' }));
+      await expect(args.onChange).toHaveBeenCalledWith({ name: `${spec.name}.shapeKind`, value: 'rect' });
+    });
+    await step('Geometry swaps to the rectangle\'s fields', async () => {
+      await expect(cell.getByText('Width')).toBeInTheDocument();
+      await expect(cell.queryByText('Radius')).toBeNull();
+      await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('"value": "rect"');
+    });
   },
 };

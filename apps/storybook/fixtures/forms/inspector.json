@@ -1,0 +1,160 @@
+{
+  "title": "Node Style",
+  "name": "style",
+  "presets": [
+    { "label": "Blue", "value": "#3b82f6" },
+    { "label": "Indigo", "value": "#6366f1" },
+    { "label": "Violet", "value": "#8b5cf6" },
+    { "label": "Emerald", "value": "#10b981" },
+    { "label": "Amber", "value": "#f59e0b" },
+    { "label": "Rose", "value": "#f43f5e" },
+    { "label": "Slate", "value": "#64748b" },
+    { "label": "White", "value": "#ffffff", "darkValue": "#0f172a" }
+  ],
+  "shapeKind": {
+    "name": "shapeKind",
+    "type": "select",
+    "label": "Shape",
+    "group": "Geometry",
+    "options": [
+      { "value": "circle", "label": "Circle" },
+      { "value": "rect", "label": "Rectangle" },
+      { "value": "regular-polygon", "label": "Regular polygon" },
+      { "value": "star", "label": "Star" }
+    ]
+  },
+  "geometryByKind": {
+    "circle": [{ "name": "radius", "type": "number", "label": "Radius", "group": "Geometry", "min": 0, "max": 200, "step": 1 }],
+    "rect": [
+      { "name": "width", "type": "number", "label": "Width", "group": "Geometry", "min": 0, "max": 400, "step": 1 },
+      { "name": "height", "type": "number", "label": "Height", "group": "Geometry", "min": 0, "max": 400, "step": 1 },
+      { "name": "cornerRadius", "type": "number", "label": "Corner radius", "group": "Geometry", "min": 0, "max": 200, "step": 1 }
+    ],
+    "regular-polygon": [
+      { "name": "sides", "type": "number", "label": "Sides", "group": "Geometry", "min": 3, "max": 20, "step": 1 },
+      { "name": "radius", "type": "number", "label": "Radius", "group": "Geometry", "min": 0, "max": 200, "step": 1 }
+    ],
+    "star": [
+      { "name": "points", "type": "number", "label": "Points", "group": "Geometry", "min": 3, "max": 20, "step": 1 },
+      { "name": "innerRadius", "type": "number", "label": "Inner radius", "group": "Geometry", "min": 0, "max": 200, "step": 1 },
+      { "name": "outerRadius", "type": "number", "label": "Outer radius", "group": "Geometry", "min": 0, "max": 200, "step": 1 }
+    ]
+  },
+  "rest": [
+    {
+      "name": "size",
+      "type": "number",
+      "label": "Size",
+      "group": "Geometry",
+      "min": 0,
+      "max": 200,
+      "step": 1,
+      "description": "Unified radius / half-extent. Overrides the shape's native size axis."
+    },
+    {
+      "name": "bgFill",
+      "type": "color",
+      "label": "Fill color",
+      "group": "Background",
+      "presetColors": "presets",
+      "description": "Solid color. Use the engine API directly for stacked / image / glyph fills."
+    },
+    { "name": "bgAlpha", "type": "number", "label": "Fill alpha", "group": "Background", "min": 0, "max": 1, "step": 0.01 },
+    { "name": "bgStrokeColor", "type": "color", "label": "Stroke color", "group": "Stroke", "presetColors": "presets" },
+    { "name": "bgStrokeAlpha", "type": "number", "label": "Stroke alpha", "group": "Stroke", "min": 0, "max": 1, "step": 0.01 },
+    { "name": "bgStrokeWidth", "type": "number", "label": "Stroke width", "group": "Stroke", "min": 0, "max": 50, "step": 0.5 },
+    {
+      "name": "bgStrokeAlignment",
+      "type": "select",
+      "label": "Stroke alignment",
+      "group": "Stroke",
+      "options": [
+        { "value": "inside", "label": "Inside" },
+        { "value": "center", "label": "Center" },
+        { "value": "outside", "label": "Outside" }
+      ]
+    },
+    {
+      "name": "bgStrokeDashLength",
+      "type": "number",
+      "label": "Dash length",
+      "group": "Stroke",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "description": "Leave dash + gap at 0 for a solid stroke."
+    },
+    { "name": "bgStrokeDashGap", "type": "number", "label": "Dash gap", "group": "Stroke", "min": 0, "max": 50, "step": 1 },
+    {
+      "name": "bgStrokeCap",
+      "type": "select",
+      "label": "Cap",
+      "group": "Stroke",
+      "options": [
+        { "value": "butt", "label": "Butt" },
+        { "value": "round", "label": "Round" },
+        { "value": "square", "label": "Square" }
+      ]
+    },
+    {
+      "name": "bgStrokeJoin",
+      "type": "select",
+      "label": "Join",
+      "group": "Stroke",
+      "options": [
+        { "value": "miter", "label": "Miter" },
+        { "value": "round", "label": "Round" },
+        { "value": "bevel", "label": "Bevel" }
+      ]
+    },
+    { "name": "labelText", "type": "text", "label": "Text", "group": "Label", "placeholder": "(uses node id / data field)" },
+    { "name": "labelColor", "type": "color", "label": "Color", "group": "Label", "presetColors": "presets" },
+    { "name": "labelFontSize", "type": "number", "label": "Font size", "group": "Label", "min": 1, "max": 120, "step": 1 },
+    { "name": "labelFontWeight", "type": "number", "label": "Font weight", "group": "Label", "min": 100, "max": 900, "step": 100 },
+    {
+      "name": "labelPlacement",
+      "type": "select",
+      "label": "Placement",
+      "group": "Label",
+      "description": "inside-* placements clip / truncate to fit the shape.",
+      "options": [
+        { "value": "center", "label": "Center (anchor)" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" },
+        { "value": "inside-center", "label": "Inside center (contained)" }
+      ]
+    },
+    { "name": "labelOffsetX", "type": "number", "label": "Offset X", "group": "Label", "min": -200, "max": 200, "step": 1 },
+    { "name": "labelOffsetY", "type": "number", "label": "Offset Y", "group": "Label", "min": -200, "max": 200, "step": 1 }
+  ],
+  "groupConfig": [
+    { "id": "Geometry", "badges": [{ "label": "edited" }] },
+    { "id": "Label", "badges": [{ "label": "optional", "variant": "outline" }] }
+  ],
+  "defaultValues": {
+    "style": {
+      "shapeKind": "circle",
+      "radius": 28,
+      "size": 28,
+      "bgFill": "#3b82f6",
+      "bgAlpha": 1,
+      "bgStrokeColor": "#1e3a8a",
+      "bgStrokeAlpha": 1,
+      "bgStrokeWidth": 3,
+      "bgStrokeAlignment": "center",
+      "bgStrokeDashLength": 0,
+      "bgStrokeDashGap": 0,
+      "bgStrokeCap": "butt",
+      "bgStrokeJoin": "miter",
+      "labelText": "Node",
+      "labelColor": "#ffffff",
+      "labelFontSize": 14,
+      "labelFontWeight": 400,
+      "labelPlacement": "center",
+      "labelOffsetX": 0,
+      "labelOffsetY": 0
+    }
+  }
+}

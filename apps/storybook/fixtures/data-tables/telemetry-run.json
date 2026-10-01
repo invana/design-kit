@@ -1,0 +1,404 @@
+{
+  "id": "run_7f3c · market-brief",
+  "origin": "2026-09-30T14:02:00.000Z",
+  "spanMs": 9200,
+  "slots": [
+    "w1",
+    "w2",
+    "w3"
+  ],
+  "tasks": [
+    {
+      "key": "plan",
+      "agent": "planner",
+      "spawnMs": 10,
+      "summary": "split the brief into 5 fetches, an analysis and a write-up",
+      "splits": [
+        "fetch_prices",
+        "fetch_filings",
+        "fetch_news",
+        "fetch_ratings",
+        "fetch_fx",
+        "analyse",
+        "write",
+        "verify"
+      ],
+      "attempts": [
+        {
+          "slot": "w1",
+          "startMs": 40,
+          "durationMs": 1200,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 20,
+              "durationMs": 180,
+              "kind": "tool_call",
+              "detail": "catalog.search \"semis q3\" · 14 datasets"
+            },
+            {
+              "atMs": 220,
+              "durationMs": 940,
+              "kind": "llm_call",
+              "detail": "claude-sonnet-5-5 · 2,140 → 412 tok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fetch_prices",
+      "agent": "researcher",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "12 tickers · 90 days of closes",
+      "attempts": [
+        {
+          "slot": "w1",
+          "startMs": 1260,
+          "durationMs": 1800,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /prices?page=1 · 200 · 18 KB"
+            },
+            {
+              "atMs": 460,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /prices?page=2 · 200 · 25 KB"
+            },
+            {
+              "atMs": 880,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /prices?page=3 · 200 · 32 KB"
+            },
+            {
+              "atMs": 1300,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /prices?page=4 · 200 · 39 KB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fetch_filings",
+      "agent": "researcher",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "38 filings · 10-Q and 8-K",
+      "attempts": [
+        {
+          "slot": "w2",
+          "startMs": 1260,
+          "durationMs": 800,
+          "status": "failed",
+          "error": {
+            "code": "http_429",
+            "message": "rate limited by filings API",
+            "retry": "backoff 500ms · next free slot"
+          },
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 260,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=1 · 200 · 18 KB"
+            },
+            {
+              "atMs": 340,
+              "durationMs": 260,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=2 · 200 · 25 KB"
+            },
+            {
+              "atMs": 660,
+              "durationMs": 120,
+              "kind": "tool_call",
+              "level": "warn",
+              "detail": "http GET /filings?page=3 · 429 · retry-after 0.5s"
+            }
+          ]
+        },
+        {
+          "slot": "w3",
+          "startMs": 2860,
+          "durationMs": 2200,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=1 · 200 · 18 KB"
+            },
+            {
+              "atMs": 460,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=2 · 200 · 25 KB"
+            },
+            {
+              "atMs": 880,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=3 · 200 · 32 KB"
+            },
+            {
+              "atMs": 1300,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=4 · 200 · 39 KB"
+            },
+            {
+              "atMs": 1720,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "detail": "http GET /filings?page=5 · 200 · 23 KB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fetch_news",
+      "agent": "researcher",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "61 articles · deduplicated to 44",
+      "attempts": [
+        {
+          "slot": "w3",
+          "startMs": 1260,
+          "durationMs": 1600,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 340,
+              "kind": "tool_call",
+              "detail": "http GET /news?page=1 · 200 · 18 KB"
+            },
+            {
+              "atMs": 420,
+              "durationMs": 340,
+              "kind": "tool_call",
+              "detail": "http GET /news?page=2 · 200 · 25 KB"
+            },
+            {
+              "atMs": 800,
+              "durationMs": 340,
+              "kind": "tool_call",
+              "detail": "http GET /news?page=3 · 200 · 32 KB"
+            },
+            {
+              "atMs": 1200,
+              "durationMs": 360,
+              "kind": "llm_call",
+              "detail": "claude-haiku-4-5 · dedupe · 9,800 → 220 tok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fetch_ratings",
+      "agent": "researcher",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "analyst ratings · 12 of 12 tickers",
+      "attempts": [
+        {
+          "slot": "w2",
+          "startMs": 2080,
+          "durationMs": 1200,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 60,
+              "durationMs": 500,
+              "kind": "tool_call",
+              "detail": "http GET /ratings?page=1 · 200 · 18 KB"
+            },
+            {
+              "atMs": 600,
+              "durationMs": 500,
+              "kind": "tool_call",
+              "detail": "http GET /ratings?page=2 · 200 · 25 KB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fetch_fx",
+      "agent": "researcher",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "USD, EUR, JPY, TWD daily rates",
+      "attempts": [
+        {
+          "slot": "w1",
+          "startMs": 3080,
+          "durationMs": 600,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 480,
+              "kind": "tool_call",
+              "detail": "http GET /fx?page=1 · 200 · 18 KB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "analyse",
+      "agent": "analyst",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "waited on 5 fetches, then split in two",
+      "splits": [
+        "analyse.margins",
+        "analyse.risk"
+      ],
+      "attempts": [
+        {
+          "slot": "w1",
+          "startMs": 5080,
+          "durationMs": 220,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 20,
+              "durationMs": 180,
+              "kind": "llm_call",
+              "detail": "claude-sonnet-5-5 · 1,020 → 96 tok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "analyse.margins",
+      "agent": "analyst",
+      "parent": "analyse",
+      "spawnMs": 5300,
+      "summary": "gross margin by segment · 12 companies",
+      "attempts": [
+        {
+          "slot": "w1",
+          "startMs": 5320,
+          "durationMs": 1600,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 420,
+              "kind": "tool_call",
+              "detail": "sql · join prices × filings · 1,204 rows"
+            },
+            {
+              "atMs": 500,
+              "durationMs": 1040,
+              "kind": "llm_call",
+              "detail": "claude-sonnet-5-5 · 11,300 → 1,280 tok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "analyse.risk",
+      "agent": "analyst",
+      "parent": "analyse",
+      "spawnMs": 5300,
+      "summary": "not retried — the input shape was wrong, not the network",
+      "attempts": [
+        {
+          "slot": "w2",
+          "startMs": 5320,
+          "durationMs": 800,
+          "status": "failed",
+          "error": {
+            "code": "schema_mismatch",
+            "message": "ratings.consensus expected number, got \"n/a\" on 3 rows"
+          },
+          "calls": [
+            {
+              "atMs": 40,
+              "durationMs": 300,
+              "kind": "tool_call",
+              "detail": "sql · ratings × news sentiment · 44 rows"
+            },
+            {
+              "atMs": 380,
+              "durationMs": 380,
+              "kind": "tool_call",
+              "level": "error",
+              "detail": "validate · ratings.consensus · 3 rows rejected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "write",
+      "agent": "writer",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "brief written without the risk section",
+      "attempts": [
+        {
+          "slot": "w3",
+          "startMs": 6940,
+          "durationMs": 1800,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 20,
+              "durationMs": 1100,
+              "kind": "llm_call",
+              "detail": "claude-sonnet-5-5 · draft · 14,900 → 2,030 tok"
+            },
+            {
+              "atMs": 1140,
+              "durationMs": 620,
+              "kind": "llm_call",
+              "detail": "claude-haiku-4-5 · tighten · 2,100 → 1,640 tok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "verify",
+      "agent": "orchestrator",
+      "parent": "plan",
+      "spawnMs": 1240,
+      "summary": "17 of 17 figures traced to a source",
+      "attempts": [
+        {
+          "startMs": 8760,
+          "durationMs": 400,
+          "status": "succeeded",
+          "calls": [
+            {
+              "atMs": 20,
+              "durationMs": 360,
+              "kind": "tool_call",
+              "detail": "citations.check · 17 figures · 17 grounded"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

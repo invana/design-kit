@@ -1,151 +1,94 @@
-import React from 'react';
-import { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
-import { Button, PanelBox } from '@invana/ui';
-import { Form, FormField, type FieldConfig } from '@invana/forms';
+import { Button } from '@invana/ui';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
 
-const meta: Meta = {
+import spec from '../../../fixtures/forms/all-fields.json';
+import { snippet } from '../../_story/source';
+import { VariantBoard, type Log } from '../../_story/variant-board';
+import { USE_FORM, indent, objectField } from '../form-source';
+
+const FIELDS = spec.fields as FieldConfig[];
+const VARIANTS = [{ caption: 'All Fields', width: 672 }];
+
+interface Args {
+  onSubmit: (values: FieldValues) => void;
+}
+
+function Live({ log, onSubmit }: Args & { log: Log }) {
+  const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((values) => {
+          onSubmit(values);
+          log('onSubmit', values);
+        })}
+      >
+        <FieldGroup>
+          <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition="top" size="md" />
+          <Button type="submit">Submit</Button>
+        </FieldGroup>
+      </form>
+    </Form>
+  );
+}
+
+const meta = {
   title: 'Forms/Generated/All Fields',
-  parameters: { layout: 'padded' },
-};
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        language: 'tsx',
+        code: snippet({
+          imports: [
+            "import { useForm } from 'react-hook-form';",
+            "import { FieldGroup, Form, FormField } from '@invana/forms';",
+            "import { Button } from '@invana/ui';",
+          ],
+          comment: 'Every FieldType in one ObjectField — the value each binds to is in its description',
+          data: { fields: spec.fields, defaultValues: spec.defaultValues },
+          setup: USE_FORM,
+          call: [
+            '<Form {...form}>',
+            '  <form onSubmit={onSubmit}>',
+            '    <FieldGroup>',
+            `      ${indent(objectField(spec.name, 'fields', { size: { literal: 'md' } }), '      ')}`,
+            '      <Button type="submit">Submit</Button>',
+            '    </FieldGroup>',
+            '  </form>',
+            '</Form>',
+          ].join('\n'),
+        }),
+      },
+    },
+  },
+  args: { onSubmit: fn() },
+} satisfies Meta<Args>;
+
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<Args>;
 
 /**
- * Every `FieldType` the generator renders, in one `ObjectField`. The value
- * shape each binds to is in its description; submit to see them side by side.
+ * Every `FieldType` the generator renders, in one `ObjectField`, from
+ * `fixtures/forms/all-fields.json`. The value shape each binds to is in its description; submit
+ * to see them side by side — the payload is written under the form.
  */
-const fields: FieldConfig[] = [
-  { name: 'name', type: 'text', label: 'Text', description: 'string', placeholder: 'Customer analysis' },
-  { name: 'password', type: 'password', label: 'Password', description: 'string · reveal toggle' },
-  {
-    name: 'summary',
-    type: 'textarea',
-    label: 'Textarea',
-    description: 'string · `rows` sets the height',
-    rows: 3,
-    colSpan: 2,
-  },
-  {
-    name: 'connector',
-    type: 'select',
-    label: 'Select',
-    description: 'one string from `options`',
-    placeholder: 'Select a connector',
-    options: [
-      { label: 'Neo4j', value: 'neo4j' },
-      { label: 'JanusGraph', value: 'janusgraph' },
-      { label: 'Amazon Neptune', value: 'neptune' },
-    ],
-  },
-  {
-    name: 'maxRuns',
-    type: 'number',
-    label: 'Number',
-    description: 'number · `min` / `max` / `step`',
-    min: 1,
-    max: 32,
-    step: 1,
-  },
-  {
-    name: 'share',
-    type: 'number',
-    label: 'Number · unit',
-    description: 'number · no `min` / `max`, so typed · `unit`',
-    unit: '%',
-  },
-  {
-    name: 'leadTime',
-    type: 'number',
-    label: 'Number · aside',
-    description: 'number · `aside` after the unit',
-    unit: 'd',
-    aside: 'quoted 14 d',
-  },
-  {
-    name: 'validation',
-    type: 'radio',
-    label: 'Radio',
-    description: 'one string, as a list · `orientation`',
-    orientation: 'horizontal',
-    options: [
-      { label: 'Inherit', value: 'inherit' },
-      { label: 'Strict', value: 'strict' },
-      { label: 'Permissive', value: 'permissive' },
-    ],
-    colSpan: 2,
-  },
-  {
-    name: 'scopes',
-    type: 'checkbox',
-    label: 'Checkbox group',
-    description: 'string[] from `options`',
-    orientation: 'horizontal',
-    options: [
-      { label: 'read', value: 'read' },
-      { label: 'write', value: 'write' },
-      { label: 'admin', value: 'admin' },
-    ],
-    colSpan: 2,
-  },
-  { name: 'readOnly', type: 'boolean', label: 'Boolean · switch', description: 'boolean · the default control' },
-  { name: 'abstract', type: 'boolean', control: 'checkbox', label: 'Boolean · checkbox' },
-  {
-    name: 'accent',
-    type: 'color',
-    label: 'Color',
-    description: 'string · `presetColors` for swatches',
-    presetColors: [
-      { label: 'Blue', value: '#3b82f6' },
-      { label: 'Emerald', value: '#10b981' },
-      { label: 'Amber', value: '#f59e0b' },
-    ],
-  },
-  { name: 'icon', type: 'icon', label: 'Icon', description: 'string · an icon name' },
-];
-
-const defaultValues = {
-  all: {
-    name: '',
-    password: '',
-    summary: '',
-    connector: 'neo4j',
-    maxRuns: 4,
-    share: 30,
-    leadTime: 17,
-    validation: 'inherit',
-    scopes: ['read'],
-    readOnly: false,
-    abstract: false,
-    accent: '#3b82f6',
-    icon: '',
-  },
-};
-
 export const AllFields: Story = {
   name: 'All Fields',
-  render: function Render() {
-    const form = useForm({ defaultValues });
-    const [submitted, setSubmitted] = React.useState<unknown>(null);
-
-    return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(setSubmitted)} className="max-w-2xl space-y-4">
-          <FormField.ObjectField
-            control={form.control}
-            name="all"
-            fields={fields}
-            labelPosition="top"
-            size="md"
-          />
-
-          <Button type="submit">Submit</Button>
-
-          <PanelBox title="Submitted payload">
-            <pre>{submitted ? JSON.stringify(submitted, null, 2) : '— submit the form —'}</pre>
-          </PanelBox>
-        </form>
-      </Form>
-    );
+  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  play: async ({ canvasElement, args, step }) => {
+    const cell = within(within(canvasElement).getByRole('group', { name: 'All Fields' }));
+    await step('Name the analysis and submit', async () => {
+      await userEvent.type(cell.getByRole('textbox', { name: 'Text' }), 'Margins');
+      await userEvent.click(cell.getByRole('button', { name: 'Submit' }));
+    });
+    await step('The whole object is handed over', async () => {
+      const values = { all: { ...spec.defaultValues.all, name: 'Margins' } };
+      await expect(args.onSubmit).toHaveBeenCalledWith(values);
+      await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('"name": "Margins"');
+    });
   },
 };

@@ -1,0 +1,100 @@
+[
+  {
+    "at": "10:16:02",
+    "verdict": "denied",
+    "policy": "no-pii",
+    "sid": "s-07",
+    "text": "Person.email (raw) — read refused"
+  },
+  {
+    "at": "10:16:01",
+    "verdict": "egress",
+    "policy": "egress-allowlist",
+    "sid": "s-01",
+    "text": "api.crunchbase.com · company names × 5"
+  },
+  {
+    "at": "10:15:59",
+    "verdict": "masked",
+    "policy": "no-pii",
+    "sid": "s-05",
+    "text": "Person.name read masked for ownership chain"
+  },
+  {
+    "at": "10:15:58",
+    "verdict": "warn",
+    "policy": "token-budget",
+    "sid": "s-03",
+    "text": "run at 82% of its token budget"
+  },
+  {
+    "at": "10:15:56",
+    "verdict": "allow",
+    "policy": "prefer-internal",
+    "sid": "s-02",
+    "text": "graph chosen before third party"
+  },
+  {
+    "at": "10:15:55",
+    "verdict": "denied",
+    "policy": "egress-allowlist",
+    "sid": "s-05",
+    "text": "sec.gov/edgar not on the allowlist"
+  },
+  {
+    "at": "10:15:53",
+    "verdict": "approved",
+    "policy": "egress-allowlist",
+    "sid": "s-01",
+    "text": "you · egress to api.crunchbase.com"
+  },
+  {
+    "at": "10:15:52",
+    "verdict": "egress",
+    "policy": "egress-allowlist",
+    "sid": "s-05",
+    "text": "companies-house.gov.uk · registry ids × 4"
+  },
+  {
+    "at": "10:15:50",
+    "verdict": "allow",
+    "policy": "review-threshold",
+    "sid": "s-09",
+    "text": "delivered without review · confidence 0.88"
+  },
+  {
+    "at": "10:15:49",
+    "verdict": "denied",
+    "policy": "sandbox",
+    "sid": "s-06",
+    "text": "code_exec tried network access"
+  },
+  {
+    "at": "10:15:47",
+    "verdict": "masked",
+    "policy": "no-pii",
+    "sid": "s-07",
+    "text": "Person.name read masked for ownership chain"
+  },
+  {
+    "at": "10:15:46",
+    "verdict": "warn",
+    "policy": "token-budget",
+    "sid": "s-06",
+    "text": "run at 82% of its token budget"
+  },
+  {
+    "at": "10:15:44",
+    "verdict": "denied",
+    "policy": "token-budget",
+    "sid": "s-03",
+    "text": "run would pass 1M tokens — capped"
+  },
+  {
+    "at": "10:15:43",
+    "verdict": "allow",
+    "policy": "prefer-internal",
+    "sid": "s-09",
+    "text": "graph chosen before third party"
+  }
+]

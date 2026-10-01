@@ -1,8 +1,12 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { DataTable, type ColumnDef } from "@invana/tables";
 import { InlineMeter, Sparkline } from "@invana/charts";
 import { PanelBox, StatusDot, cn } from "@invana/ui";
+
+import { jsx, snippet } from "../../_story/source";
+import { VariantBoard, type Log } from "../../_story/variant-board";
 import {
   LAYERS,
   SESSIONS,
@@ -13,13 +17,10 @@ import {
   type SessionState,
 } from "./fixtures";
 
-const meta: Meta = {
-  title: "Data Tables/Usecases/Sessions (custom classes)",
-  parameters: { layout: "padded" },
-};
+/** The cell's subject is className passthrough, and its caption says so. */
+const VARIANTS = [{ caption: "With custom classes", wide: true }];
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+const HEADER_ROW = "text-xs uppercase tracking-wider text-muted-foreground [&_button]:uppercase";
 
 const STATE: Record<
   SessionState,
@@ -180,43 +181,105 @@ const columns: ColumnDef<Session>[] = [
   },
 ];
 
+const running = SESSIONS.filter((s) => s.state === "running").length;
+const waiting = SESSIONS.filter((s) => s.state === "waiting").length;
+const ASIDE = `${running} running · ${waiting} waiting · click a row to scope`;
+
+interface Args {
+  onRowClick: (id: string | null) => void;
+}
+
+function Live({ log, onRowClick }: Args & { log: Log }) {
+  const [picked, setPicked] = React.useState<string | null>(null);
+  return (
+    <PanelBox title="Sessions · live" aside={ASIDE}>
+      <DataTable
+        columns={columns}
+        data={SESSIONS}
+        seamless
+        density="compact"
+        minWidth={880}
+        getRowId={(s) => s.id}
+        isRowSelected={(s) => s.id === picked}
+        onRowClick={(s) => {
+          const next = picked === s.id ? null : s.id;
+          onRowClick(next);
+          log("onRowClick", next);
+          setPicked(next);
+        }}
+        headerRowClassName={HEADER_ROW}
+        rowClassName={(s) =>
+          cn("transition-opacity motion-reduce:transition-none", picked != null && s.id !== picked && "opacity-55")
+        }
+      />
+    </PanelBox>
+  );
+}
+
+const meta = {
+  title: "Data Tables/Usecases/Sessions (custom classes)",
+  parameters: {
+    layout: "padded",
+    docs: {
+      source: {
+        language: "tsx",
+        code: snippet({
+          imports: ['import { DataTable } from "@invana/tables";', 'import { PanelBox, cn } from "@invana/ui";'],
+          comment: "Every class arrives through a prop — rows from fixtures/data-tables/sessions.json",
+          data: { sessions: SESSIONS.slice(0, 2) },
+          setup: [
+            "// A click scopes to the session; a second click on it clears the scope.",
+            "const [picked, setPicked] = React.useState(null);",
+          ].join("\n"),
+          call: [
+            `<PanelBox title="Sessions · live" aside="${ASIDE}">`,
+            "  " +
+              jsx("DataTable", {
+                columns: "columns",
+                data: "sessions",
+                seamless: "true",
+                density: { literal: "compact" },
+                minWidth: "880",
+                getRowId: "(s) => s.id",
+                isRowSelected: "(s) => s.id === picked",
+                onRowClick: "(s) => setPicked(picked === s.id ? null : s.id)",
+                headerRowClassName: { literal: HEADER_ROW },
+                rowClassName: '(s) => cn("transition-opacity", picked != null && s.id !== picked && "opacity-55")',
+              }).replace(/\n/g, "\n  "),
+            "</PanelBox>",
+          ].join("\n"),
+        }),
+      },
+    },
+  },
+  args: { onRowClick: fn() },
+} satisfies Meta<Args>;
+
+export default meta;
+type Story = StoryObj<Args>;
+
 /**
- * Board 1 · Monitoring's sessions table, drawn entirely by the caller: every
- * class arrives through a prop. `headerRowClassName` sets the caps header,
- * each column's `cell` builds its own content (two-line cells, the six layer
- * lights, sparkline beside its rate, the context meter) and
- * `meta.cellClassName` colours the state by row. Click a row to scope to it —
- * `isRowSelected` marks it, and `rowClassName` dims the other sessions.
+ * Board 1 · Monitoring's sessions table, drawn entirely by the caller — this story's subject is
+ * className passthrough, so it keeps its classes: every class arrives through a prop.
+ * `headerRowClassName` sets the caps header, each column's `cell` builds its own content
+ * (two-line cells, the six layer lights, sparkline beside its rate, the context meter) and
+ * `meta.cellClassName` colours the state by row. Click a row to scope to it — `isRowSelected`
+ * marks it, and `rowClassName` dims the other sessions.
  */
 export const SessionsCustomClasses: Story = {
   name: "Sessions (custom classes)",
-  render: function Render() {
-    const [picked, setPicked] = React.useState<string | null>(null);
-    const running = SESSIONS.filter((s) => s.state === "running").length;
-    const waiting = SESSIONS.filter((s) => s.state === "waiting").length;
-    return (
-      <PanelBox
-        title="Sessions · live"
-        aside={`${running} running · ${waiting} waiting · click a row to scope`}
-      >
-        <DataTable
-          columns={columns}
-          data={SESSIONS}
-          seamless
-          density="compact"
-          minWidth={880}
-          getRowId={(s) => s.id}
-          isRowSelected={(s) => s.id === picked}
-          onRowClick={(s) => setPicked((id) => (id === s.id ? null : s.id))}
-          headerRowClassName="text-xs uppercase tracking-wider text-muted-foreground [&_button]:uppercase"
-          rowClassName={(s) =>
-            cn(
-              "transition-opacity motion-reduce:transition-none",
-              picked != null && s.id !== picked && "opacity-55",
-            )
-          }
-        />
-      </PanelBox>
-    );
+  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  play: async ({ canvasElement, args, step }) => {
+    const cell = within(within(canvasElement).getByRole("group", { name: "With custom classes" }));
+    const first = SESSIONS[0]!;
+    await step("Scope to the first session", async () => {
+      await userEvent.click(cell.getByText(first.title));
+      await expect(args.onRowClick).toHaveBeenCalledWith(first.id);
+    });
+    await step("It is marked, the others dim, and the click is logged", async () => {
+      await expect(cell.getByRole("row", { selected: true })).toHaveTextContent(first.title);
+      await expect(cell.getAllByRole("row")[2]).toHaveClass("opacity-55");
+      await expect(cell.getByRole("list", { name: "Events" })).toHaveTextContent(`"${first.id}"`);
+    });
   },
 };

@@ -1,0 +1,42 @@
+[
+  {
+    "caption": "Default",
+    "width": 660,
+    "props": {
+      "value": "## Gap playbook\n\n- Gap >= 1.5% with a news catalyst and volume >= 2x the 20-day average\n  -> continuation candidate (gap-continuation).\n- Delivery % must be >= 40; below that the gap is a fade candidate\n  (gap-no-delivery), never a long.\n- Stop = VWAP; target = 1.5R; size from position-sizing.",
+      "version": "v5 · editing"
+    }
+  },
+  {
+    "caption": "Placeholder",
+    "width": 660,
+    "props": {
+      "value": "",
+      "version": "v1",
+      "placeholder": "You are a colleague who knows this graph well. Speak in the first person, warmly and plainly."
+    }
+  },
+  {
+    "caption": "Read Only",
+    "width": 660,
+    "props": {
+      "value": "## Gap playbook\n\n- Gap >= 1.5% with a news catalyst and volume >= 2x the 20-day average\n  -> continuation candidate (gap-continuation).\n- Stop = VWAP; target = 1.5R; size from position-sizing.",
+      "version": "v4",
+      "readOnly": true
+    }
+  },
+  {
+    "caption": "Revert",
+    "width": 660,
+    "props": {
+      "value": "## Gap playbook\n\n- Gap >= 1.5% with a news catalyst and volume >= 2x the 20-day average\n  -> continuation candidate (gap-continuation).\n- Delivery % must be >= 40; below that the gap is a fade candidate\n  (gap-no-delivery), never a long.\n- Stop = VWAP; target = 1.5R; size from position-sizing.",
+      "version": "v5 · editing"
+    },
+    "revert": {
+      "title": "Graph rules",
+      "to": "## Gap playbook\n\n- Gap >= 1.5% with a news catalyst and volume >= 2x the 20-day average\n  -> continuation candidate (gap-continuation).\n- Stop = VWAP; target = 1.5R; size from position-sizing.",
+      "version": "v4 · reverted",
+      "label": "Revert to v4"
+    }
+  }
+]

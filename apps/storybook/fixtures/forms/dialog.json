@@ -1,0 +1,27 @@
+{
+  "name": "nodeType",
+  "description": "Edits stage in the draft until you publish the model.",
+  "empty": { "name": "", "description": "", "parent": "none", "validation": "inherit", "abstract": false },
+  "existing": [
+    { "name": "Person", "description": "Someone with an account.", "parent": "none", "validation": "strict", "abstract": false },
+    { "name": "Customer", "description": "", "parent": "Person", "validation": "inherit", "abstract": false }
+  ],
+  "edit": "Customer",
+  "fields": [
+    { "name": "name", "type": "text", "label": "Name", "placeholder": "Account", "colSpan": 2 },
+    { "name": "description", "type": "textarea", "label": "Description", "rows": 3, "colSpan": 2 },
+    { "name": "parent", "type": "select", "label": "Parent type", "options": [{ "label": "None", "value": "none" }] },
+    {
+      "name": "validation",
+      "type": "select",
+      "label": "Validation mode",
+      "options": [
+        { "label": "Inherit from model", "value": "inherit" },
+        { "label": "Strict", "value": "strict" },
+        { "label": "Permissive", "value": "permissive" }
+      ]
+    },
+    { "name": "abstract", "type": "boolean", "control": "checkbox", "label": "Abstract — only subtypes have instances", "colSpan": 2 }
+  ],
+  "required": { "name": "Name is required." }
+}

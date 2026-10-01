@@ -1,0 +1,127 @@
+[
+  {
+    "caption": "Default",
+    "width": 660,
+    "props": {
+      "language": "python",
+      "value": "from invana.datasets import import_dataset\n\nrun = import_dataset(\"ravi/finance\", \"bars-5m\", \"./drop/bars-5m\", refresh=True)\nrun.wait()"
+    }
+  },
+  {
+    "caption": "Cypher",
+    "width": 660,
+    "props": {
+      "language": "cypher",
+      "value": "MATCH (t:Theme)<-[:IN]-(s:Stock)\nWHERE t.velocity_5d < 2.0\nRETURN s.symbol"
+    }
+  },
+  {
+    "caption": "Shell",
+    "width": 660,
+    "props": {
+      "language": "shell",
+      "value": "pnpm add github:invana/design-kit#releases/editor\ninvana run nl-single --arg read_only=true"
+    }
+  },
+  {
+    "caption": "JavaScript",
+    "width": 660,
+    "props": {
+      "language": "javascript",
+      "value": "const run = await client.runs.create({ plan: \"nl-single\", args: { read_only: true } })\nfor await (const event of run.events()) console.log(event.kind, event.at)"
+    }
+  },
+  {
+    "caption": "Plain",
+    "width": 660,
+    "props": {
+      "language": "plain",
+      "value": "import_dataset  ok   1204 written   47 reported   3.4s\nvalidate_graph  ok   0 violations               0.8s"
+    }
+  },
+  {
+    "caption": "Line Numbers",
+    "width": 660,
+    "props": {
+      "language": "yaml",
+      "value": "key: nl-single\nversion: 2\nargs:\n  read_only: {type: bool, default: true, label: Refuse anything that writes}\ntasks:\n  - key: translate_thought\n    run: translate_thought\n  - key: execute_graph_query\n    run: execute_graph_query\n    args: {query: ${steps.translate_thought.query}, read_only: ${args.read_only}}\n    depends_on: [translate_thought, validate_query]\n",
+      "showLineNumbers": true
+    }
+  },
+  {
+    "caption": "Max Height",
+    "width": 660,
+    "props": {
+      "language": "json",
+      "value": "{\n  \"task\": \"import_dataset\",\n  \"status\": \"ok\",\n  \"outputs\": {\n    \"written\": 1204,\n    \"reported\": 47,\n    \"dataset_id\": \"ds_9f2c\"\n  },\n  \"graph\": {\n    \"nodes\": { \"Order\": 1204 },\n    \"edges\": { \"FOR\": 1204 }\n  },\n  \"artifacts\": [\"orders.csv\", \"rejects.csv\"],\n  \"timing\": { \"ms\": 3402 }\n}",
+      "maxHeight": 232
+    }
+  },
+  {
+    "caption": "Live Value",
+    "width": 660,
+    "props": {
+      "language": "json",
+      "maxHeight": 200
+    },
+    "live": {
+      "file": "result.json",
+      "every": 1200,
+      "steps": [
+        {
+          "key": "task",
+          "value": "import_dataset"
+        },
+        {
+          "key": "status",
+          "value": "running"
+        },
+        {
+          "key": "outputs",
+          "value": {
+            "written": 1204,
+            "reported": 47,
+            "dataset_id": "ds_9f2c"
+          }
+        },
+        {
+          "key": "graph",
+          "value": {
+            "nodes": {
+              "Order": 1204
+            },
+            "edges": {
+              "FOR": 1204
+            }
+          }
+        },
+        {
+          "key": "artifacts",
+          "value": [
+            "orders.csv",
+            "rejects.csv"
+          ]
+        },
+        {
+          "key": "validation",
+          "value": {
+            "violations": 0,
+            "checked": [
+              "Order",
+              "FOR"
+            ]
+          }
+        },
+        {
+          "key": "timing",
+          "value": {
+            "ms": 3402
+          }
+        }
+      ],
+      "done": {
+        "status": "ok"
+      }
+    }
+  }
+]

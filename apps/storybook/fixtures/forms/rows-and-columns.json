@@ -1,0 +1,56 @@
+{
+  "sections": [
+    {
+      "name": "profile",
+      "title": "rowConfig",
+      "aside": "rows by name",
+      "fields": [
+        { "name": "firstName", "type": "text", "label": "First name" },
+        { "name": "lastName", "type": "text", "label": "Last name" },
+        {
+          "name": "role",
+          "type": "select",
+          "label": "Role",
+          "options": [
+            { "label": "Admin", "value": "admin" },
+            { "label": "Editor", "value": "editor" },
+            { "label": "Viewer", "value": "viewer" }
+          ]
+        }
+      ],
+      "rowConfig": [
+        { "id": "name", "fields": ["firstName", "lastName"] },
+        { "id": "role", "fields": ["role"] }
+      ]
+    },
+    {
+      "name": "connection",
+      "title": "colSpan",
+      "aside": "URI fills the row",
+      "fields": [
+        { "name": "uri", "type": "text", "label": "URI", "placeholder": "bolt://localhost:7687", "colSpan": 2 },
+        { "name": "username", "type": "text", "label": "Username" },
+        { "name": "password", "type": "password", "label": "Password" }
+      ]
+    },
+    {
+      "name": "address",
+      "title": "columns={3}",
+      "aside": "with mixed colSpan",
+      "columns": 3,
+      "fields": [
+        { "name": "city", "type": "text", "label": "City" },
+        { "name": "state", "type": "text", "label": "State" },
+        { "name": "zip", "type": "text", "label": "ZIP" },
+        { "name": "street", "type": "text", "label": "Street", "colSpan": 2 },
+        { "name": "unit", "type": "text", "label": "Unit" },
+        { "name": "notes", "type": "textarea", "label": "Delivery notes", "rows": 3, "colSpan": 3 }
+      ]
+    }
+  ],
+  "defaultValues": {
+    "profile": { "firstName": "Ada", "lastName": "Lovelace", "role": "admin" },
+    "connection": { "uri": "", "username": "neo4j", "password": "" },
+    "address": { "city": "", "state": "", "zip": "", "street": "", "unit": "", "notes": "" }
+  }
+}
