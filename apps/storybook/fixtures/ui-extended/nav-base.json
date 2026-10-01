@@ -1,0 +1,96 @@
+[
+  {
+    "caption": "Sections — start, center, end",
+    "width": 640,
+    "sections": { "start": "Invana", "center": "Dashboard", "end": "Sign out" }
+  },
+  {
+    "caption": "With overflow — variant=\"nav\", icon only",
+    "strip": {
+      "variant": "nav",
+      "active": "styling",
+      "overflowLabel": "More panels",
+      "items": [
+        { "key": "canvas", "name": "Canvas", "icon": "info" },
+        { "key": "settings", "name": "Settings", "icon": "settings" },
+        { "key": "styling", "name": "Styling", "icon": "paintbrush" },
+        { "key": "layers", "name": "Layers", "icon": "layers" },
+        { "key": "snapshots", "name": "Snapshots", "icon": "history" },
+        { "key": "find", "name": "Find", "icon": "search" },
+        { "key": "selection", "name": "Selection", "icon": "mouse-pointer-click" },
+        { "key": "element", "name": "Element", "icon": "scan-search" },
+        { "key": "filters", "name": "Filters", "icon": "filter" },
+        { "key": "schema", "name": "Schema", "icon": "network" },
+        { "key": "people", "name": "People", "icon": "users" }
+      ]
+    }
+  },
+  {
+    "caption": "With overflow — variant=\"underline\", a panel's views",
+    "strip": {
+      "variant": "underline",
+      "active": "snapshots",
+      "overflowLabel": "More panels",
+      "items": [
+        { "key": "canvas", "name": "Canvas", "label": "Canvas", "icon": "info" },
+        { "key": "settings", "name": "Settings", "label": "Settings", "icon": "settings" },
+        { "key": "styling", "name": "Styling", "label": "Styling", "icon": "paintbrush" },
+        { "key": "layers", "name": "Layers", "label": "Layers", "icon": "layers" },
+        { "key": "snapshots", "name": "Snapshots", "label": "Snapshots", "icon": "history" },
+        { "key": "find", "name": "Find", "label": "Find", "icon": "search" },
+        { "key": "selection", "name": "Selection", "label": "Selection", "icon": "mouse-pointer-click" },
+        { "key": "element", "name": "Element", "label": "Element", "icon": "scan-search" },
+        { "key": "filters", "name": "Filters", "label": "Filters", "icon": "filter" },
+        { "key": "schema", "name": "Schema", "label": "Schema", "icon": "network" },
+        { "key": "people", "name": "People", "label": "People", "icon": "users" }
+      ]
+    }
+  },
+  {
+    "caption": "With overflow — variant=\"folder\", a caret menu on the active page",
+    "width": 640,
+    "strip": {
+      "variant": "folder",
+      "active": "layers",
+      "overflowLabel": "More pages",
+      "activeMenu": [
+        { "id": "rename", "label": "Rename", "icon": "pencil" },
+        { "id": "duplicate", "label": "Duplicate", "icon": "copy" },
+        { "id": "remove", "label": "Remove", "icon": "trash-2", "destructive": true, "separatorBefore": true }
+      ],
+      "items": [
+        { "key": "canvas", "name": "Canvas", "label": "Canvas", "icon": "info", "menuTrigger": "caret" },
+        { "key": "settings", "name": "Settings", "label": "Settings", "icon": "settings", "menuTrigger": "caret" },
+        { "key": "styling", "name": "Styling", "label": "Styling", "icon": "paintbrush", "menuTrigger": "caret" },
+        { "key": "layers", "name": "Layers", "label": "Layers", "icon": "layers", "menuTrigger": "caret" },
+        { "key": "snapshots", "name": "Snapshots", "label": "Snapshots", "icon": "history", "menuTrigger": "caret" },
+        { "key": "find", "name": "Find", "label": "Find", "icon": "search", "menuTrigger": "caret" },
+        { "key": "selection", "name": "Selection", "label": "Selection", "icon": "mouse-pointer-click", "menuTrigger": "caret" },
+        { "key": "element", "name": "Element", "label": "Element", "icon": "scan-search", "menuTrigger": "caret" },
+        { "key": "filters", "name": "Filters", "label": "Filters", "icon": "filter", "menuTrigger": "caret" },
+        { "key": "schema", "name": "Schema", "label": "Schema", "icon": "network", "menuTrigger": "caret" },
+        { "key": "people", "name": "People", "label": "People", "icon": "users", "menuTrigger": "caret" }
+      ]
+    }
+  },
+  {
+    "caption": "Closable tabs",
+    "width": 640,
+    "strip": {
+      "variant": "folder",
+      "active": "run",
+      "fallback": "graph",
+      "overflowLabel": "More pages",
+      "activeMenu": [
+        { "id": "rename", "label": "Rename", "icon": "pencil" },
+        { "id": "close", "label": "Close", "icon": "x", "destructive": true, "separatorBefore": true }
+      ],
+      "items": [
+        { "key": "graph", "name": "Graph", "label": "Graph", "icon": "network" },
+        { "key": "canvas", "name": "Canvas 1", "label": "Canvas 1", "icon": "network", "menuTrigger": "caret" },
+        { "key": "run", "name": "Run #42", "label": "Run #42", "icon": "activity", "closable": true },
+        { "key": "rule", "name": "Rule — fuel reserve", "label": "Rule — fuel reserve", "icon": "layout-dashboard", "closable": true }
+      ]
+    }
+  }
+]
