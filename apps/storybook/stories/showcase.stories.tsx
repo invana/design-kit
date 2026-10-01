@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldValues } from 'react-hook-form';
 import { ThemeControls, useThemeControls } from '../src';
 import { // Newly showcased primitives
   AlertDialog, // ui-extended
@@ -222,7 +222,7 @@ const profileRowConfig: RowConfig[] = [
 ];
 
 const ShowcaseForm = () => {
-  const form = useForm({
+  const form = useForm<FieldValues>({
     defaultValues: {
       profile: {
         firstName: 'Ada',

@@ -62,7 +62,7 @@
         { "label": "Tasks", "value": "4 / 7", "caption": "running", "tone": "running", "meter": 0.5714 },
         { "label": "Elapsed", "value": "12s", "caption": "no timeout yet" },
         { "label": "Tokens", "value": "8.2k", "caption": "of 40k ceiling", "meter": 0.21 },
-        { "label": "Cost", "value": "$0.04", "caption": "of $2.00 budget", "meter": 0.02 },
+        { "label": "Rows scanned", "value": "1.2M", "caption": "of 50M limit", "meter": 0.02 },
         { "label": "Rows", "value": "1,880", "caption": "so far" },
         { "label": "Lanes", "value": "2 / 5", "caption": "execute_graph_query", "meter": 0.4 }
       ]
