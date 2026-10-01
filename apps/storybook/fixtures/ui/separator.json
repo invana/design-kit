@@ -1,0 +1,12 @@
+[
+  {
+    "caption": "Horizontal",
+    "orientation": "horizontal",
+    "sections": [
+      { "title": "Section 1", "body": "Content for the first section." },
+      { "title": "Section 2", "body": "Content for the second section." }
+    ]
+  },
+  { "caption": "Vertical", "orientation": "vertical", "items": ["Item 1", "Item 2", "Item 3"] },
+  { "caption": "In menu", "orientation": "horizontal", "menu": [["Profile", "Settings"], ["Help", "Logout"]] }
+]

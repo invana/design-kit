@@ -1,0 +1,82 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "aria-label": "How to read this run",
+      "value": "order",
+      "options": [
+        { "value": "order", "label": "In order" },
+        { "value": "layers", "label": "Layers" },
+        { "value": "flow", "label": "Flow" },
+        { "value": "lens", "label": "Lens" }
+      ]
+    }
+  },
+  {
+    "caption": "Solid",
+    "props": {
+      "aria-label": "Confidence level",
+      "variant": "solid",
+      "value": "95",
+      "options": [
+        { "value": "90", "label": "90%" },
+        { "value": "95", "label": "95%" },
+        { "value": "99", "label": "99%" }
+      ]
+    }
+  },
+  {
+    "caption": "No default",
+    "props": {
+      "aria-label": "Granularity",
+      "variant": "solid",
+      "value": null,
+      "options": [
+        { "value": "day", "label": "Day" },
+        { "value": "week", "label": "Week" },
+        { "value": "month", "label": "Month" }
+      ]
+    }
+  },
+  {
+    "caption": "Read only",
+    "props": {
+      "aria-label": "Confidence level",
+      "variant": "solid",
+      "readOnly": true,
+      "value": "95",
+      "options": [
+        { "value": "90", "label": "90%" },
+        { "value": "95", "label": "95%" },
+        { "value": "99", "label": "99%" }
+      ]
+    }
+  },
+  {
+    "caption": "Stretch",
+    "width": 520,
+    "props": {
+      "aria-label": "Filter by level",
+      "size": "sm",
+      "stretch": true,
+      "value": "all",
+      "options": [
+        { "value": "all", "label": "All" },
+        { "value": "info", "label": "Info" },
+        { "value": "warn", "label": "Warn" },
+        { "value": "error", "label": "Error" },
+        { "value": "debug", "label": "Debug", "disabled": true }
+      ]
+    },
+    "panel": {
+      "title": "Log for this step",
+      "columnTemplate": "64px 48px minmax(0,1fr)",
+      "lines": [
+        { "time": "+74.5s", "level": "error", "message": "connector timed out after 30s — no rows returned" },
+        { "time": "+74.6s", "level": "warn", "message": "retrying — attempt 2 of 3 · bound is 3" },
+        { "time": "+76.2s", "level": "info", "message": "cursor opened · 11 of 12 properties projected" },
+        { "time": "+76.7s", "level": "info", "message": "cursor drained · 1,284 rows · 2.1s" }
+      ]
+    }
+  }
+]

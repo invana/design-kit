@@ -1,0 +1,5 @@
+[
+  { "caption": "Default", "label": "Show toast", "type": "message", "title": "Event has been created" },
+  { "caption": "Success", "label": "Success", "type": "success", "title": "Changes saved", "description": "Your profile has been updated." },
+  { "caption": "Error", "label": "Error", "type": "error", "title": "Something went wrong", "description": "Please try again later." }
+]

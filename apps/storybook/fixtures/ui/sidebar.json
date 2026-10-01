@@ -1,0 +1,19 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "height": 400,
+    "collapsible": "icon",
+    "brand": { "initial": "I", "name": "Invana" },
+    "group": "Platform",
+    "items": [
+      { "title": "Dashboard", "icon": "dashboard" },
+      { "title": "Explore", "icon": "search" },
+      { "title": "Team", "icon": "users" },
+      { "title": "Settings", "icon": "settings" }
+    ],
+    "active": "Dashboard",
+    "footer": [{ "title": "Support", "icon": "support" }],
+    "body": "Main content area."
+  }
+]

@@ -1,0 +1,176 @@
+[
+  {
+    "caption": "Default",
+    "sections": [
+      {
+        "fields": [
+          {
+            "id": "default",
+            "placeholder": "Select an option",
+            "options": [
+              { "value": "option1", "label": "Option 1" },
+              { "value": "option2", "label": "Option 2" },
+              { "value": "option3", "label": "Option 3" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "With label",
+    "sections": [
+      {
+        "fields": [
+          {
+            "id": "country",
+            "label": "Country",
+            "placeholder": "Select a country",
+            "options": [
+              { "value": "us", "label": "United States" },
+              { "value": "uk", "label": "United Kingdom" },
+              { "value": "ca", "label": "Canada" },
+              { "value": "au", "label": "Australia" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Many options",
+    "sections": [
+      {
+        "fields": [
+          {
+            "id": "fruit",
+            "placeholder": "Choose a fruit",
+            "options": [
+              { "value": "apple", "label": "Apple" },
+              { "value": "banana", "label": "Banana" },
+              { "value": "cherry", "label": "Cherry" },
+              { "value": "date", "label": "Date" },
+              { "value": "elderberry", "label": "Elderberry" },
+              { "value": "fig", "label": "Fig" },
+              { "value": "grape", "label": "Grape" },
+              { "value": "honeydew", "label": "Honeydew" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Disabled",
+    "sections": [
+      {
+        "fields": [
+          {
+            "id": "disabled",
+            "placeholder": "Disabled select",
+            "disabled": true,
+            "options": [{ "value": "option1", "label": "Option 1" }]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "Complete showcase",
+    "width": 640,
+    "sections": [
+      {
+        "title": "Basic selects",
+        "fields": [
+          {
+            "id": "basic-default",
+            "label": "Default",
+            "placeholder": "Select an option",
+            "options": [
+              { "value": "option1", "label": "Option 1" },
+              { "value": "option2", "label": "Option 2" },
+              { "value": "option3", "label": "Option 3" }
+            ]
+          },
+          {
+            "id": "basic-disabled",
+            "label": "Disabled",
+            "placeholder": "Disabled select",
+            "disabled": true,
+            "options": [{ "value": "option1", "label": "Option 1" }]
+          }
+        ]
+      },
+      {
+        "title": "Common use cases",
+        "fields": [
+          {
+            "id": "uc-country",
+            "label": "Country",
+            "placeholder": "Select your country",
+            "options": [
+              { "value": "us", "label": "United States" },
+              { "value": "uk", "label": "United Kingdom" },
+              { "value": "ca", "label": "Canada" },
+              { "value": "au", "label": "Australia" },
+              { "value": "de", "label": "Germany" },
+              { "value": "fr", "label": "France" }
+            ]
+          },
+          {
+            "id": "uc-priority",
+            "label": "Priority",
+            "placeholder": "Set priority",
+            "options": [
+              { "value": "low", "label": "Low" },
+              { "value": "medium", "label": "Medium" },
+              { "value": "high", "label": "High" },
+              { "value": "critical", "label": "Critical" }
+            ]
+          },
+          {
+            "id": "uc-status",
+            "label": "Status",
+            "placeholder": "Select status",
+            "options": [
+              { "value": "draft", "label": "Draft" },
+              { "value": "review", "label": "In review" },
+              { "value": "approved", "label": "Approved" },
+              { "value": "rejected", "label": "Rejected" }
+            ]
+          },
+          {
+            "id": "uc-timezone",
+            "label": "Timezone",
+            "placeholder": "Select timezone",
+            "options": [
+              { "value": "pst", "label": "PST (UTC-8)" },
+              { "value": "mst", "label": "MST (UTC-7)" },
+              { "value": "cst", "label": "CST (UTC-6)" },
+              { "value": "est", "label": "EST (UTC-5)" },
+              { "value": "gmt", "label": "GMT (UTC+0)" },
+              { "value": "cet", "label": "CET (UTC+1)" }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "With helper text",
+        "fields": [
+          {
+            "id": "language",
+            "label": "Preferred language",
+            "placeholder": "Choose language",
+            "description": "This will be used for all communications.",
+            "options": [
+              { "value": "en", "label": "English" },
+              { "value": "es", "label": "Español" },
+              { "value": "fr", "label": "Français" },
+              { "value": "de", "label": "Deutsch" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

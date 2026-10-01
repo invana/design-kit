@@ -1,0 +1,6 @@
+[
+  { "caption": "Default", "size": 16 },
+  { "caption": "24px", "size": 24 },
+  { "caption": "32px", "size": 32 },
+  { "caption": "With label", "size": 16, "label": "Loading…" }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "caption": "Default",
+    "side": "right",
+    "trigger": { "label": "Open settings", "icon": "settings" },
+    "title": "Workspace settings",
+    "description": "Update your workspace details. Changes are applied immediately.",
+    "fields": [
+      { "id": "workspace", "label": "Workspace name", "value": "Invana" },
+      { "id": "slug", "label": "URL slug", "value": "invana" }
+    ],
+    "cancel": "Cancel",
+    "submit": "Save"
+  }
+]
