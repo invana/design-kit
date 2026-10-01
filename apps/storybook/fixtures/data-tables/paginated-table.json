@@ -1,0 +1,40 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "props": {}
+  },
+  {
+    "caption": "Filters",
+    "wide": true,
+    "props": { "noun": "people" },
+    "filters": [
+      { "id": "role", "label": "role" },
+      { "id": "team", "label": "team" },
+      {
+        "id": "status",
+        "label": "status",
+        "options": [
+          { "value": "active", "label": "Active" },
+          { "value": "invited", "label": "Invited" },
+          { "value": "disabled", "label": "Disabled" }
+        ]
+      },
+      {
+        "id": "busy",
+        "label": "visits",
+        "single": true,
+        "options": [
+          { "value": "high", "label": "300 or more" },
+          { "value": "low", "label": "under 300" }
+        ],
+        "split": { "column": "visits", "at": 300, "high": "high" }
+      }
+    ]
+  },
+  {
+    "caption": "Fixed Page Size",
+    "wide": true,
+    "props": { "pageSize": 20, "pageSizeOptions": false }
+  }
+]

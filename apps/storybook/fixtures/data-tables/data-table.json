@@ -1,0 +1,261 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "columns": "stores",
+    "data": "stores"
+  },
+  {
+    "caption": "Sorting",
+    "wide": true,
+    "columns": "storesRegionUnsorted",
+    "data": "stores",
+    "props": { "defaultSorting": [{ "id": "margin", "desc": true }] }
+  },
+  {
+    "caption": "Cell Highlight",
+    "wide": true,
+    "columns": "stores",
+    "data": "stores",
+    "highlight": {
+      "cells": [
+        { "column": "margin", "below": 12.5 },
+        { "column": "delta", "below": -2 }
+      ],
+      "row": { "column": "store", "equals": "Airport" }
+    }
+  },
+  {
+    "caption": "Pinned Columns",
+    "wide": true,
+    "columns": "people",
+    "data": "people",
+    "limit": 12,
+    "rowId": "id",
+    "props": { "enableColumnPinning": true, "minWidth": 1200 }
+  },
+  {
+    "caption": "Resizable Columns",
+    "wide": true,
+    "columns": "people",
+    "data": "people",
+    "limit": 12,
+    "rowId": "id",
+    "props": { "enableColumnResizing": true }
+  },
+  {
+    "caption": "Reorderable Columns",
+    "wide": true,
+    "columns": "people",
+    "data": "people",
+    "limit": 12,
+    "rowId": "id",
+    "props": { "enableColumnReordering": true }
+  },
+  {
+    "caption": "Inline Edit",
+    "wide": true,
+    "columns": "schedules",
+    "rowId": "id",
+    "toolbar": "density",
+    "footer": "edit",
+    "save": { "delayMs": 700, "min": 5, "message": "Runs at most every 5 minutes" },
+    "props": { "enableSorting": false },
+    "data": [
+      { "id": "s1", "name": "Refresh orders_daily", "owner": "finance", "everyMinutes": 15, "lastRun": "12:04" },
+      { "id": "s2", "name": "Rebuild supplier graph", "owner": "ops", "everyMinutes": 60, "lastRun": "11:00" },
+      { "id": "s3", "name": "Pull fx_rates", "owner": "finance", "everyMinutes": 5, "lastRun": "12:10" },
+      { "id": "s4", "name": "Scan new filings", "owner": "research", "everyMinutes": null, "lastRun": "—" },
+      { "id": "s5", "name": "Score news mentions", "owner": "research", "everyMinutes": 30, "lastRun": "11:45" }
+    ]
+  },
+  {
+    "caption": "Nested Rows",
+    "wide": true,
+    "columns": "catalog",
+    "rowId": "id",
+    "subRows": "children",
+    "props": { "expandOnRowClick": true },
+    "data": [
+      {
+        "id": "finance", "name": "finance", "kind": "dataset", "rows": 1214181, "updated": "1 min ago",
+        "children": [
+          {
+            "id": "orders_daily", "name": "orders_daily", "kind": "table", "rows": 1204311, "updated": "12 min ago",
+            "children": [
+              { "id": "orders_daily.order_id", "name": "order_id", "kind": "column", "type": "string" },
+              { "id": "orders_daily.store_id", "name": "store_id", "kind": "column", "type": "string" },
+              { "id": "orders_daily.amount", "name": "amount", "kind": "column", "type": "decimal" },
+              { "id": "orders_daily.placed_at", "name": "placed_at", "kind": "column", "type": "timestamp" }
+            ]
+          },
+          {
+            "id": "fx_rates", "name": "fx_rates", "kind": "table", "rows": 9870, "updated": "1 min ago",
+            "children": [
+              { "id": "fx_rates.pair", "name": "pair", "kind": "column", "type": "string" },
+              { "id": "fx_rates.rate", "name": "rate", "kind": "column", "type": "decimal" },
+              { "id": "fx_rates.as_of", "name": "as_of", "kind": "column", "type": "date" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "research", "name": "research", "kind": "dataset", "rows": 214816, "updated": "40 min ago",
+        "children": [
+          { "id": "filings_10q", "name": "filings_10q", "kind": "table", "rows": 3812, "updated": "2 d ago" },
+          {
+            "id": "news_mentions", "name": "news_mentions", "kind": "table", "rows": 211004, "updated": "40 min ago",
+            "children": [
+              { "id": "news_mentions.ticker", "name": "ticker", "kind": "column", "type": "string" },
+              { "id": "news_mentions.sentiment", "name": "sentiment", "kind": "column", "type": "float" },
+              { "id": "news_mentions.published_at", "name": "published_at", "kind": "column", "type": "timestamp" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ops", "name": "ops", "kind": "dataset", "rows": 48220, "updated": "3 h ago",
+        "children": [{ "id": "supplier_routes", "name": "supplier_routes", "kind": "table", "rows": 48220, "updated": "3 h ago" }]
+      },
+      {
+        "id": "retail", "name": "retail", "kind": "dataset", "rows": 88512, "updated": "6 h ago",
+        "children": [{ "id": "store_footfall", "name": "store_footfall", "kind": "table", "rows": 88512, "updated": "6 h ago" }]
+      }
+    ]
+  },
+  {
+    "caption": "Expandable Detail",
+    "wide": true,
+    "columns": "runs",
+    "rowId": "id",
+    "detail": { "fields": ["trigger", "input", "output", "cost", "error"], "unless": { "column": "status", "equals": "queued" } },
+    "props": { "defaultExpanded": { "run_7f3c": true }, "expandOnRowClick": true },
+    "data": [
+      {
+        "id": "run_7f3c", "workflow": "market-brief", "status": "failed", "started": "14:02:00", "duration": "9.2s",
+        "trigger": "schedule · hourly", "input": "semis q3 · 12 tickers", "output": "brief.md (risk section missing)",
+        "cost": "$0.041 · 31k tokens",
+        "error": "analyse.risk · schema_mismatch — ratings.consensus expected number, got \"n/a\" on 3 rows"
+      },
+      {
+        "id": "run_7f3b", "workflow": "market-brief", "status": "succeeded", "started": "13:02:00", "duration": "8.7s",
+        "trigger": "schedule · hourly", "input": "semis q3 · 12 tickers", "output": "brief.md · 17 figures grounded",
+        "cost": "$0.044 · 33k tokens"
+      },
+      {
+        "id": "run_7f3a", "workflow": "supplier-graph", "status": "running", "started": "13:58:12", "duration": "4m 10s",
+        "trigger": "manual · ravi", "input": "suppliers_eu · 4,812 rows", "cost": "$0.012 so far"
+      },
+      {
+        "id": "run_7f39", "workflow": "fx-refresh", "status": "succeeded", "started": "13:55:00", "duration": "1.1s",
+        "trigger": "schedule · 5 min", "input": "USD, EUR, JPY, TWD", "output": "4 rates written", "cost": "$0.000"
+      },
+      {
+        "id": "run_7f38", "workflow": "news-score", "status": "queued", "started": "—", "duration": "—",
+        "trigger": "after fx-refresh", "input": "news_mentions · since 13:30"
+      }
+    ]
+  },
+  {
+    "caption": "Preview",
+    "wide": true,
+    "columns": "margins",
+    "props": { "density": "compact", "seamless": true, "enableSorting": false, "preview": { "total": 214, "noun": "stores" } },
+    "data": [
+      { "store": "North Mall", "margin": "11.4%", "delta": "−3.1" },
+      { "store": "Northgate", "margin": "12.0%", "delta": "−2.6" },
+      { "store": "Riverside", "margin": "15.8%", "delta": "+0.4" }
+    ]
+  },
+  {
+    "caption": "Preview Open All",
+    "wide": true,
+    "columns": "margins",
+    "open": true,
+    "props": { "density": "compact", "seamless": true, "enableSorting": false, "preview": { "total": 214, "noun": "stores" } },
+    "data": [
+      { "store": "North Mall", "margin": "11.4%", "delta": "−3.1" },
+      { "store": "Northgate", "margin": "12.0%", "delta": "−2.6" },
+      { "store": "Riverside", "margin": "15.8%", "delta": "+0.4" }
+    ]
+  },
+  {
+    "caption": "Streaming",
+    "wide": true,
+    "columns": "evaluations",
+    "data": "evaluations",
+    "limit": 6,
+    "feed": { "name": "evaluations", "every": 700 },
+    "props": { "density": "compact", "enableSorting": false, "streamMode": "prepend", "maxRows": 20 }
+  },
+  {
+    "caption": "Streaming (upsert)",
+    "wide": true,
+    "columns": "sessions",
+    "data": "sessions",
+    "rowId": "id",
+    "feed": { "name": "sessions", "every": 600 },
+    "props": { "density": "compact", "streamMode": "upsert" }
+  },
+  {
+    "caption": "Density",
+    "wide": true,
+    "columns": "datasets",
+    "toolbar": "density",
+    "data": [
+      { "name": "orders_daily", "owner": "Finance", "rows": 1204311, "freshness": "12 min ago", "status": "fresh" },
+      { "name": "supplier_routes", "owner": "Ops", "rows": 48220, "freshness": "3 h ago", "status": "stale" },
+      { "name": "fx_rates", "owner": "Finance", "rows": 9870, "freshness": "1 min ago", "status": "fresh" },
+      { "name": "filings_10q", "owner": "Research", "rows": 3812, "freshness": "2 d ago", "status": "failing" },
+      { "name": "news_mentions", "owner": "Research", "rows": 211004, "freshness": "40 min ago", "status": "fresh" },
+      { "name": "store_footfall", "owner": "Retail", "rows": 88512, "freshness": "6 h ago", "status": "stale" }
+    ]
+  },
+  {
+    "caption": "Seamless",
+    "wide": true,
+    "columns": "ceilings",
+    "frame": "card",
+    "props": { "seamless": true, "enableSorting": false },
+    "data": [
+      { "key": "max_concurrent_runs", "value": "3", "bounds": "runs at once" },
+      { "key": "max_fanout", "value": "200", "bounds": "lanes in one map" },
+      { "key": "max_children", "value": "0", "bounds": "agents spawned per run" },
+      { "key": "max_depth", "value": "0", "bounds": "levels of delegation" }
+    ]
+  },
+  {
+    "caption": "Metadata Grid",
+    "wide": true,
+    "columns": "fields",
+    "rowId": "id",
+    "footer": "fields",
+    "props": { "enableSorting": false },
+    "data": [
+      { "id": "f1", "name": "CustomerId", "include": true, "dataType": "int", "logicalName": "CustomerId", "semanticType": "fact", "synonyms": "User number, User ID" },
+      { "id": "f2", "name": "CustomerName", "include": true, "dataType": "string", "logicalName": "CustomerName", "semanticType": "dimension", "synonyms": "Name" },
+      { "id": "f3", "name": "Phone", "include": true, "dataType": "string", "logicalName": "CustomerPhone", "semanticType": "dimension", "synonyms": "Telephone, number" },
+      { "id": "f4", "name": "RegistrationDate", "include": true, "dataType": "datetime", "logicalName": "RegistrationDate", "semanticType": "time", "synonyms": "Sign-up date" },
+      { "id": "f5", "name": "TotalCustomers", "include": true, "dataType": "", "logicalName": "TotalCustomers", "semanticType": "metric", "synonyms": "Synonym 1, synonym 2" }
+    ]
+  },
+  {
+    "caption": "The Journal",
+    "wide": true,
+    "columns": "journal",
+    "rowId": "id",
+    "indent": "depth",
+    "selected": "7d3184f1",
+    "props": { "density": "compact", "enableSorting": false },
+    "data": [
+      { "id": "7d3184f1", "about": "which carriers were late in H1?", "kind": "ask", "agent": "Analyst", "world": "EU · H1 2026", "elapsed": "2m 51s", "tokens": "21.4k", "tasks": "9/9", "cost": "$0.041", "status": "succeeded", "depth": 0 },
+      { "id": "c0193ab7", "about": "Nightly bundle — 4 datasets", "kind": "bulk", "agent": "Loader", "world": "global", "elapsed": "6m 12s", "tokens": "—", "tasks": "12/14", "cost": "—", "status": "running", "depth": 0 },
+      { "id": "91be2204", "about": "orders.csv → Brokerage.Order", "kind": "import", "agent": "Loader", "world": "global", "elapsed": "1.4s", "tokens": "—", "tasks": "5/7", "cost": "—", "status": "succeeded", "depth": 1 },
+      { "id": "3c77ba15", "about": "news-tv.csv → Media.Story", "kind": "import", "agent": "Loader", "world": "global", "elapsed": "—", "tokens": "—", "tasks": "0/7", "cost": "—", "status": "queued", "depth": 1 },
+      { "id": "44f7c8d2", "about": "which suppliers slipped twice?", "kind": "ask", "agent": "Analyst", "world": "EU · H1 2026", "elapsed": "18.2s", "tokens": "9.1k", "tasks": "6/6", "cost": "$0.018", "status": "cannot_answer", "depth": 0 },
+      { "id": "2ab90f13", "about": "Stitch Carriers ↔ Routes", "kind": "stitch", "agent": "Modeller", "world": "global", "elapsed": "4.9s", "tokens": "1.2k", "tasks": "3/3", "cost": "$0.003", "status": "succeeded", "depth": 0 },
+      { "id": "6e5510cc", "about": "Escalate a late supplier", "kind": "enrich", "agent": "Analyst", "world": "EU · H1 2026", "elapsed": "2m 04s", "tokens": "3.3k", "tasks": "4/5", "cost": "$0.007", "status": "awaiting_approval", "depth": 0 },
+      { "id": "b81420ef", "about": "why was the draft rejected?", "kind": "ask", "agent": "Reviewer", "world": "EU · H1 2026", "elapsed": "7.1s", "tokens": "4.4k", "tasks": "4/4", "cost": "$0.009", "status": "succeeded", "depth": 0 }
+    ]
+  }
+]
