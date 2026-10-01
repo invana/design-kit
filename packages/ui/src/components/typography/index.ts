@@ -6,13 +6,13 @@ import { TypographyH5 } from './h5';
 import { TypographyH6 } from './h6';
 import { TypographyP } from './p';
 import { TypographyBlockquote } from './blockquote';
-import { TypographyInlineCode } from './inline-code.tsx';
-import { TypographyLead } from './lead.tsx';
-import { TypographyLarge } from './large.tsx';
-import { TypographySmall } from './small.tsx';
-import { TypographyMuted } from './muted.tsx';
-import { TypographyList } from './list.tsx';
-import { TypographyPre } from './pre.tsx';
+import { TypographyInlineCode } from './inline-code';
+import { TypographyLead } from './lead';
+import { TypographyLarge } from './large';
+import { TypographySmall } from './small';
+import { TypographyMuted } from './muted';
+import { TypographyList } from './list';
+import { TypographyPre } from './pre';
 
 // Export individual components for direct imports
 export * from './h1';
@@ -23,13 +23,13 @@ export * from './h5';
 export * from './h6';
 export * from './p';
 export * from './blockquote';
-export * from './inline-code.tsx';
-export * from './lead.tsx';
-export * from './large.tsx';
-export * from './small.tsx';
-export * from './muted.tsx';
-export * from './list.tsx';
-export * from './pre.tsx';
+export * from './inline-code';
+export * from './lead';
+export * from './large';
+export * from './small';
+export * from './muted';
+export * from './list';
+export * from './pre';
 
 // Export as namespace object
 export const Typography = {

@@ -1,6 +1,6 @@
 import { Group, Panel, Separator } from "react-resizable-panels"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 // The library already sets display:flex, flex-direction and 100% width/height on
 // the group, and stretches children across the cross-axis — so wrappers only add

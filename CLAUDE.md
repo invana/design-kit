@@ -17,7 +17,7 @@ Run from repo root unless noted:
 - `pnpm build` — builds all packages via Turbo (respects `^build` dependency order)
 - `pnpm dev` — runs all `dev` tasks in parallel (non-cached, persistent)
 - `pnpm lint` — lints all packages
-- `pnpm check-types` — type-checks across the workspace
+- `pnpm check-types` — runs every package's `type-check` (each `tsc --noEmit -p tsconfig.lib.json`; a bare `tsc --noEmit` checks nothing, as each package's `tsconfig.json` is only references)
 - `pnpm format` — Prettier across `**/*.{ts,tsx,md}`
 
 Filter to a single package with `pnpm --filter <name> <script>`, e.g.:
@@ -78,7 +78,7 @@ Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` 
 - `src/index.ts` re-exports `components/ui/*` (shadcn primitives wrapping Radix), `components/ui-extended/*` (composed components like `NavHorizontal`, `NavVertical`, `TabbedPanel`, `TreeView`, `Toolbar`), `components/typography/*`, and the `cn` util from `lib/utils`.
 - Built with `tsup` → CJS + ESM + `.d.ts`. `react` / `react-dom` are externals; `peerDependencies` are React 18 or 19.
 - `build:css` uses `@tailwindcss/cli` to compile `src/styles/globals.css` → `dist/styles.css`; this file is exported as `@invana/ui/styles.css`.
-- Path alias `@/components`, `@/lib`, `@/hooks`, `@/styles` map inside `packages/ui/src/` — see `apps/storybook/.storybook/main.ts` for the canonical alias map used in Storybook's Vite config.
+- `@invana/ui` imports itself by relative path (`../../lib/utils`), never through an `@/` alias: other packages and Storybook compile its source, and an alias resolves only under ui's own tsconfig.
 
 ### `@invana/themes` — app shells
 

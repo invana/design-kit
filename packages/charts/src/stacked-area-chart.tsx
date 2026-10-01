@@ -107,7 +107,7 @@ export const StackedAreaChart = React.forwardRef<HTMLDivElement, StackedAreaChar
         const stepped = uPlot.paths.stepped!({ align: 1 })
         const last = data.length - 1
 
-        const uSeries: uPlot.Series[] = series.map((s, k) => ({
+        const uSeries: uPlot.Series[] = series.map((_, k) => ({
           stroke: theme.card,
           width: 2,
           paths: stepped,

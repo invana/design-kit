@@ -43,7 +43,7 @@
     "build": "tsup",
     "prepare": "pnpm run build",
     "lint": "eslint .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit -p tsconfig.lib.json"
   },
   "peerDependencies": {
     "@invana/styling": "workspace:*",

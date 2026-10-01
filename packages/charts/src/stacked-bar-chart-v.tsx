@@ -75,7 +75,7 @@ export const StackedBarChartV = React.forwardRef<HTMLDivElement, StackedBarChart
     const blank = totals.every((t) => t === 0)
 
     const build = React.useCallback(
-      (theme: ChartTheme, host: HTMLElement) => {
+      (_theme: ChartTheme, host: HTMLElement) => {
         const colors = series.map((s) => resolveColor(host, s.color))
         const scale = countScale(Math.max(0, ...totals))
         const ceiling = max ?? Math.max(scale.ceiling, ...gridlines)

@@ -370,7 +370,6 @@ export const ChartFrame = React.forwardRef<HTMLDivElement, ChartFrameProps>(
           <DataTable
             columns={table.columns}
             data={table.rows}
-            enablePagination={false}
             enableSorting={false}
           />
         ) : (
