@@ -9,6 +9,8 @@ import { Icon, iconTag, type IconName } from '../_content';
 
 interface AlertVariant extends Variant {
   variant?: 'default' | 'destructive';
+  /** What it means: the border, a faint ground and the icon take the tone. */
+  tone?: 'info' | 'success' | 'warning' | 'destructive';
   icon?: IconName;
   title?: string;
   description?: string;
@@ -33,7 +35,7 @@ const meta = {
             picked.map((v) => ({
               comment: v.caption,
               call: [
-                `<Alert${v.variant ? ` variant="${v.variant}"` : ''}>`,
+                `<Alert${v.variant ? ` variant="${v.variant}"` : ''}${v.tone ? ` tone="${v.tone}"` : ''}>`,
                 v.icon ? `  <${iconTag(v.icon)} />` : '',
                 v.title ? `  <AlertTitle>${v.title}</AlertTitle>` : '',
                 v.description ? `  <AlertDescription>${v.description}</AlertDescription>` : '',
@@ -63,7 +65,7 @@ export const Alert: Story = {
   render: ({ variant }) => (
     <VariantBoard variants={VARIANTS} variant={variant}>
       {(v) => (
-        <AlertRoot variant={v.variant}>
+        <AlertRoot variant={v.variant} tone={v.tone}>
           <Icon name={v.icon} />
           {v.title ? <AlertTitle>{v.title}</AlertTitle> : null}
           {v.description ? <AlertDescription>{v.description}</AlertDescription> : null}

@@ -33,6 +33,7 @@ import { Checkbox, Input, Switch } from '@invana/forms';
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@invana/forms';
 import {
   AlertCircle,
+  AlertTriangle,
   Bell,
   Bold,
   Calculator,
@@ -66,6 +67,7 @@ import {
 /** Icons by the name JSON gives them. */
 export const ICONS = {
   'alert-circle': AlertCircle,
+  'alert-triangle': AlertTriangle,
   bell: Bell,
   bold: Bold,
   calculator: Calculator,

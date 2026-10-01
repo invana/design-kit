@@ -12,6 +12,18 @@ const alertVariants = cva(
         destructive:
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
       },
+      /**
+       * What the alert means, as Badge's `tone` does: the border, a faint
+       * ground and the icon take the tone; the words stay foreground, so they
+       * read at any contrast. `destructive` here is the tone; the `destructive`
+       * variant, which also colours the words, is kept as it was.
+       */
+      tone: {
+        info: "border-info/40 bg-info/5 [&>svg]:text-info",
+        success: "border-success/40 bg-success/5 [&>svg]:text-success",
+        warning: "border-warning/50 bg-warning/5 [&>svg]:text-warning",
+        destructive: "border-destructive/50 bg-destructive/5 [&>svg]:text-destructive",
+      },
     },
     defaultVariants: {
       variant: "default",
@@ -22,11 +34,11 @@ const alertVariants = cva(
 const Alert = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
+>(({ className, variant, tone, ...props }, ref) => (
   <div
     ref={ref}
     role="alert"
-    className={cn(alertVariants({ variant }), className)}
+    className={cn(alertVariants({ variant, tone }), className)}
     {...props}
   />
 ))

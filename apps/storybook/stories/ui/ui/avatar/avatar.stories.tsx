@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
-import { Avatar as AvatarRoot, AvatarFallback, AvatarImage, Stack } from '@invana/ui';
+import { Avatar as AvatarRoot, AvatarFallback, AvatarGroup, AvatarImage, Stack, type AvatarProps } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/avatar.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -11,33 +11,29 @@ interface AvatarSpec {
   src?: string;
   alt?: string;
   initials: string;
-  /** Size and ring — the Avatar has no `size` prop, so these cells pass a class. */
-  className?: string;
+  size?: AvatarProps['size'];
 }
 
 interface AvatarVariant extends Variant {
   avatars?: AvatarSpec[];
-  /** Several avatars side by side, apart or overlapping. */
-  row?: 'spaced' | 'overlap';
+  /** Several avatars side by side: apart in a `Stack`, or overlapping in an `AvatarGroup`. */
+  row?: 'spaced' | 'group';
+  /** A group's `max` and `size`. */
+  max?: number;
+  size?: AvatarProps['size'];
   /** An avatar beside a name — drawn with `Item`. */
   people?: { initials: string; image?: string; name: string; detail: string }[];
 }
 
 const VARIANTS = data as AvatarVariant[];
 
-/**
- * The kit has no avatar group, so a row of avatars is the one layout this story styles.
- * Listed as a kit gap.
- */
-// Only the overlap is a class — the subject of its cell; a spaced row is a `Stack`.
-const OVERLAP = 'flex -space-x-2';
 
 const peopleBlocks = (v: AvatarVariant): Block[] =>
   (v.people ?? []).map((p) => ({ item: { initials: p.initials, image: p.image, title: p.name, description: p.detail } }));
 
 function avatarSource(a: AvatarSpec) {
   return [
-    `<Avatar${a.className ? ` className="${a.className}"` : ''}>`,
+    `<Avatar${a.size ? ` size="${a.size}"` : ''}>`,
     a.src ? `  <AvatarImage src="${a.src}"${a.alt ? ` alt="${a.alt}"` : ''} />` : '',
     `  <AvatarFallback>${a.initials}</AvatarFallback>`,
     '</Avatar>',
@@ -59,16 +55,18 @@ const meta = {
         language: 'tsx',
         transform: sourceFor(VARIANTS, (picked) =>
           snippets(
-            ["import { Avatar, AvatarFallback, AvatarImage } from '@invana/ui';"],
+            ["import { Avatar, AvatarFallback, AvatarGroup, AvatarImage, Stack } from '@invana/ui';"],
             picked.map((v) => ({
               comment: v.caption,
               call: v.people
                 ? contentSource(peopleBlocks(v))
                 : v.row
                   ? [
-                      v.row === 'spaced' ? '<Stack direction="row" gap="sm" align="end">' : `<div className="${OVERLAP}">`,
+                      v.row === 'spaced'
+                        ? '<Stack direction="row" gap="sm" align="end">'
+                        : `<AvatarGroup${v.max ? ` max={${v.max}}` : ''}${v.size ? ` size="${v.size}"` : ''}>`,
                       ...(v.avatars ?? []).map((a) => avatarSource(a).replace(/^/gm, '  ')),
-                      v.row === 'spaced' ? '</Stack>' : '</div>',
+                      v.row === 'spaced' ? '</Stack>' : '</AvatarGroup>',
                     ].join('\n')
                   : (v.avatars ?? []).map(avatarSource).join('\n'),
             })),
@@ -86,7 +84,7 @@ type Story = StoryObj<Args>;
 
 function Avatars({ v }: { v: AvatarVariant }) {
   const avatars = (v.avatars ?? []).map((a) => (
-    <AvatarRoot key={a.initials} className={a.className}>
+    <AvatarRoot key={a.initials} size={a.size}>
       {a.src ? <AvatarImage src={a.src} alt={a.alt ?? a.initials} /> : null}
       <AvatarFallback>{a.initials}</AvatarFallback>
     </AvatarRoot>
@@ -97,7 +95,13 @@ function Avatars({ v }: { v: AvatarVariant }) {
         {avatars}
       </Stack>
     );
-  return v.row ? <div className={OVERLAP}>{avatars}</div> : <>{avatars}</>;
+  if (v.row === 'group')
+    return (
+      <AvatarGroup max={v.max} size={v.size}>
+        {avatars}
+      </AvatarGroup>
+    );
+  return <>{avatars}</>;
 }
 
 /**
@@ -116,5 +120,7 @@ export const Avatar: Story = {
     for (const v of VARIANTS) await expect(canvas.getByRole('group', { name: v.caption })).toBeVisible();
     await expect(within(canvas.getByRole('group', { name: 'Fallback' })).getByText('JD')).toBeVisible();
     await expect(within(canvas.getByRole('group', { name: 'In a row' })).getByText('Sarah Johnson')).toBeVisible();
+    // A group past its `max` folds the rest into one `+n`.
+    await expect(within(canvas.getByRole('group', { name: 'Group' })).getByText('+3')).toBeVisible();
   },
 };

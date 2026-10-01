@@ -16,34 +16,35 @@
     ]
   },
   {
-    "caption": "Small — with a custom class",
-    "avatars": [{ "src": "https://github.com/shadcn.png", "alt": "User avatar", "initials": "SM", "className": "h-8 w-8" }]
-  },
-  {
-    "caption": "Large — with a custom class",
-    "avatars": [{ "src": "https://github.com/shadcn.png", "alt": "User avatar", "initials": "LG", "className": "h-20 w-20" }]
-  },
-  {
-    "caption": "Sizes — with a custom class",
+    "caption": "Sizes",
     "row": "spaced",
     "avatars": [
-      { "src": "https://github.com/shadcn.png", "initials": "XS", "className": "h-6 w-6" },
-      { "src": "https://github.com/shadcn.png", "initials": "SM", "className": "h-8 w-8" },
-      { "src": "https://github.com/shadcn.png", "initials": "MD" },
-      { "src": "https://github.com/shadcn.png", "initials": "LG", "className": "h-16 w-16" },
-      { "src": "https://github.com/shadcn.png", "initials": "XL", "className": "h-24 w-24" }
+      { "src": "https://github.com/shadcn.png", "initials": "XS", "size": "xs" },
+      { "src": "https://github.com/shadcn.png", "initials": "SM", "size": "sm" },
+      { "src": "https://github.com/shadcn.png", "initials": "MD", "size": "md" },
+      { "src": "https://github.com/shadcn.png", "initials": "LG", "size": "lg" }
     ]
   },
   {
-    "caption": "Group — with a custom class",
-    "row": "overlap",
+    "caption": "Group",
+    "row": "group",
+    "max": 4,
     "avatars": [
-      { "src": "https://github.com/shadcn.png", "initials": "U1", "className": "border-2 border-background" },
-      { "initials": "U2", "className": "border-2 border-background" },
-      { "initials": "U3", "className": "border-2 border-background" },
-      { "initials": "U4", "className": "border-2 border-background" },
-      { "initials": "+5", "className": "border-2 border-background" }
+      { "src": "https://github.com/shadcn.png", "initials": "CN" },
+      { "initials": "AB" },
+      { "initials": "CD" },
+      { "initials": "EF" },
+      { "initials": "GH" },
+      { "initials": "IJ" },
+      { "initials": "KL" }
     ]
+  },
+  {
+    "caption": "Group · small",
+    "row": "group",
+    "size": "sm",
+    "max": 3,
+    "avatars": [{ "initials": "RM", "size": "sm" }, { "initials": "JD", "size": "sm" }, { "initials": "SK", "size": "sm" }, { "initials": "PL", "size": "sm" }]
   },
   {
     "caption": "In a row",

@@ -4,8 +4,8 @@
   { "caption": "Title only", "title": "Quick notification" },
   { "caption": "Description only", "description": "A simple alert message without a title." },
   { "caption": "Long description", "title": "Title with a long description", "description": "This alert contains a longer description that spans multiple lines. It shows how the alert handles more extensive content and keeps its spacing and readability." },
-  { "caption": "Success", "icon": "check-circle", "title": "Success", "description": "Your changes have been saved successfully." },
+  { "caption": "Success", "tone": "success", "icon": "check-circle", "title": "Success", "description": "Your changes have been saved successfully." },
   { "caption": "Failure", "variant": "destructive", "icon": "alert-circle", "title": "Error", "description": "Failed to connect to the database. Please check your connection settings." },
-  { "caption": "Information", "icon": "info", "title": "Information", "description": "This action cannot be undone. Make sure you have a backup before proceeding." },
-  { "caption": "Warning", "variant": "destructive", "icon": "alert-circle", "title": "Warning", "description": "Your session will expire in 5 minutes. Please save your work." }
+  { "caption": "Information", "tone": "info", "icon": "info", "title": "Information", "description": "This action cannot be undone. Make sure you have a backup before proceeding." },
+  { "caption": "Warning", "tone": "warning", "icon": "alert-triangle", "title": "Warning", "description": "Your session will expire in 5 minutes. Please save your work." }
 ]
