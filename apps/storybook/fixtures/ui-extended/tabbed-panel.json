@@ -1,0 +1,317 @@
+[
+  {
+    "caption": "Basic",
+    "width": 600,
+    "defaultTab": "tab1",
+    "tabs": [
+      { "value": "tab1", "label": "Tab 1", "body": { "kind": "empty", "title": "Tab 1", "description": "Content for Tab 1" } },
+      { "value": "tab2", "label": "Tab 2", "body": { "kind": "empty", "title": "Tab 2", "description": "Content for Tab 2" } },
+      { "value": "tab3", "label": "Tab 3", "body": { "kind": "empty", "title": "Tab 3", "description": "Content for Tab 3" } }
+    ]
+  },
+  {
+    "caption": "With icons",
+    "width": 600,
+    "defaultTab": "files",
+    "tabs": [
+      { "value": "files", "label": "Files", "icon": "folder", "body": { "kind": "empty", "title": "Files", "description": "File browser content" } },
+      { "value": "search", "label": "Search", "icon": "search", "body": { "kind": "empty", "title": "Search", "description": "Search results" } },
+      { "value": "git", "label": "Git", "icon": "git-branch", "body": { "kind": "empty", "title": "Git", "description": "Git changes" } }
+    ]
+  },
+  {
+    "caption": "With disabled tab",
+    "width": 600,
+    "defaultTab": "enabled1",
+    "tabs": [
+      { "value": "enabled1", "label": "Enabled Tab", "icon": "file-code", "body": { "kind": "empty", "title": "Enabled", "description": "This tab is enabled" } },
+      { "value": "disabled", "label": "Disabled Tab", "icon": "alert-circle", "disabled": true, "body": { "kind": "empty", "title": "Disabled", "description": "This content won't show" } },
+      { "value": "enabled2", "label": "Another Enabled", "icon": "terminal", "body": { "kind": "empty", "title": "Another enabled", "description": "This tab is also enabled" } }
+    ]
+  },
+  {
+    "caption": "With header actions",
+    "width": 600,
+    "defaultTab": "explorer",
+    "tabs": [
+      {
+        "value": "explorer",
+        "label": "Explorer",
+        "icon": "folder",
+        "body": {
+          "kind": "tree",
+          "items": [
+            {
+              "id": "src",
+              "label": "src",
+              "icon": "folder-open",
+              "children": [
+                {
+                  "id": "components",
+                  "label": "components",
+                  "icon": "folder-open",
+                  "children": [
+                    { "id": "button", "label": "Button.tsx", "icon": "file-code" },
+                    { "id": "input", "label": "Input.tsx", "icon": "file-code" },
+                    { "id": "card", "label": "Card.tsx", "icon": "file-code" }
+                  ]
+                }
+              ]
+            },
+            { "id": "package", "label": "package.json", "icon": "file" }
+          ]
+        }
+      },
+      {
+        "value": "search",
+        "label": "Search",
+        "icon": "search",
+        "body": {
+          "kind": "results",
+          "title": "Results",
+          "count": "3 results in 2 files",
+          "rows": [
+            { "label": "Button.tsx", "value": "Line 12: const Button = …" },
+            { "label": "Input.tsx", "value": "Line 8: const Input = …" },
+            { "label": "Card.tsx", "value": "Line 5: const Card = …" }
+          ]
+        }
+      }
+    ],
+    "actions": [
+      { "name": "Refresh", "icon": "refresh" },
+      { "name": "Filter", "icon": "filter" },
+      { "name": "Expand", "icon": "maximize" },
+      { "name": "Close panel", "icon": "x" }
+    ]
+  },
+  {
+    "caption": "With header content",
+    "width": 640,
+    "defaultTab": "overview",
+    "tabs": [
+      { "value": "overview", "label": "Overview", "body": { "kind": "window", "title": "Overview" } },
+      { "value": "layers", "label": "Layers", "body": { "kind": "window", "title": "Layers" } },
+      { "value": "flow", "label": "Flow", "body": { "kind": "window", "title": "Flow" } },
+      { "value": "activity", "label": "Activity", "body": { "kind": "window", "title": "Activity" } }
+    ],
+    "headerContent": { "label": "Window", "options": ["7 days", "30 days", "90 days"], "value": "30 days" }
+  },
+  {
+    "caption": "With overflow",
+    "width": 400,
+    "defaultTab": "snapshots",
+    "overflow": true,
+    "keepMounted": true,
+    "tabs": [
+      { "value": "canvas", "label": "Canvas", "icon": "info", "body": { "kind": "properties", "title": "Canvas", "note": "What this board is.", "rows": [{ "label": "nodes", "value": "10" }, { "label": "edges", "value": "14" }, { "label": "layout", "value": "graph-force", "mono": true }] } },
+      { "value": "settings", "label": "Settings", "icon": "settings", "body": { "kind": "properties", "title": "Settings", "note": "Every live layer, behaviour and layout.", "rows": [{ "label": "live layers", "value": "3" }, { "label": "behaviour", "value": "drag to pin" }] } },
+      { "value": "styling", "label": "Styling", "icon": "paintbrush", "body": { "kind": "properties", "title": "Styling", "note": "Colour and label key, per type.", "rows": [{ "label": "colour by", "value": "type" }, { "label": "label key", "value": "name", "mono": true }] } },
+      { "value": "layers", "label": "Layers", "icon": "layers", "body": { "kind": "properties", "title": "Layers", "note": "The scene as a file tree.", "rows": [{ "label": "layers", "value": "4" }] } },
+      { "value": "snapshots", "label": "Snapshots", "icon": "history", "body": { "kind": "properties", "title": "Snapshots", "note": "Saved states, with thumbnails.", "rows": [{ "label": "saved", "value": "6" }, { "label": "latest", "value": "2 min ago" }] } },
+      { "value": "find", "label": "Find", "icon": "search", "body": { "kind": "find", "placeholder": "Type, then switch tabs and come back" } },
+      { "value": "selection", "label": "Selection", "icon": "pointer", "body": { "kind": "properties", "title": "Selection", "note": "What is selected right now.", "rows": [{ "label": "nodes", "value": "2" }] } },
+      { "value": "element", "label": "Element", "icon": "scan", "body": { "kind": "properties", "title": "Element", "note": "The clicked node or edge, in detail.", "rows": [{ "label": "id", "value": "Carrier:42", "mono": true }] } },
+      { "value": "filters", "label": "Filters", "icon": "filter", "body": { "kind": "properties", "title": "Filters", "note": "Elements parked out of the board.", "rows": [{ "label": "parked", "value": "0" }] } },
+      { "value": "schema", "label": "Schema", "icon": "network", "body": { "kind": "properties", "title": "Schema", "note": "Types and their relationships.", "rows": [{ "label": "types", "value": "5" }] } },
+      { "value": "people", "label": "People", "icon": "users", "body": { "kind": "properties", "title": "People", "note": "Who else is on this board.", "rows": [{ "label": "viewing", "value": "ravi" }] } }
+    ]
+  },
+  {
+    "caption": "Explorer panel",
+    "width": 350,
+    "defaultTab": "explorer",
+    "tabs": [
+      {
+        "value": "explorer",
+        "label": "Explorer",
+        "icon": "folder",
+        "body": {
+          "kind": "tree",
+          "items": [
+            {
+              "id": "src",
+              "label": "src",
+              "icon": "folder-open",
+              "children": [
+                {
+                  "id": "components",
+                  "label": "components",
+                  "icon": "folder-open",
+                  "children": [
+                    { "id": "button", "label": "Button.tsx", "icon": "file-code" },
+                    { "id": "input", "label": "Input.tsx", "icon": "file-code" },
+                    { "id": "card", "label": "Card.tsx", "icon": "file-code" }
+                  ]
+                }
+              ]
+            },
+            { "id": "package", "label": "package.json", "icon": "file" }
+          ]
+        }
+      },
+      {
+        "value": "search",
+        "label": "Search",
+        "icon": "search",
+        "body": {
+          "kind": "results",
+          "title": "Results",
+          "count": "3 results in 2 files",
+          "rows": [
+            { "label": "Button.tsx", "value": "Line 12: const Button = …" },
+            { "label": "Input.tsx", "value": "Line 8: const Input = …" },
+            { "label": "Card.tsx", "value": "Line 5: const Card = …" }
+          ]
+        }
+      },
+      {
+        "value": "git",
+        "label": "Source Control",
+        "icon": "git-branch",
+        "body": {
+          "kind": "changes",
+          "title": "Changes",
+          "count": "3",
+          "rows": [
+            { "op": "change", "kind": "M", "text": "Button.tsx" },
+            { "op": "change", "kind": "M", "text": "Input.tsx" },
+            { "op": "add", "kind": "A", "text": "Card.tsx" }
+          ]
+        }
+      }
+    ],
+    "actions": [
+      { "name": "New file", "icon": "plus" },
+      { "name": "Refresh", "icon": "refresh" },
+      { "name": "Collapse all", "icon": "maximize" }
+    ]
+  },
+  {
+    "caption": "Database explorer",
+    "width": 400,
+    "defaultTab": "tables",
+    "tabs": [
+      {
+        "value": "tables",
+        "label": "Tables",
+        "icon": "database",
+        "body": {
+          "kind": "tree",
+          "items": [
+            { "id": "users", "label": "users", "icon": "database" },
+            { "id": "products", "label": "products", "icon": "database" },
+            { "id": "orders", "label": "orders", "icon": "database" },
+            { "id": "categories", "label": "categories", "icon": "database" }
+          ]
+        }
+      },
+      {
+        "value": "queries",
+        "label": "Queries",
+        "icon": "file-text",
+        "body": {
+          "kind": "tree",
+          "items": [
+            { "id": "all-users", "label": "Get all users", "icon": "file-text" },
+            { "id": "recent-orders", "label": "Recent orders", "icon": "file-text" },
+            { "id": "top-products", "label": "Top products", "icon": "file-text" }
+          ]
+        }
+      },
+      {
+        "value": "history",
+        "label": "History",
+        "icon": "clock",
+        "body": {
+          "kind": "history",
+          "entries": [
+            { "when": "2 min ago", "title": "SELECT * FROM users" },
+            { "when": "5 min ago", "title": "SELECT COUNT(*) FROM orders" }
+          ]
+        }
+      }
+    ],
+    "actions": [
+      { "name": "Refresh", "icon": "refresh" },
+      { "name": "Settings", "icon": "settings" }
+    ]
+  },
+  {
+    "caption": "Chat panel",
+    "width": 400,
+    "defaultTab": "chat",
+    "tabs": [
+      {
+        "value": "chat",
+        "label": "Chat",
+        "body": {
+          "kind": "chat",
+          "title": "Recent sessions",
+          "sessions": [{ "when": "3 wks", "title": "Running a Python script in Docker", "note": "Finished · Local" }],
+          "empty": {
+            "title": "Build with Agent",
+            "description": "AI responses may be inaccurate.",
+            "action": "Generate Agent Instructions"
+          }
+        }
+      }
+    ],
+    "actions": [
+      { "name": "New chat", "icon": "plus" },
+      { "name": "Settings", "icon": "settings" },
+      { "name": "More options", "icon": "more" },
+      { "name": "Expand", "icon": "maximize", "separator": true },
+      { "name": "Close panel", "icon": "x" }
+    ]
+  },
+  {
+    "caption": "Bottom panel",
+    "wide": true,
+    "defaultTab": "problems",
+    "tabs": [
+      { "value": "problems", "label": "Problems", "body": { "kind": "empty", "title": "No problems", "description": "No problems have been detected in the workspace." } },
+      { "value": "output", "label": "Output", "body": { "kind": "terminal", "lines": [{ "kind": "output", "text": "Build output…" }] } },
+      { "value": "debug", "label": "Debug console", "body": { "kind": "terminal", "lines": [{ "kind": "comment", "text": "Debug console…" }] } },
+      {
+        "value": "terminal",
+        "label": "Terminal",
+        "body": {
+          "kind": "terminal",
+          "cursor": true,
+          "lines": [
+            { "kind": "prompt", "text": "npm run dev" },
+            { "kind": "comment", "text": "design-kit@1.0.0 dev" },
+            { "kind": "comment", "text": "vite" },
+            { "kind": "output", "text": "VITE v5.0.0  ready in 234 ms" },
+            { "kind": "output", "text": "Local:   http://localhost:5173/" },
+            { "kind": "output", "text": "Network: http://192.168.1.100:5173/" },
+            { "kind": "comment", "text": "press h + enter to show help" }
+          ]
+        }
+      },
+      { "value": "queries", "label": "Query results", "body": { "kind": "empty", "title": "Query results", "description": "Run a query to see its rows here." } }
+    ],
+    "actions": [
+      { "name": "Clear all", "icon": "trash" },
+      { "name": "Copy", "icon": "copy" },
+      { "name": "Filter", "icon": "filter" },
+      { "name": "Close panel", "icon": "x", "separator": true }
+    ]
+  },
+  {
+    "caption": "With a custom class",
+    "width": 600,
+    "defaultTab": "tab1",
+    "classes": {
+      "className": "border-2 border-primary/20 rounded-lg",
+      "headerClassName": "bg-primary/5 border-b-2 border-primary/20",
+      "bodyClassName": "bg-muted/20"
+    },
+    "tabs": [
+      { "value": "tab1", "label": "Custom Tab 1", "icon": "file-code", "body": { "kind": "empty", "title": "Styled content area" } },
+      { "value": "tab2", "label": "Custom Tab 2", "icon": "bug", "body": { "kind": "empty", "title": "Another styled area" } }
+    ],
+    "actions": [{ "name": "Action", "icon": "settings" }]
+  }
+]
