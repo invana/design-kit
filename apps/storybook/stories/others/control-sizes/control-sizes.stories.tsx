@@ -11,6 +11,7 @@ import {
   TabsList,
   TabsTrigger,
   Toggle,
+  Stack,
 } from '@invana/ui';
 import { Input } from '@invana/forms';
 import { Settings2 } from 'lucide-react';
@@ -143,7 +144,7 @@ function Live({ row, args, log }: { row: Row; args: Args; log: Log }) {
 
   // Kit gap: no inline layout primitive (a row of controls on one baseline), so this one
   // flex row stays. Every control in it reads its height from the scale, not from here.
-  return <div className="flex items-center gap-2">{row.controls.map(draw)}</div>;
+  return <Stack direction="row" gap="sm">{row.controls.map(draw)}</Stack>;
 }
 
 const CODE: Record<Control, (size?: Size) => string> = {

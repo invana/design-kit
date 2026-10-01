@@ -28,6 +28,7 @@ import {
   type NavHorizontalProps,
   type NavItemConfig,
   type NavVerticalProps,
+  Stack,
 } from '@invana/ui';
 import {
   Activity,
@@ -271,8 +272,7 @@ export interface PageData {
 export function DashboardPage({ page, on }: { page: PageData; on: ShellHandlers }) {
   return (
     <PanelContent title={page.title} headerActions={navItems(page.actions, on.onClick)}>
-      {/* Kit gap: no vertical stack primitive — the one layout class this page sets. */}
-      <div className="flex flex-col gap-4 pt-4">
+      <Stack gap="lg">
         {page.subtitle ? <Typography.Muted>{page.subtitle}</Typography.Muted> : null}
         <MetricGrid>
           {page.metrics.map((m) => (
@@ -310,7 +310,7 @@ export function DashboardPage({ page, on }: { page: PageData; on: ShellHandlers 
             ) : null}
           </PanelBox>
         ))}
-      </div>
+      </Stack>
     </PanelContent>
   );
 }

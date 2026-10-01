@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import * as React from 'react';
 import { composeStories } from '@storybook/react-vite';
-import { Button, SectionHeader } from '@invana/ui';
+import { Button, SectionHeader, Stack } from '@invana/ui';
 
 /** A story module as `import.meta.glob` hands it over: its meta, and its one story. */
 export type StoryModule = Record<string, unknown> & { default: { title?: string } };
@@ -29,22 +29,24 @@ export function Showcase({ modules, root }: { modules: Record<string, StoryModul
   );
 
   return (
-    <div className="flex flex-col gap-16">
+    <Stack gap="xl">
       {sections.map(({ name, Story }) => (
-        <section key={name} aria-label={name} data-showcase className="flex flex-col gap-4">
-          <SectionHeader
-            title={name}
-            actions={
-              <Button asChild size="xs" variant="ghost">
-                <a href={`/?path=/story/${Story.id}`} target="_top">
-                  Open story
-                </a>
-              </Button>
-            }
-          />
-          <Story />
+        <section key={name} aria-label={name} data-showcase>
+          <Stack gap="lg">
+            <SectionHeader
+              title={name}
+              actions={
+                <Button asChild size="xs" variant="ghost">
+                  <a href={`/?path=/story/${Story.id}`} target="_top">
+                    Open story
+                  </a>
+                </Button>
+              }
+            />
+            <Story />
+          </Stack>
         </section>
       ))}
-    </div>
+    </Stack>
   );
 }

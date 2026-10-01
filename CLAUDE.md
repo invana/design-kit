@@ -140,7 +140,8 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 - **A story composes default components and adds no classes.** A story is the component's own
   documentation, so it shows what the kit renders out of the box: `<Eyebrow>`, `<SectionHeader>`,
   `<TypographyH4>`, `<PropertyList>` — never a raw `<h4 className="mb-2 text-sm font-medium
-  text-muted-foreground">` or a `<div>` dressed with utilities. The **only** exception is a story
+  text-muted-foreground">` or a `<div>` dressed with utilities. Layout is `<Stack>` (a column, or
+  `direction="row"`, gaps `xs`–`xl`), never `flex gap-*` / `space-y-*`. The **only** exception is a story
   whose subject *is* the customisation — a "with a custom class" variant demonstrating `className`
   passthrough — and it says so in its name.
 - **Match the job, not the tag.** The right component is the one that owns the role, which is often

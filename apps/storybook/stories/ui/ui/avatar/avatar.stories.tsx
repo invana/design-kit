@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
-import { Avatar as AvatarRoot, AvatarFallback, AvatarImage } from '@invana/ui';
+import { Avatar as AvatarRoot, AvatarFallback, AvatarImage, Stack } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/avatar.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -29,7 +29,8 @@ const VARIANTS = data as AvatarVariant[];
  * The kit has no avatar group, so a row of avatars is the one layout this story styles.
  * Listed as a kit gap.
  */
-const ROW = { spaced: 'flex items-end gap-2', overlap: 'flex -space-x-2' } as const;
+// Only the overlap is a class — the subject of its cell; a spaced row is a `Stack`.
+const OVERLAP = 'flex -space-x-2';
 
 const peopleBlocks = (v: AvatarVariant): Block[] =>
   (v.people ?? []).map((p) => ({ item: { initials: p.initials, image: p.image, title: p.name, description: p.detail } }));
@@ -64,7 +65,11 @@ const meta = {
               call: v.people
                 ? contentSource(peopleBlocks(v))
                 : v.row
-                  ? [`<div className="${ROW[v.row]}">`, ...(v.avatars ?? []).map((a) => avatarSource(a).replace(/^/gm, '  ')), '</div>'].join('\n')
+                  ? [
+                      v.row === 'spaced' ? '<Stack direction="row" gap="sm" align="end">' : `<div className="${OVERLAP}">`,
+                      ...(v.avatars ?? []).map((a) => avatarSource(a).replace(/^/gm, '  ')),
+                      v.row === 'spaced' ? '</Stack>' : '</div>',
+                    ].join('\n')
                   : (v.avatars ?? []).map(avatarSource).join('\n'),
             })),
           ),
@@ -86,7 +91,13 @@ function Avatars({ v }: { v: AvatarVariant }) {
       <AvatarFallback>{a.initials}</AvatarFallback>
     </AvatarRoot>
   ));
-  return v.row ? <div className={ROW[v.row]}>{avatars}</div> : <>{avatars}</>;
+  if (v.row === 'spaced')
+    return (
+      <Stack direction="row" gap="sm" align="end">
+        {avatars}
+      </Stack>
+    );
+  return v.row ? <div className={OVERLAP}>{avatars}</div> : <>{avatars}</>;
 }
 
 /**

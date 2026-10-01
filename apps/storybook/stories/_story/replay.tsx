@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@invana/ui';
+import { Button, Stack } from '@invana/ui';
 
 export interface Replay {
   /** How many frames have arrived — 0 before the first. */
@@ -61,16 +61,16 @@ export function ReplayFrame({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-3" style={{ maxWidth: width }}>
+    <Stack gap="md" style={{ maxWidth: width }}>
       <ReplayBar replay={replay} noun={noun} />
       {children}
-    </div>
+    </Stack>
   );
 }
 
 function ReplayBar({ replay, noun }: { replay: Replay; noun: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <Stack direction="row" gap="sm">
       {replay.playing ? (
         <Button size="xs" variant="outline" onClick={replay.pause}>
           Pause
@@ -86,6 +86,6 @@ function ReplayBar({ replay, noun }: { replay: Replay; noun: string }) {
       <span role="status" className="ms-auto font-mono text-sm text-muted-foreground">
         {replay.at} / {replay.length} {noun}s
       </span>
-    </div>
+    </Stack>
   );
 }

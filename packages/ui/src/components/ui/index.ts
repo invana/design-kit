@@ -30,6 +30,7 @@ export * from './sidebar';
 export * from './skeleton';
 export * from './sonner';
 export * from './spinner';
+export * from './stack';
 export * from './status-dot';
 export * from './status-icon';
 export * from './table';

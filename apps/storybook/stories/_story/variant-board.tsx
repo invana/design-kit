@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Eyebrow } from '@invana/ui';
+import { Button, Eyebrow, Stack } from '@invana/ui';
 
 import { ALL, inline } from './source';
 
@@ -71,10 +71,10 @@ function Cell<V extends Variant>({
   };
 
   return (
-    <div
+    <Stack
       role="group"
       aria-label={variant.caption}
-      className="flex min-w-0 flex-col gap-2"
+      gap="sm"
       style={
         variant.wide
           ? { gridColumn: '1 / -1' }
@@ -87,23 +87,23 @@ function Cell<V extends Variant>({
             }
       }
     >
-      <div className="flex items-center justify-between">
+      <Stack direction="row" justify="between">
         <Eyebrow>{variant.caption}</Eyebrow>
         {sent.length ? (
           <Button size="xs" variant="ghost" onClick={reset}>
             Reset
           </Button>
         ) : null}
-      </div>
+      </Stack>
       {variant.height ? (
-        <div key={runs} className="flex min-h-0 flex-col" style={{ height: variant.height }}>
+        <Stack key={runs} gap="none" className="min-h-0" style={{ height: variant.height }}>
           {children(variant, log)}
-        </div>
+        </Stack>
       ) : (
         <React.Fragment key={runs}>{children(variant, log)}</React.Fragment>
       )}
       <EventLog sent={sent} />
-    </div>
+    </Stack>
   );
 }
 

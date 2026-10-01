@@ -1,0 +1,7 @@
+[
+  { "caption": "Column", "props": { "gap": "md" }, "items": ["Read general ledger", "Joined carrier invoices", "Decomposing the change"] },
+  { "caption": "Column · tight", "props": { "gap": "xs" }, "items": ["Segment", "ARR", "Renewal"] },
+  { "caption": "Row", "props": { "direction": "row", "gap": "sm" }, "items": ["Run", "Narrow first", "Cancel"] },
+  { "caption": "Row · wraps", "props": { "direction": "row", "gap": "xs", "wrap": true }, "items": ["orders", "suppliers", "carriers", "invoices", "ledger", "stores", "regions", "promotions"] },
+  { "caption": "Row · ends apart", "props": { "direction": "row", "justify": "between" }, "items": ["Weekly demand", "forecast run"] }
+]
