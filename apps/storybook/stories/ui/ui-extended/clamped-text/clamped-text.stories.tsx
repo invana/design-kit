@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { ClampedText as Component, Eyebrow } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/clamped-text.json';
@@ -64,12 +64,19 @@ export const ClampedText: Story = {
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    // The clamp itself is not asserted: in the test browser the kit's `[display:-webkit-box]`
-    // computes as `block`, so nothing is clipped and no `Show more` is measured there.
     await step('Both paragraphs are in the DOM whole', async () => {
       for (const v of VARIANTS) {
         await expect(within(canvas.getByRole('group', { name: v.caption })).getByText(v.text)).toBeInTheDocument();
       }
+    });
+    await step('The long one clamps, and opens and closes', async () => {
+      const cell = within(canvas.getByRole('group', { name: 'Long — clamps to three lines' }));
+      const more = await cell.findByRole('button', { name: 'Show more' });
+      await expect(more).toHaveAttribute('aria-expanded', 'false');
+      await userEvent.click(more);
+      await expect(cell.getByRole('button', { name: 'Show less' })).toHaveAttribute('aria-expanded', 'true');
+      await userEvent.click(cell.getByRole('button', { name: 'Show less' }));
+      await expect(cell.getByRole('button', { name: 'Show more' })).toBeInTheDocument();
     });
     await step('The short one offers nothing', async () => {
       const cell = within(canvas.getByRole('group', { name: 'Short — no toggle' }));
