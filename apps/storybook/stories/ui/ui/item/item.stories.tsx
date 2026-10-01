@@ -38,6 +38,10 @@ interface Row {
   status?: { text: string; tone: Tone };
   /** An open button, named for screen readers. */
   action?: string;
+  /** Present, not in play — faded in place. */
+  dim?: boolean;
+  /** Failed or refused — its title struck. */
+  struck?: boolean;
 }
 
 interface ItemVariant extends Variant {
@@ -59,9 +63,9 @@ interface Args {
 const rowCode = (v: ItemVariant, r: Row) =>
   [
     v.selected
-      ? `<Item asChild size="${v.size}" selected={selected === ${JSON.stringify(r.id)}}>`
+      ? `<Item asChild size="${v.size}" selected={selected === ${JSON.stringify(r.id)}}${r.dim ? ' dim' : ''}${r.struck ? ' struck' : ''}>`
       : `<Item${v.variant ? ` variant="${v.variant}"` : ''}${v.size ? ` size="${v.size}"` : ''}>`,
-    v.selected ? `  <a href="#" onClick={() => onSelect(${JSON.stringify(r.id)})}>` : null,
+    v.selected ? `  <button type="button" onClick={() => onSelect(${JSON.stringify(r.id)})}>` : null,
     r.icon ? '  <ItemMedia variant="icon"><FileText /></ItemMedia>' : null,
     r.dot ? `  <ItemMedia><StatusDot tone="${r.dot}" size="md" /></ItemMedia>` : null,
     '  <ItemContent>',
@@ -74,7 +78,7 @@ const rowCode = (v: ItemVariant, r: Row) =>
     r.action
       ? `  <ItemActions>\n    <Button variant="ghost" size="icon" aria-label="${r.action}" onClick={onClick}><ChevronRight /></Button>\n  </ItemActions>`
       : null,
-    v.selected ? '  </a>' : null,
+    v.selected ? '  </button>' : null,
     '</Item>',
   ]
     .filter(Boolean)
@@ -173,19 +177,18 @@ function LiveItems({ v, onSelect, onClick, log }: { v: ItemVariant } & Omit<Args
   const [selected, setSelected] = React.useState(v.selected);
   const rows = v.items.map((r) =>
     v.selected ? (
-      <ItemRow key={r.id} asChild size={v.size} variant={v.variant} selected={selected === r.id}>
-        <a
-          href="#"
+      <ItemRow key={r.id} asChild size={v.size} variant={v.variant} selected={selected === r.id} dim={r.dim} struck={r.struck}>
+        <button
+          type="button"
           aria-current={selected === r.id ? 'true' : undefined}
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             setSelected(r.id);
             onSelect(r.id);
             log('onSelect', r.id);
           }}
         >
           <RowBody r={r} onClick={onClick} log={log} />
-        </a>
+        </button>
       </ItemRow>
     ) : (
       <ItemRow key={r.id} size={v.size} variant={v.variant}>
@@ -198,8 +201,9 @@ function LiveItems({ v, onSelect, onClick, log }: { v: ItemVariant } & Omit<Args
 
 /**
  * A row: media, a title and description, actions — every variant from `fixtures/ui/item.json`.
- * The entity row is the application list at `size="xs"` (30px) with a selected state: click a
- * row and `onSelect` logs its id while the mark moves to it. The default row's chevron logs
+ * The entity row is the application list at `size="xs"` (a control's `md` height) — each row a
+ * button, with a selected state: click a row and `onSelect` logs its id while the mark moves to
+ * it. A retired row is `dim`, a refused one `struck`. The default row's chevron logs
  * `onClick`.
  */
 export const Item: Story = {
@@ -217,10 +221,10 @@ export const Item: Story = {
     });
     await step('Pick another row; the selection moves', async () => {
       const cell = within(canvas.getByRole('group', { name: 'Entity row' }));
-      await userEvent.click(cell.getByRole('link', { name: /Market Scout/ }));
+      await userEvent.click(cell.getByRole('button', { name: /Market Scout/ }));
       await expect(args.onSelect).toHaveBeenCalledWith('scout');
-      await expect(cell.getByRole('link', { name: /Market Scout/ })).toHaveAttribute('aria-current', 'true');
-      await expect(cell.getByRole('link', { name: /^Intraday Analyst/ })).not.toHaveAttribute('aria-current');
+      await expect(cell.getByRole('button', { name: /Market Scout/ })).toHaveAttribute('aria-current', 'true');
+      await expect(cell.getByRole('button', { name: /^Intraday Analyst/ })).not.toHaveAttribute('aria-current');
     });
   },
 };

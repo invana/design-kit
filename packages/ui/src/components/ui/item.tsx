@@ -31,7 +31,9 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  "group/item [a]:hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 [a]:transition-colors flex flex-wrap items-center rounded-md border border-transparent outline-none transition-colors duration-100 focus-visible:ring-[3px]",
+  // A row that is a link or a button (`asChild`) lights on hover and reads left
+  // to right; a plain row does neither.
+  "group/item [a]:hover:bg-accent/50 [button]:hover:bg-accent/50 [button]:w-full [button]:text-left [button]:cursor-pointer disabled:pointer-events-none disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 [a]:transition-colors flex flex-wrap items-center rounded-md border border-transparent outline-none transition-colors duration-100 focus-visible:ring-[3px]",
   {
     variants: {
       variant: {
@@ -43,12 +45,12 @@ const itemVariants = cva(
         default: "gap-4 p-4 ",
         sm: "gap-2.5 px-4 py-3",
         /**
-         * The application row — 30px, the height a dense list actually uses:
-         * an agent in a roster, a dataset, a schedule, a node type, a queue
-         * entry. `min-h` rather than `h`, so a row that wraps still contains
-         * its content instead of clipping it.
+         * The application row — a control's `md` height, the height a dense
+         * list actually uses: an agent in a roster, a dataset, a schedule, a
+         * node type, a queue entry. `min-h` rather than `h`, so a row that
+         * wraps still contains its content instead of clipping it.
          */
-        xs: "min-h-[30px] gap-2 px-2 py-1",
+        xs: "min-h-control-md gap-2 px-2 py-1",
       },
       /**
        * Selection, not hover. A row the user has chosen stays marked while
@@ -57,6 +59,16 @@ const itemVariants = cva(
        */
       selected: {
         true: "bg-accent",
+        false: "",
+      },
+      /** Present, not in play — queued, held, skipped. Kept in its place, faded. */
+      dim: {
+        true: "opacity-50",
+        false: "",
+      },
+      /** It ran and failed, or was refused: the title struck, in the destructive tone. */
+      struck: {
+        true: "[&_[data-slot=item-title]]:text-destructive [&_[data-slot=item-title]]:line-through",
         false: "",
       },
     },
@@ -73,6 +85,8 @@ function Item({
   variant = "default",
   size = "default",
   selected,
+  dim,
+  struck,
   asChild = false,
   ...props
 }: React.ComponentProps<"div"> &
@@ -84,7 +98,7 @@ function Item({
       data-variant={variant}
       data-size={size}
       data-selected={selected || undefined}
-      className={cn(itemVariants({ variant, size, selected, className }))}
+      className={cn(itemVariants({ variant, size, selected, dim, struck, className }))}
       {...props}
     />
   )

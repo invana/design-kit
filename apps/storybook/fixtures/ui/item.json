@@ -39,7 +39,16 @@
         "dot": "muted",
         "title": "└ Risk Checker",
         "description": "spawned · ephemeral · retired 6 min ago",
-        "status": { "text": "retired", "tone": "muted" }
+        "status": { "text": "retired", "tone": "muted" },
+        "dim": true
+      },
+      {
+        "id": "write-orders",
+        "dot": "muted",
+        "title": "Write orders back",
+        "description": "refused · no write grant on model/Orders",
+        "status": { "text": "refused", "tone": "warning" },
+        "struck": true
       },
       {
         "id": "setup-bel",
