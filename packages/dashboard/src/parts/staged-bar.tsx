@@ -50,7 +50,7 @@ export const StagedBar = React.forwardRef<HTMLDivElement, StagedBarProps>(
       role="region"
       aria-label="Staged changes"
       className={cn(
-        "flex min-h-[var(--control-h)] shrink-0 flex-wrap items-center gap-2 border-b border-border bg-primary/5 px-3 py-1",
+        "flex min-h-control-md shrink-0 flex-wrap items-center gap-2 border-b border-border bg-primary/5 px-3 py-1",
         className,
       )}
       {...props}

@@ -28,6 +28,8 @@ type Story = StoryObj<typeof meta>;
  *
  * Not a `ContextBar`: that sits under a panel and describes the *view* — counts,
  * a keyboard hint. This sits above the content and names the *record*.
+ *
+ * `lg` by default: 40px, a control's height, holding `sm` chips and buttons.
  */
 export const Default: Story = {
   render: () => (
@@ -38,7 +40,7 @@ export const Default: Story = {
         chips={
           <>
             <BoundChip bound="llm" />
-            <Badge variant="outline">running</Badge>
+            <Badge variant="outline" size="sm">running</Badge>
           </>
         }
         actions={
@@ -50,7 +52,7 @@ export const Default: Story = {
             <Button variant="outline" size="sm">
               Cancel
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon-sm">
               <MoreHorizontal />
             </Button>
           </>
@@ -63,15 +65,15 @@ export const Default: Story = {
         chips={
           <>
             <BoundChip bound="ingest" />
-            <Badge variant="outline">succeeded</Badge>
+            <Badge variant="outline" size="sm">succeeded</Badge>
           </>
         }
         actions={
           <ButtonGroup>
-            <Button variant="ghost" size="icon" aria-label="Previous task">
+            <Button variant="ghost" size="icon-sm" aria-label="Previous task">
               <ChevronLeft />
             </Button>
-            <Button variant="ghost" size="icon" aria-label="Next task">
+            <Button variant="ghost" size="icon-sm" aria-label="Next task">
               <ChevronRight />
             </Button>
           </ButtonGroup>
@@ -81,7 +83,7 @@ export const Default: Story = {
       <RecordHeader
         tone="warning"
         crumbs={['nightly-load', 'import_dataset']}
-        chips={<Badge variant="outline">draft v5</Badge>}
+        chips={<Badge variant="outline" size="sm">draft v5</Badge>}
         actions={<Button size="sm">Publish v5</Button>}
       />
     </div>

@@ -103,7 +103,7 @@ export interface TabbedPanelProps {
 }
 
 /**
- * TabbedPanel — a panel whose views sit behind one 30px tab strip.
+ * TabbedPanel — a panel whose views sit behind one `md` tab strip.
  *
  * The strip is a `NavItems` tab list (`variant="underline"`), not a Radix
  * `Tabs`: the same component draws this kit's nav rails and its workbook tabs,
@@ -168,7 +168,7 @@ export function TabbedPanel({
         <Card className={cn("flex h-full min-h-0 flex-col border rounded-none", className)}>
           <div
             className={cn(
-              "flex h-[30px] shrink-0 flex-row items-stretch border-b",
+              "flex h-control-md shrink-0 flex-row items-stretch border-b",
               headerClassName
             )}
           >

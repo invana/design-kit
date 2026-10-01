@@ -79,7 +79,7 @@ export function SpecAction({
               beside it — `⋯` is read as *More*, not drawn as it. */}
           <Button
             variant={action.variant ?? "outline"}
-            size={Trigger ? "icon" : "sm"}
+            size={Trigger ? "icon-sm" : "sm"}
             disabled={action.disabled}
             aria-label={action.label ?? action.id}
           >
@@ -156,7 +156,7 @@ export function SpecAction({
   return (
     <Button
       variant={action.variant ?? "outline"}
-      size={iconOnly ? "icon" : "sm"}
+      size={iconOnly ? "icon-sm" : "sm"}
       disabled={action.disabled}
       aria-label={iconOnly ? action.id : undefined}
       onClick={() => onAction(action.id, ctx)}

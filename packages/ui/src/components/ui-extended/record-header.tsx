@@ -24,7 +24,19 @@ export interface RecordHeaderProps
   chips?: React.ReactNode
   /** What you can do to it — prev/next, a view switch, buttons, a `…` menu. */
   actions?: React.ReactNode
+  /**
+   * The bar's height, on the control scale — a bar is as tall as a control of
+   * its size. `lg` (40px at a 13px root) tops a page or a dashboard; `md`
+   * (32px) tops a panel or a drawer, level with a `PanelBox` header. Either
+   * holds `sm` chips and buttons.
+   */
+  size?: "md" | "lg"
 }
+
+const SIZE = {
+  md: "h-control-md gap-2 px-3",
+  lg: "h-control-lg gap-2.5 px-4",
+} as const
 
 /**
  * Which record you are looking at, across the top of the surface showing it.
@@ -33,7 +45,7 @@ export interface RecordHeaderProps
  * with this line, so a reader who followed a link knows what they are reading
  * before they read any of it.
  *
- * It is **not** a `ContextBar`. That is 28px under a panel and describes the
+ * It is **not** a `ContextBar`. That is the `sm` bar under a panel and describes the
  * *view* — counts, a keyboard hint, a tab-shaped switch. This is above the
  * content and names the *record*, which is why the crumbs are mono: they are
  * identifiers, not prose.
@@ -43,16 +55,17 @@ export interface RecordHeaderProps
  * parent, shown so the child is not read out of context.
  */
 export const RecordHeader = React.forwardRef<HTMLDivElement, RecordHeaderProps>(
-  ({ tone, crumbs, chips, actions, className, ...props }, ref) => (
+  ({ tone, crumbs, chips, actions, size = "lg", className, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "flex shrink-0 items-center gap-2.5 border-b border-border bg-card px-4 py-2.5",
+        "flex shrink-0 items-center border-b border-border bg-card",
+        SIZE[size],
         className,
       )}
       {...props}
     >
-      {tone ? <StatusDot tone={tone} size="lg" /> : null}
+      {tone ? <StatusDot tone={tone} size={size} /> : null}
 
       <div className="flex min-w-0 items-center gap-1.5">
         {crumbs.map((crumb, i) => {

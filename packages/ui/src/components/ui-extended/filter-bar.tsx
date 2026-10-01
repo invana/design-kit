@@ -68,7 +68,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       ref={ref}
       className={cn(
         "flex shrink-0 items-center gap-1.5",
-        !seamless && "h-[30px] border-b border-border px-2",
+        !seamless && "h-control-md border-b border-border px-2",
         className,
       )}
       {...props}

@@ -29,7 +29,7 @@ export interface AppStatusBarProps
 }
 
 /**
- * The 25px line at the bottom of the window.
+ * The `sm` line at the bottom of the window — a control's height.
  *
  * It describes the **session**, not the screen: what is loaded, what state it
  * is in, which build is running. That is why it barely changes as you navigate
@@ -46,7 +46,7 @@ export const AppStatusBar = React.forwardRef<HTMLDivElement, AppStatusBarProps>(
     <div
       ref={ref}
       className={cn(
-        "flex h-[25px] shrink-0 items-center gap-2 border-t border-border px-2 text-sm text-muted-foreground",
+        "flex h-control-sm shrink-0 items-center gap-2 border-t border-border px-2 text-sm text-muted-foreground",
         className,
       )}
       {...props}

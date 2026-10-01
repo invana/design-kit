@@ -18,7 +18,8 @@ export interface ContextBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The 28px bar between a panel and the status bar.
+ * The `sm` bar between a panel and the status bar — a control's height, so
+ * it lines up with the controls it sits beside.
  *
  * It answers "where am I, and what is true right now" — the view switch, the
  * counts that matter for the work in front of you, and the shortcut that
@@ -34,7 +35,7 @@ export const ContextBar = React.forwardRef<HTMLDivElement, ContextBarProps>(
     <div
       ref={ref}
       className={cn(
-        "flex h-7 shrink-0 items-center gap-3 border-t border-border px-2 text-sm",
+        "flex h-control-sm shrink-0 items-center gap-3 border-t border-border px-2 text-sm",
         className,
       )}
       {...props}

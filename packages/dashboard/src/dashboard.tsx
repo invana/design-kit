@@ -352,6 +352,7 @@ function SpecHeader({
 
   return (
     <RecordHeader
+      size={header.size}
       tone={header.tone}
       crumbs={crumbs}
       chips={<SpecChips chips={header.chips} />}

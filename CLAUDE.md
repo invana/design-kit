@@ -220,3 +220,8 @@ gap in the kit, not a one-off in the design.
   `SegmentedControl`, `Toggle`, `Tabs`, `FilterChip`. `default` is `md`. `cn` registers the
   names with tailwind-merge — a new `--spacing-*` name must be added there too, or a conflicting
   height survives the merge. A control's text is the root size; only `Badge` stays `text-sm`.
+  **A bar is a control's height too**: `lg` — `AppLayoutBase` header, `RecordHeader` (default);
+  `md` — `PanelBox`, `TabbedPanel`, `PanelContent` and `FilterBar` headers, `RecordHeader
+  size="md"` (a panel or drawer), `StagedBar` (minimum); `sm` — `ContextBar`, `AppStatusBar`, the
+  app footer, and a card's header strip (`ClarifyCard`, `EmissionCard`, `TemplatePicker`). A bar
+  holds controls a step smaller. Never a pixel height on a bar.

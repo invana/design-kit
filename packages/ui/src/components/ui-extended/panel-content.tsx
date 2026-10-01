@@ -69,7 +69,7 @@ export function PanelContent({
         <Card className={cn("flex h-full min-h-0 flex-col border-none", className)}>
           <CardHeader
             className={cn(
-              "group/panel-header flex h-[35px] shrink-0 flex-row items-center gap-2",
+              "group/panel-header flex h-control-md shrink-0 flex-row items-center gap-2",
               "space-y-0 border-b py-0 pr-1",
               headerClassName
             )}

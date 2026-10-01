@@ -75,6 +75,8 @@ export interface ActionSpec {
 
 /** The record identity across the top — see `RecordHeader`. */
 export interface HeaderSpec {
+  /** The bar's height on the control scale: `lg` (default) tops a page, `md` a panel or a drawer. */
+  size?: "md" | "lg"
   tone?: StatusDotProps["tone"]
   /** Outermost first; the last is the record this dashboard is about. */
   crumbs: string[]

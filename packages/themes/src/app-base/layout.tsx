@@ -25,7 +25,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
     <TooltipProvider delayDuration={0}>
       <div className={cn("flex h-screen flex-col  bg-background text-foreground", props.className)}>
         <NavHorizontal 
-          className={cn("h-[40px] border-b border-border", CHROME_SURFACE, props.header.className)}
+          className={cn("h-control-lg border-b border-border", CHROME_SURFACE, props.header.className)}
           left={props.header.left}
           leftNavItems={props.header.leftNavItems}
           center={props.header.center}
@@ -33,7 +33,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
           right={props.header.right}
           rightNavItems={props.header.rightNavItems}
         />
-        {/* Fill the remaining column height (root minus the 40px header + 25px
+        {/* Fill the remaining column height (root minus the `lg` header + `sm`
             footer) via flex, NOT a hardcoded `calc(100vh-…)`. That keeps the
             shell embeddable: when a consumer overrides the root height (e.g.
             `className="h-full"` for a bounded / sub-viewport container) the main
@@ -43,7 +43,7 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
           {props.main}
         </div>
         <NavHorizontal 
-          className={cn("h-[25px] border-t border-border", CHROME_SURFACE, props.footer.className)}
+          className={cn("h-control-sm border-t border-border", CHROME_SURFACE, props.footer.className)}
           left={props.footer.left}
           leftNavItems={props.footer.leftNavItems}
           center={props.footer.center}
