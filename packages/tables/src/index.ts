@@ -1,8 +1,25 @@
 export { DataTable, type DataTableProps } from './data-table';
+export { PaginatedTable, type PaginatedTableProps } from './paginated-table';
+export {
+  RemotePaginatedTable,
+  type RemotePaginatedTableProps,
+} from './remote-paginated-table';
+export type { TableBaseProps } from './core/props';
 export { DataTablePagination } from './data-table-pagination';
 export { DataTableToolbar } from './data-table-toolbar';
 export { EditableCell } from './editable-cell';
-export type { CellEditHandler, EditOption, EditType } from './types';
+export {
+  applyCellEdit,
+  type ApplyCellEditOptions,
+} from './apply-cell-edit';
+export type {
+  CellEdit,
+  CellEditHandler,
+  EditOption,
+  EditType,
+  RemotePage,
+  RemotePageQuery,
+} from './types';
 export type {
   ColumnDef,
   ColumnFiltersState,

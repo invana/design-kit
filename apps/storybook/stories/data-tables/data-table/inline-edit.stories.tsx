@@ -2,10 +2,17 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   DataTable,
+  applyCellEdit,
+  type CellEdit,
   type CellEditHandler,
   type ColumnDef,
 } from "@invana/tables";
-import { SegmentedControl, type TableDensity } from "@invana/ui";
+import {
+  PropertyList,
+  PropertyRow,
+  SegmentedControl,
+  type TableDensity,
+} from "@invana/ui";
 
 type Schedule = {
   id: string;
@@ -107,7 +114,7 @@ const save = (value: unknown) =>
   );
 
 const meta: Meta = {
-  title: "Data Tables/Static/DataTable",
+  title: "Data Tables/DataTable",
   parameters: { layout: "padded" },
 };
 
@@ -126,30 +133,40 @@ type Story = StoryObj<typeof meta>;
  * `onCellEdit` here returns a promise: the new value shows as saving for a
  * moment, and a schedule under five minutes is refused — the old value comes
  * back, the cell is marked, and hovering it says why.
+ *
+ * The footer shows what `onCellEdit` received — the row's id, the field the
+ * column reads, the old and new values — which is what a `PATCH` to a server
+ * needs; `applyCellEdit(rows, edit)` writes it into the story's own state.
  */
 export const InlineEdit: Story = {
   render: function Render() {
     const [rows, setRows] = React.useState(SEED);
     const [density, setDensity] = React.useState<TableDensity>("default");
 
-    const onCellEdit: CellEditHandler<Schedule> = async ({
-      row,
-      columnId,
-      value,
-    }) => {
-      await save(value);
-      setRows((all) =>
-        all.map((r) => (r.id === row.id ? { ...r, [columnId]: value } : r)),
-      );
+    const [last, setLast] = React.useState<{
+      edit: CellEdit<Schedule>;
+      outcome: string;
+    } | null>(null);
+
+    const onCellEdit: CellEditHandler<Schedule> = async (edit) => {
+      setLast({ edit, outcome: "saving…" });
+      try {
+        await save(edit.value);
+      } catch (error) {
+        setLast({ edit, outcome: `refused — ${(error as Error).message}` });
+        throw error;
+      }
+      setLast({ edit, outcome: "saved" });
+      setRows((all) => applyCellEdit(all, edit));
     };
 
     return (
       <DataTable<Schedule>
         columns={COLUMNS}
         data={rows}
+        getRowId={(r) => r.id}
         density={density}
         enableSorting={false}
-        enableColumnVisibility={false}
         onCellEdit={onCellEdit}
         toolbar={
           <SegmentedControl
@@ -158,6 +175,27 @@ export const InlineEdit: Story = {
             value={density}
             onValueChange={(v) => setDensity(v as TableDensity)}
           />
+        }
+        footer={
+          last ? (
+            <PropertyList labelWidth={96}>
+              <PropertyRow label="rowId" mono>
+                {last.edit.rowId}
+              </PropertyRow>
+              <PropertyRow label="field" mono>
+                {last.edit.field}
+              </PropertyRow>
+              <PropertyRow label="previousValue" mono>
+                {JSON.stringify(last.edit.previousValue)}
+              </PropertyRow>
+              <PropertyRow label="value" mono>
+                {JSON.stringify(last.edit.value)}
+              </PropertyRow>
+              <PropertyRow label="outcome">{last.outcome}</PropertyRow>
+            </PropertyList>
+          ) : (
+            "Edit a cell — what onCellEdit receives shows here."
+          )
         }
       />
     );

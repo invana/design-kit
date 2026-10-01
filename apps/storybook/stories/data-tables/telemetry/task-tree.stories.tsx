@@ -192,8 +192,6 @@ export const TaskTree: Story = {
         canExpand={(r) => r.event != null}
         expandOnRowClick
         enableSorting={false}
-        enablePagination={false}
-        enableColumnVisibility={false}
         toolbar={
           <FailuresButton
             onOpen={openFailures}

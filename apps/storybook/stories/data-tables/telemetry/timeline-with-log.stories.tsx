@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DataTable } from "@invana/tables";
+import { PaginatedTable } from "@invana/tables";
 import { FilterChip, PanelBox, TaskGantt } from "@invana/ui";
 import {
   EVENTS,
@@ -71,13 +71,12 @@ export const TimelineWithLog: Story = {
           />
         </PanelBox>
         <PanelBox title="Log">
-          <DataTable<TelemetryEvent>
+          <PaginatedTable<TelemetryEvent>
             columns={LOG_COLUMNS}
             data={rows}
             density="compact"
             seamless
-            enableSorting
-            enablePagination
+            searchable={false}
             pageSize={15}
             pageSizeOptions={[15, 30, 60]}
             isRowSelected={(e) => e.seq === event?.seq}

@@ -99,7 +99,7 @@ const DENSITIES = [
 ];
 
 const meta: Meta = {
-  title: "Data Tables/Static/DataTable",
+  title: "Data Tables/DataTable",
   parameters: { layout: "padded" },
 };
 

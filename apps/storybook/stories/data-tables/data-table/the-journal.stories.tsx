@@ -53,7 +53,7 @@ const columns: ColumnDef<Run>[] = [
 ];
 
 const meta: Meta<typeof DataTable<Run>> = {
-  title: 'Data Tables/Static/DataTable',
+  title: 'Data Tables/DataTable',
   component: DataTable<Run>,
   parameters: { layout: 'padded' },
 };
@@ -84,9 +84,7 @@ export const TheJournal: Story = {
         columns={columns}
         data={RUNS}
         density="compact"
-        enablePagination={false}
         enableSorting={false}
-        enableColumnVisibility={false}
         rowIndent={(row) => row.depth}
         isRowSelected={(row) => row.id === selected}
         onRowClick={(row) => setSelected(row.id)}

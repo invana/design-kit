@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DataTable, type ColumnDef } from "@invana/tables";
+import { PaginatedTable, type ColumnDef } from "@invana/tables";
 import { Badge } from "@invana/ui";
 
 type Node = {
@@ -162,7 +162,7 @@ const COLUMNS: ColumnDef<Node, unknown>[] = [
 ];
 
 const meta: Meta = {
-  title: "Data Tables/Static/DataTable",
+  title: "Data Tables/PaginatedTable",
   parameters: { layout: "padded" },
 };
 
@@ -178,16 +178,18 @@ type Story = StoryObj<typeof meta>;
  * among its siblings, so a table never leaves its dataset. The table pages by
  * datasets — three to a page — so opening one grows this page rather than
  * pushing a dataset onto the next.
+ *
+ * The search reads every level: a dataset stays when it or anything under it
+ * matches, so searching `fx` finds the table and the dataset it lives in.
  */
 export const NestedRows: Story = {
   render: () => (
-    <DataTable<Node>
+    <PaginatedTable<Node>
       columns={COLUMNS}
       data={DATA}
       getSubRows={(n) => n.children}
       getRowId={(n) => n.id}
       expandOnRowClick
-      enableColumnVisibility={false}
       pageSize={3}
     />
   ),

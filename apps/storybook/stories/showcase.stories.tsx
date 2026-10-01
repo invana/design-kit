@@ -22,7 +22,7 @@ import {
   type FieldConfig,
   type RowConfig,
 } from '@invana/forms';
-import { DataTable, type ColumnDef } from '@invana/tables';
+import { PaginatedTable, applyCellEdit, type ColumnDef } from '@invana/tables';
 import { toast } from 'sonner';
 import {
   Bold,
@@ -177,18 +177,11 @@ const ShowcaseDataTable = () => {
   );
 
   return (
-    <DataTable<Person>
+    <PaginatedTable<Person>
       columns={columns}
       data={data}
-      enablePagination
       pageSize={5}
-      onCellEdit={({ rowIndex, columnId, value }) => {
-        setData((prev) => {
-          const target = data[rowIndex];
-          if (!target) return prev;
-          return prev.map((r) => (r.id === target.id ? { ...r, [columnId]: value } : r));
-        });
-      }}
+      onCellEdit={(edit) => setData((prev) => applyCellEdit(prev, edit))}
     />
   );
 };

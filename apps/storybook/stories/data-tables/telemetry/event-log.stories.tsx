@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DataTable } from "@invana/tables";
+import { PaginatedTable } from "@invana/tables";
 import { EVENTS, type TelemetryEvent } from "./fixtures";
 import { EMPTY_FILTER, LOG_COLUMNS, LogFilterBar, applyLogFilter } from "./log";
 
@@ -27,13 +27,11 @@ export const EventLog: Story = {
     const rows = React.useMemo(() => applyLogFilter(EVENTS, filter), [filter]);
 
     return (
-      <DataTable<TelemetryEvent>
+      <PaginatedTable<TelemetryEvent>
         columns={LOG_COLUMNS}
         data={rows}
         density="compact"
-        enableSorting
-        enablePagination
-        enableColumnVisibility
+        searchable={false}
         enableColumnPinning
         pageSize={25}
         pageSizeOptions={[25, 50, 100]}
