@@ -2,8 +2,6 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import {
-  Button,
-  ButtonGroup,
   EmptyState,
   Item,
   ItemContent,
@@ -14,7 +12,6 @@ import {
   SearchInput,
   SectionHeader,
 } from '@invana/ui';
-import { X } from 'lucide-react';
 
 import DATA from '../../../../fixtures/ui-extended/search-input.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -33,8 +30,6 @@ interface Variant {
   wide?: boolean;
   width?: number;
   fields: Field[];
-  /** Draw a clear button beside the field. */
-  clear?: boolean;
   /** Filter these as the reader types. */
   items?: string[];
 }
@@ -64,16 +59,6 @@ function Live({ v, log, onChange }: { v: Variant; log: Log; onChange: Args['onCh
     />
   ));
 
-  if (v.clear) {
-    return (
-      <ButtonGroup>
-        {inputs}
-        <Button variant="outline" size="icon" aria-label="Clear search" disabled={!values[0]} onClick={() => set(0, '', 'clear')}>
-          <X />
-        </Button>
-      </ButtonGroup>
-    );
-  }
   if (v.items) {
     const query = values[0].toLowerCase();
     const found = v.items.filter((item) => item.toLowerCase().includes(query));
@@ -151,7 +136,6 @@ const meta = {
                     onChange: `setQuery${n}`,
                   });
                 })
-                .concat(v.clear ? ['<Button variant="outline" size="icon" aria-label="Clear search" onClick={() => setQuery("")}><X /></Button>'] : [])
                 .join('\n'),
             })),
           ),
@@ -188,12 +172,20 @@ export const SearchInputStory: Story = {
       await expect(cell.getByText('Banana')).toBeInTheDocument();
       await expect(cell.queryByText('Apple')).toBeNull();
     });
-    await step('Clear empties the field', async () => {
+    await step('The clear button empties the field', async () => {
       const clear = within(within(canvasElement).getByRole('group', { name: 'With clear button' }));
       await userEvent.click(clear.getByRole('button', { name: 'Clear search' }));
       await expect(args.onChange).toHaveBeenLastCalledWith('');
       await expect(clear.getByRole('textbox')).toHaveValue('');
-      await expect(clear.getByRole('list', { name: 'Events' })).toHaveTextContent('clear""');
+      // Empty, it offers nothing to clear.
+      await expect(clear.queryByRole('button', { name: 'Clear search' })).toBeNull();
+    });
+    await step('Escape clears too', async () => {
+      const field = cell.getByRole('textbox', { name: 'Search fruit' });
+      field.focus();
+      await userEvent.keyboard('{Escape}');
+      await expect(field).toHaveValue('');
+      await expect(cell.getByText('Apple')).toBeInTheDocument();
     });
   },
 };

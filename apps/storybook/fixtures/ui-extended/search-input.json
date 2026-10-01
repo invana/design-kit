@@ -19,7 +19,7 @@
     "fields": [{ "value": "", "inputSize": "lg", "placeholder": "Search everything" }]
   },
   { "caption": "Full width", "wide": true, "fields": [{ "value": "" }] },
-  { "caption": "With clear button", "clear": true, "fields": [{ "value": "carrier" }] },
+  { "caption": "With clear button", "fields": [{ "value": "carrier" }] },
   {
     "caption": "With filtering",
     "fields": [{ "value": "", "placeholder": "Search fruit" }],
