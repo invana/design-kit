@@ -119,10 +119,6 @@ export const Carousel: Story = {
     const slides = cell.getAllByRole('group').filter((g) => g.getAttribute('aria-roledescription') === 'slide');
     await expect(slides).toHaveLength(v.slides.length);
     const next = cell.getByRole('button', { name: 'Next slide' });
-    // Embla measures the slides laid out in a row; the Vitest browser run applies no
-    // Tailwind CSS, so there the slides stack, there is one snap and Next stays disabled.
-    // In Storybook the step below runs.
-    if (next.hasAttribute('disabled')) return;
     await step('Move to the next slide', async () => {
       await userEvent.click(next);
       await waitFor(() => expect(args.onSelect).toHaveBeenCalledWith(1));
