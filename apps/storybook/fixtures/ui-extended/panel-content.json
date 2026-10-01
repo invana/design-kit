@@ -1,0 +1,515 @@
+[
+  {
+    "caption": "Default — title, close, footer",
+    "height": 320,
+    "titleText": "Panel title",
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "footer": {
+      "buttons": [
+        {
+          "label": "Cancel",
+          "variant": "ghost"
+        },
+        {
+          "label": "Save"
+        }
+      ]
+    },
+    "body": {
+      "text": "Panel body content goes here. The body scrolls independently while the header and footer stay fixed."
+    }
+  },
+  {
+    "caption": "Header actions, with an overflow menu",
+    "height": 260,
+    "width": 380,
+    "titleText": "Results",
+    "actions": [
+      {
+        "name": "Refresh",
+        "icon": "refresh"
+      },
+      {
+        "name": "Pin panel",
+        "icon": "pin"
+      },
+      {
+        "name": "More options",
+        "icon": "more",
+        "menu": [
+          {
+            "id": "export",
+            "label": "Export as CSV"
+          },
+          {
+            "id": "copy",
+            "label": "Copy as JSON",
+            "shortcut": "⌘C"
+          },
+          {
+            "id": "clear",
+            "label": "Clear results",
+            "destructive": true,
+            "separatorBefore": true
+          }
+        ]
+      },
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "body": {
+      "text": "Each action is a nav item: it carries its own tooltip, hover ring and keyboard focus, and the close button is simply the last of them."
+    }
+  },
+  {
+    "caption": "Quiet header actions — shown on hover",
+    "height": 240,
+    "titleText": "Timeline",
+    "actionsOnHover": true,
+    "actions": [
+      {
+        "name": "Filter",
+        "icon": "filter"
+      },
+      {
+        "name": "More options",
+        "icon": "more",
+        "menu": [
+          {
+            "id": "collapse",
+            "label": "Collapse all"
+          },
+          {
+            "id": "settings",
+            "label": "Timeline settings…"
+          }
+        ]
+      }
+    ],
+    "body": {
+      "text": "At rest the header is just a title. The actions fade in when the pointer enters it."
+    }
+  },
+  {
+    "caption": "Custom close icon",
+    "height": 240,
+    "titleText": "Inspector",
+    "actions": [
+      {
+        "name": "Hide panel",
+        "icon": "hide"
+      }
+    ],
+    "body": {
+      "text": "The item's name is what the tooltip and assistive tech read, so the affordance says what it does rather than being named for its shape."
+    }
+  },
+  {
+    "caption": "Custom title — an icon and a count",
+    "height": 260,
+    "width": 380,
+    "title": {
+      "icon": "database",
+      "text": "Connections",
+      "count": "3"
+    },
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "body": {
+      "text": "The title node is rendered as-is — the panel forces no typography on it beyond the header's own alignment."
+    }
+  },
+  {
+    "caption": "Long title truncates",
+    "height": 200,
+    "narrow": true,
+    "titleText": "Customer lifetime value by acquisition cohort",
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "body": {
+      "text": "The close button holds its place at the right edge of the header."
+    }
+  },
+  {
+    "caption": "Without close — a docked panel",
+    "height": 240,
+    "titleText": "Outline",
+    "body": {
+      "text": "A docked panel has nowhere to close to, so it shows no close button."
+    }
+  },
+  {
+    "caption": "Without footer",
+    "height": 240,
+    "titleText": "Notes",
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "body": {
+      "text": "A panel without a footer. The body runs all the way to the bottom edge of the card."
+    }
+  },
+  {
+    "caption": "Scrolling body",
+    "height": 360,
+    "width": 380,
+    "titleText": "Activity",
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "footer": {
+      "note": "40 events",
+      "buttons": [
+        {
+          "label": "Clear",
+          "variant": "ghost"
+        }
+      ]
+    },
+    "body": {
+      "events": [
+        {
+          "when": "09:00",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "09:07",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "09:14",
+          "text": "Executed query"
+        },
+        {
+          "when": "09:21",
+          "text": "Cached result"
+        },
+        {
+          "when": "09:28",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "09:35",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "10:42",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "10:49",
+          "text": "Executed query"
+        },
+        {
+          "when": "10:56",
+          "text": "Cached result"
+        },
+        {
+          "when": "10:03",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "10:10",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "10:17",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "11:24",
+          "text": "Executed query"
+        },
+        {
+          "when": "11:31",
+          "text": "Cached result"
+        },
+        {
+          "when": "11:38",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "11:45",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "11:52",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "11:59",
+          "text": "Executed query"
+        },
+        {
+          "when": "12:06",
+          "text": "Cached result"
+        },
+        {
+          "when": "12:13",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "12:20",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "12:27",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "12:34",
+          "text": "Executed query"
+        },
+        {
+          "when": "12:41",
+          "text": "Cached result"
+        },
+        {
+          "when": "13:48",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "13:55",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "13:02",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "13:09",
+          "text": "Executed query"
+        },
+        {
+          "when": "13:16",
+          "text": "Cached result"
+        },
+        {
+          "when": "13:23",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "14:30",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "14:37",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "14:44",
+          "text": "Executed query"
+        },
+        {
+          "when": "14:51",
+          "text": "Cached result"
+        },
+        {
+          "when": "14:58",
+          "text": "Emitted metric"
+        },
+        {
+          "when": "14:05",
+          "text": "Fetched schema"
+        },
+        {
+          "when": "15:12",
+          "text": "Resolved dependency"
+        },
+        {
+          "when": "15:19",
+          "text": "Executed query"
+        },
+        {
+          "when": "15:26",
+          "text": "Cached result"
+        },
+        {
+          "when": "15:33",
+          "text": "Emitted metric"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Inspector panel",
+    "height": 380,
+    "narrow": true,
+    "title": {
+      "text": "orders_by_region",
+      "status": "live"
+    },
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "footer": {
+      "buttons": [
+        {
+          "label": "Open query",
+          "variant": "ghost"
+        }
+      ]
+    },
+    "body": {
+      "labelWidth": 84,
+      "properties": [
+        {
+          "label": "Type",
+          "value": "Materialised view"
+        },
+        {
+          "label": "Source",
+          "value": "warehouse.public.orders",
+          "mono": true
+        },
+        {
+          "label": "Rows",
+          "value": "1,284,913"
+        },
+        {
+          "label": "Refreshed",
+          "value": "12 minutes ago"
+        },
+        {
+          "label": "Owner",
+          "value": "data-platform"
+        },
+        {
+          "label": "Id",
+          "value": "mv_8f31c0a4",
+          "mono": true
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Stacked panels — each scrolls in its own track",
+    "height": 200,
+    "stack": [
+      {
+        "titleText": "Files",
+        "actions": [
+          {
+            "name": "Close panel",
+            "icon": "x"
+          }
+        ],
+        "body": {
+          "table": {
+            "columns": [
+              "file"
+            ],
+            "rows": [
+              [
+                "index.ts"
+              ],
+              [
+                "panel-content.tsx"
+              ],
+              [
+                "panel-stack.tsx"
+              ],
+              [
+                "toolbar.tsx"
+              ],
+              [
+                "tree-view.tsx"
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "titleText": "Problems",
+        "actions": [
+          {
+            "name": "Close panel",
+            "icon": "x"
+          }
+        ],
+        "body": {
+          "table": {
+            "columns": [
+              "problem",
+              "severity"
+            ],
+            "rows": [
+              [
+                "Unused import",
+                "warn"
+              ],
+              [
+                "Missing key prop",
+                "warn"
+              ],
+              [
+                "Unreachable branch",
+                "warn"
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "caption": "With a custom class — each region takes its own",
+    "height": 280,
+    "titleText": "Preview",
+    "actions": [
+      {
+        "name": "Close panel",
+        "icon": "x"
+      }
+    ],
+    "classes": {
+      "className": "rounded-none",
+      "headerClassName": "h-9 bg-muted/60 px-4",
+      "bodyClassName": "p-0",
+      "footerClassName": "justify-end gap-2 bg-muted/40 px-4 py-2"
+    },
+    "footer": {
+      "buttons": [
+        {
+          "label": "Reset",
+          "variant": "ghost"
+        },
+        {
+          "label": "Apply"
+        }
+      ]
+    },
+    "body": {
+      "sections": [
+        "Layout",
+        "Typography",
+        "Colour",
+        "Spacing"
+      ]
+    }
+  }
+]

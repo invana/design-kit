@@ -1,0 +1,50 @@
+[
+  {
+    "caption": "A title and a fact aside",
+    "width": 560,
+    "title": "Input · what opened this run",
+    "aside": "args after ${…} binding",
+    "properties": [
+      { "label": "trigger", "value": "session · message #214" },
+      { "label": "plan", "value": "market-brief v1 · reused" },
+      { "label": "budget", "value": "40k tokens · 5 lanes" }
+    ]
+  },
+  {
+    "caption": "A count aside, as a badge",
+    "width": 560,
+    "title": "Reported",
+    "badge": "47",
+    "properties": [
+      { "label": "unresolved isin", "value": "31" },
+      { "label": "bad quantity", "value": "12" },
+      { "label": "out of window", "value": "4" }
+    ]
+  },
+  {
+    "caption": "Flush — a table meets the border",
+    "width": 560,
+    "title": "Output · rows",
+    "aside": "1,880 rows · first 3",
+    "flush": true,
+    "table": {
+      "columns": ["supplier", "route", "exposure"],
+      "rows": [
+        ["Meridian Parts", "RED_SEA", "0.82"],
+        ["Kalyan Steel", "RED_SEA", "0.71"],
+        ["Onyx Logistics", "SUEZ", "0.44"]
+      ]
+    }
+  },
+  {
+    "caption": "Untitled — the box frames a strip of figures",
+    "width": 560,
+    "metrics": [
+      { "label": "Tasks", "value": "4 / 7", "caption": "running", "meter": 0.571 },
+      { "label": "Elapsed", "value": "12s", "caption": "no timeout yet" },
+      { "label": "Tokens", "value": "8.2k", "caption": "of 40k ceiling", "meter": 0.21 },
+      { "label": "Rows", "value": "1,880", "caption": "so far" },
+      { "label": "Failed", "value": "1", "caption": "execute", "captionTone": "error", "flagged": true }
+    ]
+  }
+]

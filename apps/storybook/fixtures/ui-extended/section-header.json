@@ -1,0 +1,21 @@
+[
+  {
+    "caption": "A count and an action",
+    "icon": "boxes",
+    "title": "Node types",
+    "count": 4,
+    "action": { "icon": "plus", "label": "Add node type" }
+  },
+  {
+    "caption": "A count that is a sentence",
+    "icon": "boxes",
+    "title": "Edge types",
+    "count": "6 shown · 1 hidden"
+  },
+  {
+    "caption": "Bare — no rule, no icon",
+    "title": "Selected",
+    "count": "Observation",
+    "bare": true
+  }
+]
