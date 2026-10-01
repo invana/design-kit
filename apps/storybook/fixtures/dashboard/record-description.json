@@ -1,0 +1,22 @@
+[
+  {
+    "caption": "Default",
+    "wide": true,
+    "crumbs": ["Models", "AirRoutes"],
+    "props": {
+      "description": "Airports, countries and continents, and the routes flown between them — the network every other model in this Graph is stitched onto.",
+      "details": [
+        { "label": "Validation", "value": "strict", "mono": true },
+        { "label": "Origin", "value": "starter" },
+        { "label": "Status", "value": "active" },
+        { "label": "Updated", "value": "27 Sep 2026, 11:40" }
+      ]
+    }
+  },
+  {
+    "caption": "Short, no details",
+    "wide": true,
+    "crumbs": ["Models", "Deals"],
+    "props": { "description": "Deals closed by the sales team." }
+  }
+]
