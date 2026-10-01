@@ -1,0 +1,16 @@
+[
+  {
+    "caption": "A clarification, read back",
+    "width": 520,
+    "panel": { "title": "Output · an exchange", "aside": "it recorded a question and an answer" },
+    "props": {
+      "asker": "the agent asks",
+      "question": "“Late by ship date, or by the date we promised the customer?”",
+      "why": "because parse_intent found two readings and was told not to guess",
+      "options": [{ "label": "by ship date" }, { "label": "by promise date", "chosen": true }],
+      "answerer": "ravi answers",
+      "answer": "by promise date",
+      "answerNote": "after 41.2s · the run resumed on round 2 with one reading"
+    }
+  }
+]

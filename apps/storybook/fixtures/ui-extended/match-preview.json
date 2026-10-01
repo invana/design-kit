@@ -1,0 +1,57 @@
+[
+  {
+    "caption": "A wildcard, and what it bites",
+    "width": 460,
+    "props": {
+      "pattern": "graph_data/model/*",
+      "matches": [
+        { "address": "graph_data/model/AirRoutes@1.0.1", "matched": true },
+        { "address": "graph_data/model/Deals@1.0.0", "matched": true },
+        { "address": "graph_data/model/NewsArticles@1.0.1", "matched": true },
+        { "address": "graph_data/model/Twitter@1.0.1", "matched": true },
+        { "address": "graph_data/stitch/tweet_article@about", "matched": false },
+        { "address": "graph_data/stitch/tweet_article@links_to", "matched": false }
+      ]
+    }
+  },
+  {
+    "caption": "The version written out — the near-misses greyed",
+    "width": 460,
+    "props": {
+      "pattern": "graph_data/model/Deals@1.0.0",
+      "matches": [
+        { "address": "graph_data/model/AirRoutes@1.0.1", "matched": false },
+        { "address": "graph_data/model/Deals@1.0.0", "matched": true },
+        { "address": "graph_data/model/NewsArticles@1.0.1", "matched": false },
+        { "address": "graph_data/model/Twitter@1.0.1", "matched": false },
+        { "address": "graph_data/stitch/tweet_article@about", "matched": false },
+        { "address": "graph_data/stitch/tweet_article@links_to", "matched": false }
+      ]
+    }
+  },
+  {
+    "caption": "Nothing matched",
+    "width": 460,
+    "props": {
+      "pattern": "graph_data/model/Deal",
+      "matches": [
+        { "address": "graph_data/model/AirRoutes@1.0.1", "matched": false },
+        { "address": "graph_data/model/Deals@1.0.0", "matched": false },
+        { "address": "graph_data/model/NewsArticles@1.0.1", "matched": false },
+        { "address": "graph_data/model/Twitter@1.0.1", "matched": false },
+        { "address": "graph_data/stitch/tweet_article@about", "matched": false },
+        { "address": "graph_data/stitch/tweet_article@links_to", "matched": false }
+      ]
+    }
+  },
+  {
+    "caption": "A layer with nothing in it",
+    "width": 460,
+    "props": { "pattern": "third_party/**", "matches": [] }
+  },
+  {
+    "caption": "Resolving",
+    "width": 460,
+    "props": { "pattern": "graph_data/**", "loading": true }
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "caption": "With nested children",
+    "width": 240,
+    "item": {
+      "id": "settings",
+      "label": "Settings",
+      "icon": "settings",
+      "shortcut": "⌘,",
+      "children": [
+        { "id": "account", "label": "Account", "icon": "users", "shortcut": "⌘A" },
+        { "id": "security", "label": "Security", "icon": "shield", "shortcut": "⌘L" },
+        { "id": "notifications", "label": "Notifications", "icon": "bell" }
+      ]
+    }
+  },
+  {
+    "caption": "A plain row",
+    "width": 240,
+    "item": { "id": "notifications", "label": "Notifications", "icon": "bell" }
+  }
+]

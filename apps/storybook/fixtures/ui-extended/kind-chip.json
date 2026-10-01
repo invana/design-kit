@@ -1,0 +1,14 @@
+[
+  {
+    "caption": "Five kinds, and one the kit has never heard of",
+    "width": 440,
+    "chips": [
+      { "kind": "ask", "note": "a question answered against the graph" },
+      { "kind": "import", "note": "one dataset loaded into a model" },
+      { "kind": "bulk", "note": "several imports under one run" },
+      { "kind": "stitch", "note": "two models bound under a shared ontology" },
+      { "kind": "enrich", "note": "a third party asked, under a guardrail" },
+      { "kind": "simulate", "note": "a kind the kit has never heard of — and still draws" }
+    ]
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "caption": "Default",
+    "width": 420,
+    "summary": "8 datasets",
+    "chips": [{ "label": "status" }, { "label": "origin", "value": "folder" }]
+  },
+  {
+    "caption": "Closable",
+    "width": 520,
+    "closable": true,
+    "chips": [
+      { "label": "kind", "value": "import · bulk" },
+      { "label": "since", "value": "today" },
+      { "label": "agent" },
+      { "label": "status" }
+    ]
+  },
+  {
+    "caption": "Multi-filter chips",
+    "width": 520,
+    "summary": "12 of 40 runs",
+    "multi": [
+      { "label": "kind", "options": ["ask", "import", "bulk", "stitch", "enrich"], "value": ["import", "bulk"] },
+      { "label": "agent", "options": ["Analyst", "Loader", "Modeller", "Reviewer"], "value": [] },
+      {
+        "label": "since",
+        "multiple": false,
+        "options": [
+          { "value": "hour", "label": "last hour" },
+          { "value": "today", "label": "today" },
+          { "value": "week", "label": "this week" }
+        ],
+        "value": ["today"]
+      }
+    ]
+  },
+  {
+    "caption": "Seamless, over a table",
+    "width": 560,
+    "seamless": true,
+    "search": "Search items",
+    "multi": [{ "label": "kind", "options": ["report", "dataset", "dashboard"], "value": [] }],
+    "rows": [
+      { "title": "Quarterly revenue", "kind": "report" },
+      { "title": "Churn by cohort", "kind": "dataset" },
+      { "title": "Pipeline health", "kind": "dashboard" }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "caption": "No lens set",
+    "chips": [{ "pickable": true, "note": "the default, and a real state" }]
+  },
+  {
+    "caption": "Picked",
+    "chips": [{ "lens": { "name": "EU · H1 2026" }, "pickable": true, "note": "opens the picker" }]
+  },
+  {
+    "caption": "No picker — a statement",
+    "chips": [{ "lens": { "name": "Price-blind" }, "note": "not pressable" }]
+  }
+]

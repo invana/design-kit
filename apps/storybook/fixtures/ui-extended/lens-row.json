@@ -1,0 +1,30 @@
+[
+  {
+    "caption": "The Worlds drawer",
+    "width": 520,
+    "selected": "EU · H1 2026",
+    "rows": [
+      { "name": "Everything", "usage": { "runs": 128, "lastUsed": "2h ago" } },
+      {
+        "name": "EU · H1 2026",
+        "narrows": [{ "kind": "allow", "count": 4 }, { "kind": "sliced" }, { "kind": "closes", "layers": ["graph_data"] }],
+        "usage": { "runs": 34, "lastUsed": "2h ago" }
+      },
+      {
+        "name": "Price-blind",
+        "narrows": [{ "kind": "allow", "count": 1 }, { "kind": "excludes", "properties": ["contract_value", "revenue"] }],
+        "usage": { "runs": 7, "lastUsed": "6d ago" }
+      },
+      {
+        "name": "Nothing leaves",
+        "narrows": [
+          { "kind": "allow", "count": 1 },
+          { "kind": "deny", "count": 1 },
+          { "kind": "closes", "layers": ["llm"] },
+          { "kind": "casts", "roles": ["decide", "judge"] }
+        ],
+        "usage": { "runs": 0 }
+      }
+    ]
+  }
+]

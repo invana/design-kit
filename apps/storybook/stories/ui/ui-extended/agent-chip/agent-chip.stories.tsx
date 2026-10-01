@@ -12,7 +12,7 @@ const ICONS = { bot: Bot, user: User };
 const ICON_NAMES = { bot: 'Bot', user: 'User' };
 
 interface Chip {
-  props: Pick<AgentChipProps, 'name' | 'kind' | 'inactive'>;
+  props: Pick<AgentChipProps, 'kind' | 'inactive'> & { name: string };
   icon: keyof typeof ICONS;
   note: string;
 }

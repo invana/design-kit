@@ -1,0 +1,739 @@
+{
+  "runs": {
+    "attended": {
+      "bands": [
+        {
+          "layer": "human",
+          "note": "3 rounds · 6m 01s",
+          "parts": [{ "id": "clarify", "label": "human/form/clarify", "note": "lens: max_rounds 3" }]
+        },
+        { "layer": "agent", "spine": true },
+        { "layer": "cache", "note": "nothing declared" },
+        {
+          "layer": "llm",
+          "note": "2 roles · 57s",
+          "parts": [
+            { "id": "decide", "label": "role: decide" },
+            { "id": "extract", "label": "role: extract", "note": "reads each reply" }
+          ]
+        },
+        { "layer": "graph_data", "note": "1 · 42s", "parts": [{ "id": "orders", "label": "model/Orders@v2" }] },
+        {
+          "layer": "third_party",
+          "note": "1 · 12s",
+          "parts": [{ "id": "email", "label": "third_party/app/email", "note": "egress: the note" }]
+        }
+      ],
+      "items": [
+        { "id": "open", "label": "open", "layer": "agent", "start": 0, "end": 3000, "state": "out" },
+        {
+          "id": "plan",
+          "label": "plan",
+          "layer": "llm",
+          "part": "decide",
+          "start": 3000,
+          "end": 25000,
+          "state": "out",
+          "note": "decide"
+        },
+        {
+          "id": "fetch_orders",
+          "label": "fetch",
+          "layer": "graph_data",
+          "part": "orders",
+          "start": 25000,
+          "end": 55000,
+          "state": "in",
+          "note": "late"
+        },
+        {
+          "id": "ask_1",
+          "label": "ask",
+          "layer": "agent",
+          "start": 60000,
+          "end": 62000,
+          "state": "out",
+          "note": "round 1"
+        },
+        {
+          "id": "clarify_1",
+          "label": "clarify",
+          "layer": "human",
+          "part": "clarify",
+          "start": 62000,
+          "end": 215000,
+          "state": "in",
+          "note": "2m 33s waited"
+        },
+        {
+          "id": "read_1",
+          "label": "read",
+          "layer": "llm",
+          "part": "extract",
+          "start": 215000,
+          "end": 222000,
+          "state": "out",
+          "note": "vague"
+        },
+        {
+          "id": "ask_2",
+          "label": "ask",
+          "layer": "agent",
+          "start": 223000,
+          "end": 225000,
+          "state": "out",
+          "note": "round 2"
+        },
+        {
+          "id": "clarify_2",
+          "label": "clarify",
+          "layer": "human",
+          "part": "clarify",
+          "start": 225000,
+          "end": 378000,
+          "state": "in",
+          "note": "2m 33s waited"
+        },
+        {
+          "id": "read_2",
+          "label": "read",
+          "layer": "llm",
+          "part": "extract",
+          "start": 378000,
+          "end": 385000,
+          "state": "out",
+          "note": "2 more"
+        },
+        {
+          "id": "widen_slice",
+          "label": "widen",
+          "layer": "graph_data",
+          "part": "orders",
+          "start": 385000,
+          "end": 397000,
+          "state": "in",
+          "note": "+2"
+        },
+        {
+          "id": "ask_3",
+          "label": "ask",
+          "layer": "agent",
+          "start": 398000,
+          "end": 400000,
+          "state": "out",
+          "note": "round 3"
+        },
+        {
+          "id": "clarify_3",
+          "label": "clarify",
+          "layer": "human",
+          "part": "clarify",
+          "start": 400000,
+          "end": 455000,
+          "state": "in",
+          "note": "55s waited"
+        },
+        {
+          "id": "read_3",
+          "label": "read",
+          "layer": "llm",
+          "part": "extract",
+          "start": 455000,
+          "end": 462000,
+          "state": "out",
+          "note": "narrow"
+        },
+        {
+          "id": "clarify_4",
+          "label": "clarify",
+          "layer": "human",
+          "part": "clarify",
+          "start": 515000,
+          "end": 517000,
+          "state": "refused",
+          "note": "round 4",
+          "ruleMatched": "human/** · max_rounds 3"
+        },
+        {
+          "id": "decide",
+          "label": "decide",
+          "layer": "llm",
+          "part": "decide",
+          "start": 518000,
+          "end": 532000,
+          "state": "out",
+          "note": "anyway"
+        },
+        {
+          "id": "send",
+          "label": "send",
+          "layer": "third_party",
+          "part": "email",
+          "start": 533000,
+          "end": 545000,
+          "state": "out",
+          "note": "note"
+        },
+        { "id": "answer", "label": "answer", "layer": "agent", "start": 546000, "end": 549000, "state": "out" }
+      ],
+      "brackets": [
+        { "id": "r1", "start": 60000, "end": 222000, "label": "round 1" },
+        { "id": "r2", "start": 223000, "end": 385000, "label": "round 2" },
+        { "id": "r3", "start": 398000, "end": 462000, "label": "round 3" }
+      ]
+    },
+    "unattended": {
+      "bands": [
+        {
+          "layer": "human",
+          "note": "0 rounds",
+          "parts": [{ "id": "clarify", "label": "human/form/clarify", "note": "lens: may_ask false" }]
+        },
+        { "layer": "agent", "spine": true },
+        { "layer": "cache", "note": "nothing declared" },
+        {
+          "layer": "llm",
+          "note": "1 role · 16s",
+          "parts": [
+            { "id": "decide", "label": "role: decide" },
+            { "id": "extract", "label": "role: extract", "note": "never reached" }
+          ]
+        },
+        { "layer": "graph_data", "note": "1 · 26s", "parts": [{ "id": "orders", "label": "model/Orders@v2" }] },
+        {
+          "layer": "third_party",
+          "note": "1 · none",
+          "parts": [{ "id": "email", "label": "third_party/app/email", "note": "never reached" }]
+        }
+      ],
+      "items": [
+        { "id": "open", "label": "open", "layer": "agent", "start": 0, "end": 600, "state": "out" },
+        {
+          "id": "plan",
+          "label": "plan",
+          "layer": "llm",
+          "part": "decide",
+          "start": 600,
+          "end": 17000,
+          "state": "out",
+          "note": "decide"
+        },
+        {
+          "id": "fetch_orders",
+          "label": "fetch",
+          "layer": "graph_data",
+          "part": "orders",
+          "start": 17000,
+          "end": 43000,
+          "state": "in",
+          "note": "late"
+        },
+        {
+          "id": "clarify_1",
+          "label": "clarify",
+          "layer": "human",
+          "part": "clarify",
+          "start": 43000,
+          "end": 43400,
+          "state": "refused",
+          "note": "round 1",
+          "ruleMatched": "human/** · may_ask false"
+        },
+        {
+          "id": "answer",
+          "label": "answer",
+          "layer": "agent",
+          "start": 44000,
+          "end": 46500,
+          "state": "out",
+          "note": "no ask"
+        }
+      ]
+    }
+  },
+  "variants": [
+    {
+      "caption": "Declared — a plan in six layers",
+      "wide": true,
+      "props": {
+        "bands": [
+          { "layer": "human", "note": "declared · 1" },
+          { "layer": "agent", "spine": true },
+          { "layer": "cache", "note": "nothing declared" },
+          {
+            "layer": "llm",
+            "note": "2 roles",
+            "parts": [
+              { "id": "decide", "label": "role: decide", "note": "a caller may re-cast it" },
+              { "id": "extract", "label": "role: extract" }
+            ]
+          },
+          {
+            "layer": "graph_data",
+            "note": "1 model",
+            "parts": [{ "id": "orders", "label": "model/Orders@v2", "note": "caller supplies the slice" }]
+          },
+          {
+            "layer": "third_party",
+            "note": "1 · a boundary crossing",
+            "parts": [{ "id": "email", "label": "third_party/app/email", "note": "egress: the note" }]
+          }
+        ],
+        "items": [
+          {
+            "id": "fetch_orders",
+            "label": "fetch_orders",
+            "layer": "graph_data",
+            "part": "orders",
+            "start": 1,
+            "end": 2,
+            "note": "${supplier_id}"
+          },
+          {
+            "id": "rank_late",
+            "label": "rank_late",
+            "layer": "llm",
+            "part": "decide",
+            "start": 2,
+            "end": 3,
+            "note": "decide"
+          },
+          {
+            "id": "draft_note",
+            "label": "draft_note",
+            "layer": "llm",
+            "part": "extract",
+            "start": 3,
+            "end": 4,
+            "note": "extract"
+          },
+          { "id": "send", "label": "send", "layer": "third_party", "part": "email", "start": 4, "end": 5 },
+          { "id": "await_reply", "label": "await_reply", "layer": "human", "start": 5, "end": 6, "note": "form: human" }
+        ],
+        "scale": "seq",
+        "selectedItem": "send"
+      }
+    },
+    {
+      "caption": "Touched — one run, on the wall clock",
+      "wide": true,
+      "props": {
+        "bands": [
+          { "layer": "human", "note": "never asked" },
+          { "layer": "agent", "spine": true },
+          { "layer": "cache", "note": "1 hit", "parts": [{ "id": "result", "label": "cache/result/*" }] },
+          { "layer": "llm", "note": "2 calls", "parts": [{ "id": "local", "label": "llm/ollama-local/llama-3.1-8b" }] },
+          {
+            "layer": "graph_data",
+            "note": "1 read · 1 refused",
+            "parts": [
+              { "id": "deals", "label": "graph_data/model/Deals@1.0.0" },
+              { "id": "stitch", "label": "graph_data/stitch/tweet_article@about" }
+            ]
+          },
+          {
+            "layer": "third_party",
+            "note": "refused",
+            "parts": [{ "id": "clearbit", "label": "third_party/api/clearbit.com" }]
+          }
+        ],
+        "items": [
+          { "id": "plan", "label": "plan", "layer": "agent", "start": 0, "end": 900, "state": "out" },
+          {
+            "id": "plan-llm",
+            "label": "plan",
+            "layer": "llm",
+            "part": "local",
+            "start": 140,
+            "end": 880,
+            "state": "out"
+          },
+          {
+            "id": "fetch",
+            "label": "fetch",
+            "layer": "graph_data",
+            "part": "deals",
+            "start": 900,
+            "end": 2400,
+            "state": "in"
+          },
+          {
+            "id": "fetch-cache",
+            "label": "fetch",
+            "layer": "cache",
+            "part": "result",
+            "start": 900,
+            "end": 1100,
+            "state": "in"
+          },
+          {
+            "id": "link",
+            "label": "link",
+            "layer": "graph_data",
+            "part": "stitch",
+            "start": 2400,
+            "end": 2600,
+            "state": "refused",
+            "ruleMatched": "graph_data/stitch/*"
+          },
+          {
+            "id": "enrich",
+            "label": "enrich",
+            "layer": "third_party",
+            "part": "clearbit",
+            "start": 2600,
+            "end": 2800,
+            "state": "refused",
+            "ruleMatched": "third_party/**"
+          },
+          {
+            "id": "decide",
+            "label": "decide",
+            "layer": "llm",
+            "part": "local",
+            "start": 2800,
+            "end": 4600,
+            "state": "out"
+          },
+          { "id": "decide-human", "label": "decide", "layer": "human", "start": 4600, "end": 4800, "state": "skipped" },
+          { "id": "answer", "label": "answer", "layer": "agent", "start": 4600, "end": 4900, "state": "out" }
+        ],
+        "scale": "elapsed",
+        "selectedItem": "link"
+      }
+    },
+    {
+      "caption": "Collapsed — every band shut",
+      "wide": true,
+      "props": {
+        "bands": [
+          {
+            "layer": "human",
+            "note": "1 · on a failed check",
+            "parts": [{ "id": "triage", "label": "human/form/triage", "note": "a person decides" }]
+          },
+          { "layer": "agent", "spine": true },
+          { "layer": "cache", "note": "1", "parts": [{ "id": "manifest", "label": "cache/manifest/*" }] },
+          {
+            "layer": "llm",
+            "note": "2 roles",
+            "parts": [
+              { "id": "decide", "label": "role: decide" },
+              { "id": "extract", "label": "role: extract", "note": "reads the rejects" }
+            ]
+          },
+          {
+            "layer": "graph_data",
+            "note": "4 models",
+            "parts": [
+              { "id": "orders", "label": "model/Orders@v2" },
+              { "id": "lines", "label": "model/OrderLines@v2" },
+              { "id": "suppliers", "label": "model/Suppliers@v1" },
+              { "id": "stitch", "label": "stitch/order_supplier@placed" }
+            ]
+          },
+          { "layer": "third_party", "note": "nothing declared" }
+        ],
+        "items": [
+          {
+            "id": "read_manifest",
+            "label": "read_manifest",
+            "layer": "cache",
+            "part": "manifest",
+            "start": 1,
+            "end": 2
+          },
+          {
+            "id": "load_orders",
+            "label": "load_orders",
+            "layer": "graph_data",
+            "part": "orders",
+            "start": 2,
+            "end": 3
+          },
+          { "id": "load_lines", "label": "load_lines", "layer": "graph_data", "part": "lines", "start": 3, "end": 4 },
+          {
+            "id": "load_suppliers",
+            "label": "load_suppliers",
+            "layer": "graph_data",
+            "part": "suppliers",
+            "start": 4,
+            "end": 5
+          },
+          {
+            "id": "stitch_placed",
+            "label": "stitch_placed",
+            "layer": "graph_data",
+            "part": "stitch",
+            "start": 5,
+            "end": 6
+          },
+          { "id": "check_counts", "label": "check_counts", "layer": "llm", "part": "decide", "start": 6, "end": 7 },
+          { "id": "read_rejects", "label": "read_rejects", "layer": "llm", "part": "extract", "start": 7, "end": 8 },
+          {
+            "id": "triage",
+            "label": "triage",
+            "layer": "human",
+            "part": "triage",
+            "start": 8,
+            "end": 9,
+            "note": "only on a failed check"
+          }
+        ],
+        "scale": "seq",
+        "defaultCollapsed": ["graph_data", "llm", "cache", "human"]
+      }
+    },
+    {
+      "caption": "Gated",
+      "wide": true,
+      "selectable": false,
+      "props": {
+        "bands": [
+          { "layer": "human", "note": "0 tasks · the gates are not tasks" },
+          { "layer": "agent", "spine": true },
+          { "layer": "cache", "note": "nothing declared" },
+          {
+            "layer": "llm",
+            "note": "1 role",
+            "parts": [{ "id": "decide", "label": "role: decide", "note": "it drafts the payment" }]
+          },
+          {
+            "layer": "graph_data",
+            "note": "1 read · 1 write",
+            "parts": [
+              { "id": "invoice", "label": "model/Invoice@v2", "note": "the invoice, and its terms" },
+              { "id": "settlement", "label": "model/Settlement@v1", "note": "written only after the money moved" }
+            ]
+          },
+          {
+            "layer": "third_party",
+            "note": "2 · both leave the graph",
+            "parts": [
+              { "id": "bank", "label": "third_party/bank/payments", "note": "egress: amount + IBAN" },
+              { "id": "email", "label": "third_party/app/email", "note": "egress: a note" }
+            ]
+          }
+        ],
+        "items": [
+          {
+            "id": "load_invoice",
+            "label": "load_invoice",
+            "layer": "graph_data",
+            "part": "invoice",
+            "start": 1,
+            "end": 2,
+            "note": "read"
+          },
+          {
+            "id": "draft_payment",
+            "label": "draft_payment",
+            "layer": "llm",
+            "part": "decide",
+            "start": 2,
+            "end": 3,
+            "note": "decide"
+          },
+          {
+            "id": "send_payment",
+            "label": "send_payment",
+            "layer": "third_party",
+            "part": "bank",
+            "start": 3,
+            "end": 4,
+            "note": "egress · money"
+          },
+          {
+            "id": "record_settlement",
+            "label": "record_settlement",
+            "layer": "graph_data",
+            "part": "settlement",
+            "start": 4,
+            "end": 5,
+            "note": "write"
+          },
+          {
+            "id": "notify_supplier",
+            "label": "notify_supplier",
+            "layer": "third_party",
+            "part": "email",
+            "start": 5,
+            "end": 6,
+            "note": "egress · text"
+          }
+        ],
+        "seams": [
+          {
+            "id": "envelope",
+            "at": 2,
+            "label": "if: envelope",
+            "conditional": true,
+            "note": "cost > threshold · not on the plan"
+          },
+          {
+            "id": "approval",
+            "at": 3,
+            "label": "approval · before dispatch",
+            "note": "nothing spent · finance-approvers · 4h"
+          },
+          {
+            "id": "budget",
+            "label": "budget exhausted · raised by the runtime",
+            "note": "any dispatch · the one pause with no deadline"
+          }
+        ],
+        "scale": "seq",
+        "domain": [1, 6]
+      }
+    },
+    {
+      "caption": "Run execution",
+      "wide": true,
+      "run": "attended",
+      "props": { "scale": "elapsed", "selectedItem": "clarify_4" }
+    },
+    {
+      "caption": "Where the time went",
+      "wide": true,
+      "run": "attended",
+      "props": { "scale": "elapsed", "defaultCollapsed": ["human", "llm", "graph_data", "third_party"] }
+    },
+    {
+      "caption": "Unattended",
+      "wide": true,
+      "run": "unattended",
+      "props": { "scale": "elapsed", "selectedItem": "clarify_1" }
+    },
+    {
+      "caption": "Forecast against actual",
+      "wide": true,
+      "selectable": false,
+      "panel": { "title": "Forecast against actual", "aside": "compare: p50 · 1,204 runs" },
+      "legend": [
+        { "kind": "line", "color": "var(--color-data-1)", "label": "the bar is what this run did" },
+        { "kind": "dashed", "label": "p50 — the median of 1,204 runs, on the run's own axis" },
+        { "kind": "rule", "label": "a dashed gate has nothing to forecast" }
+      ],
+      "props": {
+        "bands": [
+          { "layer": "human", "note": "1 asked · 1 approved" },
+          { "layer": "agent", "note": "2 checks", "spine": true },
+          { "layer": "llm", "note": "3 calls, all inside p95" },
+          { "layer": "graph_data", "note": "2 reads" },
+          { "layer": "third_party", "note": "refused — never priced" }
+        ],
+        "items": [
+          {
+            "id": "parse-1",
+            "label": "parse_intent",
+            "layer": "llm",
+            "start": 0,
+            "end": 900,
+            "state": "in",
+            "forecast": { "p50": 800 }
+          },
+          {
+            "id": "ask",
+            "label": "ask_user",
+            "layer": "human",
+            "start": 900,
+            "end": 42100,
+            "state": "in",
+            "forecast": { "p50": 26000, "note": "+58%" }
+          },
+          {
+            "id": "parse-2",
+            "label": "parse_intent",
+            "layer": "llm",
+            "start": 42100,
+            "end": 42800,
+            "state": "in",
+            "forecast": { "p50": 800, "note": "−12%" }
+          },
+          {
+            "id": "resolve",
+            "label": "resolve_schema",
+            "layer": "graph_data",
+            "start": 42800,
+            "end": 43000,
+            "state": "in",
+            "forecast": { "p50": 300, "note": "−33%" }
+          },
+          {
+            "id": "build",
+            "label": "build_query",
+            "layer": "llm",
+            "start": 43000,
+            "end": 44400,
+            "state": "in",
+            "forecast": { "p50": 1100, "note": "+27%" }
+          },
+          {
+            "id": "validate",
+            "label": "validate_query",
+            "layer": "agent",
+            "start": 44400,
+            "end": 44500,
+            "state": "in"
+          },
+          {
+            "id": "execute",
+            "label": "execute_query",
+            "layer": "graph_data",
+            "start": 168000,
+            "end": 170100,
+            "state": "in",
+            "forecast": { "p50": 1900, "note": "+11%" }
+          },
+          {
+            "id": "clearbit",
+            "label": "api/clearbit.com",
+            "layer": "third_party",
+            "start": 44500,
+            "end": 44600,
+            "state": "refused",
+            "ruleMatched": "third_party/api/clearbit.com/**"
+          },
+          {
+            "id": "summarise",
+            "label": "summarise",
+            "layer": "llm",
+            "start": 170100,
+            "end": 171000,
+            "state": "in",
+            "forecast": { "p50": 900 }
+          }
+        ],
+        "seams": [
+          {
+            "id": "approval",
+            "at": 44600,
+            "label": "approval — no estimate exists",
+            "note": "2m 04s actual · 72% of the run",
+            "edge": "before",
+            "noEstimate": true
+          }
+        ],
+        "scale": "elapsed",
+        "collapsible": false,
+        "minTrackWidth": 88
+      }
+    },
+    {
+      "caption": "Fit or scroll",
+      "wide": true,
+      "selectable": false,
+      "run": "attended",
+      "panel": { "title": "What each step engaged", "aside": "8 touches" },
+      "fitToggle": true,
+      "props": { "scale": "elapsed" }
+    },
+    {
+      "caption": "Live — a run arriving",
+      "wide": true,
+      "run": "attended",
+      "live": true,
+      "props": { "scale": "elapsed", "domain": [0, 549000] }
+    }
+  ]
+}
