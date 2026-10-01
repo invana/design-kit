@@ -360,7 +360,7 @@ function BlockView({ block, send }: { block: Block; send?: Send }) {
         <AlertDescription>{block.note.text}</AlertDescription>
       </Alert>
     );
-  return <MetricTile variant="figure" {...block.metric} />;
+  return <MetricTile variant="hero" {...block.metric} />;
 }
 
 /** A body, block after block. */
@@ -440,7 +440,7 @@ export function contentSource(blocks: Block[], indent = ''): string {
       ].filter(Boolean);
     const m = b.metric;
     return [
-      `<MetricTile variant="figure" label="${m.label}" value="${m.value}"${m.caption ? ` caption="${m.caption}"` : ''}${m.captionTone ? ` captionTone="${m.captionTone}"` : ''}${m.meter !== undefined ? ` meter={${m.meter}}` : ''} />`,
+      `<MetricTile variant="hero" label="${m.label}" value="${m.value}"${m.caption ? ` caption="${m.caption}"` : ''}${m.captionTone ? ` captionTone="${m.captionTone}"` : ''}${m.meter !== undefined ? ` meter={${m.meter}}` : ''} />`,
     ];
   });
   return lines.map((l) => indent + l).join('\n');
