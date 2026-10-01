@@ -1,0 +1,82 @@
+[
+  {
+    "caption": "By digest",
+    "turn": { "id": "f1", "label": "files" },
+    "spec": {
+      "files": [
+        { "name": "margin-bridge-q3.xlsx", "size": "48 KB", "digest": "a91f03c2" },
+        { "name": "rejected-rows.csv", "size": "6 KB", "digest": "77be1d0e" },
+        { "name": "chart-freight.png", "size": "112 KB", "digest": "c0d45a9b" }
+      ]
+    }
+  },
+  {
+    "caption": "Icons + download",
+    "turn": { "id": "f2", "label": "files", "aside": "3 files · 166 KB" },
+    "spec": {
+      "files": [
+        { "name": "margin-bridge-q3.xlsx", "size": "48 KB", "digest": "a91f03c2" },
+        { "name": "rejected-rows.csv", "size": "6 KB", "digest": "77be1d0e" },
+        { "name": "chart-freight.png", "size": "112 KB", "digest": "c0d45a9b" }
+      ],
+      "download": true
+    }
+  },
+  {
+    "caption": "One file",
+    "turn": { "id": "f3", "label": "files" },
+    "spec": {
+      "files": [{ "name": "margin-bridge-q3.xlsx", "note": "48 KB · kept for 7 days" }],
+      "download": true
+    }
+  },
+  {
+    "caption": "Rejected rows",
+    "turn": { "id": "f4", "label": "files" },
+    "spec": {
+      "files": [
+        {
+          "name": "rejected-rows.csv",
+          "note": "412 rows · missing store code",
+          "status": { "label": "rejected", "tone": "warn" }
+        }
+      ],
+      "caption": "Left out of every figure above"
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "f5", "label": "files", "state": "running" },
+    "spec": { "files": [], "status": "loading" }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "f6", "label": "files" },
+    "spec": { "files": [], "status": "empty", "emptyText": "No files were produced. The answer is above." }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "f7", "label": "files", "aside": "3 · 166 KB" },
+    "spec": {
+      "files": [
+        { "name": "margin-bridge-q3.xlsx", "size": "48 KB" },
+        { "name": "rejected-rows.csv", "size": "6 KB" },
+        { "name": "chart-freight.png", "size": "112 KB" }
+      ],
+      "caption": "Digests in the file details"
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "label": "answer" },
+    "spec": {
+      "files": [
+        { "name": "margin-bridge-q3.xlsx", "size": "48 KB", "digest": "9f3a2c1e" },
+        { "name": "store-margins.csv", "size": "112 KB", "digest": "4b7e90d2" },
+        { "name": "method.md", "size": "6 KB", "digest": "c1d84f07" }
+      ],
+      "download": true
+    }
+  }
+]

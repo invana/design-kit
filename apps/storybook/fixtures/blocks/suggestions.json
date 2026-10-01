@@ -1,0 +1,46 @@
+[
+  {
+    "caption": "Chips",
+    "turn": { "id": "chips", "stage": "explain" },
+    "spec": {
+      "items": ["Break freight down by carrier", "Compare with Q3 last year", "Alert me if it gets worse"]
+    }
+  },
+  {
+    "caption": "Stacked · for narrow widths",
+    "turn": { "id": "stacked", "stage": "explain" },
+    "spec": {
+      "items": ["Break freight down by carrier", "Compare with Q3 last year", "Alert me if it gets worse"],
+      "layout": "stack"
+    }
+  },
+  {
+    "caption": "Grouped",
+    "turn": { "id": "grouped", "stage": "explain" },
+    "spec": {
+      "groups": [
+        {
+          "label": "Go deeper",
+          "items": ["Break freight down by carrier", "Which stores drove it?"]
+        },
+        { "label": "Act", "items": ["Alert me if it gets worse", "Send this to the North team"] }
+      ]
+    }
+  },
+  {
+    "caption": "One already sent",
+    "turn": { "id": "sent", "stage": "explain" },
+    "state": "answered",
+    "value": "Break freight down by carrier",
+    "spec": {
+      "items": ["Break freight down by carrier", "Compare with Q3 last year", "Alert me if it gets worse"]
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "stage": "scope" },
+    "spec": {
+      "items": ["Break freight down by carrier", "Which stores drove it?", "Alert me if it gets worse"]
+    }
+  }
+]

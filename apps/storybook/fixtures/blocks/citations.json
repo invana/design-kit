@@ -1,0 +1,87 @@
+[
+  {
+    "caption": "Sources with counts",
+    "turn": { "id": "counts", "label": "sources" },
+    "spec": {
+      "sources": [
+        { "label": "General ledger, Q3", "count": 12408 },
+        { "label": "Carrier invoices", "count": 3911 },
+        { "label": "Store master", "count": 214 }
+      ]
+    }
+  },
+  {
+    "caption": "Type + freshness",
+    "turn": { "id": "freshness", "label": "sources", "aside": "16,533 records" },
+    "spec": {
+      "sources": [
+        { "label": "General ledger, Q3", "count": 12408, "detail": "table · loaded 28 Sep 06:00" },
+        { "label": "Carrier invoices", "count": 3911, "detail": "file · uploaded 26 Sep" },
+        { "label": "Store master", "count": 214, "detail": "table · loaded 1 Sep" }
+      ]
+    }
+  },
+  {
+    "caption": "Linked to a marker",
+    "turn": {
+      "id": "linked",
+      "label": "prose",
+      "blocks": [
+        {
+          "kind": "narrative",
+          "text": "Freight per order rose 22% after the July carrier change.[2]",
+          "active": 2
+        },
+        {
+          "kind": "citations",
+          "sources": [
+            { "label": "General ledger, Q3", "count": 12408 },
+            { "label": "Carrier invoices", "count": 3911 },
+            { "label": "Store master", "count": 214 }
+          ],
+          "active": 2
+        }
+      ]
+    },
+    "spec": {
+      "sources": [
+        { "label": "General ledger, Q3", "count": 12408 },
+        { "label": "Carrier invoices", "count": 3911 },
+        { "label": "Store master", "count": 214 }
+      ],
+      "active": 2
+    }
+  },
+  {
+    "caption": "Folded",
+    "turn": { "id": "folded", "label": "sources" },
+    "spec": {
+      "sources": [
+        { "label": "General ledger, Q3", "count": 12408 },
+        { "label": "Carrier invoices", "count": 3911 },
+        { "label": "Store master", "count": 214 }
+      ],
+      "folded": true
+    }
+  },
+  {
+    "caption": "No records · said out loud",
+    "turn": { "id": "none", "label": "sources" },
+    "spec": {
+      "sources": [{ "label": "Returns log, Q3", "count": 0 }],
+      "note": "No returns matched these filters. The answer rests on no records."
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "sources" },
+    "spec": {
+      "sources": [
+        { "label": "General ledger, Q3", "count": 12408, "detail": "table · 28 Sep" },
+        { "label": "Carrier invoices", "count": 3911, "detail": "file · 26 Sep" },
+        { "label": "Store master", "count": 214, "detail": "table · 1 Sep" }
+      ]
+    }
+  }
+]

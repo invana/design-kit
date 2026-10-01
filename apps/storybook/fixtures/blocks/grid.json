@@ -1,0 +1,105 @@
+[
+  {
+    "caption": "Three across",
+    "turn": { "id": "g1", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Orders", "value": "61.2k", "delta": "▲ 7%", "tone": "good" },
+        { "label": "AOV", "value": "£67", "delta": "▼ 3%", "tone": "bad" }
+      ]
+    }
+  },
+  {
+    "caption": "Two by two",
+    "turn": { "id": "g2", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Orders", "value": "61.2k", "delta": "▲ 7%", "tone": "good" },
+        { "label": "AOV", "value": "£67", "delta": "▼ 3%", "tone": "bad" },
+        { "label": "Returns", "value": "4.2%", "delta": "flat" }
+      ]
+    }
+  },
+  {
+    "caption": "Six in two rows",
+    "turn": { "id": "g3", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Orders", "value": "61.2k", "delta": "▲ 7%", "tone": "good" },
+        { "label": "AOV", "value": "£67", "delta": "▼ 3%", "tone": "bad" },
+        { "label": "Margin", "value": "14.2%", "delta": "▼ 1.8 pts", "tone": "bad" },
+        { "label": "Freight", "value": "6.9%", "delta": "▲ 1.2 pts", "tone": "bad" },
+        { "label": "Returns", "value": "4.2%", "delta": "flat" }
+      ]
+    }
+  },
+  {
+    "caption": "One tile flagged",
+    "turn": { "id": "g4", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Orders", "value": "61.2k", "delta": "▲ 7%", "tone": "good" },
+        { "label": "North", "value": "£0.9M", "delta": "▼ 6%", "tone": "bad", "flag": true }
+      ],
+      "caption": "North rests on 9 stores · indicative",
+      "captionTone": "warn"
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "g5", "label": "metric", "state": "running" },
+    "spec": { "tiles": [], "status": "loading" }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "g6", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Returns", "value": null, "delta": "Not loaded for Q3" }
+      ]
+    }
+  },
+  {
+    "caption": "At 280px · four become two by two",
+    "narrow": true,
+    "turn": { "id": "g7", "label": "metric" },
+    "spec": {
+      "tiles": [
+        { "label": "Revenue", "value": "£4.1M", "delta": "▲ 4%", "tone": "good" },
+        { "label": "Orders", "value": "61.2k", "delta": "▲ 7%", "tone": "good" },
+        { "label": "AOV", "value": "£67", "delta": "▼ 3%", "tone": "bad" },
+        { "label": "Returns", "value": "4.2%", "delta": "flat" }
+      ]
+    }
+  },
+  {
+    "caption": "Strip",
+    "wide": true,
+    "turn": { "id": "strip", "label": "answer" },
+    "spec": {
+      "minTileWidth": 130,
+      "tiles": [
+        {
+          "label": "Tasks",
+          "value": "4 / 7",
+          "delta": "running",
+          "gauge": { "value": 4, "max": 7 }
+        },
+        { "label": "Elapsed", "value": "12s", "delta": "no timeout yet" },
+        {
+          "label": "Tokens",
+          "value": "8.2k",
+          "delta": "of 40k ceiling",
+          "gauge": { "value": 8.2, "max": 40 }
+        },
+        { "label": "Rows", "value": "1,880", "delta": "so far" },
+        { "label": "Failed", "value": "1", "delta": "execute", "tone": "bad", "flag": true }
+      ]
+    }
+  }
+]

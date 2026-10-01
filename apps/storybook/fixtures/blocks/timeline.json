@@ -1,0 +1,82 @@
+[
+  {
+    "caption": "Dated events",
+    "turn": { "id": "l1", "label": "timeline", "title": "container MSKU 402918" },
+    "spec": {
+      "events": [
+        { "when": "12 Sep", "text": "Loaded at Rotterdam", "tone": "good" },
+        { "when": "19 Sep", "text": "Held at customs · 3 days", "tone": "warn" },
+        { "when": "23 Sep", "text": "Arrived Felixstowe" },
+        { "when": "26 Sep", "text": "Delivered, 4 days late" }
+      ]
+    }
+  },
+  {
+    "caption": "With detail lines",
+    "turn": { "id": "l2", "label": "timeline", "title": "container MSKU 402918" },
+    "spec": {
+      "events": [
+        {
+          "when": "12 Sep",
+          "text": "Loaded at Rotterdam",
+          "detail": "Vessel departs on schedule",
+          "tone": "good"
+        },
+        {
+          "when": "19 Sep",
+          "text": "Held at customs",
+          "detail": "Missing certificate of origin · 3 days",
+          "tone": "warn"
+        },
+        { "when": "23 Sep", "text": "Arrived Felixstowe", "detail": "Gate-out 16:40" },
+        {
+          "when": "26 Sep",
+          "text": "Delivered",
+          "detail": "4 days after the promised date",
+          "tone": "bad"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Around an anomaly",
+    "turn": { "id": "l3", "label": "timeline", "title": "refunds, Leeds · ±3 days" },
+    "spec": {
+      "events": [
+        { "when": "11 Sep", "text": "Price change on 40 SKUs", "section": "Before" },
+        { "when": "13 Sep", "text": "New returns policy live", "section": "Before" },
+        {
+          "when": "14 Sep",
+          "text": "Refunds 2.4σ above normal",
+          "tone": "bad",
+          "section": "Spike",
+          "highlight": true
+        },
+        { "when": "15 Sep", "text": "POS outage, 2 hours", "tone": "warn", "section": "After" }
+      ]
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "l4", "label": "timeline", "title": "container MSKU 402918", "state": "running" },
+    "spec": { "events": [], "status": "loading" }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "l5", "label": "timeline", "title": "container MSKU 402918" },
+    "spec": { "events": [], "status": "empty", "emptyText": "No events recorded for this container yet." }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "l6", "label": "timeline", "title": "MSKU 402918" },
+    "spec": {
+      "events": [
+        { "when": "12 Sep", "text": "Loaded at Rotterdam", "tone": "good" },
+        { "when": "19 Sep", "text": "Held at customs · 3 days", "tone": "warn" },
+        { "when": "23 Sep", "text": "Arrived Felixstowe" },
+        { "when": "26 Sep", "text": "Delivered, 4 days late" }
+      ]
+    }
+  }
+]

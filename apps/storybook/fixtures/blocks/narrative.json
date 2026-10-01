@@ -1,0 +1,43 @@
+[
+  {
+    "caption": "Lead with the number",
+    "turn": { "id": "lead", "label": "prose" },
+    "spec": {
+      "text": "Operating margin fell **1.8 pts** to **14.2%** in Q3. About two thirds of the fall came from freight costs in the North region, which rose after the July carrier change."
+    }
+  },
+  {
+    "caption": "With citation markers",
+    "turn": { "id": "cites", "label": "prose", "aside": "3 sources" },
+    "spec": {
+      "text": "Operating margin fell **1.8 pts** to **14.2%** in Q3.[1] Freight per order rose 22% after the July carrier change,[2] and the North region carried most of it.[3]"
+    }
+  },
+  {
+    "caption": "Figures carry their direction",
+    "turn": { "id": "direction", "label": "prose" },
+    "spec": {
+      "text": "Operating margin fell **▼ 1.8 pts** to **14.2%**. Gross margin held at **38.1%** ▲ 0.1 pts, so the fall sits below the gross line, in freight."
+    }
+  },
+  {
+    "caption": "Streaming",
+    "turn": { "id": "streaming", "label": "prose", "state": "running" },
+    "spec": {
+      "text": "Operating margin fell **1.8 pts** to **14.2%** in Q3. About two thirds of the fall came from"
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "loading", "label": "prose" },
+    "spec": { "text": "", "status": "loading" }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "prose" },
+    "spec": {
+      "text": "Operating margin fell **1.8 pts** to **14.2%** in Q3. About two thirds of the fall came from freight costs in the North region, which rose after the July carrier change."
+    }
+  }
+]

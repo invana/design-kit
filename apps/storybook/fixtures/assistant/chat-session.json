@@ -1,0 +1,33 @@
+[
+  {
+    "caption": "Graph expansions",
+    "conversation": "graphExpansions",
+    "width": 440,
+    "props": {
+      "variant": "web",
+      "actions": ["retry", "copy", "steps", { "id": "pin", "label": "Pin to report", "icon": "pin" }, "rate"]
+    }
+  },
+  { "caption": "Agent console", "conversation": "agentConsole", "width": 440, "props": { "variant": "cli" } },
+  {
+    "caption": "Task dashboard",
+    "conversation": "taskDashboard",
+    "width": 440,
+    "props": { "variant": "cli", "defaultView": "tasks" }
+  },
+  { "caption": "Streaming", "conversation": "streaming", "width": 440, "stream": "streaming", "props": { "variant": "web" } },
+  {
+    "caption": "Method disclosure",
+    "conversation": "methodDisclosure",
+    "width": 440,
+    "height": 480,
+    "props": { "variant": "web" }
+  },
+  {
+    "caption": "Turn labels",
+    "conversation": "turnLabels",
+    "width": 420,
+    "height": 560,
+    "props": { "variant": "web" }
+  }
+]

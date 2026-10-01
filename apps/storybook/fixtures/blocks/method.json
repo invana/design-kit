@@ -1,0 +1,61 @@
+[
+  {
+    "caption": "Folded · one line",
+    "turn": { "id": "folded", "label": "method" },
+    "spec": {
+      "label": "method",
+      "code": "margin = op_income / net_revenue",
+      "meta": "margin = op_income / net_revenue · 18 ms"
+    }
+  },
+  {
+    "caption": "Open · query",
+    "turn": { "id": "query", "label": "method" },
+    "spec": {
+      "label": "query",
+      "meta": "12,408 rows · 18 ms",
+      "open": true,
+      "code": "**SELECT** region,\n  sum(op_income) / sum(net_rev) **AS** margin\n**FROM** ledger\n**WHERE** quarter = '2026-Q3'\n**GROUP BY** region"
+    }
+  },
+  {
+    "caption": "Open · model",
+    "turn": { "id": "model", "label": "method" },
+    "spec": {
+      "label": "model",
+      "meta": "mixed model · 0.4 s",
+      "open": true,
+      "code": "**yield** ~ traits + (1 | site) + (1 | season)",
+      "facts": [
+        { "label": "Plots", "value": "1,284" },
+        { "label": "Seasons", "value": "4" },
+        { "label": "Marginal R²", "value": "0.61" }
+      ]
+    }
+  },
+  {
+    "caption": "Open · several steps",
+    "turn": { "id": "steps", "label": "method" },
+    "spec": {
+      "label": "3 steps",
+      "meta": "4.2 s",
+      "open": true,
+      "steps": [
+        { "label": "Read general ledger, Q2–Q3", "detail": "12,408" },
+        { "label": "Joined carrier invoices by order", "detail": "3,911" },
+        { "label": "Decomposed the change by region", "detail": "2.1 s" }
+      ]
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "method" },
+    "spec": {
+      "label": "query",
+      "meta": "18 ms",
+      "open": true,
+      "code": "**SELECT** region,\n  sum(op_income)\n  / sum(net_rev)\n**FROM** ledger\n**WHERE** quarter = '2026-Q3'\n**GROUP BY** region"
+    }
+  }
+]

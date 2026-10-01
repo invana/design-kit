@@ -1,0 +1,66 @@
+[
+  {
+    "caption": "Figure + comparison",
+    "turn": { "id": "m1", "label": "metric" },
+    "spec": {
+      "label": "Net revenue retention",
+      "value": "108%",
+      "delta": "▲ 3 pts vs Q2 · target 110%",
+      "tone": "good"
+    }
+  },
+  {
+    "caption": "Against a target",
+    "turn": { "id": "m2", "label": "metric" },
+    "spec": {
+      "label": "Net revenue retention",
+      "value": "108%",
+      "delta": "▲ 3 pts vs Q2",
+      "tone": "good",
+      "gauge": { "value": 108, "target": 110, "min": 0, "max": 120, "unit": "%" }
+    }
+  },
+  {
+    "caption": "With a trend",
+    "turn": { "id": "m3", "label": "metric" },
+    "spec": {
+      "label": "Weekly sales",
+      "value": "£4.82M",
+      "delta": "▼ 3.1% vs LY",
+      "tone": "bad",
+      "trend": [14, 15, 12, 16, 11, 8, 9, 4, 1],
+      "caption": "Last 12 weeks"
+    }
+  },
+  {
+    "caption": "No comparison",
+    "turn": { "id": "m4", "label": "metric" },
+    "spec": { "label": "Open tickets", "value": "412", "delta": "as of 06:00" }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "m5", "label": "metric" },
+    "spec": {
+      "label": "Net revenue retention",
+      "value": null,
+      "delta": "No renewals fell due in September"
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "m6", "label": "metric", "state": "running" },
+    "spec": { "label": "Net revenue retention", "value": null, "status": "loading" }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "m7", "label": "metric" },
+    "spec": {
+      "label": "Net revenue retention",
+      "value": "108%",
+      "delta": "▲ 3 pts vs Q2",
+      "tone": "good",
+      "caption": "Target 110%"
+    }
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "caption": "Default",
+    "props": {
+      "question": "Rebuild the Q3 margin table as asked?",
+      "cost": [
+        { "label": "rows scanned", "value": "2.3B" },
+        { "label": "to run", "value": "about 40 s" },
+        { "label": "records written", "value": "12,408", "tone": "warning" }
+      ],
+      "hint": "Default: narrow to Q3 first"
+    },
+    "buttons": [
+      { "id": "no", "label": "Narrow to Q3 first" },
+      { "id": "yes", "label": "Run it", "variant": "outline" }
+    ]
+  },
+  {
+    "caption": "Seamless",
+    "props": {
+      "question": "Run the full backtest?",
+      "description": "Replays every fill since 2019 through factor model v4.",
+      "heading": true,
+      "cost": [
+        { "label": "Rows", "value": "2.3B" },
+        { "label": "Time", "value": "~40 s" },
+        { "label": "Writes", "value": "0" }
+      ],
+      "costAs": "strip",
+      "seamless": true
+    },
+    "buttons": [
+      { "id": "no", "label": "Narrow to Q3 first", "variant": "outline" },
+      { "id": "yes", "label": "Run it" }
+    ]
+  }
+]

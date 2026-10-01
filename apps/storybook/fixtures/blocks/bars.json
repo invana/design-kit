@@ -1,0 +1,78 @@
+[
+  {
+    "caption": "Groups + target",
+    "turn": { "id": "b1", "label": "chart", "title": "margin by plant, %" },
+    "spec": {
+      "unit": "%",
+      "groups": ["A", "B", "C", "D"],
+      "series": [
+        { "name": "Q3", "values": [17.7, 12.6, 15.4, 9.7] },
+        { "name": "Q2", "values": [16, 13.7, 14.9, 12], "muted": true }
+      ],
+      "target": { "value": 16.6, "label": "target 16%" }
+    }
+  },
+  {
+    "caption": "One series · one bar called out",
+    "turn": { "id": "b2", "label": "chart", "title": "margin by plant, Q3" },
+    "spec": {
+      "unit": "%",
+      "groups": ["A", "B", "C", "D", "E", "F"],
+      "series": [{ "name": "Q3 margin", "values": [15, 18.6, 11.4, 21, 13.8, 16.5] }],
+      "highlight": "C",
+      "caption": "Plant C is the lowest of six"
+    }
+  },
+  {
+    "caption": "Actual inside target",
+    "turn": { "id": "b3", "label": "chart", "title": "units vs plan, September" },
+    "spec": {
+      "groups": ["North", "South", "East", "Wales", "Scot."],
+      "series": [{ "name": "shipped", "values": [60, 64, 66, 32, 54] }],
+      "plan": { "name": "plan", "values": [70, 60, 64, 50, 56] }
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "b4", "label": "chart", "title": "margin by plant, %", "state": "running" },
+    "spec": {
+      "unit": "%",
+      "groups": ["A", "B", "C", "D"],
+      "series": [
+        { "name": "Q3", "values": [17.7, 12.6, 15.4, 9.7] },
+        { "name": "Q2", "values": [16, 13.7, 14.9, 12], "muted": true }
+      ],
+      "target": { "value": 16.6, "label": "target 16%" },
+      "status": "loading"
+    }
+  },
+  {
+    "caption": "No data",
+    "turn": { "id": "b5", "label": "chart", "title": "margin by plant, %" },
+    "spec": {
+      "unit": "%",
+      "groups": ["A", "B", "C", "D"],
+      "series": [
+        { "name": "Q3", "values": [17.7, 12.6, 15.4, 9.7] },
+        { "name": "Q2", "values": [16, 13.7, 14.9, 12], "muted": true }
+      ],
+      "target": { "value": 16.6, "label": "target 16%" },
+      "status": "empty",
+      "emptyText": "No plant has reported September margin yet."
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "b6", "label": "chart", "title": "margin by plant, %" },
+    "spec": {
+      "unit": "%",
+      "groups": ["A", "B", "C", "D"],
+      "series": [
+        { "name": "Q3", "values": [17.7, 12.6, 15.4, 9.7] },
+        { "name": "Q2", "values": [16, 13.7, 14.9, 12], "muted": true }
+      ],
+      "target": { "value": 16.6, "label": "target" }
+    }
+  }
+]

@@ -1,0 +1,223 @@
+[
+  {
+    "caption": "First rows + open all",
+    "turn": {
+      "id": "t1",
+      "label": "table",
+      "envelope": { "grounding": { "records": 214, "noun": "records" } }
+    },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        { "store": "North Mall", "margin": "11.4%", "delta": { "value": "−3.1", "tone": "bad" } },
+        { "store": "Northgate", "margin": "12.0%", "delta": { "value": "−2.6", "tone": "bad" } },
+        { "store": "Riverside", "margin": "15.8%", "delta": { "value": "+0.4", "tone": "good" } }
+      ],
+      "total": 214
+    }
+  },
+  {
+    "caption": "Sorted · row called out",
+    "turn": {
+      "id": "t2",
+      "label": "table",
+      "title": "worst 5 by change",
+      "envelope": { "grounding": { "records": 214, "noun": "records" } }
+    },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        { "store": "North Mall", "margin": "11.4%", "delta": { "value": "−3.1", "tone": "bad" } },
+        { "store": "Northgate", "margin": "12.0%", "delta": { "value": "−2.6", "tone": "bad" } },
+        {
+          "store": "Leeds Kirkstall",
+          "margin": "12.9%",
+          "delta": { "value": "−2.2", "tone": "bad" }
+        },
+        {
+          "store": "York Monks Cross",
+          "margin": "13.3%",
+          "delta": { "value": "−1.9", "tone": "bad" }
+        },
+        {
+          "store": "Hull Ferensway",
+          "margin": "13.8%",
+          "delta": { "value": "−1.4", "tone": "bad" }
+        }
+      ],
+      "total": 214,
+      "note": "sorted by Δ",
+      "sort": { "key": "delta", "dir": "asc" },
+      "highlight": [0]
+    }
+  },
+  {
+    "caption": "Wide · scrolls sideways",
+    "turn": {
+      "id": "t3",
+      "label": "table",
+      "envelope": { "grounding": { "records": 214, "noun": "records" } }
+    },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "revenue", "label": "Revenue", "align": "right" },
+        { "key": "orders", "label": "Orders", "align": "right" },
+        { "key": "aov", "label": "AOV", "align": "right" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "freight", "label": "Freight", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        {
+          "store": "North Mall",
+          "revenue": "£412k",
+          "orders": "6,110",
+          "aov": "£67",
+          "margin": "11.4%",
+          "freight": "7.9%",
+          "delta": { "value": "−3.1", "tone": "bad" }
+        },
+        {
+          "store": "Northgate",
+          "revenue": "£388k",
+          "orders": "5,720",
+          "aov": "£68",
+          "margin": "12.0%",
+          "freight": "7.6%",
+          "delta": { "value": "−2.6", "tone": "bad" }
+        },
+        {
+          "store": "Riverside",
+          "revenue": "£351k",
+          "orders": "5,390",
+          "aov": "£65",
+          "margin": "15.8%",
+          "freight": "5.8%",
+          "delta": { "value": "+0.4", "tone": "good" }
+        }
+      ],
+      "total": 214,
+      "note": "7 columns"
+    }
+  },
+  {
+    "caption": "With a total row",
+    "turn": { "id": "t4", "label": "table", "title": "by region" },
+    "spec": {
+      "columns": [
+        { "key": "region", "label": "Region" },
+        { "key": "revenue", "label": "Revenue", "align": "right" },
+        { "key": "margin", "label": "Margin", "align": "right" }
+      ],
+      "rows": [
+        { "region": "North", "revenue": "£0.9M", "margin": "11.1%" },
+        { "region": "Midlands", "revenue": "£1.2M", "margin": "13.9%" },
+        { "region": "South", "revenue": "£2.0M", "margin": "14.5%" }
+      ],
+      "totals": { "region": "All", "revenue": "£4.1M", "margin": "13.6%" },
+      "caption": "Margin total is computed from the rows, not averaged"
+    }
+  },
+  {
+    "caption": "No rows",
+    "turn": {
+      "id": "t5",
+      "label": "table",
+      "envelope": { "grounding": { "records": 0, "noun": "records" } }
+    },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [],
+      "status": "empty",
+      "emptyText": "No stores lost more than 5 pts of margin.",
+      "emptySuggestions": ["Lower the threshold to 3 pts"]
+    }
+  },
+  {
+    "caption": "Loading",
+    "turn": { "id": "t6", "label": "table", "state": "running" },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [],
+      "status": "loading"
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "t7", "label": "table", "envelope": { "grounding": { "records": 214, "noun": "" } } },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        { "store": "North Mall", "margin": "11.4%", "delta": { "value": "−3.1", "tone": "bad" } },
+        { "store": "Northgate", "margin": "12.0%", "delta": { "value": "−2.6", "tone": "bad" } },
+        { "store": "Riverside", "margin": "15.8%", "delta": { "value": "+0.4", "tone": "good" } }
+      ],
+      "total": 214
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "label": "answer" },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        { "store": "North Mall", "margin": "11.4%", "delta": { "value": "−3.1", "tone": "bad" } },
+        { "store": "Northgate", "margin": "12.0%", "delta": { "value": "−2.6", "tone": "bad" } },
+        { "store": "Riverside", "margin": "15.8%", "delta": { "value": "+0.4", "tone": "good" } }
+      ],
+      "total": 214,
+      "noun": "stores"
+    }
+  },
+  {
+    "caption": "Selectable",
+    "turn": { "id": "selectable", "label": "answer" },
+    "spec": {
+      "columns": [
+        { "key": "step", "label": "Step", "mono": true },
+        { "key": "layer", "label": "Layer" },
+        { "key": "p50", "label": "p50", "align": "right", "mono": true },
+        { "key": "failed", "label": "Failed", "align": "right", "mono": true }
+      ],
+      "rows": [
+        { "step": "translate", "layer": "llm", "p50": "5.8s", "failed": "0" },
+        { "step": "validate", "layer": "agent", "p50": "2ms", "failed": "0" },
+        {
+          "step": "execute",
+          "layer": "graph data",
+          "p50": "48ms",
+          "failed": { "value": "1", "tone": "bad" }
+        },
+        { "step": "verify_result", "layer": "agent", "p50": "3ms", "failed": "0" }
+      ],
+      "rowKey": "step",
+      "selected": "execute"
+    }
+  }
+]

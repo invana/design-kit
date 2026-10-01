@@ -1,0 +1,100 @@
+[
+  {
+    "caption": "Running",
+    "turn": {
+      "id": "running",
+      "label": "answer",
+      "trace": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408 rows", "state": "done" },
+        { "id": "inv", "label": "Joined carrier invoices", "detail": "3,911 rows", "state": "done" },
+        { "id": "dec", "label": "Decomposing the change", "detail": "2.1 s", "state": "running" },
+        { "id": "sum", "label": "Write summary", "state": "pending" }
+      ],
+      "state": "running",
+      "blocks": []
+    },
+    "spec": {
+      "steps": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408 rows", "state": "done" },
+        { "id": "inv", "label": "Joined carrier invoices", "detail": "3,911 rows", "state": "done" },
+        { "id": "dec", "label": "Decomposing the change", "detail": "2.1 s", "state": "running" },
+        { "id": "sum", "label": "Write summary", "state": "pending" }
+      ]
+    }
+  },
+  {
+    "caption": "Done · folded into the method",
+    "turn": { "id": "done", "label": "done" },
+    "spec": {
+      "folded": true,
+      "summary": "4.2 s · 16,319 rows",
+      "steps": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408 rows", "state": "done" },
+        { "id": "inv", "label": "Joined carrier invoices", "detail": "3,911 rows", "state": "done" },
+        { "id": "dec", "label": "Decomposed the change", "detail": "2.1 s", "state": "done" },
+        { "id": "sum", "label": "Wrote summary", "state": "done" }
+      ]
+    }
+  },
+  {
+    "caption": "A step failed",
+    "turn": { "id": "failed", "label": "stopped" },
+    "spec": {
+      "steps": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408 rows", "state": "done" },
+        {
+          "id": "inv",
+          "label": "Join carrier invoices",
+          "detail": "0.3 s",
+          "state": "failed",
+          "error": "The invoices file has no order_id column."
+        },
+        { "id": "dec", "label": "Decompose the change", "state": "pending" }
+      ],
+      "actions": [
+        { "id": "skip", "label": "Skip this step", "variant": "ghost", "push": true },
+        { "id": "retry", "label": "Retry", "variant": "primary" }
+      ]
+    }
+  },
+  {
+    "caption": "Waiting on you",
+    "turn": { "id": "waiting", "label": "paused" },
+    "spec": {
+      "steps": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408 rows", "state": "done" },
+        {
+          "id": "ask",
+          "label": "Which margin did you mean?",
+          "detail": "your turn",
+          "state": "waiting"
+        },
+        { "id": "dec", "label": "Decompose the change", "state": "pending" }
+      ]
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": {
+      "id": "narrow",
+      "label": "answer",
+      "trace": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408", "state": "done" },
+        { "id": "inv", "label": "Joined invoices", "detail": "3,911", "state": "done" },
+        { "id": "dec", "label": "Decomposing", "detail": "2.1 s", "state": "running" },
+        { "id": "sum", "label": "Write summary", "state": "pending" }
+      ],
+      "state": "running",
+      "blocks": []
+    },
+    "spec": {
+      "steps": [
+        { "id": "gl", "label": "Read general ledger", "detail": "12,408", "state": "done" },
+        { "id": "inv", "label": "Joined invoices", "detail": "3,911", "state": "done" },
+        { "id": "dec", "label": "Decomposing", "detail": "2.1 s", "state": "running" },
+        { "id": "sum", "label": "Write summary", "state": "pending" }
+      ]
+    }
+  }
+]

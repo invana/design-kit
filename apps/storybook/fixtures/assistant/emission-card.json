@@ -1,0 +1,44 @@
+[
+  {
+    "caption": "Metric",
+    "props": { "kind": "metric", "template": "stat-compact@1", "citation": "cite · 214 records" },
+    "body": {
+      "metric": {
+        "variant": "hero",
+        "label": "Defence theme · 5 sessions",
+        "value": "+4.8%",
+        "tone": "success",
+        "caption": "Nifty +1.1% over the same window"
+      }
+    }
+  },
+  {
+    "caption": "Table",
+    "props": { "kind": "table", "template": "table-compact@3", "citation": "cite · 4 records" },
+    "body": {
+      "table": {
+        "columns": ["stock", "week", "call"],
+        "rows": [
+          ["BEL", "+7.2%", "hold"],
+          ["MIDHANI", "−1.2%", "review"]
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Prose",
+    "props": { "kind": "prose", "template": "prose-cited@2", "citation": "cite · 12 records" },
+    "body": {
+      "prose": [
+        { "text": "BEL and HAL carried the week", "cite": "1,2" },
+        { "text": "; MIDHANI left the flagged band on Thursday", "cite": "3" },
+        { "text": "." }
+      ]
+    }
+  },
+  {
+    "caption": "Empty",
+    "props": { "kind": "empty", "template": "empty@1", "citation": "cite · 0 records" },
+    "body": { "muted": "The graph does not hold delivery % for BDL after 4 Sep." }
+  }
+]

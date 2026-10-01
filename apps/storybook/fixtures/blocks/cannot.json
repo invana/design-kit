@@ -1,0 +1,55 @@
+[
+  {
+    "caption": "Reason + what would change it",
+    "turn": { "id": "reason", "label": "outcome", "state": "cannot" },
+    "spec": {
+      "reason": "Shipments are held from January 2023, so 2021 can't be compared.",
+      "remedy": "Import the 2021 archive to answer this."
+    }
+  },
+  {
+    "caption": "With what I can answer instead",
+    "turn": { "id": "nearest", "label": "outcome", "state": "cannot" },
+    "spec": {
+      "reason": "Shipments are held from January 2023, so 2021 can't be compared.",
+      "remedy": "Import the 2021 archive to answer this.",
+      "nearest": ["Compare 2023 with 2025", "Trend since Jan 2023"]
+    }
+  },
+  {
+    "caption": "Partly answered",
+    "turn": { "id": "partial", "label": "outcome" },
+    "spec": {
+      "reason": "The answer below covers 2023–2026. 2021 and 2022 are not held.",
+      "remedy": "Import the archive to extend it.",
+      "partial": true
+    }
+  },
+  {
+    "caption": "No access",
+    "turn": { "id": "access", "label": "outcome", "state": "cannot" },
+    "spec": {
+      "reason": "Payroll data needs the Finance role, which you don't have.",
+      "remedy": "Ask a workspace admin to grant Finance."
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "outcome", "state": "cannot" },
+    "spec": {
+      "reason": "Shipments are held from January 2023, so 2021 can't be compared.",
+      "remedy": "Import the 2021 archive to answer this.",
+      "nearest": ["Compare 2023 with 2025"]
+    }
+  },
+  {
+    "caption": "Default",
+    "turn": { "id": "default", "label": "answer" },
+    "spec": {
+      "reason": "The ledger holds 2023–2026. 2021 and 2022 are not held.",
+      "remedy": "Import the archive to extend it.",
+      "nearest": ["Compare 2023 with 2025", "Trend since Jan 2023"]
+    }
+  }
+]
