@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RecordBlock } from '@invana/blocks';
 
+import { RECORD } from '../_fixtures';
+
 const meta: Meta<typeof RecordBlock> = {
   title: 'Blocks/Record',
   component: RecordBlock,
@@ -23,29 +25,6 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
-    spec: {
-      header: {
-        title: 'Acme Holdings',
-        initials: 'AH',
-        status: {
-          label: 'at risk',
-          tone: 'bad',
-        },
-      },
-      rows: [
-        {
-          label: 'Segment',
-          value: 'Enterprise',
-        },
-        {
-          label: 'ARR',
-          value: '£412,000',
-        },
-        {
-          label: 'Renewal',
-          value: '14 Jan 2027 · in 107 days',
-        },
-      ],
-    },
+    spec: RECORD,
   },
 };

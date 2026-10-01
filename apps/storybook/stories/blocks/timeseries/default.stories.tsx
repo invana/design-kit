@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TimeseriesBlock } from '@invana/blocks';
 
+import { TIMESERIES } from '../_fixtures';
+
 const meta: Meta<typeof TimeseriesBlock> = {
   title: 'Blocks/Timeseries',
   component: TimeseriesBlock,
@@ -24,34 +26,6 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
-    spec: {
-      unit: 'units',
-      series: [
-        {
-          name: 'Weekly demand',
-          points: [
-            ['Jul', 6800],
-            ['Aug', 7400],
-            ['Sep', 8200],
-            ['Oct', 8900],
-            ['Nov', 9600],
-            ['Dec', 10400],
-          ],
-        },
-      ],
-      band: {
-        label: '80% interval',
-        lower: 8000,
-        upper: 11000,
-      },
-      forecastFrom: 'Oct',
-      forecastLabel: 'today',
-      marks: [
-        {
-          at: 'Aug',
-          tone: 'warn',
-        },
-      ],
-    },
+    spec: TIMESERIES,
   },
 };

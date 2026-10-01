@@ -7,7 +7,7 @@ function Rows({ rows }: { rows: RecordRow[] }) {
   return (
     <PropertyList labelWidth="auto" variant="summary">
       {rows.map((row) => (
-        <PropertyRow key={row.label} label={row.label} mono>
+        <PropertyRow key={row.label} label={row.label} mono={row.mono ?? true}>
           {row.value}
           {row.source ? <span className="text-xs text-muted-foreground"> · {row.source}</span> : null}
         </PropertyRow>

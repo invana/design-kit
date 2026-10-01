@@ -1,20 +1,8 @@
 import { Sparkline } from "@invana/charts"
 import { MetricTile } from "@invana/ui"
 
-import { CAPTION_TONE, metricValue } from "../format"
-import type { BlockProps, MetricOptions } from "../types"
-
-/** The gauge's scale as the tile draws it: shares of the scale, and its ends and target written in `unit`. */
-function gaugeOf(gauge: NonNullable<MetricOptions["gauge"]>) {
-  const min = gauge.min ?? 0
-  const span = gauge.max - min || 1
-  const write = (n: number) => `${n.toLocaleString("en-GB")}${gauge.unit ?? ""}`
-  return {
-    fill: (gauge.value - min) / span,
-    mark: (gauge.target - min) / span,
-    labels: [write(min), `target ${write(gauge.target)}`, write(gauge.max)] as [string, string, string],
-  }
-}
+import { CAPTION_TONE, gaugeProps, metricValue } from "../format"
+import type { BlockProps } from "../types"
 
 /**
  * The one figure an answer turns on, with its comparison worded under it — and,
@@ -29,7 +17,7 @@ export function MetricBlock({ spec }: BlockProps<"metric">) {
       tone={spec.value == null ? "muted" : undefined}
       caption={spec.delta}
       captionTone={spec.tone ? CAPTION_TONE[spec.tone] : undefined}
-      gauge={spec.gauge ? gaugeOf(spec.gauge) : undefined}
+      {...gaugeProps(spec.gauge)}
       aside={
         spec.trend?.length ? (
           <Sparkline

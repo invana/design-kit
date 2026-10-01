@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { TableBlock } from '@invana/blocks';
 
+import { TABLE } from '../_fixtures';
+
 const meta: Meta<typeof TableBlock> = {
   title: 'Blocks/Table',
   component: TableBlock,
@@ -25,52 +27,7 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
-    spec: {
-      columns: [
-        {
-          key: 'store',
-          label: 'Store',
-        },
-        {
-          key: 'margin',
-          label: 'Margin',
-          align: 'right',
-        },
-        {
-          key: 'delta',
-          label: 'Δ pts',
-          align: 'right',
-        },
-      ],
-      rows: [
-        {
-          store: 'North Mall',
-          margin: '11.4%',
-          delta: {
-            value: '−3.1',
-            tone: 'bad',
-          },
-        },
-        {
-          store: 'Northgate',
-          margin: '12.0%',
-          delta: {
-            value: '−2.6',
-            tone: 'bad',
-          },
-        },
-        {
-          store: 'Riverside',
-          margin: '15.8%',
-          delta: {
-            value: '+0.4',
-            tone: 'good',
-          },
-        },
-      ],
-      total: 214,
-      noun: 'stores',
-    },
+    spec: TABLE,
     onAction: fn(),
   },
 };

@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { FormAsk } from '@invana/blocks';
+import { TableBlock } from '@invana/blocks';
 
-import { FORM } from '../_fixtures';
+import { STEPS_TABLE } from '../_fixtures';
 
-const meta: Meta<typeof FormAsk> = {
-  title: 'Blocks/Form',
-  component: FormAsk,
+const meta: Meta<typeof TableBlock> = {
+  title: 'Blocks/Table',
+  component: TableBlock,
   parameters: { layout: 'padded' },
   // The chat's middle width; a block fills whatever its shell gives it.
   decorators: [
@@ -22,11 +22,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Several fields that only make sense together, sent as one `reply` keyed by field name.
+ * Rows a reader picks from. `rowKey` names a row: a click sends `select` with its key, and
+ * `selected` is drawn picked. Columns of ids and figures set `mono`.
  */
-export const Default: Story = {
+export const Selectable: Story = {
   args: {
-    spec: FORM,
+    spec: STEPS_TABLE,
     onAction: fn(),
   },
 };

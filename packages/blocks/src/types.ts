@@ -49,8 +49,10 @@ export interface MetricOptions {
   /**
    * A bar under the figure: `value` against `target` on a scale from `min` to
    * `max`, with the scale's ends and the target written under it in `unit`.
+   * Without a `target` it is a plain meter — how full a value with a real
+   * ceiling is (`{ value: 0.42, max: 1 }`), with nothing written under it.
    */
-  gauge?: { value: number; target: number; min?: number; max: number; unit?: string }
+  gauge?: { value: number; target?: number; min?: number; max: number; unit?: string }
   /** The recent run of the figure, oldest first, drawn as a sparkline beside it. */
   trend?: number[]
   /** Set on the warning ground: the one figure in a band that needs a second look. */
@@ -61,6 +63,8 @@ export interface Column {
   key: string
   label: string
   align?: "left" | "right"
+  /** Set the column in the mono face — an id, a key, a timestamp. */
+  mono?: boolean
 }
 
 /** One label/value pair in a record. */
@@ -69,13 +73,22 @@ export interface RecordRow {
   value: string
   /** Where the value came from — `last year's promotions`, `your input`. */
   source?: string
+  /** `false` sets the value in the body face — prose rather than an id or a figure. */
+  mono?: boolean
 }
 
 /** The options of the blocks first shared by the conversation and the page. */
 interface SharedAnswerOptions {
   narrative: NarrativeOptions
   metric: MetricOptions
-  grid: { tiles: MetricOptions[] }
+  grid: {
+    tiles: MetricOptions[]
+    /**
+     * Fit as many tiles across as this width allows, in px — a strip of five or
+     * six on a wide panel. Unset, three across, and four sit two by two.
+     */
+    minTileWidth?: number
+  }
   table: {
     columns: Column[]
     rows: Record<string, Cell>[]
@@ -90,6 +103,13 @@ interface SharedAnswerOptions {
     highlight?: number[]
     /** A total row under the rows, set bold. */
     totals?: Record<string, Cell>
+    /**
+     * The column whose value names a row. Set, a row can be picked: a click
+     * sends the `select` action with that row's value.
+     */
+    rowKey?: string
+    /** The `rowKey` value of the row drawn selected. */
+    selected?: string | null
   }
   record: {
     rows?: RecordRow[]
