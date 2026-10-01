@@ -1,6 +1,6 @@
 import { cn, Skeleton } from "@invana/ui"
 
-import { SuggestionChips } from "../asks/suggestion-chips"
+import { SuggestionChips } from "@invana/blocks"
 import type { Tone } from "../protocol/types"
 
 /** One bar of a skeleton: its width as a share of the block, and a height in px when it is not a text line. */

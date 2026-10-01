@@ -1,5 +1,5 @@
 import { ClarifyCard } from "../../asks"
-import { Placeholder } from "../../conversations/placeholder"
+import { Placeholder } from "@invana/blocks"
 import type { ResolvedRegistry } from "../../conversations/registry"
 import { relativeTime } from "../../conversations/relative-time"
 import { STAGES } from "../../grammar"

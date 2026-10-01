@@ -1,9 +1,9 @@
 import * as React from "react"
 import { cn } from "@invana/ui"
 
-import { ActionRow } from "../../answers/blocks/actions"
+import { ActionRow } from "@invana/blocks"
 import { BlockCaption, BlockEmpty, BlockSkeleton } from "../../conversations/block-status"
-import { Placeholder } from "../../conversations/placeholder"
+import { Placeholder } from "@invana/blocks"
 import type { ResolvedRegistry } from "../../conversations/registry"
 import type { ConversationEvent } from "../../protocol/events"
 import type { AnswerTurn, BlockSpec, Outcome } from "../../protocol/types"

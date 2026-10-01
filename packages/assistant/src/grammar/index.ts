@@ -1,5 +1,5 @@
 export * from "./stages"
-export * from "./blocks"
+export { ANSWER_KINDS, ASK_KINDS, BLOCKS, type AnswerKind, type AskKind, type BlockKind } from "@invana/blocks"
 export * from "./patterns"
 export * from "./asks"
 export * from "./answers"

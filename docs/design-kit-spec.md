@@ -60,20 +60,18 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 6. Only meaningful in a dashboard (rows, panel layout) → `dashboard`.
 7. Anything else → `ui`.
 
-First slice of `blocks`: `narrative`, `metric`, `grid`, `record`, `table`, `timeseries`, `bars`,
-`ranked`, and `Page`. `form` stays in assistant: it is tied to the ask turn's state. Assistant
-registers them from `blocks`. Dashboard draws them in `PanelBox` once each clash with its own
-panels is decided (see To do). No backward compatibility is kept.
+`blocks` holds every kind: the 24 with renderers, and the rest as kinds and option types that
+draw a labelled placeholder. Assistant registers them from `blocks` through one adapter. Dashboard
+draws them in `PanelBox` once each clash with its own panels is decided (see To do). No backward
+compatibility is kept.
 
 ## To do
 
 - [x] **Rename to the terms above** in the grammar, protocol, registry, fixtures, stories and the
       spec: `ASK_PRESETS` + `BLOCK_PRESETS` → one `BLOCKS` (with `BlockKind`, `AskKind`,
-      `AnswerKind`), `ASKS` → `ASK_INTENTS`, the `preset` key → `kind`, `asks/presets/` →
-      `asks/blocks/`.
-- [x] **Create `@invana/blocks`** with `narrative`, `metric`, `grid`, `record`, `table`,
-      `timeseries`, `bars`, `ranked`, plus `Page`. Assistant draws these kinds from it, and
-      `answerToPage(turn)` opens a long answer as a page.
+      `AnswerKind`), `ASKS` → `ASK_INTENTS`, the `preset` key → `kind`.
+- [x] **Create `@invana/blocks`** with every block and `Page`, a `Blocks/<Kind>` story each.
+      Assistant draws every kind from it, and `answerToPage(turn)` opens a long answer as a page.
 - [ ] **Dashboard draws blocks.** Decide each clash first: dashboard `table` (row selection) vs the
       `table` block; `metrics` vs `grid` (tones, `meter`); `properties` vs `record` (`mono`,
       `labelWidth`); `text` (callout, actions) is not `narrative` and stays.

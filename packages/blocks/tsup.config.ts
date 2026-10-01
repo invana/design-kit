@@ -9,7 +9,8 @@ export default defineConfig({
   clean: true,
   // Every kit package stays external: a block composes ui, charts and tables,
   // and bundling any of them would ship a second copy of each.
-  external: ['react', 'react-dom', '@invana/ui', '@invana/charts', '@invana/tables', '@invana/styling'],
+  // react-hook-form stays with them: the form block shares forms' context.
+  external: ['react', 'react-dom', 'react-hook-form', '@invana/ui', '@invana/charts', '@invana/tables', '@invana/forms', '@invana/styling'],
   treeshake: true,
   tsconfig: './tsconfig.lib.json',
 })

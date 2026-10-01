@@ -34,11 +34,13 @@
   },
   "peerDependencies": {
     "@invana/charts": "workspace:*",
+    "@invana/forms": "workspace:*",
     "@invana/styling": "workspace:*",
     "@invana/tables": "workspace:*",
     "@invana/ui": "workspace:*",
     "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
+    "react-dom": "^18 || ^19",
+    "react-hook-form": "^7"
   },
   "devDependencies": {
     "@invana/charts": "workspace:*",
@@ -50,6 +52,7 @@
     "@types/react-dom": "^19.2.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-hook-form": "^7.81.0",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3"
   }

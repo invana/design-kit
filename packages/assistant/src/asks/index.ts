@@ -23,5 +23,4 @@ export type {
   ClarifyOption,
   ClarifyState,
 } from "@invana/ui"
-export * from "./confirm-card"
-export * from "./suggestion-chips"
+export { ConfirmCard, SuggestionChips, type ConfirmCardProps, type ConfirmCost, type SuggestionChipsProps } from "@invana/blocks"

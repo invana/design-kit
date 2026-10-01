@@ -2,7 +2,7 @@
 // Do not edit by hand: change the spec first, then copy the ids here.
 // grammar.test.ts fails when these ids and the block registry disagree.
 
-import type { AskKind } from "./blocks"
+import type { AskKind } from "@invana/blocks"
 import type { StageId } from "./stages"
 
 /** The things the assistant asks back, each on one block. */

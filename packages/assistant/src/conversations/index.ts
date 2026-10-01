@@ -1,4 +1,4 @@
 export * from "./thread"
-export * from "./placeholder"
+export { Placeholder, type PlaceholderProps } from "@invana/blocks"
 export * from "./registry"
 export * from "./turn-label"

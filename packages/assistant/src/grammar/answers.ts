@@ -2,7 +2,7 @@
 // Do not edit by hand: change the spec first, then copy the ids here.
 // grammar.test.ts fails when these ids and the blocks disagree.
 
-import type { AnswerKind } from "./blocks"
+import type { AnswerKind } from "@invana/blocks"
 
 /**
  * What an answer tells, each drawn by one or more blocks. The answer

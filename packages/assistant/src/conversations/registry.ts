@@ -1,23 +1,7 @@
 import type * as React from "react"
 
-import { CannotBlock } from "../answers/blocks/cannot"
-import { CaveatBlock } from "../answers/blocks/caveat"
-import { CitationsBlock } from "../answers/blocks/citations"
-import { FilesBlock } from "../answers/blocks/files"
-import { MethodBlock } from "../answers/blocks/method"
-import { ProposalBlock } from "../answers/blocks/proposal"
-import { ScopeBlock } from "../answers/blocks/scope"
-import { TimelineBlock } from "../answers/blocks/timeline"
-import { TraceBlock } from "../answers/blocks/trace"
-import { NarrativeAnswer, shared } from "../answers/shared"
-import { ConfirmAsk } from "../asks/blocks/confirm"
-import { FormAsk } from "../asks/blocks/form"
-import { MultiAsk } from "../asks/blocks/multi"
-import { MultistepAsk } from "../asks/blocks/multistep"
-import { QuickAsk } from "../asks/blocks/quick"
-import { SingleAsk } from "../asks/blocks/single"
-import { SuggestionsAsk } from "../asks/blocks/suggestions"
-import type { AskKind, AnswerKind } from "../grammar"
+import { ANSWER_RENDERERS, ASK_RENDERERS } from "../answers/shared"
+import type { AnswerKind, AskKind } from "@invana/blocks"
 import type { ConversationEvent } from "../protocol/events"
 import type {
   AnswerTurn,
@@ -59,73 +43,9 @@ export type BlockRenderer<P extends AnswerKind = any> = React.ComponentType<Bloc
 export type AskRegistry = { [P in AskKind]: AskRenderer<P> | null }
 export type BlockRegistry = { [P in AnswerKind]: BlockRenderer<P> | null }
 
-export const BUILT_IN_ASKS: AskRegistry = {
-  confirm: ConfirmAsk,
-  single: SingleAsk,
-  multi: MultiAsk,
-  quick: QuickAsk,
-  period: null,
-  number: null,
-  short: null,
-  long: null,
-  entity: null,
-  scale: null,
-  multistep: MultistepAsk,
-  form: FormAsk,
-  weights: null,
-  approval: null,
-  interpretation: null,
-  fork: null,
-  plan: null,
-  modelspec: null,
-  hypothesis: null,
-  range: null,
-  suggestions: SuggestionsAsk,
-}
+export const BUILT_IN_ASKS: AskRegistry = ASK_RENDERERS
 
-export const BUILT_IN_BLOCKS: BlockRegistry = {
-  narrative: NarrativeAnswer,
-  metric: shared("metric"),
-  grid: shared("grid"),
-  table: shared("table"),
-  attr: null,
-  record: shared("record"),
-  ranked: shared("ranked"),
-  timeseries: shared("timeseries"),
-  bars: shared("bars"),
-  waterfall: null,
-  matrix: null,
-  funnel: null,
-  histogram: null,
-  timeline: TimelineBlock,
-  subgraph: null,
-  method: MethodBlock,
-  citations: CitationsBlock,
-  files: FilesBlock,
-  proposal: ProposalBlock,
-  cannot: CannotBlock,
-  caveat: CaveatBlock,
-  scope: ScopeBlock,
-  checks: null,
-  trace: TraceBlock,
-  test: null,
-  coef: null,
-  forest: null,
-  scatter: null,
-  box: null,
-  correlation: null,
-  control: null,
-  pareto: null,
-  survival: null,
-  tornado: null,
-  decomposition: null,
-  modeleval: null,
-  pivot: null,
-  profile: null,
-  evidence: null,
-  dumbbell: null,
-  quantiles: null,
-}
+export const BUILT_IN_BLOCKS: BlockRegistry = ANSWER_RENDERERS
 
 /**
  * How an ask sits in the thread, apart from what its renderer draws.

@@ -21,9 +21,15 @@ import { Block } from "@invana/blocks"
 />
 ```
 
-Kinds today: `narrative`, `metric`, `grid`, `record`, `table`, `timeseries`, `bars`, `ranked`.
-`BlockOptionsByKind` types each one's options; `BLOCK_RENDERERS` maps a kind to what draws it. A
-table that holds rows back sends the `open` action.
+Every kind lives here (`BLOCKS` in `kinds.ts`); 24 have a renderer, the rest draw a labelled
+placeholder with their JSON. `BlockOptionsByKind` types each one's options; `BLOCK_RENDERERS` maps a
+kind to what draws it.
+
+Every block takes the same props: `spec`, and for a block that returns a value `state` (`pending`
+until answered) and `value`. Whatever the reader does comes back through `onAction(action, value?)`:
+`reply` / `change` / `skip` from an ask, `open` from a table holding rows back, `prompt` from a
+suggested question, `scope` with `{ part, value }`, or an action's own id. The shell says what
+each means: the assistant turns them into conversation events, a dashboard into panel actions.
 
 ## A page
 

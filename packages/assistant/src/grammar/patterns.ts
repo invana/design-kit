@@ -2,7 +2,7 @@
 // Do not edit by hand: change the spec first, then copy the ids here.
 // grammar.test.ts fails when these ids and the block registry disagree.
 
-import type { AnswerKind } from "./blocks"
+import type { AnswerKind } from "@invana/blocks"
 
 /**
  * Answer patterns: which blocks an answer has, in order. The flow picks the

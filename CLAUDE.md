@@ -48,7 +48,7 @@ One word per idea, the same in code, docs, stories and the Design Kit Spec (full
 - **ask** / **answer**: the two kinds of conversation turn, never the name of a block.
 - **intent**: why a turn uses a block; conversation-only (`ASK_INTENTS`, `ANSWER_INTENTS`).
 - Retired: *preset*, *intent block*, *answer block*, *ask preset*. In code: `BLOCKS` (with
-  `BlockKind`, `AskKind`, `AnswerKind`), the `kind` key, `ASK_INTENTS`, `asks/blocks/`.
+  `BlockKind`, `AskKind`, `AnswerKind`) in `@invana/blocks`, the `kind` key, `ASK_INTENTS`.
 
 ## Workspace layout
 
@@ -57,7 +57,7 @@ packages/
   styling/   → @invana/styling   (Tailwind v4 design tokens, themes, source CSS only)
   ui/        → @invana/ui        (React component library, shadcn/Radix based)
   themes/    → @invana/themes    (App layout shells: AppLayoutBase, app-v1, app-v2)
-  blocks/    → @invana/blocks    (blocks drawn from a JSON spec, and Page; shared by assistant and dashboard)
+  blocks/    → @invana/blocks    (every block, drawn from a JSON spec, and Page; shared by assistant and dashboard)
   assistant/ → @invana/assistant (JSON-driven analyst conversation: thread, asks, answers, follow-ups)
 apps/
   storybook/ → @invana/stoybook  (Storybook 10 + Vite consumer of the three packages)
@@ -150,7 +150,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   component here, with its own story, rather than styling around it — that is the signal this rule
   exists to surface.
 - Write only one story per file in `apps/storybook/stories/`. Each `*.stories.tsx` file should export a single story — split variants into separate files rather than bundling multiple stories together.
-- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, every story under `assistant/conversations/` renders `<ChatSession spec={fixture} />` and nothing else, with its JSON in `fixtures/conversations/`; and `assistant/playground.stories.tsx` (`Assistant/Playground`) — the whole assistant in an `AppLayoutV2` shell, and the one place each user's experience is shown (there are no per-user stories): pick a user (or link to one with the `user` arg, e.g. `&args=user:journalist;variant:cli`), a variant (`web`/`cli`) and a width, and play recorded runs (send, needs input, a costly question, failure, stop, open a step, tasks view) into their thread. Its data is one JSON file per user in `packages/assistant/src/data/conversations/` — the thread they open on plus their recorded runs, built into patch scripts by `fixtures/scripts/runs.ts`; a new moment or user goes there, and `runs.test.ts` checks that the users together show every built ask and block), `blocks/` (`@invana/blocks`: one folder per block or `page/`, titled `Blocks/<Name>`; the conversation's board stories for the same blocks stay under `assistant/answers/blocks/`), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
+- Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (mirrors `packages/assistant/src`: `assistant/conversations/`, `assistant/asks/`, `assistant/answers/`, every story under `assistant/conversations/` renders `<ChatSession spec={fixture} />` and nothing else, with its JSON in `fixtures/conversations/`; and `assistant/playground.stories.tsx` (`Assistant/Playground`) — the whole assistant in an `AppLayoutV2` shell, and the one place each user's experience is shown (there are no per-user stories): pick a user (or link to one with the `user` arg, e.g. `&args=user:journalist;variant:cli`), a variant (`web`/`cli`) and a width, and play recorded runs (send, needs input, a costly question, failure, stop, open a step, tasks view) into their thread. Its data is one JSON file per user in `packages/assistant/src/data/conversations/` — the thread they open on plus their recorded runs, built into patch scripts by `fixtures/scripts/runs.ts`; a new moment or user goes there, and `runs.test.ts` checks that the users together show every built ask and block), `blocks/` (`@invana/blocks`: one folder per block or `page/`, titled `Blocks/<Name>`; the conversation's board stories for the same blocks stay under `assistant/asks/blocks/` and `assistant/answers/blocks/`), `charts/` (one folder per chart, `charts/<component>/`, titled `Charts/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
 - Stories under `ui/` mirror `packages/ui/src/components/` exactly — i.e. `ui/ui/`, `ui/ui-extended/`, `ui/typography/`. Story `title` mirrors the full folder path, e.g. `"UI/UI/Button"`, `"UI/UI Extended/NavHorizontal"`, `"UI/Typography/Heading"`, `"Data Tables/DataTable"`, `"Themes/AppV2"`. The forms section follows the same rule — `"Forms/Manual/Composed Form"`, `"Forms/Generated/Dialog"`.
 
 ## Where demand comes from
@@ -184,8 +184,9 @@ gap in the kit, not a one-off in the design.
 - **Where a component goes** — ask in order and stop at the first yes:
   needs an external JS library the other packages don't have → its own package
   (`@invana/editor`, `@invana/charts`); encodes numbers as marks → `@invana/charts`; rows and
-  columns of records → `@invana/tables`; only meaningful inside a conversation turn, relative to
-  a prompt → `@invana/assistant`; anything else, including anything a dashboard, run view,
+  columns of records → `@invana/tables`; drawn from a JSON spec, in a conversation turn, a
+  dashboard panel or a page → `@invana/blocks`; only meaningful inside a conversation (turns,
+  intents, the envelope) → `@invana/assistant`; anything else, including anything a dashboard, run view,
   review queue or report also shows → `@invana/ui`. So `TraceList`, `ExchangeRecord`,
   `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
 - **`@invana/assistant` is JSON only.** Studio renders `<ChatSession spec variant="cli" | "web" />`
@@ -196,11 +197,13 @@ gap in the kit, not a one-off in the design.
   and block is drawn through the registry, and how one sits (an ask bare or in the question card, a
   block in the answer card or its own) is a trait registered beside its renderer, never a check on
   its id in a variant.
-  Kinds, patterns and flows are ids in `packages/assistant/src/grammar/` — a new block
-  gets a board on the Design Kit Spec and an id in the grammar first, then its
-  renderer (`asks/blocks/<id>.tsx` or `answers/blocks/<id>.tsx`) is registered in
-  `conversations/registry.ts`. An unbuilt block renders a labelled placeholder; a renderer reads
-  only its block's options — a screen that needs more is a grammar change, not a prop.
+  Kinds are ids in `packages/blocks/src/kinds.ts`; intents, patterns and flows are ids in
+  `packages/assistant/src/grammar/`. A new block gets a board on the Design Kit Spec and a kind
+  first, then its renderer (`packages/blocks/src/blocks/<kind>.tsx`, props `{ spec, state?,
+  value?, id?, onAction? }`) is registered in `packages/blocks/src/registry.ts`; the assistant
+  wraps every block once (`answers/shared.tsx`), turning its actions into conversation events. An
+  unbuilt block renders a labelled placeholder; a renderer reads only its spec — a screen that
+  needs more is a change to the kind's options, not a prop.
   Envelope fields (scope, grounding, freshness, method, caveats) sit on the answer, never as
   blocks. Answer patterns are typed recipes and stories, not exports.
 - **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
