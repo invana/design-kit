@@ -49,6 +49,7 @@
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-row-in: row-in 1s ease-out;
 }
 
 @keyframes accordion-down {
@@ -59,6 +60,10 @@
 @keyframes accordion-up {
   from { height: var(--radix-accordion-content-height); }
   to { height: 0; }
+}
+
+@keyframes row-in {
+  from { background-color: color-mix(in srgb, var(--color-primary) 12%, transparent); }
 }
 
 /* Dark mode */
