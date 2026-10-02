@@ -31,7 +31,7 @@ import { cn } from "../../lib/utils"
  */
 const linkVariants = cva(
   "underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 \
-  focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[2px]",
+  focus-visible:ring-ring focus-visible:ring-offset-2 rounded-control",
   {
     variants: {
       variant: {

@@ -129,7 +129,7 @@ export const SliceSummary = React.forwardRef<HTMLDivElement, SliceSummaryProps>(
         ref={ref}
         className={cn(
           "flex min-w-0 flex-col gap-0.5",
-          variant === "block" && "rounded-control border border-border p-2",
+          variant === "block" && "rounded-md border border-border p-2",
           className,
         )}
         {...props}

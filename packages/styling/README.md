@@ -95,10 +95,16 @@ All colors follow the CSS variable pattern and can be used with TailwindCSS util
 
 ### Border Radius
 
-- `--radius`: Base radius (0.5rem)
-- `--radius-lg`: Large radius
-- `--radius-md`: Medium radius
-- `--radius-sm`: Small radius
+Three dials set every corner; no component takes a radius prop. See the rationale at the top
+of `src/index.css` and try them live in Storybook (`Others/CornerRadius`).
+
+| Dial | Class | Draws | Default |
+| --- | --- | --- | --- |
+| `--radius` | `rounded`, `rounded-sm` … `rounded-4xl` (every step reads `--radius`) | tables, rows, boxes inside a card | `0px` |
+| `--radius-surface` | `rounded-surface` | cards, panels, dialogs, popovers, menus, tooltips | `var(--radius)` |
+| `--radius-control` | `rounded-control` | buttons, badges, chips, inputs, selects, tabs, toggles | `4px` |
+
+Round objects (avatars, dots, switch thumbs) keep `rounded-full` and follow no dial.
 
 ### Animations
 
@@ -120,7 +126,11 @@ You can override any variable by defining it after importing:
 
 @theme {
   --color-primary: hsl(270 100% 50%); /* Override primary color */
-  --radius: 1rem; /* Increase border radius */
+}
+
+:root {
+  --radius-surface: 6px; /* Round cards, panels and floating surfaces */
+  --radius-control: 2px; /* Soften buttons, badges and inputs less */
 }
 ```
 

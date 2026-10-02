@@ -1,0 +1,87 @@
+{
+  "dials": { "radius": 0, "surface": 0, "control": 4 },
+  "options": [
+    { "value": "day", "label": "Day" },
+    { "value": "week", "label": "Week" },
+    { "value": "month", "label": "Month" }
+  ],
+  "buttons": ["default", "outline", "secondary", "ghost", "destructive"],
+  "select": { "placeholder": "Pick a store", "items": ["North", "South", "Online"] },
+  "swatches": [
+    { "label": "Ink", "value": "#1f2937" },
+    { "label": "Teal", "value": "#0d9488" },
+    { "label": "Amber", "value": "#d97706" }
+  ],
+  "chips": {
+    "address": "model/Orders@v2",
+    "agent": "reconcile",
+    "kind": "schedule",
+    "lens": "Finance close",
+    "mark": "draft",
+    "filter": { "label": "status", "value": "running" },
+    "suggestions": ["Break it down by store", "Compare with last quarter"]
+  },
+  "card": { "title": "Run summary", "description": "Three agents, one budget." },
+  "panel": { "title": "Input · what opened this run", "aside": "3 fields", "body": "orders.csv, 12 columns, 4,812 rows." },
+  "panelContent": { "title": "Log", "count": "214", "body": "Tailing the last run." },
+  "popover": { "trigger": "Popover", "body": "A popover is a surface: it reads --radius-surface." },
+  "hoverCard": { "trigger": "Hover card", "body": "Hover cards float, so they are surfaces too." },
+  "tooltip": { "trigger": "Tooltip", "body": "A tooltip is a surface." },
+  "menu": { "trigger": "Menu", "items": ["Rename", "Duplicate", "Archive"] },
+  "menubar": { "menus": [{ "label": "File", "items": ["New run", "Open…"] }, { "label": "Edit", "items": ["Undo", "Redo"] }] },
+  "command": { "placeholder": "Search commands…", "heading": "Runs", "items": ["Open last run", "Start a backtest", "Show budget"] },
+  "navigation": { "label": "Reports", "items": ["Daily close", "Variance", "Budget"] },
+  "dialog": {
+    "trigger": "Dialog",
+    "title": "Archive this run?",
+    "description": "The dialog is a surface; its buttons are controls."
+  },
+  "alertDialog": {
+    "trigger": "Alert dialog",
+    "title": "Delete the backtest?",
+    "description": "This cannot be undone."
+  },
+  "table": {
+    "columns": ["Agent", "Status", "Tokens"],
+    "rows": [
+      ["ingest", "done", "1,204"],
+      ["reconcile", "running", "3,870"],
+      ["report", "queued", "—"]
+    ]
+  },
+  "rows": [
+    {
+      "caption": "Controls · buttons and toggles",
+      "wide": true,
+      "parts": ["buttons", "icon-button", "button-group", "toggle", "toggle-group", "segmented", "tabs", "kbd"]
+    },
+    {
+      "caption": "Controls · fields",
+      "wide": true,
+      "parts": ["input", "search", "input-group", "select", "textarea", "checkbox", "icon-input", "swatches"]
+    },
+    {
+      "caption": "Controls · badges and chips",
+      "wide": true,
+      "parts": ["badges", "filter-chip", "address-chip", "agent-chip", "kind-chip", "lens-chip", "mark-chip", "suggestions"]
+    },
+    {
+      "caption": "Surfaces · cards and panels",
+      "wide": true,
+      "parts": ["card", "panel", "panel-content"]
+    },
+    {
+      "caption": "Surfaces · floating",
+      "wide": true,
+      "parts": ["popover", "hover-card", "tooltip", "menu", "menubar", "navigation", "dialog", "alert-dialog", "command"]
+    },
+    {
+      "caption": "Structure · --radius",
+      "parts": ["table"]
+    },
+    {
+      "caption": "Together · a card holding all three",
+      "parts": ["nested"]
+    }
+  ]
+}

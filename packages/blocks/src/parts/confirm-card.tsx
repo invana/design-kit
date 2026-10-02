@@ -74,7 +74,7 @@ export const ConfirmCard = React.forwardRef<HTMLDivElement, ConfirmCardProps>(
             // so the outer cells are flush.
             seamless
               ? "-mx-2 -my-1 [clip-path:inset(0.25rem_0.5rem)]"
-              : "overflow-hidden rounded-control border border-border",
+              : "overflow-hidden rounded-md border border-border",
           )}
           style={{ gridTemplateColumns: `repeat(${cost.length}, minmax(0, 1fr))` }}
         >

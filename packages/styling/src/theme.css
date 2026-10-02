@@ -34,17 +34,22 @@
   --color-card-foreground: hsl(222.2 84% 4.9%);
 
   /* Border Radius — see the full rationale in `index.css`.
-     Structure 0 · controls 2px (`rounded-control`) · round only where round
-     IS the object. The scale is flat on purpose so components already written
-     against rounded-sm/md/lg need no edit and cannot drift back. */
+     Three dials: structure `--radius` (0, every step below reads it),
+     surfaces `--radius-surface` (card-like frames, `rounded-surface`, follows
+     --radius) and controls `--radius-control` (4px, `rounded-control`) ·
+     round only where
+     round IS the object. */
   --radius: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-control: 2px;
+  --radius-xs: var(--radius);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+  --radius-surface: var(--radius);
+  --radius-control: 4px;
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;

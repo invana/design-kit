@@ -167,55 +167,67 @@
   --color-edge: hsl(210 6% 78%);
 
   /* ------------------------------------------------------------------------
-   * Border radius — the design language, decided 01-09-2026.
+   * Border radius — three dials, revised 03-10-2026.
    *
-   *   STRUCTURE is cut.      0      anything that CONTAINS
-   *   CONTROLS are pressed.  2px    anything you PRESS or TYPE INTO
-   *   SHAPE is not radius.   999px  only where round IS the object
+   *   STRUCTURE   --radius          0          anything that CONTAINS
+   *   SURFACES    --radius-surface  --radius   cards, panels, anything floating
+   *   CONTROLS    --radius-control  4px        anything you PRESS, TYPE INTO
+   *                                            or that labels at control height
+   *   SHAPE       rounded-full      999px      only where round IS the object
    *
-   * Structure: cards, panels, dialogs, popovers, menus, tables, ledger rows,
-   * chips, badges, tab panels, canvas surfaces, diagram nodes.
-   * Controls: buttons, inputs, selects, textareas, menu items, tab triggers,
-   * toggles — `rounded-control`, generated from `--radius-control` below.
+   * Structure: tables, ledger rows, boxes inside a card, tab panels, canvas
+   * surfaces, diagram nodes — `rounded`, `rounded-sm` …
+   * `rounded-4xl`, every step of which reads `--radius`.
+   * Surfaces: the frames a block or a screen section sits in — Card (and so
+   * PanelContent), PanelBox — and everything that floats over
+   * the page: Dialog, AlertDialog, Popover, HoverCard, Tooltip, dropdown and
+   * menubar menus, Select's list, Command, the NavigationMenu viewport —
+   * `rounded-surface`, which reads `--radius-surface`. It defaults to
+   * `--radius`; set it to round the frames while what is inside them stays
+   * cut.
+   * Controls: buttons, badges, chips, inputs, selects, textareas, menu items,
+   * tab triggers, toggles — `rounded-control`, which reads `--radius-control`.
    * Shape: avatars, status dots, spinners, slider thumbs, switch capsules,
-   * scrollbar thumbs. These keep `rounded-full` because they are round
-   * objects, not rectangles with soft ends. A rectangle wearing round ends is
-   * a pill, and there are no pills.
+   * scrollbar thumbs keep `rounded-full` because they are round objects, not
+   * rectangles with soft ends. There are no pills.
    *
    * WHY 0 FOR STRUCTURE. The hairline grid is the house component: cells sit
    * on a `bg-border` backdrop separated by `gap-px`, so the "border" is the
    * backdrop showing through a one-pixel gap. Any radius on a cell lets that
    * backdrop through at every corner as a grey notch — radii and hairline
-   * grids cannot both win. It also holds at application density: a radius
-   * that is invisible on a 44px button is loud on a 24px row, and nesting a
-   * chip in a row in a panel in a card stacks four of them into mush. Sharp
-   * nests at any size.
+   * grids cannot both win. Nesting a chip in a row in a panel in a card would
+   * also stack radii into mush. Sharp nests at any size.
    *
-   * WHY 2px FOR CONTROLS, not 0. At touch size a fully cut button reads as
-   * cut metal. 2px is invisible as decoration and legible as affordance: the
-   * difference between a surface and a thing you press is information, and in
-   * a dense application that does real work.
+   * WHY A RADIUS FOR CONTROLS. The difference between a surface and a thing
+   * you press is information. A badge sits with the controls, not the
+   * structure, so a Badge beside a Button of the same height draws the same
+   * corner.
    *
-   * The scale is deliberately flat. `rounded-sm` / `-md` / `-lg` / `-xl` /
-   * `-2xl` all resolve to 0, so the ~79 components already written against
-   * them need no edit, and a `rounded-lg` typed out of habit tomorrow cannot
-   * quietly reintroduce a radius.
+   * ALL THREE ARE DIALS. Tune any on `:root` or per theme
+   * (`[data-theme="…"] { --radius-control: 2px }`) and everything on that side
+   * follows. The structure scale is flat on purpose: every step draws the same
+   * corner, so a `rounded-lg` typed out of habit cannot drift from the rest.
+   * A component with no `rounded-*` class follows neither dial — give it one.
    * ---------------------------------------------------------------------- */
   --radius: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
+  --radius-xs: var(--radius);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
 
-  /* The only non-zero rectangle radius in the system. Generates
-     `rounded-control`, which every control component points at. */
-  --radius-control: 2px;
+  /* Cards, panels and floating surfaces (dialogs, popovers, menus) point at
+     `rounded-surface`. Follows --radius until set on its own. */
+  --radius-surface: var(--radius);
 
-  /* Retained: predates the decision, and is now the same value as
-     --radius-control. Prefer `rounded-control` — it says what it is for. */
-  --radius-2px: 2px;
+  /* Every control points at `rounded-control`. */
+  --radius-control: 4px;
+
+  /* Retained alias of --radius-control. Prefer `rounded-control`. */
+  --radius-2px: var(--radius-control);
 
   /* ------------------------------------------------------------------------
    * Control heights — one scale, and a size name means one height.

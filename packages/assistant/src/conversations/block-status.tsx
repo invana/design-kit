@@ -57,7 +57,6 @@ export function BlockSkeleton({ kind }: { kind: string }) {
       {bars.map(([width, height], i) => (
         <Skeleton
           key={i}
-          className="rounded-[2px]"
           style={{ width: `${width * 100}%`, height: height ?? 9 }}
         />
       ))}
@@ -80,7 +79,7 @@ export function BlockEmpty({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <p className="m-0 rounded-[3px] border border-dashed border-border px-2 py-3.5 text-center text-sm text-muted-foreground">
+      <p className="m-0 rounded-md border border-dashed border-border px-2 py-3.5 text-center text-sm text-muted-foreground">
         {text}
       </p>
       {suggestions?.length ? <SuggestionChips items={suggestions} onSelect={onSuggest} /> : null}
