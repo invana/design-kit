@@ -141,6 +141,25 @@
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(210 10% 20%);
 
+  /* What frames the work — app header and footer, side panels, a panel's
+     header strip, a table's header — as distinct from the work itself
+     (`card`). A theme that sets no chrome of its own gets the point halfway
+     from its card to its background, so the layer exists, and recedes, in
+     every theme. */
+  --color-chrome: color-mix(in srgb, var(--color-card), var(--color-background));
+
+  /* shadcn's Sidebar names, mapped onto the kit's own: a sidebar is chrome,
+     its hover is accent, so it follows every theme rather than carrying a
+     palette of its own. */
+  --color-sidebar: var(--color-chrome);
+  --color-sidebar-foreground: var(--color-card-foreground);
+  --color-sidebar-primary: var(--color-primary);
+  --color-sidebar-primary-foreground: var(--color-primary-foreground);
+  --color-sidebar-accent: var(--color-accent);
+  --color-sidebar-accent-foreground: var(--color-accent-foreground);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-ring: var(--color-ring);
+
   /* The line between two things on a canvas — a graph edge, a dependency
      arrow, a connector. Deliberately NOT --color-border: a border separates
      surfaces and may go invisible against them, while an edge is content and
