@@ -179,6 +179,11 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   last segment (`title: 'Blocks/Components/Confirm'`, `export const Confirm`), so Storybook hoists
   it and draws no component node. A component whose variants are too heavy for one page (a
   `DataTable`, an app shell) draws one at a time: its `variant` arg defaults to the first caption.
+- **Themes are the exception: a shell is seen, not wrapped.** A story under `themes/` draws one
+  app shell full-screen and nothing else — no `VariantBoard`, no event log, no replay bar, no
+  variant select — one story per layout, each its own title (`Themes/AppV2/Main Left`), so the
+  sidebar still shows only folders and stories. Seeing the theme is the point; story chrome
+  around it ruins that.
 - **Blocks, Charts, Dashboard and Assistant share one tree**: `<Area>/Components/<Name>` (one
   story per component, every variant), `<Area>/Showcase` (every component of the area and its
   variants on one page, read from the same JSON — never a second copy of the data), plus
