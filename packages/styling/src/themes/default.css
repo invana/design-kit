@@ -89,7 +89,7 @@
   --popover-foreground: 220 10% 92%;
   --border: 220 8% 18%;
   --input: 220 8% 21%;
-  --card: 220 8% 13.5%;
+  --card: 220 8% 11%;
   --card-foreground: 220 10% 92%;
   --primary: 152 52% 52%;
   --primary-foreground: 220 10% 6%;
@@ -117,7 +117,7 @@
   --color-popover-foreground: hsl(220 10% 92%);
   --color-border: hsl(220 8% 18%);
   --color-input: hsl(220 8% 21%);
-  --color-card: hsl(220 8% 13.5%);
+  --color-card: hsl(220 8% 11%);
   --color-card-foreground: hsl(220 10% 92%);
   --color-primary: hsl(152 52% 52%);
   --color-primary-foreground: hsl(220 10% 6%);
