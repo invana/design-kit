@@ -84,6 +84,13 @@ const preview: Preview = {
       return <Story />;
     },
   ],
+  // A `play` that clicks or types leaves focus on that control, and a scripted
+  // focus counts as keyboard focus until the pointer moves — so the story would
+  // open with a focus ring drawn. Let go of it once the checks have run.
+  afterEach: () => {
+    const el = document.activeElement;
+    if (el instanceof HTMLElement && el !== document.body) el.blur();
+  },
 };
 
 export default preview;
