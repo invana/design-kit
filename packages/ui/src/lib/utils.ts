@@ -14,6 +14,11 @@ import { extendTailwindMerge } from "tailwind-merge"
  * Registering them as spacing values puts them in every spacing group, so the
  * later class wins as it does for any other height.
  *
+ * The same holds for the radius dials (`rounded-control`, `rounded-surface`,
+ * from `--radius-control` / `--radius-surface`): unregistered,
+ * `cn("rounded-control", "rounded-none")` keeps both, so an override such as
+ * an input group squaring its inner input could lose to stylesheet order.
+ *
  * The type ladder needs nothing here: `base · sm · xs` are all Tailwind
  * built-ins. If a future `--text-*` token invents a name Tailwind does not
  * know, register it in the same breath — `text-*` is both size and colour, and
@@ -23,6 +28,7 @@ const twMerge = extendTailwindMerge({
   extend: {
     theme: {
       spacing: ["control-xs", "control-sm", "control-md", "control-lg"],
+      radius: ["control", "surface"],
     },
   },
 })

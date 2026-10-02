@@ -800,7 +800,7 @@ export const LayerStrip = React.forwardRef<HTMLDivElement, LayerStripProps>(
       <div
         ref={ref}
         className={cn(
-          "min-w-0 overflow-x-auto rounded-control border border-border bg-card",
+          "min-w-0 overflow-x-auto rounded-md border border-border bg-card",
           className,
         )}
         {...props}

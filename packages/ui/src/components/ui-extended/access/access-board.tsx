@@ -149,7 +149,7 @@ const AccessTile = React.memo(function AccessTile({
       onBlur={() => onFocusChange?.(null)}
       onClick={() => onSelectedChange?.(selected ? null : t.key)}
       className={cn(
-        "flex min-w-0 items-center gap-2 rounded-control border border-border bg-card px-2 py-1 text-left",
+        "flex min-w-0 items-center gap-2 rounded-md border border-border bg-card px-2 py-1 text-left",
         "transition-colors motion-reduce:transition-none",
         // Rings, not border colours: an inset ring is a box-shadow, so it
         // draws over the global `* { border-color }` in @invana/styling, which

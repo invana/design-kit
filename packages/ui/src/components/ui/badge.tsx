@@ -13,13 +13,13 @@ import { cn } from "../../lib/utils"
  * recolours `default`, `outline` and `soft`, and leaves `secondary` and
  * `destructive` alone — those are already a colour decision.
  *
- * No pill. A badge is structure, so it takes the structure radius, 0 (see
- * `@invana/styling` › border radius, decided 01-09-2026). Where round *is* the
- * object — a count bubble on a nav item, a state marker — that is `StatusDot`
- * or an explicit `rounded-full`, never a badge variant.
+ * No pill. A badge sits at control height beside buttons, so it takes the
+ * control radius, `rounded-control` (see `@invana/styling` › border radius).
+ * Where round *is* the object — a count bubble on a nav item, a state marker —
+ * that is `StatusDot` or an explicit `rounded-full`, never a badge variant.
  */
 const badgeVariants = cva(
-  "inline-flex items-center border font-semibold transition-colors \
+  "inline-flex items-center rounded-control border font-semibold transition-colors \
   focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {

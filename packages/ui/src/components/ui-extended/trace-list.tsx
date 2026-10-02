@@ -367,7 +367,7 @@ export const TraceGate = React.forwardRef<HTMLDivElement, TraceGateProps>(
       />
       <span
         className={cn(
-          "relative ml-8 flex items-center gap-2 rounded-control border bg-card px-2 py-0.5",
+          "relative ml-8 flex items-center gap-2 rounded-md border bg-card px-2 py-0.5",
           GATE_TONE[tone],
         )}
       >

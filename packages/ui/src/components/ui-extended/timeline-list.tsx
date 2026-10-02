@@ -129,7 +129,7 @@ export const TimelineEntry = React.forwardRef<
         ref={ref}
         className={cn(
           "grid grid-cols-[3.5rem_0.75rem_minmax(0,1fr)] items-baseline gap-1.5 pb-1 last:pb-0",
-          highlight && "rounded-[2px]",
+          highlight && "rounded-md",
           highlight === "error" && "bg-destructive/15",
           highlight === "warning" && "bg-warning/15",
           highlight === "success" && "bg-success/15",

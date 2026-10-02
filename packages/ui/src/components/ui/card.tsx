@@ -8,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-md border bg-card text-card-foreground shadow",
+      "rounded-surface border bg-card text-card-foreground shadow",
       className
     )}
     {...props}
@@ -84,7 +84,7 @@ interface CardWithHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
 const CardWithHeader = React.forwardRef<HTMLDivElement, CardWithHeaderProps>(
   ({ className, title, description, headerClassName, contentClassName, footerClassName, footer, children, ...props }, ref) => (
     <Card ref={ref} className={className} {...props}>
-      <CardHeader className={`${headerClassName} rounded-t-md`}>
+      <CardHeader className={`${headerClassName} rounded-t-surface`}>
         {typeof title === 'string' ? <CardTitle>{title}</CardTitle> : title}
         {description && (typeof description === 'string' ? <CardDescription>{description}</CardDescription> : description)}
       </CardHeader>

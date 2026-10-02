@@ -55,7 +55,7 @@ export const MatchPreview = React.forwardRef<HTMLDivElement, MatchPreviewProps>(
       <div
         ref={ref}
         className={cn(
-          "flex min-w-0 flex-col gap-1 rounded-control border border-border p-2",
+          "flex min-w-0 flex-col gap-1 rounded-md border border-border p-2",
           className,
         )}
         {...props}

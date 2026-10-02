@@ -58,10 +58,10 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
     <Card
       ref={ref}
       className={cn(
-        // A band is square and flat: the radius and the lift belong to cards
-        // that float, and twenty of these in a column would read as twenty
-        // floating things rather than one page.
-        "flex min-w-0 flex-col overflow-hidden rounded-control shadow-none",
+        // A band is flat: the lift belongs to cards that float, and twenty of
+        // these in a column would read as twenty floating things rather than
+        // one page. Its corner is the surface dial, as a Card's is.
+        "flex min-w-0 flex-col overflow-hidden rounded-surface shadow-none",
         className,
       )}
       {...props}

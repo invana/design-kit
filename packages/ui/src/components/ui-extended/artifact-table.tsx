@@ -74,7 +74,7 @@ export const ArtifactTable = React.forwardRef<
       {files.map((file, index) => (
         <div
           key={index}
-          className="flex items-center gap-2.5 border-b border-border/60 py-1 last:border-b-0"
+          className="flex items-center gap-2.5 rounded-md border-b border-border/60 py-1 last:border-b-0"
         >
           {file.icon != null ? (
             <span className="flex w-4 shrink-0 justify-center text-muted-foreground">{file.icon}</span>
@@ -199,13 +199,13 @@ export const ArtifactCard = React.forwardRef<HTMLDivElement, ArtifactCardProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex items-center gap-2.5 rounded-[3px] border border-border p-2", className)}
+        className={cn("flex items-center gap-2.5 rounded-md border border-border p-2", className)}
         {...props}
       >
         {ext ? (
           <span
             aria-hidden
-            className="flex h-9 w-[30px] shrink-0 items-end justify-center rounded-[2px] border border-border bg-muted pb-[3px] font-mono text-[0.692rem] leading-none text-muted-foreground"
+            className="flex h-9 w-[30px] shrink-0 items-end justify-center rounded-md border border-border bg-muted pb-[3px] font-mono text-[0.692rem] leading-none text-muted-foreground"
           >
             {ext}
           </span>

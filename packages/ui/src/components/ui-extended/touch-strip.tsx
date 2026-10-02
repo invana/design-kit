@@ -106,7 +106,7 @@ export const TouchStrip = React.forwardRef<HTMLDivElement, TouchStripProps>(
               key={String(item.layer)}
               role="listitem"
               className={cn(
-                "flex min-w-0 flex-1 flex-col gap-px rounded-control border border-border bg-card px-2 py-1",
+                "flex min-w-0 flex-1 flex-col gap-px rounded-md border border-border bg-card px-2 py-1",
                 item.dim && "opacity-55",
               )}
             >

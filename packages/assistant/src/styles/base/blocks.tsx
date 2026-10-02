@@ -103,7 +103,7 @@ export function OutcomeView({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-control border border-border px-2 py-1.5",
+        "flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-md border border-border px-2 py-1.5",
         tone === "bad" && "border-destructive/50",
         className,
       )}
