@@ -1,0 +1,75 @@
+{
+  "data": {
+    "metrics": [
+      { "label": "Datasets", "value": "4", "caption": "1 refreshing" },
+      { "label": "Entities", "value": "12,408", "caption": "6 types" },
+      { "label": "Relations", "value": "31,920", "caption": "5 types" },
+      { "label": "Last sync", "value": "10:12", "caption": "today" }
+    ],
+    "datasets": [
+      { "name": "crm.accounts", "source": "Salesforce", "rows": "4,812", "refreshed": "10:12", "status": "synced" },
+      { "name": "crm.pipeline", "source": "Salesforce", "rows": "9,307", "refreshed": "10:12", "status": "synced" },
+      { "name": "funding.rounds", "source": "Crunchbase", "rows": "1,146", "refreshed": "09:40", "status": "refreshing" },
+      { "name": "filings.form_d", "source": "SEC EDGAR", "rows": "388", "refreshed": "2 Oct", "status": "stale" }
+    ],
+    "graph": [
+      { "type": "Company", "kind": "entity", "count": "4,812", "from": "crm.accounts" },
+      { "type": "Person", "kind": "entity", "count": "3,904", "from": "crm.accounts" },
+      { "type": "Round", "kind": "entity", "count": "1,146", "from": "funding.rounds" },
+      { "type": "Metric", "kind": "entity", "count": "2,158", "from": "crm.pipeline" },
+      { "type": "Filing", "kind": "entity", "count": "388", "from": "filings.form_d" },
+      { "type": "RAISED", "kind": "relation", "count": "1,146", "from": "funding.rounds" },
+      { "type": "OWNED_BY", "kind": "relation", "count": "4,812", "from": "crm.accounts" },
+      { "type": "HAS_METRIC", "kind": "relation", "count": "21,580", "from": "crm.pipeline" },
+      { "type": "EVIDENCED_BY", "kind": "relation", "count": "3,994", "from": "filings.form_d" },
+      { "type": "REPORTED_BY", "kind": "relation", "count": "388", "from": "filings.form_d" }
+    ]
+  },
+  "llms": {
+    "models": [
+      { "role": "Default", "provider": "local", "model": "qwen3-27b", "context": "128k", "status": "ready" },
+      { "role": "Fallback", "provider": "openai", "model": "gpt-4o-mini", "context": "128k", "status": "ready" },
+      { "role": "Embeddings", "provider": "local", "model": "bge-m3", "context": "8k", "status": "ready" }
+    ],
+    "budget": { "label": "Tokens this month", "value": "1.24M of 2M", "caption": "resets 1 Nov", "meter": 0.62 }
+  },
+  "governance": {
+    "fields": [
+      { "name": "maskPII", "type": "boolean", "label": "Mask personal data in answers" },
+      { "name": "approveWrites", "type": "boolean", "label": "Ask before an agent writes to the graph" },
+      {
+        "name": "sources",
+        "type": "select",
+        "label": "Sources an answer may cite",
+        "options": [
+          { "label": "Primary only", "value": "primary" },
+          { "label": "Primary and secondary", "value": "all" }
+        ]
+      },
+      {
+        "name": "retention",
+        "type": "select",
+        "label": "Keep the audit log for",
+        "options": [
+          { "label": "30 days", "value": "30" },
+          { "label": "90 days", "value": "90" },
+          { "label": "1 year", "value": "365" }
+        ]
+      },
+      { "name": "maxSteps", "type": "number", "label": "Steps per run, at most", "min": 1, "max": 50, "step": 1 }
+    ],
+    "rowConfig": [
+      { "id": "privacy", "fields": ["maskPII"] },
+      { "id": "writes", "fields": ["approveWrites"] },
+      { "id": "policy", "fields": ["sources", "retention"] },
+      { "id": "limits", "fields": ["maxSteps"] }
+    ],
+    "initial": { "maskPII": true, "approveWrites": true, "sources": "all", "retention": "90", "maxSteps": 12 }
+  },
+  "thirdParty": [
+    { "name": "Salesforce", "usedFor": "Accounts and pipeline", "status": "connected" },
+    { "name": "Crunchbase", "usedFor": "Funding rounds", "status": "connected" },
+    { "name": "SEC EDGAR", "usedFor": "Form D filings", "status": "connected" },
+    { "name": "Slack", "usedFor": "Send answers to a channel", "status": "not connected" }
+  ]
+}

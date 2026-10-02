@@ -8,7 +8,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
   Button,
   EmptyState,
@@ -17,7 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger,
   Separator,
-  type NavHorizontalItem,
 } from '@invana/ui';
 import {
   ChatSession,
@@ -31,20 +29,23 @@ import {
   Minimize,
   Monitor,
   Moon,
-  MoreHorizontal,
   Palette,
+  Settings,
   Sparkles,
+  Star,
   Sun,
 } from 'lucide-react';
 
 import data from '../../../fixtures/themes/app-agents.json';
 import { CHAT_ICONS, logEvent } from '../../assistant/chat-kit';
+import { SettingsDialog } from './settings-dialog';
 
 /**
  * The thread as the API would send it: the spec it opens on, the ask that plays in
  * after it, and the answer that streams once the ask is answered.
  */
 const FIXTURE = data as unknown as {
+  stars: number;
   sessions: string[];
   spec: ConversationSpec;
   opening: PatchScript;
@@ -80,35 +81,28 @@ function Conversation() {
   return <ChatSession spec={chat.spec} variant="cli" icons={CHAT_ICONS} onEvent={onEvent} onStop={chat.stop} />;
 }
 
-/** How many sessions the header shows before the rest fold into `…`. */
-const SHOWN = 3;
-
 /**
- * The open sessions as header nav: the first three, then `…` holding the rest.
- * A session picked from `…` takes the last visible place, so the open one is
- * always on the strip.
+ * The open session as the last crumb of the trail, drawn as the crumbs are; its
+ * caret lists the other sessions, and picking one opens it.
  */
-function SessionsNav() {
-  const [order, setOrder] = React.useState(FIXTURE.sessions);
-  const [active, setActive] = React.useState(order[0]);
-
-  const open = (name: string) => {
-    setActive(name);
-    if (order.indexOf(name) >= SHOWN) {
-      setOrder((o) => [...o.slice(0, SHOWN - 1), name, ...o.slice(SHOWN - 1).filter((n) => n !== name)]);
-    }
-  };
-
-  const items: NavHorizontalItem[] = [
-    ...order.slice(0, SHOWN).map((name) => ({ name, label: name, onClick: () => open(name) })),
-    {
-      name: 'More sessions',
-      icon: MoreHorizontal,
-      menuItems: order.slice(SHOWN).map((name) => ({ id: name, label: name, onSelect: () => open(name) })),
-    },
-  ];
-
-  return <NavHorizontalItems items={items} activeKey={active} />;
+function SessionCrumb() {
+  const [active, setActive] = React.useState(FIXTURE.sessions[0]);
+  return (
+    <NavHorizontalItems
+      items={[
+        {
+          key: 'session',
+          name: 'Sessions',
+          label: active,
+          menuTrigger: 'caret',
+          menuItems: FIXTURE.sessions
+            .filter((name) => name !== active)
+            .map((name) => ({ id: name, label: name, onSelect: () => setActive(name) })),
+          className: '!p-0 font-bold text-foreground hover:!bg-transparent hover:text-primary',
+        },
+      ]}
+    />
+  );
 }
 
 const MODE_ICONS = { light: Sun, dark: Moon, system: Monitor };
@@ -118,7 +112,7 @@ function ThemeMenu() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon-xs" title="Theme & appearance">
+        <Button variant="ghost" size="icon-sm" className="[&_svg]:size-5" title="Theme & appearance">
           <Palette />
         </Button>
       </PopoverTrigger>
@@ -140,9 +134,41 @@ function FullScreenToggle() {
   const toggle = () =>
     void (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
   return (
-    <Button variant="ghost" size="icon-xs" title={full ? 'Exit full screen' : 'Full screen'} onClick={toggle}>
+    <Button variant="ghost" size="icon-sm" className="[&_svg]:size-5" title={full ? 'Exit full screen' : 'Full screen'} onClick={toggle}>
       {full ? <Minimize /> : <Maximize />}
     </Button>
+  );
+}
+
+/** Stars the graph: the star fills and the count takes the reader's star. */
+function StarButton() {
+  const [starred, setStarred] = React.useState(false);
+  const count = FIXTURE.stars + (starred ? 1 : 0);
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="[&_svg]:size-5"
+      title={starred ? 'Unstar' : 'Star'}
+      aria-pressed={starred}
+      onClick={() => setStarred((s) => !s)}
+    >
+      <Star className={starred ? 'fill-current' : undefined} />
+      <span className="tabular-nums">{count.toLocaleString()}</span>
+    </Button>
+  );
+}
+
+/** Opens the graph's settings: data, LLMs, governance and third-party services. */
+function SettingsButton() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <Button variant="ghost" size="icon-sm" className="[&_svg]:size-5" title="Settings" onClick={() => setOpen(true)}>
+        <Settings />
+      </Button>
+      <SettingsDialog open={open} onOpenChange={setOpen} scope="accounts-graph" />
+    </>
   );
 }
 
@@ -171,48 +197,49 @@ export const Default: Story = {
     </ThemeProvider>
   ),
   args: {
-    // As Studio's Explorer draws it: brand, the trail and the open sessions on
-    // the left; what the canvas holds, the theme, full screen and the assistant on the right.
+    // As Studio's Explorer draws it: brand and the trail, ending in the open
+    // session, on the left; stars, the theme, full screen, the assistant and settings on the right.
     header: {
       left: (
         <div className="flex items-center gap-1">
           <span className="select-none px-2 text-xl font-bold">Invana Studio</span>
           <Separator orientation="vertical" className="h-4" />
           <Breadcrumb className="px-1.5">
-            <BreadcrumbList className="gap-1.5 font-bold text-foreground sm:gap-1.5">
+            <BreadcrumbList className="gap-1.5 font-bold sm:gap-1.5">
               <BreadcrumbItem>
-                <BreadcrumbLink href="#" className="hover:text-primary">
+                <BreadcrumbLink href="#">
                   ravi-merugu
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-muted-foreground" />
+              <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage className="font-bold">accounts-graph</BreadcrumbPage>
+                <BreadcrumbLink href="#">
+                  accounts-graph
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <SessionCrumb />
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <Separator orientation="vertical" className="h-4" />
-          <SessionsNav />
         </div>
       ),
-      // The Explorer's right side — what the canvas holds, the theme, the assistant —
-      // with a full-screen toggle.
+      // The Explorer's right side — the theme and the assistant — with the
+      // graph's stars, a full-screen toggle and its settings.
       rightNavItems: [
-        {
-          name: 'Entities in view',
-          label: <span className="tabular-nums text-muted-foreground">9 of 12,408</span>,
-          className: '!px-1.5',
-        },
-        { name: 'Theme & appearance', label: <ThemeMenu />, className: '!p-0' },
-        { name: 'Full screen', label: <FullScreenToggle />, className: '!p-0' },
+        { name: 'Stars', label: <StarButton />, className: '!px-1 !py-0' },
+        { name: 'Theme & appearance', label: <ThemeMenu />, className: '!px-1 !py-0' },
+        { name: 'Full screen', label: <FullScreenToggle />, className: '!px-1 !py-0' },
         {
           name: 'Assistant',
           label: 'Assistant',
           icon: Sparkles,
-          iconClassName: 'size-4',
+          iconClassName: 'size-5',
           onClick: () => {},
-          className: '!bg-primary/10 !text-primary !px-2 !py-1 hover:!bg-primary/15',
+          className: 'ml-1 !px-2 !py-1',
         },
+        { name: 'Settings', label: <SettingsButton />, className: '!px-1 !py-0' },
       ],
     },
     leftSection: { content: <Conversation /> },
@@ -227,16 +254,21 @@ export const Default: Story = {
   },
   play: async ({ canvasElement, step }) => {
     const c = within(canvasElement);
-    await step('A session folded under … takes the last visible place when picked', async () => {
+    await step('The trail shows one session; another is picked from its dropdown', async () => {
       await expect(c.queryByText('Board pack')).not.toBeInTheDocument();
-      await userEvent.click(c.getByRole('button', { name: /More sessions/ }));
+      await userEvent.click(c.getByRole('button', { name: 'Sessions menu' }));
       await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Board pack' }));
       await expect(c.getByText('Board pack')).toBeInTheDocument();
-      await expect(c.queryByText('SOC 2 gaps')).not.toBeInTheDocument();
     });
     await step('The scope ask plays in, and picking one streams the answer', async () => {
       await userEvent.click(await c.findByText('Top 50 by ARR', {}, { timeout: 3000 }));
       await expect(await c.findByText('Acme Robotics', {}, { timeout: 8000 })).toBeInTheDocument();
+    });
+    await step('Settings opens on the data: the datasets and the graph built from them', async () => {
+      await userEvent.click(c.getByRole('button', { name: 'Settings' }));
+      const dialog = within(await within(document.body).findByRole('dialog'));
+      await expect(dialog.getByText('Crunchbase')).toBeInTheDocument();
+      await expect(dialog.getByText('EVIDENCED_BY')).toBeInTheDocument();
     });
   },
 };
