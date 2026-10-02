@@ -336,12 +336,13 @@
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 150ms ease-out, transform 150ms ease-out;
+    --hint-color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
     background-repeat: no-repeat;
     background-image:
-      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
-      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
-      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7)),
-      linear-gradient(hsl(var(--foreground) / 0.7), hsl(var(--foreground) / 0.7));
+      linear-gradient(var(--hint-color), var(--hint-color)),
+      linear-gradient(var(--hint-color), var(--hint-color)),
+      linear-gradient(var(--hint-color), var(--hint-color)),
+      linear-gradient(var(--hint-color), var(--hint-color));
   }
 
   &::before {
@@ -357,9 +358,7 @@
   &:hover::before,
   &:hover::after,
   &:focus-visible::before,
-  &:focus-visible::after,
-  &:focus-within::before,
-  &:focus-within::after {
+  &:focus-visible::after {
     opacity: 1;
     transform: scale(1);
   }
@@ -406,6 +405,17 @@ body {
 @layer base {
   * {
     border-color: var(--color-border);
+  }
+
+  /*
+   * A ring's offset gap is the page, not Tailwind's default white — so a
+   * `ring-offset-2` reads as a gap on a dark theme too. A
+   * `ring-offset-<colour>` utility still wins.
+   */
+  *,
+  ::before,
+  ::after {
+    --tw-ring-offset-color: var(--color-background);
   }
 }
 
