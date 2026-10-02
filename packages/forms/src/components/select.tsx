@@ -22,7 +22,7 @@ const SelectTrigger = React.forwardRef<
     className={cn(
       "py-0",
       triggerSize === "sm" ? "h-control-sm px-2" : triggerSize === "lg" ? "h-control-lg px-3" : "h-control-md px-2.5",
-      "flex w-full items-center justify-between whitespace-nowrap rounded-control border border-input bg-transparent  shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex w-full items-center justify-between whitespace-nowrap rounded-control border border-input bg-transparent  shadow-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
     {...props}

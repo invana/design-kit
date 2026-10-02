@@ -20,7 +20,7 @@ import { cn } from "../../lib/utils"
  */
 const badgeVariants = cva(
   "inline-flex items-center rounded-control border font-semibold transition-colors \
-  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
