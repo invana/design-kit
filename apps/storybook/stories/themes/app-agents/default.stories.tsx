@@ -27,6 +27,8 @@ import {
   type PatchScript,
 } from '@invana/assistant';
 import {
+  Maximize,
+  Minimize,
   Monitor,
   Moon,
   MoreHorizontal,
@@ -127,6 +129,23 @@ function ThemeMenu() {
   );
 }
 
+/** Puts the whole page in or out of full screen, and follows Esc leaving it. */
+function FullScreenToggle() {
+  const [full, setFull] = React.useState(false);
+  React.useEffect(() => {
+    const sync = () => setFull(document.fullscreenElement != null);
+    document.addEventListener('fullscreenchange', sync);
+    return () => document.removeEventListener('fullscreenchange', sync);
+  }, []);
+  const toggle = () =>
+    void (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
+  return (
+    <Button variant="ghost" size="icon-xs" title={full ? 'Exit full screen' : 'Full screen'} onClick={toggle}>
+      {full ? <Minimize /> : <Maximize />}
+    </Button>
+  );
+}
+
 const meta: Meta<typeof AppLayoutAgents> = {
   title: 'Themes/AppAgents/Default',
   component: AppLayoutAgents,
@@ -153,7 +172,7 @@ export const Default: Story = {
   ),
   args: {
     // As Studio's Explorer draws it: brand, the trail and the open sessions on
-    // the left; what the canvas holds, the theme and the assistant on the right.
+    // the left; what the canvas holds, the theme, full screen and the assistant on the right.
     header: {
       left: (
         <div className="flex items-center gap-1">
@@ -176,7 +195,8 @@ export const Default: Story = {
           <SessionsNav />
         </div>
       ),
-      // The Explorer's right side: what the canvas holds, the theme, the assistant.
+      // The Explorer's right side — what the canvas holds, the theme, the assistant —
+      // with a full-screen toggle.
       rightNavItems: [
         {
           name: 'Entities in view',
@@ -184,6 +204,7 @@ export const Default: Story = {
           className: '!px-1.5',
         },
         { name: 'Theme & appearance', label: <ThemeMenu />, className: '!p-0' },
+        { name: 'Full screen', label: <FullScreenToggle />, className: '!p-0' },
         {
           name: 'Assistant',
           label: 'Assistant',
