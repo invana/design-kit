@@ -17,7 +17,8 @@ export interface AppLayoutBaseProps {
   header: NavHorizontalProps;
   main: React.ReactNode
   mainClassName?: string
-  footer: NavHorizontalProps
+  /** Optional — a shell with no status line (app-agents) leaves it out. */
+  footer?: NavHorizontalProps
 }
 
 export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
@@ -43,15 +44,17 @@ export const AppLayoutBase: React.FC<AppLayoutBaseProps> = (props) => {
         <div className={cn("flex-1 min-h-0 w-full bg-background", props.mainClassName)}>
           {props.main}
         </div>
-        <NavHorizontal 
-          className={cn("h-control-sm border-t border-border", CHROME_SURFACE, props.footer.className)}
-          left={props.footer.left}
-          leftNavItems={props.footer.leftNavItems}
-          center={props.footer.center}
-          centerNavItems={props.footer.centerNavItems}
-          right={props.footer.right}
-          rightNavItems={props.footer.rightNavItems}
-        />
+        {props.footer && (
+          <NavHorizontal 
+            className={cn("h-control-sm border-t border-border", CHROME_SURFACE, props.footer.className)}
+            left={props.footer.left}
+            leftNavItems={props.footer.leftNavItems}
+            center={props.footer.center}
+            centerNavItems={props.footer.centerNavItems}
+            right={props.footer.right}
+            rightNavItems={props.footer.rightNavItems}
+          />
+        )}
       </div>
     </TooltipProvider>
   );

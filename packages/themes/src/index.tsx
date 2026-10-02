@@ -2,3 +2,4 @@ export * from './core';
 export * from './app-base';
 export * from './app-v1';
 export * from './app-v2';
+export * from './app-agents';

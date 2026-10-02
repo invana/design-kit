@@ -82,7 +82,8 @@ Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` 
 
 ### `@invana/themes` — app shells
 
-- `src/index.tsx` exposes `core` (theme provider), `app-base`, `app-v1`, `app-v2`. Each `app-*` folder is a self-contained layout (header/main/footer or sidebar variants) built on top of `@invana/ui` primitives (`TooltipProvider`, `NavHorizontal`, etc.).
+- `src/index.tsx` exposes `core` (theme provider), `app-base`, `app-v1`, `app-v2`, `app-agents`. Each `app-*` folder is a self-contained layout (header/main/footer or sidebar variants) built on top of `@invana/ui` primitives (`TooltipProvider`, `NavHorizontal`, etc.).
+- `app-agents` is `AppLayoutBase` (footer optional) over one resizable split — conversation rail left, the work right; no activity bar, no inspector, no bottom panel (that is `AppLayoutV2`).
 - Same `tsup` + Tailwind CLI build pipeline as `ui`. Peer deps include `@invana/styling` and `@invana/ui` as `workspace:*`.
 
 ### `apps/storybook` — showcase + dev environment
