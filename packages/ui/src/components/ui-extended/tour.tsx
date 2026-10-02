@@ -221,7 +221,7 @@ export function Tour({
     <ErrorBoundary>
       <Card
         className={cn(
-          "w-80 gap-0 border-border bg-popover p-0 text-popover-foreground shadow-xl",
+          "w-80 gap-0 border-border bg-popover p-0 text-popover-foreground shadow-lg",
           positionClasses[position],
           className
         )}

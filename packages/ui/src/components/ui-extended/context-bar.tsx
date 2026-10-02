@@ -35,7 +35,7 @@ export const ContextBar = React.forwardRef<HTMLDivElement, ContextBarProps>(
     <div
       ref={ref}
       className={cn(
-        "flex h-control-sm shrink-0 items-center gap-3 border-t border-border px-2 text-sm",
+        "flex h-control-sm shrink-0 items-center gap-3 border-t border-border bg-chrome px-2 text-sm",
         className,
       )}
       {...props}

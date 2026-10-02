@@ -103,6 +103,10 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // The sidebar (left) panel. `preserve-pixel-size` holds its width when the
   // surrounding group grows (e.g. the right/auxiliary or bottom collapsing), so
   // the editor absorbs the freed space instead of the sidebar widening.
+  // A side panel (left, right, bottom) is chrome, and so is anything drawn as
+  // a card inside it: the panel re-points `card` at `chrome`, so a TabbedPanel
+  // or a list placed there takes the panel's surface and only the editor comes
+  // forward. Portalled menus and dialogs are outside it and keep their own.
   const sidebarPanel = leftSection ? (
     <ResizablePanel
       id={panelId("sidebar-panel")}
@@ -112,7 +116,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       collapsible={leftSection.collapsible ?? DEFAULT_SIDEBAR.collapsible}
       groupResizeBehavior="preserve-pixel-size"
     >
-      <div className="h-full overflow-auto bg-card border-r">{leftSection.content}</div>
+      <div className="h-full overflow-auto bg-chrome [--color-card:var(--color-chrome)] border-r">{leftSection.content}</div>
     </ResizablePanel>
   ) : null;
 
@@ -127,7 +131,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       collapsible={rightSection.collapsible ?? DEFAULT_AUXILIARY.collapsible}
       groupResizeBehavior="preserve-pixel-size"
     >
-      <div className="h-full overflow-auto bg-card border-l">{rightSection.content}</div>
+      <div className="h-full overflow-auto bg-chrome [--color-card:var(--color-chrome)] border-l">{rightSection.content}</div>
     </ResizablePanel>
   ) : null;
 
@@ -142,7 +146,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
         maxSize={bottomSection.maxSize ?? DEFAULT_TERMINAL.maxSize}
         collapsible={bottomSection.collapsible ?? DEFAULT_TERMINAL.collapsible}
       >
-        <div className="h-full overflow-auto bg-card">{bottomSection.content}</div>
+        <div className="h-full overflow-auto bg-chrome [--color-card:var(--color-chrome)]">{bottomSection.content}</div>
       </ResizablePanel>
     </>
   ) : null;

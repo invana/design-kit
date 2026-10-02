@@ -123,12 +123,11 @@ function DraggableHeader<TData>({
         transition,
         opacity: isDragging ? 0.6 : 1,
         ...getCommonPinStyles(header),
-        ...(isPinned ? { backgroundColor: "hsl(var(--background))" } : {}),
       }}
       className={cn(
         "group relative select-none",
         isPinned &&
-          "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
+          "bg-chrome shadow-[inset_-1px_0_0_0_hsl(var(--border))] group-data-[seamless]/table:bg-card",
         column.columnDef.meta?.headerClassName,
       )}
       // Only a draggable header takes dnd-kit's attributes: when reordering is
@@ -454,7 +453,7 @@ export function TableGrid<TData extends RowData>({
                               align === "right" && "text-right",
                               align === "center" && "text-center",
                               isPinned &&
-                                "bg-background shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
+                                "bg-card shadow-[inset_-1px_0_0_0_hsl(var(--border))]",
                               meta?.mono && "font-mono",
                               meta?.control && CONTROL_CELL,
                               highlighted && HIGHLIGHT,
@@ -528,7 +527,7 @@ export function TableGrid<TData extends RowData>({
           </TableBody>
         </Table>
         {footer != null && (
-          <div className="sticky bottom-0 border-t bg-muted/40 px-3 py-2 text-muted-foreground">
+          <div className="sticky bottom-0 border-t bg-chrome px-3 py-2 text-muted-foreground">
             {footer}
           </div>
         )}

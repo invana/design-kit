@@ -4,12 +4,13 @@ import { cn } from '@invana/ui/lib/utils';
 
 /**
  * The chrome surface. Header and footer are one frame around `main`, so they
- * share a single background — `card`, one step off the `background` the content
- * area sits on. Exported so shells adding their own chrome (app-v1's left
- * activity bar) sit on the same surface rather than re-deriving it.
+ * share a single background — `chrome`, which a theme sets apart from the
+ * `card` the work sits on (a theme that does not set it gets one derived
+ * from its card and background). Exported so shells adding their own chrome
+ * (app-v1's left activity bar) sit on the same surface rather than re-deriving it.
  * A caller's own `className` merges last and still wins.
  */
-export const CHROME_SURFACE = 'bg-card text-card-foreground';
+export const CHROME_SURFACE = 'bg-chrome text-card-foreground';
 
 export interface AppLayoutBaseProps {
   className?: string;

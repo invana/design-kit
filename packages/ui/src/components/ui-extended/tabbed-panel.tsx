@@ -173,11 +173,12 @@ export function TabbedPanel({
         {/* The card is the flex column: the header holds its height and the
             body is the only part that grows. That replaces the old
             `h-[calc(100%-30px)]` arithmetic, which assumed a header that could
-            never wrap or change height. */}
+            never wrap or change height. The tab strip is chrome, the body
+            card. */}
         <Card className={cn("flex h-full min-h-0 flex-col border rounded-none", className)}>
           <div
             className={cn(
-              "flex h-control-md shrink-0 flex-row items-stretch border-b",
+              "flex h-control-md shrink-0 flex-row items-stretch border-b bg-chrome",
               headerClassName
             )}
           >

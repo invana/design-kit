@@ -75,7 +75,7 @@ export function PanelContent({
           <CardHeader
             className={cn(
               "group/panel-header flex h-control-md shrink-0 flex-row items-center gap-2",
-              "space-y-0 border-b py-0 pr-1",
+              "space-y-0 border-b bg-chrome py-0 pr-1",
               headerClassName
             )}
           >
@@ -98,7 +98,7 @@ export function PanelContent({
             {children}
           </CardContent>
           {footerContent ? (
-            <CardFooter className={cn("shrink-0 border-t", footerClassName)}>
+            <CardFooter className={cn("shrink-0 border-t bg-chrome", footerClassName)}>
               {footerContent}
             </CardFooter>
           ) : null}

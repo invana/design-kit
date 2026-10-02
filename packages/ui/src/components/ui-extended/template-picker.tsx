@@ -53,7 +53,7 @@ export const TemplatePicker = React.forwardRef<
     {...props}
   >
     {heading != null ? (
-      <div className="flex h-control-sm shrink-0 items-center border-b border-border px-2 text-sm text-muted-foreground">
+      <div className="flex h-control-sm shrink-0 items-center border-b border-border bg-chrome px-2 text-sm text-muted-foreground">
         {heading}
       </div>
     ) : null}
@@ -87,7 +87,7 @@ export const TemplatePicker = React.forwardRef<
       })}
     </div>
     {footnote != null ? (
-      <div className="border-t border-border px-2 py-1 text-sm text-muted-foreground">
+      <div className="border-t border-border bg-chrome px-2 py-1 text-sm text-muted-foreground">
         {footnote}
       </div>
     ) : null}

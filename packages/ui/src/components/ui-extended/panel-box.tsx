@@ -69,7 +69,7 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
       {title != null ? (
         <div
           className={cn(
-            "flex h-control-md shrink-0 items-center border-b border-border px-2.5",
+            "flex h-control-md shrink-0 items-center border-b border-border bg-chrome px-2.5",
             headerClassName,
           )}
         >

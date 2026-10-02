@@ -254,15 +254,11 @@ export function RichSelect({
       ) : (
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       )}
-      {/* Force the solid token background: the primitive's default popover is
-          translucent (`bg-popover/80` + backdrop-blur), which reads as
-          transparent over a busy canvas. `tailwind-merge` keeps the later
-          `bg-popover`, and any consumer `contentClassName` still wins. */}
       <DropdownMenuContent
         align={align}
         side={side}
         sideOffset={sideOffset}
-        className={cn("min-w-[14rem] bg-popover", contentClassName)}
+        className={cn("min-w-[14rem]", contentClassName)}
       >
         {label && (
           <>

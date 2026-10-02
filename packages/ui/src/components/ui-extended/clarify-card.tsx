@@ -160,7 +160,7 @@ export const ClarifyCard = React.forwardRef<HTMLDivElement, ClarifyCardProps>(
         )}
         {...props}
       >
-        <div className="flex h-control-sm shrink-0 items-center gap-2 border-b border-border bg-muted px-2 text-sm">
+        <div className="flex h-control-sm shrink-0 items-center gap-2 border-b border-border bg-chrome px-2 text-sm">
           <span className="shrink-0 font-medium">{settled ? state : kind}</span>
           {step != null ? (
             <span className="truncate text-muted-foreground">{step}</span>

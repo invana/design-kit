@@ -59,7 +59,7 @@ export const RecordHeader = React.forwardRef<HTMLDivElement, RecordHeaderProps>(
     <div
       ref={ref}
       className={cn(
-        "flex shrink-0 items-center border-b border-border bg-card",
+        "flex shrink-0 items-center border-b border-border bg-chrome",
         SIZE[size],
         className,
       )}
