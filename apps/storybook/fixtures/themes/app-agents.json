@@ -1,11 +1,24 @@
 {
+  "sessions": [
+    "Funding watch",
+    "Penang exposure",
+    "SOC 2 gaps",
+    "Q4 churn risk",
+    "Vendor overlap",
+    "Board pack"
+  ],
   "spec": {
     "id": "funding-watch",
     "title": "Funding watch",
     "analyst": "You",
     "assistant": "Analyst",
-    "scope": { "World": "Accounts graph", "Lens": "Funding watch" },
-    "composer": { "placeholder": "Message all in Accounts graph" },
+    "scope": {
+      "World": "Accounts graph",
+      "Lens": "Funding watch"
+    },
+    "composer": {
+      "placeholder": "Message all in Accounts graph"
+    },
     "turns": [
       {
         "id": "u1",
@@ -31,11 +44,22 @@
             "question": "What counts as a **top account**?",
             "label": "Top accounts",
             "options": [
-              { "value": "arr", "label": "Top 50 by ARR", "detail": "crm.arr" },
-              { "value": "pipeline", "label": "Top 50 by open pipeline", "detail": "crm.pipeline" },
-              { "value": "strategic", "label": "Strategic accounts list", "detail": "38 accounts" }
-            ],
-            "default": "arr"
+              {
+                "value": "arr",
+                "label": "Top 50 by ARR",
+                "detail": "crm.arr"
+              },
+              {
+                "value": "pipeline",
+                "label": "Top 50 by open pipeline",
+                "detail": "crm.pipeline"
+              },
+              {
+                "value": "strategic",
+                "label": "Strategic accounts list",
+                "detail": "38 accounts"
+              }
+            ]
           }
         }
       }
@@ -58,12 +82,87 @@
         }
       }
     },
-    { "at": 400, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "resolve", "key": "resolve_scope", "label": "Resolve top accounts", "state": "running" } } },
-    { "at": 1200, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "resolve", "key": "resolve_scope", "label": "Resolve top accounts", "detail": "50 accounts", "state": "done" } } },
-    { "at": 1300, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "rounds", "key": "match_rounds", "label": "Match funding rounds · last 90 days", "state": "running" } } },
-    { "at": 2400, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "rounds", "key": "match_rounds", "label": "Match funding rounds · last 90 days", "detail": "3 rounds · 4 sources", "state": "done" } } },
-    { "at": 2500, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "revenue", "key": "read_metric", "label": "Read Q3 revenue", "state": "running" } } },
-    { "at": 3200, "patch": { "op": "add-trace-step", "turn": "a1", "step": { "id": "revenue", "key": "read_metric", "label": "Read Q3 revenue", "detail": "3 of 3 accounts", "state": "done" } } },
+    {
+      "at": 400,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "resolve",
+          "key": "resolve_scope",
+          "label": "Resolve top accounts",
+          "state": "running"
+        }
+      }
+    },
+    {
+      "at": 1200,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "resolve",
+          "key": "resolve_scope",
+          "label": "Resolve top accounts",
+          "detail": "50 accounts",
+          "state": "done"
+        }
+      }
+    },
+    {
+      "at": 1300,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "rounds",
+          "key": "match_rounds",
+          "label": "Match funding rounds · last 90 days",
+          "state": "running"
+        }
+      }
+    },
+    {
+      "at": 2400,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "rounds",
+          "key": "match_rounds",
+          "label": "Match funding rounds · last 90 days",
+          "detail": "3 rounds · 4 sources",
+          "state": "done"
+        }
+      }
+    },
+    {
+      "at": 2500,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "revenue",
+          "key": "read_metric",
+          "label": "Read Q3 revenue",
+          "state": "running"
+        }
+      }
+    },
+    {
+      "at": 3200,
+      "patch": {
+        "op": "add-trace-step",
+        "turn": "a1",
+        "step": {
+          "id": "revenue",
+          "key": "read_metric",
+          "label": "Read Q3 revenue",
+          "detail": "3 of 3 accounts",
+          "state": "done"
+        }
+      }
+    },
     {
       "at": 3400,
       "patch": {
@@ -83,18 +182,58 @@
         "block": {
           "kind": "table",
           "columns": [
-            { "key": "account", "label": "Account" },
-            { "key": "round", "label": "Round" },
-            { "key": "closed", "label": "Closed" },
-            { "key": "q3", "label": "Q3 vs Q2", "align": "right" }
+            {
+              "key": "account",
+              "label": "Account"
+            },
+            {
+              "key": "round",
+              "label": "Round"
+            },
+            {
+              "key": "closed",
+              "label": "Closed"
+            },
+            {
+              "key": "q3",
+              "label": "Q3 vs Q2",
+              "align": "right"
+            }
           ],
           "rows": [
-            { "account": "Acme Robotics", "round": "Series C · $90M", "closed": "8 Jul", "q3": { "value": "+11%", "tone": "good", "strong": true } },
-            { "account": "Initech", "round": "Series B · $40M", "closed": "21 Aug", "q3": { "value": "+4%", "tone": "good" } },
-            { "account": "Globex", "round": "Series A · $18M", "closed": "2 Sep", "q3": { "value": "−2%", "tone": "bad" } }
+            {
+              "account": "Acme Robotics",
+              "round": "Series C · $90M",
+              "closed": "8 Jul",
+              "q3": {
+                "value": "+11%",
+                "tone": "good",
+                "strong": true
+              }
+            },
+            {
+              "account": "Initech",
+              "round": "Series B · $40M",
+              "closed": "21 Aug",
+              "q3": {
+                "value": "+4%",
+                "tone": "good"
+              }
+            },
+            {
+              "account": "Globex",
+              "round": "Series A · $18M",
+              "closed": "2 Sep",
+              "q3": {
+                "value": "−2%",
+                "tone": "bad"
+              }
+            }
           ],
           "noun": "accounts",
-          "highlight": [0]
+          "highlight": [
+            0
+          ]
         }
       }
     },
@@ -107,13 +246,27 @@
           "at": "2026-10-03T10:21:04.000Z",
           "duration": 3900,
           "envelope": {
-            "scope": ["Accounts graph", "Funding watch", "last 90 days"],
-            "grounding": { "records": 12408, "noun": "entities" },
+            "scope": [
+              "Accounts graph",
+              "Funding watch",
+              "last 90 days"
+            ],
+            "grounding": {
+              "records": 12408,
+              "noun": "entities"
+            },
             "freshness": "v14"
           }
         }
       }
     },
-    { "at": 4000, "patch": { "op": "set-state", "turn": "a1", "state": "complete" } }
+    {
+      "at": 4000,
+      "patch": {
+        "op": "set-state",
+        "turn": "a1",
+        "state": "complete"
+      }
+    }
   ]
 }
