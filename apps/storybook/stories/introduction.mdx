@@ -251,6 +251,38 @@ Extend themes with your own variables:
 }
 ```
 
+### Corner Radius
+
+Every corner in the kit reads one of three dials. No component takes a radius prop — set the
+dials on `:root` (or per theme) and everything on that side follows. Try them live in
+[Others › CornerRadius](?path=/story/others-cornerradius--corner-radius).
+
+| Dial | Class | Draws | Default |
+| --- | --- | --- | --- |
+| `--radius` | `rounded`, `rounded-sm` … `rounded-4xl` | tables, rows, boxes inside a card | `0px` |
+| `--radius-surface` | `rounded-surface` | `Card`, `PanelBox`, `PanelContent`, `Dialog`, `Popover`, menus, `Tooltip` | `var(--radius)` |
+| `--radius-control` | `rounded-control` | `Button`, `Badge`, chips, `Input`, `Select`, `Tabs`, `Toggle`, `SegmentedControl`, menu items | `4px` |
+
+```css
+/* after @import "@invana/styling/index.css" */
+:root {
+  --radius: 0px;          /* structure */
+  --radius-surface: 6px;  /* cards, panels, dialogs, popovers, menus */
+  --radius-control: 4px;  /* buttons, badges, inputs, tabs, toggles */
+}
+
+/* Only for one theme */
+[data-theme="vite"] {
+  --radius-control: 2px;
+}
+```
+
+- Round objects — avatars, status dots, switch thumbs — keep `rounded-full` and follow no dial.
+- Structure is square by default: the hairline grid (cells on a `bg-border` backdrop, `gap-px`)
+  shows a grey notch at any rounded corner.
+- Building a component: pick the class for its role, never a pixel value (`rounded-[3px]`). A
+  component with no `rounded-*` class follows no dial.
+
 ### Per-Component Theming
 
 Override colors for specific components:
