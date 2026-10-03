@@ -117,6 +117,25 @@
             "total": 14,
             "noun": "airlines",
             "sort": { "key": "countries", "dir": "desc" }
+          },
+          {
+            "kind": "activity",
+            "state": "settled",
+            "bands": [
+              { "label": "understand", "span": 9 },
+              { "label": "validate", "span": 2 },
+              { "label": "query", "span": 10 },
+              { "label": "project", "span": 3 }
+            ],
+            "axis": ["0 s", "1.2 s", "2.4 s"],
+            "cell": "100 ms",
+            "lanes": [
+              { "id": "graph", "label": "Graph", "rate": "212 rows", "rateTone": "hot", "cells": [null, null, null, null, null, null, null, null, null, 0.3, 0.33, 0.95, 0.76, 0.84, 0.8, 0.84, 0.68, 0.68, 0.88, 1.0, 0.78, 1.0, 0.44, 0.38] },
+              { "id": "llm", "label": "LLM", "rate": "3.1k tok", "cells": [0.7, 0.74, 0.65, 0.66, 0.86, 0.67, 0.76, 0.8, 0.81, 0.78, null, null, null, null, null, null, null, null, null, null, null, null, 0.27, 0.23] },
+              { "id": "cache", "label": "Cache", "rate": "miss", "cells": [null, null, null, null, null, null, null, null, null, 0.19, null, null, null, null, null, null, null, null, null, null, null, null, null, null] },
+              { "id": "third", "label": "Third party", "short": "3rd party", "rate": "—", "off": true, "cells": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
+            ],
+            "hint": "**Graph** carried the run · the model only at the start and the end"
           }
         ],
         "meta": "local · qwen3-27b · 14 rows · LLM 0.9s · query 1.4s",

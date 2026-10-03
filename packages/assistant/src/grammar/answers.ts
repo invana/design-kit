@@ -24,6 +24,7 @@ export const ANSWER_INTENTS = [
   { id: "trust", name: "Method, sources, scope and limits", kinds: ["method", "citations", "scope", "caveat", "cannot", "checks"] },
   { id: "act", name: "A proposed action, or a file", kinds: ["proposal", "files"] },
   { id: "run.steps", name: "What the run did, in order", kinds: ["trace"] },
+  { id: "run.activity", name: "Which layers were busy", kinds: ["activity"] },
 ] as const satisfies readonly { id: string; name: string; kinds: readonly AnswerKind[] }[]
 
 export type AnswerIntentId = (typeof ANSWER_INTENTS)[number]["id"]
