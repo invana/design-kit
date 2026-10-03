@@ -53,6 +53,7 @@ export const BLOCKS = [
   { id: "scope", name: "Scope line", tier: "today" },
   { id: "checks", name: "Checks", tier: "next" },
   { id: "trace", name: "Progress trace", tier: "today" },
+  { id: "activity", name: "Layer activity", tier: "today" },
   { id: "test", name: "Test result", tier: "next" },
   { id: "coef", name: "Coefficients", tier: "next" },
   { id: "forest", name: "Forest plot", tier: "next" },

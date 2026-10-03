@@ -1,5 +1,6 @@
 import type * as React from "react"
 
+import { ActivityBlock } from "./blocks/activity"
 import { BarsBlock } from "./blocks/bars"
 import { CannotBlock } from "./blocks/cannot"
 import { CaveatBlock } from "./blocks/caveat"
@@ -76,6 +77,7 @@ export const BLOCK_RENDERERS: BlockRenderers = {
   scope: ScopeBlock,
   checks: null,
   trace: TraceBlock,
+  activity: ActivityBlock,
   test: null,
   coef: null,
   forest: null,

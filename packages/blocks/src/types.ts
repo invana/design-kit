@@ -582,6 +582,68 @@ export interface ScopeOptions {
   openPart?: number
 }
 
+/** One lane of the activity block: a layer, or a part of one when its parent is opened. */
+export interface ActivityLane {
+  id: string
+  /** `Graph`, `Third party`, `Company.revenue`. */
+  label: string
+  /** What the lane is called at 280px — `3rd party`. Defaults to `label`. */
+  short?: string
+  /** At the right — `6.9K/s`, `86k tok`, `2 refused`, `quiet`. `—` when the layer is off. */
+  rate?: string
+  /** The rate is high: drawn in the info tone. `bad` draws it in the destructive tone. */
+  rateTone?: "hot" | "bad"
+  /** The layer is not open to this run: its label is muted, its cells hollow. */
+  off?: boolean
+  /** How busy each slice was, `0`–`1`, oldest first; `null` not touched. */
+  cells: (number | null)[]
+  /** Slices a rule refused, or where data left the boundary. */
+  marks?: { at: number; kind: "refused" | "egress" }[]
+  /** Its parts — a model's types and relations — drawn under it, indented, when it is open. */
+  children?: ActivityLane[]
+  /** Drawn open. The reader can open and close it either way. */
+  open?: boolean
+}
+
+/** The operation behind a pinned slice — what the run did in that cell. */
+export interface ActivityPin {
+  /** The lane it is on, by id. */
+  lane: string
+  /** The cell. */
+  at: number
+  /** `Company.revenue · write`. */
+  title: string
+  /** `4.25–4.50 s`. */
+  time?: string
+  /** The statement, in mono — `SET c.revenue_q3 = $value · 512 rows`. */
+  query?: string
+  rows?: { label: string; value: string }[]
+  /** Under the record — `1 of 3 operations in this window`. */
+  note?: string
+  /** Sent as an `action` event — `Open in the trace`. */
+  action?: ActionOption
+}
+
+export interface ActivityOptions {
+  /** `live` follows the last seconds; `settled` is the whole run; `stale` has lost the signal. */
+  state?: "live" | "settled" | "stale"
+  /** The steps over the lanes, in order, each as wide as its share of the axis. */
+  bands?: { label: string; span: number; current?: boolean }[]
+  /** Labels spread under the lanes — `0 s`, `10 s`, `21 s`. */
+  axis?: string[]
+  lanes: ActivityLane[]
+  /** What one cell covers, for its title — `250 ms`. */
+  cell?: string
+  /** A line under the lanes — `Third party only in step 3`. `**bold**` as in a narrative. */
+  hint?: string
+  /** Show the key: touched, refused, left the boundary. */
+  legend?: boolean
+  /** A slice held open, with its record under the lanes. */
+  pinned?: ActivityPin
+  /** At the foot — `Open run detail` — sent as `action` events. */
+  actions?: ActionOption[]
+}
+
 export interface TraceOptions {
   steps: TraceStep[]
   /** One line — `▸ 4 steps` with `summary` at the right — until opened. */
@@ -644,6 +706,7 @@ export interface AnswerOptionsByKind extends SharedAnswerOptions {
   scope: ScopeOptions
   checks: { rows: { label: string; ok: boolean; count?: Figure }[] }
   trace: TraceOptions
+  activity: ActivityOptions
   test: {
     verdict: string
     evidence?: "strong" | "moderate" | "weak"

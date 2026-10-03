@@ -19,6 +19,7 @@ export * from "./parts/confirm-card"
 export * from "./parts/suggestion-chips"
 
 // Each block, for a shell that wraps one.
+export { ActivityBlock } from "./blocks/activity"
 export { BarsBlock } from "./blocks/bars"
 export { CannotBlock } from "./blocks/cannot"
 export { CaveatBlock } from "./blocks/caveat"
