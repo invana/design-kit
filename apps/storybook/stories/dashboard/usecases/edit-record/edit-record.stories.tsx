@@ -46,7 +46,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Examples/Edit Record',
+  title: 'Dashboard/Use Cases/Edit Record',
   parameters: {
     layout: 'fullscreen',
     docs: {

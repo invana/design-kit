@@ -15,7 +15,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Examples/From Blocks',
+  title: 'Dashboard/Use Cases/From Blocks',
   parameters: {
     layout: 'fullscreen',
     docs: {

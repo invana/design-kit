@@ -21,7 +21,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Examples/Task Parameters',
+  title: 'Dashboard/Use Cases/Task Parameters',
   parameters: {
     layout: 'fullscreen',
     docs: {

@@ -15,7 +15,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Examples/Plan',
+  title: 'Dashboard/Use Cases/Plan',
   parameters: {
     layout: 'fullscreen',
     docs: {

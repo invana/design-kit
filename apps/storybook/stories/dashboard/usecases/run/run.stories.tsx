@@ -20,7 +20,7 @@ interface Args {
 }
 
 const meta = {
-  title: 'Dashboard/Examples/Run',
+  title: 'Dashboard/Use Cases/Run',
   parameters: {
     layout: 'fullscreen',
     docs: {
