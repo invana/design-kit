@@ -34,8 +34,6 @@ const SENDS: Record<string, string> = {
   params: '// Every edit → onAction("edit-param", { panelId: "params", param: { name, source, value } })',
   text: '// A button → onAction("retry", { panelId: "notice" })',
   artifacts: '// Open or download → onAction("open-file", { panelId: "files", itemId: "<digest>" })',
-  layers:
-    '// A bar picked → onAction("select-item", { panelId: "layers", itemId: "fetch" })\n// The Fit switch → onAction("fit", { panelId: "layers", pressed: false })',
 };
 
 interface Args {
@@ -84,8 +82,6 @@ function answer(spec: Spec, id: string, ctx: ActionContext = {}): Spec {
   switch (id) {
     case 'select-step':
       return patchPanel(spec, panelId, { selectedId: ctx.stepId });
-    case 'select-item':
-      return patchPanel(spec, panelId, { selectedItem: ctx.itemId });
     case 'select-lens':
       return patchPanel(spec, panelId, { selected: ctx.lens });
     case 'edit-param':
@@ -100,12 +96,6 @@ function answer(spec: Spec, id: string, ctx: ActionContext = {}): Spec {
                 ),
               },
             }
-          : p,
-      );
-    case 'fit':
-      return mapPanels(spec, (p) =>
-        p.id === panelId
-          ? { ...p, actions: p.actions?.map((a) => (a.id === 'fit' ? { ...a, pressed: ctx.pressed } : a)), options: { ...p.options, fit: ctx.pressed } }
           : p,
       );
     case 'retry':
@@ -139,11 +129,12 @@ function Live({ variant, log, onAction }: { variant: PanelVariant; log: Log; onA
  * Every panel kind a dashboard draws that is not a block — one cell each, from
  * `fixtures/dashboard/panels.json`, drawn through `<Dashboard spec>` with a one-panel spec.
  * `json`, `code`, `exchange`, `log`, `list`, `params` and `text` are built in; `trace`,
- * `touched`, `attempts`, `artifacts`, `layers`, `lens` and `clarification` arrive with
- * `registry={RUN_PANELS}`. Every block kind is a panel kind too — those are under `Blocks`.
+ * `touched`, `attempts`, `artifacts`, `lens` and `clarification` arrive with
+ * `registry={RUN_PANELS}`. Every block kind is a panel kind too — those are under `Blocks`; the
+ * layers a run spent are the `gantt` block's (`Blocks/Components/Gantt/Layer Access`).
  *
  * Each action reaches `onAction(id, { panelId, … })`, is written under the cell, and is answered
- * as a consumer would: a picked step, task or bar is selected, a parameter edit is kept, the
+ * as a consumer would: a picked step or lens is selected, a parameter edit is kept, the
  * notice's buttons act. One kind is drawn at a time; pick another with `variant`.
  */
 export const Panels: Story = {

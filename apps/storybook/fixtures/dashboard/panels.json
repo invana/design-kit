@@ -192,36 +192,6 @@
     }
   },
   {
-    "caption": "Layers",
-    "wide": true,
-    "panel": {
-      "id": "layers",
-      "kind": "layers",
-      "title": "Where the time went",
-      "actions": [{ "id": "fit", "label": "Fit", "pressed": true }],
-      "options": {
-        "scale": "elapsed",
-        "fit": true,
-        "selectAction": "select-item",
-        "selectedItem": null,
-        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "human": { "swatch": "bg-data-6" } },
-        "bands": [
-          { "layer": "human", "note": "1 round", "parts": [{ "id": "clarify", "label": "human/form/clarify" }] },
-          { "layer": "agent", "spine": true },
-          { "layer": "llm", "note": "2 roles", "parts": [{ "id": "decide", "label": "role: decide" }, { "id": "extract", "label": "role: extract" }] },
-          { "layer": "graph_data", "note": "1 model", "parts": [{ "id": "orders", "label": "model/Orders@v2" }] }
-        ],
-        "items": [
-          { "id": "open", "label": "open", "layer": "agent", "start": 0, "end": 3000, "state": "out" },
-          { "id": "plan", "label": "plan", "layer": "llm", "part": "decide", "start": 3000, "end": 25000, "state": "out" },
-          { "id": "ask", "label": "ask", "layer": "human", "part": "clarify", "start": 25000, "end": 63000, "state": "in" },
-          { "id": "fetch", "label": "fetch", "layer": "graph_data", "part": "orders", "start": 63000, "end": 95000, "state": "out" },
-          { "id": "read", "label": "read", "layer": "llm", "part": "extract", "start": 95000, "end": 99000, "state": "out" }
-        ]
-      }
-    }
-  },
-  {
     "caption": "Lens",
     "wide": true,
     "panel": {

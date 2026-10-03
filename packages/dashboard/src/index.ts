@@ -14,7 +14,6 @@ export {
   TouchedPanel,
   AttemptsPanel,
   ArtifactsPanel,
-  LayersPanel,
   LensPanel,
   ClarificationPanel,
 } from "./panels/run"
@@ -25,7 +24,6 @@ export type {
   TouchedOptions,
   AttemptsOptions,
   ArtifactsOptions,
-  LayersOptions,
   ArtifactSpec,
   LensOptions,
   LensRowSpec,

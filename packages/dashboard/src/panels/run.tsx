@@ -3,7 +3,6 @@ import {
   ArtifactTable,
   ExchangeRecord,
   LayerSection,
-  LayerStrip,
   LensRow,
   MarkChip,
   ParticipantRow,
@@ -14,12 +13,7 @@ import {
   TraceStep,
   type Artifact,
   type Layer,
-  type LayerBand,
-  type LayerBracket,
-  type LayerItem,
   type LayerPalette,
-  type LayerScale,
-  type LayerSeam,
   type LensUsage,
   type Narrowing,
   type TouchItem,
@@ -33,9 +27,11 @@ import type { PanelRendererProps } from "../types"
  * The panels a **run page** is made of.
  *
  * They are not in `BUILT_IN_PANELS`, and that is deliberate: the built-in list
- * is eleven kinds two unrelated surfaces each need, and these seven are one
+ * is eleven kinds two unrelated surfaces each need, and these six are one
  * surface family's — a run read in order, what it touched, a step's clock, the
- * files it left, the layers it spent, what governed it, and the ask it settled.
+ * files it left, what governed it, and the ask it settled. The layers it spent
+ * are the `gantt` block — a row per layer, a bar per task that reached it — so
+ * a conversation draws them too.
  * Shipping them here rather than in the default registry keeps a consumer that
  * only wanted tiles and a log from carrying the run vocabulary, while keeping
  * the adapter in the kit rather than copied into every product that draws runs.
@@ -125,32 +121,6 @@ export interface ArtifactsOptions {
   downloadAction?: string
 }
 
-export interface LayersOptions {
-  bands: LayerBand[]
-  items: LayerItem[]
-  /** `"seq"` reads a plan's order, `"elapsed"` a run's wall clock. */
-  scale?: LayerScale
-  domain?: [number, number]
-  ticks?: number[]
-  brackets?: LayerBracket[]
-  seams?: LayerSeam[]
-  palette?: LayerPalette
-  defaultCollapsed?: Layer[]
-  labelWidth?: number
-  /**
-   * The narrowest the track is drawn before it scrolls, in `rem`. A run whose
-   * work is seconds inside a wait of minutes needs a wider track than its panel
-   * — past this the strip scrolls rather than squeezing bars under their own
-   * names.
-   */
-  minTrackWidth?: number
-  /** The overview reading — the whole axis in the panel's width. See `LayerStrip`'s `fit`. */
-  fit?: boolean
-  selectedItem?: string | null
-  /** Dispatched with `{ itemId }` when a bar is picked. */
-  selectAction?: string
-}
-
 /** One lens row under the layer it narrows. */
 export interface LensRowSpec {
   name: string
@@ -213,7 +183,7 @@ export interface ClarificationOptions {
 }
 
 /**
- * The seven kinds, as a type argument for `DashboardSpec`.
+ * The six kinds, as a type argument for `DashboardSpec`.
  *
  * A `type` and not an `interface`: `ExtraPanels` is `Record<string, unknown>`,
  * which an interface never satisfies — it has no implicit index signature — so
@@ -225,7 +195,6 @@ export type RunPanelOptions = {
   touched: TouchedOptions
   attempts: AttemptsOptions
   artifacts: ArtifactsOptions
-  layers: LayersOptions
   lens: LensOptions
   clarification: ClarificationOptions
 }
@@ -309,7 +278,6 @@ export const RUN_PANELS = {
   touched: TouchedPanel,
   attempts: AttemptsPanel,
   artifacts: ArtifactsPanel,
-  layers: LayersPanel,
   lens: LensPanel,
   clarification: ClarificationPanel,
 }
@@ -339,40 +307,6 @@ export function ArtifactsPanel({
               onAction(options.downloadAction as string, {
                 panelId: panel.id,
                 itemId: String(file.digest ?? file.name),
-              })
-          : undefined
-      }
-    />
-  )
-}
-
-export function LayersPanel({
-  panel,
-  options,
-  onAction,
-}: PanelRendererProps<LayersOptions>) {
-  return (
-    <LayerStrip
-      bands={options.bands}
-      items={options.items}
-      seams={options.seams}
-      brackets={options.brackets}
-      scale={options.scale ?? "elapsed"}
-      domain={options.domain}
-      ticks={options.ticks}
-      palette={options.palette}
-      labelWidth={options.labelWidth}
-      minTrackWidth={options.minTrackWidth}
-      fit={options.fit}
-      defaultCollapsed={options.defaultCollapsed}
-      collapsible={false}
-      selectedItem={options.selectedItem ?? undefined}
-      onSelectItem={
-        options.selectAction
-          ? (itemId) =>
-              onAction(options.selectAction as string, {
-                panelId: panel.id,
-                itemId,
               })
           : undefined
       }
