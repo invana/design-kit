@@ -17,13 +17,13 @@ export const ANSWER_INTENTS = [
   { id: "rank", name: "Leaders and laggards", kinds: ["ranked", "pareto", "tornado"] },
   { id: "explain-change", name: "What moved the total", kinds: ["waterfall", "decomposition"] },
   { id: "records", name: "Rows, or one entity", kinds: ["table", "record", "attr", "pivot", "profile"] },
-  { id: "sequence", name: "What happened when", kinds: ["timeline"] },
+  { id: "sequence", name: "What happened when", kinds: ["timeline", "heatstrip"] },
   { id: "spread", name: "The shape of the values", kinds: ["histogram", "box", "quantiles", "survival"] },
   { id: "relate", name: "How things connect", kinds: ["scatter", "correlation", "subgraph"] },
   { id: "stats", name: "Test and model results", kinds: ["test", "coef", "forest", "evidence", "modeleval"] },
   { id: "trust", name: "Method, sources, scope and limits", kinds: ["method", "citations", "scope", "caveat", "cannot", "checks"] },
   { id: "act", name: "A proposed action, or a file", kinds: ["proposal", "files"] },
-  { id: "run.steps", name: "What the run did, in order", kinds: ["trace"] },
+  { id: "run.steps", name: "What the run did, in order", kinds: ["trace", "gantt"] },
   { id: "run.activity", name: "Which layers were busy", kinds: ["activity"] },
 ] as const satisfies readonly { id: string; name: string; kinds: readonly AnswerKind[] }[]
 
