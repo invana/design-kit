@@ -4,7 +4,7 @@ import { LayerChip as Component, PropertyList, PropertyRow, type Layer, type Lay
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/layer-chip.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /**
  * The hues are the caller's. `LayerChip` ships none — it takes a `palette` and paints what it is
@@ -78,7 +78,7 @@ type Story = StoryObj<Args>;
  */
 export const LayerChip: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={128}>
           {v.chips.map(({ layer, count, dim, note }) => (
@@ -88,7 +88,7 @@ export const LayerChip: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -18,7 +18,7 @@ import { Bot, ChevronRight, FileText } from 'lucide-react';
 
 import data from '../../../../fixtures/ui/item.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** What JSON names an icon by; the story holds the icons. */
 const ICONS = { file: <FileText /> };
@@ -208,9 +208,9 @@ function LiveItems({ v, onSelect, onClick, log }: { v: ItemVariant } & Omit<Args
  */
 export const Item: Story = {
   render: ({ variant, onSelect, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveItems v={v} onSelect={onSelect} onClick={onClick} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

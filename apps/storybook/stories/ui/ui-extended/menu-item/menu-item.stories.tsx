@@ -5,7 +5,7 @@ import { MenuItem as Component, type MenuItemProps } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/menu-item.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** The kit ships no icon set; the story supplies the ones JSON names. */
 const ICONS = { settings: Settings, users: Users, shield: Shield, bell: Bell };
@@ -96,14 +96,14 @@ function toProps(item: Item, onClick: Args['onClick'], log: Log): MenuItemProps 
  */
 export const MenuItem: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         // MenuItem draws an <li>; the list it belongs to is the caller's.
         <ul role="menu">
           <Component {...toProps(v.item, onClick, log)} />
         </ul>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'A plain row' }));

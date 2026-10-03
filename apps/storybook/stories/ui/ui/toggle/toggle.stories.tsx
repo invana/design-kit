@@ -6,7 +6,7 @@ import { Bold, Italic, Underline } from 'lucide-react';
 
 import data from '../../../../fixtures/ui/toggle.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** JSON names an icon; the story owns the glyphs (packages ship icon-agnostic). */
 const ICONS = { bold: Bold, italic: Italic, underline: Underline };
@@ -96,9 +96,9 @@ function LiveToggle({ v, onPressedChange, log }: { v: ToggleVariant; onPressedCh
  */
 export const Toggle: Story = {
   render: ({ variant, onPressedChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveToggle v={v} onPressedChange={onPressedChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

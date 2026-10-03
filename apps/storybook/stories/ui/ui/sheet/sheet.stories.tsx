@@ -17,7 +17,7 @@ import { Settings } from 'lucide-react';
 
 import data from '../../../../fixtures/ui/sheet.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 const ICONS = { settings: Settings };
 
@@ -148,9 +148,9 @@ function Live({ v, onOpenChange, log }: { v: SheetVariant; onOpenChange: Args['o
  */
 export const Sheet: Story = {
   render: ({ variant, onOpenChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onOpenChange={onOpenChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

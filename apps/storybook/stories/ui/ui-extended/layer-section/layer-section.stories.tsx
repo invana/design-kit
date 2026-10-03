@@ -4,7 +4,7 @@ import { LayerSection as Component, RuleRow, type Layer, type LayerPalette, type
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/layer-section.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /** The hues are the caller's — these components ship none. */
 const PALETTE: LayerPalette = {
@@ -82,7 +82,7 @@ type Story = StoryObj<Args>;
  */
 export const LayerSection: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.sections.map(({ rules = [], ...section }) => (
           <Component key={section.layer} {...section} palette={PALETTE}>
@@ -92,7 +92,7 @@ export const LayerSection: Story = {
           </Component>
         ))
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const v = VARIANTS[0]!;

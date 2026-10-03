@@ -1,5 +1,5 @@
 /**
- * What the Code tab shows. Storybook's own guess is the story's chrome — `<VariantBoard …>`
+ * What the Code tab shows. Storybook's own guess is the story's chrome — `<VariantGrid …>`
  * or a `render` function — so a story writes its source from the same JSON it draws: the
  * data a consumer would hold, then the call that draws it.
  */

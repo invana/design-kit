@@ -3,7 +3,7 @@ import { expect, within } from 'storybook/test';
 import { PanelBox, Gantt } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard } from '../../_story/variant-board';
+import { VariantGrid } from '../../_story/variant-grid';
 import { RUN_SPAN_MS, SLOTS, formatMs, slotLaneTasks } from './fixtures';
 
 const TASKS = slotLaneTasks();
@@ -49,7 +49,7 @@ type Story = StoryObj;
  */
 export const SlotLanes: Story = {
   render: () => (
-    <VariantBoard variants={VARIANTS}>
+    <VariantGrid variants={VARIANTS}>
       {() => (
         <PanelBox title="Worker slots" aside={`${SLOTS.length} slots · ${formatMs(RUN_SPAN_MS)}`}>
           <Gantt
@@ -59,7 +59,7 @@ export const SlotLanes: Story = {
           />
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Slot Lanes' }));

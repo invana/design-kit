@@ -17,7 +17,7 @@ import {
 
 import data from '../../../../fixtures/ui/select.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface SelectField {
   id: string;
@@ -130,7 +130,7 @@ function LiveSelect({ field, onValueChange, log }: { field: SelectField; onValue
  */
 export const Select: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <FieldGroup>
           {v.sections.map((s, i) =>
@@ -149,7 +149,7 @@ export const Select: Story = {
           )}
         </FieldGroup>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With label' }));

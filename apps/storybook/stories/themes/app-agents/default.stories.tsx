@@ -464,7 +464,7 @@ export const Default: Story = {
       content: (
         <EmptyState
           title="Canvas"
-          description="The work the agents act on — a graph, a document, a dashboard."
+          description="The work the agents act on — a graph, a document, a board."
         />
       ),
     },

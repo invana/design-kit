@@ -19,7 +19,7 @@ import {
 
 import data from '../../../../fixtures/ui/menubar.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 type Entry =
   | { type: 'item'; label: string; shortcut?: string }
@@ -237,9 +237,9 @@ function LiveMenubar({ v, log, ...on }: { v: MenubarVariant; log: Log } & Omit<A
  */
 export const Menubar: Story = {
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveMenubar v={v} log={log} {...on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

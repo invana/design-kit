@@ -4,7 +4,7 @@ import { PropertyList, PropertyRow } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/button.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { ButtonFromSpec, ICONS, buttonSource, spaced, type ButtonSpec } from '../_content';
 
 interface GlassButton extends ButtonSpec {
@@ -75,7 +75,7 @@ type Story = StoryObj<Args>;
  */
 export const Button: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => {
         const rows = v.rows.map((row, i) => (
           <div key={i}>
@@ -109,7 +109,7 @@ export const Button: Story = {
           </>
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

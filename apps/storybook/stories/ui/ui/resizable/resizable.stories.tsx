@@ -6,7 +6,7 @@ import { PanelContent, ResizableHandle, ResizablePanel, ResizablePanelGroup } fr
 
 import data from '../../../../fixtures/ui/resizable.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface PaneSpec {
   id: string;
@@ -149,9 +149,9 @@ function LiveResizable({ v, onLayoutChanged, log }: { v: ResizableVariant; onLay
  */
 export const Resizable: Story = {
   render: ({ variant, onLayoutChanged }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveResizable v={v} onLayoutChanged={onLayoutChanged} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Simple horizontal' }));

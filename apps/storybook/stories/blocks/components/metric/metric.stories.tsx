@@ -4,7 +4,7 @@ import { MetricBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.metric;
 
@@ -43,13 +43,13 @@ type Story = StoryObj<Args>;
 
 /**
  * The one figure an answer turns on, its comparison worded under it, and a bar against its target
- * — the Metric board of the Design Kit Spec.
+ * — the Metric page of the Design Kit Spec.
  */
 export const Metric: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <MetricBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

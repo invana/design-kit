@@ -15,7 +15,7 @@ import {
 import variants from '../../../fixtures/data-tables/paginated-table.json';
 import people from '../../../fixtures/data-tables/people.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 import { columnsSource, PEOPLE_COLUMNS, type Person } from '../columns';
 
 /** A filter chip as JSON: `split` is a band of a number column — `high` at or over `at`. */
@@ -188,9 +188,9 @@ type Story = StoryObj<Args>;
 export const PaginatedTableStory: Story = {
   name: 'PaginatedTable',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} on={on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

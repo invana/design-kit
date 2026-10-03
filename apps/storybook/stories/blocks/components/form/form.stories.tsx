@@ -5,7 +5,7 @@ import { FormAsk } from '@invana/blocks';
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { LiveBlock, type BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.form;
 const ERROR = 'A field in error';
@@ -50,14 +50,14 @@ type Story = StoryObj<Args>;
 
 /**
  * Several fields that only make sense together, sent as one `reply` keyed by field name — the Form
- * board of the Design Kit Spec. "A field in error" is a state the analyst reaches; the play types
+ * page of the Design Kit Spec. "A field in error" is a state the analyst reaches; the play types
  * an elasticity below its bound.
  */
 export const Form: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveBlock component={FormAsk} variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

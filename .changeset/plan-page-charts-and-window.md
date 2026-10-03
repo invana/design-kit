@@ -1,6 +1,6 @@
 ---
 "@invana/ui": minor
-"@invana/dashboard": minor
+"@invana/boards": minor
 ---
 
 Two charts for a record read over time, and a window that applies to every tab.
@@ -18,6 +18,6 @@ hover reads the nearest day.
 `TabbedPanel` gains `headerContent`, a control on the right of the tab strip that applies to every
 tab.
 
-`@invana/dashboard`: `DashboardSpec.tabActions` puts `ActionSpec`s there, for example a
+`@invana/boards`: `BoardSpec.tabActions` puts `ActionSpec`s there, for example a
 `7 · 30 · 90 days` switch. `TableOptions` gains `rowKey`, `selectAction` and `selected`: a picked
 row dispatches `{ itemId }` with its `rowKey` value and is drawn selected.

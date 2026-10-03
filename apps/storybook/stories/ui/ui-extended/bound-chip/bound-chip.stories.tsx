@@ -4,7 +4,7 @@ import { BoundChip as Component, PropertyList, PropertyRow, type Bound, type Bou
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/bound-chip.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /**
  * The hues are the caller's — `BoundChip` ships none and draws what it is given, so this palette
@@ -80,7 +80,7 @@ type Story = StoryObj<Args>;
  */
 export const BoundChip: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={112}>
           {v.chips.map(({ bound, note }) => (
@@ -90,7 +90,7 @@ export const BoundChip: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0]!.caption }));

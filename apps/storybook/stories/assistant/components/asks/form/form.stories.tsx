@@ -5,7 +5,7 @@ import type { ConversationEvent } from '@invana/assistant';
 import { BLOCK_VARIANTS } from '../../../../../fixtures/blocks';
 import { askTurn, LiveTurn } from '../../../../_story/live-turn';
 import { jsx, snippets, sourceFor, variantArg } from '../../../../_story/source';
-import { VariantBoard } from '../../../../_story/variant-board';
+import { VariantGrid } from '../../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.form;
 const ERROR = 'A field in error';
@@ -54,15 +54,15 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The Form board of the Design Kit Spec in the conversation — the same JSON as
+ * The Form page of the Design Kit Spec in the conversation — the same JSON as
  * `Blocks/Components/Form`, as an ask turn. Submitting goes out as a `reply` event; the story
  * answers with the API's `set-state` patch.
  */
 export const Form: Story = {
   render: ({ variant, onEvent }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTurn turn={askTurn('form', v)} now={v.now} onEvent={onEvent} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

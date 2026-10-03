@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 import data from '../../../../fixtures/ui/sonner.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ToastVariant extends Variant {
   /** The button that fires it. */
@@ -71,7 +71,7 @@ type Story = StoryObj<Args>;
 export const Sonner: Story = {
   render: ({ variant, onToast }) => (
     <>
-      <VariantBoard variants={VARIANTS} variant={variant}>
+      <VariantGrid variants={VARIANTS} variant={variant}>
         {(v, log) => (
           <Button
             variant="outline"
@@ -86,7 +86,7 @@ export const Sonner: Story = {
             {v.label}
           </Button>
         )}
-      </VariantBoard>
+      </VariantGrid>
       <Toaster />
     </>
   ),

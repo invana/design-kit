@@ -5,7 +5,7 @@ import { ConfirmCard as ConfirmCardPart, type ConfirmCardProps } from '@invana/a
 
 import data from '../../../../fixtures/assistant/confirm-card.json';
 import { inline, json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface ConfirmVariant {
   caption: string;
@@ -68,7 +68,7 @@ type Story = StoryObj<Args>;
  */
 export const ConfirmCard: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <ConfirmCardPart {...v.props}>
           {v.buttons.map((b) => (
@@ -86,7 +86,7 @@ export const ConfirmCard: Story = {
           ))}
         </ConfirmCardPart>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const c = within(within(canvasElement).getByRole('group', { name: 'Seamless' }));

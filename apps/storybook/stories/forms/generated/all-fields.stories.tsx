@@ -6,7 +6,7 @@ import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from 
 
 import spec from '../../../fixtures/forms/all-fields.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { USE_FORM, indent, objectField } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
@@ -78,7 +78,7 @@ type Story = StoryObj<Args>;
  */
 export const AllFields: Story = {
   name: 'All Fields',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'All Fields' }));
     await step('Name the analysis and submit', async () => {

@@ -5,7 +5,7 @@ import { EmptyState, ErrorBoundary as Component } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/error-boundary.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface BoundaryVariant extends Variant {
   /** What the broken child throws. */
@@ -80,7 +80,7 @@ type Story = StoryObj<Args>;
  */
 export const ErrorBoundary: Story = {
   render: ({ variant, onError }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <Component
           onError={
@@ -96,7 +96,7 @@ export const ErrorBoundary: Story = {
           <Broken error={v.error} />
         </Component>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

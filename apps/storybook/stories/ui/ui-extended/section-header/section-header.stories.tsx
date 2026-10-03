@@ -6,7 +6,7 @@ import { Boxes, Plus } from 'lucide-react';
 
 import VARIANTS from '../../../../fixtures/ui-extended/section-header.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 type Variant = (typeof VARIANTS)[number];
 
@@ -94,9 +94,9 @@ function Live({ v, log, onAction }: { v: Variant; log: Log; onAction: Args['onAc
 export const SectionHeaderStory: Story = {
   name: 'SectionHeader',
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onAction={onAction} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

@@ -4,8 +4,8 @@ import { HeatLane as Chart, type HeatLaneProps } from '@invana/charts';
 
 import data from '../../../../fixtures/charts/heat-lane.json';
 import { variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
-import { LiveProps, chartSnippet, chartSource, checkBoard, type ChartVariant } from '../../_chart';
+import { VariantGrid } from '../../../_story/variant-grid';
+import { LiveProps, chartSnippet, chartSource, checkGrid, type ChartVariant } from '../../_chart';
 
 // JSON widens the literal unions; the shape is the chart's own props.
 const VARIANTS = data as unknown as ChartVariant<HeatLaneProps & Record<string, unknown>>[];
@@ -35,13 +35,13 @@ type Story = StoryObj<Args>;
  */
 export const HeatLane: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <LiveProps variant={v} noun="cell">{(props) => <Chart {...props} />}</LiveProps>}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Refused and left the boundary' }));
     await expect(cell.getAllByTitle(/refused$/).length).toBe(2);
-    await checkBoard(canvasElement, VARIANTS, 'cell');
+    await checkGrid(canvasElement, VARIANTS, 'cell');
   },
 };

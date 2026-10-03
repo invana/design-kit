@@ -11,7 +11,7 @@ import { CONVERSATIONS, STREAMING_SCRIPT, type ConversationId } from '@invana/as
 
 import data from '../../../../fixtures/assistant/chat-session.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 import { ACTION_ICONS, CHAT_ICONS, chatCallbacks, RailPanel } from '../../chat-kit';
 
 type Action = Extract<ChatSessionAnswerAction, string> | { id: string; label: string; icon?: string };
@@ -107,7 +107,7 @@ type Story = StoryObj<Args>;
  */
 export const ChatSession: Story = {
   render: ({ variant, look, onEvent, ...handlers }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <RailPanel height={v.height}>
           <ChatSessionView
@@ -125,7 +125,7 @@ export const ChatSession: Story = {
           />
         </RailPanel>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const c = within(within(canvasElement).getByRole('group', { name: 'Graph expansions' }));

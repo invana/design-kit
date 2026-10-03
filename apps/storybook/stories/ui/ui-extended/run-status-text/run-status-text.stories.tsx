@@ -4,7 +4,7 @@ import { PropertyList, PropertyRow, RunStatusText } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/run-status-text.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Args {
   variant: string;
@@ -52,7 +52,7 @@ type Story = StoryObj<Args>;
 export const RunStatusTextStory: Story = {
   name: 'RunStatusText',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={148}>
           {v.statuses.map(({ status, what }) => (
@@ -62,7 +62,7 @@ export const RunStatusTextStory: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0].caption }));

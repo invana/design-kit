@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { AskState, BlockKind, BlockProps } from '@invana/blocks';
 
 import type { BlockVariant } from '../../fixtures/blocks';
-import type { Log } from './variant-board';
+import type { Log } from './variant-grid';
 
 export type BlockAction = (action: string, value?: unknown) => void;
 

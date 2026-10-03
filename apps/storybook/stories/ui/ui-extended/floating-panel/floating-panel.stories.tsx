@@ -5,7 +5,7 @@ import { FloatingPanel as Component, PropertyList, PropertyRow } from '@invana/u
 
 import DATA from '../../../../fixtures/ui-extended/floating-panel.json';
 import { jsxWith, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface PanelVariant extends Variant {
   title: string;
@@ -114,9 +114,9 @@ function Panel({ v, args, log }: { v: PanelVariant; args: Args; log: Log }) {
  */
 export const FloatingPanel: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => <Panel v={v} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

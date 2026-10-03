@@ -16,7 +16,7 @@ import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from 
 
 import spec from '../../../fixtures/forms/dialog.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { indent, objectField } from '../form-source';
 
 type NodeType = typeof spec.empty;
@@ -172,7 +172,7 @@ type Story = StoryObj<Args>;
  */
 export const DialogStory: Story = {
   name: 'Dialog',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Dialog' }));
     await step(`Edit ${EDIT.name}`, async () => {

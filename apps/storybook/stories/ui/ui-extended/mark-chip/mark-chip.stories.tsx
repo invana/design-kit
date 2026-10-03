@@ -4,7 +4,7 @@ import { MarkChip as Component, PropertyList, PropertyRow, type MarkTone } from 
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/mark-chip.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface MarkVariant extends Variant {
   marks: { mark: string; tone?: MarkTone; note: string }[];
@@ -58,7 +58,7 @@ type Story = StoryObj<Args>;
  */
 export const MarkChip: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={112}>
           {v.marks.map(({ mark, tone, note }) => (
@@ -68,7 +68,7 @@ export const MarkChip: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0]!.caption }));

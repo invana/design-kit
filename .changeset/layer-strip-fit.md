@@ -1,6 +1,6 @@
 ---
 "@invana/ui": minor
-"@invana/dashboard": minor
+"@invana/boards": minor
 ---
 
 `LayerStrip` gains `fit` — the overview reading, where the whole axis fits the strip's own width.
@@ -17,7 +17,7 @@ enough that the briefest span is drawn at the bar's readable width (4.5rem), up 
 with short steps scrolls so each step can be read, rather than clearing a fixed floor and
 squeezing them.
 
-`@invana/dashboard`: a titled panel takes `actions`, drawn on the right of its header after `aside`
+`@invana/boards`: a titled panel takes `actions`, drawn on the right of its header after `aside`
 and dispatched with `{ panelId }` — so a panel can offer a reading of itself, such as a `Fit`
 switch. An `ActionSpec` with `pressed` draws as a labelled `Switch` and dispatches `{ pressed }`.
 `LayersOptions` passes `fit` through.

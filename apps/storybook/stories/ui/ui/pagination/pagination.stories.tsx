@@ -13,7 +13,7 @@ import {
 
 import data from '../../../../fixtures/ui/pagination.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface PaginationVariant extends Variant {
   /** The page shown first, from 1. */
@@ -131,9 +131,9 @@ function LivePagination({ v, onPageChange, log }: { v: PaginationVariant; onPage
  */
 export const Pagination: Story = {
   render: ({ variant, onPageChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LivePagination v={v} onPageChange={onPageChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

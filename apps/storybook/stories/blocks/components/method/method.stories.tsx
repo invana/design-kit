@@ -4,7 +4,7 @@ import { MethodBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.method;
 
@@ -46,9 +46,9 @@ type Story = StoryObj<Args>;
  */
 export const Method: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <MethodBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

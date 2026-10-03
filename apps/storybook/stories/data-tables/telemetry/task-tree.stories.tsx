@@ -12,7 +12,7 @@ import {
 } from "@invana/ui";
 
 import { jsx, snippet } from "../../_story/source";
-import { VariantBoard, type Log } from "../../_story/variant-board";
+import { VariantGrid, type Log } from "../../_story/variant-grid";
 import { columnsSource } from "../columns";
 import {
   EVENTS,
@@ -283,7 +283,7 @@ type Story = StoryObj<Args>;
  * **Open failures** can reveal every task on the way to one.
  */
 export const TaskTree: Story = {
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole("group", { name: "Task Tree" }));
     await step("Open every failure", async () => {

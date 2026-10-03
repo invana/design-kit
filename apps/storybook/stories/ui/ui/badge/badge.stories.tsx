@@ -4,7 +4,7 @@ import { Badge as BadgeRoot, PropertyList, PropertyRow } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/badge.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { Badges, badgeSource, type BadgeSpec } from '../_content';
 
 type Treatment = NonNullable<BadgeSpec['variant']>;
@@ -64,7 +64,7 @@ type Story = StoryObj<Args>;
  */
 export const Badge: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.sizes ? (
           <PropertyList labelWidth="auto">
@@ -95,7 +95,7 @@ export const Badge: Story = {
           </div>
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

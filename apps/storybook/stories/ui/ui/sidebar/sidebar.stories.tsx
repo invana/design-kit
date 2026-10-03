@@ -26,7 +26,7 @@ import { LayoutDashboard, LifeBuoy, Search, Settings, Users } from 'lucide-react
 
 import data from '../../../../fixtures/ui/sidebar.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 const ICONS = { dashboard: LayoutDashboard, search: Search, users: Users, settings: Settings, support: LifeBuoy };
 
@@ -195,13 +195,13 @@ function Live({ v, onOpenChange, onSelect, log }: { v: SidebarVariant; onOpenCha
 /**
  * The app's navigation rail, collapsing to icons — from `fixtures/ui/sidebar.json`. Pick an
  * item: `onSelect` receives its title and the story moves the active mark. The trigger sends
- * `onOpenChange` with `false` / `true`. Heavy, so the board draws the first variant.
+ * `onOpenChange` with `false` / `true`. Heavy, so the grid draws the first variant.
  */
 export const Sidebar: Story = {
   render: ({ variant, onOpenChange, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onOpenChange={onOpenChange} onSelect={onSelect} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

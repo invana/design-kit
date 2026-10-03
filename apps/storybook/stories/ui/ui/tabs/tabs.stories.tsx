@@ -16,7 +16,7 @@ import {
 
 import data from '../../../../fixtures/ui/tabs.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface Tab {
   value: string;
@@ -152,7 +152,7 @@ function LiveTabs({ group, onValueChange, log }: { group: Group; onValueChange: 
  */
 export const Tabs: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) =>
         v.groups.map((g, i) => (
           <React.Fragment key={i}>
@@ -161,7 +161,7 @@ export const Tabs: Story = {
           </React.Fragment>
         ))
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

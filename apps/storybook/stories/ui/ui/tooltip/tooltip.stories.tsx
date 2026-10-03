@@ -6,7 +6,7 @@ import { Plus } from 'lucide-react';
 
 import data from '../../../../fixtures/ui/tooltip.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** JSON names an icon; the story owns the glyphs (packages ship icon-agnostic). */
 const ICONS = { plus: [Plus, 'Plus'] } as const;
@@ -102,9 +102,9 @@ function LiveTooltip({ v, onOpenChange, log }: { v: TooltipVariant; onOpenChange
  */
 export const Tooltip: Story = {
   render: ({ variant, onOpenChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTooltip v={v} onOpenChange={onOpenChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

@@ -5,7 +5,7 @@ import { NavVertical, PanelBox, StatusDot, TypographyMuted, type StatusDotProps 
 
 import VARIANTS from '../../../../fixtures/ui-extended/nav-vertical.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 import { MAP_ITEMS, toNavItems, type NavJson } from '../nav-base/_nav-items';
 
 type Variant = (typeof VARIANTS)[number];
@@ -91,20 +91,20 @@ function Live({ v, log, onClick, onSelect }: { v: Variant; log: Log } & Omit<Arg
 export const NavVerticalStory: Story = {
   name: 'NavVertical',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} {...on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
-    const board = within(canvasElement);
+    const grid = within(canvasElement);
     await step('A rail item reports its name', async () => {
-      const cell = within(board.getByRole('group', { name: 'Default' }));
+      const cell = within(grid.getByRole('group', { name: 'Default' }));
       await userEvent.click(cell.getByRole('button', { name: 'Home' }));
       await expect(args.onClick).toHaveBeenCalledWith('Home');
       await expect(cell.getByText('Opened Home')).toBeInTheDocument();
     });
     await step('The New menu creates a query', async () => {
-      const cell = within(board.getByRole('group', { name: 'With menus' }));
+      const cell = within(grid.getByRole('group', { name: 'With menus' }));
       await userEvent.click(cell.getByRole('button', { name: 'New' }));
       await userEvent.click(within(document.body).getByRole('menuitem', { name: /New query/ }));
       await expect(args.onSelect).toHaveBeenCalledWith('New', 'query');

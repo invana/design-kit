@@ -5,7 +5,7 @@ import { Accordion as AccordionRoot, AccordionContent, AccordionItem, AccordionT
 
 import data from '../../../../fixtures/ui/accordion.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import { Badges, Content, badgeSource, contentSource, type BadgeSpec, type Block, type Send } from '../_content';
 
 interface Section {
@@ -147,9 +147,9 @@ function Live({ v, onValueChange, log }: { v: AccordionVariant; onValueChange: A
  */
 export const Accordion: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onValueChange={onValueChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Basic' }));

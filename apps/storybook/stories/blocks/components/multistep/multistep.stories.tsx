@@ -5,7 +5,7 @@ import { MultistepAsk } from '@invana/blocks';
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { LiveBlock, type BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.multistep;
 const STEP_2 = 'Step 2 · number with a unit';
@@ -53,14 +53,14 @@ type Story = StoryObj<Args>;
 
 /**
  * Several asks in one card, a step at a time; the answers go as one `reply` keyed by step id — the
- * Multi-step board of the Design Kit Spec. Steps 2, 3 and the review are states the analyst
+ * Multi-step page of the Design Kit Spec. Steps 2, 3 and the review are states the analyst
  * reaches; the play walks each cell there.
  */
 export const Multistep: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveBlock component={MultistepAsk} variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

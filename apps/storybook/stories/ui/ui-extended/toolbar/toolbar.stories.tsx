@@ -6,7 +6,7 @@ import { Lock, Maximize } from 'lucide-react';
 
 import TOOLBARS from '../../../../fixtures/ui-extended/toolbar.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** Icons are code, named from the JSON. */
 const ICONS: Record<string, React.ReactNode> = { lock: <Lock />, fit: <Maximize /> };
@@ -92,9 +92,9 @@ function Live({ v, onAction, log }: { v: ToolbarVariant; onAction: Args['onActio
 export const ToolbarStory: Story = {
   name: 'Toolbar',
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Canvas' }));

@@ -24,7 +24,7 @@ import { ChevronsRight, Database, Filter, MoreHorizontal, Pin, RefreshCw, X } fr
 
 import FIXTURE from '../../../../fixtures/ui-extended/panel-content.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** The fixture's shape: one panel, or a column of them (`stack`). */
 interface Action {
@@ -272,7 +272,7 @@ function LivePanel({ p, height, log, onAction, onSelect }: { p: Panel; height: n
   }));
   const TitleIcon = p.title?.icon ? ICONS[p.title.icon] : undefined;
   return (
-    // Story chrome: PanelContent fills its parent's height, and a board cell has none. A bordered
+    // Story chrome: PanelContent fills its parent's height, and a grid cell has none. A bordered
     // box with a bounded track is what an app's layout gives it.
     <PanelBox flush>
       <div style={{ height }}>
@@ -329,13 +329,13 @@ function LivePanel({ p, height, log, onAction, onSelect }: { p: Panel; height: n
 export const PanelContentStory: Story = {
   name: 'PanelContent',
   render: ({ variant, onAction, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) =>
         (v.stack ?? [v]).map((p, i) => (
           <LivePanel key={i} p={p} height={v.height} log={log} onAction={onAction} onSelect={onSelect} />
         ))
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0].caption }));

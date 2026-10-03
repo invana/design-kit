@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 import data from '../../../../fixtures/charts/segmented-bar.json';
 import { variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
-import { Framed, LiveProps, chartSource, checkBoard, framedCall, type ChartVariant } from '../../_chart';
+import { VariantGrid } from '../../../_story/variant-grid';
+import { Framed, LiveProps, chartSource, checkGrid, framedCall, type ChartVariant } from '../../_chart';
 
 /** One bar per row of a table, every row on the same series in the same order. */
 type Props = {
@@ -82,7 +82,7 @@ type Story = StoryObj<Args>;
  */
 export const SegmentedBar: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <LiveProps variant={v} noun="update">
           {({ series, rows }) => (
@@ -111,7 +111,7 @@ export const SegmentedBar: Story = {
           )}
         </LiveProps>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
-  play: async ({ canvasElement }) => checkBoard(canvasElement, VARIANTS, 'update'),
+  play: async ({ canvasElement }) => checkGrid(canvasElement, VARIANTS, 'update'),
 };

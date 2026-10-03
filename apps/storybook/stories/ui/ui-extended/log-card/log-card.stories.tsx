@@ -6,7 +6,7 @@ import { LogCard as Component, type LogLine } from '@invana/ui';
 import DATA from '../../../../fixtures/ui-extended/log-card.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface LogVariant extends Variant {
   live?: boolean;
@@ -110,9 +110,9 @@ function Live({ v, args, log }: { v: LogVariant; args: Args; log: Log }) {
  */
 export const LogCard: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => (v.live ? <Live v={v} args={args} log={log} /> : <Card v={v} lines={LINES} args={args} log={log} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

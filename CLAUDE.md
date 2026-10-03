@@ -40,14 +40,18 @@ One word per idea, the same in code, docs, stories and the Design Kit Spec (full
 `docs/design-kit-spec.md`):
 
 - **block**: one reusable drawing built from a JSON spec, shown in a conversation turn or a
-  dashboard panel. No sub-types: a block that returns a value and one that only shows data are
+  board panel. No sub-types: a block that returns a value and one that only shows data are
   both blocks. Its id is its **kind** (`{ kind: "timeseries", … }`).
 - **part**: a plain component a block is built from (`ui`, `charts`, `tables`, `forms`).
 - **shell**: what frames a block and maps its actions: the conversation (`ChatSession`) or the
-  dashboard (`PanelBox`).
+  board (`PanelBox`).
+- **board**: a surface any section of the kit is placed on — blocks, forms, tables, a canvas —
+  from a JSON spec (`BoardSpec`, `@invana/boards`): a report, a live board with filters, an
+  artboard. Only this; the Design Kit Spec's per-block pages are **spec pages** and a story's
+  layout of variants is its **grid** (`VariantGrid`).
 - **ask** / **answer**: the two kinds of conversation turn, never the name of a block.
 - **intent**: why a turn uses a block; conversation-only (`ASK_INTENTS`, `ANSWER_INTENTS`).
-- Retired: *preset*, *intent block*, *answer block*, *ask preset*. In code: `BLOCKS` (with
+- Retired: *preset*, *intent block*, *answer block*, *ask preset*, *dashboard* (now *board*). In code: `BLOCKS` (with
   `BlockKind`, `AskKind`, `AnswerKind`) in `@invana/blocks`, the `kind` key, `ASK_INTENTS`.
 
 ## Workspace layout
@@ -57,13 +61,13 @@ packages/
   styling/   → @invana/styling   (Tailwind v4 design tokens, themes, source CSS only)
   ui/        → @invana/ui        (React component library, shadcn/Radix based)
   themes/    → @invana/themes    (App layout shells: AppLayoutBase, app-v1, app-v2)
-  blocks/    → @invana/blocks    (every block, drawn from a JSON spec, and Page; shared by assistant and dashboard)
+  blocks/    → @invana/blocks    (every block, drawn from a JSON spec, and Page; shared by assistant and board)
   assistant/ → @invana/assistant (JSON-driven analyst conversation: thread, asks, answers, follow-ups)
 apps/
   storybook/ → @invana/stoybook  (Storybook 10 + Vite consumer of the three packages)
 ```
 
-Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. `blocks` depends on `ui`, `charts`, `tables` and `styling`; `assistant` depends on `blocks`, `ui`, `charts`, `tables`, `forms` and `styling` (peer + dev, workspace:*) and nothing depends on it — the dashboard included. Never invert this — `styling` must remain free of React, `ui` must not import from `themes`, `blocks` or `assistant`, and `blocks` must not import from `assistant` or `dashboard`.
+Dependency direction: `ui` depends on `styling` (devDep, workspace:*); `themes` depends on `ui` + `styling` (peer + dev, workspace:*); `storybook` consumes all three. `blocks` depends on `ui`, `charts`, `tables` and `styling`; `assistant` depends on `blocks`, `ui`, `charts`, `tables`, `forms` and `styling` (peer + dev, workspace:*) and nothing depends on it — the board included. Never invert this — `styling` must remain free of React, `ui` must not import from `themes`, `blocks` or `assistant`, and `blocks` must not import from `assistant` or `board`.
 
 ## Architecture
 
@@ -128,7 +132,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   the last row, and its outer cells flush with the text around it (no outer padding). Off by
   default, so a table standing alone keeps its box. The assistant's renderers pass `seamless`
   (the card or answer is the frame), and so does the Design Kit Spec's shared stylesheet; the
-  dashboard draws every panel in a `PanelBox` (a `title` only adds the label bar), so a block is
+  board draws every panel in a `PanelBox` (a `title` only adds the label bar), so a block is
   framed alike in both shells;
   stories set the prop, never classes. Where the outer cells can't be known (an auto-fit grid that
   wraps), the component reaches out by a cell's padding and clips it — with `overflow-hidden`, not
@@ -156,12 +160,11 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 - **How a story is written** (the standard for every story).
   The story-only helpers are in `apps/storybook/stories/_story/`; none of them is a kit component.
   - **Data is JSON** in `apps/storybook/fixtures/<area>/` (`blocks/<kind>.json`, `charts/`, `runs/`,
-    `dashboards/`), never inline in the story — and never in a package (no dummy data ships). A
+    `boards/`), never inline in the story — and never in a package (no dummy data ships). A
     block's file is `[{ caption, spec, state?, value?, narrow?, turn, now? }]`, typed in
-    `fixtures/blocks/index.ts`; `Blocks/<Kind>`, its conversation board and a dashboard panel all read
+    `fixtures/blocks/index.ts`; `Blocks/<Kind>`, its conversation grid and a board panel all read
     the same file.
-  - **One story per component, showing its variants**: `VariantBoard` lays them out as the spec's
-    board does, with a `variant` select (`variantArg`) to draw one.
+  - **One story per component, showing its variants**: `VariantGrid` lays them out as the spec page does, with a `variant` select (`variantArg`) to draw one.
   - **The Code tab shows the data and the call**, written from that JSON with `snippet` / `snippets`
     / `jsx` into `parameters.docs.source` (`transform: sourceFor(…)` when there is a `variant`
     select, so the Code tab follows it). Callbacks are named (`onAction={onAction}`) with what they
@@ -176,7 +179,7 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
     Run them with `pnpm --filter @invana/stoybook exec vitest run --project storybook <path>`.
 - **One title, one story — so the sidebar shows only folders and stories.** Every `*.stories.tsx`
   exports exactly one story, and no two files share a `title`: a component's variants are cells of
-  its one story (`VariantBoard`), never sibling files. The story's export is named as the title's
+  its one story (`VariantGrid`), never sibling files. The story's export is named as the title's
   last segment (`title: 'Blocks/Components/Confirm'`, `export const Confirm`), so Storybook hoists
   it and draws no component node. A component whose variants are too heavy for one page (a
   `DataTable`, an app shell) draws one at a time: its `variant` arg defaults to the first caption.
@@ -186,14 +189,14 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   each variant's `useCase`). Each file still exports one story named for its title's last segment.
   Use it only when the readers differ, never to split variants of one use case.
 - **Themes are the exception: a shell is seen, not wrapped.** A story under `themes/` draws one
-  app shell full-screen and nothing else — no `VariantBoard`, no event log, no replay bar, no
+  app shell full-screen and nothing else — no `VariantGrid`, no event log, no replay bar, no
   variant select — one story per layout, each its own title (`Themes/AppV2/Main Left`), so the
   sidebar still shows only folders and stories. Seeing the theme is the point; story chrome
   around it ruins that.
-- **Blocks, Charts, Dashboard and Assistant share one tree**: `<Area>/Components/<Name>` (one
+- **Blocks, Charts, Boards and Assistant share one tree**: `<Area>/Components/<Name>` (one
   story per component, every variant), `<Area>/Showcase` (every component of the area and its
   variants on one page, read from the same JSON — never a second copy of the data), plus
-  `Dashboard/Use Cases/<Screen>` (`stories/dashboard/usecases/<screen>/`) for whole dashboards and `Assistant/Conversations/*` and
+  `Boards/Use Cases/<Screen>` (`stories/boards/usecases/<screen>/`) for whole boards and `Assistant/Conversations/*` and
   `Assistant/Playground` as they are. In code: `stories/<area>/components/<name>/<name>.stories.tsx`
   and `stories/<area>/showcase.stories.tsx`.
 - Organize stories under these top-level sections in `apps/storybook/stories/`: `ui/`, `forms/` (`@invana/forms`, kept small and split by who builds the fields: `forms/manual/` — fields written by hand, a `FormField` render per field (raw controls, or the generator's labelled rows such as `FormField.Input`); `forms/generated/` — fields rendered from a `FieldConfig[]` by `ObjectField` / `SettingsPanel`: the capabilities (all fields, rows and columns, groups) and one story per Studio form shape (sign in, create page, dialog, settings section, inspector). A new Studio form that fits an existing story extends it rather than adding one), `data-tables/`, `assistant/` (`assistant/components/` — `asks/<kind>/`, `answers/<kind>/` and the conversation's parts, titled `Assistant/Components/…`; `assistant/showcase.stories.tsx`; `assistant/conversations/`, every story under `assistant/conversations/` renders `<ChatSession spec={fixture} />` and nothing else, with its JSON in `fixtures/conversations/`; and `assistant/playground.stories.tsx` (`Assistant/Playground`) — the whole assistant in an `AppLayoutV2` shell, and the one place each user's experience is shown (there are no per-user stories): pick a user (or link to one with the `user` arg, e.g. `&args=user:journalist;variant:cli`), a variant (`web`/`cli`) and a width, and play recorded runs (send, needs input, a costly question, failure, stop, open a step, tasks view) into their thread. Its data is one JSON file per user in `packages/assistant/src/data/conversations/` — the thread they open on plus their recorded runs, built into patch scripts by `fixtures/scripts/runs.ts`; a new moment or user goes there, and `runs.test.ts` checks that the users together show every built ask and block), `blocks/` (`@invana/blocks`: `blocks/components/<kind>/` or `page/`, titled `Blocks/Components/<Name>`; the conversation's board for the same block is `Assistant/Components/Asks/<Name>` or `Assistant/Components/Answers/<Name>`, from the same JSON), `charts/` (`charts/components/<component>/`, titled `Charts/Components/<Component>`), `themes/` (for theme stories), and `others/` (catch-all for anything that doesn't fit). A small number of top-level showcase stories (e.g. `palette.stories.tsx`, `showcase.stories.tsx`) live directly in `apps/storybook/stories/` so they appear at the sidebar root; their `title` is a single segment (`"Palette"`, `"Showcase"`).
@@ -201,25 +204,25 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
 
 ## Where demand comes from
 
-The kit's roadmap is driven by the **Invana hi-fi board** at
+The kit's roadmap is driven by the **Invana hi-fi design** at
 `~/Projects/invana/invana/.design/` (43 artboards, `hi-fi-finance/`). Every hi-fi screen is
-composed only from `@invana/*` components — so a component the board needs and the kit lacks is a
+composed only from `@invana/*` components — so a component the hi-fi design needs and the kit lacks is a
 gap in the kit, not a one-off in the design.
 
-- `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each board
+- `~/Projects/invana/invana/.design/design-kit-coverage.md` is the authoritative map: each hi-fi
   element → its design-kit component, what is missing, and the build order. Read it before adding
   a component, and update it when you ship one.
 - The **Design Kit Spec** (https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5) is the one design
   reference for blocks; code follows it and no other canvas. Its model (see Terms): a **block**
   is drawn from its JSON spec and composed of **parts** (`ui-extended`, `charts`, `tables`,
   `forms`) that know nothing of blocks and take size, density, `palette` and `seamless` as props;
-  a **shell** (conversation or dashboard) frames it. In a conversation an **intent** says why a
-  turn uses a block, and several intents may share one block with different options. Each block
-  board's header names its intents, parts, status and knobs; the Shared blocks page shows one spec
+  a **shell** (conversation or board) frames it. In a conversation an **intent** says why a
+  turn uses a block, and several intents may share one block with different options. Each block's
+  spec page header names its intents, parts, status and knobs; the Shared blocks page shows one spec
   in both shells, the Customisation page shows the knobs live and the Playground shows the blocks
-  in `AppLayoutV2`. Each block with a renderer has **one story that replicates its whole board**: every variant,
-  captioned as the board captions it, laid out by the story-only `VariantBoard`
-  (`apps/storybook/stories/_story/variant-board.tsx`, 320px columns; the 280px variant draws at
+  in `AppLayoutV2`. Each block with a renderer has **one story that replicates its whole spec page**: every variant,
+  captioned as the spec page captions it, laid out by the story-only `VariantGrid`
+  (`apps/storybook/stories/_story/variant-grid.tsx`, 320px columns; the 280px variant draws at
   280px) from `apps/storybook/fixtures/blocks/<kind>.json`. A variant the renderer cannot draw is a gap in the renderer, not a story workaround.
   A design change goes to the spec first; its Needs review page holds changes not yet decided.
 - `docs/TODO.md` tracks every component the assistant needs, across packages:
@@ -231,8 +234,8 @@ gap in the kit, not a one-off in the design.
   needs an external JS library the other packages don't have → its own package
   (`@invana/editor`, `@invana/charts`); encodes numbers as marks → `@invana/charts`; rows and
   columns of records → `@invana/tables`; drawn from a JSON spec, in a conversation turn, a
-  dashboard panel or a page → `@invana/blocks`; only meaningful inside a conversation (turns,
-  intents, the envelope) → `@invana/assistant`; anything else, including anything a dashboard, run view,
+  board panel or a page → `@invana/blocks`; only meaningful inside a conversation (turns,
+  intents, the envelope) → `@invana/assistant`; anything else, including anything a board, run view,
   review queue or report also shows → `@invana/ui`. So `TraceList`, `ExchangeRecord`,
   `ArtifactTable`, the run outcomes, `CitationList` and `ProposalCard` stay in ui.
 - **`@invana/assistant` is JSON only.** Studio renders `<ChatSession spec variant="cli" | "web" />`
@@ -244,7 +247,7 @@ gap in the kit, not a one-off in the design.
   block in the answer card or its own) is a trait registered beside its renderer, never a check on
   its id in a variant.
   Kinds are ids in `packages/blocks/src/kinds.ts`; intents, patterns and flows are ids in
-  `packages/assistant/src/grammar/`. A new block gets a board on the Design Kit Spec and a kind
+  `packages/assistant/src/grammar/`. A new block gets a spec page on the Design Kit Spec and a kind
   first, then its renderer (`packages/blocks/src/blocks/<kind>.tsx`, props `{ spec, state?,
   value?, id?, onAction? }`) is registered in `packages/blocks/src/registry.ts`; the assistant
   wraps every block once (`answers/shared.tsx`), turning its actions into conversation events. An

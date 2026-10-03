@@ -4,7 +4,7 @@ import { Avatar as AvatarRoot, AvatarFallback, AvatarGroup, AvatarImage, Stack, 
 
 import data from '../../../../fixtures/ui/avatar.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { Content, contentSource, type Block } from '../_content';
 
 interface AvatarSpec {
@@ -111,9 +111,9 @@ function Avatars({ v }: { v: AvatarVariant }) {
  */
 export const Avatar: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (v.people ? <Content blocks={peopleBlocks(v)} /> : <Avatars v={v} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

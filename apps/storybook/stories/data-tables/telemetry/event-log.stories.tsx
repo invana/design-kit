@@ -3,7 +3,7 @@ import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { PaginatedTable, type FilterValues } from '@invana/tables';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard } from '../../_story/variant-board';
+import { VariantGrid } from '../../_story/variant-grid';
 import { columnsSource } from '../columns';
 import { EVENTS, type TelemetryEvent } from './fixtures';
 import { LOG_COLUMNS, LOG_FILTERS, LOG_SEARCH_COLUMNS } from './log';
@@ -70,7 +70,7 @@ type Story = StoryObj<Args>;
  */
 export const EventLog: Story = {
   render: ({ onSearchChange, onFiltersChange }) => (
-    <VariantBoard variants={VARIANTS}>
+    <VariantGrid variants={VARIANTS}>
       {(_v, log) => (
         <PaginatedTable<TelemetryEvent>
           columns={LOG_COLUMNS}
@@ -93,7 +93,7 @@ export const EventLog: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Event Log' }));

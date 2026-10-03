@@ -6,7 +6,7 @@ import { Badge, PanelBox } from '@invana/ui';
 
 import spec from '../../../fixtures/forms/param-row.json';
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 
 type Param = {
   name: string;
@@ -115,7 +115,7 @@ type Story = StoryObj<Args>;
  */
 export const ParamRowStory: Story = {
   name: 'Param Row',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Param Row' }));
     await step('Set the batch size', async () => {

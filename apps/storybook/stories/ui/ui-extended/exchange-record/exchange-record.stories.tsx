@@ -4,7 +4,7 @@ import { ExchangeRecord as Component, PanelBox, type ExchangeOption } from '@inv
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/exchange-record.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ExchangeVariant extends Variant {
   panel: { title: string; aside: string };
@@ -68,13 +68,13 @@ type Story = StoryObj<Args>;
  */
 export const ExchangeRecord: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PanelBox title={v.panel.title} aside={v.panel.aside} flush>
           <Component {...v.props} />
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const v = VARIANTS[0]!;

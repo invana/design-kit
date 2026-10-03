@@ -5,7 +5,7 @@ import { NavBase, NavItems, TypographyMuted, TypographySmall, type NavItemsVaria
 
 import VARIANTS from '../../../../fixtures/ui-extended/nav-base.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 import { toMenu, toNavItems, type MenuJson, type NavJson } from './_nav-items';
 
 type Variant = (typeof VARIANTS)[number];
@@ -150,7 +150,7 @@ function LiveStrip({ strip, log, onActiveChange, onSelect, onClose }: { strip: S
 export const NavBaseStory: Story = {
   name: 'NavBase',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v: Variant, log) =>
         v.strip ? (
           <LiveStrip strip={v.strip as Strip} log={log} {...on} />
@@ -165,18 +165,18 @@ export const NavBaseStory: Story = {
           />
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
-    const board = within(canvasElement);
+    const grid = within(canvasElement);
     await step('Pick a tab in the underline strip', async () => {
-      const cell = within(board.getByRole('group', { name: VARIANTS[2].caption }));
+      const cell = within(grid.getByRole('group', { name: VARIANTS[2].caption }));
       await userEvent.click(cell.getByRole('tab', { name: /Canvas/ }));
       await expect(args.onActiveChange).toHaveBeenCalledWith('canvas');
       await expect(cell.getByRole('tab', { name: /Canvas/ })).toHaveAttribute('aria-selected', 'true');
     });
     await step('Close a page tab', async () => {
-      const cell = within(board.getByRole('group', { name: 'Closable tabs' }));
+      const cell = within(grid.getByRole('group', { name: 'Closable tabs' }));
       await userEvent.click(cell.getByRole('button', { name: 'Close Run #42' }));
       await expect(args.onClose).toHaveBeenCalledWith('run');
       await expect(cell.queryByText('Run #42')).toBeNull();

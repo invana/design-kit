@@ -121,7 +121,7 @@ export type {
 }
 
 /**
- * A conversation is **data**, like a dashboard. Everything in this file is
+ * A conversation is **data**, like a board. Everything in this file is
  * JSON-serialisable: the API sends a {@link ConversationSpec}, then patches;
  * the component renders whatever spec it is given and sends events back.
  *

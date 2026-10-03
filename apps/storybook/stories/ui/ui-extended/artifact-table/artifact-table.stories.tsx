@@ -4,7 +4,7 @@ import { ArtifactTable as Component, PanelBox, type Artifact, type ArtifactTable
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/artifact-table.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface ArtifactVariant extends Variant {
   /** The panel the table sits in, when it is a step's record. */
@@ -105,9 +105,9 @@ function Cell({ v, args, log }: { v: ArtifactVariant; args: Args; log: Log }) {
  */
 export const ArtifactTable: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => <Cell v={v} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

@@ -12,7 +12,7 @@ import {
 
 import VARIANTS from '../../../../fixtures/ui-extended/nav-horizontal.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 import { ICONS, MAP_ITEMS, toNavItems, type NavJson } from '../nav-base/_nav-items';
 
 type Variant = (typeof VARIANTS)[number];
@@ -167,26 +167,26 @@ function Live({ v, log, onClick, onSelect, onChange }: { v: Variant; log: Log } 
 export const NavHorizontalStory: Story = {
   name: 'NavHorizontal',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} {...on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
-    const board = within(canvasElement);
+    const grid = within(canvasElement);
     await step('An action item reports its name', async () => {
-      const cell = within(board.getByRole('group', { name: 'Default' }));
+      const cell = within(grid.getByRole('group', { name: 'Default' }));
       await userEvent.click(cell.getByRole('button', { name: 'Home' }));
       await expect(args.onClick).toHaveBeenCalledWith('Home');
       await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('onClick"Home"');
     });
     await step('Typing in the centre search', async () => {
-      const cell = within(board.getByRole('group', { name: 'Center search' }));
+      const cell = within(grid.getByRole('group', { name: 'Center search' }));
       await userEvent.type(cell.getByPlaceholderText(/Search nodes/), 'ab');
       await expect(args.onChange).toHaveBeenLastCalledWith('ab');
       await expect(cell.getByPlaceholderText(/Search nodes/)).toHaveValue('ab');
     });
     await step('Mark all as read clears the badge', async () => {
-      const cell = within(board.getByRole('group', { name: 'With menus' }));
+      const cell = within(grid.getByRole('group', { name: 'With menus' }));
       await expect(cell.getByText('3')).toBeInTheDocument();
       await userEvent.click(cell.getByRole('button', { name: /Notifications/ }));
       await userEvent.click(within(document.body).getByRole('menuitem', { name: 'Mark all as read' }));
@@ -194,7 +194,7 @@ export const NavHorizontalStory: Story = {
       await expect(cell.queryByText('3')).toBeNull();
     });
     await step('A submenu opens beside its row, and its rows are the choices', async () => {
-      const cell = within(board.getByRole('group', { name: 'Center search' }));
+      const cell = within(grid.getByRole('group', { name: 'Center search' }));
       await userEvent.click(cell.getByRole('button', { name: 'Export' }));
       const menu = within(document.body);
       await userEvent.click(await menu.findByRole('menuitem', { name: 'Send to' }));

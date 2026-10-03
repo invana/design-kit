@@ -5,7 +5,7 @@ import { ButtonWithTooltip as Component, type ButtonWithTooltipProps } from '@in
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/button-with-tooltip.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 const ICONS = { settings: Settings };
 const ICON_NAMES = { settings: 'Settings' };
@@ -60,7 +60,7 @@ type Story = StoryObj<Args>;
  */
 export const ButtonWithTooltip: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => {
         const Icon = ICONS[v.icon];
         return (
@@ -75,7 +75,7 @@ export const ButtonWithTooltip: Story = {
           </Component>
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Icon button' }));

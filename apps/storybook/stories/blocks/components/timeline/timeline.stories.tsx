@@ -4,7 +4,7 @@ import { TimelineBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.timeline;
 
@@ -42,15 +42,15 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * A few dated events in order, each marked by what it did to the figure — the Timeline board of
+ * A few dated events in order, each marked by what it did to the figure — the Timeline page of
  * the Design Kit Spec. An event with `children` opens into them (`open` draws it open), so a
  * three-day hold reads step by step.
  */
 export const Timeline: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <TimelineBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

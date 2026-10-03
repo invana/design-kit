@@ -5,7 +5,7 @@ import { CitationList as Component, CitationRow } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/citation-list.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface Row {
   kind?: string;
@@ -96,9 +96,9 @@ function List({ v, onSelect, log }: { v: CitationVariant; onSelect: Args['onSele
  */
 export const CitationList: Story = {
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <List v={v} onSelect={onSelect} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Numbered' }));

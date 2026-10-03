@@ -5,7 +5,7 @@ import graphExpansions from "./conversations/graph-expansions.json"
 import methodDisclosure from "./conversations/method-disclosure.json"
 import streaming from "./conversations/streaming.json"
 import streamingScript from "./conversations/streaming.script.json"
-import taskDashboard from "./conversations/task-dashboard.json"
+import taskBoard from "./conversations/task-board.json"
 import turnLabels from "./conversations/turn-labels.json"
 import breeder from "../data/conversations/breeder.json"
 import dataScientist from "../data/conversations/data-scientist.json"
@@ -63,7 +63,7 @@ export type SessionId = keyof typeof SESSIONS
 export const CONVERSATIONS = {
   graphExpansions: graphExpansions as unknown as ConversationSpec,
   agentConsole: agentConsole as unknown as ConversationSpec,
-  taskDashboard: taskDashboard as unknown as ConversationSpec,
+  taskBoard: taskBoard as unknown as ConversationSpec,
   streaming: streaming as unknown as ConversationSpec,
   methodDisclosure: methodDisclosure as unknown as ConversationSpec,
   turnLabels: turnLabels as unknown as ConversationSpec,

@@ -4,7 +4,7 @@ import { Legend as Component, LegendItem, type LegendProps, type LegendSwatchKin
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/legend.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface LegendVariant extends Variant {
   orientation?: LegendProps['orientation'];
@@ -56,7 +56,7 @@ type Story = StoryObj<Args>;
  */
 export const Legend: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <Component orientation={v.orientation}>
           {v.items.map((item) => (
@@ -64,7 +64,7 @@ export const Legend: Story = {
           ))}
         </Component>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

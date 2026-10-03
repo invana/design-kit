@@ -5,7 +5,7 @@ import { SuggestionChips as SuggestionChipsPart, type SuggestionChipsProps } fro
 
 import data from '../../../../fixtures/assistant/suggestion-chips.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface ChipsVariant {
   caption: string;
@@ -66,9 +66,9 @@ type Story = StoryObj<Args>;
 /** Follow-ups that reuse the current scope. Picking one sends it as the next prompt. */
 export const SuggestionChips: Story = {
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveChips variant={v} onSelect={onSelect} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const c = within(within(canvasElement).getByRole('group', { name: 'Default' }));

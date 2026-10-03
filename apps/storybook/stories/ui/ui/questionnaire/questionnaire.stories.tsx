@@ -24,7 +24,7 @@ import {
 
 import data from '../../../../fixtures/ui/questionnaire.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface Choice {
   value: string;
@@ -227,9 +227,9 @@ function LiveQuestionnaire({
  */
 export const Questionnaire: Story = {
   render: ({ variant, onItemChange, onSubmit }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveQuestionnaire v={v} onItemChange={onItemChange} onSubmit={onSubmit} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

@@ -15,7 +15,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/search-input.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Field {
   /** What the field filters, when a cell has several. */
@@ -160,9 +160,9 @@ type Story = StoryObj<Args>;
 export const SearchInputStory: Story = {
   name: 'SearchInput',
   render: ({ variant, onChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onChange={onChange} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With filtering' }));

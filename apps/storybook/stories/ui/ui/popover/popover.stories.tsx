@@ -7,7 +7,7 @@ import { FieldContent, FieldGroup, FieldLabel, Input } from '@invana/forms';
 
 import data from '../../../../fixtures/ui/popover.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface PopoverVariant extends Variant {
   trigger: string;
@@ -127,9 +127,9 @@ function LivePopover({ v, onOpenChange, log }: { v: PopoverVariant; onOpenChange
  */
 export const Popover: Story = {
   render: ({ variant, onOpenChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LivePopover v={v} onOpenChange={onOpenChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

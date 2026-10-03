@@ -12,7 +12,7 @@ import {
 
 import data from '../../../../fixtures/ui/table.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface TableData {
   caption?: string;
@@ -82,7 +82,7 @@ type Story = StoryObj<Args>;
  */
 export const Table: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.tables.map((t, i) => (
           <TablePart key={i} density={t.density} seamless={t.seamless}>
@@ -106,7 +106,7 @@ export const Table: Story = {
           </TablePart>
         ))
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

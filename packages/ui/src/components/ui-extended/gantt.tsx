@@ -199,7 +199,7 @@ export interface GanttProps
    */
   renderBar?: (bar: GanttBar, row: GanttRow) => React.ReactNode
   /**
-   * `compact` in a drawer, `comfortable` on a dashboard. It moves the bar's
+   * `compact` in a drawer, `comfortable` on a board. It moves the bar's
    * height, not the type scale — one component, three surfaces (SR14).
    */
   density?: "compact" | "comfortable"

@@ -5,7 +5,7 @@ import { Terminal, TerminalLine, type TerminalLineKind, type TerminalLevel } fro
 import DATA from '../../../../fixtures/ui-extended/terminal.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Line {
   kind?: TerminalLineKind;
@@ -128,9 +128,9 @@ type Story = StoryObj<Args>;
 export const TerminalStory: Story = {
   name: 'Terminal',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (v.live ? <Live v={v} /> : <Draw v={v} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

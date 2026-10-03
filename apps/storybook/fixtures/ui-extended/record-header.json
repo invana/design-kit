@@ -6,10 +6,10 @@
     "crumbs": ["Which suppliers are exposed to the Red Sea route?"],
     "chips": [{ "bound": "llm" }, { "badge": "running" }],
     "views": [
-      { "value": "dashboard", "label": "Dashboard" },
-      { "value": "yml", "label": "dashboard.yml" }
+      { "value": "board", "label": "Board" },
+      { "value": "yml", "label": "board.yml" }
     ],
-    "view": "dashboard",
+    "view": "board",
     "actions": [
       { "label": "Cancel", "variant": "outline" },
       { "label": "More", "variant": "ghost", "icon": "more" }

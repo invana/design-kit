@@ -29,7 +29,7 @@ export interface PageProps extends Omit<React.HTMLAttributes<HTMLElement>, "chil
 /**
  * Blocks laid out as a document: sections top to bottom, each block bare, no
  * cards and no borders. A section's title is its rule; a page's title is its
- * heading. The same specs a conversation turn or a dashboard panel draws.
+ * heading. The same specs a conversation turn or a board panel draws.
  */
 export const Page = React.forwardRef<HTMLElement, PageProps>(({ spec, onAction, className, ...props }, ref) => (
   <article ref={ref} className={cn("flex min-w-0 flex-col gap-6", className)} {...props}>

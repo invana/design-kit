@@ -13,7 +13,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/run-outcomes.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 type Step =
   | { row: Pick<ChatSessionTaskRowProps, 'status' | 'name' | 'meta'> }
@@ -169,9 +169,9 @@ type Story = StoryObj<Args>;
  */
 export const RunOutcomes: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Outcome v={v} log={log} onAction={onAction} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[3].caption }));

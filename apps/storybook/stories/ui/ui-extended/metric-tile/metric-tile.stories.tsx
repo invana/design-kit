@@ -12,7 +12,7 @@ import {
 import DATA from '../../../../fixtures/ui-extended/metric-tile.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 type Tile = Pick<MetricTileProps, 'variant' | 'tone' | 'captionTone' | 'meter'> & {
   label: string;
@@ -159,9 +159,9 @@ function Live({ every }: { every: number }) {
  */
 export const MetricTile: Story = {
   render: ({ variant, every }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (v.live ? <Live every={every} /> : <Tiles v={v} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

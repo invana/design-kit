@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { DataTable, type ExpandedState } from '@invana/tables';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { columnsSource } from '../columns';
 import { AGENTS, EVENTS, type TelemetryEvent } from './fixtures';
 import { LOG_COLUMNS } from './log';
@@ -128,7 +128,7 @@ type Story = StoryObj<Args>;
  */
 export const GroupedByAgent: Story = {
   name: 'Grouped by Agent',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Grouped by Agent' }));
     const first = BY_AGENT[0]!;

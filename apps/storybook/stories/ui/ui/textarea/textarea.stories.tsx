@@ -14,7 +14,7 @@ import {
 
 import data from '../../../../fixtures/ui/textarea.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface TextareaField {
   id: string;
@@ -134,7 +134,7 @@ function LiveTextarea({ field, onChange, log }: { field: TextareaField; onChange
  */
 export const Textarea: Story = {
   render: ({ variant, onChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <FieldGroup>
           {v.sections.map((s, i) =>
@@ -151,7 +151,7 @@ export const Textarea: Story = {
           )}
         </FieldGroup>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With label' }));

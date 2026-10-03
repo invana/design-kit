@@ -13,7 +13,7 @@ import {
 
 import data from '../../../../fixtures/typography/typography.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /** A run of inline text: plain, code, strong, em — or a span with a class (the custom-class cell). */
 type Run = string | { code: string } | { strong: string } | { em: string } | { text: string; className: string };
@@ -170,7 +170,7 @@ type Story = StoryObj<Args>;
  */
 export const Typography: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <React.Fragment>
           {v.nodes.map((n, i) => (
@@ -178,7 +178,7 @@ export const Typography: Story = {
           ))}
         </React.Fragment>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

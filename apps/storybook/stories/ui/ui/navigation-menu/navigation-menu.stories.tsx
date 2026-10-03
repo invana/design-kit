@@ -18,7 +18,7 @@ import {
 
 import data from '../../../../fixtures/ui/navigation-menu.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface NavLink {
   title: string;
@@ -168,9 +168,9 @@ function LiveNavigationMenu({ v, log, onValueChange, onSelect }: { v: Navigation
  */
 export const NavigationMenu: Story = {
   render: ({ variant, onValueChange, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveNavigationMenu v={v} log={log} onValueChange={onValueChange} onSelect={onSelect} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

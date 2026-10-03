@@ -21,7 +21,7 @@ import { ClarifyCard as ClarifyCardPart, type ClarifyCardProps } from '@invana/a
 
 import data from '../../../../fixtures/assistant/clarify-card.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Choice {
   value: string;
@@ -230,9 +230,9 @@ type Story = StoryObj<Args>;
  */
 export const ClarifyCard: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => <LiveCard variant={v} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

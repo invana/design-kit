@@ -14,7 +14,7 @@ import {
 
 import data from '../../../../fixtures/ui/command.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { ICONS, Icon, type IconName } from '../_content';
 
 interface CommandVariant extends Variant {
@@ -85,7 +85,7 @@ type Story = StoryObj<Args>;
  */
 export const Command: Story = {
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <CommandRoot>
           <CommandInput placeholder={v.placeholder} />
@@ -115,7 +115,7 @@ export const Command: Story = {
           </CommandList>
         </CommandRoot>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

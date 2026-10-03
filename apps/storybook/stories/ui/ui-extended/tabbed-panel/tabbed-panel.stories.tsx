@@ -54,7 +54,7 @@ import {
 
 import RAW from '../../../../fixtures/ui-extended/tabbed-panel.json';
 import { inline, json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** Icons are code, not data: the JSON names one, this map draws it. */
 const ICONS: Record<string, React.ElementType> = {
@@ -463,9 +463,9 @@ type Story = StoryObj<Args>;
 export const TabbedPanelStory: Story = {
   name: 'TabbedPanel',
   render: ({ variant, ...handlers }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} {...handlers} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Basic' }));

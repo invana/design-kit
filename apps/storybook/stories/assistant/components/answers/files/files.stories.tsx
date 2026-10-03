@@ -5,7 +5,7 @@ import type { ConversationEvent } from '@invana/assistant';
 import { BLOCK_VARIANTS } from '../../../../../fixtures/blocks';
 import { answerTurn, LiveTurn } from '../../../../_story/live-turn';
 import { jsx, snippets, sourceFor, variantArg } from '../../../../_story/source';
-import { VariantBoard } from '../../../../_story/variant-board';
+import { VariantGrid } from '../../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.files;
 
@@ -46,14 +46,14 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The Files board of the Design Kit Spec in the conversation — the same JSON as
+ * The Files page of the Design Kit Spec in the conversation — the same JSON as
  * `Blocks/Components/Files`, as an answer turn. A download goes out as an `action` event.
  */
 export const Files: Story = {
   render: ({ variant, onEvent }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTurn turn={answerTurn('files', v)} now={v.now} onEvent={onEvent} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

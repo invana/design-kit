@@ -4,7 +4,7 @@ import { TimeseriesBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.timeseries;
 
@@ -43,14 +43,14 @@ type Story = StoryObj<Args>;
 
 /**
  * A measure over time: the line, its forecast from `forecastFrom`, the range it is judged against,
- * and the periods that stand out ringed in their tone. The Time series board's other variants (two
+ * and the periods that stand out ringed in their tone. The Time series page's other variants (two
  * series, a threshold, a gap) are gaps in the renderer.
  */
 export const Timeseries: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <TimeseriesBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

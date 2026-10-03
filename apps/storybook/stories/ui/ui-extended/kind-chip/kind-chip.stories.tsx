@@ -4,7 +4,7 @@ import { KindChip as Component, PropertyList, PropertyRow, type RunKind } from '
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/kind-chip.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface KindVariant extends Variant {
   chips: { kind: RunKind; note: string }[];
@@ -58,7 +58,7 @@ type Story = StoryObj<Args>;
  */
 export const KindChip: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={92}>
           {v.chips.map(({ kind, note }) => (
@@ -68,7 +68,7 @@ export const KindChip: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0]!.caption }));

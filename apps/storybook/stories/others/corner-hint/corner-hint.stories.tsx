@@ -5,7 +5,7 @@ import { Button, Kbd, Link, PanelBox } from '@invana/ui';
 
 import data from '../../../fixtures/others/corner-hint.json';
 import { snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../_story/variant-grid';
 
 interface HintVariant extends Variant {
   buttons?: { label: string; kbd: string; hint: boolean }[];
@@ -74,7 +74,7 @@ type Story = StoryObj<Args>;
  */
 export const CornerHint: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => {
         const click = (label: string) => (e: React.MouseEvent) => {
           e.preventDefault();
@@ -106,7 +106,7 @@ export const CornerHint: Story = {
           </PanelBox>
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);

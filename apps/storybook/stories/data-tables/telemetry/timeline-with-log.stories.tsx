@@ -5,7 +5,7 @@ import { PaginatedTable, type FilterValues, type TableFilter } from '@invana/tab
 import { PanelBox, Gantt } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { EVENTS, RUN_SPAN_MS, formatOffset, ganttTasks, type TelemetryEvent } from './fixtures';
 import { LOG_COLUMNS, LOG_FILTERS, LOG_SEARCH_COLUMNS } from './log';
 
@@ -151,7 +151,7 @@ type Story = StoryObj<Args>;
  */
 export const TimelineWithLog: Story = {
   name: 'Timeline with Log',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Timeline with Log' }));
     await step('Pick fetch_filings on the timeline', async () => {

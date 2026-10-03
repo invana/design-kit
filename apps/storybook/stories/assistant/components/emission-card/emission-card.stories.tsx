@@ -15,7 +15,7 @@ import { CitationMarker, EmissionBody, EmissionCard as EmissionCardPart, type Em
 
 import data from '../../../../fixtures/assistant/emission-card.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 /** What a card's body holds — one of a figure, a table, cited prose, or a muted line. */
 interface Body {
@@ -139,7 +139,7 @@ type Story = StoryObj<Args>;
  */
 export const EmissionCard: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <EmissionCardPart {...v.props}>
           <EmissionBody>
@@ -147,7 +147,7 @@ export const EmissionCard: Story = {
           </EmissionBody>
         </EmissionCardPart>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every kind draws in the same card, with its template and citation', async () => {

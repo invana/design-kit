@@ -44,7 +44,7 @@ const config: StorybookConfig = {
       '@invana/charts': resolve(__dirname, '../../../packages/charts/src'),
       '@invana/blocks': resolve(__dirname, '../../../packages/blocks/src'),
       '@invana/charts/*': resolve(__dirname, '../../../packages/charts/src/*'),
-      '@invana/dashboard': resolve(__dirname, '../../../packages/dashboard/src'),
+      '@invana/boards': resolve(__dirname, '../../../packages/boards/src'),
       '@invana/assistant': resolve(__dirname, '../../../packages/assistant/src'),
       '@invana/assistant/*': resolve(__dirname, '../../../packages/assistant/src/*'),
 

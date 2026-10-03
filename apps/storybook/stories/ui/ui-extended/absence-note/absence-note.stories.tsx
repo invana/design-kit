@@ -4,7 +4,7 @@ import { AbsenceNote as Component, PanelBox, type AbsenceNoteProps } from '@inva
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/absence-note.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface AbsenceVariant extends Variant {
   /** The panel the note stands in for. */
@@ -66,13 +66,13 @@ type Story = StoryObj<Args>;
  */
 export const AbsenceNote: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PanelBox title={v.panel} flush>
           <Component {...v.props}>{v.text}</Component>
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -4,7 +4,7 @@ import { Item, ItemActions, ItemContent, ItemTitle, Kbd as KbdKey, KbdGroup } fr
 
 import data from '../../../../fixtures/ui/kbd.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface KbdVariant extends Variant {
   /** The action the keys perform, when they sit beside one. */
@@ -71,7 +71,7 @@ type Story = StoryObj<Args>;
  */
 export const Kbd: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => {
         const keys = (
           <KbdGroup>
@@ -91,7 +91,7 @@ export const Kbd: Story = {
           keys
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

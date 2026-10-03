@@ -6,7 +6,7 @@ import { File, Folder } from 'lucide-react';
 
 import VARIANTS from '../../../../fixtures/ui-extended/tree-view.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** Icons are named in the JSON; a consumer draws its own. */
 const ICONS: Record<string, React.ReactNode> = {
@@ -100,9 +100,9 @@ function Live({ v, log, onClick }: { v: (typeof VARIANTS)[number]; log: Log; onC
 export const TreeViewStory: Story = {
   name: 'TreeView',
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onClick={onClick} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Searchable' }));

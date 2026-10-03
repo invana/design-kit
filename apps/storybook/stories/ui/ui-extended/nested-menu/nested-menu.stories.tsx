@@ -6,7 +6,7 @@ import { Bell, File, FolderOpen, Mail, Settings, Shield, Users } from 'lucide-re
 
 import VARIANTS from '../../../../fixtures/ui-extended/nested-menu.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** Icons are named in the JSON; a consumer imports its own. */
 const ICONS: Record<string, React.ElementType> = {
@@ -98,9 +98,9 @@ function Live({ items, log, onClick }: { items: MenuJson[]; log: Log; onClick: A
 export const NestedMenuStory: Story = {
   name: 'NestedMenu',
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live items={v.menuItems as MenuJson[]} log={log} onClick={onClick} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Secondary' }));

@@ -7,7 +7,7 @@ import data from '../../../../fixtures/charts/line-chart.json';
 import feed from '../../../../fixtures/charts/query-latency.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { jsx, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 import {
   FORMATS,
   Framed,
@@ -116,7 +116,7 @@ function Streaming({ variant }: { variant: ChartVariant<Props> }) {
  */
 export const LineChart: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.stream ? (
           <Streaming variant={v} />
@@ -126,7 +126,7 @@ export const LineChart: Story = {
           </Framed>
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

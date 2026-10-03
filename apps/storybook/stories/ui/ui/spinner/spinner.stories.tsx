@@ -4,7 +4,7 @@ import { Spinner as SpinnerPart, TypographyMuted } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/spinner.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface SpinnerVariant extends Variant {
   /** px. Kit gap: `Spinner` has no `size` prop, so the story sets it with `style`. */
@@ -53,7 +53,7 @@ type Story = StoryObj<Args>;
  */
 export const Spinner: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => {
         const spinner = <SpinnerPart style={v.size === 16 ? undefined : { width: v.size, height: v.size }} />;
         return v.label ? (
@@ -64,7 +64,7 @@ export const Spinner: Story = {
           spinner
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

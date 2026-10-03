@@ -5,7 +5,7 @@ import { ExpandToggle as Component, Stack, TypographyMuted } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/expand-toggle.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface ToggleVariant extends Variant {
   label?: string;
@@ -86,9 +86,9 @@ type Story = StoryObj<Args>;
  */
 export const ExpandToggle: Story = {
   render: ({ variant, onToggle }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onToggle={onToggle} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Closed' }));

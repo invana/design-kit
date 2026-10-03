@@ -19,7 +19,7 @@ import {
 import DATA from '../../../../fixtures/ui-extended/gantt.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** A task as JSON holds it: a chart and an action name stand in for a custom card body. */
 type JsonTask = Omit<GanttRow, 'status' | 'detail'> & {
@@ -314,11 +314,11 @@ type Story = StoryObj<Args>;
 export const GanttStory: Story = {
   name: 'Gantt',
   render: ({ variant, onSelectRow }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) =>
         v.live ? <Live v={v} log={log} onSelectRow={onSelectRow} /> : <Static v={v} log={log} onSelectRow={onSelectRow} />
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

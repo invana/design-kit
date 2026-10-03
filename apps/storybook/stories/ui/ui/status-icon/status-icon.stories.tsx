@@ -4,7 +4,7 @@ import { PropertyList, PropertyRow, StatusIcon as StatusIconPart, type StatusIco
 
 import data from '../../../../fixtures/ui/status-icon.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface Icon {
   state: StatusIconProps['state'];
@@ -63,7 +63,7 @@ type Story = StoryObj<Args>;
  */
 export const StatusIcon: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.icons.length === 1 ? (
           <StatusIconPart state={v.icons[0].state} size={v.icons[0].size} label={v.icons[0].label} />
@@ -77,7 +77,7 @@ export const StatusIcon: Story = {
           </PropertyList>
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

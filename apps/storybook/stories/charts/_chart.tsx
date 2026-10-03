@@ -4,7 +4,7 @@ import { PanelBox } from '@invana/ui';
 
 import { ReplayFrame, useReplay } from '../_story/replay';
 import { jsx, snippets, sourceFor, type Snippet } from '../_story/source';
-import type { Variant } from '../_story/variant-board';
+import type { Variant } from '../_story/variant-grid';
 
 /**
  * Story-only scaffolding the chart stories share — not a story, and not a kit component.
@@ -25,7 +25,7 @@ export interface Live {
   frames?: Record<string, unknown>[];
 }
 
-/** One cell of a chart board, as the JSON holds it. */
+/** One cell of a chart grid, as the JSON holds it. */
 export interface ChartVariant<P = Record<string, unknown>> extends Variant {
   props: P;
   /** Drawn inside a `PanelBox` with this title and aside, as the page that owns it does. */
@@ -167,7 +167,7 @@ export function framedCall(panel: ChartVariant['panel'], call: string, aside?: s
   return `<PanelBox title="${panel.title}"${asideAttr}>\n${call.replace(/^/gm, '  ')}\n</PanelBox>`;
 }
 
-/** `parameters.docs.source` for a chart board: its imports, then each picked variant. */
+/** `parameters.docs.source` for a chart grid: its imports, then each picked variant. */
 export function chartSource<V extends ChartVariant>(
   variants: V[],
   imports: string[],
@@ -184,7 +184,7 @@ export function chartSource<V extends ChartVariant>(
 // ── the play function ──────────────────────────────────────────────────────
 
 /** Every caption drew a cell; each live cell plays to its last frame. */
-export async function checkBoard(canvasElement: HTMLElement, variants: ChartVariant[], noun = 'frame') {
+export async function checkGrid(canvasElement: HTMLElement, variants: ChartVariant[], noun = 'frame') {
   const canvas = within(canvasElement);
   for (const v of variants) await expect(canvas.getByRole('group', { name: v.caption })).toBeInTheDocument();
   for (const v of variants.filter((x) => x.live)) {

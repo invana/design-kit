@@ -4,7 +4,7 @@ import { Badge, Stack, type StackProps } from '@invana/ui';
 
 import STACKS from '../../../../fixtures/ui/stack.json';
 import { attrs, jsxWith, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface StackVariant {
   caption: string;
@@ -57,7 +57,7 @@ type Story = StoryObj<Args>;
 export const StackStory: Story = {
   name: 'Stack',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <Stack {...v.props}>
           {v.items.map((item) => (
@@ -67,7 +67,7 @@ export const StackStory: Story = {
           ))}
         </Stack>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     for (const v of VARIANTS) {

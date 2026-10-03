@@ -4,7 +4,7 @@ import { CaveatNote as Component, type CaveatNoteProps } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/caveat-note.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface CaveatVariant extends Variant {
   props: Pick<CaveatNoteProps, 'tone'> & { label: string; action?: string };
@@ -57,7 +57,7 @@ type Story = StoryObj<Args>;
  */
 export const CaveatNote: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <Component
           {...v.props}
@@ -73,7 +73,7 @@ export const CaveatNote: Story = {
           {v.text}
         </Component>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With an action' }));

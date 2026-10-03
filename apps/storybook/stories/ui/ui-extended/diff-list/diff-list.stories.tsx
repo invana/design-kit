@@ -4,7 +4,7 @@ import { DiffList as Component, DiffRow, type DiffOp } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/diff-list.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface DiffVariant extends Variant {
   rows: { op: DiffOp; kind: string; text: string }[];
@@ -52,7 +52,7 @@ type Story = StoryObj<Args>;
 /** What a change adds, alters and removes. The sign is spelled out per row — colour alone must not decide an approval. */
 export const DiffList: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <Component>
           {v.rows.map(({ op, kind, text }) => (
@@ -62,7 +62,7 @@ export const DiffList: Story = {
           ))}
         </Component>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0]!.caption }));

@@ -5,7 +5,7 @@ import { ScopeLine, type ScopeLinePart } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/scope-line.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Variant {
   caption: string;
@@ -102,9 +102,9 @@ type Story = StoryObj<Args>;
 export const ScopeLineStory: Story = {
   name: 'ScopeLine',
   render: ({ variant, ...args }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} args={args} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[1].caption }));

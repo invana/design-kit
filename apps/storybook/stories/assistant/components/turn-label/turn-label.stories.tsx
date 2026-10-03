@@ -4,7 +4,7 @@ import { TurnLabel as TurnLabelPart, type TurnLabelProps } from '@invana/assista
 
 import data from '../../../../fixtures/assistant/turn-label.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface LabelVariant {
   caption: string;
@@ -52,9 +52,9 @@ type Story = StoryObj<Args>;
  */
 export const TurnLabel: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <TurnLabelPart {...v.props}>{v.text}</TurnLabelPart>}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Each label names who is speaking', async () => {

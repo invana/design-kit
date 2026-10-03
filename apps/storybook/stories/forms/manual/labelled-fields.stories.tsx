@@ -7,7 +7,7 @@ import { Button } from '@invana/ui';
 
 import spec from '../../../fixtures/forms/labelled-fields.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 
 /** JSON names the row; the story holds the component. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- each row takes its own props
@@ -132,7 +132,7 @@ type Story = StoryObj<Args>;
  */
 export const LabelledFields: Story = {
   name: 'Labelled Fields',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Labelled Fields' }));
     await step('Write the instructions and save', async () => {

@@ -16,7 +16,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/record-header.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Variant {
   caption: string;
@@ -196,16 +196,16 @@ function Live({ v, log, onAction, onViewChange }: { v: Variant; log: Log } & Omi
 export const RecordHeaderStory: Story = {
   name: 'RecordHeader',
   render: ({ variant, onAction, onViewChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onAction={onAction} onViewChange={onViewChange} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0].caption }));
     await step('Switch to the YAML view', async () => {
-      await userEvent.click(cell.getByRole('radio', { name: 'dashboard.yml' }));
+      await userEvent.click(cell.getByRole('radio', { name: 'board.yml' }));
       await expect(args.onViewChange).toHaveBeenCalledWith('yml');
-      await expect(cell.getByRole('radio', { name: 'dashboard.yml' })).toBeChecked();
+      await expect(cell.getByRole('radio', { name: 'board.yml' })).toBeChecked();
     });
     await step('Cancel the run', async () => {
       await userEvent.click(cell.getByRole('button', { name: 'Cancel' }));

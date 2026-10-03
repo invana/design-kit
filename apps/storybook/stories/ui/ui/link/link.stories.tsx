@@ -4,7 +4,7 @@ import { Link as LinkPart, TypographyP } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/link.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface LinkSpec {
   text: string;
@@ -66,7 +66,7 @@ type Story = StoryObj<Args>;
  */
 export const Link: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <TypographyP>
           {v.parts.map((p, i) =>
@@ -91,7 +91,7 @@ export const Link: Story = {
           )}
         </TypographyP>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'External' }));

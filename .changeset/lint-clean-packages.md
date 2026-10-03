@@ -3,7 +3,7 @@
 "@invana/forms": patch
 "@invana/tables": patch
 "@invana/editor": patch
-"@invana/dashboard": patch
+"@invana/boards": patch
 ---
 
 The packages lint clean. `useIsMobile` reads the viewport with `useSyncExternalStore`, so it is right

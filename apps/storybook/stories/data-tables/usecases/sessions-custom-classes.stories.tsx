@@ -6,7 +6,7 @@ import { InlineMeter, Sparkline } from "@invana/charts";
 import { PanelBox, StatusDot, cn } from "@invana/ui";
 
 import { jsx, snippet } from "../../_story/source";
-import { VariantBoard, type Log } from "../../_story/variant-board";
+import { VariantGrid, type Log } from "../../_story/variant-grid";
 import {
   LAYERS,
   SESSIONS,
@@ -268,7 +268,7 @@ type Story = StoryObj<Args>;
  */
 export const SessionsCustomClasses: Story = {
   name: "Sessions (custom classes)",
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole("group", { name: "With custom classes" }));
     const first = SESSIONS[0]!;

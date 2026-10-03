@@ -4,7 +4,7 @@ import { BarsBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.bars;
 
@@ -43,14 +43,14 @@ type Story = StoryObj<Args>;
 
 /**
  * Groups compared as columns: two series side by side, the muted one the comparison, against a
- * dashed target — the Bar comparison board of the Design Kit Spec, from
+ * dashed target — the Bar comparison page of the Design Kit Spec, from
  * `fixtures/blocks/bars.json`.
  */
 export const Bars: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <BarsBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

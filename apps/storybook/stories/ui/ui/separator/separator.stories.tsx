@@ -13,7 +13,7 @@ import {
 
 import data from '../../../../fixtures/ui/separator.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface SeparatorVariant extends Variant {
   orientation: 'horizontal' | 'vertical';
@@ -115,9 +115,9 @@ function Draw({ v }: { v: SeparatorVariant }) {
  */
 export const Separator: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <Draw v={v} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

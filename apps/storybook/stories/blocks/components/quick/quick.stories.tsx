@@ -5,7 +5,7 @@ import { QuickAsk } from '@invana/blocks';
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { LiveBlock, type BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.quick;
 
@@ -48,14 +48,14 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * Two to five short options in a row; picking one is the `reply` — the Quick pick board of the
+ * Two to five short options in a row; picking one is the `reply` — the Quick pick page of the
  * Design Kit Spec.
  */
 export const Quick: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveBlock component={QuickAsk} variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

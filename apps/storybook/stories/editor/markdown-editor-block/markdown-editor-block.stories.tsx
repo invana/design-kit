@@ -6,7 +6,7 @@ import { Button, PanelBox } from '@invana/ui';
 
 import variants from '../../../fixtures/editor/markdown-editor-block.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 
 interface MarkdownVariant extends Variant {
   props: { value: string; version?: string; placeholder?: string; readOnly?: boolean };
@@ -139,9 +139,9 @@ type Story = StoryObj<Args>;
 export const MarkdownEditorBlockStory: Story = {
   name: 'MarkdownEditorBlock',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} {...on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

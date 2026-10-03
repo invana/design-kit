@@ -20,14 +20,14 @@ import evaluationFeed from '../../../fixtures/data-tables/evaluation-feed.json';
 import sessionFeed from '../../../fixtures/data-tables/session-feed.json';
 import { ReplayFrame, useReplay } from '../../_story/replay';
 import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 import { COLUMN_SETS, columnsSource, fieldColumns, type ColumnSetName, type Columns, type Field } from '../columns';
 import { EVALUATIONS, SESSIONS } from '../usecases/fixtures';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- each variant's rows have their own shape
 type Row = Record<string, any>;
 
-/** One cell of the board, as `fixtures/data-tables/data-table.json` writes it. */
+/** One cell of the grid, as `fixtures/data-tables/data-table.json` writes it. */
 interface TableVariant extends Variant {
   /** The column set, from `../columns.tsx` — cells draw React, so columns are code. */
   columns: ColumnSetName;
@@ -482,9 +482,9 @@ type Story = StoryObj<Args>;
 export const DataTableStory: Story = {
   name: 'DataTable',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTable v={v} log={log} on={on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

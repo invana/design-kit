@@ -7,7 +7,7 @@ import { Bot, Info } from 'lucide-react';
 
 import spec from '../../../fixtures/forms/settings-section.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { indent, objectField } from '../form-source';
 
 /** JSON names a tab's icon; the story holds the component. */
@@ -129,7 +129,7 @@ type Story = StoryObj<Args>;
 export const SettingsSection: Story = {
   name: 'Settings Section',
   render: ({ onSubmit }) => (
-    <VariantBoard variants={VARIANTS}>
+    <VariantGrid variants={VARIANTS}>
       {(_v, log) => (
         <TabbedPanel
           defaultTab={spec.defaultTab}
@@ -141,7 +141,7 @@ export const SettingsSection: Story = {
           }))}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Settings Section' }));

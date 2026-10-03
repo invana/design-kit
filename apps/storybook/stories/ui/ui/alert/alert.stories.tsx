@@ -4,7 +4,7 @@ import { Alert as AlertRoot, AlertDescription, AlertTitle } from '@invana/ui';
 
 import data from '../../../../fixtures/ui/alert.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { Icon, iconTag, type IconName } from '../_content';
 
 interface AlertVariant extends Variant {
@@ -63,7 +63,7 @@ type Story = StoryObj<Args>;
  */
 export const Alert: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <AlertRoot variant={v.variant} tone={v.tone}>
           <Icon name={v.icon} />
@@ -71,7 +71,7 @@ export const Alert: Story = {
           {v.description ? <AlertDescription>{v.description}</AlertDescription> : null}
         </AlertRoot>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

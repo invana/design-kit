@@ -5,7 +5,7 @@ import { Button, MetricGrid, MetricTile, Tour, useTour, type TourStep } from '@i
 
 import DATA from '../../../../fixtures/ui-extended/tour.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface StepData {
   id: string;
@@ -137,15 +137,15 @@ type Story = StoryObj<Args>;
  * accented callout and reference chips; Prev / Next below — driven by `useTour`, from
  * `fixtures/ui-extended/tour.json`. A step's `content` replaces its typed body; `position` pins
  * the panel to a corner of the viewport (the floating cell starts closed, so it does not cover
- * the board). Step through, click a reference, exit or finish: each is logged, and the story
+ * the grid). Step through, click a reference, exit or finish: each is logged, and the story
  * closes the tour and offers it again.
  */
 export const TourStory: Story = {
   name: 'Tour',
   render: ({ variant, ...args }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} args={args} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0].caption }));

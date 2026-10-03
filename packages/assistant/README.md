@@ -2,7 +2,7 @@
 
 The analyst assistant, driven by JSON. `<ChatSession spec variant />` renders a whole conversation
 — the analyst's questions, what the assistant asks back, its answers, and the run behind each —
-from a `ConversationSpec`, the way `@invana/dashboard` renders a `DashboardSpec`. Two variants draw
+from a `ConversationSpec`, the way `@invana/boards` renders a `BoardSpec`. Two variants draw
 the same spec: `cli`, the console (caret prompts, status-dotted replies, step rows, a Tasks view),
 and `web`, the chat (labelled turns, answer cards, `Answered in 1.4 s`). The composer is the same in
 both, configured by the spec's `composer`.

@@ -37,7 +37,7 @@ import { Button } from '@invana/ui';
 
 import spec from '../../../fixtures/forms/composed-form.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 
 const VARIANTS = [{ caption: 'Composed Form', width: 576 }];
 
@@ -308,7 +308,7 @@ type Story = StoryObj<Args>;
  */
 export const ComposedForm: Story = {
   name: 'Composed Form',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Composed Form' }));
     await step('Saving empty shows the rules', async () => {

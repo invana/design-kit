@@ -15,7 +15,7 @@ import {
 
 import data from '../../../../fixtures/ui/alert-dialog.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import { ButtonFromSpec, buttonSource, type ButtonSpec } from '../_content';
 
 interface AlertDialogVariant extends Variant {
@@ -127,9 +127,9 @@ function Live({ v, args, log }: { v: AlertDialogVariant; args: Args; log: Log })
  */
 export const AlertDialog: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => <Live v={v} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const v = VARIANTS[0];

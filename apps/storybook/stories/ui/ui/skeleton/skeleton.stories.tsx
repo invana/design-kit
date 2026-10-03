@@ -4,7 +4,7 @@ import { Item, ItemContent, ItemMedia, Skeleton as SkeletonPart } from '@invana/
 
 import data from '../../../../fixtures/ui/skeleton.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface Shape {
   width: number | string;
@@ -70,7 +70,7 @@ type Story = StoryObj<Args>;
  */
 export const Skeleton: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <>
           <Item>
@@ -88,7 +88,7 @@ export const Skeleton: Story = {
           ))}
         </>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

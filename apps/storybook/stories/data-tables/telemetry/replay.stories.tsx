@@ -7,7 +7,7 @@ import { SkipForward } from 'lucide-react';
 
 import { ReplayFrame, type Replay } from '../../_story/replay';
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import {
   EVENTS,
   RUN_SPAN_MS,
@@ -210,7 +210,7 @@ type Story = StoryObj<Args>;
  */
 export const ReplayStory: Story = {
   name: 'Replay',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Replay' }));
     // The replay's own count — the table under it has a status line too.

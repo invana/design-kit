@@ -4,7 +4,7 @@ import { ButtonGroup as ButtonGroupRoot, ButtonGroupSeparator } from '@invana/ui
 
 import data from '../../../../fixtures/ui/button-group.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 import { ButtonFromSpec, ICONS, buttonSource, type ButtonSpec } from '../_content';
 
 type Entry = ButtonSpec | { separator: true };
@@ -61,7 +61,7 @@ type Story = StoryObj<Args>;
  */
 export const ButtonGroup: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <ButtonGroupRoot aria-label="Formatting">
           {v.items.map((e, i) =>
@@ -80,7 +80,7 @@ export const ButtonGroup: Story = {
           )}
         </ButtonGroupRoot>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

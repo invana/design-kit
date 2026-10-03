@@ -20,7 +20,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/rich-select.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** Icons are code, so the JSON names them. */
 const ICONS = {
@@ -269,9 +269,9 @@ type Story = StoryObj<Args>;
 export const RichSelectStory: Story = {
   name: 'RichSelect',
   render: ({ variant, ...args }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} args={args} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const page = within(canvasElement.ownerDocument.body);

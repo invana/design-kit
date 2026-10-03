@@ -31,20 +31,20 @@ import timeseries from './timeseries.json';
 import trace from './trace.json';
 
 /**
- * One variant of a block, as its board on the Design Kit Spec draws it. `spec` is the block's
+ * One variant of a block, as its page on the Design Kit Spec draws it. `spec` is the block's
  * options — exactly what the API sends — so the `Blocks/Components/<Kind>` story, the
- * conversation's board and a dashboard panel all draw the same JSON. The rest is the shell's:
+ * conversation's grid and a board panel all draw the same JSON. The rest is the shell's:
  * `state` and `value` for an answered ask, `turn` and `now` for the conversation.
  */
 export interface BlockVariant<K extends BlockKind> {
   caption: string;
-  /** A block with more than one use case splits its board by this — the gantt's `run` and `layers`. */
+  /** A block with more than one use case splits its grid by this — the gantt's `run` and `layers`. */
   useCase?: string;
-  /** Draw the cell at 280px — the board's "At 280px" variant. */
+  /** Draw the cell at 280px — the grid's "At 280px" variant. */
   narrow?: boolean;
-  /** A width in px other than the board's 320 — a block the spec draws wider. */
+  /** A width in px other than the grid's 320 — a block the spec draws wider. */
   width?: number;
-  /** Take the board's whole row — a strip or a table fitted to a dashboard's width. */
+  /** Take the grid's whole row — a strip or a table fitted to a board's width. */
   wide?: boolean;
   spec: BlockOptionsByKind[K];
   state?: AskState;

@@ -4,7 +4,7 @@ import { RecordBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.record;
 
@@ -42,14 +42,14 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * One entity as label/value pairs, with who it is and its state above them — the Record board of
+ * One entity as label/value pairs, with who it is and its state above them — the Record page of
  * the Design Kit Spec.
  */
 export const Record: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <RecordBlock spec={v.spec} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

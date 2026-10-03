@@ -4,7 +4,7 @@ import { DataTable, type ColumnDef } from '@invana/tables';
 import { PanelBox, cn } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard } from '../../_story/variant-board';
+import { VariantGrid } from '../../_story/variant-grid';
 import { EVALUATIONS, type Evaluation, type Verdict } from './fixtures';
 
 /** The cell's subject is className passthrough, and its caption says so. */
@@ -88,7 +88,7 @@ type Story = StoryObj;
 export const EvaluationStreamCustomClasses: Story = {
   name: 'Evaluation Stream (custom classes)',
   render: () => (
-    <VariantBoard variants={VARIANTS}>
+    <VariantGrid variants={VARIANTS}>
       {() => (
         <PanelBox title="Evaluation stream" aside="denials, egress and warnings travel one by one; routine allows are summed above">
           <DataTable
@@ -103,7 +103,7 @@ export const EvaluationStreamCustomClasses: Story = {
           />
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With custom classes' }));

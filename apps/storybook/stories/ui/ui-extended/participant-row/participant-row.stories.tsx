@@ -4,7 +4,7 @@ import { LayerSection, PanelBox, ParticipantRow, type LayerPalette } from '@inva
 
 import VARIANTS from '../../../../fixtures/ui-extended/participant-row.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Args {
   variant: string;
@@ -64,7 +64,7 @@ type Story = StoryObj<Args>;
 export const ParticipantRowStory: Story = {
   name: 'ParticipantRow',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PanelBox title={v.title} aside={v.aside}>
           {v.sections.map((s) => (
@@ -76,7 +76,7 @@ export const ParticipantRowStory: Story = {
           ))}
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

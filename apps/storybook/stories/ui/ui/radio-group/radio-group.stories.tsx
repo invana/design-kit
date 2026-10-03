@@ -5,7 +5,7 @@ import { FieldLabel, RadioGroup as RadioGroupRoot, RadioGroupItem } from '@invan
 
 import data from '../../../../fixtures/ui/radio-group.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface RadioGroupVariant extends Variant {
   name: string;
@@ -87,9 +87,9 @@ function LiveRadioGroup({ v, onValueChange, log }: { v: RadioGroupVariant; onVal
  */
 export const RadioGroup: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveRadioGroup v={v} onValueChange={onValueChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

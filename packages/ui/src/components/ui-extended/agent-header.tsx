@@ -75,7 +75,7 @@ function SettingsLink({ onClick, children }: { onClick: () => void; children: Re
  * keeps its marks and counts and drops the words.
  *
  * Plain props, no conversation: pass it as a `ChatSession`'s `header`, or
- * over a run view or a dashboard that shows the same session.
+ * over a run view or a board that shows the same session.
  */
 export const AgentHeader = React.forwardRef<HTMLDivElement, AgentHeaderProps>(
   (

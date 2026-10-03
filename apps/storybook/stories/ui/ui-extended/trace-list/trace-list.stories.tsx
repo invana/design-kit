@@ -18,7 +18,7 @@ import DATA from '../../../../fixtures/ui-extended/trace-list.json';
 import run from '../../../../fixtures/runs/variance-run.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { EventLog, VariantBoard, type Log } from '../../../_story/variant-board';
+import { EventLog, VariantGrid, type Log } from '../../../_story/variant-grid';
 
 type MarkTone = React.ComponentProps<typeof MarkChip>['tone'];
 
@@ -292,9 +292,9 @@ type Story = StoryObj<Args>;
 export const TraceListStory: Story = {
   name: 'TraceList',
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (v.live ? <Progress /> : <Trace v={v} log={log} onSelect={onSelect} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

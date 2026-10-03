@@ -89,7 +89,7 @@ export interface MetricGridProps extends React.HTMLAttributes<HTMLDivElement> {
    *
    * It is a prop because a tile strip is usually one band of something larger,
    * and a grid that keeps its own tighter rhythm makes the whole surface read
-   * as two grids. A dashboard passes its own gap; a standalone strip keeps the
+   * as two grids. A board passes its own gap; a standalone strip keeps the
    * default.
    */
   gap?: number

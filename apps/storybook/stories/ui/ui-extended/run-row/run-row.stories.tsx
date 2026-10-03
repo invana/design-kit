@@ -5,7 +5,7 @@ import { FilterBar, FilterChip, PanelBox, RunRow } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/run-row.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Run {
   address: string;
@@ -151,9 +151,9 @@ type Story = StoryObj<Args>;
 export const RunRowStory: Story = {
   name: 'RunRow',
   render: ({ variant, onSelect, onRemove }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Journal v={v} log={log} onSelect={onSelect} onRemove={onRemove} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[0].caption }));

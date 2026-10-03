@@ -5,7 +5,7 @@ import { SuggestionsAsk } from '@invana/blocks';
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { LiveBlock, type BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.suggestions;
 
@@ -52,9 +52,9 @@ type Story = StoryObj<Args>;
  */
 export const Suggestions: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveBlock component={SuggestionsAsk} variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

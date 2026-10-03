@@ -5,7 +5,7 @@ import { AgentChip as Component, PropertyList, PropertyRow, type AgentChipProps 
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/agent-chip.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /** Icons JSON names by key; the kit ships icon-agnostic, so the story supplies them. */
 const ICONS = { bot: Bot, user: User };
@@ -65,7 +65,7 @@ type Story = StoryObj<Args>;
  */
 export const AgentChip: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList labelWidth={140}>
           {v.chips.map((c) => {
@@ -78,7 +78,7 @@ export const AgentChip: Story = {
           })}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

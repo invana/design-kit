@@ -15,7 +15,7 @@ import {
 
 import data from '../../../../fixtures/ui/carousel.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface CarouselVariant extends Variant {
   align: 'start' | 'center' | 'end';
@@ -109,9 +109,9 @@ function Live({ v, onSelect, log }: { v: CarouselVariant; onSelect: Args['onSele
  */
 export const Carousel: Story = {
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onSelect={onSelect} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const v = VARIANTS[0];

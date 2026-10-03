@@ -16,7 +16,7 @@ import { Badge } from '@invana/ui';
 import variants from '../../../fixtures/data-tables/remote-paginated-table.json';
 import warehouse from '../../../fixtures/data-tables/warehouse-datasets.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 import { columnsSource } from '../columns';
 
 type Dataset = { name: string; rows: number; owner: string };
@@ -300,9 +300,9 @@ type Story = StoryObj<Args>;
 export const RemotePaginatedTableStory: Story = {
   name: 'RemotePaginatedTable',
   render: ({ variant, ...on }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} on={on} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

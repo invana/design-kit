@@ -4,7 +4,7 @@ import { SliceSummary, type SliceSummaryProps } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/slice-summary.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Args {
   variant: string;
@@ -56,9 +56,9 @@ type Story = StoryObj<Args>;
 export const SliceSummaryStory: Story = {
   name: 'SliceSummary',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <SliceSummary {...(v.props as SliceSummaryProps)} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

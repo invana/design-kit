@@ -1,6 +1,6 @@
 # Components tracker
 
-Status of every component the assistant needs, across packages. The design reference is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): one board per ask and answer-block, each variant on a board is one story.
+Status of every component the assistant needs, across packages. The design reference is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): one spec page per ask and answer-block, each variant on a board is one story.
 
 **Update the row in the same commit that changes the component.** Edit only the `Status` cell unless the design changes; a design change goes to the canvas first.
 
@@ -201,7 +201,7 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 
 ## @invana/ui
 
-Fourteen components move to assistant; the folder shown is where they are today. New additions are controls and notes that a dashboard or report uses as readily as the assistant.
+Fourteen components move to assistant; the folder shown is where they are today. New additions are controls and notes that a board or report uses as readily as the assistant.
 
 
 ### Moves out to assistant
@@ -275,9 +275,9 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/forms | FormField.Period, FormField.Weights | `packages/forms/src/form-field.tsx` | extend | partial | next |
 | @invana/forms | FieldConfig `unit` and `aside`, typed number | `packages/forms/src/types.ts` | extend | done | next |
 | @invana/forms | `xs` tier at 28px, muted field labels | `packages/forms/src/form-field.tsx` | extend | done | today |
-| @invana/dashboard | Every block kind is a panel kind (`table`, `grid`, `record` replace `table`, `metrics`, `properties`) | `packages/dashboard/src/panels/block.tsx` | extend | done | today |
-| @invana/dashboard | `RecordDescription`, `StagedBar`, `AttemptClock` move from ui: only the dashboard draws them | `packages/dashboard/src/parts/` | move | done | today |
-| @invana/dashboard | One trace: `RUN_PANELS`' `trace` and the `trace` block are one idea in two shapes; the registered one wins today | `packages/dashboard/src/panels/run.tsx` | change | todo | next |
+| @invana/boards | Every block kind is a panel kind (`table`, `grid`, `record` replace `table`, `metrics`, `properties`) | `packages/boards/src/panels/block.tsx` | extend | done | today |
+| @invana/boards | `RecordDescription`, `StagedBar`, `AttemptClock` move from ui: only the board draws them | `packages/boards/src/parts/` | move | done | today |
+| @invana/boards | One trace: `RUN_PANELS`' `trace` and the `trace` block are one idea in two shapes; the registered one wins today | `packages/boards/src/panels/run.tsx` | change | todo | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
 | @invana/themes | `AppLayoutAgents` `overlay`: panels floating over the work, top right | `packages/themes/src/app-agents/layout.tsx` | extend | done | today |
 | apps/storybook | Assistant section | `apps/storybook/stories/assistant/` | new | done | today |
@@ -285,7 +285,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 
 ## Block registry
 
-One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board on the canvas before they are built.
+One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a spec page on the canvas before they are built.
 
 
 ### Blocks in asks

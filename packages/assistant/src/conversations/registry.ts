@@ -25,7 +25,7 @@ export interface BlockRendererProps<P extends AnswerKind = AnswerKind> {
   onEvent: (event: ConversationEvent) => void
 }
 
-// `any`, as in the dashboard's registry: a registry holds renderers for many
+// `any`, as in the board's registry: a registry holds renderers for many
 // option shapes, and one typed on its own options is not assignable to `unknown`.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AskRenderer<P extends AskKind = any> = React.ComponentType<AskRendererProps<P>>
@@ -81,7 +81,7 @@ export const BUILT_IN_BLOCK_TRAITS: Partial<Record<string, BlockTraits>> = {
 /**
  * Renderers a consumer adds or replaces — `{ blocks: { subgraph: CanvasBlock } }`
  * — with their traits. Consumer entries win over the built-ins, as in the
- * dashboard, so a template of your own sits in the thread exactly as you say.
+ * board, so a template of your own sits in the thread exactly as you say.
  */
 export interface RegistryOverrides {
   asks?: Partial<Record<string, AskRenderer>>

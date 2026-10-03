@@ -5,7 +5,7 @@ import { LensRow as Component, type LayerPalette, type LensUsage, type Narrowing
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/lens-row.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** The hues are the caller's — these components ship none. */
 const PALETTE: LayerPalette = {
@@ -91,9 +91,9 @@ function Drawer({ v, onSelect, log }: { v: LensRowVariant; onSelect: Args['onSel
  */
 export const LensRow: Story = {
   render: ({ variant, onSelect }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Drawer v={v} onSelect={onSelect} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'The Worlds drawer' }));

@@ -4,7 +4,7 @@ import { RefusalCard, TypographyInlineCode } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/refusal-card.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Args {
   variant: string;
@@ -69,13 +69,13 @@ type Story = StoryObj<Args>;
 export const RefusalCardStory: Story = {
   name: 'RefusalCard',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <RefusalCard label={v.label} remedy={v.remedy}>
           <Body runs={v.body} />
         </RefusalCard>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

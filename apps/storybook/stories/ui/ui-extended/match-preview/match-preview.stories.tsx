@@ -4,7 +4,7 @@ import { MatchPreview as Component, type MatchPreviewProps } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/match-preview.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface MatchVariant extends Variant {
   props: MatchPreviewProps;
@@ -65,9 +65,9 @@ type Story = StoryObj<Args>;
  */
 export const MatchPreview: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <Component {...v.props} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

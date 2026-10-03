@@ -6,7 +6,7 @@ import { FieldDescription, FieldGroup, Form, FormField, type FieldConfig, type F
 
 import spec from '../../../fixtures/forms/sign-in.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { USE_FORM, indent, objectField } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
@@ -112,7 +112,7 @@ type Story = StoryObj<Args>;
  */
 export const SignIn: Story = {
   name: 'Sign In',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Sign In' }));
     await step('Enter the credentials and sign in', async () => {

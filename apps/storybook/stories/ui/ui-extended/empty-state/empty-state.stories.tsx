@@ -5,7 +5,7 @@ import { Button, EmptyState as Component, EmptyStateLock } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/empty-state.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 /** The kit ships no icon set; the story supplies the ones JSON names. */
 const ICONS = { database: Database, boxes: Boxes, search: Search };
@@ -76,7 +76,7 @@ type Story = StoryObj<Args>;
  */
 export const EmptyState: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => {
         const Icon = ICONS[v.icon];
         return (
@@ -105,7 +105,7 @@ export const EmptyState: Story = {
           />
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const v = VARIANTS[0]!;

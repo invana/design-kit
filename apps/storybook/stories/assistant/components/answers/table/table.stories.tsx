@@ -5,7 +5,7 @@ import type { ConversationEvent } from '@invana/assistant';
 import { BLOCK_VARIANTS } from '../../../../../fixtures/blocks';
 import { answerTurn, LiveTurn } from '../../../../_story/live-turn';
 import { jsx, snippets, sourceFor, variantArg } from '../../../../_story/source';
-import { VariantBoard } from '../../../../_story/variant-board';
+import { VariantGrid } from '../../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.table;
 
@@ -46,16 +46,16 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The Table preview board of the Design Kit Spec in the conversation — the same JSON as
+ * The Table preview page of the Design Kit Spec in the conversation — the same JSON as
  * `Blocks/Components/Table`, as an answer turn. `Open all` goes out as an `open` event. A picked
  * row goes out as an `action` event named `select` — without its key: the conversation does not
  * carry it yet (`toEvent` in `answers/shared.tsx` has no `select` case).
  */
 export const Table: Story = {
   render: ({ variant, onEvent }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTurn turn={answerTurn('table', v)} now={v.now} onEvent={onEvent} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

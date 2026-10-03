@@ -5,7 +5,7 @@ import type { ConversationEvent } from '@invana/assistant';
 import { BLOCK_VARIANTS } from '../../../../../fixtures/blocks';
 import { answerTurn, LiveTurn } from '../../../../_story/live-turn';
 import { jsx, snippets, sourceFor, variantArg } from '../../../../_story/source';
-import { VariantBoard } from '../../../../_story/variant-board';
+import { VariantGrid } from '../../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.gantt;
 
@@ -51,9 +51,9 @@ type Story = StoryObj<Args>;
  */
 export const Gantt: Story = {
   render: ({ variant, onEvent }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTurn turn={answerTurn('gantt', v)} now={v.now} onEvent={onEvent} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Every variant draws', async () => {

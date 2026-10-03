@@ -6,7 +6,7 @@ import { FieldGroup, Form, FormField, type FieldValues, type RowConfig } from '@
 
 import spec from '../../../fixtures/forms/groups.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { USE_FORM, indent, objectField, withLists } from '../form-source';
 
 const IMPORTANT = withLists(spec.important.fields, spec.lists);
@@ -154,7 +154,7 @@ type Story = StoryObj<Args>;
  * `useForm`: Update Settings hands back one object, written under the card.
  */
 export const Groups: Story = {
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Groups' }));
     await step('Open the Label tab and change its font', async () => {

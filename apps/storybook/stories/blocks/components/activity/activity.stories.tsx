@@ -4,7 +4,7 @@ import { ActivityBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.activity;
 
@@ -45,16 +45,16 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * Which layers a run kept busy, and when — the Layer activity board of the Design Kit Spec. One
+ * Which layers a run kept busy, and when — the Layer activity page of the Design Kit Spec. One
  * lane per layer over a shared axis, brighter where busier, the rate at the right and the steps
  * banded above. Open a layer into its parts; pin a lit cell for the operation behind it. A
  * refusal and a crossing of the boundary are marked in their cell; with no signal the lanes dim.
  */
 export const Activity: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <ActivityBlock spec={v.spec} onAction={(action, value) => { onAction(action, value); log('onAction', { action, value }); }} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

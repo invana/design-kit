@@ -14,7 +14,7 @@ import {
 } from '@invana/assistant';
 
 import type { BlockVariant } from '../../fixtures/blocks';
-import type { Log } from './variant-board';
+import type { Log } from './variant-grid';
 
 /** A block variant as the ask turn the API would send for it. */
 export function askTurn<K extends AskKind>(kind: K, v: BlockVariant<K>): AskTurn {

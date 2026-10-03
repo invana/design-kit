@@ -40,7 +40,7 @@ export interface ChatSessionTaskRowProps {
 /**
  * One background task / agent / session: status dot, bold name, truncating
  * description, right-aligned meta. Used both in the pinned strip under a
- * transcript and in the grouped task dashboard ({@link ChatSessionTaskGroup}).
+ * transcript and in the grouped task board ({@link ChatSessionTaskGroup}).
  *
  * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */
@@ -102,7 +102,7 @@ export interface ChatSessionTaskGroupProps {
 
 /**
  * A titled section of task rows — the "Needs input" / "Completed" groups of a
- * session dashboard.
+ * session board.
  *
  * @deprecated Import from `@invana/assistant`. This export leaves `@invana/ui` in the next release.
  */

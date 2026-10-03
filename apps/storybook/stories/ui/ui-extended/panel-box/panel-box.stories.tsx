@@ -17,7 +17,7 @@ import {
 
 import VARIANTS from '../../../../fixtures/ui-extended/panel-box.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 type Variant = (typeof VARIANTS)[number];
 
@@ -133,7 +133,7 @@ function Body({ v }: { v: Variant }) {
 }
 
 /**
- * One band of a dashboard, from `fixtures/ui-extended/panel-box.json`. The column scrolls; a band
+ * One band of a board, from `fixtures/ui-extended/panel-box.json`. The column scrolls; a band
  * never does. `aside` is the fact on the right — a count, a provenance note, a badge — never a
  * toolbar (a band that wants icon buttons is a panel, `PanelContent`). `flush` drops the body
  * padding so a table's header rule meets the border. With no `title` there is no label bar: the
@@ -142,7 +142,7 @@ function Body({ v }: { v: Variant }) {
 export const PanelBoxStory: Story = {
   name: 'PanelBox',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PanelBox
           title={v.title}
@@ -152,7 +152,7 @@ export const PanelBoxStory: Story = {
           <Body v={v} />
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -10,8 +10,8 @@
   },
   { "caption": "Agent console", "conversation": "agentConsole", "width": 440, "props": { "variant": "cli" } },
   {
-    "caption": "Task dashboard",
-    "conversation": "taskDashboard",
+    "caption": "Task board",
+    "conversation": "taskBoard",
     "width": 440,
     "props": { "variant": "cli", "defaultView": "tasks" }
   },

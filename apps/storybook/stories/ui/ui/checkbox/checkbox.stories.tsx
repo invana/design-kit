@@ -7,7 +7,7 @@ import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@
 
 import data from '../../../../fixtures/ui/checkbox.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import type { ChoiceSpec } from '../_content';
 
 interface Choice extends ChoiceSpec {
@@ -119,9 +119,9 @@ function Live({ v, onCheckedChange, log }: { v: CheckboxVariant; onCheckedChange
  */
 export const Checkbox: Story = {
   render: ({ variant, onCheckedChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onCheckedChange={onCheckedChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

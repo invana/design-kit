@@ -13,7 +13,7 @@ import {
 
 import data from '../../../../fixtures/ui/breadcrumb.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface Crumb {
   label?: string;
@@ -83,7 +83,7 @@ type Story = StoryObj<Args>;
  */
 export const Breadcrumb: Story = {
   render: ({ variant, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <BreadcrumbRoot>
           <BreadcrumbList>
@@ -113,7 +113,7 @@ export const Breadcrumb: Story = {
           </BreadcrumbList>
         </BreadcrumbRoot>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

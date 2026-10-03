@@ -4,9 +4,9 @@ import { GanttBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
-/** The gantt read by task — every variant of its board that is not Layer access. */
+/** The gantt read by task — every variant of its grid that is not Layer access. */
 const VARIANTS = BLOCK_VARIANTS.gantt.filter((v) => v.useCase !== 'layers');
 
 interface Args {
@@ -43,7 +43,7 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * **Run progress** — the `gantt` block read by task, the JSON a dashboard panel or an answer turn
+ * **Run progress** — the `gantt` block read by task, the JSON a board panel or an answer turn
  * sends. One row per task on the run's clock: a retry's failed attempt left of the one that stuck,
  * a task that never ran as an outline. A task's `subtasks` nest under it (`open` draws it open); a
  * parent with no timing of its own draws the stretch they cover. Hover a row for its card, beside
@@ -52,7 +52,7 @@ type Story = StoryObj<Args>;
  */
 export const RunProgress: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <GanttBlock
           spec={v.spec}
@@ -62,7 +62,7 @@ export const RunProgress: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

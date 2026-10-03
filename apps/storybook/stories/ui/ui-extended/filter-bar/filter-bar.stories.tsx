@@ -17,7 +17,7 @@ import {
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/filter-bar.json';
 import { inline, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface Chip {
   label: string;
@@ -242,9 +242,9 @@ function Menus({ v, args, log }: { v: FilterVariant; args: Args; log: Log }) {
  */
 export const FilterBar: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => (v.chips ? <Chips v={v} args={args} log={log} /> : <Menus v={v} args={args} log={log} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

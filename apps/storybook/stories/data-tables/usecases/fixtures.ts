@@ -2,7 +2,7 @@ import sessions from '../../../fixtures/data-tables/sessions.json';
 import evaluations from '../../../fixtures/data-tables/evaluations.json';
 
 /**
- * Story-only types and formatters for the Agent dashboards' sessions table (Monitoring) and
+ * Story-only types and formatters for the Agent boards' sessions table (Monitoring) and
  * evaluation stream (Governance). The rows are JSON — `fixtures/data-tables/sessions.json` and
  * `evaluations.json`, frozen at one moment of the board's live feed. Not a story file, so
  * Storybook does not index it.

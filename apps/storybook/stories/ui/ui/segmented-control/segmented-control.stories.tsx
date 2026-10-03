@@ -5,7 +5,7 @@ import { PanelBox, SegmentedControl as SegmentedControlPart, Terminal, TerminalL
 
 import data from '../../../../fixtures/ui/segmented-control.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 type Level = 'info' | 'warn' | 'error';
 
@@ -108,9 +108,9 @@ function Live({ v, onValueChange, log }: { v: SegmentedVariant; onValueChange: A
  */
 export const SegmentedControl: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onValueChange={onValueChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

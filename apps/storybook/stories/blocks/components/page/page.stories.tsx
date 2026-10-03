@@ -6,7 +6,7 @@ import { answerToPage } from '@invana/assistant';
 import { PAGE_VARIANTS, type PageVariant } from '../../../../fixtures/blocks';
 import type { BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = PAGE_VARIANTS;
 
@@ -61,13 +61,13 @@ type Story = StoryObj<Args>;
 
 /**
  * Blocks laid out as a document: no cards and no borders, a section's title as its rule. Every
- * block is the same JSON a conversation turn or a dashboard panel draws. A long answer opens in
+ * block is the same JSON a conversation turn or a board panel draws. A long answer opens in
  * full through `answerToPage`, which keeps the blocks a page draws — the citations stay in the
  * conversation.
  */
 export const Page: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <PageBlock
           spec={pageOf(v)}
@@ -77,7 +77,7 @@ export const Page: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const report = within(within(canvasElement).getByRole('group', { name: 'Report' }));

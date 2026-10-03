@@ -18,7 +18,7 @@ import { Settings2 } from 'lucide-react';
 
 import data from '../../../fixtures/others/control-sizes.json';
 import { snippets, sourceFor, variantArg } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 
 type Size = 'xs' | 'sm' | 'lg';
 type Control = 'button' | 'icon-button' | 'badge' | 'segmented' | 'search' | 'input' | 'filter-chip' | 'tabs' | 'toggle';
@@ -205,9 +205,9 @@ type Story = StoryObj<Args>;
  */
 export const ControlSizes: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(row, log) => <Live row={row} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

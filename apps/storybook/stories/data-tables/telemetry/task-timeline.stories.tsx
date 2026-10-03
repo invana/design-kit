@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button, ButtonGroup, PanelBox, Stack, Gantt, type ExpandedKeys } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { EVENTS, RUN_SPAN_MS, everyTask, formatMs, ganttTasks } from './fixtures';
 
 const TASKS = ganttTasks();
@@ -122,7 +122,7 @@ type Story = StoryObj<Args>;
  * click one to pick it. **Open failures** opens every task on the way to one.
  */
 export const TaskTimeline: Story = {
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Task Timeline' }));
     await step('Pick the plan', async () => {

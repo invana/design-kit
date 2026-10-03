@@ -5,7 +5,7 @@ import { Badge, RecordHeader, RecordPager, SegmentedControl } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/record-pager.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 type Variant = (typeof VARIANTS)[number];
 
@@ -133,9 +133,9 @@ function Live({ v, log, onPrevious, onNext }: { v: Variant; log: Log } & Omit<Ar
 export const RecordPagerStory: Story = {
   name: 'RecordPager',
   render: ({ variant, onPrevious, onNext }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onPrevious={onPrevious} onNext={onNext} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[1].caption }));

@@ -101,7 +101,7 @@ import data from '../../../fixtures/others/corner-radius.json';
 import { BLOCK_VARIANTS } from '../../../fixtures/blocks';
 import { LiveBlock } from '../../_story/live-block';
 import { variantArg, ALL } from '../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 
 type Part =
   | 'buttons'
@@ -144,7 +144,7 @@ type Part =
 
 interface Row extends Variant {
   parts?: Part[];
-  /** A block row: its first variant, framed by a `PanelBox` as a dashboard frames it. */
+  /** A block row: its first variant, framed by a `PanelBox` as a board frames it. */
   block?: BlockKind;
 }
 
@@ -610,9 +610,9 @@ function Board({ args, update }: { args: Args; update: (next: Partial<Dials>) =>
   return (
     <Stack gap="lg">
       <DialPanel dials={{ radius: args.radius, surface: args.surface, control: args.control }} update={update} />
-      <VariantBoard variants={VARIANTS} variant={args.variant}>
+      <VariantGrid variants={VARIANTS} variant={args.variant}>
         {(row, log) => <Live row={row} args={args} log={log} />}
-      </VariantBoard>
+      </VariantGrid>
     </Stack>
   );
 }
@@ -670,7 +670,7 @@ type Story = StoryObj<Args>;
  * | `--radius-surface` | `rounded-surface` | `Card`, `PanelBox`, `PanelContent`, `Dialog`, `AlertDialog`, `Popover`, `HoverCard`, `Tooltip`, menus, `Select`'s list, `Command` | `var(--radius)` |
  * | `--radius-control` | `rounded-control` | `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`, `SegmentedControl`, `Tabs`, `Badge`, chips, `Input`, `SearchInput`, `Select`, `Textarea`, `Checkbox`, menu items | `4px` |
  *
- * The board shows every surface and control, then every built block in the `PanelBox` a dashboard
+ * The board shows every surface and control, then every built block in the `PanelBox` a board
  * frames it with: the frame follows the surface dial, the block's buttons and chips the control
  * dial. Round objects (avatars, status dots, switch thumbs) keep `rounded-full` and follow no dial.
  * Structure is square by default because the hairline grid (cells on a `bg-border` backdrop,

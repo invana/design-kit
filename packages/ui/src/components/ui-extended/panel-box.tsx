@@ -9,7 +9,7 @@ export interface PanelBoxProps
   /**
    * What this band is — `Input · what opened this run`, `result.json`, `Log`.
    * Without one there is no label bar: the box still frames its content, which
-   * is how a band of figures sits on a dashboard as it sits in an answer card.
+   * is how a band of figures sits on a board as it sits in an answer card.
    */
   title?: React.ReactNode
   /**
@@ -31,10 +31,10 @@ export interface PanelBoxProps
 }
 
 /**
- * One band of a dashboard: a bordered box, with a label bar over it when it
+ * One band of a board: a bordered box, with a label bar over it when it
  * has a `title`.
  *
- * A dashboard is a scrolling column of these — tiles, then the flow, then
+ * A board is a scrolling column of these — tiles, then the flow, then
  * Input beside `result.json`, then the Log. Each box is **content-height and
  * owns no scroller**: the column scrolls, so a band that scrolled itself would
  * hide its own content behind a second bar.

@@ -4,7 +4,7 @@ import { AddressChip as Component, PropertyList, PropertyRow, type AddressTone }
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/address-chip.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface Chip {
   address: string;
@@ -86,7 +86,7 @@ type Story = StoryObj<Args>;
  */
 export const AddressChip: Story = {
   render: ({ variant, onOpen }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) =>
         v.labelWidth ? (
           <PropertyList labelWidth={v.labelWidth}>
@@ -114,7 +114,7 @@ export const AddressChip: Story = {
           ))
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Opens what it names' }));

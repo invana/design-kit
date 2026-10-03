@@ -4,7 +4,7 @@ import { DataReach as Component, type DataReachModel } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/data-reach.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ReachVariant extends Variant {
   models: DataReachModel[];
@@ -53,7 +53,7 @@ type Story = StoryObj<Args>;
  */
 export const DataReach: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => (
         <Component
           models={v.models}
@@ -63,7 +63,7 @@ export const DataReach: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

@@ -5,7 +5,7 @@ import type { ConversationEvent } from '@invana/assistant';
 import { BLOCK_VARIANTS } from '../../../../../fixtures/blocks';
 import { askTurn, LiveTurn } from '../../../../_story/live-turn';
 import { jsx, snippets, sourceFor, variantArg } from '../../../../_story/source';
-import { VariantBoard } from '../../../../_story/variant-board';
+import { VariantGrid } from '../../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.confirm;
 
@@ -53,15 +53,15 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The Confirm board of the Design Kit Spec in the conversation — the same JSON as
+ * The Confirm page of the Design Kit Spec in the conversation — the same JSON as
  * `Blocks/Components/Confirm`, as an ask turn. A click goes out as a `ConversationEvent`; the
  * story answers with the API's `set-state` patch, and the cell's log shows both.
  */
 export const Confirm: Story = {
   render: ({ variant, onEvent }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTurn turn={askTurn('confirm', v)} now={v.now} onEvent={onEvent} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

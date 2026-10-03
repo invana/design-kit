@@ -4,7 +4,7 @@ import { Eyebrow as Component, TypographyMuted, type EyebrowProps } from '@invan
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/eyebrow.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface EyebrowVariant extends Variant {
   props: Pick<EyebrowProps, 'tone'> & { aside?: string };
@@ -62,14 +62,14 @@ type Story = StoryObj<Args>;
  */
 export const Eyebrow: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <>
           <Component {...v.props}>{v.text}</Component>
           {v.mutedBody ? <TypographyMuted>{v.body}</TypographyMuted> : v.body}
         </>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

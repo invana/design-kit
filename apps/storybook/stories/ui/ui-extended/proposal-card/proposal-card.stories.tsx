@@ -16,7 +16,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/proposal-card.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 interface Variant {
   caption: string;
@@ -180,9 +180,9 @@ type Story = StoryObj<Args>;
 export const ProposalCardStory: Story = {
   name: 'ProposalCard',
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} onAction={onAction} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: VARIANTS[1].caption }));

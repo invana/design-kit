@@ -5,7 +5,7 @@ import { HoverCard as HoverCardRoot, HoverCardContent, HoverCardTrigger } from '
 
 import data from '../../../../fixtures/ui/hover-card.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import { ButtonFromSpec, Content, buttonSource, contentSource, type Block, type ButtonSpec } from '../_content';
 
 interface HoverCardVariant extends Variant {
@@ -88,9 +88,9 @@ function Live({ v, onOpenChange, log }: { v: HoverCardVariant; onOpenChange: Arg
  */
 export const HoverCard: Story = {
   render: ({ variant, onOpenChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} onOpenChange={onOpenChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args }) => {
     const v = VARIANTS[0];

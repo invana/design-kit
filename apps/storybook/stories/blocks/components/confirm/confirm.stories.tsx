@@ -5,7 +5,7 @@ import { ConfirmAsk } from '@invana/blocks';
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { LiveBlock, type BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.confirm;
 
@@ -48,15 +48,15 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * Yes or no, with what yes costs stated before the buttons — the Confirm board of the Design Kit
+ * Yes or no, with what yes costs stated before the buttons — the Confirm page of the Design Kit
  * Spec, variant for variant, from `fixtures/blocks/confirm.json`. Click either button: the block
  * sends `reply` with `true` or `false`, and the story settles it as a consumer would.
  */
 export const Confirm: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveBlock component={ConfirmAsk} variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

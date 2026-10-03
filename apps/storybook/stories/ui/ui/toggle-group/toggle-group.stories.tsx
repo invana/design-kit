@@ -6,7 +6,7 @@ import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from 'luc
 
 import data from '../../../../fixtures/ui/toggle-group.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** JSON names an icon; the story owns the glyphs (packages ship icon-agnostic). */
 const ICONS = {
@@ -135,9 +135,9 @@ function LiveGroup({ group, onValueChange, log }: { group: Group; onValueChange:
  */
 export const ToggleGroup: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => v.groups.map((g, i) => <LiveGroup key={i} group={g} onValueChange={onValueChange} log={log} />)}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

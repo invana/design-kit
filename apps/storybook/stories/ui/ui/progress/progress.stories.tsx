@@ -5,7 +5,7 @@ import { Eyebrow, PanelBox, Progress as ProgressBar, TypographyMuted } from '@in
 import data from '../../../../fixtures/ui/progress.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ProgressVariant extends Variant {
   label: string;
@@ -90,7 +90,7 @@ function LiveProgress({ v }: { v: ProgressVariant }) {
  */
 export const Progress: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.feed ? (
           <LiveProgress v={v} />
@@ -104,7 +104,7 @@ export const Progress: Story = {
           </>
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

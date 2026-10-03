@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 import data from '../../../../fixtures/charts/inline-meter.json';
 import { variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
-import { Framed, LiveProps, chartSnippet, chartSource, checkBoard, framedCall, type ChartVariant } from '../../_chart';
+import { VariantGrid } from '../../../_story/variant-grid';
+import { Framed, LiveProps, chartSnippet, chartSource, checkGrid, framedCall, type ChartVariant } from '../../_chart';
 
 /** A meter alone, or — with `rows` — one per row of a table, each row giving its `value`. */
 type Props = Omit<InlineMeterProps, 'value'> & {
@@ -75,7 +75,7 @@ type Story = StoryObj<Args>;
  */
 export const InlineMeter: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <LiveProps variant={v} noun="update">
           {({ rows, ...meter }) =>
@@ -107,7 +107,7 @@ export const InlineMeter: Story = {
           }
         </LiveProps>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
-  play: async ({ canvasElement }) => checkBoard(canvasElement, VARIANTS, 'update'),
+  play: async ({ canvasElement }) => checkGrid(canvasElement, VARIANTS, 'update'),
 };

@@ -1,6 +1,6 @@
 ---
 "@invana/ui": minor
-"@invana/dashboard": minor
+"@invana/boards": minor
 ---
 
 A record being edited reads the way it is drawn: its description under the crumbs, what it has
@@ -12,7 +12,7 @@ staged, and which of its readings wait.
 - `StagedBar` shows what is staged and not yet published: a count, then each change with its sign
   spelled out and its own `×`, then `Discard all` and the shortcut that publishes.
 
-**New in `@invana/dashboard`:**
+**New in `@invana/boards`:**
 - `header.description` and `header.details` draw a `RecordDescription` under the header.
 - `staged` draws a `StagedBar` between the header and the tabs, on every tab. Its acts dispatch
   by id.

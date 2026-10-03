@@ -6,7 +6,7 @@ import { TableBlock } from '@invana/blocks';
 import { BLOCK_VARIANTS, type BlockVariant } from '../../../../fixtures/blocks';
 import type { BlockAction } from '../../../_story/live-block';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 const VARIANTS = BLOCK_VARIANTS.table;
 
@@ -61,15 +61,15 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The first rows of a longer table and how many there are — the Table preview board of the Design
+ * The first rows of a longer table and how many there are — the Table preview page of the Design
  * Kit Spec. `Open all` sends `open`; with `rowKey` a click sends `select` with the row's key, and
  * the story moves `selected` to it as a consumer would.
  */
 export const Table: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveTable variant={v} onAction={onAction} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = (caption: string) => within(within(canvasElement).getByRole('group', { name: caption }));

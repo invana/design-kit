@@ -4,7 +4,7 @@ import { EgressList as Component, type EgressListProps } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/egress-list.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface EgressVariant extends Variant {
   props: EgressListProps;
@@ -59,9 +59,9 @@ type Story = StoryObj<Args>;
  */
 export const EgressList: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <Component {...v.props} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

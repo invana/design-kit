@@ -77,7 +77,7 @@ import {
 
 import DATA from '../../../../fixtures/ui-extended/panel-stack.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 /** JSON names → icon components; the kit ships no icon set. */
 const ICONS: Record<string, React.ElementType> = {
@@ -545,9 +545,9 @@ function Live({ v, log, onCollapsedChange, onClick, onSelect }: { v: StackVarian
 export const PanelStackStory: Story = {
   name: 'PanelStack',
   render: ({ variant, ...handlers }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Live v={v} log={log} {...handlers} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Source control' }));

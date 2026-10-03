@@ -4,7 +4,7 @@ import { Card, CardContent, CastTable as Component, type CastTableProps } from '
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/cast-table.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface CastVariant extends Variant {
   /** Inside a card, where `seamless` lets the card be the frame. */
@@ -75,7 +75,7 @@ type Story = StoryObj<Args>;
  */
 export const CastTable: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.card ? (
           <Card>
@@ -87,7 +87,7 @@ export const CastTable: Story = {
           <Component {...v.props} />
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

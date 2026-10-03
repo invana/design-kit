@@ -4,9 +4,9 @@ import { GanttBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
-/** The gantt read by layer — the Layer access variants of its board. */
+/** The gantt read by layer — the Layer access variants of its grid. */
 const VARIANTS = BLOCK_VARIANTS.gantt.filter((v) => v.useCase === 'layers');
 
 interface Args {
@@ -52,7 +52,7 @@ type Story = StoryObj<Args>;
  */
 export const LayerAccess: Story = {
   render: ({ variant, onAction }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <GanttBlock
           spec={v.spec}
@@ -62,7 +62,7 @@ export const LayerAccess: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

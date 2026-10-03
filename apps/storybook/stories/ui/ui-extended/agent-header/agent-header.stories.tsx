@@ -5,7 +5,7 @@ import { Focus, Globe, ShieldCheck, Users } from 'lucide-react';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/agent-header.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface HeaderVariant extends Variant {
   props: Omit<AgentHeaderProps, 'icons' | 'onRequestAccess' | 'onOpenSettings'>;
@@ -76,7 +76,7 @@ type Story = StoryObj<Args>;
  */
 export const AgentHeader: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => (
         <Component
           {...v.props}
@@ -91,7 +91,7 @@ export const AgentHeader: Story = {
           }}
         />
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Entire world · idle' }));

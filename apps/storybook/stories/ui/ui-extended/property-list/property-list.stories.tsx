@@ -4,7 +4,7 @@ import { PropertyList, PropertyRow } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/property-list.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 interface Args {
   variant: string;
@@ -51,7 +51,7 @@ type Story = StoryObj<Args>;
 export const PropertyListStory: Story = {
   name: 'PropertyList',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PropertyList
           labelWidth={v.labelWidth}
@@ -64,7 +64,7 @@ export const PropertyListStory: Story = {
           ))}
         </PropertyList>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

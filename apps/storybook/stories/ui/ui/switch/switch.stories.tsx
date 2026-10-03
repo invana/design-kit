@@ -14,7 +14,7 @@ import {
 
 import data from '../../../../fixtures/ui/switch.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface SwitchField {
   id: string;
@@ -133,7 +133,7 @@ function LiveSwitch({ field, onCheckedChange, log }: { field: SwitchField; onChe
  */
 export const Switch: Story = {
   render: ({ variant, onCheckedChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <FieldGroup>
           {v.sections.map((s, i) =>
@@ -150,7 +150,7 @@ export const Switch: Story = {
           )}
         </FieldGroup>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With label' }));

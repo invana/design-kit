@@ -1,7 +1,7 @@
 {
   "name": "@invana/blocks",
   "version": "0.0.31",
-  "description": "Invana Design System - Blocks: reusable drawings from a JSON spec, shared by conversations, dashboards and pages",
+  "description": "Invana Design System - Blocks: reusable drawings from a JSON spec, shared by conversations, boards and pages",
   "license": "MIT",
   "repository": {
     "type": "git",

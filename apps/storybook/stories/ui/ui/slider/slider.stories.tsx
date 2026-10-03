@@ -5,7 +5,7 @@ import { FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, Fi
 
 import data from '../../../../fixtures/ui/slider.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface SliderField {
   id: string;
@@ -122,7 +122,7 @@ function LiveSlider({ field, onValueChange, log }: { field: SliderField; onValue
  */
 export const Slider: Story = {
   render: ({ variant, onValueChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
         <FieldGroup>
           {v.sections.map((s, i) =>
@@ -141,7 +141,7 @@ export const Slider: Story = {
           )}
         </FieldGroup>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'With label' }));

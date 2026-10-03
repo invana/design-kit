@@ -13,7 +13,7 @@ monorepo built on React, [Tailwind CSS v4](https://tailwindcss.com/), and
 | [`packages/ui`](packages/ui) | `@invana/ui` | React component library — shadcn/Radix primitives (`components/ui/*`) and higher-level compositions (`components/ui-extended/*`), typography, and the `cn` util. |
 | [`packages/forms`](packages/forms) | `@invana/forms` | Composable form building blocks — `FormField` (+ `ObjectField` and leaf inputs) on top of `react-hook-form`. Unopinionated: consumers own `useForm` and the form chrome. |
 | [`packages/tables`](packages/tables) | `@invana/tables` | Data table components. |
-| [`packages/blocks`](packages/blocks) | `@invana/blocks` | Every block, drawn from a JSON spec (charts, tables, records, prose, choices, forms, …), and `Page`, which lays them out as a report. Shared by the assistant and dashboards. |
+| [`packages/blocks`](packages/blocks) | `@invana/blocks` | Every block, drawn from a JSON spec (charts, tables, records, prose, choices, forms, …), and `Page`, which lays them out as a report. Shared by the assistant and boards. |
 | [`packages/charts`](packages/charts) | `@invana/charts` | Every chart: time series on uPlot (`LineChart`, `StackedBarChartV`, `StackedAreaChart`) and in-row marks in DOM/SVG (`Sparkline`, `InlineMeter`, `SegmentedBar`). |
 | [`packages/assistant`](packages/assistant) | `@invana/assistant` | The analyst assistant, driven by JSON: `<Conversation spec onEvent />` renders a thread of asks and answers from a `ConversationSpec`, following Analyst Flow Grammar. |
 | [`packages/themes`](packages/themes) | `@invana/themes` | App layout shells (`AppLayoutBase`, `app-v1`, `app-v2`) built on `@invana/ui`. |

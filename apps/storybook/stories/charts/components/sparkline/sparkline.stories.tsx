@@ -3,8 +3,8 @@ import { Sparkline as Chart, type SparklineProps } from '@invana/charts';
 
 import data from '../../../../fixtures/charts/sparkline.json';
 import { variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
-import { Framed, LiveProps, chartSnippet, chartSource, checkBoard, type ChartVariant } from '../../_chart';
+import { VariantGrid } from '../../../_story/variant-grid';
+import { Framed, LiveProps, chartSnippet, chartSource, checkGrid, type ChartVariant } from '../../_chart';
 
 // JSON widens the literal unions; the shape is the chart's own props.
 const VARIANTS = data as unknown as ChartVariant<SparklineProps & Record<string, unknown>>[];
@@ -33,7 +33,7 @@ type Story = StoryObj<Args>;
  */
 export const Sparkline: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <LiveProps variant={v} noun="week">
           {(props) => (
@@ -43,7 +43,7 @@ export const Sparkline: Story = {
           )}
         </LiveProps>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
-  play: async ({ canvasElement }) => checkBoard(canvasElement, VARIANTS, 'week'),
+  play: async ({ canvasElement }) => checkGrid(canvasElement, VARIANTS, 'week'),
 };

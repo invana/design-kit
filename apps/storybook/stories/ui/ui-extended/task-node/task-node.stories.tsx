@@ -4,7 +4,7 @@ import { TaskNode, type BoundPalette, type TaskNodeProps } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/task-node.json';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = DATA as { caption: string; props: Omit<TaskNodeProps, 'boundPalette'> }[];
 
@@ -64,9 +64,9 @@ type Story = StoryObj<Args>;
 export const TaskNodeStory: Story = {
   name: 'TaskNode',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => <TaskNode {...v.props} boundPalette={BOUNDS} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

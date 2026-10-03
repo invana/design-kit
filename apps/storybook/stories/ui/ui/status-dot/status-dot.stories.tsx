@@ -4,7 +4,7 @@ import { PropertyList, PropertyRow, StatusDot as StatusDotPart, type StatusDotPr
 
 import data from '../../../../fixtures/ui/status-dot.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface Dot {
   tone: NonNullable<StatusDotProps['tone']>;
@@ -72,7 +72,7 @@ type Story = StoryObj<Args>;
  */
 export const StatusDot: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) =>
         v.dots.some((d) => d.name) ? (
           <PropertyList labelWidth="auto">
@@ -86,7 +86,7 @@ export const StatusDot: Story = {
           v.dots.map((d) => <StatusDotPart key={d.tone} tone={d.tone} size={d.size} label={d.label} />)
         )
       }
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

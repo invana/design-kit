@@ -18,7 +18,7 @@ import { Field, FieldGroup, FieldLabel } from '@invana/forms';
 
 import data from '../../../../fixtures/ui/dialog.json';
 import { json, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import { ButtonFromSpec, buttonSource, type ButtonSpec, type FieldSpec } from '../_content';
 
 interface DialogVariant extends Variant {
@@ -157,9 +157,9 @@ function Live({ v, args, log }: { v: DialogVariant; args: Args; log: Log }) {
  */
 export const Dialog: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => <Live v={v} args={args} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const v = VARIANTS[0];

@@ -6,7 +6,7 @@ import { SettingsPanel, type FieldConfig, type FieldValues, type GroupConfig } f
 
 import spec from '../../../fixtures/forms/inspector.json';
 import { jsx, snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { withLists } from '../form-source';
 
 type ShapeKind = keyof typeof spec.geometryByKind;
@@ -118,7 +118,7 @@ type Story = StoryObj<Args>;
  * written under the panel.
  */
 export const Inspector: Story = {
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Inspector' }));
     await step('Change the shape to a rectangle', async () => {

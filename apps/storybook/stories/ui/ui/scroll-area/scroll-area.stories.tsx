@@ -5,7 +5,7 @@ import { Item, ItemContent, ItemGroup, ItemSeparator, ItemTitle, PanelBox, Scrol
 
 import data from '../../../../fixtures/ui/scroll-area.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ScrollAreaVariant extends Variant {
   /** The viewport's height in px — ScrollArea takes no size prop, so the story passes it as `style`. */
@@ -73,7 +73,7 @@ type Story = StoryObj<Args>;
  */
 export const ScrollArea: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <PanelBox title={v.title} flush>
           <ScrollAreaRoot style={{ height: v.height }}>
@@ -92,7 +92,7 @@ export const ScrollArea: Story = {
           </ScrollAreaRoot>
         </PanelBox>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

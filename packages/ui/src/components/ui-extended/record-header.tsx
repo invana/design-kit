@@ -26,7 +26,7 @@ export interface RecordHeaderProps
   actions?: React.ReactNode
   /**
    * The bar's height, on the control scale — a bar is as tall as a control of
-   * its size. `lg` (40px at a 13px root) tops a page or a dashboard; `md`
+   * its size. `lg` (40px at a 13px root) tops a page or a board; `md`
    * (32px) tops a panel or a drawer, level with a `PanelBox` header. Either
    * holds `sm` chips and buttons.
    */
@@ -41,7 +41,7 @@ const SIZE = {
 /**
  * Which record you are looking at, across the top of the surface showing it.
  *
- * A run dashboard, a step dashboard, a plan, a draft — every one of them opens
+ * A run board, a step board, a plan, a draft — every one of them opens
  * with this line, so a reader who followed a link knows what they are reading
  * before they read any of it.
  *
@@ -83,7 +83,7 @@ export const RecordHeader = React.forwardRef<HTMLDivElement, RecordHeaderProps>(
                   "truncate font-mono",
                   // The **last** crumb gives way first. It is the record's own
                   // name and the longest of them, and the reader is already on
-                  // it; the parents are what say *which dashboard this is*, and
+                  // it; the parents are what say *which board this is*, and
                   // at four characters `runs` truncated to `ru…` leaves the one
                   // question a crumb trail exists to answer unanswered.
                   last

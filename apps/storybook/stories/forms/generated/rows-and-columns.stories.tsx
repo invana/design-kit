@@ -6,7 +6,7 @@ import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type R
 
 import spec from '../../../fixtures/forms/rows-and-columns.json';
 import { snippet } from '../../_story/source';
-import { VariantBoard, type Log } from '../../_story/variant-board';
+import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { USE_FORM, indent, objectField } from '../form-source';
 
 interface Section {
@@ -122,7 +122,7 @@ type Story = StoryObj<Args>;
  */
 export const RowsAndColumns: Story = {
   name: 'Rows and Columns',
-  render: (args) => <VariantBoard variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantBoard>,
+  render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Rows and Columns' }));
     await step('Fill the city and save', async () => {

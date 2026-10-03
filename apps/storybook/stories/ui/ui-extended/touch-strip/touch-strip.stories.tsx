@@ -4,7 +4,7 @@ import { Eyebrow, PanelBox, TouchStrip, type LayerPalette } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/touch-strip.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard } from '../../../_story/variant-board';
+import { VariantGrid } from '../../../_story/variant-grid';
 
 const VARIANTS = DATA.variants;
 /** The hues are the caller's — the kit ships none. */
@@ -60,7 +60,7 @@ type Story = StoryObj<Args>;
 export const TouchStripStory: Story = {
   name: 'TouchStrip',
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => {
         const strip = (
           <TouchStrip
@@ -80,7 +80,7 @@ export const TouchStripStory: Story = {
           </PanelBox>
         );
       }}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

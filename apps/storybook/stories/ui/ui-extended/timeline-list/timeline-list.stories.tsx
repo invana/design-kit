@@ -15,7 +15,7 @@ import {
 
 import VARIANTS from '../../../../fixtures/ui-extended/timeline-list.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log } from '../../../_story/variant-board';
+import { VariantGrid, type Log } from '../../../_story/variant-grid';
 
 type Variant = (typeof VARIANTS)[number];
 type Tone = StatusDotProps['tone'];
@@ -176,9 +176,9 @@ function Draw({ v, log, onOpen, onOpenChange }: { v: Variant; log: Log; onOpen: 
 export const TimelineListStory: Story = {
   name: 'TimelineList',
   render: ({ variant, onOpen, onOpenChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <Draw v={v} log={log} onOpen={onOpen} onOpenChange={onOpenChange} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

@@ -12,7 +12,7 @@ import {
 
 import data from '../../../../fixtures/ui/card.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 import { Buttons, Content, buttonSource, contentSource, type Block, type ButtonSpec, type Send } from '../_content';
 
 /**
@@ -187,7 +187,7 @@ function OneCard({ c, args, log }: { c: CardSpec; args: Args; log: Log }) {
  */
 export const Card: Story = {
   render: (args) => (
-    <VariantBoard variants={VARIANTS} variant={args.variant}>
+    <VariantGrid variants={VARIANTS} variant={args.variant}>
       {(v, log) => (
         <>
           {v.cards.map((c, i) => (
@@ -195,7 +195,7 @@ export const Card: Story = {
           ))}
         </>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

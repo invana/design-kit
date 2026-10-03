@@ -12,7 +12,7 @@ import { DollarSign, Search } from 'lucide-react';
 
 import data from '../../../../fixtures/ui/input-group.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 /** What JSON names an icon by; the story holds the icons. */
 const ICONS = { search: <Search />, dollar: <DollarSign /> };
@@ -141,9 +141,9 @@ function LiveInputGroup({ v, onChange, onClick, log }: { v: InputGroupVariant } 
  */
 export const InputGroup: Story = {
   render: ({ variant, onChange, onClick }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveInputGroup v={v} onChange={onChange} onClick={onClick} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Search with a button' }));

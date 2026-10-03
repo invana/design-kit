@@ -1,7 +1,7 @@
 # @invana/blocks
 
 Blocks: reusable drawings built from a JSON spec. The same spec draws in a conversation turn
-(`@invana/assistant`), a dashboard panel (`@invana/dashboard`) or a page, a report laid out as a
+(`@invana/assistant`), a board panel (`@invana/boards`) or a page, a report laid out as a
 document. A block renders bare, with no card and no title; the shell around it adds the frame
 and says what its actions mean.
 
@@ -29,7 +29,7 @@ Every block takes the same props: `spec`, and for a block that returns a value `
 until answered) and `value`. Whatever the reader does comes back through `onAction(action, value?)`:
 `reply` / `change` / `skip` from an ask, `open` from a table holding rows back, `prompt` from a
 suggested question, `scope` with `{ part, value }`, or an action's own id. The shell says what
-each means: the assistant turns them into conversation events, a dashboard into panel actions.
+each means: the assistant turns them into conversation events, a board into panel actions.
 
 ## A page
 

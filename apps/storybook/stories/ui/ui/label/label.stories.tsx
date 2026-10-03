@@ -5,7 +5,7 @@ import { FieldContent, Input, Label as LabelText } from '@invana/forms';
 
 import data from '../../../../fixtures/ui/label.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Log, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Log, type Variant } from '../../../_story/variant-grid';
 
 interface LabelVariant extends Variant {
   id: string;
@@ -84,9 +84,9 @@ function LiveLabel({ v, onChange, log }: { v: LabelVariant; onChange: Args['onCh
  */
 export const Label: Story = {
   render: ({ variant, onChange }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => <LiveLabel v={v} onChange={onChange} log={log} />}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));

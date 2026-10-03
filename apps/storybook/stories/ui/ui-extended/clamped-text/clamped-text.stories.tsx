@@ -4,7 +4,7 @@ import { ClampedText as Component, Eyebrow } from '@invana/ui';
 
 import VARIANTS_JSON from '../../../../fixtures/ui-extended/clamped-text.json';
 import { snippets, sourceFor, variantArg } from '../../../_story/source';
-import { VariantBoard, type Variant } from '../../../_story/variant-board';
+import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface ClampedVariant extends Variant {
   /** The label over the prose. */
@@ -53,14 +53,14 @@ type Story = StoryObj<Args>;
  */
 export const ClampedText: Story = {
   render: ({ variant }) => (
-    <VariantBoard variants={VARIANTS} variant={variant}>
+    <VariantGrid variants={VARIANTS} variant={variant}>
       {(v) => (
         <>
           <Eyebrow>{v.label}</Eyebrow>
           <Component>{v.text}</Component>
         </>
       )}
-    </VariantBoard>
+    </VariantGrid>
   ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);

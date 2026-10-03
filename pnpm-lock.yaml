@@ -59,12 +59,12 @@ importers:
       '@invana/blocks':
         specifier: workspace:*
         version: link:../../packages/blocks
+      '@invana/boards':
+        specifier: workspace:*
+        version: link:../../packages/boards
       '@invana/charts':
         specifier: workspace:*
         version: link:../../packages/charts
-      '@invana/dashboard':
-        specifier: workspace:*
-        version: link:../../packages/dashboard
       '@invana/editor':
         specifier: workspace:*
         version: link:../../packages/editor
@@ -262,41 +262,7 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
-  packages/charts:
-    dependencies:
-      uplot:
-        specifier: ^1.6.32
-        version: 1.6.32
-    devDependencies:
-      '@invana/styling':
-        specifier: workspace:*
-        version: link:../styling
-      '@invana/tables':
-        specifier: workspace:*
-        version: link:../tables
-      '@invana/ui':
-        specifier: workspace:*
-        version: link:../ui
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      react:
-        specifier: ^19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.2.7
-        version: 19.2.7(react@19.2.7)
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)
-      typescript:
-        specifier: ~5.9.3
-        version: 5.9.3
-
-  packages/dashboard:
+  packages/boards:
     dependencies:
       lucide-react:
         specifier: ^1.24.0
@@ -338,6 +304,40 @@ importers:
       react-hook-form:
         specifier: ^7.81.0
         version: 7.81.0(react@19.2.7)
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/charts:
+    dependencies:
+      uplot:
+        specifier: ^1.6.32
+        version: 1.6.32
+    devDependencies:
+      '@invana/styling':
+        specifier: workspace:*
+        version: link:../styling
+      '@invana/tables':
+        specifier: workspace:*
+        version: link:../tables
+      '@invana/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.17)(typescript@5.9.3)
