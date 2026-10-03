@@ -413,8 +413,25 @@ export interface BoardSpec<X extends ExtraPanels = Record<never, never>> {
    * window a plan's numbers are read over. Ignored without `tabs`.
    */
   tabActions?: ActionSpec[]
+  /**
+   * One thing picked out of this board, read beside it — a task of a run
+   * beside the run's tree. Its own board (header, tabs, bands) in a column on
+   * the right, under this board's header, scrolling on its own, so the record
+   * it was picked from stays in view. Absent, the body takes the full width.
+   */
+  inspector?: InspectorSpec<X>
   /** Gap between rows and between panels, in px. Default `12`. */
   gap?: number
+}
+
+/**
+ * The column beside a board. Its header is drawn at `md`, as a panel's is; an
+ * `inspector` inside it is ignored — one record beside another, never a chain.
+ */
+export interface InspectorSpec<X extends ExtraPanels = Record<never, never>> {
+  spec: BoardSpec<X>
+  /** In px. Default `440`. */
+  width?: number
 }
 
 /** What `onAction` is told, beyond the action's own id. */

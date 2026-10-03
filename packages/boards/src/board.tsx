@@ -196,6 +196,7 @@ export function Board<X extends ExtraPanels = Record<never, never>>({
     [onAction],
   )
   const tabs = spec.tabs?.length ? spec.tabs : null
+  const inspector = spec.inspector
   // Uncontrolled unless the spec names an action — a frozen report still
   // switches tabs, it just has nobody to tell.
   const [ownTab, setOwnTab] = React.useState(spec.tab ?? tabs?.[0]?.id)
@@ -221,6 +222,31 @@ export function Board<X extends ExtraPanels = Record<never, never>>({
     </div>
   )
 
+  const main = tabs ? (
+    <TabbedPanel
+      className="min-h-0 flex-1 border-0 bg-transparent shadow-none"
+      bodyClassName="flex min-h-0 flex-col"
+      activeTab={activeTab}
+      onTabChange={(value) =>
+        spec.tabAction ? emit(spec.tabAction, { option: value }) : setOwnTab(value)
+      }
+      headerContent={
+        spec.tabActions?.length ? (
+          <SpecActions actions={spec.tabActions} onAction={emit} icons={icons} />
+        ) : undefined
+      }
+      tabs={tabs.map((tab) => ({
+        value: tab.id,
+        label: tab.label,
+        icon: tab.locked ? Lock : undefined,
+        disabled: tab.locked,
+        content: body(tab.rows as AnyRow[], tab.flush),
+      }))}
+    />
+  ) : (
+    body(spec.rows as AnyRow[])
+  )
+
   return (
     <div className={cn("flex min-h-0 flex-col bg-background", className)} {...props}>
       {spec.header ? <SpecHeader header={spec.header} onAction={emit} icons={icons} /> : null}
@@ -229,29 +255,24 @@ export function Board<X extends ExtraPanels = Record<never, never>>({
       ) : null}
       {spec.staged ? <SpecStaged staged={spec.staged} onAction={emit} /> : null}
 
-      {tabs ? (
-        <TabbedPanel
-          className="min-h-0 flex-1 border-0 bg-transparent shadow-none"
-          bodyClassName="flex min-h-0 flex-col"
-          activeTab={activeTab}
-          onTabChange={(value) =>
-            spec.tabAction ? emit(spec.tabAction, { option: value }) : setOwnTab(value)
-          }
-          headerContent={
-            spec.tabActions?.length ? (
-              <SpecActions actions={spec.tabActions} onAction={emit} icons={icons} />
-            ) : undefined
-          }
-          tabs={tabs.map((tab) => ({
-            value: tab.id,
-            label: tab.label,
-            icon: tab.locked ? Lock : undefined,
-            disabled: tab.locked,
-            content: body(tab.rows as AnyRow[], tab.flush),
-          }))}
-        />
+      {inspector ? (
+        <div className="flex min-h-0 flex-1">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">{main}</div>
+          <Board
+            className="border-l border-border"
+            style={{ width: inspector.width ?? 440, flexShrink: 0 }}
+            spec={{
+              ...inspector.spec,
+              inspector: undefined,
+              header: inspector.spec.header && { size: "md", ...inspector.spec.header },
+            }}
+            onAction={emit}
+            registry={extraRegistry}
+            icons={icons}
+          />
+        </div>
       ) : (
-        body(spec.rows as AnyRow[])
+        main
       )}
     </div>
   )
