@@ -20,6 +20,13 @@ export interface AppLayoutAgentsProps {
   /** The work the agents act on — a canvas, a graph, a document. */
   mainSection: MainSectionConfig;
   /**
+   * Panels that float over the work, top right, stacked in one column — the
+   * run's activity, its log. The column is as tall as the work and no taller:
+   * two panels share it, each scrolling its own body. Pass nothing (or
+   * `null`) and the work is uncovered.
+   */
+  overlay?: React.ReactNode;
+  /**
    * Namespace for the resizable group and panel ids. Defaults to a
    * per-instance `useId()`, so two shells alive at once never share a layout —
    * see `AppLayoutV2Props.idPrefix`. Pass one only when the ids must be stable.
@@ -47,6 +54,7 @@ export const AppLayoutAgents: React.FC<AppLayoutAgentsProps> = ({
   mainClassName,
   leftSection,
   mainSection,
+  overlay,
   idPrefix,
 }) => {
   const generatedId = React.useId().replace(/:/g, '');
@@ -84,7 +92,15 @@ export const AppLayoutAgents: React.FC<AppLayoutAgentsProps> = ({
             minSize={mainSection.minSize ?? DEFAULT_MAIN.minSize}
           >
             {/* The work owns its scroll — a canvas pans rather than scrolls. */}
-            <div className="relative h-full overflow-hidden bg-card">{mainSection.content}</div>
+            <div className="relative h-full overflow-hidden bg-card">
+              {mainSection.content}
+              {overlay ? (
+                // Only the panels take the pointer: the gaps between them are still the work.
+                <div className="pointer-events-none absolute inset-y-2 right-2 flex w-[min(480px,calc(100%-1rem))] flex-col items-stretch gap-2 [&>*]:pointer-events-auto">
+                  {overlay}
+                </div>
+              ) : null}
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       }
