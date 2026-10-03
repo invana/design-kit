@@ -108,8 +108,12 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   now?: number
   /** Shows a close control in the header. */
   onClose?: () => void
-  /** Draw the header — title, turn count, close. @default true when the spec has a title */
-  header?: boolean
+  /**
+   * The header. `true` draws the session's own — title, turn count, close;
+   * `false` draws none; any node is drawn in its place, so a host composes
+   * its own header from whatever it needs. @default true when the spec has a title
+   */
+  header?: boolean | React.ReactNode
   /** Shown when the spec has no turns yet. */
   emptyState?: React.ReactNode
   /** The CLI's view, controlled. */

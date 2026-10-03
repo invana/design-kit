@@ -231,7 +231,8 @@ function PinnedSteps() {
 export interface CliSessionProps {
   running: boolean
   onStop: () => void
-  header: boolean
+  /** `true` draws the session's own header; a node is drawn in its place. */
+  header: React.ReactNode
   onClose?: () => void
   emptyState?: React.ReactNode
   className?: string
@@ -258,7 +259,7 @@ export function CliSession({ running, onStop, header, onClose, emptyState, class
   )
   return (
     <div className={cn("flex h-full min-h-0 flex-col bg-background", className)}>
-      {header ? <SessionHeader onClose={onClose} /> : null}
+      {header === true ? <SessionHeader onClose={onClose} /> : header || null}
       <ChatSessionFrame
         className="min-h-0 flex-1"
         autoScrollKey={`${ctx.view}-${ctx.spec.turns.length}`}

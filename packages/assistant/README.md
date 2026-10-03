@@ -37,7 +37,7 @@ const chat = useChatSession(initial);
 ```
 
 The API sends patches — `add-turn`, `set-state`, `add-block`, `update-block`, `add-trace-step`,
-`update-trace-step`, `update-turn`, `update-spec`, and for the streaming effect `append-text` (words
+`update-trace-step`, `update-turn`, `update-spec`, `set-records` (a model's live record count), and for the streaming effect `append-text` (words
 into any block's text field) and `append-thinking` (a step's reasoning). Hand them over any way:
 
 - `applyPatch(spec, patch)` and pass the spec — fully controlled;

@@ -164,7 +164,8 @@ function dayBreaks(exchanges: Exchange[], now: number): (string | undefined)[] {
 export interface WebSessionProps {
   running: boolean
   onStop: () => void
-  header: boolean
+  /** `true` draws the session's own header; a node is drawn in its place. */
+  header: React.ReactNode
   onClose?: () => void
   emptyState?: React.ReactNode
   className?: string
@@ -181,7 +182,7 @@ export function WebSession({ running, onStop, header, onClose, emptyState, class
   const breaks = dayBreaks(exchanges, ctx.now)
   return (
     <div className={cn("flex h-full min-h-0 flex-col bg-background", className)}>
-      {header ? <SessionHeader onClose={onClose} /> : null}
+      {header === true ? <SessionHeader onClose={onClose} /> : header || null}
       <ChatSessionFrame
         className="min-h-0 flex-1"
         autoScrollKey={ctx.spec.turns.length}

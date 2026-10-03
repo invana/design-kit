@@ -95,4 +95,16 @@ describe("applyPatch", () => {
     })
     expect(() => applyPatch(withTable, { op: "append-text", turn: "t3", field: "rows", text: "x" })).toThrow(PatchError)
   })
+
+  it("keeps a model's record count current, and refuses one it does not have", () => {
+    const withAccess = applyPatch(base, {
+      op: "update-spec",
+      fields: { access: { kind: "world", label: "Accounts graph", models: [{ id: "accounts", name: "Accounts", access: ["read"] }] } },
+    })
+    const next = applyPatch(withAccess, { op: "set-records", model: "accounts", records: 84_000 })
+    expect(next.access?.models?.[0]).toMatchObject({ id: "accounts", records: 84_000 })
+    expect(withAccess.access?.models?.[0].records).toBeUndefined()
+    expect(() => applyPatch(next, { op: "set-records", model: "hr", records: 1 })).toThrow(PatchError)
+    expect(() => applyPatch(base, { op: "set-records", model: "accounts", records: 1 })).toThrow(PatchError)
+  })
 })

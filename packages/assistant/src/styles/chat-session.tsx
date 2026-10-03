@@ -217,7 +217,7 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
   const shared = {
     running,
     onStop: stop,
-    header: header ?? !!live.title,
+    header: header === undefined ? !!live.title : header,
     onClose,
     emptyState,
     className,

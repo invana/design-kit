@@ -266,9 +266,67 @@ export interface ConversationSpec {
   assistant?: string
   /** Scope carried by the whole thread, until a turn changes it. */
   scope?: Record<string, string>
+  /**
+   * Who is answering, what it can reach, what it may spend and the rules it
+   * runs under — sent with the spec for the host's header (`AgentHeader`,
+   * passed as `header`). The session itself draws none of them.
+   */
+  agent?: AgentSpec
+  /** The data this session can reach. Set when the session starts; never changed by a turn. */
+  access?: AccessSpec
+  /** Tokens spent in this session, of the budget it was given. Tokens, never money. */
+  budget?: { used: number; limit: number }
+  /** The rules the session runs under — read-only here; changed in the host's settings. */
+  governance?: GovernanceSpec
   /** What the composer offers besides the text — mode, model, timeout, files. */
   composer?: ComposerSpec
   turns: Turn[]
+}
+
+// ── the agent, its data and its rules ───────────────────────────────────────
+
+export interface AgentSpec {
+  /** `Analyst`. */
+  name: string
+  /** `v2`. */
+  version?: string
+  /** `sonnet-5.5`. */
+  model?: string
+}
+
+/** One published model, and what this session may do with it. */
+export interface AccessModel {
+  id: string
+  name: string
+  /**
+   * Records this session can see, after its slice. Left out while the count is
+   * on its way; the API keeps it current with `set-records`.
+   */
+  records?: number | null
+  /** `["read"]`, `["read", "write"]`, or `"denied"`. */
+  access: string[] | "denied"
+  /** What the session's view is narrowed to — `time 2019 → now · axis announced_at`. */
+  slice?: string
+}
+
+/**
+ * The data a session can reach. `world` is the whole graph the session opened
+ * on; `group` is an access group's share of it, named in `label`.
+ */
+export interface AccessSpec {
+  kind: "world" | "group"
+  /** `Accounts graph`, `Finance-EU`. */
+  label: string
+  models?: AccessModel[]
+}
+
+export interface GovernanceSpec {
+  /** The strictest rule in force, as the badge says it — `Read-only`, `Governed`. */
+  summary: string
+  /** The rules, in order — `Permissions: read-only`, `Retention: 30 days`. */
+  rules?: { label: string; value: string }[]
+  /** Where data may leave to, per destination, and what may go. */
+  egress?: { to: string; classes?: string[] }[]
 }
 
 // ── the composer ────────────────────────────────────────────────────────────

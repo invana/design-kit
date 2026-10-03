@@ -33,6 +33,8 @@ export type ConversationPatch =
   | { op: "append-thinking"; turn: string; step: string; text: string }
   /** Anything else on a turn — its envelope once known, its outcome, its duration. */
   | { op: "update-turn"; turn: string; fields: Record<string, unknown> }
+  /** A model's record count, as it changes — the live count behind the header's data reach. */
+  | { op: "set-records"; model: string; records: number }
   /** The conversation's own fields — its title, its composer. Never its turns. */
   | { op: "update-spec"; fields: Partial<Omit<ConversationSpec, "id" | "turns">> }
 
@@ -132,6 +134,19 @@ export function applyPatch(spec: ConversationSpec, patch: ConversationPatch): Co
       )
     case "update-turn":
       return onTurn(spec, patch.turn, (turn) => ({ ...turn, ...patch.fields, id: turn.id }) as Turn)
+    case "set-records": {
+      const models = spec.access?.models ?? []
+      if (!spec.access || !models.some((m) => m.id === patch.model)) {
+        throw new PatchError(`"set-records": no model "${patch.model}" in conversation "${spec.id}".`)
+      }
+      return {
+        ...spec,
+        access: {
+          ...spec.access,
+          models: models.map((m) => (m.id === patch.model ? { ...m, records: patch.records } : m)),
+        },
+      }
+    }
     case "update-spec":
       return { ...spec, ...patch.fields, id: spec.id, turns: spec.turns }
   }
