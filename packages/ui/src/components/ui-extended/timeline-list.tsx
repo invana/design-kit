@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
+import { ExpandToggle } from "./expand-toggle"
 
 /**
  * How the list arranges one entry.
@@ -47,6 +48,16 @@ export interface TimelineEntryProps
    * explain. `compact` only.
    */
   highlight?: "error" | "warning" | "success" | "info"
+  /**
+   * The events this one breaks into — `TimelineEntry`s drawn under it, in the
+   * list's variant, when it is open. A chevron beside the entry opens it.
+   */
+  nested?: React.ReactNode
+  /** Controlled. Pair it with `onOpenChange`. */
+  open?: boolean
+  /** Uncontrolled: open at first. Closed by default. */
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
   children?: React.ReactNode
 }
 
@@ -69,7 +80,9 @@ export interface TimelineFooterProps
  * because the order carries meaning — these are events in sequence, not a set.
  *
  * Both variants take the same entries; only the arrangement differs. See
- * `TimelineVariant` for which one a surface wants.
+ * `TimelineVariant` for which one a surface wants. An entry that breaks into
+ * smaller events carries them as `nested` entries, drawn under it, in the
+ * same variant, once it is opened.
  */
 export const TimelineList = React.forwardRef<
   HTMLOListElement,
@@ -117,11 +130,67 @@ function RailGutter({ marker }: { marker?: React.ReactNode }) {
   )
 }
 
+/**
+ * An entry's text, and — when it has `nested` events — the chevron before it
+ * and the events under it while it is open. Without `nested` it is the text
+ * alone, so a flat list draws exactly as it did.
+ */
+function EntryBody({
+  title,
+  children,
+  nested,
+  open,
+  onToggle,
+}: {
+  title?: React.ReactNode
+  children?: React.ReactNode
+  nested?: React.ReactNode
+  open: boolean
+  onToggle: () => void
+}) {
+  const text = (
+    <>
+      {title != null ? <span className="font-medium">{title}</span> : null}
+      {children}
+    </>
+  )
+  if (nested == null) return text
+  // What the chevron opens, for a screen reader: the title, or the entry's first line of text.
+  const label = [title, ...React.Children.toArray(children)].find(
+    (n): n is string => typeof n === "string",
+  )
+  return (
+    <>
+      <div className="flex min-w-0 items-start gap-1">
+        <ExpandToggle
+          open={open}
+          label={label}
+          onClick={onToggle}
+          className="mt-px"
+        />
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">{text}</div>
+      </div>
+      {open ? <ol className="flex flex-col pt-1">{nested}</ol> : null}
+    </>
+  )
+}
+
 export const TimelineEntry = React.forwardRef<
   HTMLLIElement,
   TimelineEntryProps
->(({ when, title, marker, highlight, className, children, ...props }, ref) => {
+>(({ when, title, marker, highlight, nested, open: openProp, defaultOpen, onOpenChange, className, children, ...props }, ref) => {
   const variant = React.useContext(TimelineVariantContext)
+  const [ownOpen, setOwnOpen] = React.useState(defaultOpen ?? false)
+  const open = openProp ?? ownOpen
+  const toggle = () => {
+    if (openProp === undefined) setOwnOpen(!open)
+    onOpenChange?.(!open)
+  }
+  const body = (
+    <EntryBody title={title} nested={nested} open={open} onToggle={toggle}>
+      {children}
+    </EntryBody>
+  )
 
   if (variant === "compact") {
     return (
@@ -140,10 +209,7 @@ export const TimelineEntry = React.forwardRef<
       >
         <span className="truncate font-mono text-xs text-muted-foreground">{when}</span>
         <span className="flex justify-center">{marker}</span>
-        <div className="flex min-w-0 flex-col gap-0.5 text-sm">
-          {title != null ? <span className="font-medium">{title}</span> : null}
-          {children}
-        </div>
+        <div className="flex min-w-0 flex-col gap-0.5 text-sm">{body}</div>
       </li>
     )
   }
@@ -158,8 +224,7 @@ export const TimelineEntry = React.forwardRef<
         <RailGutter marker={marker} />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5 pb-4 group-last/entry:pb-0">
           <span className="text-sm text-muted-foreground">{when}</span>
-          {title != null ? <span className="font-medium">{title}</span> : null}
-          {children}
+          {body}
         </div>
       </li>
     )
@@ -175,10 +240,7 @@ export const TimelineEntry = React.forwardRef<
         {marker ? <span className="translate-y-1">{marker}</span> : null}
         <span className="truncate">{when}</span>
       </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        {title != null ? <span className="font-medium">{title}</span> : null}
-        {children}
-      </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">{body}</div>
     </li>
   )
 })
