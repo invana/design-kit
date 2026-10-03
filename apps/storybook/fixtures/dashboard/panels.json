@@ -31,29 +31,6 @@
     }
   },
   {
-    "caption": "Gantt",
-    "wide": true,
-    "panel": {
-      "id": "performance",
-      "kind": "gantt",
-      "title": "Performance",
-      "aside": "pick a task",
-      "options": {
-        "labelWidth": 124,
-        "selectAction": "select-task",
-        "selectedKey": null,
-        "tasks": [
-          { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
-          { "key": "fetch_source", "startMs": 40, "durationMs": 900, "status": "succeeded", "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed" }] },
-          { "key": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded" },
-          { "key": "import_dataset", "startMs": 2150, "durationMs": 3400, "status": "succeeded" },
-          { "key": "triage", "status": "skipped" },
-          { "key": "announce", "startMs": 5600, "durationMs": 300, "status": "needs_input" }
-        ]
-      }
-    }
-  },
-  {
     "caption": "List",
     "wide": true,
     "panel": {

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Dashboard, type ActionContext, type DashboardSpec, type GanttOptions, type LogOptions } from '@invana/dashboard';
+import type { GanttOptions } from '@invana/blocks';
+import { Dashboard, type ActionContext, type DashboardSpec, type LogOptions } from '@invana/dashboard';
 
 import run from '../../../../fixtures/dashboards/run.json';
 import { jsx, snippet } from '../../../_story/source';
@@ -33,11 +34,12 @@ const meta = {
           ],
           data: { spec: SPEC },
           setup: [
-            '// A task picked in Performance → onAction("open-step", { panelId: "performance", taskKey: "fetch_source" })',
+            '// A task picked in Performance → onAction("select", { panelId: "performance", value: "fetch_source" })',
             '//   → draw that step\'s own spec; its crumb menu sends "open-step" with { itemId },',
             '//     and the run\'s crumb sends "open-run" with no context.',
             'const onAction = (id, ctx) => {',
-            '  if (id === "open-step") setStep(ctx.taskKey ?? ctx.itemId);',
+            '  if (id === "select" && ctx.panelId === "performance") setStep(ctx.value);',
+            '  if (id === "open-step") setStep(ctx.itemId);',
             '  if (id === "open-run") setStep(null);',
             '};',
             'const icons = { more: MoreHorizontal, file: Upload };',
@@ -185,7 +187,8 @@ function Live({ onAction }: Args) {
         icons={ICONS}
         onAction={(id, ctx) => {
           record(id, ctx);
-          if (id === 'open-step') setStep(ctx?.taskKey ?? ctx?.itemId ?? null);
+          if (id === 'select' && ctx?.panelId === 'performance') setStep(String(ctx.value));
+          if (id === 'open-step') setStep(ctx?.itemId ?? null);
           if (id === 'open-run') setStep(null);
           if (id === 'cancel') setSpec(cancelled);
           if (id === 'view' && ctx?.option)
@@ -212,7 +215,7 @@ export const Run: Story = {
     const canvas = within(canvasElement);
     await step('Open a task from Performance', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /fetch_source/ }));
-      await expect(args.onAction).toHaveBeenCalledWith('open-step', { panelId: 'performance', taskKey: 'fetch_source' });
+      await expect(args.onAction).toHaveBeenCalledWith('select', { panelId: 'performance', value: 'fetch_source' });
       await expect(canvas.getByRole('tab', { name: 'Exchange' })).toBeInTheDocument();
     });
     await step('Back to the run by its crumb', async () => {

@@ -30,7 +30,6 @@ const RUN_KINDS = new Set(Object.keys(RUN_PANELS));
 /** What each kind sends, as the Code tab says it. Kinds that send nothing are left out. */
 const SENDS: Record<string, string> = {
   trace: '// A row picked → onAction("select-step", { panelId: "trace", stepId: "execute_query" })',
-  gantt: '// A task picked → onAction("select-task", { panelId: "performance", taskKey: "fetch_source" })',
   list: '// A row picked → onAction("open-run", { panelId: "artifacts-list", itemId: "run-7d31" })',
   params: '// Every edit → onAction("edit-param", { panelId: "params", param: { name, source, value } })',
   text: '// A button → onAction("retry", { panelId: "notice" })',
@@ -85,8 +84,6 @@ function answer(spec: Spec, id: string, ctx: ActionContext = {}): Spec {
   switch (id) {
     case 'select-step':
       return patchPanel(spec, panelId, { selectedId: ctx.stepId });
-    case 'select-task':
-      return patchPanel(spec, panelId, { selectedKey: ctx.taskKey });
     case 'select-item':
       return patchPanel(spec, panelId, { selectedItem: ctx.itemId });
     case 'select-lens':
@@ -141,7 +138,7 @@ function Live({ variant, log, onAction }: { variant: PanelVariant; log: Log; onA
 /**
  * Every panel kind a dashboard draws that is not a block — one cell each, from
  * `fixtures/dashboard/panels.json`, drawn through `<Dashboard spec>` with a one-panel spec.
- * `json`, `code`, `exchange`, `gantt`, `log`, `list`, `params` and `text` are built in; `trace`,
+ * `json`, `code`, `exchange`, `log`, `list`, `params` and `text` are built in; `trace`,
  * `touched`, `attempts`, `artifacts`, `layers`, `lens` and `clarification` arrive with
  * `registry={RUN_PANELS}`. Every block kind is a panel kind too — those are under `Blocks`.
  *

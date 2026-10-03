@@ -1,4 +1,4 @@
-import { CodePanel, ExchangePanel, GanttPanel, JsonPanel } from "./panels/data"
+import { CodePanel, ExchangePanel, JsonPanel } from "./panels/data"
 import { BLOCK_PANELS } from "./panels/block"
 import { ListPanel, LogPanel, ParamsPanel, TextPanel } from "./panels/rows"
 import type { PanelRegistry } from "./types"
@@ -21,7 +21,6 @@ export const BUILT_IN_PANELS: PanelRegistry = {
   json: JsonPanel,
   code: CodePanel,
   exchange: ExchangePanel,
-  gantt: GanttPanel,
   log: LogPanel,
   list: ListPanel,
   params: ParamsPanel,

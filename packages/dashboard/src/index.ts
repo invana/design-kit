@@ -6,7 +6,7 @@ export * from "./parts/attempt-clock"
 export * from "./parts/record-description"
 export * from "./parts/staged-bar"
 export { SpecChip, SpecChips, SpecAction, SpecActions } from "./chips"
-export { JsonPanel, CodePanel, ExchangePanel, GanttPanel } from "./panels/data"
+export { JsonPanel, CodePanel, ExchangePanel } from "./panels/data"
 export { LogPanel, ListPanel, ParamsPanel, TextPanel } from "./panels/rows"
 export {
   RUN_PANELS,

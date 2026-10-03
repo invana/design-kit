@@ -1,10 +1,9 @@
-import { Eyebrow, TaskGantt } from "@invana/ui"
+import { Eyebrow } from "@invana/ui"
 import { CodeBlock } from "@invana/editor"
 
 import type {
   CodeOptions,
   ExchangeOptions,
-  GanttOptions,
   JsonOptions,
   PanelRendererProps,
 } from "../types"
@@ -47,23 +46,5 @@ export function ExchangePanel({ options }: PanelRendererProps<ExchangeOptions>) 
         </div>
       ))}
     </div>
-  )
-}
-
-export function GanttPanel({ panel, options, onAction }: PanelRendererProps<GanttOptions>) {
-  return (
-    <TaskGantt
-      tasks={options.tasks}
-      labelWidth={options.labelWidth}
-      density={options.density}
-      nowMs={options.nowMs}
-      openEnded={options.openEnded}
-      selectedKey={options.selectedKey}
-      onSelectTask={
-        options.selectAction
-          ? (taskKey) => onAction(options.selectAction as string, { panelId: panel.id, taskKey })
-          : undefined
-      }
-    />
   )
 }

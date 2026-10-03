@@ -1,6 +1,6 @@
 import type * as React from "react"
 import type { AskState, BlockKind, BlockOptionsByKind } from "@invana/blocks"
-import type { Bound, StatusDotProps, TaskGanttTask } from "@invana/ui"
+import type { Bound, StatusDotProps } from "@invana/ui"
 
 /**
  * A dashboard is **data**. Everything in this file is JSON-serialisable, with
@@ -183,17 +183,6 @@ export interface LogOptions {
   columnTemplate?: string
 }
 
-export interface GanttOptions {
-  tasks: TaskGanttTask[]
-  labelWidth?: number
-  density?: "compact" | "comfortable"
-  nowMs?: number
-  openEnded?: boolean
-  selectedKey?: string | null
-  /** Emits `onAction(selectAction, { taskKey })` when a row is picked. */
-  selectAction?: string
-}
-
 export interface ListOptions {
   items: Array<{
     id?: string
@@ -261,7 +250,6 @@ export interface PanelOptionsByKind {
   json: JsonOptions
   code: CodeOptions
   exchange: ExchangeOptions
-  gantt: GanttOptions
   log: LogOptions
   list: ListOptions
   params: ParamsOptions
@@ -432,8 +420,6 @@ export interface DashboardSpec<X extends ExtraPanels = Record<never, never>> {
 /** What `onAction` is told, beyond the action's own id. */
 export interface ActionContext {
   panelId?: string
-  /** Set by `gantt`'s row select. */
-  taskKey?: string
   /** Set by `list`'s row select and a crumb or staged item. */
   itemId?: string
   /** Set by `params` on an edit. */

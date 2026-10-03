@@ -172,7 +172,7 @@ function Row({
  * seventh surface is a new document rather than a new screen.
  *
  * **Behaviour is not in the spec.** Actions carry an `id` and arrive back
- * through `onAction`; a gantt row's selection, a list row's click and a
+ * through `onAction`; a gantt row's pick, a list row's click and a
  * parameter edit all come through the same seam. So a spec can be fetched,
  * stored beside a plan as `dashboard.yml`, diffed between two runs, and handed
  * to a renderer that has never heard of the record it describes.

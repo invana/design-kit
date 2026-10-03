@@ -61,7 +61,6 @@
           "aside": "pick a task to open it",
           "options": {
             "labelWidth": 124,
-            "selectAction": "open-step",
             "tasks": [
               { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
               { "key": "fetch_source", "startMs": 40, "durationMs": 900, "status": "succeeded", "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed" }] },

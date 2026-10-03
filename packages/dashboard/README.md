@@ -79,8 +79,8 @@ names render nothing, so this package pulls in no icon set of its own.
 - **Every block kind** (`BLOCKS` in `@invana/blocks`): `options` are the block's options,
   checked against `BlockOptionsByKind`. The block draws bare; the panel's `title`, `aside` and
   `absent` frame it. A kind with no renderer yet is a labelled placeholder.
-- **Panels only a dashboard has:** `json` · `code` · `exchange` · `gantt` · `log` · `list` ·
-  `params` · `text`.
+- **Panels only a dashboard has:** `json` · `code` · `exchange` · `log` · `list` · `params` ·
+  `text`.
 
 Every panel is drawn in a `PanelBox`, as an answer card frames every block, so one spec draws the
 same in a dashboard and a conversation. `title` adds the label bar; `flush` drops the padding.
@@ -92,6 +92,7 @@ same in a dashboard and a conversation. `title` adds the label bar; `flush` drop
 | `metrics` | `grid` | `caption` → `delta`; `meter: n` → `gauge: { value: n, max: 1 }`; `tone` is `good`/`bad`/`warn`/`neutral` and colours the `delta` (`running`, `info` are gone; `flag` marks the tile to look at) |
 | `properties` | `record` | `mono` defaults to `true` as before; `labelWidth` is gone |
 | `table` | `table` | Columns set `mono: true` (the default is now off); `selectAction` is gone — a pick is `select` with `{ panelId, value }` |
+| `gantt` | `gantt` (a block) | A conversation draws it too, so it is a block. `selectedKey` → `selected`; `selectAction` is gone — a pick is `select` with `{ panelId, value }` (the task's key, which was `taskKey`); a task's `subtasks` nest under it |
 
 ## Extra panel kinds
 
@@ -119,7 +120,7 @@ For a spec arriving off the wire, where nothing can be checked anyway, use `AnyD
 ## Exports
 
 `Dashboard`, `BlockPanel` and `BLOCK_PANELS`, the panel components (`JsonPanel`, `CodePanel`,
-`ExchangePanel`, `GanttPanel`, `LogPanel`, `ListPanel`, `ParamsPanel`, `TextPanel`), `RUN_PANELS`,
+`ExchangePanel`, `LogPanel`, `ListPanel`, `ParamsPanel`, `TextPanel`), `RUN_PANELS`,
 `SpecChip(s)` / `SpecAction(s)`, `BUILT_IN_PANELS`, `resolveRegistry`, the spec types, and the
 parts only a dashboard draws: `RecordDescription` (the line under the header), `StagedBar` (`spec.staged`)
 and `AttemptClock` (the `attempts` run panel). They moved here from `@invana/ui`.
