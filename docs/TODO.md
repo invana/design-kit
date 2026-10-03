@@ -342,7 +342,7 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board o
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `blocks/checks.tsx` | todo | next | – |
 | trace | `{ steps[] }` | TraceList · ui | `blocks/trace.tsx` | done | today | 3 |
 | activity | `{ lanes[], bands?, axis?, pinned?, state? }` | HeatLane · charts | `blocks/activity.tsx` | done | today | – |
-| gantt | `{ tasks[key, startMs, durationMs, status, attempts?, subtasks?], spanMs?, nowMs? }` | TaskGantt · ui | `blocks/gantt.tsx` | done | today | – |
+| gantt | `{ tasks[key, startMs, durationMs, status, attempts?, segments[key?, label?, group?, variant?]?, duration?, subtasks?], spanMs?, nowMs?, palette?, seams?, durationWidth? }` | TaskGantt · ui | `blocks/gantt.tsx` | done | today | – |
 | heatstrip | `{ states[key, label, tone], cells? \| rows[id, label, cells, children?], ticks? }` | HeatStrip · charts | `blocks/heatstrip.tsx` | done | today | – |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · blocks | `blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `blocks/coef.tsx` | todo | next | 5 |

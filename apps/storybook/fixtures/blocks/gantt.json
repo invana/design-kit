@@ -358,5 +358,166 @@
       "density": "compact",
       "ticks": 3
     }
+  },
+  {
+    "caption": "Layer access · many bars on a row",
+    "wide": true,
+    "turn": { "id": "g6", "label": "gantt", "title": "Red Sea exposure · what each task reached", "aside": "3 layers · 1 gate" },
+    "spec": {
+      "spanMs": 6000,
+      "ticks": 6,
+      "labelWidth": 200,
+      "durationWidth": 72,
+      "palette": { "network": "bg-data-3", "ingest": "bg-data-1", "work_write": "bg-data-6" },
+      "seams": [{ "after": "Order@v2 · lane 3", "label": "approval", "startMs": 5600, "durationMs": 300, "note": "held for approval" }],
+      "tasks": [
+        {
+          "key": "network",
+          "summary": "1 source",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "s3://drops/orders.csv",
+              "segments": [
+                {
+                  "key": "fetch_source#1",
+                  "label": "fetch_source",
+                  "startMs": 40,
+                  "durationMs": 310,
+                  "group": "network",
+                  "status": "failed",
+                  "title": "fetch_source · attempt 1 · 503"
+                },
+                {
+                  "key": "fetch_source",
+                  "label": "fetch_source",
+                  "startMs": 350,
+                  "durationMs": 590,
+                  "group": "network",
+                  "title": "fetch_source · 1.4 MB"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "ingest",
+          "summary": "2 participants · 3 lanes",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "bundle/manifest",
+              "segments": [
+                {
+                  "key": "check_bundle",
+                  "label": "check_bundle",
+                  "startMs": 0,
+                  "durationMs": 40,
+                  "group": "ingest",
+                  "title": "check_bundle · read"
+                }
+              ]
+            },
+            {
+              "key": "model/Brokerage.Order@v2",
+              "segments": [
+                {
+                  "key": "validate_records",
+                  "label": "validate_records",
+                  "startMs": 950,
+                  "durationMs": 1200,
+                  "group": "ingest",
+                  "title": "validate_records · 1,204 of 1,251"
+                },
+                {
+                  "key": "import_report",
+                  "label": "import_report",
+                  "startMs": 5560,
+                  "durationMs": 40,
+                  "group": "ingest",
+                  "title": "import_report · 47 rejections"
+                }
+              ]
+            },
+            {
+              "key": "Order@v2 · lane 1",
+              "segments": [
+                {
+                  "key": "import_dataset.lane_1",
+                  "label": "import_dataset",
+                  "startMs": 2150,
+                  "durationMs": 1950,
+                  "group": "ingest",
+                  "title": "import_dataset · lane 1 · 402 rows"
+                }
+              ]
+            },
+            {
+              "key": "Order@v2 · lane 2",
+              "segments": [
+                {
+                  "key": "import_dataset.lane_2",
+                  "label": "import_dataset",
+                  "startMs": 2150,
+                  "durationMs": 2750,
+                  "group": "ingest",
+                  "title": "import_dataset · lane 2 · 402 rows"
+                }
+              ]
+            },
+            {
+              "key": "Order@v2 · lane 3",
+              "segments": [
+                {
+                  "key": "import_dataset.lane_3",
+                  "label": "import_dataset",
+                  "startMs": 2150,
+                  "durationMs": 3400,
+                  "group": "ingest",
+                  "title": "import_dataset · lane 3 · 400 rows"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "work_write",
+          "label": "work write",
+          "summary": "1 of 2 reached",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "work/triage",
+              "segments": [
+                {
+                  "key": "triage",
+                  "label": "triage",
+                  "startMs": 5560,
+                  "durationMs": 40,
+                  "group": "work_write",
+                  "status": "skipped",
+                  "variant": "dashed",
+                  "title": "triage · declared, never dispatched"
+                }
+              ]
+            },
+            {
+              "key": "work/announce",
+              "segments": [
+                {
+                  "key": "announce",
+                  "label": "announce",
+                  "startMs": 5600,
+                  "durationMs": 300,
+                  "group": "work_write",
+                  "status": "needs_input",
+                  "title": "announce · held for approval"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

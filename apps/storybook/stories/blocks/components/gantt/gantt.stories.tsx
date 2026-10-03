@@ -26,7 +26,7 @@ const meta = {
             picked.map((v) => ({
               comment: v.caption,
               data: { spec: v.spec },
-              setup: "// 'select' with the task's key when a row is picked.\nconst onAction = (action, value) => {};",
+              setup: "// 'select' with the task's key when a row is picked, or the bar's key when a keyed segment is.\nconst onAction = (action, value) => {};",
               call: jsx('GanttBlock', {
                 spec: 'spec',
                 onAction: 'onAction',
@@ -49,7 +49,9 @@ type Story = StoryObj<Args>;
  * clock: a retry's failed attempt left of the one that stuck, a task that never ran as an outline.
  * A task's `subtasks` nest under it (`open` draws it open); a parent with no timing of its own
  * draws the stretch they cover. Hover a row for its card, beside the cursor; pick one and it is
- * sent as `select` with the task's key.
+ * sent as `select` with the task's key. A row's `segments` are many bars on one row — a layer's
+ * participants and the tasks that reached them, painted by `palette`, with a gate as a `seam`; a
+ * keyed bar is picked on its own and sent as `select` with its key.
  */
 export const Gantt: Story = {
   render: ({ variant, onAction }) => (
@@ -79,6 +81,12 @@ export const Gantt: Story = {
     await step('Picking a task sends its key', async () => {
       await userEvent.click(nested.getByRole('button', { name: /analyse\.risk/, pressed: false }));
       await expect(args.onAction).toHaveBeenCalledWith('select', 'analyse.risk');
+    });
+    const layers = within(canvas.getByRole('group', { name: 'Layer access · many bars on a row' }));
+    await step('Picking a bar sends the bar\'s key, not its row\'s', async () => {
+      await userEvent.click(layers.getByRole('button', { name: 'fetch_source · attempt 1 · 503' }));
+      await expect(args.onAction).toHaveBeenLastCalledWith('select', 'fetch_source#1');
+      await expect(layers.getByRole('button', { name: 'fetch_source · attempt 1 · 503' })).toHaveAttribute('aria-pressed', 'true');
     });
   },
 };

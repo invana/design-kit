@@ -647,6 +647,23 @@ export interface ActivityOptions {
 /** A task's state on the gantt — the engine's own step statuses, as `TaskGantt` reads them. */
 export type GanttStatus = "succeeded" | "running" | "failed" | "needs_input" | "stopped" | "skipped" | "queued"
 
+/** One bar on a row that holds many — a task a worker slot ran, a layer a task reached. */
+export interface GanttSegment {
+  startMs?: number
+  durationMs?: number
+  status?: GanttStatus
+  /** The hover text. */
+  title?: string
+  /** Names the bar: picking it sends `select` with this key, not the row's. */
+  key?: string
+  /** Written in the bar. */
+  label?: string
+  /** Which `palette` entry paints it, instead of its status. */
+  group?: string
+  /** `outline` is time held, not spent; `dashed` is time that may be spent. */
+  variant?: "solid" | "outline" | "dashed"
+}
+
 /** One task of a run, on its clock — and the tasks it split into. */
 export interface GanttTask {
   /** `task_key` — what the log calls it. Also the row's label. */
@@ -659,6 +676,10 @@ export interface GanttTask {
   status?: GanttStatus
   /** Earlier attempts, oldest first — the rate-limited fetch before the retry that stuck. */
   attempts?: { startMs?: number; durationMs?: number; status?: GanttStatus; title?: string }[]
+  /** Many bars on one row, each its own thing — what a worker slot held, in order. */
+  segments?: GanttSegment[]
+  /** The right-hand cell, instead of the duration — `59% busy`. */
+  duration?: string
   /** A sentence under the hover card's header. */
   summary?: string
   /** What it said last — the card's foot. */
@@ -685,9 +706,27 @@ export interface GanttOptions {
   ticks?: number
   /** The key column, in px. Defaults to the longest key, up to 40%. */
   labelWidth?: number
+  /** The duration column, in px — set alike on Gantts stacked over one clock. */
+  durationWidth?: number
   density?: "compact" | "comfortable"
   /** The task picked — a restored view. Picking one sends `select` with its key. */
   selected?: string
+  /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-1" }`. */
+  palette?: Record<string, string>
+  /** Gates — a moment the run held and spent nothing — ruled under the row they follow. */
+  seams?: GanttSeam[]
+}
+
+/** A gate, ruled across the stretch of clock it held. */
+export interface GanttSeam {
+  /** The row it follows, by key. */
+  after: string
+  /** The label column's word — `approval`. */
+  label: string
+  startMs: number
+  durationMs?: number
+  /** Written on the rule — `held for approval`. */
+  note?: string
 }
 
 /** One state a heat strip's square can be in — named in the legend, coloured by its tone. */

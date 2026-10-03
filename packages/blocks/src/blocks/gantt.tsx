@@ -21,11 +21,19 @@ const toTask = ({ open: _open, subtasks, ...task }: GanttTask): TaskGanttTask =>
  * outline. A task that split into others opens into them; one with no timing of
  * its own draws the stretch they cover. Hover a row for what it produced; pick
  * one and it is sent as `select` with the task's key.
+ *
+ * A row's `segments` are many bars on one row — what a worker slot held, what a
+ * layer was reached for — painted by `palette`. A keyed bar is picked on its
+ * own and sent as `select` with its key.
  */
 export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   const [selected, setSelected] = React.useState<string | null>(spec.selected ?? null)
   const [expanded, setExpanded] = React.useState<ExpandedKeys>(() => openKeys(spec.tasks))
   const tasks = React.useMemo(() => spec.tasks.map(toTask), [spec.tasks])
+  const pick = (key: string) => {
+    setSelected(key)
+    onAction?.("select", key)
+  }
 
   return (
     <TaskGantt
@@ -35,18 +43,15 @@ export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
       openEnded={spec.openEnded}
       ticks={spec.ticks}
       labelWidth={spec.labelWidth}
+      durationWidth={spec.durationWidth}
+      palette={spec.palette}
+      seams={spec.seams}
       density={spec.density}
       expanded={expanded}
       onExpandedChange={setExpanded}
       selectedKey={selected}
-      onSelectTask={
-        onAction
-          ? (key) => {
-              setSelected(key)
-              onAction("select", key)
-            }
-          : undefined
-      }
+      onSelectTask={onAction ? pick : undefined}
+      onSelectSegment={onAction ? pick : undefined}
     />
   )
 }
