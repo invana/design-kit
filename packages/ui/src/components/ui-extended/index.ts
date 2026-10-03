@@ -24,6 +24,7 @@ export * from './empty-state';
 export * from './error-boundary';
 export * from './exchange-record';
 export * from './eyebrow';
+export * from './expand-toggle';
 export * from './filter-bar';
 export * from './floating-panel';
 export * from './kind-chip';

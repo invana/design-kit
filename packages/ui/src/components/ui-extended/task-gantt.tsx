@@ -1,8 +1,10 @@
 import * as React from "react"
 
+import { type ExpandedKeys, useExpandedKeys } from "../../hooks/use-expanded-keys"
 import { cn } from "../../lib/utils"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card"
 import { StatusDot } from "../ui/status-dot"
+import { ExpandToggle } from "./expand-toggle"
 import { PropertyList, PropertyRow } from "./property-list"
 
 /**
@@ -64,6 +66,11 @@ export interface TaskGanttTask extends TaskGanttSegment {
   error?: { code?: React.ReactNode; message?: React.ReactNode; detail?: React.ReactNode }
   /** Replaces this row's card body entirely. */
   detail?: React.ReactNode
+  /**
+   * The tasks this one split into, drawn under it, indented, when it is open.
+   * A task with no timing of its own draws the stretch its subtasks cover.
+   */
+  subtasks?: TaskGanttTask[]
 }
 
 /**
@@ -143,6 +150,12 @@ export interface TaskGanttProps
   selectedKey?: string | null
   /** Makes the rows pickable. Picking one is what filters the log. */
   onSelectTask?: (key: string) => void
+  /** Which tasks with `subtasks` are open, by key — `true` for all. Controlled. */
+  expanded?: ExpandedKeys
+  /** Which are open at first, uncontrolled. Closed by default. */
+  defaultExpanded?: ExpandedKeys
+  /** A task opened or closed: every open key, as a `DataTable`'s `expanded` reads. */
+  onExpandedChange?: (expanded: ExpandedKeys) => void
 }
 
 /** The bar's fill. `skipped` and `queued` have none — they draw as an outline. */
@@ -178,10 +191,12 @@ const STATUS_LABEL: Record<TaskGanttStatus, string> = {
   queued: "not started",
 }
 
+/**
+ * Where the card opens. With neither `side` nor `align` it opens beside the
+ * cursor, under the row; set either and it is placed against the row instead.
+ */
 export interface TaskGanttDetailProps {
-  /** @default "right" */
   side?: "top" | "right" | "bottom" | "left"
-  /** @default "start" */
   align?: "start" | "center" | "end"
   sideOffset?: number
   /** @default 200 */
@@ -358,6 +373,74 @@ function place(
   return { start, duration: duration != null && duration > 0 ? duration : 0 }
 }
 
+/** Every task in the tree, parents before their subtasks. */
+const everyTask = (tasks: TaskGanttTask[]): TaskGanttTask[] =>
+  tasks.flatMap((t) => [t, ...everyTask(t.subtasks ?? [])])
+
+type Placed = { start: number; duration: number; status: TaskGanttStatus; title: string | undefined }
+
+/** A task's own bars: its earlier attempts, then the attempt that stuck. */
+const segmentsOf = (task: TaskGanttTask, zero: number | undefined): Placed[] =>
+  [...(task.attempts ?? []), task]
+    .map((seg) => {
+      const at = place(seg, zero)
+      return at
+        ? { ...at, status: seg.status ?? task.status ?? "succeeded", title: seg.title }
+        : null
+    })
+    .filter((s): s is Placed => s !== null)
+
+/** Indent per level of `subtasks`, and the room the open/close control takes. */
+const INDENT = 12
+const TOGGLE = 16
+
+/**
+ * A row's hover card. With no placement asked for it opens beside the cursor —
+ * where the reader is looking — and a little to its right, so moving straight
+ * down to the next row never lands on the card.
+ */
+function RowCard({
+  trigger,
+  detail,
+  detailProps,
+}: {
+  trigger: React.ReactElement
+  detail: React.ReactNode
+  detailProps?: TaskGanttDetailProps
+}) {
+  const x = React.useRef(0)
+  const [offset, setOffset] = React.useState(0)
+  const atCursor = detailProps?.side == null && detailProps?.align == null
+  return (
+    <HoverCard
+      openDelay={detailProps?.openDelay ?? 200}
+      closeDelay={detailProps?.closeDelay ?? 80}
+      onOpenChange={(open) => {
+        if (open) setOffset(x.current)
+      }}
+    >
+      <HoverCardTrigger
+        asChild
+        onPointerMove={(e) => {
+          x.current = e.clientX - e.currentTarget.getBoundingClientRect().left
+        }}
+      >
+        {trigger}
+      </HoverCardTrigger>
+      <HoverCardContent
+        side={detailProps?.side ?? "bottom"}
+        align={detailProps?.align ?? "start"}
+        alignOffset={atCursor ? offset + 16 : undefined}
+        sideOffset={detailProps?.sideOffset ?? (atCursor ? 4 : 8)}
+        style={detailProps?.width != null ? { width: detailProps.width } : undefined}
+        className={cn("w-72 p-3", detailProps?.className)}
+      >
+        {detail}
+      </HoverCardContent>
+    </HoverCard>
+  )
+}
+
 /**
  * Where the time went — one row per task, on the run's own clock.
  *
@@ -370,6 +453,11 @@ function place(
  * line of log per row), the run dashboard (full width, logs off) and the
  * document rendering — so `density` and `showLogs` are props, not three
  * drawings.
+ *
+ * A task that split into others carries them as `subtasks`: it opens into them,
+ * indented under it, and a parent with no timing of its own draws the stretch
+ * its subtasks cover as a thin rule — so a closed plan still says how long it
+ * took.
  *
  * Colour never carries state alone: every row names its duration, the bar
  * titles itself with its status, and a task that never ran is an *outline*
@@ -395,6 +483,9 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       detailProps,
       selectedKey,
       onSelectTask,
+      expanded,
+      defaultExpanded,
+      onExpandedChange,
       className,
       ...props
     },
@@ -402,58 +493,74 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
   ) => {
     const barHeight = density === "compact" ? 11 : 13
 
-    const rows = React.useMemo(() => {
-      const stamps: number[] = []
-      for (const t of [...tasks, ...tasks.flatMap((t) => t.attempts ?? [])]) {
-        if (t.startedAt != null) stamps.push(toMs(t.startedAt))
-      }
-      const zero =
-        origin != null ? toMs(origin) : stamps.length ? Math.min(...stamps) : undefined
-
-      return tasks.map((task) => {
-        const segments = [...(task.attempts ?? []), task]
-          .map((seg) => {
-            const at = place(seg, zero)
-            return at
-              ? { ...at, status: seg.status ?? task.status ?? "succeeded", title: seg.title }
-              : null
-          })
-          .filter((s): s is NonNullable<typeof s> => s !== null)
-        const last = segments[segments.length - 1]
-        return { task, segments, end: last ? last.start + last.duration : 0 }
-      })
-    }, [tasks, origin])
+    const all = React.useMemo(() => everyTask(tasks), [tasks])
+    const parents = all.filter((t) => t.subtasks?.length).map((t) => t.key)
+    const nested = parents.length > 0
+    const { isOpen, toggle } = useExpandedKeys({
+      expanded,
+      defaultExpanded,
+      onExpandedChange,
+      keys: parents,
+    })
 
     const zero = React.useMemo(() => {
       const stamps: number[] = []
-      for (const t of [...tasks, ...tasks.flatMap((t) => t.attempts ?? [])]) {
+      for (const t of [...all, ...all.flatMap((t) => t.attempts ?? [])]) {
         if (t.startedAt != null) stamps.push(toMs(t.startedAt))
       }
       return origin != null ? toMs(origin) : stamps.length ? Math.min(...stamps) : undefined
-    }, [tasks, origin])
+    }, [all, origin])
+
+    /** Each task's bars, and for a parent the stretch everything under it covers. */
+    const placed = React.useMemo(() => {
+      const own = new Map(all.map((t) => [t.key, segmentsOf(t, zero)]))
+      const reach = (t: TaskGanttTask): { start: number; end: number } | null => {
+        const segs = everyTask([t]).flatMap((d) => own.get(d.key) ?? [])
+        if (!segs.length) return null
+        return {
+          start: Math.min(...segs.map((s) => s.start)),
+          end: Math.max(...segs.map((s) => s.start + s.duration)),
+        }
+      }
+      return new Map(
+        all.map((t) => [t.key, { segments: own.get(t.key) ?? [], reach: t.subtasks?.length ? reach(t) : null }]),
+      )
+    }, [all, zero])
+
+    /** The rows on screen: every task whose parents are all open, with its depth. */
+    const rows: { task: TaskGanttTask; depth: number }[] = []
+    const walk = (list: TaskGanttTask[], depth: number) => {
+      for (const task of list) {
+        rows.push({ task, depth })
+        if (task.subtasks?.length && isOpen(task.key)) walk(task.subtasks, depth + 1)
+      }
+    }
+    walk(tasks, 0)
+
     const placedSeams = seams
       .map((seam) => ({ seam, at: place(seam, zero) }))
       .filter((s) => s.at !== null) as { seam: TaskGanttSeam; at: { start: number; duration: number } }[]
 
+    const ends = [...placed.values()].flatMap((p) => p.segments.map((s) => s.start + s.duration))
     const span = Math.max(
       spanMs ??
         Math.max(
           nowMs ?? 0,
-          ...rows.map((r) => r.end),
+          ...ends,
           ...placedSeams.map((s) => s.at.start + s.at.duration),
         ),
       1,
     )
 
-    // Which rows a bracket holds, and which bracket opens on which row.
-    const inBracket = new Set<string>()
+    // Which rows a bracket holds, and which bracket opens on which row — of the rows on screen.
+    const inBracket = new Set<number>()
     const opens = new Map<string, TaskGanttBracket>()
     for (const b of brackets) {
-      const from = tasks.findIndex((t) => t.key === b.from)
-      const to = tasks.findIndex((t, i) => i >= from && t.key === b.to)
+      const from = rows.findIndex((r) => r.task.key === b.from)
+      const to = rows.findIndex((r, i) => i >= from && r.task.key === b.to)
       if (from < 0 || to < 0) continue
-      opens.set(tasks[from].key, b)
-      for (let i = from; i <= to; i++) inBracket.add(`${i}`)
+      opens.set(rows[from].task.key, b)
+      for (let i = from; i <= to; i++) inBracket.add(i)
     }
     const seamsAfter = (key: string) => placedSeams.filter((s) => s.seam.after === key)
     const pct = (ms: number) => `${Math.max(0, Math.min(100, (ms / span) * 100))}%`
@@ -516,70 +623,86 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
           </span>
         </div>
 
-        {rows.map(({ task, segments }, index) => {
-          const neverRan = segments.length === 0
+        {rows.map(({ task, depth }, index) => {
+          const { segments, reach } = placed.get(task.key)!
+          const kids = (task.subtasks?.length ?? 0) > 0
+          const open = kids && isOpen(task.key)
+          const neverRan = segments.length === 0 && reach == null
           const selected = selectedKey != null && selectedKey === task.key
-          const bracketed = inBracket.has(`${index}`)
+          const bracketed = inBracket.has(index)
           const pickable = onSelectTask != null
           // A running task has no `durationMs` of its own yet: what it has spent so
-          // far is the segment drawn up to the *now* line.
-          const elapsed = task.durationMs ?? segments[segments.length - 1]?.duration
+          // far is the segment drawn up to the *now* line. A parent with no bar of
+          // its own has spent what its subtasks cover.
+          const elapsed =
+            task.durationMs ??
+            segments[segments.length - 1]?.duration ??
+            (reach ? reach.end - reach.start : undefined)
           const duration =
             task.duration ?? (neverRan || elapsed == null ? "—" : formatDuration(elapsed))
 
           const detail = detailFor(task, elapsed)
 
           const row = (
-            <>
-              <div className="col-span-full grid grid-cols-subgrid items-center py-[3px]">
-                <span
-                  className={cn(
-                    "min-w-0 truncate font-mono text-sm",
-                    neverRan && "text-muted-foreground",
-                  )}
-                  title={task.key}
-                >
-                  {task.label ?? task.key}
-                </span>
+            <div className="col-span-full grid grid-cols-subgrid items-center py-[3px]">
+              <span
+                className={cn(
+                  "min-w-0 truncate font-mono text-sm",
+                  neverRan && "text-muted-foreground",
+                )}
+                style={nested ? { paddingLeft: depth * INDENT + TOGGLE } : undefined}
+                title={task.key}
+              >
+                {task.label ?? task.key}
+              </span>
 
-                {/* The track — the whole clock, so an empty stretch reads as waiting. */}
-                <span
-                  className="relative min-w-0 bg-muted/55"
-                  style={{ height: barHeight }}
-                >
-                  {neverRan ? (
-                    <span className="absolute inset-0 border border-dashed border-border" />
-                  ) : (
-                    segments.map((seg, i) => (
-                      <span
-                        key={i}
-                        title={
-                          seg.title ??
-                          `${task.key} · ${seg.status} · ${formatDuration(seg.duration)}`
-                        }
-                        className={cn("absolute inset-y-0 rounded-[1px]", BAR[seg.status])}
-                        style={{
-                          left: pct(seg.start),
-                          width: pct(seg.duration),
-                          minWidth: 2,
-                        }}
-                      />
-                    ))
-                  )}
-                  {nowMs != null ? (
+              {/* The track — the whole clock, so an empty stretch reads as waiting. */}
+              <span
+                className="relative min-w-0 bg-muted/55"
+                style={{ height: barHeight }}
+              >
+                {neverRan ? (
+                  <span className="absolute inset-0 border border-dashed border-border" />
+                ) : segments.length ? (
+                  segments.map((seg, i) => (
                     <span
-                      className="absolute -top-0.5 -bottom-0.5 w-px bg-info/70"
-                      style={{ left: pct(nowMs) }}
-                      aria-hidden
+                      key={i}
+                      title={
+                        seg.title ??
+                        `${task.key} · ${seg.status} · ${formatDuration(seg.duration)}`
+                      }
+                      className={cn("absolute inset-y-0 rounded-[1px]", BAR[seg.status])}
+                      style={{
+                        left: pct(seg.start),
+                        width: pct(seg.duration),
+                        minWidth: 2,
+                      }}
                     />
-                  ) : null}
-                </span>
+                  ))
+                ) : reach ? (
+                  <span
+                    title={`${task.key} · ${task.subtasks!.length} subtasks · ${formatDuration(reach.end - reach.start)}`}
+                    className="absolute top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-foreground/45"
+                    style={{
+                      left: pct(reach.start),
+                      width: pct(reach.end - reach.start),
+                      minWidth: 2,
+                    }}
+                  />
+                ) : null}
+                {nowMs != null ? (
+                  <span
+                    className="absolute -top-0.5 -bottom-0.5 w-px bg-info/70"
+                    style={{ left: pct(nowMs) }}
+                    aria-hidden
+                  />
+                ) : null}
+              </span>
 
-                <span className="text-right font-mono text-sm text-muted-foreground tabular-nums">
-                  {duration}
-                </span>
-              </div>
-            </>
+              <span className="text-right font-mono text-sm text-muted-foreground tabular-nums">
+                {duration}
+              </span>
+            </div>
           )
 
           const trigger = pickable ? (
@@ -588,7 +711,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
               aria-pressed={selected}
               onClick={() => onSelectTask(task.key)}
               className={cn(
-                "col-span-full grid cursor-pointer grid-cols-subgrid text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                "col-span-full row-start-1 grid cursor-pointer grid-cols-subgrid text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
                 "hover:bg-accent/60",
                 bracketed && !selected && "bg-warning/5",
                 selected && "bg-accent",
@@ -599,7 +722,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
           ) : (
             <div
               className={cn(
-                "col-span-full grid grid-cols-subgrid",
+                "col-span-full row-start-1 grid grid-cols-subgrid",
                 bracketed && "bg-warning/5",
                 detail != null && "hover:bg-accent/60",
               )}
@@ -608,73 +731,72 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
             </div>
           )
 
-          const bracket = opens.get(task.key)
-          const before = bracket ? (
-            <div
-              className="col-span-full truncate border-l-2 bg-warning/10 px-2 py-0.5 font-mono text-sm font-medium text-warning"
-              // The kit's build emits no `border-<colour>` utility (see the card).
-              style={{ borderColor: "var(--color-warning)" }}
-            >
-              {bracket.label}
-            </div>
-          ) : null
-          const after = seamsAfter(task.key).map(({ seam, at }, i) => (
-            <div
-              key={`seam-${i}`}
-              className="col-span-full grid grid-cols-subgrid items-center py-[3px]"
-            >
-              <span className="min-w-0 truncate font-mono text-sm font-medium text-destructive">
-                {seam.label}
-              </span>
-              <span className="relative min-w-0" style={{ height: barHeight }}>
-                <span
-                  className="absolute top-1/2 border-t-2 border-dashed"
-                  style={{
-                    left: pct(at.start),
-                    width: pct(at.duration),
-                    borderColor: "var(--color-destructive)",
-                  }}
+          // The open/close control sits over the label cell, beside the row
+          // rather than in it, so it is never a button inside the pick button.
+          const line = (
+            <div className="col-span-full grid grid-cols-subgrid">
+              {detail == null ? (
+                trigger
+              ) : (
+                <RowCard trigger={trigger} detail={detail} detailProps={detailProps} />
+              )}
+              {kids ? (
+                <ExpandToggle
+                  open={open}
+                  label={task.key}
+                  onClick={() => toggle(task.key)}
+                  className="z-10 col-start-1 row-start-1 self-center justify-self-start"
+                  style={{ marginLeft: depth * INDENT }}
                 />
-                {seam.note != null ? (
-                  <span
-                    className="absolute top-1/2 max-w-full -translate-x-1/2 -translate-y-1/2 truncate bg-card px-1.5 text-sm text-destructive"
-                    style={{ left: pct(at.start + at.duration / 2) }}
-                  >
-                    {seam.note}
-                  </span>
-                ) : null}
-              </span>
-              <span className="text-right font-mono text-sm text-destructive tabular-nums">
-                {seam.duration ?? formatDuration(at.duration)}
-              </span>
+              ) : null}
             </div>
-          ))
-          const wrap = (node: React.ReactNode) => (
-            <React.Fragment key={task.key}>
-              {before}
-              {node}
-              {after}
-            </React.Fragment>
           )
 
-          if (detail == null) return wrap(trigger)
-
-          return wrap(
-            <HoverCard
-              openDelay={detailProps?.openDelay ?? 200}
-              closeDelay={detailProps?.closeDelay ?? 80}
-            >
-              <HoverCardTrigger asChild>{trigger}</HoverCardTrigger>
-              <HoverCardContent
-                side={detailProps?.side ?? "right"}
-                align={detailProps?.align ?? "start"}
-                sideOffset={detailProps?.sideOffset ?? 8}
-                style={detailProps?.width != null ? { width: detailProps.width } : undefined}
-                className={cn("w-72 p-3", detailProps?.className)}
-              >
-                {detail}
-              </HoverCardContent>
-            </HoverCard>
+          const bracket = opens.get(task.key)
+          return (
+            <React.Fragment key={task.key}>
+              {bracket ? (
+                <div
+                  className="col-span-full truncate border-l-2 bg-warning/10 px-2 py-0.5 font-mono text-sm font-medium text-warning"
+                  // The kit's build emits no `border-<colour>` utility (see the card).
+                  style={{ borderColor: "var(--color-warning)" }}
+                >
+                  {bracket.label}
+                </div>
+              ) : null}
+              {line}
+              {seamsAfter(task.key).map(({ seam, at }, i) => (
+                <div
+                  key={`seam-${i}`}
+                  className="col-span-full grid grid-cols-subgrid items-center py-[3px]"
+                >
+                  <span className="min-w-0 truncate font-mono text-sm font-medium text-destructive">
+                    {seam.label}
+                  </span>
+                  <span className="relative min-w-0" style={{ height: barHeight }}>
+                    <span
+                      className="absolute top-1/2 border-t-2 border-dashed"
+                      style={{
+                        left: pct(at.start),
+                        width: pct(at.duration),
+                        borderColor: "var(--color-destructive)",
+                      }}
+                    />
+                    {seam.note != null ? (
+                      <span
+                        className="absolute top-1/2 max-w-full -translate-x-1/2 -translate-y-1/2 truncate bg-card px-1.5 text-sm text-destructive"
+                        style={{ left: pct(at.start + at.duration / 2) }}
+                      >
+                        {seam.note}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="text-right font-mono text-sm text-destructive tabular-nums">
+                    {seam.duration ?? formatDuration(at.duration)}
+                  </span>
+                </div>
+              ))}
+            </React.Fragment>
           )
         })}
       </div>
