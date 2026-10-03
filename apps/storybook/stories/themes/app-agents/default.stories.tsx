@@ -202,7 +202,7 @@ function SessionCrumb() {
           menuItems: FIXTURE.sessions
             .filter((name) => name !== active)
             .map((name) => ({ id: name, label: name, onSelect: () => setActive(name) })),
-          className: '!p-0 font-bold text-foreground hover:!bg-transparent hover:text-primary',
+          className: '!p-0 font-bold',
         },
       ]}
     />
