@@ -37,6 +37,7 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | Grammar ids | `packages/assistant/src/grammar/` | new | done | today |
 | User conversations (session + runs) | `packages/assistant/src/data/conversations/` | new | done | today |
 | Placeholder | `packages/assistant/src/conversations/placeholder.tsx` | new | done | today |
+| ChatSession `header` takes a node (the host's header in place of the session's own); spec carries `agent`, `access`, `budget`, `governance` and `set-records` for it | `packages/assistant/src/styles/chat-session.tsx` | extend | done | today |
 
 ### Thread parts, moved from ui into conversations/
 
@@ -140,6 +141,7 @@ Nothing moves out. Files stay flat in charts/src, one per chart. uPlot through C
 | QuantileStrip | `packages/charts/src/quantile-strip.tsx` | new | todo | today |
 | SmallMultiples | `packages/charts/src/small-multiples.tsx` | new | todo | next |
 | ColumnProfile | `packages/charts/src/column-profile.tsx` | new | todo | next |
+| HeatLane (busyness over time, hollow / idle, refused and egress marks, pin) | `packages/charts/src/heat-lane.tsx` | new | done | today |
 
 ### New, statistical
 
@@ -230,6 +232,15 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | EvidenceBadge | `packages/ui/src/components/ui-extended/evidence-badge.tsx` | new | todo | next |
 | formatValue | `packages/ui/src/lib/format.ts` | new | todo | today |
 | Value | `packages/ui/src/components/ui-extended/value.tsx` | new | todo | today |
+| AgentHeader (session, agent, status; data reach, lens, token budget, governance) | `packages/ui/src/components/ui-extended/agent-header.tsx` | new | done | today |
+| DataReach (models, live records, access, slice; request access) | `packages/ui/src/components/ui-extended/data-reach.tsx` | new | done | today |
+
+### New panels
+
+| Component | Folder | Change | Status | Tier |
+| --- | --- | --- | --- | --- |
+| FloatingPanel (folds to its bar, closes) | `packages/ui/src/components/ui-extended/floating-panel.tsx` | new | done | today |
+| LogCard (level, words, source; pause) | `packages/ui/src/components/ui-extended/log-card.tsx` | new | done | today |
 
 ### Extensions
 
@@ -262,7 +273,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/dashboard | `RecordDescription`, `StagedBar`, `AttemptClock` move from ui: only the dashboard draws them | `packages/dashboard/src/parts/` | move | done | today |
 | @invana/dashboard | One trace: `RUN_PANELS`' `trace` and the `trace` block are one idea in two shapes; the registered one wins today | `packages/dashboard/src/panels/run.tsx` | change | todo | next |
 | @invana/editor | Rendered markdown | `packages/editor/src/` | later | todo | later |
-| @invana/themes | None | `packages/themes/src/` | stays | done | today |
+| @invana/themes | `AppLayoutAgents` `overlay`: panels floating over the work, top right | `packages/themes/src/app-agents/layout.tsx` | extend | done | today |
 | apps/storybook | Assistant section | `apps/storybook/stories/assistant/` | new | done | today |
 | release.yml | dist-branches matrix | `.github/workflows/release.yml` | extend | done | today |
 
@@ -325,6 +336,7 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board o
 | scope | `{ parts[] }` | ScopeLine · ui | `blocks/scope.tsx` | done | today | 1 |
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `blocks/checks.tsx` | todo | next | – |
 | trace | `{ steps[] }` | TraceList · ui | `blocks/trace.tsx` | done | today | 3 |
+| activity | `{ lanes[], bands?, axis?, pinned?, state? }` | HeatLane · charts | `blocks/activity.tsx` | done | today | – |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · blocks | `blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `blocks/coef.tsx` | todo | next | 5 |
 | forest (proposed) | `{ rows[label, est, lo, hi], nullAt }` | ForestPlot · charts | `blocks/forest.tsx` | todo | next | 5 |
