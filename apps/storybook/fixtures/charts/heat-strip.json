@@ -42,6 +42,36 @@
     }
   },
   {
+    "caption": "Rows · an agent opened into its tasks",
+    "width": 420,
+    "props": {
+      "labelWidth": 150,
+      "defaultExpanded": { "researcher": true },
+      "rows": [
+        { "key": "planner", "label": "planner", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] },
+        { "key": "researcher", "label": "researcher", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "skipped" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "failed" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }], "children": [
+          { "key": "fetch_prices", "label": "fetch_prices", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] },
+          { "key": "fetch_filings", "label": "fetch_filings", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "failed" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }], "children": [
+            { "key": "fetch_filings.page", "label": "page fetch", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "failed" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] },
+            { "key": "fetch_filings.parse", "label": "parse", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "skipped" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] }
+          ] },
+          { "key": "fetch_news", "label": "fetch_news", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "skipped" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] }
+        ] },
+        { "key": "analyst", "label": "analyst", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "cannot" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }], "children": [
+          { "key": "analyse.margins", "label": "analyse.margins", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "served" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] },
+          { "key": "analyse.risk", "label": "analyse.risk", "cells": [{ "at": "9:00", "state": "served" }, { "at": "9:15", "state": "served" }, { "at": "9:30", "state": "served" }, { "at": "9:45", "state": "served" }, { "at": "10:00", "state": "served" }, { "at": "10:15", "state": "served" }, { "at": "10:30", "state": "served" }, { "at": "10:45", "state": "cannot" }, { "at": "11:00", "state": "served" }, { "at": "11:15", "state": "served" }, { "at": "11:30", "state": "served" }, { "at": "11:45", "state": "served" }] }
+        ] }
+      ],
+      "states": [
+        { "key": "served", "label": "served", "color": "var(--color-success)" },
+        { "key": "skipped", "label": "skipped · overlap", "color": "var(--color-muted-foreground)" },
+        { "key": "cannot", "label": "cannot answer", "color": "var(--color-warning)", "hollow": true },
+        { "key": "failed", "label": "failed", "color": "var(--color-destructive)" }
+      ],
+      "ticks": [{ "at": 0, "label": "09" }, { "at": 4, "label": "10" }, { "at": 8, "label": "11" }]
+    }
+  },
+  {
     "caption": "Live · each firing lands",
     "props": {
       "cells": [

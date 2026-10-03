@@ -1,0 +1,362 @@
+[
+  {
+    "caption": "A run · a retry, a skip, a failure",
+    "turn": {
+      "id": "g1",
+      "label": "gantt",
+      "title": "where the time went",
+      "aside": "5.9 s"
+    },
+    "spec": {
+      "tasks": [
+        {
+          "key": "check_bundle",
+          "startMs": 0,
+          "durationMs": 40,
+          "status": "succeeded"
+        },
+        {
+          "key": "fetch_source",
+          "startMs": 40,
+          "durationMs": 900,
+          "status": "succeeded",
+          "attempts": [
+            {
+              "startMs": 40,
+              "durationMs": 310,
+              "status": "failed",
+              "title": "fetch_source · attempt 1 · 503 from the source"
+            }
+          ],
+          "summary": "Brokerage orders, 1 day",
+          "result": {
+            "rows": 1251
+          },
+          "log": "1,251 rows after one retry"
+        },
+        {
+          "key": "validate_records",
+          "startMs": 950,
+          "durationMs": 1200,
+          "status": "succeeded",
+          "result": {
+            "valid": 1204,
+            "rejected": 47
+          }
+        },
+        {
+          "key": "import_dataset",
+          "startMs": 2150,
+          "durationMs": 3400,
+          "status": "succeeded",
+          "result": {
+            "rows": 1204
+          }
+        },
+        {
+          "key": "triage",
+          "status": "skipped",
+          "summary": "nothing to triage"
+        },
+        {
+          "key": "announce",
+          "startMs": 5600,
+          "durationMs": 300,
+          "status": "failed",
+          "error": {
+            "code": "channel_closed",
+            "message": "#ops-imports no longer exists"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Nested · the plan opened",
+    "wide": true,
+    "turn": {
+      "id": "g2",
+      "label": "gantt",
+      "title": "market brief · 21 s",
+      "aside": "11 tasks · 2 failed"
+    },
+    "spec": {
+      "tasks": [
+        {
+          "key": "plan",
+          "startMs": 0,
+          "durationMs": 1800,
+          "status": "succeeded",
+          "summary": "split the brief into 8 tasks",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "fetch_prices",
+              "startMs": 1900,
+              "durationMs": 2600,
+              "status": "succeeded",
+              "result": {
+                "rows": 2520
+              }
+            },
+            {
+              "key": "fetch_filings",
+              "startMs": 9400,
+              "durationMs": 3100,
+              "status": "succeeded",
+              "attempts": [
+                {
+                  "startMs": 1900,
+                  "durationMs": 1400,
+                  "status": "failed",
+                  "title": "fetch_filings · attempt 1 · 429 rate limited"
+                }
+              ],
+              "log": "retried on slot-2 after 6 s"
+            },
+            {
+              "key": "fetch_news",
+              "startMs": 1900,
+              "durationMs": 4100,
+              "status": "succeeded"
+            },
+            {
+              "key": "fetch_ratings",
+              "startMs": 4600,
+              "durationMs": 1900,
+              "status": "succeeded"
+            },
+            {
+              "key": "fetch_fx",
+              "startMs": 6100,
+              "durationMs": 800,
+              "status": "succeeded"
+            },
+            {
+              "key": "analyse",
+              "startMs": 12600,
+              "durationMs": 1200,
+              "status": "failed",
+              "summary": "split into margins and risk",
+              "subtasks": [
+                {
+                  "key": "analyse.margins",
+                  "startMs": 13900,
+                  "durationMs": 3300,
+                  "status": "succeeded"
+                },
+                {
+                  "key": "analyse.risk",
+                  "startMs": 13900,
+                  "durationMs": 2100,
+                  "status": "failed",
+                  "error": {
+                    "code": "schema_mismatch",
+                    "message": "ratings.consensus is a string, expected a number"
+                  }
+                }
+              ]
+            },
+            {
+              "key": "write",
+              "startMs": 17300,
+              "durationMs": 2900,
+              "status": "succeeded"
+            },
+            {
+              "key": "verify",
+              "startMs": 20300,
+              "durationMs": 700,
+              "status": "succeeded"
+            }
+          ]
+        }
+      ],
+      "spanMs": 21000,
+      "ticks": 7,
+      "labelWidth": 140
+    }
+  },
+  {
+    "caption": "Parents with no clock of their own",
+    "turn": {
+      "id": "g3",
+      "label": "gantt",
+      "title": "import · 5.7 s"
+    },
+    "spec": {
+      "tasks": [
+        {
+          "key": "ingest",
+          "label": "ingest · 3 lanes",
+          "summary": "three lanes, no clock of their own",
+          "subtasks": [
+            {
+              "key": "lane_eu",
+              "startMs": 0,
+              "durationMs": 2100,
+              "status": "succeeded"
+            },
+            {
+              "key": "lane_us",
+              "startMs": 300,
+              "durationMs": 3900,
+              "status": "succeeded"
+            },
+            {
+              "key": "lane_apac",
+              "startMs": 900,
+              "durationMs": 1700,
+              "status": "succeeded"
+            }
+          ]
+        },
+        {
+          "key": "report",
+          "label": "report · 2 files",
+          "subtasks": [
+            {
+              "key": "render_xlsx",
+              "startMs": 4300,
+              "durationMs": 1400,
+              "status": "succeeded"
+            },
+            {
+              "key": "render_csv",
+              "startMs": 4300,
+              "durationMs": 400,
+              "status": "succeeded"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "caption": "In flight",
+    "turn": {
+      "id": "g4",
+      "label": "gantt",
+      "title": "market brief",
+      "aside": "running · 7 s"
+    },
+    "spec": {
+      "tasks": [
+        {
+          "key": "plan",
+          "startMs": 0,
+          "durationMs": 1800,
+          "status": "succeeded",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "fetch_prices",
+              "startMs": 1900,
+              "durationMs": 2600,
+              "status": "succeeded"
+            },
+            {
+              "key": "fetch_filings",
+              "startMs": 1900,
+              "durationMs": 5100,
+              "status": "running",
+              "log": "page 4 of 9"
+            },
+            {
+              "key": "fetch_news",
+              "startMs": 1900,
+              "durationMs": 5100,
+              "status": "running"
+            },
+            {
+              "key": "fetch_fx",
+              "status": "queued",
+              "summary": "waiting for a slot"
+            },
+            {
+              "key": "analyse",
+              "status": "queued",
+              "summary": "waits on all five fetches"
+            }
+          ]
+        }
+      ],
+      "nowMs": 7000,
+      "openEnded": true
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": {
+      "id": "g5",
+      "label": "gantt",
+      "title": "where the time went"
+    },
+    "spec": {
+      "tasks": [
+        {
+          "key": "check_bundle",
+          "startMs": 0,
+          "durationMs": 40,
+          "status": "succeeded"
+        },
+        {
+          "key": "fetch_source",
+          "startMs": 40,
+          "durationMs": 900,
+          "status": "succeeded",
+          "attempts": [
+            {
+              "startMs": 40,
+              "durationMs": 310,
+              "status": "failed",
+              "title": "fetch_source · attempt 1 · 503 from the source"
+            }
+          ],
+          "summary": "Brokerage orders, 1 day",
+          "result": {
+            "rows": 1251
+          },
+          "log": "1,251 rows after one retry"
+        },
+        {
+          "key": "validate_records",
+          "startMs": 950,
+          "durationMs": 1200,
+          "status": "succeeded",
+          "result": {
+            "valid": 1204,
+            "rejected": 47
+          }
+        },
+        {
+          "key": "import_dataset",
+          "startMs": 2150,
+          "durationMs": 3400,
+          "status": "succeeded",
+          "result": {
+            "rows": 1204
+          }
+        },
+        {
+          "key": "triage",
+          "status": "skipped",
+          "summary": "nothing to triage"
+        },
+        {
+          "key": "announce",
+          "startMs": 5600,
+          "durationMs": 300,
+          "status": "failed",
+          "error": {
+            "code": "channel_closed",
+            "message": "#ops-imports no longer exists"
+          }
+        }
+      ],
+      "density": "compact",
+      "ticks": 3
+    }
+  }
+]

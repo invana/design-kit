@@ -17,6 +17,7 @@ import { columnsSource } from "../columns";
 import {
   EVENTS,
   TASK_KEYS,
+  everyTask,
   formatMs,
   formatOffset,
   ganttTasks,
@@ -37,7 +38,7 @@ type TreeRow = {
   children?: TreeRow[];
 };
 
-const TASKS = new Map(ganttTasks().map((t) => [t.key, t]));
+const TASKS = new Map(everyTask(ganttTasks()).map((t) => [t.key, t]));
 const PARENT = new Map(
   EVENTS.filter((e) => e.taskKey).map((e) => [e.taskKey!, e.parentKey]),
 );

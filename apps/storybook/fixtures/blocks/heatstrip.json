@@ -1,0 +1,793 @@
+[
+  {
+    "caption": "One strip · a schedule's day",
+    "turn": {
+      "id": "h1",
+      "label": "heatstrip",
+      "title": "Apex watch · today",
+      "aside": "21 firings"
+    },
+    "spec": {
+      "states": [
+        {
+          "key": "served",
+          "label": "served",
+          "tone": "good"
+        },
+        {
+          "key": "skipped",
+          "label": "skipped · overlap"
+        },
+        {
+          "key": "cannot",
+          "label": "cannot answer",
+          "tone": "warn",
+          "hollow": true
+        },
+        {
+          "key": "failed",
+          "label": "failed",
+          "tone": "bad"
+        }
+      ],
+      "cells": [
+        {
+          "at": "9:00",
+          "state": "served"
+        },
+        {
+          "at": "9:15",
+          "state": "served"
+        },
+        {
+          "at": "9:30",
+          "state": "served"
+        },
+        {
+          "at": "9:45",
+          "state": "served"
+        },
+        {
+          "at": "10:00",
+          "state": "served"
+        },
+        {
+          "at": "10:15",
+          "state": "skipped"
+        },
+        {
+          "at": "10:30",
+          "state": "served"
+        },
+        {
+          "at": "10:45",
+          "state": "served"
+        },
+        {
+          "at": "11:00",
+          "state": "served"
+        },
+        {
+          "at": "11:15",
+          "state": "served"
+        },
+        {
+          "at": "11:30",
+          "state": "served"
+        },
+        {
+          "at": "11:45",
+          "state": "served"
+        },
+        {
+          "at": "12:00",
+          "state": "served"
+        },
+        {
+          "at": "12:15",
+          "state": "cannot",
+          "detail": "2 names: BPCL, HINDPETRO"
+        },
+        {
+          "at": "12:30",
+          "state": "served"
+        },
+        {
+          "at": "12:45",
+          "state": "served"
+        },
+        {
+          "at": "13:00",
+          "state": "served"
+        },
+        {
+          "at": "13:15",
+          "state": "served"
+        },
+        {
+          "at": "13:30",
+          "state": "failed"
+        },
+        {
+          "at": "13:45",
+          "state": "served"
+        },
+        {
+          "at": "14:00",
+          "state": "served"
+        }
+      ],
+      "ticks": [
+        {
+          "at": 0,
+          "label": "09"
+        },
+        {
+          "at": 4,
+          "label": "10"
+        },
+        {
+          "at": 8,
+          "label": "11"
+        },
+        {
+          "at": 12,
+          "label": "12"
+        },
+        {
+          "at": 16,
+          "label": "13"
+        },
+        {
+          "at": 20,
+          "label": "14"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Rows · a schedule opened into its jobs",
+    "wide": true,
+    "turn": {
+      "id": "h2",
+      "label": "heatstrip",
+      "title": "Monday report · 12 weeks",
+      "aside": "11 of 12 on time"
+    },
+    "spec": {
+      "states": [
+        {
+          "key": "ok",
+          "label": "on time",
+          "tone": "good"
+        },
+        {
+          "key": "retried",
+          "label": "retried",
+          "tone": "warn"
+        },
+        {
+          "key": "late",
+          "label": "late",
+          "tone": "bad"
+        },
+        {
+          "key": "off",
+          "label": "did not run",
+          "hollow": true
+        }
+      ],
+      "ticks": [
+        {
+          "at": 0,
+          "label": "Jun"
+        },
+        {
+          "at": 4,
+          "label": "Jul"
+        },
+        {
+          "at": 8,
+          "label": "Aug"
+        }
+      ],
+      "rows": [
+        {
+          "id": "report",
+          "label": "Monday report",
+          "cells": [
+            {
+              "at": "8 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "15 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "22 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "29 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "6 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "13 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "20 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "27 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "3 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "10 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "17 Aug",
+              "state": "late",
+              "detail": "sent 08:09 · 9 min late"
+            },
+            {
+              "at": "24 Aug",
+              "state": "ok"
+            }
+          ],
+          "open": true,
+          "children": [
+            {
+              "id": "refresh",
+              "label": "Refresh lead times",
+              "cells": [
+                {
+                  "at": "8 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "15 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "22 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "29 Jun",
+                  "state": "retried",
+                  "detail": "Apex API 429 · retried after 2 min"
+                },
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "retried",
+                  "detail": "Apex API 429 · retried after 7 min"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ]
+            },
+            {
+              "id": "scenario",
+              "label": "Build scenario",
+              "cells": [
+                {
+                  "at": "8 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "15 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "22 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "29 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ]
+            },
+            {
+              "id": "send",
+              "label": "Send",
+              "cells": [
+                {
+                  "at": "8 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "15 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "22 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "29 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "late",
+                  "detail": "08:09"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ],
+              "children": [
+                {
+                  "id": "send.me",
+                  "label": "to you",
+                  "cells": [
+                    {
+                      "at": "8 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "15 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "22 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "29 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "6 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "13 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "20 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "27 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "3 Aug",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "10 Aug",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "17 Aug",
+                      "state": "late"
+                    },
+                    {
+                      "at": "24 Aug",
+                      "state": "ok"
+                    }
+                  ]
+                },
+                {
+                  "id": "send.lead",
+                  "label": "to the procurement lead",
+                  "cells": [
+                    {
+                      "at": "8 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "15 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "22 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "29 Jun",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "6 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "13 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "20 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "27 Jul",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "3 Aug",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "10 Aug",
+                      "state": "ok"
+                    },
+                    {
+                      "at": "17 Aug",
+                      "state": "late"
+                    },
+                    {
+                      "at": "24 Aug",
+                      "state": "ok"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "alert",
+          "label": "Apex on-time alert",
+          "cells": [
+            {
+              "at": "8 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "15 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "22 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "29 Jun",
+              "state": "ok"
+            },
+            {
+              "at": "6 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "13 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "20 Jul",
+              "state": "off",
+              "detail": "paused for the holiday"
+            },
+            {
+              "at": "27 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "3 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "10 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "17 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "24 Aug",
+              "state": "ok"
+            }
+          ],
+          "children": [
+            {
+              "id": "alert.check",
+              "label": "Check on-time %",
+              "cells": [
+                {
+                  "at": "8 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "15 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "22 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "29 Jun",
+                  "state": "ok"
+                },
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "off"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": {
+      "id": "h3",
+      "label": "heatstrip",
+      "title": "Monday report"
+    },
+    "spec": {
+      "states": [
+        {
+          "key": "ok",
+          "label": "on time",
+          "tone": "good"
+        },
+        {
+          "key": "retried",
+          "label": "retried",
+          "tone": "warn"
+        },
+        {
+          "key": "late",
+          "label": "late",
+          "tone": "bad"
+        },
+        {
+          "key": "off",
+          "label": "did not run",
+          "hollow": true
+        }
+      ],
+      "rows": [
+        {
+          "id": "report",
+          "label": "Report",
+          "cells": [
+            {
+              "at": "6 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "13 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "20 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "27 Jul",
+              "state": "ok"
+            },
+            {
+              "at": "3 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "10 Aug",
+              "state": "ok"
+            },
+            {
+              "at": "17 Aug",
+              "state": "late"
+            },
+            {
+              "at": "24 Aug",
+              "state": "ok"
+            }
+          ],
+          "children": [
+            {
+              "id": "refresh",
+              "label": "Refresh",
+              "cells": [
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "retried"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ]
+            },
+            {
+              "id": "send",
+              "label": "Send",
+              "cells": [
+                {
+                  "at": "6 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "13 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "20 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "27 Jul",
+                  "state": "ok"
+                },
+                {
+                  "at": "3 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "10 Aug",
+                  "state": "ok"
+                },
+                {
+                  "at": "17 Aug",
+                  "state": "late"
+                },
+                {
+                  "at": "24 Aug",
+                  "state": "ok"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

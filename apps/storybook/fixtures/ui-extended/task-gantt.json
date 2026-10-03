@@ -5,7 +5,7 @@
     "title": "Performance",
     "aside": "6.3s",
     "selected": "import_dataset",
-    "detailProps": { "side": "right", "align": "start", "width": 320 },
+    "detailProps": { "width": 320 },
     "tasks": [
       { "key": "check_bundle", "status": "succeeded", "startMs": 0, "durationMs": 4, "result": { "datasets": 1, "manifest": "orders-2026-09.yaml" }, "log": "manifest read · 1 dataset" },
       {
@@ -135,6 +135,42 @@
         "summary": "two suppliers matched no route — which one did you mean?",
         "result": { "tokens_in": 4210, "tokens_out": 380, "model": "claude-opus-5" },
         "log": "asked back · awaiting an answer"
+      }
+    ]
+  },
+  {
+    "caption": "Nested — subtasks under the task that split them",
+    "width": 460,
+    "title": "Market brief",
+    "aside": "21s · 11 tasks",
+    "selected": null,
+    "spanMs": 21000,
+    "ticks": 7,
+    "labelWidth": 150,
+    "defaultExpanded": { "plan": true },
+    "tasks": [
+      {
+        "key": "plan",
+        "status": "succeeded",
+        "startMs": 0,
+        "durationMs": 1800,
+        "summary": "split the brief into 8 tasks",
+        "subtasks": [
+          { "key": "fetch_prices", "status": "succeeded", "startMs": 1900, "durationMs": 2600, "result": { "rows": 2520 } },
+          { "key": "fetch_filings", "status": "succeeded", "startMs": 9400, "durationMs": 3100, "attempts": [{ "startMs": 1900, "durationMs": 1400, "status": "failed", "title": "429 rate limited · retried on slot-2" }], "log": "retried after 6s" },
+          { "key": "fetch_news", "status": "succeeded", "startMs": 1900, "durationMs": 4100 },
+          {
+            "key": "analyse",
+            "summary": "no clock of its own — the stretch its two subtasks cover",
+            "status": "failed",
+            "subtasks": [
+              { "key": "analyse.margins", "status": "succeeded", "startMs": 13900, "durationMs": 3300 },
+              { "key": "analyse.risk", "status": "failed", "startMs": 13900, "durationMs": 2100, "error": { "code": "schema_mismatch", "message": "ratings.consensus is a string, expected a number" } }
+            ]
+          },
+          { "key": "write", "status": "succeeded", "startMs": 17300, "durationMs": 2900 },
+          { "key": "verify", "status": "succeeded", "startMs": 20300, "durationMs": 700 }
+        ]
       }
     ]
   },

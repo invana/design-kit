@@ -12,6 +12,7 @@ import {
   EVENTS,
   RUN_SPAN_MS,
   eventsUntil,
+  everyTask,
   formatOffset,
   ganttTasks,
   slotLaneTasks,
@@ -108,16 +109,17 @@ function Live({ log, onRowClick, onSpeedChange }: Args & { log: Log }) {
       </Button>
       <PanelBox
         title="Timeline"
-        aside={`${formatOffset(now)} · ${tasks.length} tasks · ${seen.length} of ${EVENTS.length} events`}
+        aside={`${formatOffset(now)} · ${everyTask(tasks).length} tasks · ${seen.length} of ${EVENTS.length} events`}
       >
         <TaskGantt
           tasks={tasks}
+          defaultExpanded
           spanMs={RUN_SPAN_MS}
           ticks={9}
           nowMs={replay.done ? undefined : now}
           openEnded={!replay.done}
           showDetail={!replay.playing}
-          labelWidth={132}
+          labelWidth={156}
         />
       </PanelBox>
       <PanelBox title="Worker slots">
@@ -127,7 +129,7 @@ function Live({ log, onRowClick, onSpeedChange }: Args & { log: Log }) {
           ticks={9}
           nowMs={replay.done ? undefined : now}
           showDetail={false}
-          labelWidth={132}
+          labelWidth={156}
         />
       </PanelBox>
       <PanelBox title="Log" aside={`newest first · last ${tail.length} of ${seen.length}`}>
@@ -164,7 +166,7 @@ const meta = {
           setup: [
             'const [now, setNow] = React.useState(0);',
             'const seen = events.filter((e) => e.offsetMs <= now);',
-            'const tasks = ganttTasks(seen);   // one row per task, the attempt in flight running to now',
+            'const tasks = ganttTasks(seen);   // the plan\'s tree of tasks, the attempt in flight running to now',
             'const lanes = slotLanes(seen);    // one row per worker slot',
             '// A click on a log row is the event: jump back to its moment.',
             'const onRowClick = (event) => setNow(event.offsetMs);',
@@ -172,10 +174,10 @@ const meta = {
           call: [
             '<>',
             '  <PanelBox title="Timeline">',
-            `    <TaskGantt tasks={tasks} spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} openEnded labelWidth={132} />`,
+            `    <TaskGantt tasks={tasks} defaultExpanded spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} openEnded labelWidth={156} />`,
             '  </PanelBox>',
             '  <PanelBox title="Worker slots">',
-            `    <TaskGantt tasks={lanes} spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} showDetail={false} labelWidth={132} />`,
+            `    <TaskGantt tasks={lanes} spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} showDetail={false} labelWidth={156} />`,
             '  </PanelBox>',
             '  <PanelBox title="Log">',
             `    ${jsx('DataTable', { columns: 'columns', data: `seen.slice(-${TAIL}).reverse()`, density: { literal: 'compact' }, seamless: 'true', onRowClick: 'onRowClick' }).replace(/\n/g, '\n    ')}`,
@@ -194,8 +196,9 @@ type Story = StoryObj<Args>;
 
 /**
  * The run replayed from its log (`fixtures/data-tables/telemetry-run.json`), so you can watch it
- * happen rather than read it afterwards. Tasks appear as outlines when spawned and fill as they
- * run; the slot lanes show three fetches start at once and the rest queue; the red attempt and
+ * happen rather than read it afterwards. Tasks appear as outlines when spawned — each under the
+ * task that split it, open, so the tree grows as the plan does — and fill as they run; close a
+ * task to fold its subtasks into the stretch they cover. The slot lanes show three fetches start at once and the rest queue; the red attempt and
  * the failure land when they happened; the log tails the newest events.
  *
  * Every view is the same function of the log cut at *now*. **Step** jumps to the next event;

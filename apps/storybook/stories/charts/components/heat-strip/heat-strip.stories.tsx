@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { HeatStrip as Chart, type HeatStripProps } from '@invana/charts';
 
 import data from '../../../../fixtures/charts/heat-strip.json';
@@ -29,6 +30,8 @@ type Story = StoryObj<Args>;
 /**
  * The shape of a schedule's day, one square per firing — from `fixtures/charts/heat-strip.json`.
  * These are status colours, so the legend is mandatory: a square carries no label of its own.
+ * `rows` draws labelled strips over one axis, and a row opens into its `children` — an agent into
+ * its tasks, a task into its steps — so a red square is followed down to the part that went red.
  * Provisional. The live cell lands each firing as it happens.
  */
 export const HeatStrip: Story = {
@@ -45,5 +48,13 @@ export const HeatStrip: Story = {
       )}
     </VariantBoard>
   ),
-  play: async ({ canvasElement }) => checkBoard(canvasElement, VARIANTS, 'firing'),
+  play: async ({ canvasElement, step }) => {
+    await checkBoard(canvasElement, VARIANTS, 'firing');
+    const rows = within(within(canvasElement).getByRole('group', { name: 'Rows · an agent opened into its tasks' }));
+    await step('fetch_filings opens into its steps', async () => {
+      await expect(rows.queryByText('page fetch')).toBeNull();
+      await userEvent.click(rows.getByRole('button', { name: 'Open fetch_filings' }));
+      await expect(rows.getByText('page fetch')).toBeInTheDocument();
+    });
+  },
 };

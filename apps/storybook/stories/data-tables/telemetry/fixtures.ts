@@ -96,17 +96,6 @@ export const TASK_KEYS = TASK_SPECS.map((t) => t.key);
 
 const SPEC = new Map(TASK_SPECS.map((t) => [t.key, t]));
 
-/** How deep a task sits under the plan — 0 for the plan itself. */
-export function taskDepth(key: string | undefined): number {
-  let depth = 0;
-  let parent = key ? SPEC.get(key)?.parent : undefined;
-  while (parent) {
-    depth += 1;
-    parent = SPEC.get(parent)?.parent;
-  }
-  return depth;
-}
-
 // ── The run, as the engine logged it ────────────────────────────────────────
 
 function buildEvents(): TelemetryEvent[] {
@@ -247,9 +236,30 @@ const tokenCount = (detail: string) => {
 /**
  * One Gantt row per task, read off the log up to `nowMs`: a finished attempt
  * is a bar, the attempt in flight runs to *now*, a task spawned but not started
- * is an outline. Subtasks are marked with `└` — `TaskGantt` has no nesting.
+ * is an outline. Each task carries the tasks it split into as `subtasks`, so
+ * the result is the plan's tree — `plan`, its fetches and `analyse`, and
+ * `analyse`'s two — and `TaskGantt` nests it.
  */
 export function ganttTasks(nowMs = Infinity): TaskGanttTask[] {
+  const rows = ganttRows(nowMs);
+  const seen = new Set(rows.map((r) => r.key));
+  const nest = (row: TaskGanttTask): TaskGanttTask => {
+    const kids = rows.filter((r) => SPEC.get(r.key)?.parent === row.key);
+    return kids.length ? { ...row, subtasks: kids.map(nest) } : row;
+  };
+  return rows.filter((r) => !seen.has(SPEC.get(r.key)?.parent ?? "")).map(nest);
+}
+
+/** Every task in a tree, parents before their subtasks — for counts and lookups. */
+export const everyTask = (tasks: TaskGanttTask[]): TaskGanttTask[] =>
+  tasks.flatMap((t) => [t, ...everyTask(t.subtasks ?? [])]);
+
+/** Every task with subtasks, open — what a story passes to show the whole tree. */
+export const allOpen = (tasks: TaskGanttTask[]): Record<string, boolean> =>
+  Object.fromEntries(everyTask(tasks).filter((t) => t.subtasks?.length).map((t) => [t.key, true]));
+
+/** The Gantt's rows in plan order, flat — `ganttTasks` nests them. */
+function ganttRows(nowMs: number): TaskGanttTask[] {
   const seen = eventsUntil(nowMs);
   return TASK_KEYS.flatMap((key) => {
     const own = seen.filter((e) => e.taskKey === key);
@@ -278,7 +288,6 @@ export function ganttTasks(nowMs = Infinity): TaskGanttTask[] {
     const last = segments[segments.length - 1];
     const failed = own.filter((e) => e.kind === "task_failed").pop();
     const status: TaskGanttStatus = last?.status ?? "queued";
-    const depth = taskDepth(key);
     const calls = own.filter(
       (e) => e.kind === "tool_call" || e.kind === "llm_call",
     );
@@ -286,7 +295,6 @@ export function ganttTasks(nowMs = Infinity): TaskGanttTask[] {
     return [
       {
         key,
-        label: depth ? `${"\u00a0\u00a0".repeat(depth - 1)}└ ${key}` : key,
         ...(last ?? {}),
         status,
         attempts: segments.slice(0, -1),

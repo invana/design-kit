@@ -1,0 +1,5 @@
+[
+  { "caption": "Closed", "label": "fetch_filings", "open": false },
+  { "caption": "Open", "label": "analyse", "open": true },
+  { "caption": "Unlabelled — a table row", "open": false }
+]

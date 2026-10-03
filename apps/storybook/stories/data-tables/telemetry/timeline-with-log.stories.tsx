@@ -36,6 +36,7 @@ function Live({ log, onSelectTask, onFiltersChange, onRowClick }: Args & { log: 
       >
         <TaskGantt
           tasks={TASKS}
+          defaultExpanded
           spanMs={RUN_SPAN_MS}
           ticks={9}
           nowMs={event?.offsetMs}
@@ -103,6 +104,7 @@ const meta = {
             '  <PanelBox title="Timeline">',
             `    ${jsx('TaskGantt', {
               tasks: 'tasks',
+              defaultExpanded: 'true',
               spanMs: String(RUN_SPAN_MS),
               ticks: '9',
               nowMs: 'event?.offsetMs',

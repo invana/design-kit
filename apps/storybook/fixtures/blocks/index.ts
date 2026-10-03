@@ -9,7 +9,9 @@ import citations from './citations.json';
 import confirm from './confirm.json';
 import files from './files.json';
 import form from './form.json';
+import gantt from './gantt.json';
 import grid from './grid.json';
+import heatstrip from './heatstrip.json';
 import method from './method.json';
 import metric from './metric.json';
 import multi from './multi.json';
@@ -68,7 +70,9 @@ export const BLOCK_VARIANTS = {
   confirm: as('confirm', confirm),
   files: as('files', files),
   form: as('form', form),
+  gantt: as('gantt', gantt),
   grid: as('grid', grid),
+  heatstrip: as('heatstrip', heatstrip),
   method: as('method', method),
   metric: as('metric', metric),
   multi: as('multi', multi),

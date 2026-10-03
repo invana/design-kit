@@ -13,6 +13,7 @@ import {
   type TaskGanttSeam,
   type TaskGanttStatus,
   type TaskGanttTask,
+  type ExpandedKeys,
 } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/task-gantt.json';
@@ -68,6 +69,7 @@ interface GanttVariant {
   seams?: TaskGanttSeam[];
   detailProps?: TaskGanttDetailProps;
   partOf?: string;
+  defaultExpanded?: ExpandedKeys;
 }
 
 const VARIANTS = DATA as GanttVariant[];
@@ -87,6 +89,7 @@ function fromSteps(v: GanttVariant): TaskGanttTask[] {
 /** A task with a `chart` gets a card body of its own, composed around the shared header. */
 function toTask(t: JsonTask): TaskGanttTask {
   const { chart, action, ...task } = t;
+  if (task.subtasks) task.subtasks = (task.subtasks as JsonTask[]).map(toTask);
   if (!chart) return task;
   return {
     ...task,
@@ -136,6 +139,8 @@ function Static({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectT
         brackets={v.brackets}
         seams={v.seams}
         detailProps={v.detailProps}
+        defaultExpanded={v.defaultExpanded}
+        onExpandedChange={(next) => log('onExpandedChange', next)}
         renderDetail={
           v.partOf
             ? (task) =>
@@ -195,7 +200,7 @@ function Live({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectTas
 
 // ── The Code tab ──
 
-const PROPS = ['origin', 'spanMs', 'nowMs', 'openEnded', 'density', 'labelWidth', 'ticks', 'detailProps'] as const;
+const PROPS = ['origin', 'spanMs', 'nowMs', 'openEnded', 'density', 'labelWidth', 'ticks', 'detailProps', 'defaultExpanded'] as const;
 
 function source(v: GanttVariant) {
   const pickable = v.selected !== undefined || v.live;
@@ -295,8 +300,11 @@ type Story = StoryObj<Args>;
  * row and unstarted tasks are outlines — and the live cell plays that run to its end, when the same
  * component drops `nowMs` and `openEnded`. A loop is a **bracket** over its rounds; a gate is a
  * **seam** across the stretch of clock it held. The card is yours: `task.detail` for one row,
- * `renderDetail` for all, composed around `TaskGanttDetailCard`. Pick a row: the key is logged and
- * the row stays lit; pick it again to clear.
+ * `renderDetail` for all, composed around `TaskGanttDetailCard`. The card opens beside the cursor;
+ * `detailProps.side` / `align` pin it to the row instead. A task's `subtasks` nest under it, opened
+ * by its chevron (`defaultExpanded`, or `expanded` with `onExpandedChange`); one with no clock of
+ * its own draws the stretch its subtasks cover. Pick a row: the key is logged and the row stays
+ * lit; pick it again to clear.
  */
 export const TaskGanttStory: Story = {
   name: 'TaskGantt',
