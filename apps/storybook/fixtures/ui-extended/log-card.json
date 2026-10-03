@@ -1,0 +1,85 @@
+{
+  "lines": [
+    {
+      "at": "10:21:00",
+      "level": "info",
+      "source": "agent",
+      "message": "run started · plan: 3 steps, 3 models"
+    },
+    {
+      "at": "10:21:00",
+      "level": "debug",
+      "source": "llm.plan",
+      "message": "in=2.1k tokens · model sonnet-5.5"
+    },
+    {
+      "at": "10:21:01",
+      "level": "info",
+      "source": "egress",
+      "message": "llm/anthropic-eu: 3 classes sent, property_values cut"
+    },
+    {
+      "at": "10:21:01",
+      "level": "info",
+      "source": "graph.query",
+      "message": "Accounts ok · 50 rows · 120ms"
+    },
+    {
+      "at": "10:21:02",
+      "level": "warn",
+      "source": "crunchbase.com/api",
+      "message": "429 rate limited · retry 1 in 400ms"
+    },
+    {
+      "at": "10:21:02",
+      "level": "info",
+      "source": "graph.query",
+      "message": "Funding rounds ok · 3 rows · 340ms"
+    },
+    {
+      "at": "10:21:03",
+      "level": "info",
+      "source": "egress",
+      "message": "third_party/crunchbase.com: record_ids sent, 2 classes cut"
+    },
+    {
+      "at": "10:21:03",
+      "level": "error",
+      "source": "graph.query",
+      "message": "HR records denied (lens: funding-watch)"
+    },
+    {
+      "at": "10:21:04",
+      "level": "info",
+      "source": "graph.metric",
+      "message": "Q3 revenue ok · 3 accounts"
+    },
+    {
+      "at": "10:21:05",
+      "level": "info",
+      "source": "agent",
+      "message": "run done · 7 calls · 3 layers · 1 refused"
+    }
+  ],
+  "variants": [
+    {
+      "caption": "A run's log",
+      "width": 480
+    },
+    {
+      "caption": "Live — following",
+      "width": 480,
+      "live": true
+    },
+    {
+      "caption": "One source only",
+      "width": 480,
+      "source": "graph.query"
+    },
+    {
+      "caption": "Folded to its bar",
+      "width": 480,
+      "collapsed": true
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "variants": [
+    {
+      "caption": "Open, with a footer",
+      "width": 480,
+      "title": "Run",
+      "aside": "idle",
+      "rows": [
+        {
+          "label": "Started",
+          "value": "10:21:00"
+        },
+        {
+          "label": "Calls",
+          "value": "7"
+        },
+        {
+          "label": "Layers",
+          "value": "graph data, llm, third party"
+        }
+      ],
+      "footer": "7 calls · 3 layers · 1 refused"
+    },
+    {
+      "caption": "Folded, with its summary",
+      "width": 480,
+      "title": "Run",
+      "aside": "idle",
+      "collapsed": true,
+      "summary": "7 calls · 3 layers",
+      "rows": [
+        {
+          "label": "Calls",
+          "value": "7"
+        }
+      ]
+    },
+    {
+      "caption": "No controls",
+      "width": 480,
+      "title": "Run",
+      "rows": [
+        {
+          "label": "Calls",
+          "value": "7"
+        }
+      ],
+      "fixed": true
+    }
+  ]
+}

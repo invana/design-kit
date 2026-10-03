@@ -13,9 +13,103 @@
     "title": "Funding watch",
     "analyst": "You",
     "assistant": "Analyst",
+    "agent": {
+      "name": "Analyst",
+      "version": "v2",
+      "model": "sonnet-5.5"
+    },
     "scope": {
       "World": "Accounts graph",
       "Lens": "Funding watch"
+    },
+    "access": {
+      "kind": "world",
+      "label": "Accounts graph",
+      "models": [
+        {
+          "id": "accounts",
+          "name": "Accounts",
+          "access": [
+            "read",
+            "write"
+          ]
+        },
+        {
+          "id": "rounds",
+          "name": "Funding rounds",
+          "access": [
+            "read"
+          ],
+          "slice": "time 2019 → now · axis announced_at"
+        },
+        {
+          "id": "contacts",
+          "name": "Contacts",
+          "access": [
+            "read"
+          ],
+          "slice": "region EU, US"
+        },
+        {
+          "id": "filings",
+          "name": "Filings",
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "id": "hr",
+          "name": "HR records",
+          "access": "denied"
+        },
+        {
+          "id": "payroll",
+          "name": "Payroll",
+          "access": "denied"
+        }
+      ]
+    },
+    "budget": {
+      "used": 3100,
+      "limit": 50000
+    },
+    "governance": {
+      "summary": "Read-only",
+      "rules": [
+        {
+          "label": "Permissions",
+          "value": "Read-only; writes need approval"
+        },
+        {
+          "label": "PII",
+          "value": "Redacted before any model call"
+        },
+        {
+          "label": "Retention",
+          "value": "30 days"
+        },
+        {
+          "label": "Owner",
+          "value": "ravi-merugu · policy v3"
+        }
+      ],
+      "egress": [
+        {
+          "to": "llm/anthropic-eu/sonnet-5.5",
+          "classes": [
+            "type_names",
+            "property_names",
+            "the_question",
+            "aggregates"
+          ]
+        },
+        {
+          "to": "third_party/crunchbase.com",
+          "classes": [
+            "record_ids"
+          ]
+        }
+      ]
     },
     "composer": {
       "placeholder": "Message all in Accounts graph"
@@ -30,6 +124,38 @@
     ]
   },
   "opening": [
+    {
+      "at": 300,
+      "patch": {
+        "op": "set-records",
+        "model": "accounts",
+        "records": 84210
+      }
+    },
+    {
+      "at": 500,
+      "patch": {
+        "op": "set-records",
+        "model": "filings",
+        "records": 6034
+      }
+    },
+    {
+      "at": 900,
+      "patch": {
+        "op": "set-records",
+        "model": "rounds",
+        "records": 12480
+      }
+    },
+    {
+      "at": 1400,
+      "patch": {
+        "op": "set-records",
+        "model": "contacts",
+        "records": 1104377
+      }
+    },
     {
       "at": 700,
       "patch": {
@@ -80,6 +206,18 @@
           "startedAt": "2026-10-03T10:21:00.000Z",
           "trace": [],
           "blocks": []
+        }
+      }
+    },
+    {
+      "at": 250,
+      "patch": {
+        "op": "update-spec",
+        "fields": {
+          "budget": {
+            "used": 5200,
+            "limit": 50000
+          }
         }
       }
     },
@@ -268,6 +406,186 @@
         "turn": "a1",
         "state": "complete"
       }
+    },
+    {
+      "at": 3800,
+      "patch": {
+        "op": "update-spec",
+        "fields": {
+          "budget": {
+            "used": 12400,
+            "limit": 50000
+          }
+        }
+      }
     }
-  ]
+  ],
+  "activity": {
+    "cell": "250 ms",
+    "axis": [
+      "0 s",
+      "2 s",
+      "4 s"
+    ],
+    "bands": [
+      {
+        "label": "1 · Plan",
+        "span": 3
+      },
+      {
+        "label": "2 · Pull accounts",
+        "span": 4
+      },
+      {
+        "label": "3 · Enrich",
+        "span": 6
+      },
+      {
+        "label": "4 · Write",
+        "span": 3
+      }
+    ],
+    "lanes": [
+      {
+        "id": "graph",
+        "label": "Graph",
+        "rate": "56 rows",
+        "rateTone": "hot",
+        "cells": [ null, null, null, 0.5, 0.9, 0.7, 0.95, 0.8, 0.3, 0.2, 0.6, 0.85, 0.7, 0, 0, 0 ],
+        "marks": [
+          {
+            "at": 9,
+            "kind": "refused"
+          }
+        ]
+      },
+      {
+        "id": "llm",
+        "label": "LLM",
+        "rate": "9.3k tok",
+        "cells": [ 0.4, 0.9, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.7, 1, 0.6 ],
+        "marks": [
+          {
+            "at": 2,
+            "kind": "egress"
+          },
+          {
+            "at": 15,
+            "kind": "egress"
+          }
+        ]
+      },
+      {
+        "id": "third",
+        "label": "Third party",
+        "short": "3rd party",
+        "rate": "1 call",
+        "cells": [ null, null, null, null, null, null, 0.4, 0.8, 0.6, null, null, null, null, null, null, null ],
+        "marks": [
+          {
+            "at": 8,
+            "kind": "egress"
+          }
+        ]
+      },
+      {
+        "id": "cache",
+        "label": "Cache",
+        "rate": "—",
+        "cells": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+      }
+    ],
+    "logs": [
+      {
+        "at": 0,
+        "log": {
+          "at": "10:21:00",
+          "level": "info",
+          "source": "agent",
+          "message": "run started · plan: 3 steps, 3 models"
+        }
+      },
+      {
+        "at": 300,
+        "log": {
+          "at": "10:21:00",
+          "level": "debug",
+          "source": "llm.plan",
+          "message": "in=2.1k tokens · model sonnet-5.5"
+        }
+      },
+      {
+        "at": 700,
+        "log": {
+          "at": "10:21:01",
+          "level": "info",
+          "source": "egress",
+          "message": "llm/anthropic-eu: 3 classes sent, property_values cut"
+        }
+      },
+      {
+        "at": 1200,
+        "log": {
+          "at": "10:21:01",
+          "level": "info",
+          "source": "graph.query",
+          "message": "Accounts ok · 50 rows · 120ms"
+        }
+      },
+      {
+        "at": 1600,
+        "log": {
+          "at": "10:21:02",
+          "level": "warn",
+          "source": "crunchbase.com/api",
+          "message": "429 rate limited · retry 1 in 400ms"
+        }
+      },
+      {
+        "at": 1900,
+        "log": {
+          "at": "10:21:02",
+          "level": "info",
+          "source": "graph.query",
+          "message": "Funding rounds ok · 3 rows · 340ms"
+        }
+      },
+      {
+        "at": 2200,
+        "log": {
+          "at": "10:21:03",
+          "level": "info",
+          "source": "egress",
+          "message": "third_party/crunchbase.com: record_ids sent, 2 classes cut"
+        }
+      },
+      {
+        "at": 2300,
+        "log": {
+          "at": "10:21:03",
+          "level": "error",
+          "source": "graph.query",
+          "message": "HR records denied (lens: funding-watch)"
+        }
+      },
+      {
+        "at": 3200,
+        "log": {
+          "at": "10:21:04",
+          "level": "info",
+          "source": "graph.metric",
+          "message": "Q3 revenue ok · 3 accounts"
+        }
+      },
+      {
+        "at": 3900,
+        "log": {
+          "at": "10:21:05",
+          "level": "info",
+          "source": "agent",
+          "message": "run done · 7 calls · 3 layers · 1 refused"
+        }
+      }
+    ]
+  }
 }

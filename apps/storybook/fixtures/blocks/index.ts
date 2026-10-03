@@ -1,6 +1,7 @@
 import type { AskState, BlockKind, BlockOptionsByKind, PageSpec } from '@invana/blocks';
 import type { AnswerTurn } from '@invana/assistant';
 
+import activity from './activity.json';
 import bars from './bars.json';
 import cannot from './cannot.json';
 import caveat from './caveat.json';
@@ -37,6 +38,8 @@ export interface BlockVariant<K extends BlockKind> {
   caption: string;
   /** Draw the cell at 280px — the board's "At 280px" variant. */
   narrow?: boolean;
+  /** A width in px other than the board's 320 — a block the spec draws wider. */
+  width?: number;
   /** Take the board's whole row — a strip or a table fitted to a dashboard's width. */
   wide?: boolean;
   spec: BlockOptionsByKind[K];
@@ -57,6 +60,7 @@ const as = <K extends BlockKind>(_kind: K, data: unknown) => data as BlockVarian
 
 /** Every built kind's variants, keyed by kind. */
 export const BLOCK_VARIANTS = {
+  activity: as('activity', activity),
   bars: as('bars', bars),
   cannot: as('cannot', cannot),
   caveat: as('caveat', caveat),

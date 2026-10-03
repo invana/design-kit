@@ -1,0 +1,128 @@
+{
+  "variants": [
+    {
+      "caption": "Entire world, two models denied",
+      "width": 480,
+      "models": [
+        {
+          "id": "accounts",
+          "name": "Accounts",
+          "access": [
+            "read",
+            "write"
+          ],
+          "records": 84210
+        },
+        {
+          "id": "rounds",
+          "name": "Funding rounds",
+          "access": [
+            "read"
+          ],
+          "slice": "time 2019 → now · axis announced_at",
+          "records": 12480
+        },
+        {
+          "id": "contacts",
+          "name": "Contacts",
+          "access": [
+            "read"
+          ],
+          "slice": "region EU, US",
+          "records": 1104377
+        },
+        {
+          "id": "filings",
+          "name": "Filings",
+          "access": [
+            "read"
+          ],
+          "records": 6034
+        },
+        {
+          "id": "hr",
+          "name": "HR records",
+          "access": "denied"
+        },
+        {
+          "id": "payroll",
+          "name": "Payroll",
+          "access": "denied"
+        }
+      ]
+    },
+    {
+      "caption": "Counts still arriving",
+      "width": 480,
+      "models": [
+        {
+          "id": "accounts",
+          "name": "Accounts",
+          "access": [
+            "read",
+            "write"
+          ],
+          "records": 84210
+        },
+        {
+          "id": "rounds",
+          "name": "Funding rounds",
+          "access": [
+            "read"
+          ],
+          "slice": "time 2019 → now · axis announced_at"
+        },
+        {
+          "id": "contacts",
+          "name": "Contacts",
+          "access": [
+            "read"
+          ],
+          "slice": "region EU, US"
+        },
+        {
+          "id": "filings",
+          "name": "Filings",
+          "access": [
+            "read"
+          ],
+          "records": 6034
+        },
+        {
+          "id": "hr",
+          "name": "HR records",
+          "access": "denied"
+        },
+        {
+          "id": "payroll",
+          "name": "Payroll",
+          "access": "denied"
+        }
+      ]
+    },
+    {
+      "caption": "An access group, nothing denied",
+      "width": 480,
+      "models": [
+        {
+          "id": "accounts",
+          "name": "Accounts",
+          "records": 9120,
+          "access": [
+            "read"
+          ],
+          "slice": "region EU"
+        },
+        {
+          "id": "rounds",
+          "name": "Funding rounds",
+          "records": 2210,
+          "access": [
+            "read"
+          ],
+          "slice": "region EU"
+        }
+      ]
+    }
+  ]
+}

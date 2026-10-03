@@ -1,0 +1,303 @@
+[
+  {
+    "caption": "Entire world · idle",
+    "width": 720,
+    "props": {
+      "title": "Funding watch",
+      "agent": {
+        "name": "Analyst",
+        "version": "v2",
+        "model": "sonnet-5.5"
+      },
+      "status": {
+        "tone": "muted",
+        "label": "idle"
+      },
+      "access": {
+        "kind": "world",
+        "label": "Accounts graph",
+        "models": [
+          {
+            "id": "accounts",
+            "name": "Accounts",
+            "access": [
+              "read",
+              "write"
+            ],
+            "records": 84210
+          },
+          {
+            "id": "rounds",
+            "name": "Funding rounds",
+            "access": [
+              "read"
+            ],
+            "slice": "time 2019 → now · axis announced_at",
+            "records": 12480
+          },
+          {
+            "id": "contacts",
+            "name": "Contacts",
+            "access": [
+              "read"
+            ],
+            "slice": "region EU, US",
+            "records": 1104377
+          },
+          {
+            "id": "filings",
+            "name": "Filings",
+            "access": [
+              "read"
+            ],
+            "records": 6034
+          },
+          {
+            "id": "hr",
+            "name": "HR records",
+            "access": "denied"
+          },
+          {
+            "id": "payroll",
+            "name": "Payroll",
+            "access": "denied"
+          }
+        ]
+      },
+      "lens": "Funding watch",
+      "budget": {
+        "used": 12400,
+        "limit": 50000
+      },
+      "governance": {
+        "summary": "Read-only",
+        "rules": [
+          {
+            "label": "Permissions",
+            "value": "Read-only; writes need approval"
+          },
+          {
+            "label": "PII",
+            "value": "Redacted before any model call"
+          },
+          {
+            "label": "Retention",
+            "value": "30 days"
+          },
+          {
+            "label": "Owner",
+            "value": "ravi-merugu · policy v3"
+          }
+        ],
+        "egress": [
+          {
+            "to": "llm/anthropic-eu/sonnet-5.5",
+            "classes": [
+              "type_names",
+              "property_names",
+              "the_question",
+              "aggregates"
+            ]
+          },
+          {
+            "to": "third_party/crunchbase.com",
+            "classes": [
+              "record_ids"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Access group · running",
+    "width": 720,
+    "props": {
+      "title": "Penang exposure",
+      "agent": {
+        "name": "Analyst",
+        "version": "v2",
+        "model": "sonnet-5.5"
+      },
+      "status": {
+        "tone": "running",
+        "label": "running…"
+      },
+      "access": {
+        "kind": "group",
+        "label": "Finance-EU",
+        "models": [
+          {
+            "id": "accounts",
+            "name": "Accounts",
+            "records": 9120,
+            "access": [
+              "read"
+            ],
+            "slice": "region EU"
+          },
+          {
+            "id": "rounds",
+            "name": "Funding rounds",
+            "records": 2210,
+            "access": [
+              "read"
+            ],
+            "slice": "region EU"
+          }
+        ]
+      },
+      "lens": "Supplier risk",
+      "budget": {
+        "used": 41800,
+        "limit": 50000
+      },
+      "governance": {
+        "summary": "Governed",
+        "rules": [
+          {
+            "label": "Permissions",
+            "value": "Read-only; writes need approval"
+          },
+          {
+            "label": "PII",
+            "value": "Redacted before any model call"
+          },
+          {
+            "label": "Retention",
+            "value": "30 days"
+          },
+          {
+            "label": "Owner",
+            "value": "ravi-merugu · policy v3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "At 360px · needs input",
+    "width": 360,
+    "props": {
+      "title": "Funding watch",
+      "agent": {
+        "name": "Analyst",
+        "version": "v2",
+        "model": "sonnet-5.5"
+      },
+      "status": {
+        "tone": "info",
+        "label": "needs input (1)",
+        "short": "needs 1"
+      },
+      "access": {
+        "kind": "world",
+        "label": "Accounts graph",
+        "models": [
+          {
+            "id": "accounts",
+            "name": "Accounts",
+            "access": [
+              "read",
+              "write"
+            ],
+            "records": 84210
+          },
+          {
+            "id": "rounds",
+            "name": "Funding rounds",
+            "access": [
+              "read"
+            ],
+            "slice": "time 2019 → now · axis announced_at",
+            "records": 12480
+          },
+          {
+            "id": "contacts",
+            "name": "Contacts",
+            "access": [
+              "read"
+            ],
+            "slice": "region EU, US",
+            "records": 1104377
+          },
+          {
+            "id": "filings",
+            "name": "Filings",
+            "access": [
+              "read"
+            ],
+            "records": 6034
+          },
+          {
+            "id": "hr",
+            "name": "HR records",
+            "access": "denied"
+          },
+          {
+            "id": "payroll",
+            "name": "Payroll",
+            "access": "denied"
+          }
+        ]
+      },
+      "lens": "Funding watch",
+      "budget": {
+        "used": 3100,
+        "limit": 50000
+      },
+      "governance": {
+        "summary": "Read-only",
+        "rules": [
+          {
+            "label": "Permissions",
+            "value": "Read-only; writes need approval"
+          },
+          {
+            "label": "PII",
+            "value": "Redacted before any model call"
+          },
+          {
+            "label": "Retention",
+            "value": "30 days"
+          },
+          {
+            "label": "Owner",
+            "value": "ravi-merugu · policy v3"
+          }
+        ],
+        "egress": [
+          {
+            "to": "llm/anthropic-eu/sonnet-5.5",
+            "classes": [
+              "type_names",
+              "property_names",
+              "the_question",
+              "aggregates"
+            ]
+          },
+          {
+            "to": "third_party/crunchbase.com",
+            "classes": [
+              "record_ids"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "caption": "Agent only",
+    "width": 360,
+    "props": {
+      "title": "Scratch",
+      "agent": {
+        "name": "Analyst"
+      },
+      "status": {
+        "tone": "muted",
+        "label": "idle"
+      }
+    }
+  }
+]
