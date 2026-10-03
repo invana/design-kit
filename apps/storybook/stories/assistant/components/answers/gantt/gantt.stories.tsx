@@ -47,7 +47,7 @@ type Story = StoryObj<Args>;
 
 /**
  * The Gantt block in the conversation — the same JSON as
- * `Blocks/Components/Gantt`, as an answer turn.
+ * `Blocks/Components/Gantt/Run Progress` and `…/Layer Access`, as an answer turn.
  */
 export const Gantt: Story = {
   render: ({ variant, onEvent }) => (

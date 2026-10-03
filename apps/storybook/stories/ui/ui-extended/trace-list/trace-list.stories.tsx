@@ -64,7 +64,7 @@ interface TraceVariant {
 
 const VARIANTS = DATA as TraceVariant[];
 
-/** The hues are the caller's — the kit ships none. Matching `LayerStrip`'s. */
+/** The hues are the caller's — the kit ships none. Matching the Gantt's Layer access. */
 const LAYER_PALETTE: LayerPalette = {
   graph_data: { swatch: 'bg-data-1', text: 'text-data-1' },
   llm: { swatch: 'bg-data-7', text: 'text-data-7' },

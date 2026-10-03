@@ -5,25 +5,25 @@ import { BarChartH } from '@invana/charts';
 import {
   Button,
   PanelBox,
-  TaskGantt,
-  TaskGanttDetailCard,
-  type TaskGanttBracket,
-  type TaskGanttDetailProps,
-  type TaskGanttProps,
-  type TaskGanttSeam,
-  type TaskGanttStatus,
-  type TaskGanttTask,
+  Gantt,
+  GanttDetailCard,
+  type GanttBracket,
+  type GanttDetailProps,
+  type GanttProps,
+  type GanttSeam,
+  type GanttStatus,
+  type GanttRow,
   type ExpandedKeys,
 } from '@invana/ui';
 
-import DATA from '../../../../fixtures/ui-extended/task-gantt.json';
+import DATA from '../../../../fixtures/ui-extended/gantt.json';
 import { ReplayFrame, useReplay } from '../../../_story/replay';
 import { inline, jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
 import { VariantBoard, type Log } from '../../../_story/variant-board';
 
 /** A task as JSON holds it: a chart and an action name stand in for a custom card body. */
-type JsonTask = Omit<TaskGanttTask, 'status' | 'detail'> & {
-  status?: TaskGanttStatus;
+type JsonTask = Omit<GanttRow, 'status' | 'detail'> & {
+  status?: GanttStatus;
   chart?: { caption: string; labelWidth: number; data: { label: string; value: number; display: string }[] };
   action?: string;
 };
@@ -31,7 +31,7 @@ type JsonTask = Omit<TaskGanttTask, 'status' | 'detail'> & {
 /** The run's `steps` exactly as the trace API returns them. */
 interface TraceStepJson {
   task_key: string;
-  status: TaskGanttStatus;
+  status: GanttStatus;
   started_at: string | null;
   finished_at: string | null;
   duration_ms: number | null;
@@ -41,7 +41,7 @@ interface TraceStepJson {
 interface StepEvent {
   nowMs: number;
   task: string;
-  status: TaskGanttStatus;
+  status: GanttStatus;
   log?: string;
 }
 
@@ -62,21 +62,21 @@ interface GanttVariant {
   spanMs?: number;
   nowMs?: number;
   openEnded?: boolean;
-  density?: TaskGanttProps['density'];
+  density?: GanttProps['density'];
   labelWidth?: number;
   ticks?: number;
-  brackets?: TaskGanttBracket[];
-  seams?: TaskGanttSeam[];
-  detailProps?: TaskGanttDetailProps;
+  brackets?: GanttBracket[];
+  seams?: GanttSeam[];
+  detailProps?: GanttDetailProps;
   partOf?: string;
   defaultExpanded?: ExpandedKeys;
-  palette?: TaskGanttProps['palette'];
+  palette?: GanttProps['palette'];
 }
 
 const VARIANTS = DATA as GanttVariant[];
 
 /** The trace's steps as tasks. A running step is drawn up to *now* — it cannot say when it ends. */
-function fromSteps(v: GanttVariant): TaskGanttTask[] {
+function fromSteps(v: GanttVariant): GanttRow[] {
   return (v.steps ?? []).map((s) => ({
     key: s.task_key,
     status: s.status,
@@ -88,15 +88,15 @@ function fromSteps(v: GanttVariant): TaskGanttTask[] {
 }
 
 /** A task with a `chart` gets a card body of its own, composed around the shared header. */
-function toTask(t: JsonTask): TaskGanttTask {
+function toTask(t: JsonTask): GanttRow {
   const { chart, action, ...task } = t;
-  if (task.subtasks) task.subtasks = (task.subtasks as JsonTask[]).map(toTask);
+  if (task.rows) task.rows = (task.rows as JsonTask[]).map(toTask);
   if (!chart) return task;
   return {
     ...task,
     detail: (
-      <TaskGanttDetailCard
-        task={{
+      <GanttDetailCard
+        row={{
           ...task,
           result: <BarChartH caption={chart.caption} labelWidth={chart.labelWidth} data={chart.data} />,
           log: action ? (
@@ -110,26 +110,26 @@ function toTask(t: JsonTask): TaskGanttTask {
   };
 }
 
-function useSelection(v: GanttVariant, log: Log, onSelectTask: Args['onSelectTask']) {
+function useSelection(v: GanttVariant, log: Log, onSelectRow: Args['onSelectRow']) {
   const [selected, setSelected] = React.useState<string | null>(v.selected ?? null);
   if (v.selected === undefined) return {};
   return {
     selectedKey: selected,
-    onSelectTask: (key: string) => {
-      onSelectTask(key);
-      log('onSelectTask', key);
+    onSelectRow: (key: string) => {
+      onSelectRow(key);
+      log('onSelectRow', key);
       setSelected((prev) => (prev === key ? null : key));
     },
   };
 }
 
-function Static({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectTask: Args['onSelectTask'] }) {
-  const selection = useSelection(v, log, onSelectTask);
+function Static({ v, log, onSelectRow }: { v: GanttVariant; log: Log; onSelectRow: Args['onSelectRow'] }) {
+  const selection = useSelection(v, log, onSelectRow);
   const tasks = v.steps ? fromSteps(v) : (v.tasks ?? []).map(toTask);
   return (
     <PanelBox title={v.title} aside={v.aside}>
-      <TaskGantt
-        tasks={tasks}
+      <Gantt
+        rows={tasks}
         origin={v.origin}
         spanMs={v.spanMs}
         nowMs={v.nowMs}
@@ -147,8 +147,8 @@ function Static({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectT
           v.partOf
             ? (task) =>
                 task.detail ?? (
-                  <TaskGanttDetailCard
-                    task={{ ...task, log: [task.log, `part of ${v.partOf}`].filter(Boolean).join(' · ') }}
+                  <GanttDetailCard
+                    row={{ ...task, log: [task.log, `part of ${v.partOf}`].filter(Boolean).join(' · ') }}
                   />
                 )
             : undefined
@@ -160,7 +160,7 @@ function Static({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectT
 }
 
 /** The tasks after `events`: queued until an event names one, running up to now, then as it last said. */
-function tasksAfter(v: GanttVariant, events: StepEvent[], nowMs: number): TaskGanttTask[] {
+function tasksAfter(v: GanttVariant, events: StepEvent[], nowMs: number): GanttRow[] {
   return (v.keys ?? []).map((key) => {
     const mine = events.filter((e) => e.task === key);
     if (!mine.length) return { key, status: 'queued' };
@@ -177,17 +177,17 @@ function tasksAfter(v: GanttVariant, events: StepEvent[], nowMs: number): TaskGa
   });
 }
 
-function Live({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectTask: Args['onSelectTask'] }) {
+function Live({ v, log, onSelectRow }: { v: GanttVariant; log: Log; onSelectRow: Args['onSelectRow'] }) {
   const events = v.events ?? [];
   const replay = useReplay(events.length, { every: 500 });
   const received = events.slice(0, replay.at);
   const nowMs = received.length ? received[received.length - 1].nowMs : 0;
-  const selection = useSelection({ ...v, selected: null }, log, onSelectTask);
+  const selection = useSelection({ ...v, selected: null }, log, onSelectRow);
   return (
     <ReplayFrame replay={replay} noun="event" width={v.width}>
       <PanelBox title={v.title} aside={replay.done ? `${(nowMs / 1000).toFixed(1)}s` : `now ${(nowMs / 1000).toFixed(1)}s`}>
-        <TaskGantt
-          tasks={tasksAfter(v, received, nowMs)}
+        <Gantt
+          rows={tasksAfter(v, received, nowMs)}
           spanMs={replay.done ? undefined : Math.max(v.spanMs ?? 0, nowMs)}
           nowMs={replay.done ? undefined : nowMs}
           openEnded={!replay.done}
@@ -215,8 +215,8 @@ function source(v: GanttVariant) {
   const handler = pickable
     ? [
         `const [selected, setSelected] = React.useState(${JSON.stringify(v.selected ?? null)});`,
-        '// `onSelectTask` receives the task key — "import_dataset". Picking it again clears the filter.',
-        'const onSelectTask = (key) => setSelected((prev) => (prev === key ? null : key));',
+        '// `onSelectRow` receives the task key — "import_dataset". Picking it again clears the filter.',
+        'const onSelectRow = (key) => setSelected((prev) => (prev === key ? null : key));',
       ]
     : [];
   const steps = v.steps
@@ -236,21 +236,21 @@ function source(v: GanttVariant) {
         'const { tasks, nowMs, done } = useRunSteps(runId);',
       ]
     : [];
-  const call = jsx('TaskGantt', {
-    tasks: 'tasks',
+  const call = jsx('Gantt', {
+    rows: 'tasks',
     ...scalarProps,
     ...(v.live ? { nowMs: 'done ? undefined : nowMs', openEnded: '!done' } : {}),
     brackets: v.brackets ? 'brackets' : undefined,
     seams: v.seams ? 'seams' : undefined,
     renderDetail: v.partOf ? 'renderDetail' : undefined,
     selectedKey: pickable ? 'selected' : undefined,
-    onSelectTask: pickable ? 'onSelectTask' : undefined,
+    onSelectRow: pickable ? 'onSelectRow' : undefined,
   });
   return {
     comment: v.caption,
     data: {
       ...(v.steps ? { origin: v.origin, steps: v.steps } : {}),
-      ...(v.tasks ? { tasks: v.tasks.map(({ chart, action, ...t }) => (chart ? { ...t, detail: '<TaskGanttDetailCard … BarChartH />' } : t)) } : {}),
+      ...(v.tasks ? { tasks: v.tasks.map(({ chart, action, ...t }) => (chart ? { ...t, detail: '<GanttDetailCard … BarChartH />' } : t)) } : {}),
       ...(v.brackets ? { brackets: v.brackets } : {}),
       ...(v.seams ? { seams: v.seams } : {}),
     },
@@ -261,7 +261,7 @@ function source(v: GanttVariant) {
       ...(v.partOf
         ? [
             '// Every row without its own `detail` keeps the shared card, with one line of context.',
-            `const renderDetail = (task) => task.detail ?? <TaskGanttDetailCard task={{ ...task, log: \`\${task.log} · part of ${v.partOf}\` }} />;`,
+            `const renderDetail = (task) => task.detail ?? <GanttDetailCard row={{ ...task, log: \`\${task.log} · part of ${v.partOf}\` }} />;`,
           ]
         : []),
     ].join('\n') || undefined,
@@ -271,23 +271,23 @@ function source(v: GanttVariant) {
 
 interface Args {
   variant: string;
-  onSelectTask: (key: string) => void;
+  onSelectRow: (key: string) => void;
 }
 
 const meta = {
-  title: 'UI/UI Extended/TaskGantt',
+  title: 'UI/UI Extended/Gantt',
   parameters: {
     layout: 'padded',
     docs: {
       source: {
         language: 'tsx',
         transform: sourceFor(VARIANTS, (picked) =>
-          snippets(["import { PanelBox, TaskGantt, TaskGanttDetailCard } from '@invana/ui';"], picked.map(source)),
+          snippets(["import { PanelBox, Gantt, GanttDetailCard } from '@invana/ui';"], picked.map(source)),
         ),
       },
     },
   },
-  args: { variant: 'All', onSelectTask: fn() },
+  args: { variant: 'All', onSelectRow: fn() },
   argTypes: { variant: variantArg(VARIANTS) },
 } satisfies Meta<Args>;
 
@@ -295,27 +295,28 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * A run's tasks on its clock, from `fixtures/ui-extended/task-gantt.json`.
+ * A run's tasks on its clock, from `fixtures/ui-extended/gantt.json`.
  *
  * Finished, each row's `result.json`, error and last log line come **on hover**, not under the
  * row, so the rows stay a chart. In flight, the clock is open-ended, the *now* line threads every
  * row and unstarted tasks are outlines — and the live cell plays that run to its end, when the same
  * component drops `nowMs` and `openEnded`. A loop is a **bracket** over its rounds; a gate is a
  * **seam** across the stretch of clock it held. The card is yours: `task.detail` for one row,
- * `renderDetail` for all, composed around `TaskGanttDetailCard`. The card opens beside the cursor;
- * `detailProps.side` / `align` pin it to the row instead. A task's `subtasks` nest under it, opened
+ * `renderDetail` for all, composed around `GanttDetailCard`. The card opens beside the cursor;
+ * `detailProps.side` / `align` pin it to the row instead. A row's `rows` nest under it, opened
  * by its chevron (`defaultExpanded`, or `expanded` with `onExpandedChange`); one with no clock of
- * its own draws the stretch its subtasks cover. A row's `segments` are many bars on one row — what a
- * worker slot held, what a layer was reached for — each with a `label` written in it, a `group`
- * that `palette` paints, and a `variant` (`outline` for time held, `dashed` for time declared).
+ * its own draws the stretch they cover. A row's `bars` are many bars on one row — what a
+ * worker slot held, what a layer was reached for — each with a `label` written in it and a `note`
+ * under it, a `group` that `palette` paints, a `variant` (`outline` for time held, `dashed` for
+ * time declared), and a hover card of its own when it has a `summary`, `result`, `error` or `log`.
  * Pick a row: the key is logged and the row stays lit; pick it again to clear.
  */
-export const TaskGanttStory: Story = {
-  name: 'TaskGantt',
-  render: ({ variant, onSelectTask }) => (
+export const GanttStory: Story = {
+  name: 'Gantt',
+  render: ({ variant, onSelectRow }) => (
     <VariantBoard variants={VARIANTS} variant={variant}>
       {(v, log) =>
-        v.live ? <Live v={v} log={log} onSelectTask={onSelectTask} /> : <Static v={v} log={log} onSelectTask={onSelectTask} />
+        v.live ? <Live v={v} log={log} onSelectRow={onSelectRow} /> : <Static v={v} log={log} onSelectRow={onSelectRow} />
       }
     </VariantBoard>
   ),
@@ -324,7 +325,7 @@ export const TaskGanttStory: Story = {
     const finished = within(canvas.getByRole('group', { name: VARIANTS[0].caption }));
     await step('Pick a task to filter the log to it', async () => {
       await userEvent.click(finished.getByRole('button', { name: /verify_counts/ }));
-      await expect(args.onSelectTask).toHaveBeenCalledWith('verify_counts');
+      await expect(args.onSelectRow).toHaveBeenCalledWith('verify_counts');
       await expect(finished.getByRole('button', { name: /verify_counts/ })).toHaveAttribute('aria-pressed', 'true');
       await expect(finished.getByRole('list', { name: 'Events' })).toHaveTextContent('"verify_counts"');
     });

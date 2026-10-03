@@ -180,6 +180,11 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
   last segment (`title: 'Blocks/Components/Confirm'`, `export const Confirm`), so Storybook hoists
   it and draws no component node. A component whose variants are too heavy for one page (a
   `DataTable`, an app shell) draws one at a time: its `variant` arg defaults to the first caption.
+- **A component with two distinct use cases gets one story per use case, under its folder.** The
+  `gantt` block is read by task (`Blocks/Components/Gantt/Run Progress`) and by layer
+  (`…/Layer Access`): two readers, two pages, one fixture (`fixtures/blocks/gantt.json`, split by
+  each variant's `useCase`). Each file still exports one story named for its title's last segment.
+  Use it only when the readers differ, never to split variants of one use case.
 - **Themes are the exception: a shell is seen, not wrapped.** A story under `themes/` draws one
   app shell full-screen and nothing else — no `VariantBoard`, no event log, no replay bar, no
   variant select — one story per layout, each its own title (`Themes/AppV2/Main Left`), so the

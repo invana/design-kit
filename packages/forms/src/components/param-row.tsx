@@ -133,7 +133,7 @@ export const ParamRow = React.forwardRef<HTMLDivElement, ParamRowProps>(
               aria-label={name}
               // The colour is a token, set inline because the kit's build emits
               // no `border-<colour>` utility today — `border-destructive`
-              // renders grey. Same workaround as `TaskGantt`'s error band.
+              // renders grey. Same workaround as `Gantt`'s error band.
               style={invalid ? { borderColor: "var(--color-destructive)" } : undefined}
               className="min-w-0 flex-1 rounded-l-none font-mono"
             />

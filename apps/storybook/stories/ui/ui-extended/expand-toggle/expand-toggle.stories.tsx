@@ -78,7 +78,7 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * The chevron that opens a row into the rows under it — a `DataTable`'s sub-rows, a `TaskGantt`'s
+ * The chevron that opens a row into the rows under it — a `DataTable`'s sub-rows, a `Gantt`'s
  * subtasks, a `HeatStrip`'s children — so every tree in the kit opens alike. With a `label` it
  * reads `Open fetch_filings` / `Close fetch_filings`; without, `Expand row` / `Collapse row`. A
  * click never reaches the row around it, so opening a pickable row does not pick it.

@@ -31,7 +31,7 @@ const TraceVariant = React.createContext<"default" | "progress">("default")
  *
  * Nothing here is an axis. The layer a step spent is a column on its row, so a
  * list nests for free and a second round is simply another row inside the box
- * that holds it. The clock reading of the same trace is `LayerStrip`.
+ * that holds it. The clock reading of the same trace is `Gantt`, by task or by layer.
  */
 export const TraceList = React.forwardRef<HTMLDivElement, TraceListProps>(
   ({ variant = "default", className, children, ...props }, ref) => (

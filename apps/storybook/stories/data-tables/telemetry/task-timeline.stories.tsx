@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Button, ButtonGroup, PanelBox, Stack, TaskGantt, type ExpandedKeys } from '@invana/ui';
+import { Button, ButtonGroup, PanelBox, Stack, Gantt, type ExpandedKeys } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
 import { VariantBoard, type Log } from '../../_story/variant-board';
@@ -17,7 +17,7 @@ function failurePaths(): Record<string, boolean> {
   const open: Record<string, boolean> = {};
   const walk = (list: typeof TASKS): boolean =>
     list.some((t) => {
-      const below = walk(t.subtasks ?? []);
+      const below = walk(t.rows ?? []);
       if (below) open[t.key] = true;
       return below || t.status === 'failed';
     });
@@ -28,11 +28,11 @@ function failurePaths(): Record<string, boolean> {
 const VARIANTS = [{ caption: 'Task Timeline', wide: true }];
 
 interface Args {
-  onSelectTask: (key: string | null) => void;
+  onSelectRow: (key: string | null) => void;
   onExpandedChange: (expanded: ExpandedKeys) => void;
 }
 
-function Live({ log, onSelectTask, onExpandedChange }: Args & { log: Log }) {
+function Live({ log, onSelectRow, onExpandedChange }: Args & { log: Log }) {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [expanded, setExpanded] = React.useState<ExpandedKeys>({ plan: true });
   const open = (next: ExpandedKeys, by: string) => {
@@ -54,18 +54,18 @@ function Live({ log, onSelectTask, onExpandedChange }: Args & { log: Log }) {
         </Button>
       </ButtonGroup>
       <PanelBox title="Timeline" aside={ASIDE}>
-        <TaskGantt
-          tasks={TASKS}
+        <Gantt
+          rows={TASKS}
           spanMs={RUN_SPAN_MS}
           ticks={9}
           detailProps={{ width: 300 }}
           expanded={expanded}
           onExpandedChange={(next) => open(next, 'onExpandedChange')}
           selectedKey={selected}
-          onSelectTask={(key) => {
+          onSelectRow={(key) => {
             const next = key === selected ? null : key;
-            onSelectTask(next);
-            log('onSelectTask', next);
+            onSelectRow(next);
+            log('onSelectRow', next);
             setSelected(next);
           }}
         />
@@ -82,30 +82,30 @@ const meta = {
       source: {
         language: 'tsx',
         code: snippet({
-          imports: ["import { PanelBox, TaskGantt } from '@invana/ui';"],
+          imports: ["import { PanelBox, Gantt } from '@invana/ui';"],
           comment: 'The log folded into the plan\'s tree of tasks — derived from fixtures/data-tables/telemetry-run.json',
-          data: { tasks: [{ ...TASKS[0]!, subtasks: TASKS[0]!.subtasks!.slice(0, 2) }] },
+          data: { tasks: [{ ...TASKS[0]!, rows: TASKS[0]!.rows!.slice(0, 2) }] },
           setup: [
             '// Which tasks are open, by key: { plan: true, analyse: true } — or `true` for all.',
             'const [expanded, setExpanded] = React.useState({ plan: true });',
             '// The task\'s key — pick it again to clear the pick.',
             'const [selected, setSelected] = React.useState(null);',
           ].join('\n'),
-          call: `<PanelBox title="Timeline" aside="${ASIDE}">\n  ${jsx('TaskGantt', {
-            tasks: 'tasks',
+          call: `<PanelBox title="Timeline" aside="${ASIDE}">\n  ${jsx('Gantt', {
+            rows: 'tasks',
             spanMs: String(RUN_SPAN_MS),
             ticks: '9',
             detailProps: '{ width: 300 }',
             expanded: 'expanded',
             onExpandedChange: 'setExpanded',
             selectedKey: 'selected',
-            onSelectTask: '(key) => setSelected(key === selected ? null : key)',
+            onSelectRow: '(key) => setSelected(key === selected ? null : key)',
           }).replace(/\n/g, '\n  ')}\n</PanelBox>`,
         }),
       },
     },
   },
-  args: { onSelectTask: fn(), onExpandedChange: fn() },
+  args: { onSelectRow: fn(), onExpandedChange: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -127,7 +127,7 @@ export const TaskTimeline: Story = {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Task Timeline' }));
     await step('Pick the plan', async () => {
       await userEvent.click(cell.getAllByRole('button', { pressed: false })[0]!);
-      await expect(args.onSelectTask).toHaveBeenCalledWith('plan');
+      await expect(args.onSelectRow).toHaveBeenCalledWith('plan');
       await expect(cell.getByRole('button', { pressed: true })).toHaveTextContent('plan');
     });
     await step('Open every failure: the failed subtask shows under analyse', async () => {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { PaginatedTable, type FilterValues, type TableFilter } from '@invana/tables';
-import { PanelBox, TaskGantt } from '@invana/ui';
+import { PanelBox, Gantt } from '@invana/ui';
 
 import { jsx, snippet } from '../../_story/source';
 import { VariantBoard, type Log } from '../../_story/variant-board';
@@ -17,12 +17,12 @@ const FILTERS: TableFilter<TelemetryEvent>[] = [...LOG_FILTERS, { id: 'task', la
 const VARIANTS = [{ caption: 'Timeline with Log', wide: true }];
 
 interface Args {
-  onSelectTask: (key: string) => void;
+  onSelectRow: (key: string) => void;
   onFiltersChange: (values: FilterValues) => void;
   onRowClick: (seq: number | null) => void;
 }
 
-function Live({ log, onSelectTask, onFiltersChange, onRowClick }: Args & { log: Log }) {
+function Live({ log, onSelectRow, onFiltersChange, onRowClick }: Args & { log: Log }) {
   const [filters, setFilters] = React.useState<FilterValues>({});
   const [event, setEvent] = React.useState<TelemetryEvent | null>(null);
   const taskFilter = filters.task?.[0] ?? null;
@@ -34,16 +34,16 @@ function Live({ log, onSelectTask, onFiltersChange, onRowClick }: Args & { log: 
         title="Timeline"
         aside={event ? `${formatOffset(event.offsetMs)} · ${event.kind}` : 'pick a task to filter the log'}
       >
-        <TaskGantt
-          tasks={TASKS}
+        <Gantt
+          rows={TASKS}
           defaultExpanded
           spanMs={RUN_SPAN_MS}
           ticks={9}
           nowMs={event?.offsetMs}
           selectedKey={taskFilter ?? event?.taskKey ?? null}
-          onSelectTask={(key) => {
-            onSelectTask(key);
-            log('onSelectTask', key);
+          onSelectRow={(key) => {
+            onSelectRow(key);
+            log('onSelectRow', key);
             setFilters((f) => ({ ...f, task: key === taskFilter ? [] : [key] }));
             setEvent(null);
           }}
@@ -89,7 +89,7 @@ const meta = {
       source: {
         language: 'tsx',
         code: snippet({
-          imports: ["import { PaginatedTable } from '@invana/tables';", "import { PanelBox, TaskGantt } from '@invana/ui';"],
+          imports: ["import { PaginatedTable } from '@invana/tables';", "import { PanelBox, Gantt } from '@invana/ui';"],
           comment: 'Each one steers the other: the timeline sets the log\'s `task` filter, a log row drops a line on the timeline',
           data: { filters: FILTERS },
           setup: [
@@ -97,19 +97,19 @@ const meta = {
             'const [event, setEvent] = React.useState(null);',
             'const task = filters.task?.[0] ?? null;',
             '// A task key: pick it to narrow the log, pick it again to let the whole log back in.',
-            'const onSelectTask = (key) => { setFilters((f) => ({ ...f, task: key === task ? [] : [key] })); setEvent(null); };',
+            'const onSelectRow = (key) => { setFilters((f) => ({ ...f, task: key === task ? [] : [key] })); setEvent(null); };',
           ].join('\n'),
           call: [
             '<>',
             '  <PanelBox title="Timeline">',
-            `    ${jsx('TaskGantt', {
-              tasks: 'tasks',
+            `    ${jsx('Gantt', {
+              rows: 'tasks',
               defaultExpanded: 'true',
               spanMs: String(RUN_SPAN_MS),
               ticks: '9',
               nowMs: 'event?.offsetMs',
               selectedKey: 'task ?? event?.taskKey ?? null',
-              onSelectTask: 'onSelectTask',
+              onSelectRow: 'onSelectRow',
             }).replace(/\n/g, '\n    ')}`,
             '  </PanelBox>',
             '  <PanelBox title="Log">',
@@ -131,7 +131,7 @@ const meta = {
       },
     },
   },
-  args: { onSelectTask: fn(), onFiltersChange: fn(), onRowClick: fn() },
+  args: { onSelectRow: fn(), onFiltersChange: fn(), onRowClick: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -146,7 +146,7 @@ type Story = StoryObj<Args>;
  * - **Pick an event** in the log and the timeline marks its task and drops a line at the
  *   event's moment, so a `retry_scheduled` or a `429` lands on the bar it happened inside.
  *
- * The line reuses `TaskGantt`'s `nowMs`, which exists for a run in flight — a cursor that is not
+ * The line reuses `Gantt`'s `nowMs`, which exists for a run in flight — a cursor that is not
  * *now* is a gap in the component, borrowed here.
  */
 export const TimelineWithLog: Story = {
@@ -157,7 +157,7 @@ export const TimelineWithLog: Story = {
     await step('Pick fetch_filings on the timeline', async () => {
       const row = cell.getAllByRole('button', { pressed: false }).find((b) => b.textContent?.includes('fetch_filings'))!;
       await userEvent.click(row);
-      await expect(args.onSelectTask).toHaveBeenCalledWith('fetch_filings');
+      await expect(args.onSelectRow).toHaveBeenCalledWith('fetch_filings');
     });
     await step('The log narrows to its events', async () => {
       await waitFor(() => expect(cell.queryByText(/catalog\.search/)).toBeNull());

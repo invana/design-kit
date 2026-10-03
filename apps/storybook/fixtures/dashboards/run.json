@@ -196,7 +196,10 @@
                         "durationMs": 310,
                         "group": "network",
                         "status": "failed",
-                        "title": "fetch_source · attempt 1 · 503"
+                        "title": "fetch_source · attempt 1 · 503",
+                        "note": "attempt 1",
+                        "chip": { "label": "503", "tone": "bad" },
+                        "error": { "code": "503", "message": "refused · retrying (2 of 3)" }
                       },
                       {
                         "key": "fetch_source",
@@ -204,7 +207,10 @@
                         "startMs": 350,
                         "durationMs": 590,
                         "group": "network",
-                        "title": "fetch_source · 1.4 MB"
+                        "title": "fetch_source · 1.4 MB",
+                        "note": "1.4 MB",
+                        "log": "200 · 1.4 MB in 0.6s",
+                        "result": { "bytes": "1.4 MB", "from": "s3://drops/orders.csv" }
                       }
                     ]
                   }
@@ -224,7 +230,9 @@
                         "startMs": 0,
                         "durationMs": 40,
                         "group": "ingest",
-                        "title": "check_bundle · read"
+                        "title": "check_bundle · read",
+                        "note": "read",
+                        "log": "manifest read · 1 dataset"
                       }
                     ]
                   },
@@ -237,7 +245,11 @@
                         "startMs": 950,
                         "durationMs": 1200,
                         "group": "ingest",
-                        "title": "validate_records · 1,204 of 1,251"
+                        "title": "validate_records · 1,204 of 1,251",
+                        "note": "1,204 of 1,251",
+                        "chip": { "label": "47", "tone": "warn" },
+                        "result": { "kept": "1,204", "reported": 47 },
+                        "log": "47 of 1,251 reported"
                       },
                       {
                         "key": "import_report",
@@ -245,7 +257,8 @@
                         "startMs": 5560,
                         "durationMs": 40,
                         "group": "ingest",
-                        "title": "import_report · 47 rejections"
+                        "title": "import_report · 47 rejections",
+                        "note": "47 rejections"
                       }
                     ]
                   },
@@ -258,7 +271,9 @@
                         "startMs": 2150,
                         "durationMs": 1950,
                         "group": "ingest",
-                        "title": "import_dataset · lane 1 · 402 rows"
+                        "title": "import_dataset · lane 1 · 402 rows",
+                        "note": "402 rows",
+                        "result": { "rows": 402 }
                       }
                     ]
                   },
@@ -271,7 +286,9 @@
                         "startMs": 2150,
                         "durationMs": 2750,
                         "group": "ingest",
-                        "title": "import_dataset · lane 2 · 402 rows"
+                        "title": "import_dataset · lane 2 · 402 rows",
+                        "note": "402 rows",
+                        "result": { "rows": 402 }
                       }
                     ]
                   },
@@ -284,7 +301,10 @@
                         "startMs": 2150,
                         "durationMs": 3400,
                         "group": "ingest",
-                        "title": "import_dataset · lane 3 · 400 rows"
+                        "title": "import_dataset · lane 3 · 400 rows",
+                        "note": "400 rows",
+                        "result": { "rows": 400 },
+                        "log": "lane 3 · 400 Order, 400 FOR"
                       }
                     ]
                   }
@@ -307,7 +327,8 @@
                         "group": "work_write",
                         "status": "skipped",
                         "variant": "dashed",
-                        "title": "triage · declared, never dispatched"
+                        "title": "triage · declared, never dispatched",
+                        "note": "never dispatched"
                       }
                     ]
                   },
@@ -321,7 +342,10 @@
                         "durationMs": 300,
                         "group": "work_write",
                         "status": "needs_input",
-                        "title": "announce · held for approval"
+                        "title": "announce · held for approval",
+                        "note": "held for approval",
+                        "chip": { "label": "gate", "tone": "warn" },
+                        "summary": "waits on an approver before it writes"
                       }
                     ]
                   }

@@ -38,6 +38,8 @@ import trace from './trace.json';
  */
 export interface BlockVariant<K extends BlockKind> {
   caption: string;
+  /** A block with more than one use case splits its board by this — the gantt's `run` and `layers`. */
+  useCase?: string;
   /** Draw the cell at 280px — the board's "At 280px" variant. */
   narrow?: boolean;
   /** A width in px other than the board's 320 — a block the spec draws wider. */

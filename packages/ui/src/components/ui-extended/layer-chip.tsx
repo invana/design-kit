@@ -13,7 +13,7 @@ import { cn } from "../../lib/utils"
  *
  * `agent` is the **spine**: the runtime itself, which does the participating
  * rather than being a participant, and is never governed. Nothing in this file
- * knows that — a band says so with `spine`, see `LayerStrip`.
+ * knows that — the surface that draws the layers says so.
  */
 export type KnownLayer =
   | "graph_data"
@@ -151,7 +151,7 @@ export interface LayerChipProps
 /**
  * One class of participant, as a swatch and a name.
  *
- * It heads a `LayerSection`, bands a run's `LayerStrip`, and counts a layer in
+ * It heads a `LayerSection`, names a layer's row in a run's `Gantt`, and counts a layer in
  * the Worlds drawer — everywhere a reader has to know *what kind of thing this
  * is* before reading which one.
  *

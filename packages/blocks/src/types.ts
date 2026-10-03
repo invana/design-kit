@@ -644,14 +644,14 @@ export interface ActivityOptions {
   actions?: ActionOption[]
 }
 
-/** A task's state on the gantt — the engine's own step statuses, as `TaskGantt` reads them. */
-export type GanttStatus = "succeeded" | "running" | "failed" | "needs_input" | "stopped" | "skipped" | "queued"
+/** A bar's state on the gantt — the engine's own step statuses, as `Gantt` reads them; `refused` is what a rule stopped. */
+export type GanttSpecStatus = "succeeded" | "running" | "failed" | "needs_input" | "stopped" | "skipped" | "queued" | "refused"
 
 /** One bar on a row that holds many — a task a worker slot ran, a layer a task reached. */
-export interface GanttSegment {
+export interface GanttSpecBar {
   startMs?: number
   durationMs?: number
-  status?: GanttStatus
+  status?: GanttSpecStatus
   /** The hover text. */
   title?: string
   /** Names the bar: picking it sends `select` with this key, not the row's. */
@@ -662,10 +662,19 @@ export interface GanttSegment {
   group?: string
   /** `outline` is time held, not spent; `dashed` is time that may be spent. */
   variant?: "solid" | "outline" | "dashed"
+  /** A second line under the label — `1,204 of 1,251`. */
+  note?: string
+  /** A badge at the bar's end — `{ "label": "503", "tone": "bad" }`. */
+  chip?: { label: string; tone?: Tone }
+  /** The bar's own hover card. Any one of these opens it. */
+  summary?: string
+  result?: Record<string, string | number>
+  error?: { code?: string; message?: string }
+  log?: string
 }
 
 /** One task of a run, on its clock — and the tasks it split into. */
-export interface GanttTask {
+export interface GanttSpecRow {
   /** `task_key` — what the log calls it. Also the row's label. */
   key: string
   /** A human name for the row, instead of the key. */
@@ -673,11 +682,11 @@ export interface GanttTask {
   /** From the run's zero. A task with neither, and no subtasks, never ran. */
   startMs?: number
   durationMs?: number
-  status?: GanttStatus
+  status?: GanttSpecStatus
   /** Earlier attempts, oldest first — the rate-limited fetch before the retry that stuck. */
-  attempts?: { startMs?: number; durationMs?: number; status?: GanttStatus; title?: string }[]
+  attempts?: { startMs?: number; durationMs?: number; status?: GanttSpecStatus; title?: string }[]
   /** Many bars on one row, each its own thing — what a worker slot held, in order. */
-  segments?: GanttSegment[]
+  segments?: GanttSpecBar[]
   /** The right-hand cell, instead of the duration — `59% busy`. */
   duration?: string
   /** A sentence under the hover card's header. */
@@ -688,14 +697,14 @@ export interface GanttTask {
   /** What it produced, as label/value pairs on the card — `{ rows: 412 }`. */
   result?: Record<string, string | number>
   /** The tasks it split into, indented under it. A task with no timing draws their stretch. */
-  subtasks?: GanttTask[]
+  subtasks?: GanttSpecRow[]
   /** Drawn open. The reader can open and close it either way. */
   open?: boolean
 }
 
 export interface GanttOptions {
   /** In plan order. */
-  tasks: GanttTask[]
+  tasks: GanttSpecRow[]
   /** The clock's ceiling — the run's length. Defaults to the last end. */
   spanMs?: number
   /** The *now* line, while the run is in flight. */
@@ -714,11 +723,17 @@ export interface GanttOptions {
   /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-1" }`. */
   palette?: Record<string, string>
   /** Gates — a moment the run held and spent nothing — ruled under the row they follow. */
-  seams?: GanttSeam[]
+  seams?: GanttSpecSeam[]
+  /**
+   * What the clock counts. `elapsed` (the default) is milliseconds from the
+   * run's zero. `seq` is a plan read in order, before it runs: `startMs` and
+   * `durationMs` are step numbers, ticks read `step 3`, durations `2 steps`.
+   */
+  scale?: "elapsed" | "seq"
 }
 
 /** A gate, ruled across the stretch of clock it held. */
-export interface GanttSeam {
+export interface GanttSpecSeam {
   /** The row it follows, by key. */
   after: string
   /** The label column's word — `approval`. */

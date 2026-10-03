@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable } from '@invana/tables';
-import { Button, PanelBox, SegmentedControl, TaskGantt } from '@invana/ui';
+import { Button, PanelBox, SegmentedControl, Gantt } from '@invana/ui';
 import { SkipForward } from 'lucide-react';
 
 import { ReplayFrame, type Replay } from '../../_story/replay';
@@ -111,8 +111,8 @@ function Live({ log, onRowClick, onSpeedChange }: Args & { log: Log }) {
         title="Timeline"
         aside={`${formatOffset(now)} · ${everyTask(tasks).length} tasks · ${seen.length} of ${EVENTS.length} events`}
       >
-        <TaskGantt
-          tasks={tasks}
+        <Gantt
+          rows={tasks}
           defaultExpanded
           spanMs={RUN_SPAN_MS}
           ticks={9}
@@ -120,16 +120,18 @@ function Live({ log, onRowClick, onSpeedChange }: Args & { log: Log }) {
           openEnded={!replay.done}
           showDetail={!replay.playing}
           labelWidth={156}
+          durationWidth={72}
         />
       </PanelBox>
       <PanelBox title="Worker slots">
-        <TaskGantt
-          tasks={lanes}
+        <Gantt
+          rows={lanes}
           spanMs={RUN_SPAN_MS}
           ticks={9}
           nowMs={replay.done ? undefined : now}
           showDetail={false}
           labelWidth={156}
+          durationWidth={72}
         />
       </PanelBox>
       <PanelBox title="Log" aside={`newest first · last ${tail.length} of ${seen.length}`}>
@@ -160,24 +162,24 @@ const meta = {
         code: snippet({
           imports: [
             "import { DataTable } from '@invana/tables';",
-            "import { PanelBox, TaskGantt } from '@invana/ui';",
+            "import { PanelBox, Gantt } from '@invana/ui';",
           ],
           comment: 'Every view is the same function of the log cut at `now` — nothing animates on its own',
           setup: [
             'const [now, setNow] = React.useState(0);',
             'const seen = events.filter((e) => e.offsetMs <= now);',
             'const tasks = ganttTasks(seen);   // the plan\'s tree of tasks, the attempt in flight running to now',
-            'const lanes = slotLanes(seen);    // one row per worker slot',
+            'const lanes = slotLanes(seen);    // one row per worker slot, each task it ran a labelled bar in `bars`',
             '// A click on a log row is the event: jump back to its moment.',
             'const onRowClick = (event) => setNow(event.offsetMs);',
           ].join('\n'),
           call: [
             '<>',
             '  <PanelBox title="Timeline">',
-            `    <TaskGantt tasks={tasks} defaultExpanded spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} openEnded labelWidth={156} />`,
+            `    <Gantt rows={tasks} defaultExpanded spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} openEnded labelWidth={156} durationWidth={72} />`,
             '  </PanelBox>',
             '  <PanelBox title="Worker slots">',
-            `    <TaskGantt tasks={lanes} spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} showDetail={false} labelWidth={156} />`,
+            `    <Gantt rows={lanes} spanMs={${RUN_SPAN_MS}} ticks={9} nowMs={now} showDetail={false} labelWidth={156} durationWidth={72} />`,
             '  </PanelBox>',
             '  <PanelBox title="Log">',
             `    ${jsx('DataTable', { columns: 'columns', data: `seen.slice(-${TAIL}).reverse()`, density: { literal: 'compact' }, seamless: 'true', onRowClick: 'onRowClick' }).replace(/\n/g, '\n    ')}`,
@@ -198,7 +200,8 @@ type Story = StoryObj<Args>;
  * The run replayed from its log (`fixtures/data-tables/telemetry-run.json`), so you can watch it
  * happen rather than read it afterwards. Tasks appear as outlines when spawned — each under the
  * task that split it, open, so the tree grows as the plan does — and fill as they run; close a
- * task to fold its subtasks into the stretch they cover. The slot lanes show three fetches start at once and the rest queue; the red attempt and
+ * task to fold its subtasks into the stretch they cover. The slot lanes — each task a labelled bar on
+ * its slot's row — show three fetches start at once and the rest queue; the red attempt and
  * the failure land when they happened; the log tails the newest events.
  *
  * Every view is the same function of the log cut at *now*. **Step** jumps to the next event;

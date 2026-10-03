@@ -1,8 +1,8 @@
 import run from "../../../fixtures/data-tables/telemetry-run.json";
 import type {
-  TaskGanttSegment,
-  TaskGanttStatus,
-  TaskGanttTask,
+  GanttBar,
+  GanttStatus,
+  GanttRow,
 } from "@invana/ui";
 
 /**
@@ -236,36 +236,36 @@ const tokenCount = (detail: string) => {
 /**
  * One Gantt row per task, read off the log up to `nowMs`: a finished attempt
  * is a bar, the attempt in flight runs to *now*, a task spawned but not started
- * is an outline. Each task carries the tasks it split into as `subtasks`, so
+ * is an outline. Each task carries the tasks it split into as `rows`, so
  * the result is the plan's tree — `plan`, its fetches and `analyse`, and
- * `analyse`'s two — and `TaskGantt` nests it.
+ * `analyse`'s two — and `Gantt` nests it as `rows`.
  */
-export function ganttTasks(nowMs = Infinity): TaskGanttTask[] {
+export function ganttTasks(nowMs = Infinity): GanttRow[] {
   const rows = ganttRows(nowMs);
   const seen = new Set(rows.map((r) => r.key));
-  const nest = (row: TaskGanttTask): TaskGanttTask => {
+  const nest = (row: GanttRow): GanttRow => {
     const kids = rows.filter((r) => SPEC.get(r.key)?.parent === row.key);
-    return kids.length ? { ...row, subtasks: kids.map(nest) } : row;
+    return kids.length ? { ...row, rows: kids.map(nest) } : row;
   };
   return rows.filter((r) => !seen.has(SPEC.get(r.key)?.parent ?? "")).map(nest);
 }
 
 /** Every task in a tree, parents before their subtasks — for counts and lookups. */
-export const everyTask = (tasks: TaskGanttTask[]): TaskGanttTask[] =>
-  tasks.flatMap((t) => [t, ...everyTask(t.subtasks ?? [])]);
+export const everyTask = (tasks: GanttRow[]): GanttRow[] =>
+  tasks.flatMap((t) => [t, ...everyTask(t.rows ?? [])]);
 
 /** Every task with subtasks, open — what a story passes to show the whole tree. */
-export const allOpen = (tasks: TaskGanttTask[]): Record<string, boolean> =>
-  Object.fromEntries(everyTask(tasks).filter((t) => t.subtasks?.length).map((t) => [t.key, true]));
+export const allOpen = (tasks: GanttRow[]): Record<string, boolean> =>
+  Object.fromEntries(everyTask(tasks).filter((t) => t.rows?.length).map((t) => [t.key, true]));
 
 /** The Gantt's rows in plan order, flat — `ganttTasks` nests them. */
-function ganttRows(nowMs: number): TaskGanttTask[] {
+function ganttRows(nowMs: number): GanttRow[] {
   const seen = eventsUntil(nowMs);
   return TASK_KEYS.flatMap((key) => {
     const own = seen.filter((e) => e.taskKey === key);
     if (!own.length) return [];
 
-    const segments: TaskGanttSegment[] = [];
+    const segments: GanttBar[] = [];
     for (const start of own.filter((e) => e.kind === "task_started")) {
       const end = own.find(
         (e) =>
@@ -287,7 +287,7 @@ function ganttRows(nowMs: number): TaskGanttTask[] {
 
     const last = segments[segments.length - 1];
     const failed = own.filter((e) => e.kind === "task_failed").pop();
-    const status: TaskGanttStatus = last?.status ?? "queued";
+    const status: GanttStatus = last?.status ?? "queued";
     const calls = own.filter(
       (e) => e.kind === "tool_call" || e.kind === "llm_call",
     );
@@ -325,7 +325,7 @@ export interface SlotRun {
   attempt: number;
   startMs: number;
   durationMs: number;
-  status: TaskGanttStatus;
+  status: GanttStatus;
 }
 
 /** What each worker slot held, in order, up to `nowMs`. */
@@ -358,25 +358,30 @@ export function slotRuns(nowMs = Infinity): Record<string, SlotRun[]> {
 }
 
 /**
- * One Gantt row per slot. `TaskGantt` draws a row's `attempts` before its main
- * segment, each in its own status colour, so every run but the last goes in
- * `attempts` — the lane is a sequence of tasks, not retries of one.
+ * One Gantt row per slot, each task it ran a bar of its own in `bars` —
+ * labelled with the task, keyed by it (`fetch_filings#2` for a retry), in its
+ * own status colour. The lane is a sequence of tasks, not retries of one.
  */
-export function slotLaneTasks(nowMs = Infinity): TaskGanttTask[] {
+export function slotLaneTasks(nowMs = Infinity): GanttRow[] {
   const lanes = slotRuns(nowMs);
   const elapsed = Math.min(nowMs, RUN_SPAN_MS);
   return SLOTS.map((slot) => {
-    const runs: TaskGanttSegment[] = lanes[slot].map((r) => ({
-      startMs: r.startMs,
-      durationMs: r.durationMs,
-      status: r.status,
-      title: `${r.taskKey}${r.attempt > 1 ? ` #${r.attempt}` : ""} · ${formatMs(r.durationMs)}`,
-    }));
-    const busy = runs.reduce((n, r) => n + (r.durationMs ?? 0), 0);
+    const bars: GanttBar[] = lanes[slot].map((r) => {
+      const name = `${r.taskKey}${r.attempt > 1 ? ` #${r.attempt}` : ""}`;
+      return {
+        key: r.attempt > 1 ? `${r.taskKey}#${r.attempt}` : r.taskKey,
+        label: name,
+        startMs: r.startMs,
+        durationMs: r.durationMs,
+        status: r.status,
+        title: `${name} · ${formatMs(r.durationMs)}`,
+      };
+    });
+    const busy = bars.reduce((n, r) => n + (r.durationMs ?? 0), 0);
     return {
       key: slot,
-      ...(runs[runs.length - 1] ?? { status: "queued" as const }),
-      attempts: runs.slice(0, -1),
+      ...(bars.length ? {} : { status: "queued" as const }),
+      bars,
       duration:
         elapsed > 0 ? `${Math.round((busy / elapsed) * 100)}% busy` : "—",
     };

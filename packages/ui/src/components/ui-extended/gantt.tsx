@@ -8,13 +8,15 @@ import { ExpandToggle } from "./expand-toggle"
 import { PropertyList, PropertyRow } from "./property-list"
 
 /**
- * What a task did with its slice of the run's clock.
+ * What a bar did with its slice of the clock.
  *
  * These are the engine's own step statuses (`StepStatus`, plus `skipped` for a
  * branch that never ran), not a second vocabulary: a Gantt row and a log line
- * are the same task seen twice, so they say the same word for the same state.
+ * are the same work seen twice, so they say the same word for the same state.
+ * `refused` is what a rule stopped — reached for and not allowed — which is a
+ * different fact from `skipped`, and both are drawn.
  */
-export type TaskGanttStatus =
+export type GanttStatus =
   | "succeeded"
   | "running"
   | "failed"
@@ -22,26 +24,28 @@ export type TaskGanttStatus =
   | "stopped"
   | "skipped"
   | "queued"
+  | "refused"
 
 /** A `Date`, an ISO string, or epoch milliseconds — whatever the JSON carried. */
-export type TaskGanttInstant = string | number | Date
+export type GanttInstant = string | number | Date
 
 /**
- * One bar. A task is usually one of these; a retried task is two or more, the
- * failed attempt sitting to the left of the one that stuck.
+ * One bar on the clock. A row's own bar is one of these, so is each earlier
+ * attempt — the failed one sitting to the left of the one that stuck — and so
+ * is each of the row's `bars`.
  */
-export interface TaskGanttSegment {
+export interface GanttBar {
   /** Offset from the run's zero. Use this, or `startedAt` with `origin`. */
   startMs?: number
   durationMs?: number
-  startedAt?: TaskGanttInstant
-  finishedAt?: TaskGanttInstant
-  status?: TaskGanttStatus
+  startedAt?: GanttInstant
+  finishedAt?: GanttInstant
+  status?: GanttStatus
   /** Overrides the hover text, which otherwise reads `key · status · duration`. */
   title?: string
   /**
    * Names the bar, so it can be picked on its own — `fetch_source#1`. Only a
-   * segment in `segments` has one; the row's own bar is picked with the row.
+   * bar in a row's `bars` has one; the row's own bar is picked with the row.
    */
   key?: string
   /**
@@ -54,7 +58,7 @@ export interface TaskGanttSegment {
   /**
    * Which entry of `palette` paints it, in place of its status fill — a layer,
    * a lane, an agent. A group the palette does not name keeps the status fill,
-   * and a `failed` bar is always drawn as failed.
+   * and a `failed` or `refused` bar is always drawn as one.
    */
   group?: string
   /**
@@ -63,29 +67,50 @@ export interface TaskGanttSegment {
    * not yet dispatched.
    */
   variant?: "solid" | "outline" | "dashed"
+  /**
+   * A second line under the label — `1,204 of 1,251`, `503`. A row with one
+   * grows to the `md` control height to carry both lines.
+   */
+  note?: React.ReactNode
+  /** A small mark at the bar's end — a `Badge`, an icon, a count. Drawn with a label. */
+  chip?: React.ReactNode
+  /**
+   * What this bar did, for its own hover card — the same fields a row's card
+   * reads. A row with a bar that has one opens no card of its own: its bars
+   * do, so the reader gets the bar under the cursor rather than the row.
+   */
+  summary?: React.ReactNode
+  result?: React.ReactNode | Record<string, unknown>
+  error?: { code?: React.ReactNode; message?: React.ReactNode; detail?: React.ReactNode }
+  log?: React.ReactNode
 }
 
-export interface TaskGanttTask extends TaskGanttSegment {
-  /** `task_key` — what the log lines call this task. Also the row's label. */
+/**
+ * One row: a task on a run's clock, a worker slot, a layer, a participant —
+ * whatever the surface groups time by. It carries its own bar, earlier
+ * attempts, many `bars` of its own, and the `rows` it opens into.
+ */
+export interface GanttRow extends GanttBar {
+  /** What the log lines call it — `task_key`, `slot-1`, `ingest`. Also the row's label. */
   key: string
   /** Shown instead of `key`, when the row wants a human name. */
   label?: React.ReactNode
   /** Earlier attempts, oldest first. A failed one draws in `destructive`. */
-  attempts?: TaskGanttSegment[]
+  attempts?: GanttBar[]
   /**
    * Many bars on one row, each a thing of its own rather than a retry — what a
    * worker slot held in order, what a layer was reached for. Drawn with the
    * row's own bar, if it has one; give each a `label` to say what it was.
    */
-  segments?: TaskGanttSegment[]
-  /** Overrides the right-hand duration cell. `—` when the task never ran. */
+  bars?: GanttBar[]
+  /** Overrides the right-hand duration cell. `—` when the row never ran. */
   duration?: React.ReactNode
-  /** One line — what the task said. The card's last line. */
+  /** One line — what it said. The card's last line. */
   log?: React.ReactNode
   /** A sentence under the card's header, when the row wants one. */
   summary?: React.ReactNode
   /**
-   * What the task produced — its `result.json`, or any part of it.
+   * What it produced — its `result.json`, or any part of it.
    *
    * An object renders as label/value pairs, with nested values as JSON; a node
    * renders as given, which is the hook for a kind-specific card (a table
@@ -97,17 +122,18 @@ export interface TaskGanttTask extends TaskGanttSegment {
   /** Replaces this row's card body entirely. */
   detail?: React.ReactNode
   /**
-   * The tasks this one split into, drawn under it, indented, when it is open.
-   * A task with no timing of its own draws the stretch its subtasks cover.
+   * The rows this one opens into — the tasks it split into, the participants
+   * of a layer — drawn under it, indented, when it is open. A row with no
+   * timing of its own draws the stretch its rows cover.
    */
-  subtasks?: TaskGanttTask[]
+  rows?: GanttRow[]
 }
 
 /**
  * A bounded repetition — a loop's rounds — drawn as a bracket over the rows
  * it holds, with its label on a line of its own above them.
  */
-export interface TaskGanttBracket {
+export interface GanttBracket {
   /** The first row it holds, by `key`. */
   from: string
   /** The last row it holds, by `key`. Rows are matched in order, first hit. */
@@ -120,8 +146,8 @@ export interface TaskGanttBracket {
  * A gate — a moment the run held and spent nothing — drawn as a rule across
  * the stretch of the clock it held, between the rows it lies between.
  */
-export interface TaskGanttSeam
-  extends Pick<TaskGanttSegment, "startMs" | "durationMs" | "startedAt" | "finishedAt"> {
+export interface GanttSeam
+  extends Pick<GanttBar, "startMs" | "durationMs" | "startedAt" | "finishedAt"> {
   /** The row it follows, by `key`. */
   after: string
   /** The label column's word — `approval`. */
@@ -132,12 +158,12 @@ export interface TaskGanttSeam
   duration?: React.ReactNode
 }
 
-export interface TaskGanttProps
+export interface GanttProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
-  /** One entry per task, in plan order — the run's `steps`, grouped by task. */
-  tasks: TaskGanttTask[]
-  /** The run's zero, when tasks carry timestamps. Defaults to the earliest one. */
-  origin?: TaskGanttInstant
+  /** One entry per row, in order — a run's tasks, its slots, its layers. */
+  rows: GanttRow[]
+  /** The clock's zero, when bars carry timestamps. Defaults to the earliest one. */
+  origin?: GanttInstant
   /** The clock's ceiling. Defaults to the last end, or `nowMs` if that is later. */
   spanMs?: number
   /** Draws the *now* line. Set it while the run is in flight; omit it after. */
@@ -159,19 +185,19 @@ export interface TaskGanttProps
    */
   durationWidth?: number
   /** Loops, bracketed over their rounds. */
-  brackets?: TaskGanttBracket[]
+  brackets?: GanttBracket[]
   /** Gates, ruled across the time they held. */
-  seams?: TaskGanttSeam[]
+  seams?: GanttSeam[]
   /**
-   * What each segment `group` is painted with — `{ ingest: "bg-data-1" }`. The
+   * What each bar `group` is painted with — `{ ingest: "bg-data-1" }`. The
    * kit ships no hues: a group nobody painted keeps its status fill.
    */
   palette?: Record<string, string>
   /**
-   * The inside of a bar, for every segment — a chip, an icon, a count. Return
+   * The inside of a bar, for every bar in `bars` — a chip, an icon, a count. Return
    * `null` for a bar that should stay a plain fill. Wins over `label`.
    */
-  renderSegment?: (segment: TaskGanttSegment, task: TaskGanttTask) => React.ReactNode
+  renderBar?: (bar: GanttBar, row: GanttRow) => React.ReactNode
   /**
    * `compact` in a drawer, `comfortable` on a dashboard. It moves the bar's
    * height, not the type scale — one component, three surfaces (SR14).
@@ -188,30 +214,30 @@ export interface TaskGanttProps
    * Replaces the default card body, for every row. Return `null` for a row that
    * should not open one.
    */
-  renderDetail?: (task: TaskGanttTask) => React.ReactNode
+  renderDetail?: (row: GanttRow) => React.ReactNode
   /** Where the card sits, how fast it opens, and how wide it is. */
-  detailProps?: TaskGanttDetailProps
-  /** The task the log is currently filtered to (SR15). */
+  detailProps?: GanttDetailProps
+  /** The row or bar picked — what the log is currently filtered to (SR15). */
   selectedKey?: string | null
   /** Makes the rows pickable. Picking one is what filters the log. */
-  onSelectTask?: (key: string) => void
+  onSelectRow?: (key: string) => void
   /**
-   * Makes each keyed segment pickable on its own — the task a layer was
-   * reached for, rather than the layer. A row whose segments are keyed is then
+   * Makes each keyed bar pickable on its own — the task a layer was reached
+   * for, rather than the layer. A row whose bars are keyed is then
    * picked by its bars, not as a whole, so a bar is never a button inside a
    * button. `selectedKey` lights a bar with that key as it lights a row.
    */
-  onSelectSegment?: (segmentKey: string, taskKey: string) => void
-  /** Which tasks with `subtasks` are open, by key — `true` for all. Controlled. */
+  onSelectBar?: (barKey: string, rowKey: string) => void
+  /** Which rows with `rows` are open, by key — `true` for all. Controlled. */
   expanded?: ExpandedKeys
   /** Which are open at first, uncontrolled. Closed by default. */
   defaultExpanded?: ExpandedKeys
-  /** A task opened or closed: every open key, as a `DataTable`'s `expanded` reads. */
+  /** A row opened or closed: every open key, as a `DataTable`'s `expanded` reads. */
   onExpandedChange?: (expanded: ExpandedKeys) => void
 }
 
 /** The bar's fill. `skipped` and `queued` have none — they draw as an outline. */
-const BAR: Record<TaskGanttStatus, string> = {
+const BAR: Record<GanttStatus, string> = {
   succeeded: "bg-success",
   running: "bg-info",
   failed: "bg-destructive",
@@ -219,10 +245,11 @@ const BAR: Record<TaskGanttStatus, string> = {
   stopped: "bg-muted-foreground",
   skipped: "bg-transparent",
   queued: "bg-transparent",
+  refused: "bg-destructive/35",
 }
 
-/** The dot's tone, so a card and a task row say one state in one colour. */
-const DOT: Record<TaskGanttStatus, React.ComponentProps<typeof StatusDot>["tone"]> = {
+/** The dot's tone, so a card and a row say one state in one colour. */
+const DOT: Record<GanttStatus, React.ComponentProps<typeof StatusDot>["tone"]> = {
   succeeded: "success",
   running: "running",
   failed: "error",
@@ -230,10 +257,11 @@ const DOT: Record<TaskGanttStatus, React.ComponentProps<typeof StatusDot>["tone"
   stopped: "muted",
   skipped: "muted",
   queued: "queued",
+  refused: "error",
 }
 
 /** What the card calls each state. `skipped` and `queued` say what happened, not the enum. */
-const STATUS_LABEL: Record<TaskGanttStatus, string> = {
+const STATUS_LABEL: Record<GanttStatus, string> = {
   succeeded: "succeeded",
   running: "running",
   failed: "failed",
@@ -241,13 +269,14 @@ const STATUS_LABEL: Record<TaskGanttStatus, string> = {
   stopped: "stopped",
   skipped: "never ran",
   queued: "not started",
+  refused: "refused",
 }
 
 /**
  * Where the card opens. With neither `side` nor `align` it opens beside the
  * cursor, under the row; set either and it is placed against the row instead.
  */
-export interface TaskGanttDetailProps {
+export interface GanttDetailProps {
   side?: "top" | "right" | "bottom" | "left"
   align?: "start" | "center" | "end"
   sideOffset?: number
@@ -260,10 +289,10 @@ export interface TaskGanttDetailProps {
   className?: string
 }
 
-export interface TaskGanttDetailCardProps
+export interface GanttDetailCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
-  task: TaskGanttTask
-  /** Elapsed so far, for a task still running — it has no `durationMs` yet. */
+  row: GanttRow
+  /** Elapsed so far, for a row still running — it has no `durationMs` yet. */
   elapsedMs?: number
   formatDuration?: (ms: number) => string
 }
@@ -305,7 +334,7 @@ function renderResult(
 }
 
 /**
- * What one task did, as a card.
+ * What one row — or one bar — did, as a card.
  *
  * The body of the hover card, and exported so a surface can compose its own
  * around the same header — `renderDetail` returning this with a kind-specific
@@ -315,21 +344,21 @@ function renderResult(
  * Order is fixed and is the order a reader asks in: what state, how long, what
  * went wrong, what came out, what it said last.
  */
-export const TaskGanttDetailCard = React.forwardRef<
+export const GanttDetailCard = React.forwardRef<
   HTMLDivElement,
-  TaskGanttDetailCardProps
->(({ task, elapsedMs, formatDuration = defaultFormatDuration, className, ...props }, ref) => {
-  const status = task.status ?? "succeeded"
-  const ms = task.durationMs ?? elapsedMs
-  const duration = task.duration ?? (ms != null ? formatDuration(ms) : "—")
-  const attempts = task.attempts ?? []
+  GanttDetailCardProps
+>(({ row, elapsedMs, formatDuration = defaultFormatDuration, className, ...props }, ref) => {
+  const status = row.status ?? "succeeded"
+  const ms = row.durationMs ?? elapsedMs
+  const duration = row.duration ?? (ms != null ? formatDuration(ms) : "—")
+  const attempts = row.attempts ?? []
 
   return (
     <div ref={ref} className={cn("flex flex-col gap-2", className)} {...props}>
       <div className="flex items-baseline gap-2">
         <StatusDot tone={DOT[status]} size="md" className="translate-y-px" />
         <span className="min-w-0 flex-1 truncate font-mono text-sm font-medium">
-          {task.key}
+          {row.key}
         </span>
         <span className="shrink-0 font-mono text-sm text-muted-foreground tabular-nums">
           {duration}
@@ -338,7 +367,7 @@ export const TaskGanttDetailCard = React.forwardRef<
 
       <div className="text-sm text-muted-foreground">
         {STATUS_LABEL[status]}
-        {task.summary != null ? <> · {task.summary}</> : null}
+        {row.summary != null ? <> · {row.summary}</> : null}
       </div>
 
       {attempts.length ? (
@@ -355,9 +384,9 @@ export const TaskGanttDetailCard = React.forwardRef<
         </div>
       ) : null}
 
-      {task.segments?.length ? (
+      {row.bars?.length ? (
         <div className="flex flex-col gap-0.5">
-          {task.segments.map((s, i) => (
+          {row.bars.map((s, i) => (
             <span key={i} className="flex items-baseline gap-2 text-sm text-muted-foreground">
               <span className="min-w-0 flex-1 truncate font-mono text-foreground">
                 {s.label ?? s.title ?? s.status ?? "—"}
@@ -370,42 +399,42 @@ export const TaskGanttDetailCard = React.forwardRef<
         </div>
       ) : null}
 
-      {task.error != null ? (
+      {row.error != null ? (
         <div
           // The colour is a token, set inline because the kit's build emits no
           // `border-<colour>` utility today — `border-destructive` renders grey.
           style={{ borderColor: "var(--color-destructive)" }}
           className="border-l-2 bg-destructive/10 px-2 py-1.5"
         >
-          {task.error.code != null ? (
+          {row.error.code != null ? (
             <div className="font-mono text-sm font-medium text-destructive">
-              {task.error.code}
+              {row.error.code}
             </div>
           ) : null}
-          {task.error.message != null ? (
-            <div className="text-sm">{task.error.message}</div>
+          {row.error.message != null ? (
+            <div className="text-sm">{row.error.message}</div>
           ) : null}
-          {task.error.detail != null ? (
+          {row.error.detail != null ? (
             <pre className="mt-1 max-h-32 overflow-auto whitespace-pre-wrap font-mono text-sm text-muted-foreground">
-              {task.error.detail}
+              {row.error.detail}
             </pre>
           ) : null}
         </div>
       ) : null}
 
-      {task.result != null ? renderResult(task.result) : null}
+      {row.result != null ? renderResult(row.result) : null}
 
-      {task.log != null ? (
+      {row.log != null ? (
         <div className="border-t border-border pt-1.5 font-mono text-sm text-muted-foreground">
-          {task.log}
+          {row.log}
         </div>
       ) : null}
     </div>
   )
 })
-TaskGanttDetailCard.displayName = "TaskGanttDetailCard"
+GanttDetailCard.displayName = "GanttDetailCard"
 
-const toMs = (t: TaskGanttInstant): number =>
+const toMs = (t: GanttInstant): number =>
   t instanceof Date ? t.getTime() : typeof t === "number" ? t : Date.parse(t)
 
 const defaultFormatDuration = (ms: number): string => {
@@ -422,48 +451,52 @@ const defaultFormatTick = (ms: number): string => {
   return Number.isInteger(s) ? `${s}s` : `${(Math.round(s * 10) / 10).toFixed(1)}s`
 }
 
-/** Resolves a segment to the run's clock, in ms from zero. */
+/** Resolves a bar to the clock, in ms from zero. */
 function place(
-  seg: TaskGanttSegment,
+  bar: GanttBar,
   origin: number | undefined,
 ): { start: number; duration: number } | null {
-  let start = seg.startMs
-  if (start == null && seg.startedAt != null && origin != null) {
-    start = toMs(seg.startedAt) - origin
+  let start = bar.startMs
+  if (start == null && bar.startedAt != null && origin != null) {
+    start = toMs(bar.startedAt) - origin
   }
   if (start == null || Number.isNaN(start)) return null
 
-  let duration = seg.durationMs
-  if (duration == null && seg.startedAt != null && seg.finishedAt != null) {
-    duration = toMs(seg.finishedAt) - toMs(seg.startedAt)
+  let duration = bar.durationMs
+  if (duration == null && bar.startedAt != null && bar.finishedAt != null) {
+    duration = toMs(bar.finishedAt) - toMs(bar.startedAt)
   }
   return { start, duration: duration != null && duration > 0 ? duration : 0 }
 }
 
-/** Every task in the tree, parents before their subtasks. */
-const everyTask = (tasks: TaskGanttTask[]): TaskGanttTask[] =>
-  tasks.flatMap((t) => [t, ...everyTask(t.subtasks ?? [])])
+/** Every row in the tree, parents before the rows they open into. */
+const everyRow = (rows: GanttRow[]): GanttRow[] =>
+  rows.flatMap((t) => [t, ...everyRow(t.rows ?? [])])
 
 type Placed = {
   start: number
   duration: number
-  status: TaskGanttStatus
+  status: GanttStatus
   title: string | undefined
-  /** The segment as given, for `renderSegment`, `label`, `group` and `variant`. */
-  seg: TaskGanttSegment
+  /** The bar as given, for `renderBar`, `label`, `group` and `variant`. */
+  bar: GanttBar
 }
 
 /**
- * A task's own bars: its earlier attempts, the segments it holds, then the
- * attempt that stuck. The task's `label` names its row, not its bar, so the
- * task's own bar is drawn without one.
+ * A row's bars: its earlier attempts, the `bars` it holds, then its own — the
+ * attempt that stuck. The row's `label` and card fields describe the row, not
+ * its own bar, so that bar is drawn without them.
  */
-const segmentsOf = (task: TaskGanttTask, zero: number | undefined): Placed[] =>
-  [...(task.attempts ?? []), ...(task.segments ?? []), { ...task, label: undefined }]
-    .map((seg) => {
-      const at = place(seg, zero)
+const barsOf = (row: GanttRow, zero: number | undefined): Placed[] =>
+  [
+    ...(row.attempts ?? []),
+    ...(row.bars ?? []),
+    { ...row, label: undefined, summary: undefined, result: undefined, error: undefined, log: undefined },
+  ]
+    .map((bar) => {
+      const at = place(bar, zero)
       return at
-        ? { ...at, status: seg.status ?? task.status ?? "succeeded", title: seg.title, seg }
+        ? { ...at, status: bar.status ?? row.status ?? "succeeded", title: bar.title, bar }
         : null
     })
     .filter((s): s is Placed => s !== null)
@@ -475,7 +508,11 @@ const VARIANT = {
   dashed: "border border-dashed border-foreground/40 bg-transparent",
 } as const
 
-/** Indent per level of `subtasks`, and the room the open/close control takes. */
+/** A bar with something to say beyond its tooltip. */
+const hasCard = (bar: GanttBar) =>
+  bar.summary != null || bar.result != null || bar.error != null || bar.log != null
+
+/** Indent per level of `rows`, and the room the open/close control takes. */
 const INDENT = 12
 const TOGGLE = 16
 
@@ -491,7 +528,7 @@ function RowCard({
 }: {
   trigger: React.ReactElement
   detail: React.ReactNode
-  detailProps?: TaskGanttDetailProps
+  detailProps?: GanttDetailProps
 }) {
   const x = React.useRef(0)
   const [offset, setOffset] = React.useState(0)
@@ -527,31 +564,31 @@ function RowCard({
 }
 
 /**
- * Where the time went — one row per task, on the run's own clock.
+ * Where the time went — rows of bars on one clock.
  *
- * Duration is the question a run detail is opened with, and a step list with a
- * duration column answers it one row at a time. A bar placed by start and sized
- * by duration puts the slow task, the retry and the branch that never ran in one
- * glance (SR14).
+ * A row is whatever a surface groups time by. Read by **task**, it answers the
+ * question a run detail is opened with: a bar placed by start and sized by
+ * duration puts the slow task, the retry and the branch that never ran in one
+ * glance (SR14). Read by **layer**, the same drawing answers what the run
+ * reached and what it was stopped from reaching: a row per layer opens into its
+ * participants, and each holds the `bars` of the tasks that reached it, painted
+ * by `palette` — `refused` where a rule said no, `dashed` where it was declared
+ * and never dispatched. Read by **slot**, each row is a worker and its bars are
+ * what it ran, in order.
  *
- * It is one component across three surfaces — the Runs drawer (compact, with a
- * line of log per row), the run dashboard (full width, logs off) and the
- * document rendering — so `density` and `showLogs` are props, not three
- * drawings.
+ * A row opens into its `rows`, indented under it, and a parent with no timing
+ * of its own draws the stretch they cover as a thin rule — so a closed plan
+ * still says how long it took. The clock is milliseconds by default; a plan
+ * read in order passes step numbers and a `formatTick` that names them.
  *
- * A task that split into others carries them as `subtasks`: it opens into them,
- * indented under it, and a parent with no timing of its own draws the stretch
- * its subtasks cover as a thin rule — so a closed plan still says how long it
- * took.
- *
- * Colour never carries state alone: every row names its duration, the bar
- * titles itself with its status, and a task that never ran is an *outline*
- * rather than a paler fill.
+ * Colour never carries state alone: every row names its duration, a bar titles
+ * itself with its status, a row that never ran is an *outline* rather than a
+ * paler fill, and a refused bar's name is struck through.
  */
-export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
+export const Gantt = React.forwardRef<HTMLDivElement, GanttProps>(
   (
     {
-      tasks,
+      rows,
       origin,
       spanMs,
       nowMs,
@@ -564,14 +601,14 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       brackets = [],
       seams = [],
       palette,
-      renderSegment,
+      renderBar,
       density = "comfortable",
       showDetail = true,
       renderDetail,
       detailProps,
       selectedKey,
-      onSelectTask,
-      onSelectSegment,
+      onSelectRow,
+      onSelectBar,
       expanded,
       defaultExpanded,
       onExpandedChange,
@@ -582,8 +619,8 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
   ) => {
     const barHeight = density === "compact" ? 11 : 13
 
-    const all = React.useMemo(() => everyTask(tasks), [tasks])
-    const parents = all.filter((t) => t.subtasks?.length).map((t) => t.key)
+    const all = React.useMemo(() => everyRow(rows), [rows])
+    const parents = all.filter((t) => t.rows?.length).map((t) => t.key)
     const nested = parents.length > 0
     const { isOpen, toggle } = useExpandedKeys({
       expanded,
@@ -600,11 +637,11 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       return origin != null ? toMs(origin) : stamps.length ? Math.min(...stamps) : undefined
     }, [all, origin])
 
-    /** Each task's bars, and for a parent the stretch everything under it covers. */
+    /** Each row's bars, and for a parent the stretch everything under it covers. */
     const placed = React.useMemo(() => {
-      const own = new Map(all.map((t) => [t.key, segmentsOf(t, zero)]))
-      const reach = (t: TaskGanttTask): { start: number; end: number } | null => {
-        const segs = everyTask([t]).flatMap((d) => own.get(d.key) ?? [])
+      const own = new Map(all.map((t) => [t.key, barsOf(t, zero)]))
+      const reach = (t: GanttRow): { start: number; end: number } | null => {
+        const segs = everyRow([t]).flatMap((d) => own.get(d.key) ?? [])
         if (!segs.length) return null
         return {
           start: Math.min(...segs.map((s) => s.start)),
@@ -612,25 +649,25 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
         }
       }
       return new Map(
-        all.map((t) => [t.key, { segments: own.get(t.key) ?? [], reach: t.subtasks?.length ? reach(t) : null }]),
+        all.map((t) => [t.key, { bars: own.get(t.key) ?? [], reach: t.rows?.length ? reach(t) : null }]),
       )
     }, [all, zero])
 
-    /** The rows on screen: every task whose parents are all open, with its depth. */
-    const rows: { task: TaskGanttTask; depth: number }[] = []
-    const walk = (list: TaskGanttTask[], depth: number) => {
-      for (const task of list) {
-        rows.push({ task, depth })
-        if (task.subtasks?.length && isOpen(task.key)) walk(task.subtasks, depth + 1)
+    /** The rows on screen: every row whose parents are all open, with its depth. */
+    const visible: { row: GanttRow; depth: number }[] = []
+    const walk = (list: GanttRow[], depth: number) => {
+      for (const row of list) {
+        visible.push({ row, depth })
+        if (row.rows?.length && isOpen(row.key)) walk(row.rows, depth + 1)
       }
     }
-    walk(tasks, 0)
+    walk(rows, 0)
 
     const placedSeams = seams
       .map((seam) => ({ seam, at: place(seam, zero) }))
-      .filter((s) => s.at !== null) as { seam: TaskGanttSeam; at: { start: number; duration: number } }[]
+      .filter((s) => s.at !== null) as { seam: GanttSeam; at: { start: number; duration: number } }[]
 
-    const ends = [...placed.values()].flatMap((p) => p.segments.map((s) => s.start + s.duration))
+    const ends = [...placed.values()].flatMap((p) => p.bars.map((s) => s.start + s.duration))
     const span = Math.max(
       spanMs ??
         Math.max(
@@ -643,12 +680,12 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
 
     // Which rows a bracket holds, and which bracket opens on which row — of the rows on screen.
     const inBracket = new Set<number>()
-    const opens = new Map<string, TaskGanttBracket>()
+    const opens = new Map<string, GanttBracket>()
     for (const b of brackets) {
-      const from = rows.findIndex((r) => r.task.key === b.from)
-      const to = rows.findIndex((r, i) => i >= from && r.task.key === b.to)
+      const from = visible.findIndex((r) => r.row.key === b.from)
+      const to = visible.findIndex((r, i) => i >= from && r.row.key === b.to)
       if (from < 0 || to < 0) continue
-      opens.set(rows[from].task.key, b)
+      opens.set(visible[from].row.key, b)
       for (let i = from; i <= to; i++) inBracket.add(i)
     }
     const seamsAfter = (key: string) => placedSeams.filter((s) => s.seam.after === key)
@@ -663,21 +700,21 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
      * The card for one row, or `null` for a row with nothing to say — an empty
      * card that follows the cursor is worse than no card.
      */
-    const detailFor = (task: TaskGanttTask, elapsedMs?: number): React.ReactNode => {
+    const detailFor = (row: GanttRow, elapsedMs?: number): React.ReactNode => {
       if (!showDetail) return null
-      if (renderDetail) return renderDetail(task)
-      if (task.detail != null) return task.detail
+      if (renderDetail) return renderDetail(row)
+      if (row.detail != null) return row.detail
       const hasBody =
-        task.result != null ||
-        task.error != null ||
-        task.log != null ||
-        task.summary != null ||
-        (task.attempts?.length ?? 0) > 0 ||
-        (task.segments?.length ?? 0) > 0
+        row.result != null ||
+        row.error != null ||
+        row.log != null ||
+        row.summary != null ||
+        (row.attempts?.length ?? 0) > 0 ||
+        (row.bars?.length ?? 0) > 0
       if (!hasBody) return null
       return (
-        <TaskGanttDetailCard
-          task={task}
+        <GanttDetailCard
+          row={row}
           elapsedMs={elapsedMs}
           formatDuration={formatDuration}
         />
@@ -713,40 +750,58 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
           </span>
         </div>
 
-        {rows.map(({ task, depth }, index) => {
-          const { segments, reach } = placed.get(task.key)!
-          const kids = (task.subtasks?.length ?? 0) > 0
-          const open = kids && isOpen(task.key)
-          const neverRan = segments.length === 0 && reach == null
-          const selected = selectedKey != null && selectedKey === task.key
+        {visible.map(({ row, depth }, index) => {
+          const { bars, reach } = placed.get(row.key)!
+          const kids = (row.rows?.length ?? 0) > 0
+          const open = kids && isOpen(row.key)
+          const neverRan = bars.length === 0 && reach == null
+          const selected = selectedKey != null && selectedKey === row.key
           const bracketed = inBracket.has(index)
-          const barPicks = onSelectSegment != null && (task.segments ?? []).some((s) => s.key != null)
-          const pickable = onSelectTask != null && !barPicks
-          // A running task has no `durationMs` of its own yet: what it has spent so
-          // far is the segment drawn up to the *now* line. A parent with no bar of
-          // its own has spent what its subtasks cover.
-          // A row of many bars has spent what they add up to.
-          const ownBar = place(task, zero) != null
+          const barPicks = onSelectBar != null && (row.bars ?? []).some((s) => s.key != null)
+          const pickable = onSelectRow != null && !barPicks
+          // A running row has no `durationMs` of its own yet: what it has spent so
+          // far is the bar drawn up to the *now* line. A parent with no bar of its
+          // own has spent what its rows cover; a row of many bars, what they add up to.
+          const ownBar = place(row, zero) != null
           const elapsed =
-            task.durationMs ??
-            (task.segments?.length && !ownBar
-              ? segments.reduce((n, s) => n + s.duration, 0)
-              : segments[segments.length - 1]?.duration) ??
+            row.durationMs ??
+            (row.bars?.length && !ownBar
+              ? bars.reduce((n, s) => n + s.duration, 0)
+              : bars[bars.length - 1]?.duration) ??
             (reach ? reach.end - reach.start : undefined)
           const duration =
-            task.duration ?? (neverRan || elapsed == null ? "—" : formatDuration(elapsed))
+            row.duration ?? (neverRan || elapsed == null ? "—" : formatDuration(elapsed))
 
-          const detail = detailFor(task, elapsed)
+          // A bar that has its own card: the bars own the hover, not the row.
+          const barCards = bars.map((s) =>
+            showDetail && hasCard(s.bar) ? (
+              <GanttDetailCard
+                row={{
+                  key: s.bar.key ?? row.key,
+                  label: s.bar.label,
+                  status: s.status,
+                  durationMs: s.duration,
+                  summary: s.bar.summary,
+                  result: s.bar.result,
+                  error: s.bar.error,
+                  log: s.bar.log,
+                }}
+                formatDuration={formatDuration}
+              />
+            ) : null,
+          )
+          const detail = barCards.some((c) => c != null) ? null : detailFor(row, elapsed)
 
           // What each bar carries inside it. A row with any of it grows to hold a
-          // line of text; the rest keep the thin bar, so a chart of plain tasks
-          // does not change height because the API added a field.
-          const contents = segments.map((s) =>
-            renderSegment ? renderSegment(s.seg, task) : s.seg.label ?? null,
+          // line of text — two, with a note; the rest keep the thin bar, so a
+          // chart of plain bars does not change height because the API added a field.
+          const contents = bars.map((s) =>
+            renderBar ? renderBar(s.bar, row) : s.bar.label ?? null,
           )
           const tall = contents.some((c) => c != null)
+          const twoLines = tall && bars.some((s) => s.bar.note != null)
 
-          const row = (
+          const cells = (
             <div className="col-span-full grid grid-cols-subgrid items-center py-[3px]">
               <span
                 className={cn(
@@ -754,33 +809,36 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                   neverRan && "text-muted-foreground",
                 )}
                 style={nested ? { paddingLeft: depth * INDENT + TOGGLE } : undefined}
-                title={task.key}
+                title={row.key}
               >
-                {task.label ?? task.key}
+                {row.label ?? row.key}
               </span>
 
               {/* The track — the whole clock, so an empty stretch reads as waiting. */}
               <span
-                className={cn("relative min-w-0 bg-muted/55", tall && "h-control-xs")}
+                className={cn(
+                  "relative min-w-0 bg-muted/55",
+                  twoLines ? "h-control-md" : tall && "h-control-xs",
+                )}
                 style={tall ? undefined : { height: barHeight }}
               >
                 {neverRan ? (
                   <span className="absolute inset-0 border border-dashed border-border" />
-                ) : segments.length ? (
-                  segments.map((seg, i) => {
+                ) : bars.length ? (
+                  bars.map((b, i) => {
                     // Chosen, not merged: a palette entry is a consumer's class,
-                    // which `cn` cannot see a conflict with. A failure keeps its
-                    // own colour over any group's — it is the one bar a reader
-                    // must not mistake for work done.
+                    // which `cn` cannot see a conflict with. A failure and a
+                    // refusal keep their own colour over any group's — they are
+                    // the bars a reader must not mistake for work done.
                     const fill =
-                      (seg.status !== "failed" && seg.seg.group != null && palette?.[seg.seg.group]) ||
-                      BAR[seg.status]
-                    const variant = VARIANT[seg.seg.variant ?? "solid"]
+                      (b.status !== "failed" && b.status !== "refused" && b.bar.group != null && palette?.[b.bar.group]) ||
+                      BAR[b.status]
+                    const variant = VARIANT[b.bar.variant ?? "solid"]
                     const inside = contents[i]
                     const title =
-                      seg.title ?? `${task.key} · ${seg.status} · ${formatDuration(seg.duration)}`
-                    const at = { left: pct(seg.start), width: pct(seg.duration), minWidth: 2 }
-                    const key = seg.seg.key
+                      b.title ?? `${row.key} · ${b.status} · ${formatDuration(b.duration)}`
+                    const at = { left: pct(b.start), width: pct(b.duration), minWidth: 2 }
+                    const key = b.bar.key
                     const Bar = barPicks && key != null ? "button" : "span"
                     const pick =
                       Bar === "button"
@@ -788,17 +846,20 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                             type: "button" as const,
                             "aria-label": title,
                             "aria-pressed": selectedKey === key,
-                            onClick: () => onSelectSegment!(key!, task.key),
+                            onClick: () => onSelectBar!(key!, row.key),
                           }
                         : {}
                     const lit = key != null && selectedKey === key && "ring-1 ring-ring"
                     const picking =
                       Bar === "button" &&
                       "cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                    return inside == null ? (
+                    const card = barCards[i]
+                    // The native tooltip is the fallback, not a second copy of the card.
+                    const tip = card == null ? title : undefined
+                    const drawn = inside == null ? (
                       <Bar
                         key={i}
-                        title={title}
+                        title={tip}
                         className={cn("absolute inset-y-0 rounded-[1px]", variant || fill, picking, lit)}
                         style={at}
                         {...pick}
@@ -808,11 +869,13 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                       // is unreadable in half the themes.
                       <Bar
                         key={i}
-                        title={title}
+                        title={tip}
                         className={cn(
                           "absolute inset-y-px flex min-w-0 items-stretch overflow-hidden rounded-xs border border-border bg-card text-left",
-                          seg.seg.variant === "dashed" && "border-dashed",
-                          picking && [picking, "hover:bg-accent"],
+                          b.bar.variant === "dashed" && "border-dashed",
+                          // Muted, not accent: in some themes accent is a strong hue
+                          // and the bar's text would sit on it.
+                          picking && [picking, "hover:bg-muted"],
                           lit,
                         )}
                         style={at}
@@ -820,17 +883,38 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                       >
                         <span
                           aria-hidden
-                          className={cn("w-1 shrink-0", seg.seg.variant && seg.seg.variant !== "solid" ? "bg-border" : fill)}
+                          className={cn("w-1 shrink-0", b.bar.variant && b.bar.variant !== "solid" ? "bg-border" : fill)}
                         />
-                        <span className="flex min-w-0 items-center truncate px-1 font-mono text-sm">
-                          {inside}
+                        <span className="flex min-w-0 flex-auto flex-col justify-center px-1">
+                          <span
+                            className={cn(
+                              "truncate font-mono text-sm",
+                              b.status === "refused" && "text-destructive line-through",
+                            )}
+                          >
+                            {inside}
+                          </span>
+                          {b.bar.note != null ? (
+                            <span className="truncate text-sm text-muted-foreground">{b.bar.note}</span>
+                          ) : null}
                         </span>
+                        {b.bar.chip != null ? (
+                          // The chip gives way first: a narrow bar keeps its name.
+                          <span className="flex min-w-0 shrink-[100] items-center overflow-hidden pr-1">
+                            {b.bar.chip}
+                          </span>
+                        ) : null}
                       </Bar>
+                    )
+                    return card == null ? (
+                      drawn
+                    ) : (
+                      <RowCard key={i} trigger={drawn} detail={card} detailProps={detailProps} />
                     )
                   })
                 ) : reach ? (
                   <span
-                    title={`${task.key} · ${task.subtasks!.length} subtasks · ${formatDuration(reach.end - reach.start)}`}
+                    title={`${row.key} · ${row.rows!.length} rows · ${formatDuration(reach.end - reach.start)}`}
                     className="absolute top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-foreground/45"
                     style={{
                       left: pct(reach.start),
@@ -858,7 +942,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
             <button
               type="button"
               aria-pressed={selected}
-              onClick={() => onSelectTask(task.key)}
+              onClick={() => onSelectRow(row.key)}
               className={cn(
                 "col-span-full row-start-1 grid cursor-pointer grid-cols-subgrid text-left focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
                 "hover:bg-accent/60",
@@ -866,7 +950,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                 selected && "bg-accent",
               )}
             >
-              {row}
+              {cells}
             </button>
           ) : (
             <div
@@ -876,7 +960,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                 detail != null && "hover:bg-accent/60",
               )}
             >
-              {row}
+              {cells}
             </div>
           )
 
@@ -892,8 +976,8 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
               {kids ? (
                 <ExpandToggle
                   open={open}
-                  label={task.key}
-                  onClick={() => toggle(task.key)}
+                  label={row.key}
+                  onClick={() => toggle(row.key)}
                   className="z-10 col-start-1 row-start-1 self-center justify-self-start"
                   style={{ marginLeft: depth * INDENT }}
                 />
@@ -901,9 +985,9 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
             </div>
           )
 
-          const bracket = opens.get(task.key)
+          const bracket = opens.get(row.key)
           return (
-            <React.Fragment key={task.key}>
+            <React.Fragment key={row.key}>
               {bracket ? (
                 <div
                   className="col-span-full truncate border-l-2 bg-warning/10 px-2 py-0.5 font-mono text-sm font-medium text-warning"
@@ -914,7 +998,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
                 </div>
               ) : null}
               {line}
-              {seamsAfter(task.key).map(({ seam, at }, i) => (
+              {seamsAfter(row.key).map(({ seam, at }, i) => (
                 <div
                   key={`seam-${i}`}
                   className="col-span-full grid grid-cols-subgrid items-center py-[3px]"
@@ -952,4 +1036,4 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
     )
   },
 )
-TaskGantt.displayName = "TaskGantt"
+Gantt.displayName = "Gantt"

@@ -1,18 +1,37 @@
 import * as React from "react"
-import { TaskGantt, type ExpandedKeys, type TaskGanttTask } from "@invana/ui"
+import { Badge, Gantt, type ExpandedKeys, type GanttRow } from "@invana/ui"
 
-import type { BlockProps, GanttTask } from "../types"
+import { BADGE_TONE } from "../format"
+import type { BlockProps, GanttSpecBar, GanttSpecRow } from "../types"
 
 /** The tasks drawn open at first, by key — every task the spec marks `open`. */
-const openKeys = (tasks: GanttTask[]): Record<string, boolean> =>
+const openKeys = (tasks: GanttSpecRow[]): Record<string, boolean> =>
   Object.fromEntries(
     tasks.flatMap((t) => [...(t.open ? [[t.key, true] as const] : []), ...Object.entries(openKeys(t.subtasks ?? []))]),
   )
 
-/** The JSON's words as the Gantt's task — the same fields, with the open flag left behind. */
-const toTask = ({ open: _open, subtasks, ...task }: GanttTask): TaskGanttTask => ({
+/** A bar's chip, as the badge the JSON names. */
+const toBar = ({ chip, ...bar }: GanttSpecBar) => ({
+  ...bar,
+  chip: chip ? (
+    <Badge variant="soft" tone={BADGE_TONE[chip.tone ?? "neutral"]}>
+      {chip.label}
+    </Badge>
+  ) : undefined,
+})
+
+/** A plan read in order counts steps, not milliseconds. */
+const STEP_TICK = (n: number) => `step ${Math.round(n)}`
+const STEPS = (n: number) => (Math.round(n) === 1 ? "1 step" : `${Math.round(n)} steps`)
+
+/**
+ * The spec's words as the Gantt's: a task is a row, its `subtasks` the rows it
+ * opens into, its `segments` the bars it holds — the open flag left behind.
+ */
+const toRow = ({ open: _open, subtasks, segments, ...task }: GanttSpecRow): GanttRow => ({
   ...task,
-  subtasks: subtasks?.map(toTask),
+  bars: segments?.map(toBar),
+  rows: subtasks?.map(toRow),
 })
 
 /**
@@ -24,24 +43,27 @@ const toTask = ({ open: _open, subtasks, ...task }: GanttTask): TaskGanttTask =>
  *
  * A row's `segments` are many bars on one row — what a worker slot held, what a
  * layer was reached for — painted by `palette`. A keyed bar is picked on its
- * own and sent as `select` with its key.
+ * own and sent as `select` with its key. With `scale: "seq"` the clock counts a
+ * plan's steps, so the same drawing reads a plan before it runs.
  */
 export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   const [selected, setSelected] = React.useState<string | null>(spec.selected ?? null)
   const [expanded, setExpanded] = React.useState<ExpandedKeys>(() => openKeys(spec.tasks))
-  const tasks = React.useMemo(() => spec.tasks.map(toTask), [spec.tasks])
+  const rows = React.useMemo(() => spec.tasks.map(toRow), [spec.tasks])
   const pick = (key: string) => {
     setSelected(key)
     onAction?.("select", key)
   }
 
   return (
-    <TaskGantt
-      tasks={tasks}
+    <Gantt
+      rows={rows}
       spanMs={spec.spanMs}
       nowMs={spec.nowMs}
       openEnded={spec.openEnded}
       ticks={spec.ticks}
+      formatTick={spec.scale === "seq" ? STEP_TICK : undefined}
+      formatDuration={spec.scale === "seq" ? STEPS : undefined}
       labelWidth={spec.labelWidth}
       durationWidth={spec.durationWidth}
       palette={spec.palette}
@@ -50,8 +72,8 @@ export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
       expanded={expanded}
       onExpandedChange={setExpanded}
       selectedKey={selected}
-      onSelectTask={onAction ? pick : undefined}
-      onSelectSegment={onAction ? pick : undefined}
+      onSelectRow={onAction ? pick : undefined}
+      onSelectBar={onAction ? pick : undefined}
     />
   )
 }

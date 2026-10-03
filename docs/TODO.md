@@ -254,10 +254,11 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | CitationRow numbered (on CitationList) | `packages/ui/src/components/ui-extended/citation-list.tsx` | extend | done | today |
 | TraceList progress (on TraceList, TraceStep) | `packages/ui/src/components/ui-extended/trace-list.tsx` | extend | done | today |
 | CannotAnswerCard type sizes (on CannotAnswerCard) | `packages/ui/src/components/ui-extended/cannot-answer-card.tsx` | extend | done | today |
-| TaskGantt subtasks, nested; hover card at the cursor (on TaskGantt) | `packages/ui/src/components/ui-extended/task-gantt.tsx` | extend | done | today |
-| TaskGantt many bars on a row — `segments` with `key`, `label`, `group` + `palette`, `variant`; `onSelectSegment`; `renderSegment`; `durationWidth` (on TaskGantt) | `packages/ui/src/components/ui-extended/task-gantt.tsx` | extend | done | today |
+| Gantt — one drawing for run progress and layer access; replaces TaskGantt and LayerStrip (`rows` nest, `bars` on a row, `refused`) | `packages/ui/src/components/ui-extended/gantt.tsx` | new | done | today |
+| Gantt rows nested; hover card at the cursor (on Gantt) | `packages/ui/src/components/ui-extended/gantt.tsx` | extend | done | today |
+| Gantt many bars on a row — `bars` with `key`, `label`, `note`, `chip`, `group` + `palette`, `variant`, a card of their own (`summary`/`result`/`error`/`log`); `onSelectBar`; `renderBar`; `durationWidth` (on Gantt) | `packages/ui/src/components/ui-extended/gantt.tsx` | extend | done | today |
 | TimelineEntry nested entries (on TimelineList) | `packages/ui/src/components/ui-extended/timeline-list.tsx` | extend | done | today |
-| ExpandToggle and `useExpandedKeys` (shared by DataTable, TaskGantt, HeatStrip) | `packages/ui/src/components/ui-extended/expand-toggle.tsx` | new | done | today |
+| ExpandToggle and `useExpandedKeys` (shared by DataTable, Gantt, HeatStrip) | `packages/ui/src/components/ui-extended/expand-toggle.tsx` | new | done | today |
 
 ### Everything else
 
@@ -342,7 +343,7 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board o
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `blocks/checks.tsx` | todo | next | – |
 | trace | `{ steps[] }` | TraceList · ui | `blocks/trace.tsx` | done | today | 3 |
 | activity | `{ lanes[], bands?, axis?, pinned?, state? }` | HeatLane · charts | `blocks/activity.tsx` | done | today | – |
-| gantt | `{ tasks[key, startMs, durationMs, status, attempts?, segments[key?, label?, group?, variant?]?, duration?, subtasks?], spanMs?, nowMs?, palette?, seams?, durationWidth? }` | TaskGantt · ui | `blocks/gantt.tsx` | done | today | – |
+| gantt | `{ tasks[key, startMs, durationMs, status, attempts?, segments[key?, label?, note?, chip?, group?, variant?, summary?, result?, error?, log?]?, duration?, subtasks?], spanMs?, nowMs?, palette?, seams?, scale?, durationWidth? }` | Gantt · ui | `blocks/gantt.tsx` | done | today | – |
 | heatstrip | `{ states[key, label, tone], cells? \| rows[id, label, cells, children?], ticks? }` | HeatStrip · charts | `blocks/heatstrip.tsx` | done | today | – |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · blocks | `blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `blocks/coef.tsx` | todo | next | 5 |

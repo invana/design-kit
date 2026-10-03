@@ -155,7 +155,7 @@
         "startMs": 0,
         "durationMs": 1800,
         "summary": "split the brief into 8 tasks",
-        "subtasks": [
+        "rows": [
           { "key": "fetch_prices", "status": "succeeded", "startMs": 1900, "durationMs": 2600, "result": { "rows": 2520 } },
           { "key": "fetch_filings", "status": "succeeded", "startMs": 9400, "durationMs": 3100, "attempts": [{ "startMs": 1900, "durationMs": 1400, "status": "failed", "title": "429 rate limited · retried on slot-2" }], "log": "retried after 6s" },
           { "key": "fetch_news", "status": "succeeded", "startMs": 1900, "durationMs": 4100 },
@@ -163,7 +163,7 @@
             "key": "analyse",
             "summary": "no clock of its own — the stretch its two subtasks cover",
             "status": "failed",
-            "subtasks": [
+            "rows": [
               { "key": "analyse.margins", "status": "succeeded", "startMs": 13900, "durationMs": 3300 },
               { "key": "analyse.risk", "status": "failed", "startMs": 13900, "durationMs": 2100, "error": { "code": "schema_mismatch", "message": "ratings.consensus is a string, expected a number" } }
             ]
@@ -187,24 +187,34 @@
       {
         "key": "network",
         "summary": "1 source",
-        "segments": [
+        "bars": [
           {
             "label": "fetch_source",
             "startMs": 40,
             "durationMs": 310,
             "group": "network",
             "status": "failed",
-            "title": "fetch_source #1 · 503"
+            "title": "fetch_source #1 · 503",
+            "note": "503",
+            "error": { "code": "503", "message": "refused · retried" }
           },
-          { "label": "fetch_source", "startMs": 350, "durationMs": 590, "group": "network", "title": "fetch_source · 1.4 MB" }
+          {
+            "label": "fetch_source",
+            "startMs": 350,
+            "durationMs": 590,
+            "group": "network",
+            "title": "fetch_source · 1.4 MB",
+            "note": "1.4 MB",
+            "result": { "bytes": "1.4 MB" }
+          }
         ]
       },
       {
         "key": "ingest",
         "summary": "bundle and Order@v2",
-        "segments": [
+        "bars": [
           { "label": "check_bundle", "startMs": 0, "durationMs": 40, "group": "ingest" },
-          { "label": "validate_records", "startMs": 950, "durationMs": 1200, "group": "ingest" },
+          { "label": "validate_records", "startMs": 950, "durationMs": 1200, "group": "ingest", "note": "1,204 of 1,251", "summary": "47 rows reported" },
           { "label": "import_dataset", "startMs": 2150, "durationMs": 3400, "group": "ingest" },
           { "label": "import_report", "startMs": 5560, "durationMs": 40, "group": "ingest" }
         ]
@@ -212,13 +222,13 @@
       {
         "key": "approval",
         "summary": "held, nothing spent",
-        "segments": [{ "label": "waiting on ravi", "startMs": 5160, "durationMs": 440, "variant": "outline", "status": "needs_input" }]
+        "bars": [{ "label": "waiting on ravi", "startMs": 5160, "durationMs": 440, "variant": "outline", "status": "needs_input" }]
       },
       {
         "key": "work_write",
         "label": "work write",
         "summary": "1 of 2 reached",
-        "segments": [
+        "bars": [
           { "label": "triage", "startMs": 4600, "durationMs": 950, "variant": "dashed", "status": "skipped", "title": "triage · declared, never dispatched" },
           { "label": "announce", "startMs": 5600, "durationMs": 300, "group": "work_write" }
         ]
