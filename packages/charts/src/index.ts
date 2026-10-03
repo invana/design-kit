@@ -8,6 +8,7 @@ export type { ChartMark, ChartReference, LegendEntry } from './base/chart-frame'
 export * from './sparkline';
 export * from './inline-meter';
 export * from './segmented-bar';
+export * from './heat-lane';
 
 // Provisional, moved as-is from @invana/ui.
 export * from './bar-chart-h';
