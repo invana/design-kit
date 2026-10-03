@@ -44,11 +44,21 @@ const toRow = ({ open: _open, subtasks, segments, ...task }: GanttSpecRow): Gant
  * A row's `segments` are many bars on one row — what a worker slot held, what a
  * layer was reached for — painted by `palette`. A keyed bar is picked on its
  * own and sent as `select` with its key. With `scale: "seq"` the clock counts a
- * plan's steps, so the same drawing reads a plan before it runs.
+ * plan's steps, so the same drawing reads a plan before it runs. The reader opens
+ * and closes rows; a spec whose `open` flags change opens and closes them again.
  */
 export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   const [selected, setSelected] = React.useState<string | null>(spec.selected ?? null)
   const [expanded, setExpanded] = React.useState<ExpandedKeys>(() => openKeys(spec.tasks))
+  // The spec's `open` flags win again whenever they change — a patch that opens or closes rows,
+  // an `Expand all`. Compared by the keys they open, so a new spec object with the same flags
+  // (a selection moved) leaves the rows the reader opened alone.
+  const opened = Object.keys(openKeys(spec.tasks)).sort().join("\n")
+  const [lastOpened, setLastOpened] = React.useState(opened)
+  if (opened !== lastOpened) {
+    setLastOpened(opened)
+    setExpanded(openKeys(spec.tasks))
+  }
   const rows = React.useMemo(() => spec.tasks.map(toRow), [spec.tasks])
   const pick = (key: string) => {
     setSelected(key)
