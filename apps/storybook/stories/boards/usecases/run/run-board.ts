@@ -33,7 +33,10 @@ type Language = 'plain' | 'json' | 'cypher' | 'yaml' | 'python';
 
 export interface Task {
   key: string;
+  /** How it runs — a python function, or a call made for it. */
   kind: TaskKind;
+  /** The layer it belongs to. A python task belongs to one too — the layer it works for. */
+  layer: Layer;
   /** The function it ran. */
   fn: string;
   status: Status;
@@ -69,6 +72,13 @@ export interface Selection {
   tab?: string;
 }
 
+/** The two readings of one run on one clock: by task, or by layer. */
+export type TraceView = 'Execution' | 'Layer access';
+export const TRACE_VIEWS: TraceView[] = ['Execution', 'Layer access'];
+
+/** `Expand all` or `Collapse all` last pressed on the trace; unset, rows open as the trace has them. */
+export type Fold = boolean | undefined;
+
 // ── reading the trace ──────────────────────────────────────────────────────
 
 export const tasksOf = (tasks: Task[]): Task[] => tasks.flatMap((t) => [t, ...tasksOf(t.tasks ?? [])]);
@@ -82,6 +92,7 @@ export function pick(trace: Trace, key: string): Selection | null {
   return owner.key === id ? { task: id, call: null } : { task: owner.key, call: id, tab: 'calls' };
 }
 
+/** Layers in the order they are read; the Gantt paints each call by its own. */
 const PALETTE: Record<Layer, string> = {
   model: 'bg-data-1',
   'graph.model': 'bg-data-2',
@@ -105,6 +116,8 @@ const callFacts = (c: Call) =>
   [ms(c.durationMs), c.tokens && `${k(c.tokens.in)} in · ${k(c.tokens.out)} out`, c.rows != null && `${c.rows.toLocaleString('en')} rows`]
     .filter(Boolean)
     .join(' · ');
+
+const LAYERS = Object.keys(PALETTE) as Layer[];
 
 // ── the run ────────────────────────────────────────────────────────────────
 
@@ -148,7 +161,53 @@ function taskRow(t: Task): GanttRow {
   };
 }
 
-function runTabs(trace: Trace, sel: Selection): NonNullable<BoardSpec['tabs']> {
+/**
+ * The run by layer, on the same clock: a row per layer — its strip, every function's stretch in
+ * the layer's colour — opening into the functions that belong to it (a python task too), each
+ * opening into the calls it made.
+ */
+function layerRows(trace: Trace): GanttRow[] {
+  const tasks = tasksOf(trace.tasks);
+  return LAYERS.flatMap((layer): GanttRow[] => {
+    const own = tasks.filter((t) => t.layer === layer);
+    if (!own.length) return [];
+    const calls = own.flatMap((t) => t.calls);
+    return [
+      {
+        key: `layer:${layer}`,
+        label: layer,
+        duration: `${calls.length} call${calls.length === 1 ? '' : 's'}`,
+        segments: own.map((t) => ({
+          key: t.key,
+          startMs: t.startMs,
+          durationMs: t.durationMs,
+          status: t.status,
+          group: layer,
+          title: `${t.key} · ${t.kind}`,
+        })),
+        open: true,
+        subtasks: own.map((t) => ({
+          key: t.key,
+          startMs: t.startMs,
+          durationMs: t.durationMs,
+          status: t.status,
+          summary: [t.kind, t.summary].filter(Boolean).join(' · '),
+          result: t.result,
+          attempts: t.attempts,
+          subtasks: t.calls.length ? t.calls.map(callRow) : undefined,
+          open: t.calls.length > 1,
+        })),
+      },
+    ];
+  });
+}
+
+/** Every row that opens, opened — or closed. */
+const folded = (rows: GanttRow[], open: boolean): GanttRow[] =>
+  rows.map((r) => (r.subtasks ? { ...r, open, subtasks: folded(r.subtasks, open) } : r));
+
+function runTabs(trace: Trace, sel: Selection, view: TraceView, fold: Fold): NonNullable<BoardSpec['tabs']> {
+  const rows = view === 'Execution' ? trace.tasks.map(taskRow) : layerRows(trace);
   const tasks = tasksOf(trace.tasks);
   const calls = callsOf(trace);
   const tokens = tokensOf(calls);
@@ -179,10 +238,16 @@ function runTabs(trace: Trace, sel: Selection): NonNullable<BoardSpec['tabs']> {
         {
           panels: [
             {
-              id: 'execution',
+              id: 'trace',
               kind: 'gantt',
-              title: 'Execution',
-              aside: 'a call under its task, by layer · pick one to inspect it',
+              title: 'Run trace',
+              aside: view === 'Execution' ? 'tasks, each with its calls' : 'layers → functions → calls',
+              actions: [
+                fold
+                  ? { id: 'trace-fold', icon: 'collapse', label: 'Collapse all', variant: 'ghost' }
+                  : { id: 'trace-fold', icon: 'expand', label: 'Expand all', variant: 'ghost' },
+                { id: 'trace-view', options: TRACE_VIEWS, value: view },
+              ],
               options: {
                 spanMs: trace.durationMs,
                 ticks: 6,
@@ -190,7 +255,7 @@ function runTabs(trace: Trace, sel: Selection): NonNullable<BoardSpec['tabs']> {
                 durationWidth: 64,
                 palette: PALETTE,
                 selected: sel.call ?? sel.task ?? undefined,
-                tasks: trace.tasks.map(taskRow),
+                tasks: fold === undefined ? rows : folded(rows, fold),
               },
             },
           ],
@@ -321,6 +386,7 @@ function inspector(trace: Trace, sel: Selection): BoardSpec | null {
                   rows: [
                     { label: 'Function', value: task.fn },
                     { label: 'Kind', value: task.kind },
+                    { label: 'Layer', value: task.layer },
                     { label: 'Under', value: parent?.key ?? 'the run' },
                     ...(children?.length ? [{ label: 'Ran', value: children.map((c) => c.key).join(', ') }] : []),
                     ...(task.summary ? [{ label: 'Summary', value: task.summary, mono: false }] : []),
@@ -411,7 +477,7 @@ function inspector(trace: Trace, sel: Selection): BoardSpec | null {
 }
 
 /** The whole board: the run, and the picked task beside it. */
-export function runBoard(trace: Trace, sel: Selection, tab = 'trace'): BoardSpec {
+export function runBoard(trace: Trace, sel: Selection, tab = 'trace', view: TraceView = 'Execution', fold?: Fold): BoardSpec {
   const side = inspector(trace, sel);
   return {
     title: trace.question,
@@ -427,7 +493,7 @@ export function runBoard(trace: Trace, sel: Selection, tab = 'trace'): BoardSpec
     rows: [],
     tab,
     tabAction: 'tab',
-    tabs: runTabs(trace, sel),
+    tabs: runTabs(trace, sel, view, fold),
     inspector: side ? { spec: side, width: 480 } : undefined,
   };
 }

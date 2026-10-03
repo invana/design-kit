@@ -9,6 +9,8 @@ import {
 import {
   Check,
   ChevronLeft,
+  ChevronsDownUp,
+  ChevronsUpDown,
   ChevronRight,
   MoreHorizontal,
   Play,
@@ -36,6 +38,8 @@ export const ICONS = {
   play: Play,
   check: Check,
   close: X,
+  expand: ChevronsUpDown,
+  collapse: ChevronsDownUp,
 };
 
 // ── the flow, as a registered panel ────────────────────────────────────────
