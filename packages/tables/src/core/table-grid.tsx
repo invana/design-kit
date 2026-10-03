@@ -24,6 +24,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  ExpandToggle,
   Spinner,
   Table,
   TableBody,
@@ -36,7 +37,6 @@ import {
 import {
   ArrowDown,
   ArrowUp,
-  ChevronRight,
   ChevronsUpDown,
   GripVertical,
 } from "lucide-react";
@@ -465,28 +465,14 @@ export function TableGrid<TData extends RowData>({
                             {first && expandable ? (
                               <div className="flex items-center gap-1">
                                 {canExpand ? (
-                                  <button
-                                    type="button"
-                                    aria-expanded={isExpanded}
-                                    aria-label={isExpanded ? "Collapse row" : "Expand row"}
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                      row.toggleExpanded();
-                                    }}
-                                    className="inline-flex size-4 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                  >
-                                    <ChevronRight
-                                      aria-hidden
-                                      className={cn(
-                                        "size-3.5 transition-transform motion-reduce:transition-none",
-                                        isExpanded && "rotate-90",
-                                      )}
-                                    />
-                                  </button>
+                                  <ExpandToggle
+                                    open={isExpanded}
+                                    onClick={() => row.toggleExpanded()}
+                                  />
                                 ) : (
                                   // A leaf keeps the chevron's room, so its
                                   // text lines up with its expandable siblings.
-                                  <span aria-hidden className="size-4 shrink-0" />
+                                  <ExpandToggle.Spacer />
                                 )}
                                 <div className="min-w-0 flex-1">
                                   {flexRender(
