@@ -54,6 +54,8 @@ export const BLOCKS = [
   { id: "checks", name: "Checks", tier: "next" },
   { id: "trace", name: "Progress trace", tier: "today" },
   { id: "activity", name: "Layer activity", tier: "today" },
+  { id: "gantt", name: "Task timeline", tier: "today" },
+  { id: "heatstrip", name: "Heat strip", tier: "today" },
   { id: "test", name: "Test result", tier: "next" },
   { id: "coef", name: "Coefficients", tier: "next" },
   { id: "forest", name: "Forest plot", tier: "next" },

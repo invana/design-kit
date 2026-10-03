@@ -644,6 +644,91 @@ export interface ActivityOptions {
   actions?: ActionOption[]
 }
 
+/** A task's state on the gantt — the engine's own step statuses, as `TaskGantt` reads them. */
+export type GanttStatus = "succeeded" | "running" | "failed" | "needs_input" | "stopped" | "skipped" | "queued"
+
+/** One task of a run, on its clock — and the tasks it split into. */
+export interface GanttTask {
+  /** `task_key` — what the log calls it. Also the row's label. */
+  key: string
+  /** A human name for the row, instead of the key. */
+  label?: string
+  /** From the run's zero. A task with neither, and no subtasks, never ran. */
+  startMs?: number
+  durationMs?: number
+  status?: GanttStatus
+  /** Earlier attempts, oldest first — the rate-limited fetch before the retry that stuck. */
+  attempts?: { startMs?: number; durationMs?: number; status?: GanttStatus; title?: string }[]
+  /** A sentence under the hover card's header. */
+  summary?: string
+  /** What it said last — the card's foot. */
+  log?: string
+  error?: { code?: string; message?: string }
+  /** What it produced, as label/value pairs on the card — `{ rows: 412 }`. */
+  result?: Record<string, string | number>
+  /** The tasks it split into, indented under it. A task with no timing draws their stretch. */
+  subtasks?: GanttTask[]
+  /** Drawn open. The reader can open and close it either way. */
+  open?: boolean
+}
+
+export interface GanttOptions {
+  /** In plan order. */
+  tasks: GanttTask[]
+  /** The clock's ceiling — the run's length. Defaults to the last end. */
+  spanMs?: number
+  /** The *now* line, while the run is in flight. */
+  nowMs?: number
+  /** The run has not decided its length yet: the last tick reads `8s+`. */
+  openEnded?: boolean
+  /** Intervals on the axis. `4` by default. */
+  ticks?: number
+  /** The key column, in px. Defaults to the longest key, up to 40%. */
+  labelWidth?: number
+  density?: "compact" | "comfortable"
+  /** The task picked — a restored view. Picking one sends `select` with its key. */
+  selected?: string
+}
+
+/** One state a heat strip's square can be in — named in the legend, coloured by its tone. */
+export interface HeatStripState {
+  key: string
+  label: string
+  /** `good` · `bad` · `warn`; `neutral` (the default) is the muted ink. */
+  tone?: Tone
+  /** A ring, not a fill — for "nothing happened here". */
+  hollow?: boolean
+}
+
+export interface HeatStripCell {
+  /** When — `9:45`. In the square's title. */
+  at: string
+  /** Its state, by key. */
+  state: string
+  /** More for the title — `2 names: BPCL, HINDPETRO`. */
+  detail?: string
+}
+
+/** One labelled strip, and the strips it opens into. */
+export interface HeatStripRowOptions {
+  id: string
+  label: string
+  cells: HeatStripCell[]
+  children?: HeatStripRowOptions[]
+  /** Drawn open. The reader can open and close it either way. */
+  open?: boolean
+}
+
+export interface HeatStripOptions {
+  states: HeatStripState[]
+  /** One strip. Send this or `rows`. */
+  cells?: HeatStripCell[]
+  /** Labelled strips over one axis, each opening into its `children`. */
+  rows?: HeatStripRowOptions[]
+  /** Labels under the squares, by index — `[{ at: 0, label: "09" }]`. */
+  ticks?: { at: number; label: string }[]
+}
+
 export interface TraceOptions {
   steps: TraceStep[]
   /** One line — `▸ 4 steps` with `summary` at the right — until opened. */
@@ -707,6 +792,8 @@ export interface AnswerOptionsByKind extends SharedAnswerOptions {
   checks: { rows: { label: string; ok: boolean; count?: Figure }[] }
   trace: TraceOptions
   activity: ActivityOptions
+  gantt: GanttOptions
+  heatstrip: HeatStripOptions
   test: {
     verdict: string
     evidence?: "strong" | "moderate" | "weak"

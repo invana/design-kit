@@ -8,7 +8,9 @@ import { CitationsBlock } from "./blocks/citations"
 import { ConfirmAsk } from "./blocks/confirm"
 import { FilesBlock } from "./blocks/files"
 import { FormAsk } from "./blocks/form"
+import { GanttBlock } from "./blocks/gantt"
 import { GridBlock } from "./blocks/grid"
+import { HeatStripBlock } from "./blocks/heatstrip"
 import { MethodBlock } from "./blocks/method"
 import { MetricBlock } from "./blocks/metric"
 import { MultiAsk } from "./blocks/multi"
@@ -78,6 +80,8 @@ export const BLOCK_RENDERERS: BlockRenderers = {
   checks: null,
   trace: TraceBlock,
   activity: ActivityBlock,
+  gantt: GanttBlock,
+  heatstrip: HeatStripBlock,
   test: null,
   coef: null,
   forest: null,
