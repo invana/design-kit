@@ -30,29 +30,6 @@
       ]
     },
     {
-      "height": 348,
-      "panels": [
-        {
-          "kind": "flow",
-          "title": "The flow · status as it ran",
-          "aside": "click a task for its step detail ›",
-          "flush": true,
-          "options": {
-            "nodes": [
-              { "col": 1, "row": 1, "taskKey": "check_bundle", "bound": "ingest", "status": "success", "meta": "1 dataset · 4ms" },
-              { "col": 2, "row": 1, "taskKey": "fetch_source", "bound": "network", "status": "success", "meta": "orders.csv · 0.9s", "tags": [{ "label": "attempt 2", "tone": "warning" }] },
-              { "col": 3, "row": 1, "taskKey": "validate_records", "bound": "ingest", "status": "success", "meta": "1,204 of 1,251 · 1.2s" },
-              { "col": 4, "row": 1, "taskKey": "import_dataset", "bound": "ingest", "status": "success", "meta": "Brokerage.Order@v2", "tags": [{ "label": "3 lanes" }] },
-              { "col": 3, "row": 2, "taskKey": "triage", "bound": "work_write", "meta": "never ran", "dim": true },
-              { "col": 4, "row": 2, "taskKey": "verify_counts", "bound": "none", "status": "success", "meta": "1,204 = 1,204" },
-              { "col": 3, "row": 3, "taskKey": "announce", "bound": "work_write", "status": "success", "gate": true, "meta": "approved by ravi" },
-              { "col": 4, "row": 3, "taskKey": "import_report", "bound": "ingest", "status": "success", "meta": "47 rejections" }
-            ]
-          }
-        }
-      ]
-    },
-    {
       "panels": [
         {
           "id": "performance",
@@ -60,29 +37,57 @@
           "title": "Performance",
           "aside": "pick a task to open it",
           "options": {
-            "labelWidth": 124,
+            "spanMs": 6000,
+            "ticks": 6,
+            "labelWidth": 200,
+            "durationWidth": 72,
             "tasks": [
-              { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
-              { "key": "fetch_source", "startMs": 40, "durationMs": 900, "status": "succeeded", "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed" }] },
-              { "key": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded" },
-              { "key": "import_dataset", "startMs": 2150, "durationMs": 3400, "status": "succeeded" },
-              { "key": "verify_counts", "startMs": 5550, "durationMs": 8, "status": "succeeded" },
-              { "key": "triage", "status": "skipped" },
-              { "key": "import_report", "startMs": 5560, "durationMs": 40, "status": "succeeded" },
-              { "key": "announce", "startMs": 5600, "durationMs": 300, "status": "needs_input" }
-            ]
-          }
-        },
-        {
-          "kind": "record",
-          "title": "Reported",
-          "asideChip": { "label": "47", "tone": "warning" },
-          "width": 340,
-          "options": {
-            "rows": [
-              { "label": "unresolved isin", "value": "31" },
-              { "label": "bad quantity", "value": "12" },
-              { "label": "out of window", "value": "4" }
+              { "key": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded", "summary": "manifest read · 1 dataset" },
+              {
+                "key": "fetch_source",
+                "startMs": 350,
+                "durationMs": 590,
+                "status": "succeeded",
+                "summary": "orders.csv · 1.4 MB",
+                "attempts": [{ "startMs": 40, "durationMs": 310, "status": "failed", "title": "503 · retried" }]
+              },
+              { "key": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded", "result": { "kept": "1,204", "reported": 47 } },
+              {
+                "key": "import_dataset",
+                "status": "succeeded",
+                "open": true,
+                "summary": "fan-out · 3 lanes of 402",
+                "subtasks": [
+                  {
+                    "key": "import_dataset.lane_1",
+                    "label": "lane 1",
+                    "startMs": 2150,
+                    "durationMs": 1950,
+                    "status": "succeeded",
+                    "result": { "rows": 402 }
+                  },
+                  {
+                    "key": "import_dataset.lane_2",
+                    "label": "lane 2",
+                    "startMs": 2150,
+                    "durationMs": 2750,
+                    "status": "succeeded",
+                    "result": { "rows": 402 }
+                  },
+                  {
+                    "key": "import_dataset.lane_3",
+                    "label": "lane 3",
+                    "startMs": 2150,
+                    "durationMs": 3400,
+                    "status": "succeeded",
+                    "result": { "rows": 400 }
+                  }
+                ]
+              },
+              { "key": "verify_counts", "startMs": 5550, "durationMs": 8, "status": "succeeded", "summary": "1,204 = 1,204" },
+              { "key": "triage", "status": "skipped", "summary": "never ran" },
+              { "key": "import_report", "startMs": 5560, "durationMs": 40, "status": "succeeded", "summary": "47 rejections" },
+              { "key": "announce", "startMs": 5600, "durationMs": 300, "status": "needs_input", "summary": "held for approval" }
             ]
           }
         }
@@ -90,6 +95,254 @@
     },
     {
       "panels": [
+        {
+          "id": "slots",
+          "kind": "gantt",
+          "title": "Worker slots",
+          "aside": "3 slots · what each held, in order · pick a bar to open its task",
+          "options": {
+            "spanMs": 6000,
+            "ticks": 6,
+            "labelWidth": 200,
+            "durationWidth": 72,
+            "tasks": [
+              {
+                "key": "slot-1",
+                "duration": "59% busy",
+                "segments": [
+                  { "key": "check_bundle", "label": "check_bundle", "startMs": 0, "durationMs": 40, "status": "succeeded" },
+                  {
+                    "key": "fetch_source#1",
+                    "label": "fetch_source",
+                    "startMs": 40,
+                    "durationMs": 310,
+                    "status": "failed",
+                    "title": "fetch_source #1 · 503 · retried on slot-2"
+                  },
+                  { "key": "validate_records", "label": "validate_records", "startMs": 950, "durationMs": 1200, "status": "succeeded" },
+                  {
+                    "key": "import_dataset.lane_1",
+                    "label": "lane 1",
+                    "startMs": 2150,
+                    "durationMs": 1950,
+                    "status": "succeeded",
+                    "title": "import_dataset · lane 1"
+                  },
+                  { "key": "verify_counts", "label": "verify_counts", "startMs": 5550, "durationMs": 8, "status": "succeeded" }
+                ]
+              },
+              {
+                "key": "slot-2",
+                "duration": "57% busy",
+                "segments": [
+                  { "key": "fetch_source", "label": "fetch_source #2", "startMs": 350, "durationMs": 590, "status": "succeeded" },
+                  {
+                    "key": "import_dataset.lane_2",
+                    "label": "lane 2",
+                    "startMs": 2150,
+                    "durationMs": 2750,
+                    "status": "succeeded",
+                    "title": "import_dataset · lane 2"
+                  },
+                  { "key": "import_report", "label": "import_report", "startMs": 5560, "durationMs": 40, "status": "succeeded" }
+                ]
+              },
+              {
+                "key": "slot-3",
+                "duration": "58% busy",
+                "segments": [
+                  {
+                    "key": "import_dataset.lane_3",
+                    "label": "lane 3",
+                    "startMs": 2150,
+                    "durationMs": 3400,
+                    "status": "succeeded",
+                    "title": "import_dataset · lane 3"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "panels": [
+        {
+          "id": "layers",
+          "kind": "gantt",
+          "title": "Layer access",
+          "aside": "what each task reached, by layer · pick a bar to open its task",
+          "options": {
+            "spanMs": 6000,
+            "ticks": 6,
+            "labelWidth": 200,
+            "durationWidth": 72,
+            "palette": { "network": "bg-data-3", "ingest": "bg-data-1", "work_write": "bg-data-6" },
+            "seams": [{ "after": "Order@v2 · lane 3", "label": "approval", "startMs": 5600, "durationMs": 300, "note": "held for approval" }],
+            "tasks": [
+              {
+                "key": "network",
+                "summary": "1 source",
+                "open": true,
+                "subtasks": [
+                  {
+                    "key": "s3://drops/orders.csv",
+                    "segments": [
+                      {
+                        "key": "fetch_source#1",
+                        "label": "fetch_source",
+                        "startMs": 40,
+                        "durationMs": 310,
+                        "group": "network",
+                        "status": "failed",
+                        "title": "fetch_source · attempt 1 · 503"
+                      },
+                      {
+                        "key": "fetch_source",
+                        "label": "fetch_source",
+                        "startMs": 350,
+                        "durationMs": 590,
+                        "group": "network",
+                        "title": "fetch_source · 1.4 MB"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "key": "ingest",
+                "summary": "2 participants · 3 lanes",
+                "open": true,
+                "subtasks": [
+                  {
+                    "key": "bundle/manifest",
+                    "segments": [
+                      {
+                        "key": "check_bundle",
+                        "label": "check_bundle",
+                        "startMs": 0,
+                        "durationMs": 40,
+                        "group": "ingest",
+                        "title": "check_bundle · read"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "model/Brokerage.Order@v2",
+                    "segments": [
+                      {
+                        "key": "validate_records",
+                        "label": "validate_records",
+                        "startMs": 950,
+                        "durationMs": 1200,
+                        "group": "ingest",
+                        "title": "validate_records · 1,204 of 1,251"
+                      },
+                      {
+                        "key": "import_report",
+                        "label": "import_report",
+                        "startMs": 5560,
+                        "durationMs": 40,
+                        "group": "ingest",
+                        "title": "import_report · 47 rejections"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "Order@v2 · lane 1",
+                    "segments": [
+                      {
+                        "key": "import_dataset.lane_1",
+                        "label": "import_dataset",
+                        "startMs": 2150,
+                        "durationMs": 1950,
+                        "group": "ingest",
+                        "title": "import_dataset · lane 1 · 402 rows"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "Order@v2 · lane 2",
+                    "segments": [
+                      {
+                        "key": "import_dataset.lane_2",
+                        "label": "import_dataset",
+                        "startMs": 2150,
+                        "durationMs": 2750,
+                        "group": "ingest",
+                        "title": "import_dataset · lane 2 · 402 rows"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "Order@v2 · lane 3",
+                    "segments": [
+                      {
+                        "key": "import_dataset.lane_3",
+                        "label": "import_dataset",
+                        "startMs": 2150,
+                        "durationMs": 3400,
+                        "group": "ingest",
+                        "title": "import_dataset · lane 3 · 400 rows"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "key": "work_write",
+                "label": "work write",
+                "summary": "1 of 2 reached",
+                "open": true,
+                "subtasks": [
+                  {
+                    "key": "work/triage",
+                    "segments": [
+                      {
+                        "key": "triage",
+                        "label": "triage",
+                        "startMs": 5560,
+                        "durationMs": 40,
+                        "group": "work_write",
+                        "status": "skipped",
+                        "variant": "dashed",
+                        "title": "triage · declared, never dispatched"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "work/announce",
+                    "segments": [
+                      {
+                        "key": "announce",
+                        "label": "announce",
+                        "startMs": 5600,
+                        "durationMs": 300,
+                        "group": "work_write",
+                        "status": "needs_input",
+                        "title": "announce · held for approval"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "panels": [
+        {
+          "kind": "record",
+          "title": "Reported",
+          "asideChip": { "label": "47", "tone": "warning" },
+          "width": 340,
+          "options": {
+            "rows": [{ "label": "unresolved isin", "value": "31" }, { "label": "bad quantity", "value": "12" }, { "label": "out of window", "value": "4" }]
+          }
+        },
         {
           "kind": "record",
           "title": "Input · what opened this run",

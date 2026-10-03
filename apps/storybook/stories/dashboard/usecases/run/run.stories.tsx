@@ -6,13 +6,19 @@ import { Dashboard, type ActionContext, type DashboardSpec, type LogOptions } fr
 
 import run from '../../../../fixtures/dashboards/run.json';
 import { jsx, snippet } from '../../../_story/source';
-import { FlowPanel, ICONS, Surface, panelsOf, useSent, type WithFlow } from '../../_fixtures';
+import { ICONS, Surface, panelsOf, useSent } from '../../_fixtures';
 
 // JSON widens the literal unions (`"succeeded"`, `"info"`); the shape is the dashboard's own.
-const SPEC = run as unknown as DashboardSpec<WithFlow>;
+const SPEC = run as unknown as DashboardSpec;
 
-/** The run's own record, read back out of its spec: the Gantt's tasks and the log's lines. */
-const TRACE = (panelsOf(SPEC).find((p) => p.id === 'performance')!.options as GanttOptions).tasks;
+type Task = GanttOptions['tasks'][number];
+const flatten = (tasks: Task[]): Task[] => tasks.flatMap((t) => [t, ...flatten(t.subtasks ?? [])]);
+
+/**
+ * The run's own record, read back out of its spec: every task of the Gantt — a lane under the
+ * task that split into it — and the log's lines.
+ */
+const TRACE = flatten((panelsOf(SPEC).find((p) => p.id === 'performance')!.options as GanttOptions).tasks);
 const LOG = (panelsOf(SPEC).find((p) => p.id === 'log')!.options as LogOptions).lines;
 
 interface Args {
@@ -30,15 +36,15 @@ const meta = {
           imports: [
             "import { Dashboard } from '@invana/dashboard';",
             "import { MoreHorizontal, Upload } from 'lucide-react'; // any icon set",
-            "import { FlowPanel } from './flow-panel'; // your canvas, registered as `flow`",
           ],
           data: { spec: SPEC },
           setup: [
-            '// A task picked in Performance → onAction("select", { panelId: "performance", value: "fetch_source" })',
-            '//   → draw that step\'s own spec; its crumb menu sends "open-step" with { itemId },',
-            '//     and the run\'s crumb sends "open-run" with no context.',
+            '// A task picked in Performance → onAction("select", { panelId: "performance", value: "fetch_source" });',
+            '//   a bar picked in Worker slots or Layer access sends its own key — { panelId: "layers", value: "fetch_source#1" },',
+            '//   an earlier attempt being `<key>#<n>` → draw that step\'s own spec; its crumb menu sends "open-step"',
+            '//   with { itemId }, and the run\'s crumb sends "open-run" with no context.',
             'const onAction = (id, ctx) => {',
-            '  if (id === "select" && ctx.panelId === "performance") setStep(ctx.value);',
+            '  if (id === "select") setStep(String(ctx.value).split("#")[0]);',
             '  if (id === "open-step") setStep(ctx.itemId);',
             '  if (id === "open-run") setStep(null);',
             '};',
@@ -46,7 +52,6 @@ const meta = {
           ].join('\n'),
           call: jsx('Dashboard', {
             spec: 'step ? stepSpec(step) : spec',
-            registry: '{ flow: FlowPanel }',
             icons: 'icons',
             onAction: 'onAction',
           }),
@@ -61,8 +66,6 @@ export default meta;
 type Story = StoryObj<Args>;
 
 // ── a step, opened inside the run — derived from the run's own record ─────
-
-type Task = (typeof TRACE)[number];
 
 const STEP_TONE = { succeeded: 'success', skipped: 'queued', needs_input: 'warning' } as const;
 const tone = (t: Task) => STEP_TONE[t.status as keyof typeof STEP_TONE];
@@ -159,7 +162,7 @@ function stepSpec(task: Task): DashboardSpec {
 }
 
 /** The run's header after `Cancel` — what the API's answer would patch in. */
-function cancelled(spec: DashboardSpec<WithFlow>): DashboardSpec<WithFlow> {
+function cancelled(spec: DashboardSpec): DashboardSpec {
   const header = spec.header!;
   return {
     ...spec,
@@ -182,12 +185,12 @@ function Live({ onAction }: Args) {
       <Dashboard
         key={task?.key ?? 'run'}
         className="min-h-0 flex-1"
-        spec={(task ? stepSpec(task) : spec) as DashboardSpec<WithFlow>}
-        registry={{ flow: FlowPanel as never }}
+        spec={task ? stepSpec(task) : spec}
         icons={ICONS}
         onAction={(id, ctx) => {
           record(id, ctx);
-          if (id === 'select' && ctx?.panelId === 'performance') setStep(String(ctx.value));
+          // Every Gantt sends `select`: a row's key from Performance, a bar's from slots and layers.
+          if (id === 'select') setStep(String(ctx?.value).split('#')[0]);
           if (id === 'open-step') setStep(ctx?.itemId ?? null);
           if (id === 'open-run') setStep(null);
           if (id === 'cancel') setSpec(cancelled);
@@ -200,11 +203,16 @@ function Live({ onAction }: Args) {
 }
 
 /**
- * **A run, read as a report** — the flow with status, the budget against its ceiling, where the
- * time went, `result.json` and the log; one `DashboardSpec` in `fixtures/dashboards/run.json`.
- * The flow is a registered `flow` panel, which is how a real `@invana/canvas` one arrives.
+ * **A run, read as a report** — the budget against its ceiling, then three readings of one clock
+ * stacked so their axes line up: **Performance** (every task, a split task open into its lanes,
+ * a retry's failed attempt before the one that stuck), **Worker slots** (what each slot held, in
+ * order) and **Layer access** (what each task reached, by layer and participant, with the approval
+ * gate as a seam). All three are the `gantt` block — the slots and layers as rows of many bars —
+ * so the same spec draws in a conversation too. Then what was reported, the input, `result.json`
+ * and the log; one `DashboardSpec` in `fixtures/dashboards/run.json`.
  *
- * Pick a task in **Performance** to open it inside the run: the run's crumb becomes a link back
+ * Pick a task in **Performance**, or a bar in **Worker slots** or **Layer access**, to open it
+ * inside the run: the run's crumb becomes a link back
  * (`crumbActions`), the task's crumb opens every task of the run (`crumbMenu`), and the step
  * carries its own tabs — derived from the run's own Gantt and log, as a consumer would. `Cancel`
  * marks the run cancelling. Every action is written in the footer.
@@ -214,7 +222,8 @@ export const Run: Story = {
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);
     await step('Open a task from Performance', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: /fetch_source/ }));
+      // Performance draws first, so its row is the first `fetch_source` button; slots and layers have bars too.
+      await userEvent.click(canvas.getAllByRole('button', { name: /fetch_source/ })[0]);
       await expect(args.onAction).toHaveBeenCalledWith('select', { panelId: 'performance', value: 'fetch_source' });
       await expect(canvas.getByRole('tab', { name: 'Exchange' })).toBeInTheDocument();
     });
@@ -223,6 +232,11 @@ export const Run: Story = {
       await expect(args.onAction).toHaveBeenLastCalledWith('open-run', undefined);
       await expect(canvas.getByText('Performance')).toBeInTheDocument();
       await expect(canvas.getByRole('list', { name: 'Events' })).toHaveTextContent('onAction("open-run")');
+    });
+    await step('Open the failed attempt from Layer access', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'fetch_source · attempt 1 · 503' }));
+      await expect(args.onAction).toHaveBeenLastCalledWith('select', { panelId: 'layers', value: 'fetch_source#1' });
+      await expect(canvas.getByRole('tab', { name: 'Exchange' })).toBeInTheDocument();
     });
   },
 };
