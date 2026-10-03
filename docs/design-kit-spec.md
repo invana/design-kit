@@ -48,7 +48,7 @@ styling ─┬─ ui ─┬─ forms ─ tables ─ charts ─┐
 | `@invana/themes` | App shells: `AppLayoutV2` and the rest | ui |
 | **`@invana/blocks`** | **Blocks: `types.ts` (kinds and their option types), `registry.ts`, `block.tsx`, one file per kind** | ui, charts, tables, forms |
 | `@invana/assistant` | The conversation shell: turns, intents, patterns, flows, envelope, streaming, cite focus | blocks, ui |
-| `@invana/dashboard` | The dashboard shell: rows, panels in `PanelBox`, header, tabs; every block kind as a panel; panels only a dashboard has (`json`, `code`, `exchange`, `gantt`, `log`, `list`, `params`, `text`) | blocks, ui, charts, tables, forms, editor |
+| `@invana/dashboard` | The dashboard shell: rows, panels in `PanelBox`, header, tabs; every block kind as a panel; panels only a dashboard has (`json`, `code`, `exchange`, `log`, `list`, `params`, `text`) | blocks, ui, charts, tables, forms, editor |
 
 **Where a component goes**, in order, stopping at the first yes:
 

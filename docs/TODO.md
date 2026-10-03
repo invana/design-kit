@@ -128,6 +128,7 @@ Nothing moves out. Files stay flat in charts/src, one per chart. uPlot through C
 | BarChartV comparison (on BarChartV) | `packages/charts/src/bar-chart-v.tsx` | extend | done | next |
 | BarChartH ranked (on BarChartH) | `packages/charts/src/bar-chart-h.tsx` | extend | done | today |
 | InlineMeter target (on InlineMeter) | `packages/charts/src/inline-meter.tsx` | extend | partial | next |
+| HeatStrip rows, nested (on HeatStrip) | `packages/charts/src/heat-strip.tsx` | extend | done | today |
 
 ### New, general
 
@@ -253,6 +254,8 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | CitationRow numbered (on CitationList) | `packages/ui/src/components/ui-extended/citation-list.tsx` | extend | done | today |
 | TraceList progress (on TraceList, TraceStep) | `packages/ui/src/components/ui-extended/trace-list.tsx` | extend | done | today |
 | CannotAnswerCard type sizes (on CannotAnswerCard) | `packages/ui/src/components/ui-extended/cannot-answer-card.tsx` | extend | done | today |
+| TaskGantt subtasks, nested; hover card at the cursor (on TaskGantt) | `packages/ui/src/components/ui-extended/task-gantt.tsx` | extend | done | today |
+| ExpandToggle and `useExpandedKeys` (shared by DataTable, TaskGantt, HeatStrip) | `packages/ui/src/components/ui-extended/expand-toggle.tsx` | new | done | today |
 
 ### Everything else
 
@@ -337,6 +340,8 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board o
 | checks | `{ rows[label, ok, count] }` | CheckList · ui | `blocks/checks.tsx` | todo | next | – |
 | trace | `{ steps[] }` | TraceList · ui | `blocks/trace.tsx` | done | today | 3 |
 | activity | `{ lanes[], bands?, axis?, pinned?, state? }` | HeatLane · charts | `blocks/activity.tsx` | done | today | – |
+| gantt | `{ tasks[key, startMs, durationMs, status, attempts?, subtasks?], spanMs?, nowMs? }` | TaskGantt · ui | `blocks/gantt.tsx` | done | today | – |
+| heatstrip | `{ states[key, label, tone], cells? \| rows[id, label, cells, children?], ticks? }` | HeatStrip · charts | `blocks/heatstrip.tsx` | done | today | – |
 | test (proposed) | `{ test, statistic, p, effect, ci, assumptions, verdict }` | TestResult · blocks | `blocks/test.tsx` | todo | next | 5 |
 | coef (proposed) | `{ terms[term, est, se, lo, hi, p] }` | CoefficientTable · tables | `blocks/coef.tsx` | todo | next | 5 |
 | forest (proposed) | `{ rows[label, est, lo, hi], nullAt }` | ForestPlot · charts | `blocks/forest.tsx` | todo | next | 5 |
