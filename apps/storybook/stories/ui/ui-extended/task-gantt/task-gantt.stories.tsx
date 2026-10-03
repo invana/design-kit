@@ -70,6 +70,7 @@ interface GanttVariant {
   detailProps?: TaskGanttDetailProps;
   partOf?: string;
   defaultExpanded?: ExpandedKeys;
+  palette?: TaskGanttProps['palette'];
 }
 
 const VARIANTS = DATA as GanttVariant[];
@@ -138,6 +139,7 @@ function Static({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectT
         ticks={v.ticks}
         brackets={v.brackets}
         seams={v.seams}
+        palette={v.palette}
         detailProps={v.detailProps}
         defaultExpanded={v.defaultExpanded}
         onExpandedChange={(next) => log('onExpandedChange', next)}
@@ -200,7 +202,7 @@ function Live({ v, log, onSelectTask }: { v: GanttVariant; log: Log; onSelectTas
 
 // ── The Code tab ──
 
-const PROPS = ['origin', 'spanMs', 'nowMs', 'openEnded', 'density', 'labelWidth', 'ticks', 'detailProps', 'defaultExpanded'] as const;
+const PROPS = ['origin', 'spanMs', 'nowMs', 'openEnded', 'density', 'labelWidth', 'ticks', 'palette', 'detailProps', 'defaultExpanded'] as const;
 
 function source(v: GanttVariant) {
   const pickable = v.selected !== undefined || v.live;
@@ -303,8 +305,10 @@ type Story = StoryObj<Args>;
  * `renderDetail` for all, composed around `TaskGanttDetailCard`. The card opens beside the cursor;
  * `detailProps.side` / `align` pin it to the row instead. A task's `subtasks` nest under it, opened
  * by its chevron (`defaultExpanded`, or `expanded` with `onExpandedChange`); one with no clock of
- * its own draws the stretch its subtasks cover. Pick a row: the key is logged and the row stays
- * lit; pick it again to clear.
+ * its own draws the stretch its subtasks cover. A row's `segments` are many bars on one row — what a
+ * worker slot held, what a layer was reached for — each with a `label` written in it, a `group`
+ * that `palette` paints, and a `variant` (`outline` for time held, `dashed` for time declared).
+ * Pick a row: the key is logged and the row stays lit; pick it again to clear.
  */
 export const TaskGanttStory: Story = {
   name: 'TaskGantt',

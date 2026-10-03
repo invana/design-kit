@@ -175,6 +175,57 @@
     ]
   },
   {
+    "caption": "Many bars on a row — painted by group, labelled in the bar",
+    "wide": true,
+    "title": "Layer access",
+    "aside": "what each layer was reached for",
+    "spanMs": 6000,
+    "ticks": 6,
+    "labelWidth": 120,
+    "palette": { "network": "bg-data-3", "ingest": "bg-data-1", "work_write": "bg-data-6" },
+    "tasks": [
+      {
+        "key": "network",
+        "summary": "1 source",
+        "segments": [
+          {
+            "label": "fetch_source",
+            "startMs": 40,
+            "durationMs": 310,
+            "group": "network",
+            "status": "failed",
+            "title": "fetch_source #1 · 503"
+          },
+          { "label": "fetch_source", "startMs": 350, "durationMs": 590, "group": "network", "title": "fetch_source · 1.4 MB" }
+        ]
+      },
+      {
+        "key": "ingest",
+        "summary": "bundle and Order@v2",
+        "segments": [
+          { "label": "check_bundle", "startMs": 0, "durationMs": 40, "group": "ingest" },
+          { "label": "validate_records", "startMs": 950, "durationMs": 1200, "group": "ingest" },
+          { "label": "import_dataset", "startMs": 2150, "durationMs": 3400, "group": "ingest" },
+          { "label": "import_report", "startMs": 5560, "durationMs": 40, "group": "ingest" }
+        ]
+      },
+      {
+        "key": "approval",
+        "summary": "held, nothing spent",
+        "segments": [{ "label": "waiting on ravi", "startMs": 5160, "durationMs": 440, "variant": "outline", "status": "needs_input" }]
+      },
+      {
+        "key": "work_write",
+        "label": "work write",
+        "summary": "1 of 2 reached",
+        "segments": [
+          { "label": "triage", "startMs": 4600, "durationMs": 950, "variant": "dashed", "status": "skipped", "title": "triage · declared, never dispatched" },
+          { "label": "announce", "startMs": 5600, "durationMs": 300, "group": "work_write" }
+        ]
+      }
+    ]
+  },
+  {
     "caption": "Live — a run streaming its steps",
     "width": 420,
     "live": true,

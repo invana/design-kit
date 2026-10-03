@@ -39,6 +39,30 @@ export interface TaskGanttSegment {
   status?: TaskGanttStatus
   /** Overrides the hover text, which otherwise reads `key · status · duration`. */
   title?: string
+  /**
+   * Names the bar, so it can be picked on its own — `fetch_source#1`. Only a
+   * segment in `segments` has one; the row's own bar is picked with the row.
+   */
+  key?: string
+  /**
+   * Written in the bar — the task a slot held, the participant a layer reached.
+   * A row with a labelled bar grows to the `xs` control height to carry it, and
+   * the bar draws as a card with its fill as a rail, so the text stays legible
+   * on any status or palette colour.
+   */
+  label?: React.ReactNode
+  /**
+   * Which entry of `palette` paints it, in place of its status fill — a layer,
+   * a lane, an agent. A group the palette does not name keeps the status fill,
+   * and a `failed` bar is always drawn as failed.
+   */
+  group?: string
+  /**
+   * `solid` (the default) is spent time. `outline` is time held but not spent
+   * — queued, waiting on a gate; `dashed` is time that may be spent — declared,
+   * not yet dispatched.
+   */
+  variant?: "solid" | "outline" | "dashed"
 }
 
 export interface TaskGanttTask extends TaskGanttSegment {
@@ -48,6 +72,12 @@ export interface TaskGanttTask extends TaskGanttSegment {
   label?: React.ReactNode
   /** Earlier attempts, oldest first. A failed one draws in `destructive`. */
   attempts?: TaskGanttSegment[]
+  /**
+   * Many bars on one row, each a thing of its own rather than a retry — what a
+   * worker slot held in order, what a layer was reached for. Drawn with the
+   * row's own bar, if it has one; give each a `label` to say what it was.
+   */
+  segments?: TaskGanttSegment[]
   /** Overrides the right-hand duration cell. `—` when the task never ran. */
   duration?: React.ReactNode
   /** One line — what the task said. The card's last line. */
@@ -123,10 +153,25 @@ export interface TaskGanttProps
    * up to 40% of the width — the surface decides the width, never the chart.
    */
   labelWidth?: number
+  /**
+   * The right-hand duration column, in px. Omit it and it takes its widest
+   * cell; set it on charts stacked over one clock so their tracks end together.
+   */
+  durationWidth?: number
   /** Loops, bracketed over their rounds. */
   brackets?: TaskGanttBracket[]
   /** Gates, ruled across the time they held. */
   seams?: TaskGanttSeam[]
+  /**
+   * What each segment `group` is painted with — `{ ingest: "bg-data-1" }`. The
+   * kit ships no hues: a group nobody painted keeps its status fill.
+   */
+  palette?: Record<string, string>
+  /**
+   * The inside of a bar, for every segment — a chip, an icon, a count. Return
+   * `null` for a bar that should stay a plain fill. Wins over `label`.
+   */
+  renderSegment?: (segment: TaskGanttSegment, task: TaskGanttTask) => React.ReactNode
   /**
    * `compact` in a drawer, `comfortable` on a dashboard. It moves the bar's
    * height, not the type scale — one component, three surfaces (SR14).
@@ -150,6 +195,13 @@ export interface TaskGanttProps
   selectedKey?: string | null
   /** Makes the rows pickable. Picking one is what filters the log. */
   onSelectTask?: (key: string) => void
+  /**
+   * Makes each keyed segment pickable on its own — the task a layer was
+   * reached for, rather than the layer. A row whose segments are keyed is then
+   * picked by its bars, not as a whole, so a bar is never a button inside a
+   * button. `selectedKey` lights a bar with that key as it lights a row.
+   */
+  onSelectSegment?: (segmentKey: string, taskKey: string) => void
   /** Which tasks with `subtasks` are open, by key — `true` for all. Controlled. */
   expanded?: ExpandedKeys
   /** Which are open at first, uncontrolled. Closed by default. */
@@ -303,6 +355,21 @@ export const TaskGanttDetailCard = React.forwardRef<
         </div>
       ) : null}
 
+      {task.segments?.length ? (
+        <div className="flex flex-col gap-0.5">
+          {task.segments.map((s, i) => (
+            <span key={i} className="flex items-baseline gap-2 text-sm text-muted-foreground">
+              <span className="min-w-0 flex-1 truncate font-mono text-foreground">
+                {s.label ?? s.title ?? s.status ?? "—"}
+              </span>
+              {s.durationMs != null ? (
+                <span className="shrink-0 font-mono tabular-nums">{formatDuration(s.durationMs)}</span>
+              ) : null}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
       {task.error != null ? (
         <div
           // The colour is a token, set inline because the kit's build emits no
@@ -377,18 +444,36 @@ function place(
 const everyTask = (tasks: TaskGanttTask[]): TaskGanttTask[] =>
   tasks.flatMap((t) => [t, ...everyTask(t.subtasks ?? [])])
 
-type Placed = { start: number; duration: number; status: TaskGanttStatus; title: string | undefined }
+type Placed = {
+  start: number
+  duration: number
+  status: TaskGanttStatus
+  title: string | undefined
+  /** The segment as given, for `renderSegment`, `label`, `group` and `variant`. */
+  seg: TaskGanttSegment
+}
 
-/** A task's own bars: its earlier attempts, then the attempt that stuck. */
+/**
+ * A task's own bars: its earlier attempts, the segments it holds, then the
+ * attempt that stuck. The task's `label` names its row, not its bar, so the
+ * task's own bar is drawn without one.
+ */
 const segmentsOf = (task: TaskGanttTask, zero: number | undefined): Placed[] =>
-  [...(task.attempts ?? []), task]
+  [...(task.attempts ?? []), ...(task.segments ?? []), { ...task, label: undefined }]
     .map((seg) => {
       const at = place(seg, zero)
       return at
-        ? { ...at, status: seg.status ?? task.status ?? "succeeded", title: seg.title }
+        ? { ...at, status: seg.status ?? task.status ?? "succeeded", title: seg.title, seg }
         : null
     })
     .filter((s): s is Placed => s !== null)
+
+/** `outline` and `dashed` are drawn as an edge; the fill is kept for spent time. */
+const VARIANT = {
+  solid: "",
+  outline: "border border-foreground/40 bg-transparent",
+  dashed: "border border-dashed border-foreground/40 bg-transparent",
+} as const
 
 /** Indent per level of `subtasks`, and the room the open/close control takes. */
 const INDENT = 12
@@ -475,14 +560,18 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
       formatTick = defaultFormatTick,
       formatDuration = defaultFormatDuration,
       labelWidth,
+      durationWidth,
       brackets = [],
       seams = [],
+      palette,
+      renderSegment,
       density = "comfortable",
       showDetail = true,
       renderDetail,
       detailProps,
       selectedKey,
       onSelectTask,
+      onSelectSegment,
       expanded,
       defaultExpanded,
       onExpandedChange,
@@ -583,7 +672,8 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
         task.error != null ||
         task.log != null ||
         task.summary != null ||
-        (task.attempts?.length ?? 0) > 0
+        (task.attempts?.length ?? 0) > 0 ||
+        (task.segments?.length ?? 0) > 0
       if (!hasBody) return null
       return (
         <TaskGanttDetailCard
@@ -601,7 +691,7 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
         style={{
           gridTemplateColumns: `${
             labelWidth != null ? `${labelWidth}px` : "fit-content(40%)"
-          } minmax(0, 1fr) max-content`,
+          } minmax(0, 1fr) ${durationWidth != null ? `${durationWidth}px` : "max-content"}`,
         }}
         {...props}
       >
@@ -630,18 +720,31 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
           const neverRan = segments.length === 0 && reach == null
           const selected = selectedKey != null && selectedKey === task.key
           const bracketed = inBracket.has(index)
-          const pickable = onSelectTask != null
+          const barPicks = onSelectSegment != null && (task.segments ?? []).some((s) => s.key != null)
+          const pickable = onSelectTask != null && !barPicks
           // A running task has no `durationMs` of its own yet: what it has spent so
           // far is the segment drawn up to the *now* line. A parent with no bar of
           // its own has spent what its subtasks cover.
+          // A row of many bars has spent what they add up to.
+          const ownBar = place(task, zero) != null
           const elapsed =
             task.durationMs ??
-            segments[segments.length - 1]?.duration ??
+            (task.segments?.length && !ownBar
+              ? segments.reduce((n, s) => n + s.duration, 0)
+              : segments[segments.length - 1]?.duration) ??
             (reach ? reach.end - reach.start : undefined)
           const duration =
             task.duration ?? (neverRan || elapsed == null ? "—" : formatDuration(elapsed))
 
           const detail = detailFor(task, elapsed)
+
+          // What each bar carries inside it. A row with any of it grows to hold a
+          // line of text; the rest keep the thin bar, so a chart of plain tasks
+          // does not change height because the API added a field.
+          const contents = segments.map((s) =>
+            renderSegment ? renderSegment(s.seg, task) : s.seg.label ?? null,
+          )
+          const tall = contents.some((c) => c != null)
 
           const row = (
             <div className="col-span-full grid grid-cols-subgrid items-center py-[3px]">
@@ -658,27 +761,73 @@ export const TaskGantt = React.forwardRef<HTMLDivElement, TaskGanttProps>(
 
               {/* The track — the whole clock, so an empty stretch reads as waiting. */}
               <span
-                className="relative min-w-0 bg-muted/55"
-                style={{ height: barHeight }}
+                className={cn("relative min-w-0 bg-muted/55", tall && "h-control-xs")}
+                style={tall ? undefined : { height: barHeight }}
               >
                 {neverRan ? (
                   <span className="absolute inset-0 border border-dashed border-border" />
                 ) : segments.length ? (
-                  segments.map((seg, i) => (
-                    <span
-                      key={i}
-                      title={
-                        seg.title ??
-                        `${task.key} · ${seg.status} · ${formatDuration(seg.duration)}`
-                      }
-                      className={cn("absolute inset-y-0 rounded-[1px]", BAR[seg.status])}
-                      style={{
-                        left: pct(seg.start),
-                        width: pct(seg.duration),
-                        minWidth: 2,
-                      }}
-                    />
-                  ))
+                  segments.map((seg, i) => {
+                    // Chosen, not merged: a palette entry is a consumer's class,
+                    // which `cn` cannot see a conflict with. A failure keeps its
+                    // own colour over any group's — it is the one bar a reader
+                    // must not mistake for work done.
+                    const fill =
+                      (seg.status !== "failed" && seg.seg.group != null && palette?.[seg.seg.group]) ||
+                      BAR[seg.status]
+                    const variant = VARIANT[seg.seg.variant ?? "solid"]
+                    const inside = contents[i]
+                    const title =
+                      seg.title ?? `${task.key} · ${seg.status} · ${formatDuration(seg.duration)}`
+                    const at = { left: pct(seg.start), width: pct(seg.duration), minWidth: 2 }
+                    const key = seg.seg.key
+                    const Bar = barPicks && key != null ? "button" : "span"
+                    const pick =
+                      Bar === "button"
+                        ? {
+                            type: "button" as const,
+                            "aria-label": title,
+                            "aria-pressed": selectedKey === key,
+                            onClick: () => onSelectSegment!(key!, task.key),
+                          }
+                        : {}
+                    const lit = key != null && selectedKey === key && "ring-1 ring-ring"
+                    const picking =
+                      Bar === "button" &&
+                      "cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    return inside == null ? (
+                      <Bar
+                        key={i}
+                        title={title}
+                        className={cn("absolute inset-y-0 rounded-[1px]", variant || fill, picking, lit)}
+                        style={at}
+                        {...pick}
+                      />
+                    ) : (
+                      // A card with the fill as its rail: text on a status colour
+                      // is unreadable in half the themes.
+                      <Bar
+                        key={i}
+                        title={title}
+                        className={cn(
+                          "absolute inset-y-px flex min-w-0 items-stretch overflow-hidden rounded-xs border border-border bg-card text-left",
+                          seg.seg.variant === "dashed" && "border-dashed",
+                          picking && [picking, "hover:bg-accent"],
+                          lit,
+                        )}
+                        style={at}
+                        {...pick}
+                      >
+                        <span
+                          aria-hidden
+                          className={cn("w-1 shrink-0", seg.seg.variant && seg.seg.variant !== "solid" ? "bg-border" : fill)}
+                        />
+                        <span className="flex min-w-0 items-center truncate px-1 font-mono text-sm">
+                          {inside}
+                        </span>
+                      </Bar>
+                    )
+                  })
                 ) : reach ? (
                   <span
                     title={`${task.key} · ${task.subtasks!.length} subtasks · ${formatDuration(reach.end - reach.start)}`}
