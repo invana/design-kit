@@ -255,6 +255,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | TraceList progress (on TraceList, TraceStep) | `packages/ui/src/components/ui-extended/trace-list.tsx` | extend | done | today |
 | CannotAnswerCard type sizes (on CannotAnswerCard) | `packages/ui/src/components/ui-extended/cannot-answer-card.tsx` | extend | done | today |
 | TaskGantt subtasks, nested; hover card at the cursor (on TaskGantt) | `packages/ui/src/components/ui-extended/task-gantt.tsx` | extend | done | today |
+| TimelineEntry nested entries (on TimelineList) | `packages/ui/src/components/ui-extended/timeline-list.tsx` | extend | done | today |
 | ExpandToggle and `useExpandedKeys` (shared by DataTable, TaskGantt, HeatStrip) | `packages/ui/src/components/ui-extended/expand-toggle.tsx` | new | done | today |
 
 ### Everything else
@@ -328,7 +329,7 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a board o
 | matrix | `{ rows, cols, values, scale }` | Heatmap · charts | `blocks/matrix.tsx` | todo | next | – |
 | funnel | `{ steps[label, count] }` | Funnel · charts | `blocks/funnel.tsx` | todo | next | – |
 | histogram | `{ bins \| values, threshold?, outliers? }` | Histogram · charts | `blocks/histogram.tsx` | todo | next | 4 |
-| timeline | `{ events[when, text, tone] }` | TimelineList · ui | `blocks/timeline.tsx` | done | today | 1 |
+| timeline | `{ events[when, text, tone, children?] }` | TimelineList · ui | `blocks/timeline.tsx` | done | today | 1 |
 | subgraph | `{ nodes, edges }` | @invana/canvas | `blocks/subgraph.tsx` | todo | later | – |
 | method | `{ label, code, meta }` | ChatSessionDisclosure · ui | `blocks/method.tsx` | done | today | 2 |
 | citations | `{ sources[] }` | CitationList · ui | `blocks/citations.tsx` | done | today | 2 |
