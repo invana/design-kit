@@ -13,6 +13,7 @@ import {
   MoreHorizontal,
   Play,
   Upload,
+  X,
 } from 'lucide-react';
 
 import { EventLog, type Logged } from '../_story/variant-grid';
@@ -34,6 +35,7 @@ export const ICONS = {
   file: Upload,
   play: Play,
   check: Check,
+  close: X,
 };
 
 // ── the flow, as a registered panel ────────────────────────────────────────

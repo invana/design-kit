@@ -1,0 +1,434 @@
+{
+  "id": "run_7d3184f1",
+  "question": "Which suppliers are exposed to the Red Sea route?",
+  "agent": "supply-analyst",
+  "status": "succeeded",
+  "startedAt": "2026-10-04T09:12:04.000Z",
+  "durationMs": 12840,
+  "budget": { "tokens": 40000 },
+  "tasks": [
+    {
+      "key": "plan",
+      "kind": "model",
+      "fn": "agent.plan(question)",
+      "status": "succeeded",
+      "startMs": 0,
+      "durationMs": 1400,
+      "summary": "6 steps planned",
+      "access": [{ "label": "model:claude-sonnet", "state": "used" }],
+      "input": { "question": "Which suppliers are exposed to the Red Sea route?" },
+      "output": { "steps": ["resolve_entities", "find_suppliers", "shipments_on_route", "erp_contracts", "news_scan", "score_exposure", "compose_answer"] },
+      "calls": [
+        {
+          "id": "plan/c1",
+          "layer": "model",
+          "target": "claude-sonnet-5-5",
+          "op": "messages.create",
+          "startMs": 20,
+          "durationMs": 1360,
+          "status": "succeeded",
+          "tokens": { "in": 1240, "out": 310 },
+          "request": {
+            "language": "plain",
+            "body": "SYSTEM  You plan analyses over the supply graph. Use only the tools listed.\nTOOLS   graph.schema, graph.query, dataset.scan, erp.sql, web.search, skill:route-risk-scoring\n\nUSER    Which suppliers are exposed to the Red Sea route?"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"steps\": [\n    { \"id\": \"resolve_entities\", \"why\": \"map 'Red Sea route' to Route nodes\" },\n    { \"id\": \"find_suppliers\", \"why\": \"suppliers whose lanes use those routes\" },\n    { \"id\": \"shipments_on_route\", \"why\": \"volume on the route, last 90 days\" },\n    { \"id\": \"erp_contracts\", \"why\": \"contract terms and alternates\" },\n    { \"id\": \"news_scan\", \"why\": \"current disruption\" },\n    { \"id\": \"score_exposure\", \"why\": \"rank by exposure\" },\n    { \"id\": \"compose_answer\" }\n  ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "key": "resolve_entities",
+      "kind": "python",
+      "fn": "tasks.resolve_entities(phrase)",
+      "status": "succeeded",
+      "startMs": 1400,
+      "durationMs": 900,
+      "summary": "2 routes · 4 ports",
+      "access": [
+        { "label": "graph:schema:read", "state": "used" },
+        { "label": "model:claude-haiku", "state": "used" }
+      ],
+      "input": { "phrase": "Red Sea route" },
+      "output": { "routes": ["SUEZ-BAB", "JED-BAB"], "ports": ["Jeddah", "Port Sudan", "Djibouti", "Suez"] },
+      "calls": [],
+      "tasks": [
+        {
+          "key": "read_schema",
+          "kind": "graph.model",
+          "fn": "graph.schema(labels)",
+          "status": "succeeded",
+          "startMs": 1420,
+          "durationMs": 180,
+          "summary": "3 labels · 4 relations",
+          "access": [{ "label": "graph:schema:read", "state": "used" }],
+          "input": { "labels": ["Supplier", "Route", "Port"] },
+          "output": { "labels": 3, "relations": 4 },
+          "calls": [
+            {
+              "id": "read_schema/c1",
+              "layer": "graph.model",
+              "target": "supply-graph@v12",
+              "op": "schema",
+              "startMs": 1430,
+              "durationMs": 160,
+              "status": "succeeded",
+              "request": { "language": "json", "body": "{ \"model\": \"supply-graph\", \"version\": 12, \"labels\": [\"Supplier\", \"Route\", \"Port\"] }" },
+              "response": {
+                "language": "yaml",
+                "body": "Supplier: { id, name, country, tier }\nRoute:    { code, name, legs }\nPort:     { unlocode, name }\nrelations:\n  - (Supplier)-[:SHIPS_VIA]->(Route)\n  - (Route)-[:CALLS_AT]->(Port)\n  - (Supplier)-[:ALTERNATE_OF]->(Supplier)\n  - (Supplier)-[:LOCATED_IN]->(Country)"
+              }
+            }
+          ]
+        },
+        {
+          "key": "match_route",
+          "kind": "model",
+          "fn": "agent.match(phrase, candidates)",
+          "status": "succeeded",
+          "startMs": 1600,
+          "durationMs": 680,
+          "summary": "SUEZ-BAB, JED-BAB",
+          "access": [{ "label": "model:claude-haiku", "state": "used" }],
+          "input": { "phrase": "Red Sea route", "candidates": 41 },
+          "output": { "routes": ["SUEZ-BAB", "JED-BAB"], "confidence": 0.93 },
+          "calls": [
+            {
+              "id": "match_route/c1",
+              "layer": "model",
+              "target": "claude-haiku-4-5",
+              "op": "messages.create",
+              "startMs": 1610,
+              "durationMs": 660,
+              "status": "succeeded",
+              "tokens": { "in": 980, "out": 64 },
+              "request": {
+                "language": "plain",
+                "body": "SYSTEM  Pick the Route codes a phrase refers to. Answer JSON.\nUSER    Phrase: \"Red Sea route\"\n        Candidates (41): SUEZ-BAB Suez → Bab-el-Mandeb · JED-BAB Jeddah → Bab-el-Mandeb · CAPE Cape of Good Hope · …"
+              },
+              "response": { "language": "json", "body": "{ \"routes\": [\"SUEZ-BAB\", \"JED-BAB\"], \"confidence\": 0.93 }" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "find_suppliers",
+      "kind": "graph.data",
+      "fn": "graph.query(cypher, params)",
+      "status": "succeeded",
+      "startMs": 2300,
+      "durationMs": 1600,
+      "summary": "38 suppliers on 2 routes",
+      "result": { "suppliers": 38 },
+      "access": [
+        { "label": "graph:supply:read", "state": "used" },
+        { "label": "graph:supply:write", "state": "granted" }
+      ],
+      "input": { "routes": ["SUEZ-BAB", "JED-BAB"] },
+      "output": { "rows": 38 },
+      "calls": [
+        {
+          "id": "find_suppliers/c1",
+          "layer": "graph.data",
+          "target": "supply-graph@v12",
+          "op": "cypher",
+          "startMs": 2320,
+          "durationMs": 1560,
+          "status": "succeeded",
+          "rows": 38,
+          "request": {
+            "language": "cypher",
+            "body": "MATCH (s:Supplier)-[:SHIPS_VIA]->(r:Route)\nWHERE r.code IN $routes\nOPTIONAL MATCH (s)<-[:ALTERNATE_OF]-(alt:Supplier)\nRETURN s.id, s.name, s.country, s.tier, collect(r.code) AS routes, count(alt) AS alternates\nORDER BY s.tier, s.name\n\n// $routes = [\"SUEZ-BAB\", \"JED-BAB\"]"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"rows\": 38,\n  \"columns\": [\"s.id\", \"s.name\", \"s.country\", \"s.tier\", \"routes\", \"alternates\"],\n  \"first\": [\n    [\"SUP-0142\", \"Aden Polymers\", \"YE\", 1, [\"SUEZ-BAB\"], 0],\n    [\"SUP-0087\", \"Nile Fasteners\", \"EG\", 1, [\"SUEZ-BAB\", \"JED-BAB\"], 2],\n    [\"SUP-0311\", \"Gulf Textile Co\", \"SA\", 2, [\"JED-BAB\"], 1]\n  ],\n  \"truncated\": true\n}"
+          }
+        }
+      ]
+    },
+    {
+      "key": "shipments_on_route",
+      "kind": "dataset",
+      "fn": "dataset.scan(name, filter)",
+      "status": "succeeded",
+      "startMs": 3900,
+      "durationMs": 2200,
+      "summary": "1,412 shipments · 90 days",
+      "result": { "shipments": "1,412", "teu": "6,880" },
+      "access": [{ "label": "dataset:shipments:read", "state": "used" }],
+      "input": { "suppliers": 38, "since": "2026-07-06" },
+      "output": { "rows": 1412 },
+      "calls": [
+        {
+          "id": "shipments_on_route/c1",
+          "layer": "dataset",
+          "target": "shipments@2026-10-01",
+          "op": "scan",
+          "startMs": 3910,
+          "durationMs": 2170,
+          "status": "succeeded",
+          "rows": 1412,
+          "request": {
+            "language": "json",
+            "body": "{\n  \"dataset\": \"shipments\",\n  \"snapshot\": \"2026-10-01\",\n  \"columns\": [\"supplier_id\", \"route_code\", \"teu\", \"departed_at\"],\n  \"filter\": {\n    \"supplier_id\": { \"in\": \"$find_suppliers.s.id\" },\n    \"route_code\": { \"in\": [\"SUEZ-BAB\", \"JED-BAB\"] },\n    \"departed_at\": { \"gte\": \"2026-07-06\" }\n  }\n}"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"rows\": 1412,\n  \"bytes_scanned\": \"84 MB\",\n  \"files\": 12,\n  \"aggregate\": { \"teu\": 6880 }\n}"
+          }
+        }
+      ]
+    },
+    {
+      "key": "erp_contracts",
+      "kind": "connector",
+      "fn": "connectors.erp.sql(query)",
+      "status": "succeeded",
+      "startMs": 3900,
+      "durationMs": 1500,
+      "summary": "36 contracts · pricing refused",
+      "result": { "contracts": 36 },
+      "access": [
+        { "label": "connector:erp:contracts:read", "state": "used" },
+        { "label": "connector:erp:pricing:read", "state": "denied" }
+      ],
+      "input": { "suppliers": 38 },
+      "output": { "contracts": 36, "pricing": null },
+      "calls": [
+        {
+          "id": "erp_contracts/c1",
+          "layer": "connector",
+          "target": "postgres://svc_agent:••••@erp-db.internal:5432/erp",
+          "op": "sql",
+          "startMs": 3920,
+          "durationMs": 980,
+          "status": "succeeded",
+          "rows": 36,
+          "request": {
+            "language": "plain",
+            "body": "SELECT supplier_id, contract_no, incoterm, renews_on, sole_source\nFROM procurement.contracts\nWHERE supplier_id = ANY($1)\n  AND status = 'active';\n\n-- $1 = 38 supplier ids from find_suppliers"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"rows\": 36,\n  \"first\": [\n    { \"supplier_id\": \"SUP-0142\", \"contract_no\": \"C-22-0918\", \"incoterm\": \"FOB\", \"sole_source\": true },\n    { \"supplier_id\": \"SUP-0087\", \"contract_no\": \"C-23-0144\", \"incoterm\": \"CIF\", \"sole_source\": false }\n  ]\n}"
+          }
+        },
+        {
+          "id": "erp_contracts/c2",
+          "layer": "connector",
+          "target": "postgres://svc_agent:••••@erp-db.internal:5432/erp",
+          "op": "sql",
+          "startMs": 4920,
+          "durationMs": 40,
+          "status": "refused",
+          "code": "denied",
+          "request": {
+            "language": "plain",
+            "body": "SELECT supplier_id, unit_price, currency\nFROM procurement.price_lists\nWHERE supplier_id = ANY($1);"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"refused\": true,\n  \"rule\": \"lens:analyst · connector:erp:pricing:read not granted\",\n  \"sent\": false\n}"
+          }
+        }
+      ]
+    },
+    {
+      "key": "news_scan",
+      "kind": "web",
+      "fn": "tools.web.search(query)",
+      "status": "succeeded",
+      "startMs": 4500,
+      "durationMs": 3100,
+      "summary": "2 sources read · 1 retry",
+      "attempts": [{ "startMs": 3900, "durationMs": 400, "status": "failed", "title": "429 · rate limited · retried" }],
+      "access": [
+        { "label": "web:search", "state": "used" },
+        { "label": "web:fetch", "state": "used" }
+      ],
+      "input": { "query": "Red Sea shipping disruption Bab-el-Mandeb October 2026" },
+      "output": { "sources": 2 },
+      "calls": [
+        {
+          "id": "news_scan/c1",
+          "layer": "web",
+          "target": "api.search.example/v1",
+          "op": "search",
+          "startMs": 3910,
+          "durationMs": 380,
+          "status": "failed",
+          "code": "429",
+          "request": {
+            "language": "json",
+            "body": "POST /v1/search\nAuthorization: Bearer ••••\n\n{ \"q\": \"Red Sea shipping disruption Bab-el-Mandeb October 2026\", \"recency\": \"7d\" }"
+          },
+          "response": { "language": "json", "body": "{ \"status\": 429, \"error\": \"rate_limited\", \"retry_after\": 0.2 }" }
+        },
+        {
+          "id": "news_scan/c2",
+          "layer": "web",
+          "target": "api.search.example/v1",
+          "op": "search",
+          "startMs": 4510,
+          "durationMs": 690,
+          "status": "succeeded",
+          "request": {
+            "language": "json",
+            "body": "POST /v1/search\nAuthorization: Bearer ••••\n\n{ \"q\": \"Red Sea shipping disruption Bab-el-Mandeb October 2026\", \"recency\": \"7d\" }"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"results\": [\n    { \"url\": \"https://news.example/shipping/red-sea-diversions\", \"title\": \"Carriers extend Cape diversions into Q4\" },\n    { \"url\": \"https://port.example/notices/2026-10-02\", \"title\": \"Port Sudan: berthing delays up to 6 days\" }\n  ]\n}"
+          }
+        },
+        {
+          "id": "news_scan/c3",
+          "layer": "web",
+          "target": "news.example",
+          "op": "fetch",
+          "startMs": 5210,
+          "durationMs": 1300,
+          "status": "succeeded",
+          "request": { "language": "plain", "body": "GET https://news.example/shipping/red-sea-diversions" },
+          "response": {
+            "language": "plain",
+            "body": "200 · text/html · 212 KB → 1,840 words kept\n\n\"Three of the five largest carriers said on Thursday they would keep routing Asia–Europe services around the Cape of Good Hope through December…\""
+          }
+        },
+        {
+          "id": "news_scan/c4",
+          "layer": "web",
+          "target": "port.example",
+          "op": "fetch",
+          "startMs": 6520,
+          "durationMs": 1070,
+          "status": "succeeded",
+          "request": { "language": "plain", "body": "GET https://port.example/notices/2026-10-02" },
+          "response": {
+            "language": "plain",
+            "body": "200 · text/html · 38 KB → 410 words kept\n\n\"Vessels calling Port Sudan should expect berthing delays of up to six days…\""
+          }
+        }
+      ]
+    },
+    {
+      "key": "score_exposure",
+      "kind": "skill",
+      "fn": "skills.route_risk_scoring@1.3(inputs)",
+      "status": "succeeded",
+      "startMs": 7600,
+      "durationMs": 2200,
+      "summary": "38 scored · 9 high",
+      "result": { "high": 9, "medium": 14, "low": 15 },
+      "access": [
+        { "label": "skill:route-risk-scoring", "state": "used" },
+        { "label": "dataset:shipments:read", "state": "granted" }
+      ],
+      "input": { "suppliers": 38, "shipments": 1412, "contracts": 36, "signals": 2 },
+      "output": { "high": 9, "medium": 14, "low": 15 },
+      "calls": [
+        {
+          "id": "score_exposure/c1",
+          "layer": "skill",
+          "target": "route-risk-scoring@1.3",
+          "op": "invoke",
+          "startMs": 7610,
+          "durationMs": 2180,
+          "status": "succeeded",
+          "request": {
+            "language": "json",
+            "body": "{\n  \"skill\": \"route-risk-scoring\",\n  \"version\": \"1.3\",\n  \"inputs\": {\n    \"suppliers\": \"$find_suppliers\",\n    \"volume\": \"$shipments_on_route\",\n    \"contracts\": \"$erp_contracts\",\n    \"signals\": \"$news_scan\"\n  },\n  \"weights\": { \"volume\": 0.4, \"sole_source\": 0.3, \"alternates\": 0.2, \"signal\": 0.1 }\n}"
+          },
+          "response": {
+            "language": "json",
+            "body": "{\n  \"scored\": 38,\n  \"bands\": { \"high\": 9, \"medium\": 14, \"low\": 15 },\n  \"top\": [\n    { \"id\": \"SUP-0142\", \"score\": 0.91 },\n    { \"id\": \"SUP-0087\", \"score\": 0.84 },\n    { \"id\": \"SUP-0311\", \"score\": 0.79 }\n  ]\n}"
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "key": "compute_scores",
+          "kind": "python",
+          "fn": "route_risk_scoring.compute(frame, weights)",
+          "status": "succeeded",
+          "startMs": 7700,
+          "durationMs": 1900,
+          "summary": "pandas · 38 rows",
+          "access": [],
+          "input": { "rows": 38, "weights": { "volume": 0.4, "sole_source": 0.3, "alternates": 0.2, "signal": 0.1 } },
+          "output": { "scores": 38, "mean": 0.52 },
+          "calls": []
+        }
+      ]
+    },
+    {
+      "key": "compose_answer",
+      "kind": "model",
+      "fn": "agent.answer(findings)",
+      "status": "succeeded",
+      "startMs": 9800,
+      "durationMs": 2800,
+      "summary": "answer · 2 citations",
+      "access": [{ "label": "model:claude-sonnet", "state": "used" }],
+      "input": { "high": 9, "citations": 2 },
+      "output": { "blocks": ["narrative", "ranked", "table", "citations"] },
+      "calls": [
+        {
+          "id": "compose_answer/c1",
+          "layer": "model",
+          "target": "claude-sonnet-5-5",
+          "op": "messages.create",
+          "startMs": 9810,
+          "durationMs": 2780,
+          "status": "succeeded",
+          "tokens": { "in": 3920, "out": 820 },
+          "request": {
+            "language": "plain",
+            "body": "SYSTEM  Answer from the findings only. Cite each external claim. Say what you could not see.\nUSER    Which suppliers are exposed to the Red Sea route?\n\nFINDINGS\n  suppliers on route: 38 (2 routes)\n  scored: 9 high · 14 medium · 15 low\n  top: Aden Polymers 0.91 (sole source) · Nile Fasteners 0.84 · Gulf Textile Co 0.79\n  volume: 6,880 TEU over 90 days\n  not seen: unit pricing (connector:erp:pricing:read denied)\n  signals: [1] news.example — Cape diversions into Q4 · [2] port.example — Port Sudan delays"
+          },
+          "response": {
+            "language": "plain",
+            "body": "Nine of the 38 suppliers shipping on the Red Sea routes are highly exposed. Aden Polymers is the most exposed: it is a sole source with no alternate in the graph. Carriers expect Cape diversions to continue into Q4 [1], and Port Sudan reports berthing delays of up to six days [2].\n\nI could not see unit pricing, so the cost of switching suppliers is not estimated."
+          }
+        }
+      ]
+    },
+    {
+      "key": "cite_sources",
+      "kind": "python",
+      "fn": "tasks.cite(answer, sources)",
+      "status": "succeeded",
+      "startMs": 12600,
+      "durationMs": 220,
+      "summary": "2 citations bound",
+      "access": [],
+      "input": { "claims": 2, "sources": 2 },
+      "output": { "bound": 2, "unbound": 0 },
+      "calls": []
+    }
+  ],
+  "logs": [
+    { "time": "00:00.000", "level": "info", "source": "plan", "message": "run_7d3184f1 started · agent supply-analyst" },
+    { "time": "00:01.380", "level": "info", "source": "plan", "message": "plan · 7 steps · 1,550 tokens" },
+    { "time": "00:01.420", "level": "debug", "source": "read_schema", "message": "schema supply-graph@v12 · 3 labels" },
+    { "time": "00:02.270", "level": "info", "source": "match_route", "message": "'Red Sea route' → SUEZ-BAB, JED-BAB (0.93)" },
+    { "time": "00:03.880", "level": "info", "source": "find_suppliers", "message": "38 rows in 1.56s" },
+    { "time": "00:03.900", "level": "info", "source": "shipments_on_route", "message": "scan shipments@2026-10-01 · 12 files" },
+    { "time": "00:04.290", "level": "warn", "source": "news_scan", "message": "search 429 rate_limited · retry 1 of 3 in 0.2s" },
+    { "time": "00:04.900", "level": "info", "source": "erp_contracts", "message": "36 active contracts" },
+    { "time": "00:04.960", "level": "error", "source": "erp_contracts", "message": "refused · connector:erp:pricing:read not granted · query not sent" },
+    { "time": "00:05.200", "level": "info", "source": "news_scan", "message": "2 results · fetching" },
+    { "time": "00:06.080", "level": "info", "source": "shipments_on_route", "message": "1,412 rows · 84 MB scanned" },
+    { "time": "00:07.590", "level": "info", "source": "news_scan", "message": "2 sources kept · 2,250 words" },
+    { "time": "00:07.700", "level": "debug", "source": "compute_scores", "message": "frame 38 × 9 · weights volume .4 sole_source .3 alternates .2 signal .1" },
+    { "time": "00:09.600", "level": "info", "source": "compute_scores", "message": "scores mean 0.52 · max 0.91" },
+    { "time": "00:09.790", "level": "info", "source": "score_exposure", "message": "9 high · 14 medium · 15 low" },
+    { "time": "00:12.590", "level": "info", "source": "compose_answer", "message": "answer · 820 tokens · 2 citations" },
+    { "time": "00:12.820", "level": "info", "source": "cite_sources", "message": "2 of 2 claims bound" },
+    { "time": "00:12.840", "level": "info", "source": "cite_sources", "message": "run_7d3184f1 succeeded in 12.8s" }
+  ]
+}
