@@ -88,8 +88,12 @@ export interface ThemeSelectorProps {
   defaultAccent?: string | null;
 }
 
-/** Tokens previewed in each theme card, in display order. */
-const SWATCH_TOKENS = ['bg-primary', 'bg-secondary', 'bg-accent', 'bg-muted', 'bg-border'] as const;
+/**
+ * Tokens previewed in each theme card, in display order: the ones that tell
+ * themes apart. Surface tokens (secondary, muted, accent) sit a few percent off
+ * the background in dark mode, so they would read as empty dots.
+ */
+const SWATCH_TOKENS = ['bg-primary', 'bg-foreground', 'bg-muted-foreground', 'bg-border'] as const;
 
 /** Dependency-free check glyph for the selected-theme badge. */
 function CheckMark({ className }: { className?: string }) {
