@@ -29,11 +29,15 @@ interface Entry {
   detail?: string;
   link?: string;
   badge?: { label: string; tone: string };
+  /** The smaller events it breaks into, drawn under it once it is opened. */
+  entries?: Entry[];
+  open?: boolean;
 }
 
 interface Args {
   variant: string;
   onOpen: (title: string) => void;
+  onOpenChange: (entry: string, open: boolean) => void;
 }
 
 const IMPORTS = [
@@ -42,6 +46,17 @@ const IMPORTS = [
 
 function code(v: Variant) {
   const size = v.variant === 'compact' ? ' size="md"' : '';
+  if ((v.entries as Entry[]).some((e) => e.entries))
+    return [
+      '// An entry with `entries` opens into them — the same call, one level down.',
+      'const entry = (e) => (',
+      `  <TimelineEntry key={e.when + e.text} when={e.when} marker={<StatusDot tone={e.tone}${size} />}`,
+      '    nested={e.entries?.map(entry)} defaultOpen={e.open} onOpenChange={(open) => onOpenChange(e.text, open)}>',
+      '    {e.text}',
+      '  </TimelineEntry>',
+      ');',
+      `<TimelineList variant="${v.variant}">{entries.map(entry)}</TimelineList>`,
+    ].join('\n');
   if (v.variant === 'rail')
     return [
       `<PanelBox title="${v.heading}">`,
@@ -91,46 +106,53 @@ const meta = {
       },
     },
   },
-  args: { variant: 'All', onOpen: fn() },
+  args: { variant: 'All', onOpen: fn(), onOpenChange: fn() },
   argTypes: { variant: variantArg(VARIANTS) },
 } satisfies Meta<Args>;
 
 export default meta;
 type Story = StoryObj<Args>;
 
-function Draw({ v, log, onOpen }: { v: Variant; log: Log; onOpen: Args['onOpen'] }) {
+function Draw({ v, log, onOpen, onOpenChange }: { v: Variant; log: Log; onOpen: Args['onOpen']; onOpenChange: Args['onOpenChange'] }) {
   const open = (title: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     onOpen(title);
     log('onClick', title);
   };
   const dotSize = v.variant === 'compact' ? 'md' : undefined;
+  const entry = (e: Entry) => (
+    <TimelineEntry
+      key={e.when + (e.text ?? e.title ?? e.link)}
+      when={e.when}
+      marker={<StatusDot tone={e.tone as Tone} size={dotSize} />}
+      nested={e.entries?.map(entry)}
+      defaultOpen={e.open}
+      onOpenChange={(open) => {
+        onOpenChange(e.text ?? '', open);
+        log('onOpenChange', { entry: e.text, open });
+      }}
+      title={
+        e.link ? (
+          <Link href="#" variant="quiet" onClick={open(e.link)}>
+            {e.link}
+          </Link>
+        ) : (
+          e.title
+        )
+      }
+    >
+      {e.text}
+      {e.detail ? <TypographyMuted>{e.detail}</TypographyMuted> : null}
+      {e.badge ? (
+        <Badge variant="outline" size="xs" tone={e.badge.tone as 'info'}>
+          {e.badge.label}
+        </Badge>
+      ) : null}
+    </TimelineEntry>
+  );
   const list = (
     <TimelineList variant={v.variant as 'columns' | 'compact' | 'rail'}>
-      {(v.entries as Entry[]).map((e) => (
-        <TimelineEntry
-          key={e.when}
-          when={e.when}
-          marker={<StatusDot tone={e.tone as Tone} size={dotSize} />}
-          title={
-            e.link ? (
-              <Link href="#" variant="quiet" onClick={open(e.link)}>
-                {e.link}
-              </Link>
-            ) : (
-              e.title
-            )
-          }
-        >
-          {e.text}
-          {e.detail ? <TypographyMuted>{e.detail}</TypographyMuted> : null}
-          {e.badge ? (
-            <Badge variant="outline" size="xs" tone={e.badge.tone as 'info'}>
-              {e.badge.label}
-            </Badge>
-          ) : null}
-        </TimelineEntry>
-      ))}
+      {(v.entries as Entry[]).map(entry)}
       {v.footer ? (
         <TimelineFooter>
           <Link href="#" variant="quiet" onClick={open(v.footer)}>
@@ -148,13 +170,14 @@ function Draw({ v, log, onOpen }: { v: Variant; log: Log; onOpen: Args['onOpen']
  * `fixtures/ui-extended/timeline-list.json`. `columns` makes `when` a column, so "what changed
  * on Friday" reads down one edge; `compact` sets when, marker and text on one line for a few
  * events inside an answer; `rail` puts `when` above the title with a line threading the markers,
- * for a narrow card. Click a rail entry: the link is logged with its title.
+ * for a narrow card. Click a rail entry: the link is logged with its title. An entry with `nested`
+ * entries opens into them with a chevron, in the same variant — a customs hold into its steps.
  */
 export const TimelineListStory: Story = {
   name: 'TimelineList',
-  render: ({ variant, onOpen }) => (
+  render: ({ variant, onOpen, onOpenChange }) => (
     <VariantBoard variants={VARIANTS} variant={variant}>
-      {(v, log) => <Draw v={v} log={log} onOpen={onOpen} />}
+      {(v, log) => <Draw v={v} log={log} onOpen={onOpen} onOpenChange={onOpenChange} />}
     </VariantBoard>
   ),
   play: async ({ canvasElement, args, step }) => {
@@ -165,6 +188,13 @@ export const TimelineListStory: Story = {
       await userEvent.click(cell.getByRole('link', { name: 'MAI-Code-1-Flash deprecated' }));
       await expect(args.onOpen).toHaveBeenCalledWith('MAI-Code-1-Flash deprecated');
       await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('"MAI-Code-1-Flash deprecated"');
+    });
+    const nested = within(canvas.getByRole('group', { name: VARIANTS[3].caption }));
+    await step('Close the hold: its steps go', async () => {
+      await expect(nested.getByText('Released')).toBeInTheDocument();
+      await userEvent.click(nested.getByRole('button', { name: 'Close Held at customs · 3 days' }));
+      await expect(args.onOpenChange).toHaveBeenCalledWith('Held at customs · 3 days', false);
+      await expect(nested.queryByText('Released')).toBeNull();
     });
   },
 };

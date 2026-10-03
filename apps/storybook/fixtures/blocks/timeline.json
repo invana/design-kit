@@ -62,6 +62,35 @@
     "spec": { "events": [], "status": "loading" }
   },
   {
+    "caption": "Nested · a hold opened into its steps",
+    "turn": { "id": "l7", "label": "timeline", "title": "container MSKU 402918" },
+    "spec": {
+      "events": [
+        { "when": "12 Sep", "text": "Loaded at Rotterdam", "tone": "good" },
+        {
+          "when": "19 Sep",
+          "text": "Held at customs · 3 days",
+          "tone": "warn",
+          "open": true,
+          "children": [
+            { "when": "19 Sep", "text": "Certificate of origin requested", "tone": "warn" },
+            { "when": "21 Sep", "text": "Certificate sent by the shipper" },
+            { "when": "22 Sep", "text": "Released", "tone": "good" }
+          ]
+        },
+        {
+          "when": "23 Sep",
+          "text": "Arrived Felixstowe",
+          "children": [
+            { "when": "23 Sep", "text": "Discharged from the vessel" },
+            { "when": "23 Sep", "text": "Gate-out 16:40" }
+          ]
+        },
+        { "when": "26 Sep", "text": "Delivered, 4 days late", "tone": "bad" }
+      ]
+    }
+  },
+  {
     "caption": "No data",
     "turn": { "id": "l5", "label": "timeline", "title": "container MSKU 402918" },
     "spec": { "events": [], "status": "empty", "emptyText": "No events recorded for this container yet." }

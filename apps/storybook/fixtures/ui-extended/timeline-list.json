@@ -31,5 +31,24 @@
       { "when": "19 hours ago", "tone": "muted", "link": "MAI-Code-1-Flash deprecated" }
     ],
     "footer": "View changelog →"
+  },
+  {
+    "caption": "Nested — an event opened into its steps",
+    "variant": "compact",
+    "entries": [
+      { "when": "12 Sep", "tone": "success", "text": "Loaded at Rotterdam" },
+      {
+        "when": "19 Sep",
+        "tone": "warning",
+        "text": "Held at customs · 3 days",
+        "open": true,
+        "entries": [
+          { "when": "19 Sep", "tone": "warning", "text": "Certificate of origin requested" },
+          { "when": "21 Sep", "tone": "muted", "text": "Certificate sent by the shipper" },
+          { "when": "22 Sep", "tone": "success", "text": "Released" }
+        ]
+      },
+      { "when": "26 Sep", "tone": "error", "text": "Delivered, 4 days late" }
+    ]
   }
 ]
