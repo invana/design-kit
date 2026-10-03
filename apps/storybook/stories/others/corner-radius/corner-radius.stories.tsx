@@ -41,7 +41,6 @@ import {
   HoverCardTrigger,
   Kbd,
   KindChip,
-  LensChip,
   MarkChip,
   Menubar,
   MenubarContent,
@@ -126,7 +125,6 @@ type Part =
   | 'address-chip'
   | 'agent-chip'
   | 'kind-chip'
-  | 'lens-chip'
   | 'mark-chip'
   | 'suggestions'
   | 'card'
@@ -422,8 +420,6 @@ function Live({ row, args, log }: { row: Row; args: Args; log: Log }) {
         return <AgentChip key={p} name={chips.agent} />;
       case 'kind-chip':
         return <KindChip key={p} kind={chips.kind} />;
-      case 'lens-chip':
-        return <LensChip key={p} lens={{ name: chips.lens }} />;
       case 'mark-chip':
         return (
           <MarkChip key={p} tone="info">

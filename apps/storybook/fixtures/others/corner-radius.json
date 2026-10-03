@@ -16,7 +16,6 @@
     "address": "model/Orders@v2",
     "agent": "reconcile",
     "kind": "schedule",
-    "lens": "Finance close",
     "mark": "draft",
     "filter": { "label": "status", "value": "running" },
     "suggestions": ["Break it down by store", "Compare with last quarter"]
@@ -63,7 +62,7 @@
     {
       "caption": "Controls · badges and chips",
       "wide": true,
-      "parts": ["badges", "filter-chip", "address-chip", "agent-chip", "kind-chip", "lens-chip", "mark-chip", "suggestions"]
+      "parts": ["badges", "filter-chip", "address-chip", "agent-chip", "kind-chip", "mark-chip", "suggestions"]
     },
     {
       "caption": "Surfaces · cards and panels",

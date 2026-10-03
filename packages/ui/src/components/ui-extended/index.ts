@@ -1,5 +1,4 @@
 export * from './absence-note';
-export * from './access';
 export * from './address-chip';
 export * from './agent-chip';
 export * from './agent-header';
@@ -31,7 +30,6 @@ export * from './kind-chip';
 export * from './layer-chip';
 export * from './layer-section';
 export * from './legend';
-export * from './lens-chip';
 export * from './lens-row';
 export * from './log-card';
 export * from './mark-chip';
