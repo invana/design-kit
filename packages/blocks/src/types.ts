@@ -729,6 +729,23 @@ export interface HeatStripOptions {
   ticks?: { at: number; label: string }[]
 }
 
+/** One dated event of the timeline block — and the smaller events it breaks into. */
+export interface TimelineEvent {
+  when: string
+  text: string
+  tone?: Tone
+  /** A second line under the text. */
+  detail?: string
+  /** Starts a labelled run of events — `Before`, `Spike`, `After`. */
+  section?: string
+  /** Calls the event out. */
+  highlight?: boolean
+  /** The events it breaks into — a customs hold into its steps — drawn under it when it is open. */
+  children?: TimelineEvent[]
+  /** Drawn open. The reader can open and close it either way. */
+  open?: boolean
+}
+
 export interface TraceOptions {
   steps: TraceStep[]
   /** One line — `▸ 4 steps` with `summary` at the right — until opened. */
@@ -775,7 +792,7 @@ export interface AnswerOptionsByKind extends SharedAnswerOptions {
      * `detail` is a second line under the text. `section` starts a labelled run
      * of events — `Before`, `Spike`, `After`; `highlight` calls one out.
      */
-    events: { when: string; text: string; tone?: Tone; detail?: string; section?: string; highlight?: boolean }[]
+    events: TimelineEvent[]
   }
   subgraph: { nodes: { id: string; label: string }[]; edges: { from: string; to: string }[] }
   method: MethodOptions
