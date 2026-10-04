@@ -134,11 +134,11 @@ export interface NavItemConfig {
 /**
  * The visual treatments a strip of nav items can wear.
  *
- * One table, because the kit draws all three and used to draw two of them by
- * hand in separate components. `nav` is what nav items have always looked
- * like; `underline` and `folder` are the two tab strips — a panel's views and
- * a workbook's pages — lifted out of `TabbedPanel` and
- * `CanvasPagesViewPanel` unchanged, so migrating those renders identically.
+ * One table, because the kit used to draw these by hand in separate
+ * components. `nav` is what nav items have always looked like; `underline` and
+ * `folder` are the two tab strips — a panel's views (`TabbedPanel`) and a
+ * workbook's pages (`Workbook`) — and `folder-bottom` is the workbook's strip
+ * under its pages.
  */
 const VARIANT = {
   /** The capsule: a filled, ringed chip. Toolbars, rails, header actions. */
@@ -167,6 +167,15 @@ const VARIANT = {
     open: "data-[state=open]:text-foreground",
     active:
       "mb-[-1px] rounded-t-md border border-b-0 border-primary text-primary",
+    strip: "items-stretch",
+  },
+  /** The folder tab turned over, for a strip under its pages: open at the top, rounded below. */
+  "folder-bottom": {
+    item: "h-full rounded-none px-3 py-2 gap-1.5",
+    hover: "hover:text-foreground",
+    open: "data-[state=open]:text-foreground",
+    active:
+      "mt-[-1px] rounded-b-md border border-t-0 border-primary text-primary",
     strip: "items-stretch",
   },
 } as const;

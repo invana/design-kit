@@ -72,3 +72,4 @@ export * from './tour';
 export * from './trace-list';
 export * from './tree-view';
 export * from './under-development';
+export * from './workbook';
