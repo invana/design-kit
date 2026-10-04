@@ -1,10 +1,11 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppLayoutAgents, type AppLayoutAgentsProps } from '@invana/themes/app-agents/layout';
 import { ThemeProvider, ThemeSelector } from '@invana/themes';
 import { ActivityBlock, type ActivityOptions } from '@invana/blocks';
+import { BoardPages, type BoardPagesSpec } from '@invana/boards';
 import {
   AgentHeader,
   Breadcrumb,
@@ -13,7 +14,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
   Button,
-  EmptyState,
   FloatingPanel,
   LogCard,
   NavHorizontalItems,
@@ -35,6 +35,7 @@ import {
   Activity,
   Focus,
   Globe,
+  Home,
   Maximize,
   Minimize,
   Monitor,
@@ -46,6 +47,7 @@ import {
   Sparkles,
   Star,
   Sun,
+  Table,
   Users,
 } from 'lucide-react';
 
@@ -65,9 +67,14 @@ const FIXTURE = data as unknown as {
   answer: PatchScript;
   /** The run's layer activity once settled, and its log lines at their time after the start. */
   activity: ActivityOptions & { logs: { at: number; log: LogLine }[] };
+  /** The open boards in the work: a welcome page and the accounts tables. */
+  boards: BoardPagesSpec;
 };
 
 const ASK = 'q1';
+
+/** The icon names the boards' JSON uses. */
+const BOARD_ICONS = { home: Home, table: Table };
 
 const HEADER_ICONS = { world: <Globe />, group: <Users />, lens: <Focus />, governance: <ShieldCheck /> };
 
@@ -418,6 +425,8 @@ type Story = StoryObj<typeof meta>;
 /**
  * The agents shell: the conversation rail on the left and the work on the right — drag the
  * handle between them to resize, or past the rail's minimum to collapse it.
+ * The work is the open boards — a welcome page and the accounts tables — over one tab strip at the bottom
+ * (`BoardPages`, from the fixture's `boards`).
  * The thread plays in from `fixtures/themes/app-agents.json`; pick a scope and the answer
  * streams in. The rail's header names the session, the agent and its status, then the data it
  * reaches (record counts arrive live), its lens, token budget and governance. The run's activity
@@ -460,17 +469,20 @@ export const Default: Story = {
       // The right side — stars, the activity and log toggles, theme, full screen, the
       // assistant and settings — is drawn by `AgentsApp`, which owns their state.
     },
+    // The work: the open boards behind one tab strip, from the fixture's `boards`.
     mainSection: {
-      content: (
-        <EmptyState
-          title="Canvas"
-          description="The work the agents act on — a graph, a document, a board."
-        />
-      ),
+      content: <BoardPages spec={FIXTURE.boards} icons={BOARD_ICONS} onAction={action('onAction')} />,
     },
   },
   play: async ({ canvasElement, step }) => {
     const c = within(canvasElement);
+    await step('The work opens on the welcome board; the Accounts tab shows its tables', async () => {
+      await expect(c.getByText('Welcome to accounts-graph')).toBeVisible();
+      await userEvent.click(c.getByRole('tab', { name: /Accounts/ }));
+      await expect(c.getByText('Top accounts')).toBeVisible();
+      await expect(c.getByText('Recent funding')).toBeVisible();
+      await expect(c.getByText('Welcome to accounts-graph')).not.toBeVisible();
+    });
     await step('The rail header shows one session; another is picked from its dropdown', async () => {
       await expect(c.queryByText('Board pack')).not.toBeInTheDocument();
       await userEvent.click(c.getByRole('button', { name: 'Sessions menu' }));
@@ -486,7 +498,9 @@ export const Default: Story = {
     });
     await step('The scope ask plays in, and picking one streams the answer', async () => {
       await userEvent.click(await c.findByText('Top 50 by ARR', {}, { timeout: 3000 }));
-      await expect(await c.findByText('Acme Robotics', {}, { timeout: 8000 })).toBeInTheDocument();
+      // In the conversation, not the Accounts board, which lists the same account.
+      const inThread = () => c.queryAllByText('Acme Robotics').filter((el) => !el.closest('[role="tabpanel"]'));
+      await waitFor(() => expect(inThread()).not.toHaveLength(0), { timeout: 8000 });
     });
     await step('The activity panel fills in as the run goes: a refusal on Graph, data leaving to a third party', async () => {
       await expect(await c.findByText(/by layer · 4 s/, {}, { timeout: 6000 })).toBeInTheDocument();

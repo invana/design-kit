@@ -497,6 +497,8 @@ export interface ActionContext {
   lens?: string
   /** Set by a block panel — what its action carries: a row's key, a form's values. */
   value?: unknown
+  /** Set by `BoardPages` — the page a pick, a close or a board's own action came from. */
+  pageId?: string
 }
 
 export interface PanelRendererProps<O = PanelOptions> {
@@ -551,3 +553,47 @@ export interface BoardProps<X extends ExtraPanels = Record<never, never>>
  * the truth about JSON off the wire rather than a weakness of the type.
  */
 export type AnyBoardSpec = BoardSpec<Record<string, CustomOptions>>
+
+/** One page of a {@link BoardPagesSpec}: its tab, and the board behind it. */
+export interface BoardPageSpec<X extends ExtraPanels = Record<never, never>> {
+  id: string
+  title: string
+  /** A key into {@link BoardPagesProps.icons}. Unknown names render nothing. */
+  icon?: string
+  disabled?: boolean
+  /** Draws an `×` on the tab, dispatching `closeAction`. Only with `closeAction`. */
+  closable?: boolean
+  board: BoardSpec<X>
+}
+
+/**
+ * Several boards behind one tab strip — the open boards of a shell. Like a
+ * board's own tabs, the pick is the strip's to keep until the spec names
+ * `selectAction`; then it is reported with `{ pageId }` and `active` is the host's.
+ */
+export interface BoardPagesSpec<X extends ExtraPanels = Record<never, never>> {
+  pages: BoardPageSpec<X>[]
+  /** The page shown. Defaults to the first. */
+  active?: string
+  /** Dispatched with `{ pageId }` when a tab is picked. */
+  selectAction?: string
+  /** Dispatched with `{ pageId }` by a closable tab's `×`. */
+  closeAction?: string
+  /** Draws a `+` that dispatches this. Absent, there is no `+`. */
+  addAction?: string
+  /** The `+`'s tooltip — `New board`. */
+  addLabel?: string
+  /** Where the tabs sit: over the boards (default) or under them, as a spreadsheet's do. */
+  tabPosition?: "top" | "bottom"
+  /** Which end of the strip the prev / next / `+` buttons dock at. Default `end`. */
+  pagerPosition?: "start" | "end"
+}
+
+export interface BoardPagesProps<X extends ExtraPanels = Record<never, never>> {
+  spec: BoardPagesSpec<X>
+  /** Every page's actions and the strip's own, told apart by `pageId`. */
+  onAction?: (actionId: string, ctx?: ActionContext) => void
+  registry?: PanelRegistry
+  icons?: Record<string, React.ComponentType<{ className?: string }>>
+  className?: string
+}

@@ -1,0 +1,160 @@
+[
+  {
+    "caption": "Tabs on top",
+    "wide": true,
+    "height": 560,
+    "spec": {
+      "pages": [
+        {
+          "id": "plan",
+          "title": "nl-single@2",
+          "icon": "plan",
+          "board": "plan"
+        },
+        {
+          "id": "forecast",
+          "title": "Weekly demand",
+          "icon": "chart",
+          "board": "forecast-run"
+        },
+        {
+          "id": "notes",
+          "title": "Notes",
+          "icon": "record",
+          "board": {
+            "rows": [
+              {
+                "panels": [
+                  {
+                    "id": "notes",
+                    "kind": "text",
+                    "title": "Notes",
+                    "options": {
+                      "text": "Demand dipped in week 38 after the price change; the forecast run below re-fits with the new elasticity."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Tabs at the bottom",
+    "wide": true,
+    "height": 560,
+    "spec": {
+      "pages": [
+        {
+          "id": "plan",
+          "title": "nl-single@2",
+          "icon": "plan",
+          "board": "plan"
+        },
+        {
+          "id": "forecast",
+          "title": "Weekly demand",
+          "icon": "chart",
+          "board": "forecast-run"
+        },
+        {
+          "id": "notes",
+          "title": "Notes",
+          "icon": "record",
+          "board": {
+            "rows": [
+              {
+                "panels": [
+                  {
+                    "id": "notes",
+                    "kind": "text",
+                    "title": "Notes",
+                    "options": {
+                      "text": "Demand dipped in week 38 after the price change; the forecast run below re-fits with the new elasticity."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "active": "forecast",
+      "tabPosition": "bottom",
+      "pagerPosition": "start"
+    }
+  },
+  {
+    "caption": "Host-controlled: open, close and add",
+    "wide": true,
+    "height": 560,
+    "spec": {
+      "pages": [
+        {
+          "id": "plan",
+          "title": "nl-single@2",
+          "icon": "plan",
+          "board": "plan",
+          "closable": true
+        },
+        {
+          "id": "forecast",
+          "title": "Weekly demand",
+          "icon": "chart",
+          "board": "forecast-run",
+          "closable": true
+        },
+        {
+          "id": "notes",
+          "title": "Notes",
+          "icon": "record",
+          "board": {
+            "rows": [
+              {
+                "panels": [
+                  {
+                    "id": "notes",
+                    "kind": "text",
+                    "title": "Notes",
+                    "options": {
+                      "text": "Demand dipped in week 38 after the price change; the forecast run below re-fits with the new elasticity."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "closable": true
+        }
+      ],
+      "active": "plan",
+      "selectAction": "open-board",
+      "closeAction": "close-board",
+      "addAction": "new-board",
+      "addLabel": "New board"
+    },
+    "newBoard": {
+      "title": "Untitled board",
+      "icon": "plan",
+      "board": {
+        "rows": [
+          {
+            "panels": [
+              {
+                "id": "empty",
+                "kind": "text",
+                "title": "Untitled board",
+                "options": {
+                  "text": "An empty board. Add panels to its spec to fill it.",
+                  "tone": "muted"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

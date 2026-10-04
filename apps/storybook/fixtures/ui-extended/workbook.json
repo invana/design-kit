@@ -1,0 +1,286 @@
+{
+  "variants": [
+    {
+      "caption": "Tabs on top",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          }
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          }
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          }
+        }
+      ],
+      "active": "overview",
+      "add": true
+    },
+    {
+      "caption": "Tabs at the bottom",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          }
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          }
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          }
+        }
+      ],
+      "active": "overview",
+      "tabPosition": "bottom",
+      "pagerPosition": "start",
+      "add": true
+    },
+    {
+      "caption": "With a page menu",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          }
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          }
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          }
+        }
+      ],
+      "active": "accounts",
+      "menu": [
+        {
+          "id": "rename",
+          "label": "Rename"
+        },
+        {
+          "id": "duplicate",
+          "label": "Duplicate"
+        },
+        {
+          "id": "remove",
+          "label": "Remove",
+          "destructive": true,
+          "separatorBefore": true
+        }
+      ]
+    },
+    {
+      "caption": "Closable pages",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          },
+          "closable": true
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          },
+          "closable": true
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          },
+          "closable": true
+        }
+      ],
+      "active": "funding"
+    },
+    {
+      "caption": "Header actions",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          }
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          }
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          }
+        }
+      ],
+      "active": "overview",
+      "actions": [
+        {
+          "id": "settings",
+          "label": "Settings",
+          "icon": "settings"
+        },
+        {
+          "id": "help",
+          "label": "Help",
+          "icon": "help"
+        }
+      ]
+    },
+    {
+      "caption": "More pages than fit",
+      "width": 680,
+      "height": 220,
+      "pages": [
+        {
+          "id": "overview",
+          "title": "Overview",
+          "icon": "home",
+          "body": {
+            "title": "Overview",
+            "description": "What the graph holds and what changed since you last looked."
+          }
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "icon": "table",
+          "body": {
+            "title": "Accounts",
+            "description": "Every account, its segment, ARR and owner."
+          }
+        },
+        {
+          "id": "funding",
+          "title": "Funding",
+          "icon": "chart",
+          "body": {
+            "title": "Funding",
+            "description": "Rounds raised by your accounts in the last 90 days."
+          }
+        },
+        {
+          "id": "owners",
+          "title": "Owners",
+          "icon": "table",
+          "body": {
+            "title": "Owners",
+            "description": "Who owns which accounts."
+          }
+        },
+        {
+          "id": "pipeline",
+          "title": "Pipeline",
+          "icon": "chart",
+          "body": {
+            "title": "Pipeline",
+            "description": "Open deals by stage."
+          }
+        },
+        {
+          "id": "renewals",
+          "title": "Renewals",
+          "icon": "table",
+          "body": {
+            "title": "Renewals",
+            "description": "Contracts up for renewal this quarter."
+          }
+        },
+        {
+          "id": "churn",
+          "title": "Churn risk",
+          "icon": "chart",
+          "body": {
+            "title": "Churn risk",
+            "description": "Accounts whose usage is falling."
+          }
+        }
+      ],
+      "active": "overview",
+      "add": true
+    }
+  ]
+}
