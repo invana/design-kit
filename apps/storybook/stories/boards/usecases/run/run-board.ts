@@ -1,5 +1,5 @@
 import type { GanttOptions } from '@invana/blocks';
-import type { BoardSpec, ChipSpec, LogOptions, PanelSpec } from '@invana/boards';
+import type { BoardSpec, ChipSpec, EventSpec, EventsOptions, LogOptions, PanelSpec } from '@invana/boards';
 
 /**
  * A run as the API records it — every task it ran, every call a task made across a layer,
@@ -119,6 +119,96 @@ const callFacts = (c: Call) =>
 
 const LAYERS = Object.keys(PALETTE) as Layer[];
 
+// ── the event stream ───────────────────────────────────────────────────────
+
+/** What the engine calls a call, by the layer it crossed. */
+const CALL_KIND: Record<Layer, (c: Call) => string> = {
+  model: () => 'llm_call',
+  'graph.model': () => 'graph_schema',
+  'graph.data': () => 'graph_query',
+  dataset: () => 'dataset_scan',
+  connector: (c) => c.op,
+  web: (c) => (c.op === 'search' ? 'web_search' : 'http_fetch'),
+  skill: () => 'skill_invoke',
+};
+
+/** Where a call went, short — the host, never the credentials. */
+const host = (target: string) => target.replace(/^\w+:\/\/([^@]*@)?/, '').split(/[:/]/)[0];
+/** `00:04.290` → 4290. */
+const clock = (time = '00:00.000') => {
+  const [m, sec] = time.split(':');
+  return Math.round((Number(m) * 60 + Number(sec)) * 1000);
+};
+
+/**
+ * The run as the engine wrote it: every task starting and finishing, every attempt that was
+ * retried, every call it made and every line it logged — built from the trace, as a telemetry
+ * view would be, so the stream agrees with the Gantt and the access log.
+ */
+export function eventsOf(trace: Trace): EventSpec[] {
+  const out: Omit<EventSpec, 'id'>[] = [];
+  for (const t of tasksOf(trace.tasks)) {
+    for (const a of t.attempts ?? []) {
+      out.push({ atMs: a.startMs, level: 'info', kind: 'task_started', task: t.key, message: `${t.fn} · attempt 1` });
+      out.push({ atMs: a.startMs + a.durationMs, level: 'warn', kind: 'retry_scheduled', task: t.key, tookMs: a.durationMs, message: a.title ?? 'retried' });
+    }
+    out.push({
+      atMs: t.startMs,
+      level: 'info',
+      kind: 'task_started',
+      task: t.key,
+      message: t.fn,
+      fields: { fn: t.fn, kind: t.kind, layer: t.layer, access: t.access.map((x) => `${x.label} (${x.state})`).join(', ') || '—' },
+    });
+    for (const c of t.calls) {
+      const bad = c.status === 'failed' || c.status === 'refused';
+      out.push({
+        atMs: c.startMs,
+        level: bad ? 'error' : 'info',
+        kind: c.status === 'refused' ? 'refused' : CALL_KIND[c.layer](c),
+        task: t.key,
+        tookMs: c.durationMs,
+        message: [`${c.layer} · ${c.op} · ${host(c.target)}`, c.code, c.tokens && `${c.tokens.in + c.tokens.out} tokens`, c.rows != null && `${c.rows} rows`]
+          .filter(Boolean)
+          .join(' · '),
+        fields: {
+          call: c.id,
+          target: c.target,
+          op: c.op,
+          status: c.code ? `${c.status} · ${c.code}` : c.status,
+          ...(c.tokens ? { tokens: `${c.tokens.in} in · ${c.tokens.out} out` } : {}),
+          ...(c.rows != null ? { rows: String(c.rows) } : {}),
+        },
+      });
+    }
+    out.push({
+      atMs: t.startMs + t.durationMs,
+      level: t.status === 'failed' ? 'error' : 'info',
+      kind: t.status === 'failed' ? 'task_failed' : 'task_succeeded',
+      task: t.key,
+      tookMs: t.durationMs,
+      message: t.summary ?? word(t.status),
+    });
+  }
+  for (const line of trace.logs) {
+    out.push({ atMs: clock(line.time), level: line.level ?? 'info', kind: 'log', task: line.source, message: line.message });
+  }
+  return out
+    .map((e, i) => ({ ...e, i }))
+    .sort((a, b) => a.atMs - b.atMs || a.i - b.i)
+    .map(({ i: _i, ...e }, n) => ({ id: `e${n + 1}`, ...e }));
+}
+
+/** The tasks, parent by parent, for the tree. */
+const treeTasks = (trace: Trace): NonNullable<EventsOptions['tasks']> => {
+  const walk = (tasks: Task[], parent?: string): NonNullable<EventsOptions['tasks']> =>
+    tasks.flatMap((t) => [
+      { key: t.key, parent, status: t.status, summary: t.summary, startMs: t.startMs, durationMs: t.durationMs },
+      ...walk(t.tasks ?? [], t.key),
+    ]);
+  return walk(trace.tasks);
+};
+
 // ── the run ────────────────────────────────────────────────────────────────
 
 type GanttRow = GanttOptions['tasks'][number];
@@ -207,6 +297,7 @@ const folded = (rows: GanttRow[], open: boolean): GanttRow[] =>
   rows.map((r) => (r.subtasks ? { ...r, open, subtasks: folded(r.subtasks, open) } : r));
 
 function runTabs(trace: Trace, sel: Selection, view: TraceView, fold: Fold): NonNullable<BoardSpec['tabs']> {
+  const events = eventsOf(trace);
   const rows = view === 'Execution' ? trace.tasks.map(taskRow) : layerRows(trace);
   const tasks = tasksOf(trace.tasks);
   const calls = callsOf(trace);
@@ -263,6 +354,24 @@ function runTabs(trace: Trace, sel: Selection, view: TraceView, fold: Fold): Non
       ],
     },
     {
+      id: 'tree',
+      label: 'Task tree',
+      rows: [
+        {
+          panels: [
+            {
+              id: 'tree',
+              kind: 'events',
+              title: 'Tasks and what each wrote',
+              aside: 'a task’s events before the tasks it ran · pick a row to inspect its task',
+              flush: true,
+              options: { events, layout: 'tree', tasks: treeTasks(trace), selectAction: 'select' },
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: 'access',
       label: `Access log · ${calls.length}`,
       rows: [
@@ -307,8 +416,21 @@ function runTabs(trace: Trace, sel: Selection, view: TraceView, fold: Fold): Non
     },
     {
       id: 'log',
-      label: 'Log',
-      rows: [{ panels: [{ kind: 'log', title: 'Log', aside: `${trace.logs.length} lines`, flush: true, options: { lines: trace.logs } }] }],
+      label: `Log · ${events.length}`,
+      rows: [
+        {
+          panels: [
+            {
+              id: 'log',
+              kind: 'events',
+              title: 'Every event, in order',
+              aside: 'pick one to inspect its task',
+              flush: true,
+              options: { events, layout: 'log', selectAction: 'select' },
+            },
+          ],
+        },
+      ],
     },
   ];
 }
@@ -336,7 +458,7 @@ function inspector(trace: Trace, sel: Selection): BoardSpec | null {
   const task = all.find((t) => t.key === sel.task);
   if (!task) return null;
   const parent = all.find((t) => t.tasks?.some((c) => c.key === task.key));
-  const lines = trace.logs.filter((l) => l.source === task.key);
+  const lines = eventsOf(trace).filter((e) => e.task === task.key);
   const tokens = tokensOf(task.calls);
   // The picked call reads first; the rest keep the order they were made in.
   const calls = [...task.calls].sort((a, b) => Number(b.id === sel.call) - Number(a.id === sel.call));
@@ -456,13 +578,11 @@ function inspector(trace: Trace, sel: Selection): BoardSpec | null {
       },
       {
         id: 'logs',
-        label: `Logs · ${lines.length}`,
+        label: `Events · ${lines.length}`,
         rows: [
           {
             panels: [
-              lines.length
-                ? { kind: 'log', title: 'This task only', flush: true, options: { lines } }
-                : { kind: 'log', title: 'This task only', options: { lines: [] }, absent: { reason: 'declared-none', label: 'no lines', note: 'This task wrote nothing to the log.' } },
+              { kind: 'events', title: 'This task only', flush: true, options: { events: lines, layout: 'log', hideTask: true } },
             ],
           },
         ],

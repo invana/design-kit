@@ -33,7 +33,7 @@ const meta = {
           data: { trace: TRACE },
           setup: [
             '// runBoard(trace, selection, tab, view, fold) builds the BoardSpec — the run in tabs, the picked task as its inspector.',
-            '// A task or call picked in Execution, or a row in the Access log → onAction("select", { panelId, value: <task key | call id> });',
+            '// A task or call picked in the Run trace, a row of the Task tree, the Access log or the Log → onAction("select", { panelId, value: <task key | call id> });',
             '//   the inspector\'s crumb menu sends "open-task" with { itemId }, its × sends "close",',
             '//   a tab sends "tab" (the run) or "inspect-tab" (the task) with { option },',
             '//   the Run trace switch sends "trace-view" with { panelId: "trace", option: "Execution" | "Layer access" },',
@@ -95,7 +95,7 @@ function Live({ onAction }: Args) {
  * **What an agent did to answer one question** — a trace explorer over the run's own record
  * (`fixtures/runs/agent-run.json`).
  *
- * The run is three tabs. **Trace**: the budget in tokens, then the **Run trace**, read two ways
+ * The run is four tabs. **Trace**: the budget in tokens, then the **Run trace**, read two ways
  * on one clock by its switch. **Execution** is the tree of tasks the run executed, each task's
  * calls as rows under it, painted by the layer they crossed (model, graph model, graph data,
  * dataset, skill, connector, web), a failed or refused call in its status colour, a retry's
@@ -104,7 +104,11 @@ function Live({ onAction }: Args) {
  * functions that belong to it (a python task too — it belongs to the layer it works for), each
  * opening into its calls. Either view opens a task or call in the inspector, and `Expand all` /
  * `Collapse all` opens or closes every row of the view it is on.
- * **Access log**: every call as a table. **Log**: every line.
+ * **Task tree**: the tasks as a tree, each task's own events under it before the tasks it ran, an
+ * event opening into its fields, with `Open failures` to reveal every task on the way to a retry
+ * or a refusal. **Access log**: every call as a table. **Log**: every event in order, a page at a
+ * time, searched and narrowed by kind, task and level. The tree and the log are one `events`
+ * panel in two layouts, over a stream built from the trace (`eventsOf`).
  *
  * Pick a task or a call, in Execution or the Access log, and it opens in the **inspector**
  * beside the run (`BoardSpec.inspector`), so the tree stays in view: its access labels
@@ -142,6 +146,14 @@ export const Run: Story = {
       await userEvent.click(canvas.getByRole('button', { name: 'compute_scores · python' }));
       await expect(args.onAction).toHaveBeenLastCalledWith('select', { panelId: 'trace', value: 'compute_scores' });
       await expect(canvas.getByText('route_risk_scoring.compute(frame, weights)')).toBeInTheDocument();
+    });
+    await step('Open failures in the Task tree, then a task from it', async () => {
+      await userEvent.click(canvas.getByRole('tab', { name: 'Task tree' }));
+      await expect(args.onAction).toHaveBeenLastCalledWith('tab', { option: 'tree' });
+      await userEvent.click(canvas.getByRole('button', { name: 'Open failures' }));
+      await expect(canvas.getAllByText('refused').length).toBeGreaterThan(0);
+      await userEvent.click(canvas.getByText('erp_contracts', { selector: 'td span' }));
+      await expect(args.onAction).toHaveBeenLastCalledWith('select', { panelId: 'tree', value: 'erp_contracts' });
     });
     await step('Close the inspector', async () => {
       await userEvent.click(canvas.getByRole('button', { name: 'Close' }));
