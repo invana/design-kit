@@ -83,6 +83,33 @@ describe("applyPatch", () => {
     expect(next.turns).toHaveLength(3)
   })
 
+  it("streams any block by the block's own patch, the same one a board streams it by", () => {
+    const answer: AnswerTurn = {
+      id: "t3",
+      role: "assistant",
+      kind: "answer",
+      state: "running",
+      blocks: [{ kind: "gantt", tasks: [{ key: "plan", status: "running", startMs: 0 }], nowMs: 400, openEnded: true }],
+    }
+    const next = applyPatches(applyPatch(base, { op: "add-turn", turn: answer }), [
+      { op: "patch-block", turn: "t3", patch: { op: "upsert", at: ["tasks"], item: { key: "plan", status: "succeeded", durationMs: 900 } } },
+      { op: "patch-block", turn: "t3", block: 0, patch: { op: "upsert", at: ["tasks"], item: { key: "fetch", status: "queued" } } },
+      { op: "patch-block", turn: "t3", patch: { op: "set", fields: { nowMs: undefined, openEnded: false, kind: "table" } } },
+    ])
+    expect((next.turns[2] as AnswerTurn).blocks[0]).toEqual({
+      kind: "gantt",
+      tasks: [
+        { key: "plan", status: "succeeded", startMs: 0, durationMs: 900 },
+        { key: "fetch", status: "queued" },
+      ],
+      nowMs: undefined,
+      openEnded: false,
+    })
+    expect(() =>
+      applyPatch(next, { op: "patch-block", turn: "t3", patch: { op: "upsert", at: ["tasks", "nope", "subtasks"], item: { key: "x" } } }),
+    ).toThrow(PatchError)
+  })
+
   it("refuses to stream into what is not there, or not text", () => {
     const answer: AnswerTurn = { id: "t3", role: "assistant", kind: "answer", state: "running", blocks: [] }
     const withAnswer = applyPatch(base, { op: "add-turn", turn: answer })

@@ -1,3 +1,5 @@
+import { applyBlockPatch, type BlockPatch, BlockPatchError } from "@invana/blocks"
+
 import type {
   AnswerState,
   AnswerTurn,
@@ -18,12 +20,18 @@ export type ConversationPatch =
   /** Move a turn through its states. An answered ask carries its `value`. */
   | { op: "set-state"; turn: string; state: AskState | AnswerState; value?: unknown }
   | { op: "add-block"; turn: string; block: BlockSpec }
-  /** Change a block in place — its rows arriving, a loading block settling. `block` is its index. */
+  /**
+   * Stream a block: one {@link BlockPatch} — the same patch a board or a page
+   * streams the block by. `block` is its index, the last block when left out.
+   */
+  | { op: "patch-block"; turn: string; block?: number; patch: BlockPatch }
+  /** Change a block in place — its rows arriving, a loading block settling. `block` is its index. A `set` block patch. */
   | { op: "update-block"; turn: string; block: number; fields: Record<string, unknown> }
   /**
    * Stream words into a block: `text` is appended to its string `field`
    * (default `text`). `block` is its index, the last block when left out — so
-   * a stream sends `add-block` with the field empty, then its words.
+   * a stream sends `add-block` with the field empty, then its words. An
+   * `append` block patch.
    */
   | { op: "append-text"; turn: string; text: string; block?: number; field?: string }
   | { op: "add-trace-step"; turn: string; step: TraceStep }
@@ -64,16 +72,20 @@ function onStep(answer: AnswerTurn, id: string, op: string, fn: (step: TraceStep
   return { ...answer, trace: trace.map((s, i) => (i === at ? fn(s) : s)) }
 }
 
-function appendText(answer: AnswerTurn, text: string, index: number | undefined, field: string): AnswerTurn {
+/** Block `index` of an answer (the last when left out) after a block patch — the one way a block changes. */
+function patchBlock(answer: AnswerTurn, op: string, index: number | undefined, patch: BlockPatch): AnswerTurn {
   const at = index ?? answer.blocks.length - 1
-  const block = answer.blocks[at] as (BlockSpec & Record<string, unknown>) | undefined
-  if (!block) throw new PatchError(`"append-text": turn "${answer.id}" has no block ${at}.`)
-  const current = block[field] ?? ""
-  if (typeof current !== "string") {
-    throw new PatchError(`"append-text": "${field}" of block ${at} on turn "${answer.id}" is not text.`)
-  }
+  const block = answer.blocks[at]
+  if (!block) throw new PatchError(`"${op}": turn "${answer.id}" has no block ${at}.`)
   const blocks = answer.blocks.slice()
-  blocks[at] = { ...block, [field]: current + text } as BlockSpec
+  try {
+    blocks[at] = applyBlockPatch(block, patch)
+  } catch (error) {
+    if (error instanceof BlockPatchError) {
+      throw new PatchError(`"${op}": block ${at} on turn "${answer.id}": ${error.message}`)
+    }
+    throw error
+  }
   return { ...answer, blocks }
 }
 
@@ -101,17 +113,16 @@ export function applyPatch(spec: ConversationSpec, patch: ConversationPatch): Co
         const answer = asAnswer(turn, patch.op)
         return { ...answer, blocks: [...answer.blocks, patch.block] }
       })
+    case "patch-block":
+      return onTurn(spec, patch.turn, (turn) => patchBlock(asAnswer(turn, patch.op), patch.op, patch.block, patch.patch))
     case "update-block":
-      return onTurn(spec, patch.turn, (turn) => {
-        const answer = asAnswer(turn, patch.op)
-        const block = answer.blocks[patch.block]
-        if (!block) throw new PatchError(`"update-block": turn "${answer.id}" has no block ${patch.block}.`)
-        const blocks = answer.blocks.slice()
-        blocks[patch.block] = { ...block, ...patch.fields, kind: block.kind } as BlockSpec
-        return { ...answer, blocks }
-      })
+      return onTurn(spec, patch.turn, (turn) =>
+        patchBlock(asAnswer(turn, patch.op), patch.op, patch.block, { op: "set", fields: patch.fields }),
+      )
     case "append-text":
-      return onTurn(spec, patch.turn, (turn) => appendText(asAnswer(turn, patch.op), patch.text, patch.block, patch.field ?? "text"))
+      return onTurn(spec, patch.turn, (turn) =>
+        patchBlock(asAnswer(turn, patch.op), patch.op, patch.block, { op: "append", at: [patch.field ?? "text"], text: patch.text }),
+      )
     case "add-trace-step":
       return onTurn(spec, patch.turn, (turn) => {
         const answer = asAnswer(turn, patch.op)
