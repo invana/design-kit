@@ -1,7 +1,8 @@
 import * as React from 'react';
-import type { AnswerKind, AskKind } from '@invana/blocks';
+import type { AnswerKind, AskKind, BlockPatch, PatchScript } from '@invana/blocks';
 import {
   applyPatch,
+  applyPatches,
   ChatSessionTurn,
   type AnswerTurn,
   type AskSpec,
@@ -14,6 +15,8 @@ import {
 } from '@invana/assistant';
 
 import type { BlockVariant } from '../../fixtures/blocks';
+import { ReplayFrame } from './replay';
+import { useScriptReplay } from './stream';
 import type { Log } from './variant-grid';
 
 /** A block variant as the ask turn the API would send for it. */
@@ -67,11 +70,14 @@ export function patchFor(event: ConversationEvent): ConversationPatch | undefine
 export function LiveTurn({
   turn,
   now,
+  stream,
   onEvent,
   log,
 }: {
   turn: AskTurn | AnswerTurn;
   now?: string;
+  /** The block's stream, as the variant records it — the turn replays it as `patch-block`. */
+  stream?: PatchScript<BlockPatch>;
   onEvent?: (event: ConversationEvent) => void;
   log: Log;
 }) {
@@ -84,5 +90,40 @@ export function LiveTurn({
     log('patch', patch);
     setSpec((s) => applyPatch(s, patch));
   };
-  return <ChatSessionTurn turn={spec.turns[0]} onEvent={handle} now={now ? Date.parse(now) : undefined} />;
+  const draw = (live: ConversationSpec) => (
+    <ChatSessionTurn turn={live.turns[0]} onEvent={handle} now={now ? Date.parse(now) : undefined} />
+  );
+  if (!stream || turn.kind !== 'answer') return draw(spec);
+  return <StreamedTurn spec={spec} script={turnScript(turn.id, stream)} draw={draw} />;
+}
+
+/**
+ * A block's stream as the conversation carries it: each block patch as `patch-block` on the
+ * turn's block, the answer `running` until the last step settles it `complete`.
+ */
+export function turnScript(turn: string, stream: PatchScript<BlockPatch>): PatchScript<ConversationPatch> {
+  const toTurn = (patch: BlockPatch): ConversationPatch => ({ op: 'patch-block', turn, block: 0, patch });
+  const last = stream.reduce((m, s) => Math.max(m, s.at), 0);
+  return [
+    { at: 0, patch: { op: 'set-state', turn, state: 'running' } },
+    ...stream.map((s) => ({ at: s.at, patch: (Array.isArray(s.patch) ? s.patch : [s.patch]).map(toTurn) })),
+    { at: last, patch: { op: 'set-state', turn, state: 'complete' } },
+  ];
+}
+
+function StreamedTurn({
+  spec,
+  script,
+  draw,
+}: {
+  spec: ConversationSpec;
+  script: PatchScript<ConversationPatch>;
+  draw: (spec: ConversationSpec) => React.ReactNode;
+}) {
+  const live = useScriptReplay(spec, script, applyPatches);
+  return (
+    <ReplayFrame replay={live.replay} noun="update" width={null}>
+      {draw(live.spec)}
+    </ReplayFrame>
+  );
 }

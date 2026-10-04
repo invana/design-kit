@@ -1,5 +1,7 @@
 import type * as React from "react"
-import type { AskState, BlockKind, BlockOptionsByKind } from "@invana/blocks"
+import type { AskState, BlockKind, BlockOptionsByKind, SpecStream } from "@invana/blocks"
+
+import type { BoardPatch } from "./stream"
 import type { Bound, StatusDotProps } from "@invana/ui"
 
 /**
@@ -545,6 +547,19 @@ export interface BoardProps<X extends ExtraPanels = Record<never, never>>
   registry?: PanelRegistry
   /** Icon names the spec may use. Unknown names render nothing. */
   icons?: Record<string, React.ComponentType<{ className?: string }>>
+  /**
+   * Patches to `spec` as they arrive — a panel's block streaming by the same
+   * patch a conversation streams it by (`patch-panel`), or its own fields
+   * moving (`update-panel`). The board draws `spec` with them applied; a new
+   * `spec` starts over from it. Sources and their rules are the block stream's:
+   * `fromNdjson`, `fromEventSource`, a generator, or `playScript`, or a
+   * function `(signal) => source` kept stable.
+   */
+  stream?: SpecStream<BoardPatch>
+  /** The stream ended; the spec as it left it. */
+  onStreamEnd?: (spec: BoardSpec<X>) => void
+  /** A patch did not apply, or the source failed. The stream stops there. */
+  onStreamError?: (error: unknown) => void
 }
 
 /**

@@ -1,10 +1,10 @@
 import * as React from "react"
+import { useStreamedSpec } from "@invana/blocks"
 
 import { resolveRegistry } from "../conversations/registry"
 import type { ConversationEvent } from "../protocol/events"
 import { applyPatches } from "../protocol/reduce"
-import { patchesOf, stopPatches } from "../protocol/stream"
-import type { ConversationSpec } from "../protocol/types"
+import { stopPatches } from "../protocol/stream"
 import { useStopKey } from "./base/chrome"
 import {
   ChatSessionContext,
@@ -21,68 +21,6 @@ import { WebSession } from "./web/web-session"
 /** `open-run` → `onOpenRun`: the callback prop an event goes to. */
 const handlerName = (type: string) =>
   `on${type.replace(/(^|-)([a-z])/g, (_, __, c: string) => c.toUpperCase())}`
-
-/**
- * The spec as drawn: the one given, with `stream`'s patches applied as they
- * arrive. A new spec starts over from it; `stop()` ends the stream and records
- * how far it got.
- */
-function useStreamedSpec(
-  spec: ConversationSpec,
-  stream: ChatSessionProps["stream"],
-  onEnd?: (spec: ConversationSpec) => void,
-  onError?: (error: unknown) => void,
-) {
-  const [base, setBase] = React.useState(spec)
-  const [live, setLive] = React.useState(spec)
-  // A new spec starts over from it, in the same render.
-  if (base !== spec) {
-    setBase(spec)
-    setLive(spec)
-  }
-  const current = React.useRef(spec)
-  const abort = React.useRef<AbortController | null>(null)
-  const callbacks = React.useRef({ onEnd, onError })
-  React.useLayoutEffect(() => {
-    callbacks.current = { onEnd, onError }
-    current.current = live
-  })
-
-  const set = React.useCallback((next: ConversationSpec) => {
-    current.current = next
-    setLive(next)
-  }, [])
-
-  React.useEffect(() => {
-    if (!stream) return
-    const controller = new AbortController()
-    abort.current = controller
-    void (async () => {
-      try {
-        const source = typeof stream === "function" ? stream(controller.signal) : stream
-        for await (const batch of patchesOf(source)) {
-          if (controller.signal.aborted) return
-          set(applyPatches(current.current, batch))
-        }
-        if (!controller.signal.aborted) callbacks.current.onEnd?.(current.current)
-      } catch (error) {
-        if (!controller.signal.aborted) callbacks.current.onError?.(error)
-      } finally {
-        if (abort.current === controller) abort.current = null
-      }
-    })()
-    return () => controller.abort()
-  }, [stream, set])
-
-  const stop = React.useCallback(() => {
-    if (!abort.current) return
-    abort.current.abort()
-    abort.current = null
-    set(applyPatches(current.current, stopPatches(current.current)))
-  }, [set])
-
-  return { live, stop }
-}
 
 /**
  * A conversation with the assistant, drawn from JSON alone, in one of two
@@ -117,7 +55,12 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
     className,
   } = props
 
-  const { live, stop: stopStream } = useStreamedSpec(spec, stream, onStreamEnd, onStreamError)
+  // Read as every shell reads its stream; stopping records how far it got.
+  const { live, stop: stopStream } = useStreamedSpec(spec, stream, applyPatches, {
+    onEnd: onStreamEnd,
+    onError: onStreamError,
+    stopPatches,
+  })
   // A run held on the analyst's answer is not in flight: the composer takes
   // their words, and there is nothing to stop.
   const running = live.turns.some((t) => isAnswer(t) && runOutcome(t) === "live")

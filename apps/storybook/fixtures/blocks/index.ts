@@ -1,4 +1,4 @@
-import type { AskState, BlockKind, BlockOptionsByKind, PageSpec } from '@invana/blocks';
+import type { AskState, BlockKind, BlockOptionsByKind, PageSpec, PatchScript } from '@invana/blocks';
 import type { AnswerTurn } from '@invana/assistant';
 
 import activity from './activity.json';
@@ -47,6 +47,12 @@ export interface BlockVariant<K extends BlockKind> {
   /** Take the grid's whole row — a strip or a table fitted to a board's width. */
   wide?: boolean;
   spec: BlockOptionsByKind[K];
+  /**
+   * The block live: block patches to `spec`, each at its ms from the start, as the API streams
+   * them — the same script a conversation sends as `patch-block` and a board as `patch-panel`.
+   * A cell with one replays it; the others draw `spec` as it stands.
+   */
+  stream?: PatchScript;
   state?: AskState;
   value?: unknown;
   /**

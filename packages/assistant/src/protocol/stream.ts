@@ -1,175 +1,60 @@
+import {
+  type EventSourceOptions,
+  fromEventSource as fromEventSourceOf,
+  fromNdjson as fromNdjsonOf,
+  offsetScript as offsetScriptOf,
+  type PatchChunk as PatchChunkOf,
+  type PatchScript as PatchScriptOf,
+  patchesOf as patchesOfAny,
+  type PatchSource as PatchSourceOf,
+  playScript as playScriptOf,
+  type PlayOptions,
+  type ScriptStep as ScriptStepOf,
+  scriptLength,
+} from "@invana/blocks"
+
 import type { ConversationPatch } from "./reduce"
 import type { AnswerTurn, ConversationSpec } from "./types"
 
 /**
- * A conversation arrives as a spec, then as patches. These are the ways the
- * patches can arrive — one at a time or in batches, from a fetch body, an
- * EventSource, a generator, or a recorded script — all read the same way by
- * `<ChatSession stream>` and `useChatSession().stream()`.
+ * A conversation arrives as a spec, then as patches — by the same transport
+ * every block streams by (`@invana/blocks`), carrying {@link ConversationPatch}.
+ * These are the ways the patches can arrive — one at a time or in batches,
+ * from a fetch body, an EventSource, a generator, or a recorded script — all
+ * read the same way by `<ChatSession stream>` and `useChatSession().stream()`.
  */
-export type PatchChunk = ConversationPatch | ConversationPatch[]
-export type PatchSource = AsyncIterable<PatchChunk> | Iterable<PatchChunk>
-
-const toArray = (chunk: PatchChunk) => (Array.isArray(chunk) ? chunk : [chunk])
+export type PatchChunk = PatchChunkOf<ConversationPatch>
+export type PatchSource = PatchSourceOf<ConversationPatch>
+/** A patch and when it lands, in ms from the start of the script. */
+export type ScriptStep = ScriptStepOf<ConversationPatch>
+/** A recorded run: plain JSON, replayed by {@link playScript}. */
+export type PatchScript = PatchScriptOf<ConversationPatch>
+export type { EventSourceOptions, PlayOptions }
 
 /** Every patch of a source, flattened, in order. */
-export async function* patchesOf(source: PatchSource): AsyncGenerator<ConversationPatch[]> {
-  for await (const chunk of source as AsyncIterable<PatchChunk>) yield toArray(chunk)
-}
-
-// ── wire adapters ───────────────────────────────────────────────────────────
+export const patchesOf = (source: PatchSource) => patchesOfAny<ConversationPatch>(source)
 
 /**
  * Patches from a newline-delimited JSON body: one patch, or an array of them,
  * per line. Pass the `Response` of a streaming `fetch`, or its body.
  */
-export async function* fromNdjson(
-  input: Response | ReadableStream<Uint8Array>,
-): AsyncGenerator<PatchChunk> {
-  const body = input instanceof Response ? input.body : input
-  if (!body) return
-  const reader = body.getReader()
-  const decoder = new TextDecoder()
-  let buffered = ""
-  try {
-    for (;;) {
-      const { value, done } = await reader.read()
-      buffered += decoder.decode(value, { stream: !done })
-      let newline = buffered.indexOf("\n")
-      while (newline >= 0) {
-        const line = buffered.slice(0, newline).trim()
-        buffered = buffered.slice(newline + 1)
-        if (line) yield JSON.parse(line) as PatchChunk
-        newline = buffered.indexOf("\n")
-      }
-      if (done) break
-    }
-    const rest = buffered.trim()
-    if (rest) yield JSON.parse(rest) as PatchChunk
-  } finally {
-    reader.releaseLock()
-  }
-}
-
-export interface EventSourceOptions {
-  /** The event whose data is a patch. @default "message" */
-  event?: string
-  /** The event that ends the stream. @default "done" */
-  done?: string
-  /** Close the EventSource when the stream ends. @default true */
-  close?: boolean
-}
+export const fromNdjson = (input: Response | ReadableStream<Uint8Array>) => fromNdjsonOf<ConversationPatch>(input)
 
 /** Patches from Server-Sent Events: each event's `data` is a patch, or an array of them. */
-export async function* fromEventSource(
-  source: EventSource,
-  { event = "message", done = "done", close = true }: EventSourceOptions = {},
-): AsyncGenerator<PatchChunk> {
-  const queue: PatchChunk[] = []
-  let finished = false
-  let failure: unknown
-  let wake: (() => void) | undefined
-  const notify = () => {
-    wake?.()
-    wake = undefined
-  }
-  const onData = (e: MessageEvent) => {
-    try {
-      queue.push(JSON.parse(e.data as string) as PatchChunk)
-    } catch (error) {
-      failure = error
-    }
-    notify()
-  }
-  const onDone = () => {
-    finished = true
-    notify()
-  }
-  const onError = () => {
-    // EventSource reconnects on its own while CONNECTING; CLOSED is the end.
-    if (source.readyState === EventSource.CLOSED) onDone()
-  }
-  source.addEventListener(event, onData as EventListener)
-  source.addEventListener(done, onDone)
-  source.addEventListener("error", onError)
-  try {
-    for (;;) {
-      if (failure) throw failure
-      const next = queue.shift()
-      if (next) {
-        yield next
-        continue
-      }
-      if (finished) return
-      await new Promise<void>((resolve) => (wake = resolve))
-    }
-  } finally {
-    source.removeEventListener(event, onData as EventListener)
-    source.removeEventListener(done, onDone)
-    source.removeEventListener("error", onError)
-    if (close) source.close()
-  }
-}
-
-// ── recorded scripts ────────────────────────────────────────────────────────
-
-/** A patch and when it lands, in ms from the start of the script. */
-export interface ScriptStep {
-  at: number
-  patch: PatchChunk
-}
-
-/** A recorded run: plain JSON, replayed by {@link playScript}. */
-export type PatchScript = ScriptStep[]
-
-export interface PlayOptions {
-  /** 2 plays twice as fast. @default 1 */
-  speed?: number
-  signal?: AbortSignal
-}
-
-function sleep(ms: number, signal?: AbortSignal) {
-  return new Promise<void>((resolve) => {
-    if (signal?.aborted || ms <= 0) return resolve()
-    const timer = setTimeout(done, ms)
-    function done() {
-      clearTimeout(timer)
-      signal?.removeEventListener("abort", done)
-      resolve()
-    }
-    signal?.addEventListener("abort", done, { once: true })
-  })
-}
+export const fromEventSource = (source: EventSource, options?: EventSourceOptions) =>
+  fromEventSourceOf<ConversationPatch>(source, options)
 
 /**
  * A script as a stream: each step is yielded when it is due. Steps due at the
  * same moment are yielded together; aborting ends the stream where it stands.
  */
-export async function* playScript(
-  script: PatchScript,
-  { speed = 1, signal }: PlayOptions = {},
-): AsyncGenerator<ConversationPatch[]> {
-  const steps = [...script].sort((a, b) => a.at - b.at)
-  let clock = 0
-  let i = 0
-  while (i < steps.length) {
-    if (signal?.aborted) return
-    const at = steps[i].at
-    await sleep((at - clock) / speed, signal)
-    if (signal?.aborted) return
-    clock = at
-    const batch: ConversationPatch[] = []
-    while (i < steps.length && steps[i].at === at) batch.push(...toArray(steps[i++].patch))
-    yield batch
-  }
-}
+export const playScript = (script: PatchScript, options?: PlayOptions) => playScriptOf(script, options)
 
 /** Shift every step of a script by `ms` — to chain scripts one after another. */
-export const offsetScript = (script: PatchScript, ms: number): PatchScript =>
-  script.map((s) => ({ ...s, at: s.at + ms }))
+export const offsetScript = (script: PatchScript, ms: number): PatchScript => offsetScriptOf(script, ms)
 
 /** When a script's last step lands. */
-export const scriptLength = (script: PatchScript) => script.reduce((m, s) => Math.max(m, s.at), 0)
+export { scriptLength }
 
 export interface DeltaOptions {
   /** When the first delta lands, in ms. @default 0 */

@@ -10,6 +10,9 @@ const openKeys = (tasks: GanttSpecRow[]): Record<string, boolean> =>
     tasks.flatMap((t) => [...(t.open ? [[t.key, true] as const] : []), ...Object.entries(openKeys(t.subtasks ?? []))]),
   )
 
+/** Every task's key, nested ones too. */
+const allKeys = (tasks: GanttSpecRow[]): string[] => tasks.flatMap((t) => [t.key, ...allKeys(t.subtasks ?? [])])
+
 /** A bar's chip, as the badge the JSON names. */
 const toBar = ({ chip, ...bar }: GanttSpecBar) => ({
   ...bar,
@@ -50,14 +53,26 @@ const toRow = ({ open: _open, subtasks, segments, ...task }: GanttSpecRow): Gant
 export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   const [selected, setSelected] = React.useState<string | null>(spec.selected ?? null)
   const [expanded, setExpanded] = React.useState<ExpandedKeys>(() => openKeys(spec.tasks))
-  // The spec's `open` flags win again whenever they change — a patch that opens or closes rows,
-  // an `Expand all`. Compared by the keys they open, so a new spec object with the same flags
-  // (a selection moved) leaves the rows the reader opened alone.
-  const opened = Object.keys(openKeys(spec.tasks)).sort().join("\n")
-  const [lastOpened, setLastOpened] = React.useState(opened)
-  if (opened !== lastOpened) {
-    setLastOpened(opened)
-    setExpanded(openKeys(spec.tasks))
+  // Two ways the spec opens rows. A task that streams in marked `open` opens, and the rows the
+  // reader opened or closed keep their choice. A patch that changes the `open` flags of tasks
+  // already drawn (an `Expand all`) wins again, compared by the keys it opens, so a new spec
+  // object with the same flags (a selection moved) leaves the reader's rows alone.
+  const keys = allKeys(spec.tasks)
+  const flagged = openKeys(spec.tasks)
+  const openedAmong = (among: string[]) => among.filter((key) => flagged[key]).sort().join("\n")
+  const [seen, setSeen] = React.useState(() => new Set(keys))
+  const [lastOpened, setLastOpened] = React.useState(() => openedAmong(keys))
+  const fresh = keys.filter((key) => !seen.has(key))
+  const reflagged = openedAmong(keys.filter((key) => seen.has(key))) !== lastOpened
+  if (fresh.length || reflagged) {
+    setSeen(new Set(keys))
+    setLastOpened(openedAmong(keys))
+    if (reflagged) setExpanded(flagged)
+    else {
+      const arrived = fresh.filter((key) => flagged[key])
+      if (arrived.length)
+        setExpanded((e) => (e === true ? e : { ...e, ...Object.fromEntries(arrived.map((k) => [k, true])) }))
+    }
   }
   const rows = React.useMemo(() => spec.tasks.map(toRow), [spec.tasks])
   const pick = (key: string) => {

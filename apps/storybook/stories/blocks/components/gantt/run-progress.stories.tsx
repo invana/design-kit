@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { GanttBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
+import { blockSource, Streamed, streamImports } from '../../../_story/stream';
 import { VariantGrid } from '../../../_story/variant-grid';
 
 /** The gantt read by task — every variant of its grid that is not Layer access. */
@@ -23,13 +24,13 @@ const meta = {
         language: 'tsx',
         transform: sourceFor(VARIANTS, (picked) =>
           snippets(
-            ["import { GanttBlock } from '@invana/blocks';"],
-            picked.map((v) => ({
-              comment: v.caption,
-              data: { spec: v.spec },
-              setup: "// 'select' with the task's key when a row is picked.\nconst onAction = (action, value) => {};",
-              call: jsx('GanttBlock', { spec: 'spec', onAction: 'onAction' }),
-            })),
+            streamImports(picked, ["import { GanttBlock } from '@invana/blocks';"]),
+            picked.map((v) =>
+              blockSource(v, {
+                setup: "// 'select' with the task's key when a row is picked.\nconst onAction = (action, value) => {};",
+                call: (spec) => jsx('GanttBlock', { spec, onAction: 'onAction' }),
+              }),
+            ),
           ),
         ),
       },
@@ -49,18 +50,27 @@ type Story = StoryObj<Args>;
  * parent with no timing of its own draws the stretch they cover. Hover a row for its card, beside
  * the cursor; pick one and it is sent as `select` with the task's key. The same block read by
  * layer is `Blocks/Components/Gantt/Layer Access`.
+ *
+ **Live**, the same block streams: the API sends block patches — a task `upsert`ed as it
+ * starts and settles, the clock `set` as it ticks, `null` dropping the *now* line at the end — and
+ * the block redraws from each spec. A task that arrives marked `open` opens (`analyse`, split
+ * mid-run). The same script reaches a conversation as `patch-block` and a board as `patch-panel`.
  */
 export const RunProgress: Story = {
   render: ({ variant, onAction }) => (
     <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
-        <GanttBlock
-          spec={v.spec}
-          onAction={(action, value) => {
-            onAction(action, value);
-            log('onAction', { action, value });
-          }}
-        />
+        <Streamed spec={v.spec} stream={v.stream}>
+          {(spec) => (
+            <GanttBlock
+              spec={spec}
+              onAction={(action, value) => {
+                onAction(action, value);
+                log('onAction', { action, value });
+              }}
+            />
+          )}
+        </Streamed>
       )}
     </VariantGrid>
   ),
@@ -78,6 +88,16 @@ export const RunProgress: Story = {
     await step('Picking a task sends its key', async () => {
       await userEvent.click(nested.getByRole('button', { name: /analyse\.risk/, pressed: false }));
       await expect(args.onAction).toHaveBeenCalledWith('select', 'analyse.risk');
+    });
+    const live = within(canvas.getByRole('group', { name: 'Live · a run streaming' }));
+    await step('The live run streams to its end', async () => {
+      await waitFor(() => expect(live.getByRole('status')).not.toHaveTextContent(/^0 \//), { timeout: 3000 });
+      await userEvent.click(live.getByRole('button', { name: 'Skip to end' }));
+      await expect(live.getByRole('status')).toHaveTextContent(/^(\d+) \/ \1 updates$/);
+      await expect(live.getByText('compose')).toBeInTheDocument();
+    });
+    await step('A task that arrives open opens', async () => {
+      await expect(live.getByText('analyse.risk')).toBeInTheDocument();
     });
   },
 };
