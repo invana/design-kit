@@ -10,6 +10,9 @@ const openKeys = (tasks: GanttSpecRow[]): Record<string, boolean> =>
     tasks.flatMap((t) => [...(t.open ? [[t.key, true] as const] : []), ...Object.entries(openKeys(t.subtasks ?? []))]),
   )
 
+/** Every task's key, nested ones too. */
+const allKeys = (tasks: GanttSpecRow[]): string[] => tasks.flatMap((t) => [t.key, ...allKeys(t.subtasks ?? [])])
+
 /** A bar's chip, as the badge the JSON names. */
 const toBar = ({ chip, ...bar }: GanttSpecBar) => ({
   ...bar,
@@ -49,6 +52,17 @@ const toRow = ({ open: _open, subtasks, segments, ...task }: GanttSpecRow): Gant
 export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   const [selected, setSelected] = React.useState<string | null>(spec.selected ?? null)
   const [expanded, setExpanded] = React.useState<ExpandedKeys>(() => openKeys(spec.tasks))
+  // While the spec streams, a task that arrives marked `open` opens; one the
+  // reader has already opened or closed keeps their choice.
+  const [seen, setSeen] = React.useState(() => new Set(allKeys(spec.tasks)))
+  const fresh = allKeys(spec.tasks).filter((key) => !seen.has(key))
+  if (fresh.length) {
+    setSeen(new Set([...seen, ...fresh]))
+    const opened = openKeys(spec.tasks)
+    const arrived = fresh.filter((key) => opened[key])
+    if (arrived.length)
+      setExpanded((e) => (e === true ? e : { ...e, ...Object.fromEntries(arrived.map((k) => [k, true])) }))
+  }
   const rows = React.useMemo(() => spec.tasks.map(toRow), [spec.tasks])
   const pick = (key: string) => {
     setSelected(key)

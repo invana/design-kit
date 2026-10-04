@@ -30,7 +30,8 @@
     "build": "tsup",
     "prepare": "pnpm run build",
     "lint": "eslint .",
-    "type-check": "tsc --noEmit -p tsconfig.lib.json"
+    "type-check": "tsc --noEmit -p tsconfig.lib.json",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@invana/charts": "workspace:*",
@@ -54,6 +55,7 @@
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.81.0",
     "tsup": "^8.5.1",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.10"
   }
 }

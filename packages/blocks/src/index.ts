@@ -9,6 +9,9 @@ export { Block, type BlockComponentProps } from "./block"
 export { Page, type PageProps, type PageSection, type PageSpec } from "./page"
 export { Placeholder, type PlaceholderProps } from "./placeholder"
 
+// Streaming them: how a block's spec changes as it arrives, and the stream every shell reads.
+export * from "./stream"
+
 // Writing figures and prose the way every block does.
 export { figureText, metricValue, CAPTION_TONE, BADGE_TONE } from "./format"
 export { prose, strong } from "./prose"
