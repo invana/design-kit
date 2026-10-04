@@ -1,6 +1,7 @@
 export * from "./types"
 export * from "./registry"
 export { Board } from "./board"
+export * from "./stream"
 export { BlockPanel, BLOCK_PANELS } from "./panels/block"
 export * from "./parts/attempt-clock"
 export * from "./parts/record-description"

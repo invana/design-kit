@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useStreamedSpec } from "@invana/blocks"
 import {
   AbsenceNote,
   DropdownMenu,
@@ -17,6 +18,7 @@ import { SpecActions, SpecChip, SpecChips } from "./chips"
 import { RecordDescription } from "./parts/record-description"
 import { StagedBar } from "./parts/staged-bar"
 import { resolveRegistry } from "./registry"
+import { applyBoardPatches } from "./stream"
 import type {
   ActionContext,
   BoardProps,
@@ -182,13 +184,21 @@ function Row({
  * column from becoming twenty scroll regions.
  */
 export function Board<X extends ExtraPanels = Record<never, never>>({
-  spec,
+  spec: given,
   onAction,
   registry: extraRegistry,
   icons = {},
+  stream,
+  onStreamEnd,
+  onStreamError,
   className,
   ...props
 }: BoardProps<X>) {
+  // Read as every shell reads its stream: a block's, a conversation's.
+  const { live: spec } = useStreamedSpec(given, stream, applyBoardPatches<X>, {
+    onEnd: onStreamEnd,
+    onError: onStreamError,
+  })
   const registry = React.useMemo(() => resolveRegistry(extraRegistry), [extraRegistry])
   const gap = spec.gap ?? 12
   const emit = React.useCallback(
