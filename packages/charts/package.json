@@ -1,6 +1,6 @@
 {
   "name": "@invana/charts",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "Invana Design System - Charts: time series on uPlot, small marks in DOM/SVG",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
