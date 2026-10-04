@@ -5,7 +5,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppLayoutAgents, type AppLayoutAgentsProps } from '@invana/themes/app-agents/layout';
 import { ThemeProvider, ThemeSelector } from '@invana/themes';
 import { ActivityBlock, type ActivityOptions } from '@invana/blocks';
-import { BoardPages, type BoardPagesSpec } from '@invana/boards';
+import { BoardPages, type ActionContext, type BoardPagesSpec, type PanelRegistry } from '@invana/boards';
 import {
   AgentHeader,
   Breadcrumb,
@@ -36,6 +36,7 @@ import {
   Focus,
   Globe,
   Home,
+  ListOrdered,
   Maximize,
   Minimize,
   Monitor,
@@ -54,6 +55,10 @@ import {
 import data from '../../../fixtures/themes/app-agents.json';
 import { CHAT_ICONS, logEvent } from '../../assistant/chat-kit';
 import { SettingsDialog } from './settings-dialog';
+import { PlayableTablePanel } from './playable-table';
+import { appendStep, panelsOf, PlaybookProvider, usePlaybook, type Playbook, type Step } from './playbook';
+import { PlaybookPanel, type Refused } from './playbook-panel';
+import { tableOps } from './table-ops';
 
 /**
  * The thread as the API would send it: the spec it opens on, the ask that plays in
@@ -69,12 +74,55 @@ const FIXTURE = data as unknown as {
   activity: ActivityOptions & { logs: { at: number; log: LogLine }[] };
   /** The open boards in the work: a welcome page and the accounts tables. */
   boards: BoardPagesSpec;
+  /**
+   * The steps the agent sends while it answers, each at its time after the answer starts:
+   * calls to the boards' tables by their panel id. One calls a table that is not there.
+   */
+  playbook: { title: string; steps: { at: number; step: Step }[] };
 };
 
 const ASK = 'q1';
 
 /** The icon names the boards' JSON uses. */
 const BOARD_ICONS = { home: Home, table: Table };
+
+/** The work's tables answer to the playbook by their panel id. */
+const BOARD_REGISTRY: PanelRegistry = { table: PlayableTablePanel };
+
+/** What can be told what, by id — read from the boards, as Studio would. */
+const PANELS = panelsOf(FIXTURE.boards).panels;
+const OPS = { table: tableOps };
+
+/**
+ * The agent's steps as the API would send them beside its answer: each is checked against the
+ * op set of the table it calls and recorded, or refused with why — a refused step never enters
+ * the record, so it cannot break the steps after it.
+ */
+function useAgentSteps() {
+  const [playbook, setPlaybook] = React.useState<Playbook>({ version: 1, title: FIXTURE.playbook.title, steps: [] });
+  const [refused, setRefused] = React.useState<Refused[]>([]);
+  const timers = React.useRef<number[]>([]);
+  React.useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // The record as of the last step recorded, so two steps in one tick both land.
+  const latest = React.useRef(playbook);
+  const record = React.useCallback((step: Step) => {
+    const result = appendStep(latest.current, step, { kindOf: (id) => PANELS.get(id)?.kind, ops: OPS });
+    if ('playbook' in result) {
+      latest.current = result.playbook;
+      setPlaybook(result.playbook);
+      return;
+    }
+    action('step refused')(step.id, result.problems);
+    setRefused((r) => [...r, { step, problems: result.problems }]);
+  }, []);
+
+  const start = React.useCallback(() => {
+    for (const { at, step } of FIXTURE.playbook.steps) timers.current.push(window.setTimeout(() => record(step), at));
+  }, [record]);
+
+  return { playbook, refused, start };
+}
 
 const HEADER_ICONS = { world: <Globe />, group: <Users />, lens: <Focus />, governance: <ShieldCheck /> };
 
@@ -316,12 +364,34 @@ function PanelToggle({
  */
 function AgentsApp(args: AppLayoutAgentsProps) {
   const activity = useRunActivity();
+  const agent = useAgentSteps();
+  const play = usePlaybook(agent.playbook);
   const [showActivity, setShowActivity] = React.useState(true);
   const [showLogs, setShowLogs] = React.useState(false);
+  const [showPlaybook, setShowPlaybook] = React.useState(true);
   const [activityFolded, setActivityFolded] = React.useState(false);
   const [logsFolded, setLogsFolded] = React.useState(false);
+  const [playbookFolded, setPlaybookFolded] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const errors = activity.lines.filter((l) => l.level === 'error').length;
+
+  // The page shown is the host's: the reader picks one, and moving to a step shows the page
+  // its first call lands on — the change is never on a page nobody is looking at.
+  const [page, setPage] = React.useState(FIXTURE.boards.active ?? FIXTURE.boards.pages[0]!.id);
+  const [seenStep, setSeenStep] = React.useState(play.current);
+  if (seenStep !== play.current) {
+    setSeenStep(play.current);
+    const on = play.targets[0] ? PANELS.get(play.targets[0])?.page : undefined;
+    if (on) setPage(on);
+  }
+  const onBoardAction = (id: string, ctx?: ActionContext) => {
+    if (id === 'page' && ctx?.pageId) setPage(ctx.pageId);
+    action('onAction')(id, ctx);
+  };
+  const startRun = () => {
+    activity.start();
+    agent.start();
+  };
 
   return (
     <>
@@ -357,6 +427,19 @@ function AgentsApp(args: AppLayoutAgentsProps) {
               ),
               className: '!px-1 !py-0',
             },
+            {
+              name: 'Playbook',
+              label: (
+                <PanelToggle
+                  icon={<ListOrdered />}
+                  label="Playbook"
+                  pressed={showPlaybook}
+                  count={play.steps.length || undefined}
+                  onToggle={() => setShowPlaybook((v) => !v)}
+                />
+              ),
+              className: '!px-1 !py-0',
+            },
             { name: 'Theme & appearance', label: <ThemeMenu />, className: '!px-1 !py-0' },
             { name: 'Full screen', label: <FullScreenToggle />, className: '!px-1 !py-0' },
             {
@@ -371,11 +454,34 @@ function AgentsApp(args: AppLayoutAgentsProps) {
           ],
         }}
         leftSection={{
-          content: <Conversation onRunStart={activity.start} onOpenSettings={() => setSettings(true)} />,
+          content: <Conversation onRunStart={startRun} onOpenSettings={() => setSettings(true)} />,
+        }}
+        // The work: the open boards behind one tab strip, from the fixture's `boards`; its tables
+        // answer to the playbook by their panel id.
+        mainSection={{
+          content: (
+            <PlaybookProvider router={play.router}>
+              <BoardPages
+                spec={{ ...FIXTURE.boards, active: page, selectAction: 'page' }}
+                registry={BOARD_REGISTRY}
+                icons={BOARD_ICONS}
+                onAction={onBoardAction}
+              />
+            </PlaybookProvider>
+          ),
         }}
         overlay={
-          showActivity || showLogs ? (
+          showPlaybook || showActivity || showLogs ? (
             <>
+              {showPlaybook ? (
+                <PlaybookPanel
+                  play={play}
+                  refused={agent.refused}
+                  collapsed={playbookFolded}
+                  onCollapsedChange={setPlaybookFolded}
+                  onClose={() => setShowPlaybook(false)}
+                />
+              ) : null}
               {showActivity ? (
                 <FloatingPanel
                   title="Activity"
@@ -431,6 +537,13 @@ type Story = StoryObj<typeof meta>;
  * streams in. The rail's header names the session, the agent and its status, then the data it
  * reaches (record counts arrive live), its lens, token budget and governance. The run's activity
  * — every system it touches — and its log float over the work, toggled from the header.
+ *
+ * While it answers, the agent changes the work in **steps**: each is calls to a table by its
+ * panel id — update a cell, add rows, mark a row or a cell, open a note on it. The Playbook
+ * panel follows the newest step and shows its page; step back and forward, or pick a step, and
+ * every table shows the work as it stood then. A step calling a table the boards do not have
+ * is refused before it is recorded. (A story-only prototype — see the RFC
+ * `feat-2026-10-05-the-work-cannot-be-played-step-by-step`.)
  */
 export const Default: Story = {
   // Self-themed: the header's picker owns the theme, so the global toolbar
@@ -466,12 +579,9 @@ export const Default: Story = {
           </Breadcrumb>
         </div>
       ),
-      // The right side — stars, the activity and log toggles, theme, full screen, the
-      // assistant and settings — is drawn by `AgentsApp`, which owns their state.
-    },
-    // The work: the open boards behind one tab strip, from the fixture's `boards`.
-    mainSection: {
-      content: <BoardPages spec={FIXTURE.boards} icons={BOARD_ICONS} onAction={action('onAction')} />,
+      // The right side — stars, the playbook, activity and log toggles, theme, full screen,
+      // the assistant and settings — is drawn by `AgentsApp`, which owns their state, as is
+      // the work: the boards and the playbook that changes them.
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -510,6 +620,32 @@ export const Default: Story = {
     await step('The log panel opens from the header and shows the refusal', async () => {
       await userEvent.click(c.getByRole('button', { name: 'Logs' }));
       await expect(await c.findByText('HR records denied (lens: funding-watch)', {}, { timeout: 3000 })).toBeInTheDocument();
+    });
+    await step("The agent's steps arrive: the Accounts page opens and the newest note is open", async () => {
+      await expect(await c.findByText('step 4 of 4', {}, { timeout: 12000 })).toBeInTheDocument();
+      await expect(c.getByRole('button', { name: 'Who owns Initech' })).toBeInTheDocument();
+      await expect(c.getByText('Recent funding')).toBeVisible();
+      const body = within(document.body);
+      await expect(await body.findByText('Owns Initech Cloud: −7% growth, $8M bridge.')).toBeVisible();
+    });
+    await step('A step calling a table the boards do not have is refused, and never recorded', async () => {
+      await expect(c.getByText(/Refused “Add Initech to the pipeline”: no target "pipeline"/)).toBeInTheDocument();
+    });
+    await step("Stepping back undoes a step's calls: Initech's bridge row leaves, then its growth returns to −4%", async () => {
+      await userEvent.click(c.getByRole('button', { name: 'Previous step' }));
+      await userEvent.click(c.getByRole('button', { name: 'Previous step' }));
+      await waitFor(() => expect(c.queryByText('$8M')).not.toBeInTheDocument());
+      await expect(c.getByText('-7%')).toBeInTheDocument();
+      await userEvent.click(c.getByRole('button', { name: 'Previous step' }));
+      await waitFor(() => expect(c.queryByText('-7%')).not.toBeInTheDocument());
+      // The thread's answer may list −4% too; the board's cell is among them.
+      await expect(c.getAllByText('-4%').length).toBeGreaterThan(0);
+    });
+    await step('Latest plays the work forward to the newest step again', async () => {
+      await userEvent.click(c.getByRole('button', { name: 'Latest' }));
+      await expect(await c.findByText('$8M')).toBeInTheDocument();
+      await expect(c.getByText('-7%')).toBeInTheDocument();
+      await expect(c.queryByRole('button', { name: 'Latest' })).not.toBeInTheDocument();
     });
     await step('Settings opens on the data: the datasets and the graph built from them', async () => {
       await userEvent.click(c.getByRole('button', { name: 'Settings' }));
