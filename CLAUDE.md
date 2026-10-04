@@ -32,7 +32,7 @@ Per-package scripts of note:
 - `@invana/stoybook`: `dev` = `storybook dev -p 6009`, `build-storybook` produces `storybook-static/`
 - `@invana/styling`: ships source CSS directly — no build step
 
-There is no test runner wired into root scripts. `@invana/assistant` has the one `test` script (`pnpm --filter @invana/assistant test`, vitest in node): it checks the grammar ids against the block registry, runs `validate()` on every session fixture, and exercises `applyPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
+There is no test runner wired into root scripts. Three packages have a `test` script, vitest in node: `@invana/assistant` (`pnpm --filter @invana/assistant test`) checks the grammar ids against the block registry, runs `validate()` on every session fixture, and exercises `applyPatch`; `@invana/blocks` exercises `applyBlockPatch` and the stream scripts; `@invana/boards` exercises `applyBoardPatch`. `vitest` is also installed in `ui` and `storybook` with no `test` script. Don't claim test commands that aren't there.
 
 ## Terms
 
@@ -174,7 +174,10 @@ If a `release:` commit ever lands without its tag (e.g. a manual push), recover 
     settles (`LiveBlock`), a conversation event gets the API's patch (`LiveTurn`), a picked row
     moves the selection. `Reset` draws a cell fresh.
   - **Live data is replayed**: `useReplay` + `ReplayFrame` feed a stream (chart points, run events)
-    as new props, with play / pause / skip to end.
+    as new props, with play / pause / skip to end. A **block streams from its JSON**: a variant's
+    `stream` (`[{ at, patch }]`, block patches) replays over its `spec` — `Streamed` in a block
+    story, `LiveTurn stream` in an answer story (as `patch-block`) — so the static cells, the
+    conversation and a board still read the same `spec`.
   - **A `play` function checks the interaction** — click, then assert the payload and what changed.
     Run them with `pnpm --filter @invana/stoybook exec vitest run --project storybook <path>`.
 - **One title, one story — so the sidebar shows only folders and stories.** Every `*.stories.tsx`
@@ -255,6 +258,20 @@ gap in the kit, not a one-off in the design.
   needs more is a change to the kind's options, not a prop.
   Envelope fields (scope, grounding, freshness, method, caveats) sit on the answer, never as
   blocks. Answer patterns are typed recipes and stories, not exports.
+- **Streaming belongs to blocks; the shells inherit it.** A block changes while it streams by
+  one `BlockPatch` (`packages/blocks/src/stream/`), the same for every kind: `set` (merge fields),
+  `append` (text), `push` (items onto a list), `upsert` (an item by its `key`/`id`). `at` is a path
+  from the spec's root — a name is a field, or on a list the item with that key; a number is an
+  index (`["tasks", "plan", "subtasks"]`). A merge is a JSON merge patch one level deep: `null`
+  removes a field. The transport (`patchesOf`, `fromNdjson`, `fromEventSource`, `playScript`) and
+  the hook every shell reads its stream through (`useStreamedSpec`; `useBlockStream`, `<Block
+  stream>` for one block) live there too, generic over the shell's patch. The conversation carries
+  a block patch as `patch-block` (`update-block` and `append-text` are `set` and `append`) and
+  `ChatSession stream` reads through `useStreamedSpec`; a board takes `stream` with `patch-panel`
+  (the panel's block, by the same patch) and `update-panel`. No renderer streams on its own: it
+  draws its spec, so a new spec is the stream — and a field the reader can change (`open`,
+  `folded`, `selected`, `default`) is read once, then the reader's choice wins (a task that
+  *arrives* `open` opens). A clock moves only by patch (`set nowMs`), never a block's timer.
 - **Every chart lives in `@invana/charts`**, never in `@invana/ui` — the dependency points
   charts → ui, and ui gets no re-exports. Time series are uPlot on the internal chart frame
   (`packages/charts/src/base/`), which resolves tokens for the canvas and redraws on theme or

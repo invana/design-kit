@@ -286,6 +286,60 @@
     }
   },
   {
+    "caption": "Live · a run streaming",
+    "wide": true,
+    "turn": {"id": "g9", "label": "gantt", "title": "market brief"},
+    "spec": {
+      "tasks": [
+        {
+          "key": "plan",
+          "open": true,
+          "status": "queued"
+        },
+        {
+          "key": "compose",
+          "status": "queued"
+        },
+        {
+          "key": "announce",
+          "status": "queued"
+        }
+      ],
+      "nowMs": 0,
+      "openEnded": true
+    },
+    "stream": [
+      {"at": 0, "patch": {"op": "upsert", "at": ["tasks"], "item": {"key": "plan", "status": "running", "startMs": 0, "durationMs": 0}}},
+      {"at": 500, "patch": [{"op": "set", "fields": {"nowMs": 500}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "plan", "durationMs": 500}}]},
+      {"at": 1000, "patch": [{"op": "set", "fields": {"nowMs": 1000}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "plan", "durationMs": 1000}}]},
+      {"at": 1500, "patch": [{"op": "set", "fields": {"nowMs": 1500}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "plan", "durationMs": 1500}}]},
+      {"at": 1800, "patch": [{"op": "set", "fields": {"nowMs": 1800}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "plan", "startMs": 0, "durationMs": 1800, "status": "succeeded", "summary": "split the brief into 5 tasks"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_fx", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "analyse", "open": true, "status": "queued"}}]},
+      {"at": 1900, "patch": [{"op": "set", "fields": {"nowMs": 1900}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "status": "running", "startMs": 1900, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "status": "running", "startMs": 1900, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "status": "running", "startMs": 1900, "durationMs": 0}}]},
+      {"at": 2000, "patch": [{"op": "set", "fields": {"nowMs": 2000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "durationMs": 100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 100}}]},
+      {"at": 2500, "patch": [{"op": "set", "fields": {"nowMs": 2500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "durationMs": 600}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 600}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 600}}]},
+      {"at": 3000, "patch": [{"op": "set", "fields": {"nowMs": 3000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "durationMs": 1100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 1100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 1100}}]},
+      {"at": 3300, "patch": [{"op": "set", "fields": {"nowMs": 3300}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "status": "queued", "startMs": null, "durationMs": null, "attempts": [{"startMs": 1900, "durationMs": 1400, "status": "failed", "title": "fetch_filings · attempt 1 · 429 rate limited"}], "log": "429 rate limited — retrying"}}]},
+      {"at": 3500, "patch": [{"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "status": "running", "startMs": 3500, "durationMs": 0}}, {"op": "set", "fields": {"nowMs": 3500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "durationMs": 1600}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 1600}}]},
+      {"at": 4000, "patch": [{"op": "set", "fields": {"nowMs": 4000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "durationMs": 2100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 2100}}]},
+      {"at": 4500, "patch": [{"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_fx", "status": "running", "startMs": 4500, "durationMs": 0}}, {"op": "set", "fields": {"nowMs": 4500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 1000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 2600}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_prices", "startMs": 1900, "durationMs": 2600, "status": "succeeded", "result": {"rows": 2520}}}]},
+      {"at": 5000, "patch": [{"op": "set", "fields": {"nowMs": 5000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 1500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 3100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_fx", "durationMs": 500}}]},
+      {"at": 5300, "patch": [{"op": "set", "fields": {"nowMs": 5300}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_fx", "startMs": 4500, "durationMs": 800, "status": "succeeded", "summary": "waited for a slot"}}]},
+      {"at": 5500, "patch": [{"op": "set", "fields": {"nowMs": 5500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 2000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "durationMs": 3600}}]},
+      {"at": 6000, "patch": [{"op": "set", "fields": {"nowMs": 6000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "durationMs": 2500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_news", "startMs": 1900, "durationMs": 4100, "status": "succeeded", "result": {"articles": 38}}}]},
+      {"at": 6500, "patch": [{"op": "set", "fields": {"nowMs": 6500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "fetch_filings", "startMs": 3500, "durationMs": 3000, "status": "succeeded", "attempts": [{"startMs": 1900, "durationMs": 1400, "status": "failed", "title": "fetch_filings · attempt 1 · 429 rate limited"}], "log": "9 filings after one retry"}}]},
+      {"at": 6600, "patch": [{"op": "set", "fields": {"nowMs": 6600}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "status": "queued"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "analyse", "status": "running"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "status": "running", "startMs": 6600, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "status": "running", "startMs": 6600, "durationMs": 0}}]},
+      {"at": 7000, "patch": [{"op": "set", "fields": {"nowMs": 7000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "durationMs": 400}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "durationMs": 400}}]},
+      {"at": 7500, "patch": [{"op": "set", "fields": {"nowMs": 7500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "durationMs": 900}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "durationMs": 900}}]},
+      {"at": 8000, "patch": [{"op": "set", "fields": {"nowMs": 8000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "durationMs": 1400}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "durationMs": 1400}}]},
+      {"at": 8100, "patch": [{"op": "set", "fields": {"nowMs": 8100}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.risk", "startMs": 6600, "durationMs": 1500, "status": "failed", "error": {"code": "model_timeout", "message": "no answer in 1.5 s"}}}]},
+      {"at": 8500, "patch": [{"op": "set", "fields": {"nowMs": 8500}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "durationMs": 1900}}]},
+      {"at": 9000, "patch": [{"op": "set", "fields": {"nowMs": 9000}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks"], "item": {"key": "analyse", "status": "failed", "summary": "split into margins and risk"}}, {"op": "upsert", "at": ["tasks", "plan", "subtasks", "analyse", "subtasks"], "item": {"key": "analyse.margins", "startMs": 6600, "durationMs": 2400, "status": "succeeded"}}]},
+      {"at": 9100, "patch": [{"op": "set", "fields": {"nowMs": 9100}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "compose", "status": "running", "startMs": 9100, "durationMs": 0}}]},
+      {"at": 9500, "patch": [{"op": "set", "fields": {"nowMs": 9500}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "compose", "durationMs": 400}}]},
+      {"at": 10000, "patch": [{"op": "set", "fields": {"nowMs": 10000}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "compose", "startMs": 9100, "durationMs": 900, "status": "succeeded", "summary": "answered without the risk section"}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "announce", "status": "skipped", "summary": "a partial answer is not announced"}}, {"op": "set", "fields": {"nowMs": null, "openEnded": null}}]}
+    ]
+  },
+  {
     "caption": "At 280px",
     "narrow": true,
     "turn": {
@@ -544,6 +598,64 @@
         }
       ]
     }
+  },
+  {
+    "caption": "Layer access · live",
+    "useCase": "layers",
+    "wide": true,
+    "turn": {"id": "g10", "label": "gantt", "title": "Red Sea exposure · what each task is reaching"},
+    "spec": {
+      "ticks": 6,
+      "labelWidth": 200,
+      "durationWidth": 72,
+      "palette": {
+        "network": "bg-data-3",
+        "ingest": "bg-data-1",
+        "work_write": "bg-data-6"
+      },
+      "tasks": [
+        {
+          "key": "network",
+          "open": true
+        },
+        {
+          "key": "ingest",
+          "open": true
+        },
+        {
+          "key": "work_write",
+          "label": "work write",
+          "open": true
+        }
+      ],
+      "nowMs": 0,
+      "openEnded": true
+    },
+    "stream": [
+      {"at": 0, "patch": [{"op": "upsert", "at": ["tasks", "ingest", "subtasks"], "item": {"key": "bundle/manifest"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "bundle/manifest", "segments"], "item": {"key": "check_bundle", "label": "check_bundle", "group": "ingest", "status": "running", "startMs": 0, "durationMs": 0}}]},
+      {"at": 40, "patch": [{"op": "set", "fields": {"nowMs": 40}}, {"op": "upsert", "at": ["tasks", "network", "subtasks"], "item": {"key": "s3://drops/orders.csv"}}, {"op": "upsert", "at": ["tasks", "network", "subtasks", "s3://drops/orders.csv", "segments"], "item": {"key": "fetch_source#1", "label": "fetch_source", "group": "network", "status": "running", "startMs": 40, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "bundle/manifest", "segments"], "item": {"key": "check_bundle", "label": "check_bundle", "startMs": 0, "durationMs": 40, "group": "ingest", "title": "check_bundle · read", "note": "read", "log": "manifest read · 1 dataset", "status": null}}]},
+      {"at": 350, "patch": [{"op": "set", "fields": {"nowMs": 350}}, {"op": "upsert", "at": ["tasks", "network", "subtasks", "s3://drops/orders.csv", "segments"], "item": {"key": "fetch_source", "label": "fetch_source", "group": "network", "status": "running", "startMs": 350, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "network", "subtasks", "s3://drops/orders.csv", "segments"], "item": {"key": "fetch_source#1", "label": "fetch_source", "startMs": 40, "durationMs": 310, "group": "network", "status": "failed", "title": "fetch_source · attempt 1 · 503", "note": "attempt 1", "chip": {"label": "503", "tone": "bad"}, "error": {"code": "503", "message": "refused · retrying (2 of 3)"}}}]},
+      {"at": 500, "patch": [{"op": "set", "fields": {"nowMs": 500}}, {"op": "upsert", "at": ["tasks", "network", "subtasks", "s3://drops/orders.csv", "segments"], "item": {"key": "fetch_source", "durationMs": 150}}]},
+      {"at": 940, "patch": [{"op": "set", "fields": {"nowMs": 940}}, {"op": "upsert", "at": ["tasks", "network", "subtasks", "s3://drops/orders.csv", "segments"], "item": {"key": "fetch_source", "label": "fetch_source", "startMs": 350, "durationMs": 590, "group": "network", "title": "fetch_source · 1.4 MB", "note": "1.4 MB", "log": "200 · 1.4 MB in 0.6s", "result": {"bytes": "1.4 MB", "from": "s3://drops/orders.csv"}, "status": null}}]},
+      {"at": 950, "patch": [{"op": "set", "fields": {"nowMs": 950}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks"], "item": {"key": "model/Brokerage.Order@v2"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "validate_records", "label": "validate_records", "group": "ingest", "status": "running", "startMs": 950, "durationMs": 0}}]},
+      {"at": 1000, "patch": [{"op": "set", "fields": {"nowMs": 1000}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "validate_records", "durationMs": 50}}]},
+      {"at": 1500, "patch": [{"op": "set", "fields": {"nowMs": 1500}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "validate_records", "durationMs": 550}}]},
+      {"at": 2000, "patch": [{"op": "set", "fields": {"nowMs": 2000}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "validate_records", "durationMs": 1050}}]},
+      {"at": 2150, "patch": [{"op": "set", "fields": {"nowMs": 2150}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks"], "item": {"key": "Order@v2 · lane 1"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks"], "item": {"key": "Order@v2 · lane 2"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks"], "item": {"key": "Order@v2 · lane 3"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "label": "import_dataset", "group": "ingest", "status": "running", "startMs": 2150, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "label": "import_dataset", "group": "ingest", "status": "running", "startMs": 2150, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "label": "import_dataset", "group": "ingest", "status": "running", "startMs": 2150, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "validate_records", "label": "validate_records", "startMs": 950, "durationMs": 1200, "group": "ingest", "title": "validate_records · 1,204 of 1,251", "note": "1,204 of 1,251", "chip": {"label": "47", "tone": "warn"}, "result": {"kept": "1,204", "reported": 47}, "log": "47 of 1,251 reported", "status": null}}]},
+      {"at": 2500, "patch": [{"op": "set", "fields": {"nowMs": 2500}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "durationMs": 350}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "durationMs": 350}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 350}}]},
+      {"at": 3000, "patch": [{"op": "set", "fields": {"nowMs": 3000}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "durationMs": 850}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "durationMs": 850}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 850}}]},
+      {"at": 3500, "patch": [{"op": "set", "fields": {"nowMs": 3500}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "durationMs": 1350}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "durationMs": 1350}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 1350}}]},
+      {"at": 4000, "patch": [{"op": "set", "fields": {"nowMs": 4000}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "durationMs": 1850}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "durationMs": 1850}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 1850}}]},
+      {"at": 4100, "patch": [{"op": "set", "fields": {"nowMs": 4100}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 1", "segments"], "item": {"key": "import_dataset.lane_1", "label": "import_dataset", "startMs": 2150, "durationMs": 1950, "group": "ingest", "title": "import_dataset · lane 1 · 402 rows", "note": "402 rows", "result": {"rows": 402}, "status": null}}]},
+      {"at": 4500, "patch": [{"op": "set", "fields": {"nowMs": 4500}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "durationMs": 2350}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 2350}}]},
+      {"at": 4900, "patch": [{"op": "set", "fields": {"nowMs": 4900}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 2", "segments"], "item": {"key": "import_dataset.lane_2", "label": "import_dataset", "startMs": 2150, "durationMs": 2750, "group": "ingest", "title": "import_dataset · lane 2 · 402 rows", "note": "402 rows", "result": {"rows": 402}, "status": null}}]},
+      {"at": 5000, "patch": [{"op": "set", "fields": {"nowMs": 5000}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 2850}}]},
+      {"at": 5500, "patch": [{"op": "set", "fields": {"nowMs": 5500}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "durationMs": 3350}}]},
+      {"at": 5550, "patch": [{"op": "set", "fields": {"nowMs": 5550}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "Order@v2 · lane 3", "segments"], "item": {"key": "import_dataset.lane_3", "label": "import_dataset", "startMs": 2150, "durationMs": 3400, "group": "ingest", "title": "import_dataset · lane 3 · 400 rows", "note": "400 rows", "result": {"rows": 400}, "log": "lane 3 · 400 Order, 400 FOR", "status": null}}]},
+      {"at": 5560, "patch": [{"op": "set", "fields": {"nowMs": 5560}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks"], "item": {"key": "work/triage"}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "import_report", "label": "import_report", "group": "ingest", "status": "running", "startMs": 5560, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks", "work/triage", "segments"], "item": {"key": "triage", "label": "triage", "group": "work_write", "variant": "dashed", "status": "running", "startMs": 5560, "durationMs": 0}}]},
+      {"at": 5600, "patch": [{"op": "set", "fields": {"nowMs": 5600}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks"], "item": {"key": "work/announce"}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks", "work/announce", "segments"], "item": {"key": "announce", "label": "announce", "group": "work_write", "status": "running", "startMs": 5600, "durationMs": 0}}, {"op": "upsert", "at": ["tasks", "ingest", "subtasks", "model/Brokerage.Order@v2", "segments"], "item": {"key": "import_report", "label": "import_report", "startMs": 5560, "durationMs": 40, "group": "ingest", "title": "import_report · 47 rejections", "note": "47 rejections", "status": null}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks", "work/triage", "segments"], "item": {"key": "triage", "label": "triage", "startMs": 5560, "durationMs": 40, "group": "work_write", "status": "skipped", "variant": "dashed", "title": "triage · declared, never dispatched", "note": "never dispatched"}}]},
+      {"at": 5900, "patch": [{"op": "set", "fields": {"nowMs": 5900}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "network", "summary": "1 source"}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "ingest", "summary": "2 participants · 3 lanes"}}, {"op": "upsert", "at": ["tasks"], "item": {"key": "work_write", "summary": "1 of 2 reached"}}, {"op": "upsert", "at": ["tasks", "work_write", "subtasks", "work/announce", "segments"], "item": {"key": "announce", "label": "announce", "startMs": 5600, "durationMs": 300, "group": "work_write", "status": "needs_input", "title": "announce · held for approval", "note": "held for approval", "chip": {"label": "gate", "tone": "warn"}, "summary": "waits on an approver before it writes"}}, {"op": "push", "at": ["seams"], "items": [{"after": "Order@v2 · lane 3", "label": "approval", "startMs": 5600, "durationMs": 300, "note": "held for approval"}]}, {"op": "set", "fields": {"nowMs": null, "openEnded": null, "spanMs": 6000}}]}
+    ]
   },
   {
     "caption": "Layer access · a plan, in step order",

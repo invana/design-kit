@@ -47,7 +47,7 @@ export function useReplay(length: number, { every = 800, autoplay = true } = {})
 
 /**
  * Story chrome: play, pause and restart a replay and how far it has got, over what it feeds.
- * `width` is the frame's max width, so a story sets no classes.
+ * `width` is the frame's max width, so a story sets no classes; `null` takes the cell's.
  */
 export function ReplayFrame({
   replay,
@@ -57,11 +57,11 @@ export function ReplayFrame({
 }: {
   replay: Replay;
   noun?: string;
-  width?: number;
+  width?: number | null;
   children: React.ReactNode;
 }) {
   return (
-    <Stack gap="md" style={{ maxWidth: width }}>
+    <Stack gap="md" style={width === null ? undefined : { maxWidth: width }}>
       <ReplayBar replay={replay} noun={noun} />
       {children}
     </Stack>

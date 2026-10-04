@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { GanttBlock } from '@invana/blocks';
 
 import { BLOCK_VARIANTS } from '../../../../fixtures/blocks';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
+import { blockSource, Streamed, streamImports } from '../../../_story/stream';
 import { VariantGrid } from '../../../_story/variant-grid';
 
 /** The gantt read by layer — the Layer access variants of its grid. */
@@ -23,13 +24,13 @@ const meta = {
         language: 'tsx',
         transform: sourceFor(VARIANTS, (picked) =>
           snippets(
-            ["import { GanttBlock } from '@invana/blocks';"],
-            picked.map((v) => ({
-              comment: v.caption,
-              data: { spec: v.spec },
-              setup: "// 'select' with the bar's key when a bar is picked — \"fetch_source#1\".\nconst onAction = (action, value) => {};",
-              call: jsx('GanttBlock', { spec: 'spec', onAction: 'onAction' }),
-            })),
+            streamImports(picked, ["import { GanttBlock } from '@invana/blocks';"]),
+            picked.map((v) =>
+              blockSource(v, {
+                setup: "// 'select' with the bar's key when a bar is picked — \"fetch_source#1\".\nconst onAction = (action, value) => {};",
+                call: (spec) => jsx('GanttBlock', { spec, onAction: 'onAction' }),
+              }),
+            ),
           ),
         ),
       },
@@ -49,18 +50,25 @@ type Story = StoryObj<Args>;
  * `chip` at the end and a hover card of its own. A bar a rule stopped is `refused` — struck through,
  * never mistaken for skipped; a plan read before it runs is `scale: "seq"`, its bars `dashed`
  * (declared). A gate is a `seam`. Pick a bar and it is sent as `select` with its key.
+ *
+ **Live**, a participant arrives when a task first reaches it and each bar grows from its
+ * `upsert` as the clock ticks; the gate is `push`ed onto `seams` once it has held.
  */
 export const LayerAccess: Story = {
   render: ({ variant, onAction }) => (
     <VariantGrid variants={VARIANTS} variant={variant}>
       {(v, log) => (
-        <GanttBlock
-          spec={v.spec}
-          onAction={(action, value) => {
-            onAction(action, value);
-            log('onAction', { action, value });
-          }}
-        />
+        <Streamed spec={v.spec} stream={v.stream}>
+          {(spec) => (
+            <GanttBlock
+              spec={spec}
+              onAction={(action, value) => {
+                onAction(action, value);
+                log('onAction', { action, value });
+              }}
+            />
+          )}
+        </Streamed>
       )}
     </VariantGrid>
   ),
@@ -78,6 +86,14 @@ export const LayerAccess: Story = {
     const plan = within(canvas.getByRole('group', { name: 'Layer access · a plan, in step order' }));
     await step('A plan counts steps, not seconds', async () => {
       await expect(plan.getByText('step 3')).toBeInTheDocument();
+    });
+    const live = within(canvas.getByRole('group', { name: 'Layer access · live' }));
+    await step('The live run reaches every layer', async () => {
+      await waitFor(() => expect(live.getByRole('status')).not.toHaveTextContent(/^0 \//), { timeout: 3000 });
+      await userEvent.click(live.getByRole('button', { name: 'Skip to end' }));
+      await expect(live.getByRole('status')).toHaveTextContent(/^(\d+) \/ \1 updates$/);
+      await expect(live.getByRole('button', { name: 'fetch_source · attempt 1 · 503' })).toBeInTheDocument();
+      await expect(live.getByText('approval')).toBeInTheDocument();
     });
   },
 };

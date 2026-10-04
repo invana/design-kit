@@ -25,7 +25,10 @@ Everything here is only meaningful relative to a prompt. ChatSession is the pare
 | ChatSession CLI variant | `packages/assistant/src/styles/cli/` | new | done | today |
 | ChatSession web variant, ChatSessionTurn | `packages/assistant/src/styles/web/` | new | done | today |
 | useChatSession | `packages/assistant/src/styles/use-chat-session.ts` | new | done | today |
-| Stream sources (NDJSON, SSE, scripts, deltas, stop) | `packages/assistant/src/protocol/stream.ts` | new | done | today |
+| Stream sources (NDJSON, SSE, scripts, deltas, stop) | `packages/assistant/src/protocol/stream.ts` | extend (transport → `@invana/blocks`, typed for the conversation) | done | today |
+| Block patch, stream transport, `useStreamedSpec` / `useBlockStream`, `<Block stream>` | `packages/blocks/src/stream/` | new | done | today |
+| `patch-block` conversation patch (`update-block`, `append-text` on top of it); ChatSession reads its stream through `useStreamedSpec` | `packages/assistant/src/protocol/reduce.ts` | extend | done | today |
+| Board `stream` — `patch-panel`, `update-panel` | `packages/boards/src/stream.ts` | new | done | today |
 | Recorded runs (every user) | `packages/assistant/src/fixtures/scripts/runs.ts` | new | done | today |
 | Conversation fixtures (the conversations/ stories' JSON, with a streaming script) | `packages/assistant/src/fixtures/conversations/` | new | done | today |
 | Conversation, ConversationTurn | `packages/assistant/src/conversations/` | remove (→ ChatSession) | done | today |
