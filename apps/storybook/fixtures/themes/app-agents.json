@@ -587,5 +587,209 @@
         }
       }
     ]
+  },
+  "boards": {
+    "active": "welcome",
+    "tabPosition": "bottom",
+    "pagerPosition": "start",
+    "pages": [
+      {
+        "id": "welcome",
+        "title": "Welcome",
+        "icon": "home",
+        "board": {
+          "rows": [
+            {
+              "panels": [
+                {
+                  "id": "welcome",
+                  "kind": "text",
+                  "title": "Welcome to accounts-graph",
+                  "options": {
+                    "text": "This is where the work the agents act on opens — a board, a graph, a document. Ask the assistant on the left a question, or open a board from the tabs above.\n\nBoards you open stay here as tabs, each keeping its place while you switch between them."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "accounts",
+        "title": "Accounts",
+        "icon": "table",
+        "board": {
+          "rows": [
+            {
+              "panels": [
+                {
+                  "id": "top-accounts",
+                  "kind": "table",
+                  "title": "Top accounts",
+                  "aside": "by ARR",
+                  "options": {
+                    "columns": [
+                      {
+                        "key": "account",
+                        "label": "Account"
+                      },
+                      {
+                        "key": "segment",
+                        "label": "Segment"
+                      },
+                      {
+                        "key": "arr",
+                        "label": "ARR",
+                        "align": "right",
+                        "mono": true
+                      },
+                      {
+                        "key": "growth",
+                        "label": "Growth",
+                        "align": "right",
+                        "mono": true
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "account": "Acme Robotics",
+                        "segment": "Enterprise",
+                        "arr": "$4.2M",
+                        "growth": "+38%"
+                      },
+                      {
+                        "account": "Northwind Labs",
+                        "segment": "Enterprise",
+                        "arr": "$3.1M",
+                        "growth": "+21%"
+                      },
+                      {
+                        "account": "Globex Health",
+                        "segment": "Mid-market",
+                        "arr": "$1.8M",
+                        "growth": "+12%"
+                      },
+                      {
+                        "account": "Initech Cloud",
+                        "segment": "Mid-market",
+                        "arr": "$1.2M",
+                        "growth": {
+                          "value": "-4%",
+                          "tone": "bad"
+                        }
+                      },
+                      {
+                        "account": "Umbrella Bio",
+                        "segment": "SMB",
+                        "arr": "$0.6M",
+                        "growth": "+9%"
+                      }
+                    ],
+                    "rowKey": "account"
+                  }
+                }
+              ]
+            },
+            {
+              "panels": [
+                {
+                  "id": "funding",
+                  "kind": "table",
+                  "title": "Recent funding",
+                  "aside": "last 90 days",
+                  "options": {
+                    "columns": [
+                      {
+                        "key": "account",
+                        "label": "Account"
+                      },
+                      {
+                        "key": "round",
+                        "label": "Round"
+                      },
+                      {
+                        "key": "amount",
+                        "label": "Amount",
+                        "align": "right",
+                        "mono": true
+                      },
+                      {
+                        "key": "date",
+                        "label": "Date",
+                        "mono": true
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "account": "Acme Robotics",
+                        "round": "Series C",
+                        "amount": "$60M",
+                        "date": "2026-09-12"
+                      },
+                      {
+                        "account": "Umbrella Bio",
+                        "round": "Series A",
+                        "amount": "$14M",
+                        "date": "2026-08-03"
+                      },
+                      {
+                        "account": "Northwind Labs",
+                        "round": "Series B",
+                        "amount": "$32M",
+                        "date": "2026-07-21"
+                      }
+                    ],
+                    "rowKey": "account"
+                  }
+                },
+                {
+                  "id": "owners",
+                  "kind": "table",
+                  "title": "Account owners",
+                  "options": {
+                    "columns": [
+                      {
+                        "key": "owner",
+                        "label": "Owner"
+                      },
+                      {
+                        "key": "accounts",
+                        "label": "Accounts",
+                        "align": "right",
+                        "mono": true
+                      },
+                      {
+                        "key": "arr",
+                        "label": "ARR",
+                        "align": "right",
+                        "mono": true
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "owner": "Priya Shah",
+                        "accounts": "12",
+                        "arr": "$9.4M"
+                      },
+                      {
+                        "owner": "Daniel Okafor",
+                        "accounts": "9",
+                        "arr": "$6.1M"
+                      },
+                      {
+                        "owner": "Mei Lin",
+                        "accounts": "7",
+                        "arr": "$3.3M"
+                      }
+                    ],
+                    "rowKey": "owner"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
   }
 }
