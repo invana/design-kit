@@ -183,6 +183,51 @@ export interface LogOptions {
   columnTemplate?: string
 }
 
+/** One thing the engine wrote — a task started, a call made, a line logged. */
+export interface EventSpec {
+  id: string
+  /** From the run's zero, in ms. */
+  atMs: number
+  level: "debug" | "info" | "warn" | "error"
+  /** The engine's own word — `task_started`, `llm_call`, `retry_scheduled`. Drawn in its level's colour. */
+  kind: string
+  /** The task it belongs to, by key. */
+  task?: string
+  tookMs?: number
+  message: string
+  /** Everything else it carries, opened under the event in the tree. */
+  fields?: Record<string, string>
+}
+
+/**
+ * The run's event stream, read one of two ways. `log` is every event in
+ * order, a page at a time, searched and narrowed by kind, task and level.
+ * `tree` is the tasks as a tree, each task's own events under it before
+ * the tasks it split into, an event opening into its fields.
+ */
+export interface EventsOptions {
+  events: EventSpec[]
+  layout?: "log" | "tree"
+  /** The tasks, for `tree` — a task with no `parent` is a root. */
+  tasks?: Array<{
+    key: string
+    parent?: string
+    status: string
+    summary?: string
+    startMs?: number
+    durationMs?: number
+  }>
+  /** Leave out the task column and its chip — a log already about one task. */
+  hideTask?: boolean
+  /** `log` only. Default `25`. */
+  pageSize?: number
+  /**
+   * Dispatched with `{ panelId, value: <task key> }` when a row is picked — an
+   * event's task, or the task itself in the tree. Absent, rows do not pick.
+   */
+  selectAction?: string
+}
+
 export interface ListOptions {
   items: Array<{
     id?: string
@@ -251,6 +296,7 @@ export interface PanelOptionsByKind {
   code: CodeOptions
   exchange: ExchangeOptions
   log: LogOptions
+  events: EventsOptions
   list: ListOptions
   params: ParamsOptions
   text: TextOptions

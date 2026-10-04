@@ -1,4 +1,5 @@
 import { CodePanel, ExchangePanel, JsonPanel } from "./panels/data"
+import { EventsPanel } from "./panels/events"
 import { BLOCK_PANELS } from "./panels/block"
 import { ListPanel, LogPanel, ParamsPanel, TextPanel } from "./panels/rows"
 import type { PanelRegistry } from "./types"
@@ -10,7 +11,8 @@ import type { PanelRegistry } from "./types"
  *
  * Eight, and the number is meant to stay near it. Another belongs here only
  * when two unrelated surfaces both need it and a conversation does not —
- * otherwise it is a block, or a consumer's registry entry.
+ * otherwise it is a block, or a consumer's registry entry. `events` passes:
+ * a run page and a telemetry view both read an engine's event stream.
  *
  * Deliberately absent: **`canvas`**. A flow, a map or a graph needs
  * `@invana/canvas`, and importing it here would put PixiJS in the bundle of
@@ -22,6 +24,7 @@ export const BUILT_IN_PANELS: PanelRegistry = {
   code: CodePanel,
   exchange: ExchangePanel,
   log: LogPanel,
+  events: EventsPanel,
   list: ListPanel,
   params: ParamsPanel,
   text: TextPanel,

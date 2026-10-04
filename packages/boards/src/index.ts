@@ -8,6 +8,7 @@ export * from "./parts/staged-bar"
 export { SpecChip, SpecChips, SpecAction, SpecActions } from "./chips"
 export { JsonPanel, CodePanel, ExchangePanel } from "./panels/data"
 export { LogPanel, ListPanel, ParamsPanel, TextPanel } from "./panels/rows"
+export { EventsPanel } from "./panels/events"
 export {
   RUN_PANELS,
   TracePanel,
