@@ -2,14 +2,14 @@ import * as React from 'react';
 import { action } from 'storybook/actions';
 import { toast } from 'sonner';
 import { AppLayoutAgents, type AppLayoutAgentsProps } from '@invana/themes/app-agents/layout';
-import { AgentHeader, Badge, Button, Stack, Toaster, Workbook, type WorkbookPage } from '@invana/ui';
+import { AgentHeader, Button, StageTrail, Toaster, Workbook, type WorkbookPage } from '@invana/ui';
 import { applyPatch, ChatSession, type ConversationEvent, type ConversationSpec, type Turn } from '@invana/assistant';
-import { GitBranch, ListOrdered, Network, RotateCcw, Shapes, Table } from 'lucide-react';
+import { GitBranch, ListOrdered, Network, RotateCcw, Shapes, ShieldCheck, Table, Users } from 'lucide-react';
 
 import { CHAT_ICONS, logEvent } from '../../../assistant/chat-kit';
 import { appendStep, PlaybookProvider, usePlaybook, type Playbook, type Step } from '../playbook/playbook';
 import { PlaybookPanel, type Refused } from '../playbook/playbook-panel';
-import { SessionMenu, ThemeMenu, WorkflowStepper } from './chrome';
+import { SessionMenu, stagesOf, ThemeMenu } from './chrome';
 import { COPY, DATA, say, type GraphModel, type Value } from './data';
 import {
   acceptModel,
@@ -76,6 +76,9 @@ function latest<S>(steps: readonly Step[], target: string, base: S, apply: (s: S
       }
   return state;
 }
+
+/** The marks on the agent header's second line: the access group and the policy. */
+const HEADER_ICONS = { group: <Users />, governance: <ShieldCheck /> };
 
 const canvasTab = (sid: string) => `canvas:${sid}`;
 const sidOf = (tab: string) => (tab.startsWith('canvas:') ? tab.slice(7) : null);
@@ -585,8 +588,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
     };
   });
 
-  const viewing = sidOf(active) ? null : active === 'dataset' ? work.dataset.name : 'Chickpea graph model';
-  const parentName = session.parent ? sessions[session.parent]?.name : undefined;
+  const firstAsk = session.spec.turns.find((t) => t.role === 'analyst')?.text;
 
   return (
     <PlaybookProvider router={playbackControls.router}>
@@ -595,7 +597,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
           {...layout}
           header={{
             ...layout.header,
-            center: <WorkflowStepper progress={progress} onPick={pickStage} />,
+            center: <StageTrail steps={stagesOf(progress)} onPick={(id) => pickStage(Number(id))} />,
             rightNavItems: [
               {
                 name: 'Playbook',
@@ -647,41 +649,33 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
                   },
                 ]}
                 header={
+                  // Line one is what the session is about — its first question — and the session
+                  // menu; line two is who answers (the agent) and what it may reach (its policy).
                   <AgentHeader
-                    title={
-                      <Stack direction="row" gap="xs">
-                        {session.name}
-                        {parentName ? <Badge tone="muted">from {parentName}</Badge> : null}
-                        {viewing ? <Badge tone="primary">viewing {viewing}</Badge> : null}
-                      </Stack>
-                    }
+                    title={firstAsk ?? session.name}
                     agent={session.spec.agent}
-                    budget={session.spec.budget}
+                    access={DATA.access}
+                    governance={DATA.governance}
+                    icons={HEADER_ICONS}
                     actions={
-                      <>
-                        <SessionMenu
-                          sessions={Object.values(sessions).map((x) => ({
-                            id: x.id,
-                            name: x.name,
-                            parent: x.parent,
-                            asks: x.spec.turns.filter((t) => t.role === 'analyst').length,
-                          }))}
-                          current={current}
-                          onPick={(sid) => {
-                            openTab(canvasTab(sid));
-                            setNode(null);
-                          }}
-                        />
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          title="Branch this session into a new canvas"
-                          onClick={() => newSession(current)}
-                        >
-                          <GitBranch />
-                          Branch
-                        </Button>
-                      </>
+                      <SessionMenu
+                        sessions={Object.values(sessions).map((x) => ({
+                          id: x.id,
+                          name: x.name,
+                          parent: x.parent,
+                          asks: x.spec.turns.filter((t) => t.role === 'analyst').length,
+                        }))}
+                        current={current}
+                        onPick={(sid) => {
+                          openTab(canvasTab(sid));
+                          setNode(null);
+                        }}
+                        onBranch={() => newSession(current)}
+                        onNew={() => {
+                          newSession(null);
+                          toast('New canvas and session');
+                        }}
+                      />
                     }
                   />
                 }

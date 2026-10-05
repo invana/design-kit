@@ -1,6 +1,32 @@
 {
+  "user": "ravi-merugu",
+  "project": "chickpea-breeding",
   "workspace": "Chickpea breeding workspace",
-  "agent": { "name": "Researcher", "version": "v1", "model": "sonnet-5.5" },
+  "agent": { "name": "Researcher" },
+  "access": {
+    "kind": "group",
+    "label": "Chickpea breeding",
+    "models": [
+      { "id": "datasets", "name": "Datasets · chickpea-*", "records": 12, "access": ["read", "write"] },
+      { "id": "graph-models", "name": "Graph models · chickpea", "records": 5, "access": ["read", "write"] },
+      { "id": "graph", "name": "Graph · chickpea", "records": 102, "access": ["read", "write"] },
+      { "id": "web", "name": "Web sources · trial reports, release notices", "records": 7, "access": ["read"] },
+      { "id": "germplasm", "name": "Germplasm passport DB", "records": 1240, "access": ["read"], "slice": "public accessions only" },
+      { "id": "settings", "name": "Workspace settings", "access": "denied" },
+      { "id": "other", "name": "Other projects", "access": "denied" }
+    ]
+  },
+  "governance": {
+    "summary": "policy · researcher-chickpea",
+    "rules": [
+      { "label": "Allow", "value": "datasets:Read, datasets:Write on dataset/chickpea-*" },
+      { "label": "Allow", "value": "graph:Read, graph:Write on graph/chickpea" },
+      { "label": "Allow", "value": "web:Fetch on trial reports, release notices" },
+      { "label": "Deny", "value": "workspace:* on settings" },
+      { "label": "Deny", "value": "* on project/* except chickpea-breeding" },
+      { "label": "Owner", "value": "ravi-merugu · v2" }
+    ]
+  },
   "budget": { "used": 0, "limit": 80000 },
   "stages": ["Research", "Dataset", "Model", "Import", "Explore"],
   "columns": [

@@ -4,7 +4,7 @@ import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppLayoutAgents } from '@invana/themes/app-agents/layout';
 import { ThemeProvider, useTheme, type ThemeMode } from '@invana/themes';
-import { Separator } from '@invana/ui';
+import { HeaderTrail } from '@invana/ui';
 
 import { DATA } from './data';
 import { DatasetStudio as Studio } from './studio';
@@ -92,13 +92,7 @@ export const DatasetStudio: Story = {
   args: {
     stage: 0,
     header: {
-      left: (
-        <>
-          Invana
-          <Separator orientation="vertical" />
-          {DATA.workspace}
-        </>
-      ),
+      left: <HeaderTrail brand="Invana" crumbs={[{ label: DATA.user, href: '#' }, { label: DATA.project, href: '#' }]} />,
     },
     mainSection: { content: null },
   },
@@ -142,7 +136,8 @@ export const DatasetStudio: Story = {
       await waitFor(() => expect(canvasElement.querySelector('canvas')).not.toBeNull(), { timeout: 6000 });
     });
     await step('Branching copies the session and its canvas into a new tab', async () => {
-      await userEvent.click(c.getByRole('button', { name: 'Branch' }));
+      await userEvent.click(c.getByRole('button', { name: 'Sessions' }));
+      await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Branch this session' }));
       await expect(await c.findByText(/Branched from/, {}, { timeout: 4000 })).toBeInTheDocument();
       await expect(c.getAllByText(/my-canvas-2/).length).toBeGreaterThan(0);
     });

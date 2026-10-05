@@ -1,3 +1,5 @@
+import type { DataReachModel } from '@invana/ui';
+
 import fixture from '../../../../fixtures/themes/dataset-studio.json';
 
 /**
@@ -68,8 +70,12 @@ export interface Preset {
 }
 
 export const DATA = fixture as unknown as {
+  user: string;
+  project: string;
   workspace: string;
-  agent: { name: string; version: string; model: string };
+  agent: { name: string };
+  access: { kind: 'world' | 'group'; label: string; models: DataReachModel[] };
+  governance: { summary: string; rules: { label: string; value: string }[] };
   budget: { used: number; limit: number };
   stages: string[];
   columns: StudioColumn[];
