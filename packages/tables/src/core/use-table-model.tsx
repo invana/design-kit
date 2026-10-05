@@ -42,6 +42,7 @@ export type TableModelOptions<TData extends RowData> = Pick<
   TableBaseProps<TData>,
   | "columns"
   | "onCellEdit"
+  | "editTrigger"
   | "enableSorting"
   | "sorting"
   | "onSortingChange"
@@ -83,6 +84,7 @@ export function useTableModel<TData extends RowData>({
   columns,
   data,
   onCellEdit,
+  editTrigger = "click",
   enableSorting = true,
   sorting: sortingProp,
   onSortingChange,
@@ -124,6 +126,17 @@ export function useTableModel<TData extends RowData>({
     }),
   );
 
+  // The columns hold the latest `onCellEdit` through a ref, not as a
+  // dependency: a caller's handler is usually a new function each render, and
+  // a new cell renderer is a new component — every editable cell would remount
+  // on any parent render, dropping a save in flight or the first click of a
+  // double-click.
+  const onCellEditRef = React.useRef(onCellEdit);
+  React.useLayoutEffect(() => {
+    onCellEditRef.current = onCellEdit;
+  });
+  const canEdit = onCellEdit != null;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- as `columns`
   const wrappedColumns = React.useMemo<ColumnDef<TData, any>[]>(
     () =>
@@ -138,12 +151,15 @@ export function useTableModel<TData extends RowData>({
               editType={meta.editType}
               options={meta.options}
               align={meta.align}
-              onCellEdit={onCellEdit}
+              onCellEdit={
+                canEdit ? (edit) => onCellEditRef.current?.(edit) : undefined
+              }
+              trigger={editTrigger}
             />
           ),
         };
       }),
-    [columns, onCellEdit],
+    [columns, canEdit, editTrigger],
   );
 
   const clientPaging = paging?.mode === "client";

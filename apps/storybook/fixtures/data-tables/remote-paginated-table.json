@@ -25,5 +25,12 @@
     "wide": true,
     "server": { "rows": "warehouse", "delayMs": 600, "failFirst": "HTTP 503 — the warehouse is offline" },
     "props": { "searchable": false }
+  },
+  {
+    "caption": "Cell Click and Double-Click Edit",
+    "wide": true,
+    "server": { "rows": "warehouse", "delayMs": 400 },
+    "props": { "searchPlaceholder": "Search datasets", "noun": "datasets", "editTrigger": "dblclick" },
+    "cellClick": { "row": "dataset_01", "column": "rows" }
   }
 ]

@@ -40,6 +40,14 @@ export interface TableBaseProps<TData extends RowData> {
    * `meta.editType` / `meta.options`); return a promise to save asynchronously.
    */
   onCellEdit?: CellEditHandler<TData>;
+  /**
+   * What opens an editable cell's editor. `click` (the default) opens it on a
+   * click or `Enter`. `dblclick` leaves a single click to `onCellClick` — the
+   * cell is picked, its details shown — and opens the editor on a double-click,
+   * or `F2` on the focused cell (`Enter` on it is a click). Either way `Enter`
+   * saves and `Escape` puts the value back.
+   */
+  editTrigger?: "click" | "dblclick";
   /** Anything beside the table's own controls, at the start of the toolbar. */
   toolbar?: React.ReactNode;
   /** Content rendered as a sticky summary bar inside the table's bordered container, below the rows. */
@@ -119,6 +127,16 @@ export interface TableBaseProps<TData extends RowData> {
   /** Makes rows activate — click, `Enter` or `Space`. */
   onRowClick?: (row: TData) => void;
   /**
+   * A body cell was clicked — the header never, nor a cell whose editor is
+   * open (a click inside the field is typing, not picking). Fires before
+   * `onRowClick` when both are set, since the cell is inside the row; a
+   * double-click is two clicks, so it fires twice. Cells take no focus of
+   * their own: `Enter` on an editable cell's value is a click, so it fires
+   * there, and a keyboard reader picks a whole row with `onRowClick`. Pair
+   * with `isCellHighlighted` to draw the picked cell.
+   */
+  onCellClick?: (row: TData, columnId: string) => void;
+  /**
    * Rows under a row, with the same columns — a plan's subtasks, a folder's
    * files, a dataset's tables. A row with children gets a chevron in its first
    * cell; each level indents that cell, as `rowIndent` does for a flat list
@@ -171,6 +189,7 @@ export type TableViewProps<TData extends RowData> = Pick<
   | "headerRowClassName"
   | "minWidth"
   | "onRowClick"
+  | "onCellClick"
   | "getSubRows"
   | "renderExpanded"
   | "expandOnRowClick"
@@ -199,6 +218,7 @@ export function pickViewProps<TData extends RowData>(
     headerRowClassName: props.headerRowClassName,
     minWidth: props.minWidth,
     onRowClick: props.onRowClick,
+    onCellClick: props.onCellClick,
     getSubRows: props.getSubRows,
     renderExpanded: props.renderExpanded,
     expandOnRowClick: props.expandOnRowClick,
