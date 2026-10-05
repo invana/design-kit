@@ -733,11 +733,13 @@ export const NavBase: React.FC<BaseNavProps> = ({
     ? "flex flex-col items-center gap-1"
     : "flex items-center gap-1 ";
 
+  // Horizontally the bar never grows past its parent: the start and centre give
+  // up width (a crumb truncates, a trail folds) and the end keeps its controls.
   return (
     <nav className={containerClass}>
       {sections.start?.content && (
         <div
-          className={`${sectionWrapperClass} ${sections.start.className || ""}`}
+          className={`${sectionWrapperClass} ${isVertical ? "" : "min-w-0 shrink"} ${sections.start.className || ""}`}
         >
           {sections.start.content}
         </div>
@@ -745,7 +747,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.center?.content ? (
         <div
-          className={`flex-1 ${isVertical ? "" : "flex justify-center items-center gap-1"} ${sections.center.className || ""}`}
+          className={`flex-1 ${isVertical ? "" : "flex min-w-0 justify-center items-center gap-1"} ${sections.center.className || ""}`}
         >
           {sections.center.content}
         </div>
@@ -756,7 +758,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.end?.content && (
         <div
-          className={`${sectionWrapperClass} ${isVertical ? "" : "ml-auto"} ${sections.end.className || ""}`}
+          className={`${sectionWrapperClass} ${isVertical ? "" : "ml-auto shrink-0"} ${sections.end.className || ""}`}
         >
           {sections.end.content}
         </div>
