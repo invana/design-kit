@@ -70,6 +70,30 @@ export const Form: Story = {
       await expect(c.queryByRole('button', { name: 'Run scenario' })).toBeNull();
       await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('"reply"');
     });
+    await step('Import waits for the required Header, then sends every choice', async () => {
+      const i = cell('Import settings');
+      const submit = i.getByRole('button', { name: 'Import' });
+      await expect(submit).toBeDisabled();
+      await expect(i.getByRole('radio', { name: /^Merge fields/ })).toBeDisabled();
+      await expect(i.getByRole('textbox', { name: 'Source' })).toBeDisabled();
+      await userEvent.click(i.getByRole('radio', { name: /^No header/ }));
+      await userEvent.click(submit);
+      await expect(args.onAction).toHaveBeenCalledWith(
+        'reply',
+        expect.objectContaining({ format: 'csv', duplicates: 'skip', header: 'none', source: 's3://finance/exports/q3.csv' }),
+      );
+    });
+    await step('A checkbox sends true or false', async () => {
+      const d = cell('Save a dataset');
+      await userEvent.click(d.getByRole('checkbox', { name: 'Keep citations with the rows' }));
+      await userEvent.click(d.getByRole('button', { name: 'Save dataset' }));
+      await expect(args.onAction).toHaveBeenCalledWith('reply', expect.objectContaining({ citations: false }));
+    });
+    await step('Answered, a checkbox reads No and a choice its label', async () => {
+      const a = cell('Answered · checkbox and choices');
+      await expect(a.getByText('Replace duplicates')).toBeVisible();
+      await expect(a.getByText('No')).toBeVisible();
+    });
     await step('An elasticity of 0 is below its bound: the field shows its error', async () => {
       const input = cell(ERROR).getByRole('spinbutton', { name: 'Elasticity' });
       await userEvent.tripleClick(input);
