@@ -2,12 +2,27 @@ import * as React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Form, ObjectField, type FieldConfig } from '@invana/forms';
 import { DataTable, type CellEdit, type ColumnDef } from '@invana/tables';
-import { Badge, Button, CaveatNote, EmptyState, Legend, LegendItem, PanelBox, RecordHeader, SegmentedControl, Stack } from '@invana/ui';
+import {
+  Badge,
+  Button,
+  CaveatNote,
+  EmptyState,
+  Legend,
+  LegendItem,
+  PanelBox,
+  PanelContent,
+  RecordHeader,
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+  SegmentedControl,
+  Stack,
+} from '@invana/ui';
 import { FileJson, Network, Play, Plus, Table, Trash2 } from 'lucide-react';
 
 import { DATA, plural, type GraphModel } from '../data';
 import { validateModel } from '../ops/model-ops';
-import { GraphView } from '../graph-view';
+import { GraphFrame, GraphView } from '../graph-view';
 import { useDataset, useModel } from '../work';
 
 type View = 'form' | 'map' | 'file';
@@ -418,7 +433,7 @@ export function ModelPage({ onChange, onImport }: { onChange: (m: GraphModel, ti
   }));
 
   return (
-    <Stack gap="none">
+    <Stack gap="none" fill>
       <RecordHeader
         crumbs={['Chickpea graph model']}
         chips={
@@ -442,30 +457,30 @@ export function ModelPage({ onChange, onImport }: { onChange: (m: GraphModel, ti
           </>
         }
       />
-      <Stack direction="row" gap="lg" align="start">
-        <Stack gap="md">
-          {view === 'form' ? <ModelForm key={JSON.stringify(model)} model={model} columns={columns} onChange={onChange} /> : null}
-          {view === 'map' ? <ColumnMapping model={model} columns={dataset.columns} onChange={onChange} /> : null}
-          {view === 'file' ? <ModelFile model={model} onChange={onChange} /> : null}
-        </Stack>
-        <PanelBox title="Schema preview" aside={<Table />}>
-          <Stack gap="sm">
-            <GraphFrame>
+      <ResizablePanelGroup orientation="horizontal">
+        <ResizablePanel defaultSize="58%" minSize="320px">
+          <PanelContent titleText={VIEWS.find((v) => v.value === view)!.label}>
+            <Stack gap="md">
+              {issues.map((x) => (
+                <CaveatNote key={x} tone="warning" label="Issue">
+                  {x}
+                </CaveatNote>
+              ))}
+              {view === 'form' ? <ModelForm key={JSON.stringify(model)} model={model} columns={columns} onChange={onChange} /> : null}
+              {view === 'map' ? <ColumnMapping model={model} columns={dataset.columns} onChange={onChange} /> : null}
+              {view === 'file' ? <ModelFile model={model} onChange={onChange} /> : null}
+            </Stack>
+          </PanelContent>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel minSize="240px">
+          <PanelBox title="Schema preview" aside={<Table />} flush fill>
+            <GraphFrame height="100%">
               <SchemaPreview model={model} />
             </GraphFrame>
-            {issues.map((x) => (
-              <CaveatNote key={x} tone="warning" label="Issue">
-                {x}
-              </CaveatNote>
-            ))}
-          </Stack>
-        </PanelBox>
-      </Stack>
+          </PanelBox>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </Stack>
   );
-}
-
-/** A canvas needs a height to draw in. */
-export function GraphFrame({ children, height = 320 }: { children: React.ReactNode; height?: number }) {
-  return <div style={{ height, minWidth: 0, width: '100%' }}>{children}</div>;
 }

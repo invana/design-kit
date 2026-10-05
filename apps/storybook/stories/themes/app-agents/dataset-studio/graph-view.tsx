@@ -6,9 +6,13 @@ import {
   D3ForceLayout,
   DragNodeBehaviour,
   DragPanBehaviour,
+  EdgeLabelLODBehaviour,
   GraphCanvas,
   GraphLayer,
   HoverActivateBehaviour,
+  LabelCollisionBehaviour,
+  NodeLabelLODBehaviour,
+  TextResolutionLODBehaviour,
   ThemeBehaviour,
   WheelZoomBehaviour,
   useSelection,
@@ -16,12 +20,13 @@ import {
   type GraphLayerProps,
 } from '@invana/canvas-react';
 import type { GraphCanvas as GraphEngine, GraphData, GraphEdge, GraphNode } from '@invana/graph';
-import { useThemeOptional } from '@invana/themes';
 
 /**
  * A graph drawn by the canvas engine (`@invana/canvas-react`, linked from the canvas repo):
  * force layout, drag, pan and zoom, hover lighting a node's neighbours, click to select. The
  * colour of a node is its type's, read from the theme's data tokens so it follows the theme.
+ * Labels are re-rastered as the camera zooms in, so they stay sharp; they keep a readable size
+ * on screen, hide when zoomed far out (the best-connected stay) and give way where they overlap.
  */
 
 export interface ViewNode {
@@ -68,6 +73,22 @@ function toHex(css: string): number {
   return (r! << 16) | (g! << 8) | b!;
 }
 
+/**
+ * Bumps when the theme on `<html>` changes — after it lands, so the tokens read are the new
+ * ones (the provider applies a theme in an effect, after its children render). Works under any
+ * theme source: the story's provider or Storybook's toolbar.
+ */
+function useThemeVersion() {
+  const [version, setVersion] = React.useState(0);
+  React.useEffect(() => {
+    const html = document.documentElement;
+    const observer = new MutationObserver(() => setVersion((v) => v + 1));
+    observer.observe(html, { attributes: true, attributeFilter: ['class', 'data-theme', 'style'] });
+    return () => observer.disconnect();
+  }, []);
+  return version;
+}
+
 /** Reports the selection to the host; a click on nothing clears it. */
 function SelectionBridge({ onChange }: { onChange: (id: string | null) => void }) {
   const { selectedNodeIds } = useSelection({ clickSelectId: 'select' });
@@ -90,13 +111,13 @@ export const GraphView = React.forwardRef<
 >(function GraphView({ nodes, edges, palette, onSelect, edgeLabels = false }, ref) {
   const engine = React.useRef<GraphEngine>(null);
   React.useImperativeHandle(ref, () => ({ relayout: () => void engine.current?.runActiveLayout({ fitCamera: true }) }), []);
-  const mode = useThemeOptional()?.variantId ?? 'light';
+  const theme = useThemeVersion();
 
-  // The palette in the theme's colours; a new theme draws the layer afresh.
+  // The palette in the theme's colours.
   const colours = React.useMemo(() => {
-    void mode;
+    void theme;
     return Object.fromEntries(Object.entries(palette).map(([type, css]) => [type, toHex(css)]));
-  }, [palette, mode]);
+  }, [palette, theme]);
   const node: GraphLayerProps['node'] = React.useMemo(
     () => ({
       style: {
@@ -134,19 +155,30 @@ export const GraphView = React.forwardRef<
   );
   const select = React.useCallback((id: string | null) => onSelect?.(id), [onSelect]);
 
+  // A layer's style is set when it is made, and the behaviours hold the layer they were given,
+  // so a new theme draws the whole canvas afresh rather than only its layer.
   return (
-    <GraphCanvas ref={engine} autoResize config={CONFIG}>
+    <GraphCanvas key={theme} ref={engine} autoResize config={CONFIG}>
       <BackgroundLayer id="bg" type="pattern" patternType="dots" />
       <ThemeBehaviour id="theme" />
       <CanvasThemeSync />
-      <GraphLayer key={`${mode}-${edgeLabels}`} id="graph" data={data} node={node} edge={edge} />
+      <GraphLayer key={String(edgeLabels)} id="graph" data={data} node={node} edge={edge} />
       <D3ForceLayout id="force" targetLayerId="graph" />
       <DragPanBehaviour id="pan" />
       <WheelZoomBehaviour id="wheel" />
       <DragNodeBehaviour id="drag-node" targetLayerId="graph" pinOnRelease />
       <HoverActivateBehaviour id="hover" targetLayerId="graph" degree={1} inactiveState="dimmed" />
       <ClickSelectBehaviour id="select" targetLayerId="graph" unselectedState="dimmed" />
+      <TextResolutionLODBehaviour id="text-resolution" targetLayerId="graph" />
+      <NodeLabelLODBehaviour id="node-labels" targetLayerId="graph" minZoom={0.35} alwaysShowTop={0.2} zoomGrowth={0.5} minFontPx={10} maxFontPx={15} />
+      {edgeLabels ? <EdgeLabelLODBehaviour id="edge-labels" targetLayerId="graph" zoomGrowth={0.5} minFontPx={9} maxFontPx={12} /> : null}
+      <LabelCollisionBehaviour id="label-collision" targetLayerId="graph" />
       {onSelect ? <SelectionBridge onChange={select} /> : null}
     </GraphCanvas>
   );
 });
+
+/** A canvas needs a height to draw in. */
+export function GraphFrame({ children, height = 320 }: { children: React.ReactNode; height?: number | string }) {
+  return <div style={{ height, minWidth: 0, width: '100%' }}>{children}</div>;
+}

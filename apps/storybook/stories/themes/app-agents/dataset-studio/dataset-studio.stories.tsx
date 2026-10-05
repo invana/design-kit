@@ -1,8 +1,9 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppLayoutAgents } from '@invana/themes/app-agents/layout';
-import { ThemeProvider } from '@invana/themes';
+import { ThemeProvider, useTheme, type ThemeMode } from '@invana/themes';
 import { Separator } from '@invana/ui';
 
 import { DATA } from './data';
@@ -25,6 +26,33 @@ const meta: Meta<Args> = {
 
 export default meta;
 type Story = StoryObj<Args>;
+
+/**
+ * The toolbar's theme and the header's picker are one choice: the provider opens on the
+ * toolbar's (so `system` follows the OS, as every story does), a pick in the header is written
+ * back to the toolbar — which Storybook keeps in the URL, so it survives a reload — and a
+ * toolbar change reaches the provider. Nothing remounts, so the work is kept.
+ */
+function ToolbarThemeSync({ theme, mode, onPick }: { theme: string; mode: ThemeMode; onPick: (theme: string, mode: ThemeMode) => void }) {
+  const current = useTheme();
+  const seen = React.useRef({ theme, mode });
+  // The toolbar moved: follow it.
+  React.useEffect(() => {
+    if (seen.current.theme === theme && seen.current.mode === mode) return;
+    seen.current = { theme, mode };
+    if (current.theme !== theme) current.setTheme(theme);
+    if (current.mode !== mode) current.setMode(mode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme, mode]);
+  // The header moved: tell the toolbar.
+  React.useEffect(() => {
+    if (current.theme === seen.current.theme && current.mode === seen.current.mode) return;
+    seen.current = { theme: current.theme, mode: current.mode };
+    onPick(current.theme, current.mode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current.theme, current.mode]);
+  return null;
+}
 
 /** `Restart` draws the studio afresh. */
 function Restartable(args: Args) {
@@ -50,11 +78,17 @@ function Restartable(args: Args) {
  * drawn by the canvas repo's `GraphCanvas`, linked locally. Pick a `stage` to start further along.
  */
 export const DatasetStudio: Story = {
-  render: (args) => (
-    <ThemeProvider defaultTheme="default" defaultMode="light" storageKey={null}>
-      <Restartable {...args} />
-    </ThemeProvider>
-  ),
+  render: function Render(args) {
+    const [globals, updateGlobals] = useGlobals();
+    const theme = (globals.theme as string | undefined) ?? 'default';
+    const mode = (globals.variant as ThemeMode | undefined) ?? 'system';
+    return (
+      <ThemeProvider defaultTheme={theme} defaultMode={mode} storageKey={null}>
+        <ToolbarThemeSync theme={theme} mode={mode} onPick={(t, m) => updateGlobals({ theme: t, variant: m })} />
+        <Restartable {...args} />
+      </ThemeProvider>
+    );
+  },
   args: {
     stage: 0,
     header: {

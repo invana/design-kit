@@ -9,7 +9,7 @@ import { GitBranch, ListOrdered, Network, RotateCcw, Shapes, Table } from 'lucid
 import { CHAT_ICONS, logEvent } from '../../../assistant/chat-kit';
 import { appendStep, PlaybookProvider, usePlaybook, type Playbook, type Step } from '../playbook/playbook';
 import { PlaybookPanel, type Refused } from '../playbook/playbook-panel';
-import { SessionMenu, WorkflowStepper } from './chrome';
+import { SessionMenu, ThemeMenu, WorkflowStepper } from './chrome';
 import { COPY, DATA, say, type GraphModel, type Value } from './data';
 import {
   acceptModel,
@@ -458,9 +458,10 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
   React.useEffect(() => {
     if (opened.current) return;
     opened.current = true;
+    // Set before the session opens, so its welcome lands first rather than a tick after the replay.
+    instant.current = !!stage;
     const sid = newSession(null);
     if (!stage) return;
-    instant.current = true;
     const lastAsk = (purpose: string) =>
       [...sessionsRef.current[sid]!.spec.turns].reverse().find((t) => t.id.startsWith(`${purpose}-`))!.id;
     const ctx = () => ctxOf(sid);
@@ -498,6 +499,11 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
         }),
       );
     }
+    // The replay lands as one batch, so the playbook opens only its last page: open each page
+    // the stage reached, ending on the one it is about.
+    if (stage >= 2) openTab('dataset');
+    if (stage >= 4) openTab('model');
+    if (stage >= 5) openTab(canvasTab(sid));
     instant.current = false;
     // Opening reads nothing that changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -605,6 +611,11 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
                     {playbook.steps.length || null}
                   </Button>
                 ),
+                className: '!px-1 !py-0',
+              },
+              {
+                name: 'Theme',
+                label: <ThemeMenu />,
                 className: '!px-1 !py-0',
               },
               {

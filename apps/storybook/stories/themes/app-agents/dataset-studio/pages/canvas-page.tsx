@@ -5,7 +5,7 @@ import { GitBranch, Maximize2, Shapes } from 'lucide-react';
 import { usePlayable, useReduced } from '../../playbook/playbook';
 import { DATA, plural, sourceOf } from '../data';
 import { canvasOps, EMPTY_CANVAS, type CanvasState, type Graph } from '../ops/graph-ops';
-import { GraphView, type GraphViewHandle } from '../graph-view';
+import { GraphFrame, GraphView, type GraphViewHandle } from '../graph-view';
 import { useDataset, useGraph } from '../work';
 
 /** What a session's canvas shows at the playbook's position. */
@@ -76,11 +76,12 @@ export function CanvasPage({
         </Stack>
       }
       flush
+      fill
     >
       {shown.length && graph ? (
-        <div style={{ height: '100%', minHeight: 420 }}>
+        <GraphFrame height="100%">
           <GraphView ref={view} nodes={nodes} edges={edges} palette={DATA.palette} onSelect={onSelect} />
-        </div>
+        </GraphFrame>
       ) : (
         <EmptyState
           icon={<Shapes />}
