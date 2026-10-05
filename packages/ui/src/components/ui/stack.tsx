@@ -44,6 +44,14 @@ const stackVariants = cva("flex min-w-0", {
       true: "flex-wrap",
       false: "",
     },
+    /**
+     * A page: the stack takes its parent's height and its last child grows
+     * into what the others leave — a header, then a canvas or a split.
+     */
+    fill: {
+      true: "h-full min-h-0 [&>:last-child]:min-h-0 [&>:last-child]:flex-1",
+      false: "",
+    },
   },
   defaultVariants: {
     direction: "column",
@@ -54,7 +62,7 @@ const stackVariants = cva("flex min-w-0", {
 export interface StackProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof stackVariants> {}
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction, gap, align, justify, wrap, ...props }, ref) => (
+  ({ className, direction, gap, align, justify, wrap, fill, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -65,6 +73,7 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
           align: align ?? (direction === "row" ? "center" : undefined),
           justify,
           wrap,
+          fill,
         }),
         className,
       )}

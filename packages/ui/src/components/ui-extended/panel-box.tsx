@@ -25,6 +25,12 @@ export interface PanelBoxProps
    * `DataTable` whose header rule should line up with the box, a chart.
    */
   flush?: boolean
+  /**
+   * Take the parent's height instead of the content's, the body growing into
+   * it — a canvas or a map that is the whole page, which has no content height
+   * of its own and would otherwise draw at 0.
+   */
+  fill?: boolean
   children?: React.ReactNode
   headerClassName?: string
   bodyClassName?: string
@@ -52,7 +58,7 @@ export interface PanelBoxProps
  */
 export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
   (
-    { title, aside, flush, className, headerClassName, bodyClassName, children, ...props },
+    { title, aside, flush, fill, className, headerClassName, bodyClassName, children, ...props },
     ref,
   ) => (
     <Card
@@ -62,6 +68,7 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
         // these in a column would read as twenty floating things rather than
         // one page. Its corner is the surface dial, as a Card's is.
         "flex min-w-0 flex-col overflow-hidden rounded-surface shadow-none",
+        fill && "h-full min-h-0",
         className,
       )}
       {...props}
@@ -85,6 +92,7 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
         // holds every edge alike.
         className={cn(
           "flex min-w-0 flex-col",
+          fill && "min-h-0 flex-1",
           flush ? "p-0" : title != null ? "px-2.5 py-2" : "p-2.5",
           bodyClassName,
         )}
