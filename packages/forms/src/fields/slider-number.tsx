@@ -10,6 +10,7 @@ interface SliderNumberProps {
   min?: number;
   max?: number;
   step?: number;
+  disabled?: boolean;
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export const SliderNumber: React.FC<SliderNumberProps> = ({
   min = 0,
   max = 100,
   step = 1,
+  disabled,
   className,
 }) => {
   const [local, setLocal] = React.useState<number>(value);
@@ -43,6 +45,7 @@ export const SliderNumber: React.FC<SliderNumberProps> = ({
         min={min}
         max={max}
         step={step}
+        disabled={disabled}
         className="flex-1"
       />
       <Input
@@ -53,6 +56,7 @@ export const SliderNumber: React.FC<SliderNumberProps> = ({
         min={min}
         max={max}
         step={step}
+        disabled={disabled}
       />
     </div>
   );

@@ -43,6 +43,7 @@ import type {
   ColorPreset,
   FieldBadge,
   FieldConfig,
+  FieldOption,
   FieldOrientation,
   FieldSize,
   GroupConfig,
@@ -65,7 +66,9 @@ interface BaseFieldProps {
   placeholder?: string;
   value?: AnyValue;
   onChange?: (value: AnyValue) => void;
-  options?: { label: string; value: string }[];
+  options?: FieldOption[];
+  /** Shows the value but stops it being changed. */
+  disabled?: boolean;
   min?: number;
   max?: number;
   step?: number;
@@ -224,16 +227,20 @@ function FieldLabel({
   label,
   badge,
   size,
+  disabled,
   className,
 }: {
   label?: React.ReactNode;
   badge?: FieldBadge;
   size: FieldSize;
+  disabled?: boolean;
   className?: string;
 }) {
   if (!label && !badge) return null;
   return (
-    <FormLabel className={cn(SIZE[size].label, SIZE[size].fieldLabel, className)}>
+    <FormLabel
+      className={cn(SIZE[size].label, SIZE[size].fieldLabel, disabled && 'opacity-70', className)}
+    >
       {label}
       {badge && <StatusPill badge={badge} />}
     </FormLabel>
@@ -275,9 +282,10 @@ export const InputField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <AffixedInput
@@ -285,6 +293,7 @@ export const InputField: React.FC<BaseFieldProps> = ({
           unit={unit}
           aside={aside}
           placeholder={placeholder}
+          disabled={disabled}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         />
@@ -308,14 +317,16 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <PasswordInput
           className={SIZE[size].input}
           placeholder={placeholder}
+          disabled={disabled}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         />
@@ -340,15 +351,17 @@ export const TextareaField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <Textarea
           className={SIZE[size].textarea || undefined}
           rows={rows}
           placeholder={placeholder}
+          disabled={disabled}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         />
@@ -373,11 +386,12 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
-      <Select value={value ?? ''} onValueChange={onChange}>
+      <Select value={value ?? ''} onValueChange={onChange} disabled={disabled}>
         <FormControl>
           <SelectTrigger className={SIZE[size].select}>
             <SelectValue placeholder={placeholder} />
@@ -385,7 +399,7 @@ export const SelectField: React.FC<BaseFieldProps> = ({
         </FormControl>
         <SelectContent>
           {options.map((o) => (
-            <SelectItem key={o.value} value={o.value}>
+            <SelectItem key={o.value} value={o.value} disabled={o.disabled}>
               {o.label}
             </SelectItem>
           ))}
@@ -411,6 +425,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   badge,
   className,
   boxed = false,
+  disabled,
 }) => {
   // Optional bordered/padded enclosure for the `switch` control (default off).
   const boxClass = boxed ? 'rounded-md border p-2' : '';
@@ -418,23 +433,36 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   // independent of labelPosition (the label always sits beside the box).
   if (control === 'checkbox') {
     return (
-      <FormItem className={cn('flex items-center gap-2 space-y-0', className)}>
+      <FormItem
+        className={cn(
+          'flex gap-2 space-y-0',
+          description ? 'items-start' : 'items-center',
+          className
+        )}
+      >
         <FormControl>
           <Checkbox
             className={SIZE[size].check}
             checked={!!value}
+            disabled={disabled}
             onCheckedChange={onChange}
           />
         </FormControl>
-        <FieldLabel
-          label={label}
-          badge={badge}
-          size={size}
-          className={cn(
-            '!mt-0 cursor-pointer font-normal leading-none',
-            labelClassName
+        <div className="space-y-1">
+          <FieldLabel
+            label={label}
+            badge={badge}
+            size={size}
+            disabled={disabled}
+            className={cn(
+              '!mt-0 cursor-pointer font-normal leading-none',
+              labelClassName
+            )}
+          />
+          {description && (
+            <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
           )}
-        />
+        </div>
       </FormItem>
     );
   }
@@ -442,7 +470,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
     return (
       <FormItem className={cn('flex items-center justify-between', boxClass)}>
         <div>
-          <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+          <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
           {description && (
             <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
           )}
@@ -451,6 +479,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
           <Switch
             className={SIZE[size].switch || undefined}
             checked={!!value}
+            disabled={disabled}
             onCheckedChange={onChange}
           />
         </FormControl>
@@ -459,12 +488,13 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   }
   return (
     <FormItem className={SIZE[size].stack}>
-      <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
       <div className={cn('flex items-center justify-between', boxClass)}>
         <FormControl>
           <Switch
             className={SIZE[size].switch || undefined}
             checked={!!value}
+            disabled={disabled}
             onCheckedChange={onChange}
           />
         </FormControl>
@@ -490,32 +520,53 @@ export const RadioField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <RadioGroup
           value={value ?? ''}
           onValueChange={onChange}
+          disabled={disabled}
           className={
             orientation === 'horizontal'
               ? 'flex flex-row items-center gap-x-4'
               : cn('flex flex-col', SIZE[size].stack)
           }
         >
-          {options.map((o) => (
-            <label
-              key={o.value}
-              className="flex cursor-pointer items-center gap-2"
-            >
-              <RadioGroupItem
-                value={o.value}
-                className={cn('shrink-0', SIZE[size].radio)}
-              />
-              <span className={cn('leading-none', SIZE[size].label)}>{o.label}</span>
-            </label>
-          ))}
+          {options.map((o) => {
+            const off = disabled || o.disabled;
+            // A described choice reads as a label with a muted line under
+            // it, so the dot sits by the label's first line.
+            return (
+              <label
+                key={o.value}
+                className={cn(
+                  'flex gap-2',
+                  o.description ? 'items-start' : 'items-center',
+                  off ? 'cursor-not-allowed' : 'cursor-pointer'
+                )}
+              >
+                <RadioGroupItem
+                  value={o.value}
+                  disabled={o.disabled}
+                  className={cn('shrink-0', SIZE[size].radio)}
+                />
+                <span className={cn('flex flex-col gap-1', off && 'opacity-50')}>
+                  <span className={cn(o.description ? 'leading-4' : 'leading-none', SIZE[size].label)}>
+                    {o.label}
+                  </span>
+                  {o.description && (
+                    <span className={cn('text-muted-foreground', SIZE[size].desc)}>
+                      {o.description}
+                    </span>
+                  )}
+                </span>
+              </label>
+            );
+          })}
         </RadioGroup>
       </FormControl>
       {description && (
@@ -538,6 +589,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => {
   const selected: string[] = Array.isArray(value) ? value : [];
   const toggle = (v: string, checked: boolean) =>
@@ -545,7 +597,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
 
   return (
     <FormItem className={itemClasses(labelPosition, size, className)}>
-      <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
       <div className={inputWrapper(labelPosition, size)}>
         <div
           className={
@@ -562,6 +614,7 @@ export const CheckboxGroupField: React.FC<BaseFieldProps> = ({
               <Checkbox
                 className={cn('shrink-0', SIZE[size].check)}
                 checked={selected.includes(o.value)}
+                disabled={disabled || o.disabled}
                 onCheckedChange={(c) => toggle(o.value, c === true)}
               />
               <span className={cn('leading-none', SIZE[size].label)}>{o.label}</span>
@@ -589,9 +642,10 @@ export const ColorField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <ColorSwatches
@@ -624,9 +678,10 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         {/* A bounded number gets the slider; an open one, such as a scenario
@@ -638,6 +693,7 @@ export const NumberField: React.FC<BaseFieldProps> = ({
             min={min}
             max={max}
             step={step}
+            disabled={disabled}
           />
         ) : (
           <AffixedInput
@@ -648,6 +704,7 @@ export const NumberField: React.FC<BaseFieldProps> = ({
             min={min}
             max={max}
             step={step}
+            disabled={disabled}
             value={typeof value === 'number' ? value : ''}
             onChange={(e) =>
               onChange?.(e.target.value === '' ? undefined : Number(e.target.value))
@@ -673,9 +730,10 @@ export const IconField: React.FC<BaseFieldProps> = ({
   labelClassName,
   badge,
   className,
+  disabled,
 }) => (
   <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} className={labelClassName} />
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
     <div className={inputWrapper(labelPosition, size)}>
       <FormControl>
         <IconInput value={value} onChange={onChange} />
@@ -732,6 +790,7 @@ function renderField(
           label: field.label ?? humanize(field.name),
           description: field.description,
           options: field.options,
+          disabled: field.disabled,
           min: field.min,
           max: field.max,
           step: field.step,
@@ -1075,6 +1134,7 @@ export { ObjectField };
 export type {
   BooleanControl,
   FieldConfig,
+  FieldOption,
   FieldOrientation,
   FieldSize,
   FieldType,

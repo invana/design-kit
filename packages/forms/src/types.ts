@@ -42,6 +42,18 @@ export type ColorPreset = {
  * component's variants and defaults to `secondary` (neutral grey). Use
  * `default` for the solid accent ("on") pill.
  */
+/**
+ * One choice of a `select`, `radio` or multi-select `checkbox` field. A
+ * `description` is drawn as a muted line under a radio's label; `disabled`
+ * shows the choice but stops it being picked (radio and select).
+ */
+export type FieldOption = {
+  label: string;
+  value: string;
+  description?: string;
+  disabled?: boolean;
+};
+
 export type FieldBadge = {
   label: string;
   variant?: 'default' | 'secondary' | 'destructive' | 'outline' | 'soft';
@@ -53,7 +65,12 @@ export type FieldConfig = {
   label?: string;
   description?: string;
   placeholder?: string;
-  options?: { label: string; value: string }[];
+  options?: FieldOption[];
+  /**
+   * Shows the field and its value but stops it being changed. The value is
+   * still submitted. A `color` or `icon` field dims its label only.
+   */
+  disabled?: boolean;
   /**
    * Bounds of a `number` field. With both, it is a slider beside its number;
    * without, a typed number input that can carry a `unit` and an `aside`.
