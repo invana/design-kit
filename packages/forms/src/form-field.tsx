@@ -1013,7 +1013,9 @@ const ObjectField = <T extends FieldValues = FieldValues>({
   );
 
   return (
-    <div className={SIZE[size].outer}>
+    // A container has no width of its own, so one fitted to it takes its
+    // parent's: in a row beside a button it would otherwise shrink to nothing.
+    <div className={cn(SIZE[size].outer, fit === 'container' && 'w-full min-w-0')}>
       {ungrouped.length > 0 && (
         <div className={SIZE[size].section}>
           {renderRows(
