@@ -26,6 +26,9 @@ export default defineConfig({
         ],
         test: {
           name: 'storybook',
+          // An app shell's play walks a whole recorded session at the pace a reader sees it
+          // (Themes/AppAgents/Dataset Studio: research → dataset → model → import → explore).
+          testTimeout: 60_000,
           browser: {
             enabled: true,
             headless: true,

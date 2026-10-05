@@ -1,0 +1,129 @@
+{
+  "workspace": "Chickpea breeding workspace",
+  "agent": { "name": "Researcher", "version": "v1", "model": "sonnet-5.5" },
+  "budget": { "used": 0, "limit": 80000 },
+  "stages": ["Research", "Dataset", "Model", "Import", "Explore"],
+  "columns": [
+    { "key": "name", "label": "Variety", "type": "text" },
+    { "key": "type", "label": "Type", "type": "text" },
+    { "key": "inst", "label": "Released by", "type": "text" },
+    { "key": "year", "label": "Release year", "type": "number" },
+    { "key": "parent", "label": "Parentage", "type": "text" },
+    { "key": "yield", "label": "Yield (q/ha)", "type": "number" },
+    { "key": "seed", "label": "100-seed wt (g)", "type": "number" },
+    { "key": "mat", "label": "Maturity (days)", "type": "number" },
+    { "key": "res", "label": "Disease resistance", "type": "text" },
+    { "key": "zone", "label": "Recommended zone", "type": "text" },
+    { "key": "drought", "label": "Drought tolerance", "type": "text" }
+  ],
+  "proposedOff": ["drought"],
+  "sources": {
+    "1": { "title": "National variety release notification", "host": "seeds-registry.example", "kind": "Release notice" },
+    "2": { "title": "Coordinated pulses trial report, rabi season", "host": "pulses-trials.example", "kind": "Trial report" },
+    "3": { "title": "Deccan Pulses Institute variety catalogue", "host": "dpi.example", "kind": "Institute catalogue" },
+    "4": { "title": "Kabuli yield evaluation across zones", "host": "legume-journal.example", "kind": "Journal article" },
+    "5": { "title": "Malwa Agri University extension leaflet", "host": "mau.example", "kind": "Extension leaflet" },
+    "6": { "title": "Chickpea germplasm passport database", "host": "germplasm.example", "kind": "Database" },
+    "7": { "title": "State seed corporation product sheet", "host": "stateseeds.example", "kind": "Product sheet" }
+  },
+  "retrieved": "30 Sep 2026",
+  "rows": [
+    { "id": "r1", "name": "Anvaya", "type": "Desi", "inst": "Deccan Pulses Institute", "year": 2004, "parent": "DPL 12 × Kesar", "yield": 19.5, "seed": 21, "mat": 105, "res": "Fusarium wilt", "zone": "Central", "drought": "High", "src": [1, 3] },
+    { "id": "r2", "name": "Kesari Gold", "type": "Kabuli", "inst": "Malwa Agri University", "year": 2011, "parent": "MK 7 × ICK 33", "yield": 21.0, "seed": 38, "mat": 112, "res": "Fusarium wilt, Ascochyta blight", "zone": "Central", "drought": "Medium", "src": [2, 5] },
+    { "id": "r3", "name": "Mridula", "type": "Kabuli", "inst": "Central Legume Station", "year": 2016, "parent": "CLS 4 × MK 7", "yield": 18.2, "seed": 42, "mat": 118, "res": "Fusarium wilt", "zone": "North West", "drought": "Medium", "src": [2, 4] },
+    { "id": "r4", "name": "Tarini", "type": "Desi", "inst": "Terai Crop Research Centre", "year": 1998, "parent": "TCR 2 × Local", "yield": 16.8, "seed": 17, "mat": 128, "res": "Dry root rot", "zone": "North East", "drought": "Low", "src": [1, 6] },
+    { "id": "r5", "name": "Suvarna 5", "type": "Desi", "inst": "Deccan Pulses Institute", "year": 2019, "parent": "Anvaya × DPL 30", "yield": 22.4, "seed": 24, "mat": 98, "res": "Fusarium wilt, Dry root rot", "zone": "South", "drought": "High", "src": [1, 3] },
+    { "id": "r6", "name": "Himani", "type": "Kabuli", "inst": "Central Legume Station", "year": 2008, "parent": "CLS 1 × ICK 12", "yield": 17.9, "seed": 36, "mat": 125, "res": "Ascochyta blight", "zone": "North West", "drought": "Low", "src": [2, 6] },
+    { "id": "r7", "name": "Bhoomika", "type": "Desi", "inst": "Malwa Agri University", "year": 2013, "parent": "MK 3 × Tarini", "yield": 20.1, "seed": 23, "mat": 108, "res": "Fusarium wilt", "zone": "Central", "drought": "High", "src": [5, 7] },
+    { "id": "r8", "name": "Chandra 2", "type": "Kabuli", "inst": "Deccan Pulses Institute", "year": 2021, "parent": "Kesari Gold × DPL 41", "yield": 24.2, "seed": 44, "mat": 102, "res": "Fusarium wilt", "zone": "South", "drought": "Medium", "src": [3, 4] },
+    { "id": "r9", "name": "Vasudha", "type": "Desi", "inst": "Terai Crop Research Centre", "year": 2006, "parent": "TCR 9 × Anvaya", "yield": 18.4, "seed": 19, "mat": 120, "res": "Botrytis grey mould", "zone": "North East", "drought": "Medium", "src": [6] },
+    { "id": "r10", "name": "Neelam", "type": "Desi", "inst": "Central Legume Station", "year": 2002, "parent": "CLS 2 × Local", "yield": 17.2, "seed": 20, "mat": 115, "res": "Fusarium wilt", "zone": "North West", "drought": "Low", "src": [1, 6] },
+    { "id": "r11", "name": "Ratna Kabuli", "type": "Kabuli", "inst": "Malwa Agri University", "year": 2018, "parent": "Kesari Gold × MK 11", "yield": 19.8, "seed": 40, "mat": 110, "res": "Fusarium wilt, Ascochyta blight", "zone": "Central", "drought": "Medium", "src": [5, 2] },
+    { "id": "r12", "name": "Sahyadri", "type": "Desi", "inst": "", "year": 2023, "parent": "Suvarna 5 × DPL 52", "yield": 23.0, "seed": 22, "mat": 96, "res": "Dry root rot", "zone": "South", "drought": "High", "src": [7] }
+  ],
+  "droughtSource": 6,
+  "conflicts": {
+    "r3.yield": [{ "value": 18.2, "source": 2 }, { "value": 23.5, "source": 4 }],
+    "r7.seed": [{ "value": 23, "source": 5 }, { "value": 27, "source": 7 }],
+    "r10.year": [{ "value": 2002, "source": 1 }, { "value": 2003, "source": 6 }]
+  },
+  "presets": [
+    { "name": "Drought tolerance", "type": "text", "column": "drought" },
+    { "name": "Flower colour", "type": "text", "values": { "Kabuli": "White", "Desi": "Pink" } },
+    { "name": "Growth habit", "type": "text", "cycle": ["Semi-erect", "Semi-spreading", "Erect"] },
+    { "name": "Protein content (%)", "type": "number", "cycle": [18.4, 21.1, 19.6, 22.3, 18.9, 20.7, 19.2, 21.8, 18.6, 22.0, 20.1, 19.4] }
+  ],
+  "model": {
+    "nodes": [
+      { "label": "Variety", "key": "name", "props": [
+        { "name": "name", "column": "name" },
+        { "name": "type", "column": "type" },
+        { "name": "releaseYear", "column": "year" },
+        { "name": "yieldQHa", "column": "yield" },
+        { "name": "seedWeightG", "column": "seed" },
+        { "name": "maturityDays", "column": "mat" }
+      ] },
+      { "label": "Institution", "key": "inst", "props": [{ "name": "name", "column": "inst" }] },
+      { "label": "Trait", "key": "res", "props": [{ "name": "name", "column": "res" }] },
+      { "label": "Zone", "key": "zone", "props": [{ "name": "name", "column": "zone" }] },
+      { "label": "ParentLine", "key": "parent", "props": [{ "name": "name", "column": "parent" }] }
+    ],
+    "rels": [
+      { "from": "Variety", "type": "DEVELOPED_BY", "to": "Institution" },
+      { "from": "Variety", "type": "RESISTANT_TO", "to": "Trait" },
+      { "from": "Variety", "type": "RECOMMENDED_FOR", "to": "Zone" },
+      { "from": "Variety", "type": "DERIVED_FROM", "to": "ParentLine" }
+    ]
+  },
+  "palette": { "Variety": "var(--color-data-1)", "Institution": "var(--color-data-2)", "Trait": "var(--color-data-3)", "Zone": "var(--color-data-4)", "ParentLine": "var(--color-data-5)" },
+  "suggestions": {
+    "0": ["List all chickpea varieties with who developed them, yield, seed size, maturity and disease resistance"],
+    "1": [],
+    "2": ["Add a drought tolerance column", "Add a column", "Resolve the conflicting cells", "Save this dataset"],
+    "3": ["Turn this dataset into a graph model", "Add a column"],
+    "4": ["Make a quick change to the model", "Import the dataset into the graph model"],
+    "5": ["Which institutions released the most varieties?", "Average yield by release decade", "Wilt-resistant kabuli varieties above 18 q/ha", "Show the whole graph on canvas"]
+  },
+  "copy": {
+    "welcome": "Tell me what you're researching. I'll collect the data with a source behind every value, build a table you can edit, then help you model it as a graph and explore it.",
+    "blank": "New session on a blank canvas. Datasets and graph models are shared, so you can start from any of them.",
+    "branched": "Branched from **{parent}**{at}. I copied its canvas ({nodes} nodes) and conversation. Anything you do here stays in this branch.",
+    "fallback": "This prototype follows a scripted path. Try one of the suggestions, or ask about a specific variety, like “Tell me about Anvaya”.",
+    "need": {
+      "2": "Let’s build the dataset first. Ask me to list the chickpea varieties.",
+      "3": "Save the dataset first so the graph model points at a fixed version.",
+      "4": "There’s no graph model yet. Ask me to turn the saved dataset into one.",
+      "5": "Import the dataset into the graph model first, then I can answer questions over it."
+    },
+    "schema": "Here are the columns I’d collect for a breeding dataset. Turn off anything you don’t need, then I’ll search variety release notices, trial reports and germplasm databases, and cite each value.",
+    "collecting": "Collecting now. You can watch the table fill in.",
+    "draft": "Draft ready: **{rows} varieties** from **{sources} sources**. {conflicts}Sahyadri has no releasing institution in any source. Click any cell to see where it came from.",
+    "draftConflicts": "{n} cells have values that differ between sources; they're marked in the table. ",
+    "drought": "Added **Drought tolerance** for all {rows} varieties, rated High, Medium or Low. Every value comes from the germplasm passport database [6].",
+    "droughtThere": "The drought tolerance column is already in the table.",
+    "colAsk": "What column should I add? I can research the values with sources, or leave it empty for you to fill.",
+    "colPreset": "Added **{name}** for all {rows} varieties from the germplasm passport database [6].",
+    "colNone": "I couldn't find sources for **{name}** in this prototype, so I added it empty. Double-click a cell to fill it in.",
+    "colEmpty": "Added an empty **{name}** column. Double-click a cell to fill it in.",
+    "conflictAsk": "These cells have different values in different sources. Pick the value to keep for each; the other stays on record.",
+    "noConflicts": "No conflicts left. Every value agrees across its sources.",
+    "resolved": "Resolved {n} conflict{s}: {list}.{left}",
+    "kept": "Kept **{value}** for {name} · {column}, from source [{source}]. {left} conflict{s} left.",
+    "saveAsk": "Name this version and I’ll save it with its citations.",
+    "saved": "Saved **{name} {version}**: {rows} rows, {columns} columns{sources}.{open} Next, I can organize it as a graph model.",
+    "model": "Here’s how I’d organize the dataset as a graph. Each row becomes a **Variety**. Institutions, traits, zones and parent lines become their own nodes, so you can ask things like “which parents show up across wilt-resistant lines”.",
+    "modelReady": "Model created. Review it as a form, check the column mapping, or edit the model file directly. When it looks right, ask me to import it or press Import on the model page.",
+    "meditAsk": "What would you like to change in the model?",
+    "importAsk": "Check the import settings, then start it.",
+    "importIssues": "The model has {n} issue{s} to fix before import: {list}",
+    "imported": "Import finished. The graph is ready to explore.",
+    "merged": "Merged into the existing graph: {nodes} new node{ns} and {edges} new relationship{es}. Matching nodes were updated by key.",
+    "importStopped": "Import stopped while transforming rows. {n} row{s} {have} a missing value, and nothing was written to the graph. Fill the cell or import again and choose to skip it.",
+    "searchAgain": "None of the extra sources name a releasing institution for Sahyadri with confidence. I left the cell empty and flagged it, so the import will skip its DEVELOPED_BY relationship. You can type the value in if you know it.",
+    "institutions": "Varieties released per institution. {lead} Sahyadri isn't counted because its institution is unknown.",
+    "decades": "Average yield has risen from {first} q/ha in the {firstLabel} to {last} q/ha in the {lastLabel}. Each point averages the varieties released in that decade.",
+    "wilt": "{n} kabuli varieties are resistant to Fusarium wilt and yield at least 18 q/ha. {top}",
+    "whole": "Loaded the whole graph on **{canvas}**: {n} nodes. Click a node for its details and sources, or drag to rearrange.",
+    "notFound": "I couldn't find “{name}” in the graph."
+  }
+}
