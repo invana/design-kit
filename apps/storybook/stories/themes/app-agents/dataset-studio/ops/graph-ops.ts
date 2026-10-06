@@ -19,6 +19,9 @@ export interface GraphEdgeRecord {
   source: string;
   target: string;
   type: string;
+  /** The dataset row it came from, and the column that named its far end. */
+  row: string;
+  column: string;
 }
 export interface Skipped {
   row: string;
@@ -112,12 +115,14 @@ export function buildGraph(model: GraphModel, rows: StudioRow[]): Graph {
         skipped.push({ row: r.id, column: missing.key, rel: rel.type });
         return;
       }
+      // The column that named the far end — the row node's own key names nothing new.
+      const far = model.nodes.find((n) => n.label === (rel.to === row!.label ? rel.from : rel.to))!;
       from.forEach((a) =>
         to.forEach((b) => {
           const k = `${a}|${rel.type}|${b}`;
           if (a === b || seen.has(k)) return;
           seen.add(k);
-          edges.push({ source: a, target: b, type: rel.type });
+          edges.push({ source: a, target: b, type: rel.type, row: r.id, column: far.key });
         }),
       );
     }),

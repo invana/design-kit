@@ -29,7 +29,8 @@ import {
 import { datasetOps, EMPTY_DATASET, type DatasetState } from './ops/dataset-ops';
 import { canvasOps, EMPTY_CANVAS, EMPTY_GRAPH, graphOps, neighbours, type CanvasState, type GraphState } from './ops/graph-ops';
 import { EMPTY_MODEL, modelOps, type ModelState } from './ops/model-ops';
-import { CanvasPage, NodePanel } from './pages/canvas-page';
+import { CanvasPage, EdgePanel, NodePanel } from './pages/canvas-page';
+import type { GraphPick } from './graph-view';
 import { useGraph, WorkProvider } from './work';
 import { DatasetPage, ProvenancePanel, type PickedCell } from './pages/dataset-page';
 import { ModelPage } from './pages/model-page';
@@ -130,7 +131,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
   const [playbookFolded, setPlaybookFolded] = React.useState(false);
 
   const [picked, setPicked] = React.useState<PickedCell | null>(null);
-  const [node, setNode] = React.useState<string | null>(null);
+  const [pick, setPick] = React.useState<GraphPick | null>(null);
 
   const seq = React.useRef(0);
   const canvases = React.useRef(0);
@@ -317,7 +318,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
     });
     setActive(canvasTab(sid));
     setCurrent(sid);
-    setNode(null);
+    setPick(null);
     const writer = new Writer(() => `a-${++seq.current}`);
     if (from) {
       const ids = workOf(from.id).canvas.ids;
@@ -576,11 +577,11 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
         <CanvasPage
           session={{ id: sid, name: s.name }}
           parent={s.parent ? sessions[s.parent]?.name : undefined}
-          selected={sid === current ? node : null}
-          onSelect={setNode}
+          selected={sid === current ? pick : null}
+          onSelect={setPick}
           onLoadAll={() => prompt(sid, 'Show the whole graph on canvas')}
           onClear={() => {
-            setNode(null);
+            setPick(null);
             canvasCall('clear', {}, `Clear ${s.name}`);
           }}
         />
@@ -668,7 +669,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
                         current={current}
                         onPick={(sid) => {
                           openTab(canvasTab(sid));
-                          setNode(null);
+                          setPick(null);
                         }}
                         onBranch={() => newSession(current)}
                         onNew={() => {
@@ -693,7 +694,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
                   const sid = sidOf(id);
                   if (sid && sid !== current) {
                     setCurrent(sid);
-                    setNode(null);
+                    setPick(null);
                   }
                 }}
                 onClose={(id) => {
@@ -729,14 +730,16 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
                 const row = workOf(current).dataset.rows.find((r) => r.id === cell.row);
                 prompt(current, `Search again for the releasing institution of ${row?.name}`);
               }}
-              node={sidOf(active) === current ? node : null}
-              onCloseNode={() => setNode(null)}
+              pick={sidOf(active) === current ? pick : null}
+              onPick={setPick}
+              onClosePick={() => setPick(null)}
               onExpand={(id) => {
                 const graph = workOf(current).graph.graph!;
                 const ids = neighbours(graph, [id]);
                 canvasCall('load', { ids }, `Expand ${graph.nodes[id]!.name}`);
               }}
               onAsk={(name) => prompt(current, `Tell me about ${name}`)}
+              onAskEdge={(question) => prompt(current, question)}
             />
           }
         />
@@ -746,7 +749,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
   );
 }
 
-/** What floats over the work: the playbook, a cell's provenance, a node's details. */
+/** What floats over the work: the playbook, a cell's provenance, a node's or an edge's details. */
 function Overlays(props: {
   showPlaybook: boolean;
   playbook: React.ReactNode;
@@ -754,10 +757,12 @@ function Overlays(props: {
   onClosePicked: () => void;
   onResolve: (cell: PickedCell, option: number) => void;
   onSearchAgain: (cell: PickedCell) => void;
-  node: string | null;
-  onCloseNode: () => void;
+  pick: GraphPick | null;
+  onPick: (pick: GraphPick) => void;
+  onClosePick: () => void;
   onExpand: (id: string) => void;
   onAsk: (name: string) => void;
+  onAskEdge: (question: string) => void;
 }) {
   const { graph } = useGraph();
   return (
@@ -771,8 +776,18 @@ function Overlays(props: {
           onSearchAgain={props.onSearchAgain}
         />
       ) : null}
-      {props.node && graph ? (
-        <NodePanel id={props.node} graph={graph} onClose={props.onCloseNode} onExpand={props.onExpand} onAsk={props.onAsk} />
+      {props.pick?.kind === 'node' && graph ? (
+        <NodePanel
+          id={props.pick.id}
+          graph={graph}
+          onClose={props.onClosePick}
+          onPick={props.onPick}
+          onExpand={props.onExpand}
+          onAsk={props.onAsk}
+        />
+      ) : null}
+      {props.pick?.kind === 'edge' && graph ? (
+        <EdgePanel id={props.pick.id} graph={graph} onClose={props.onClosePick} onPick={props.onPick} onAsk={props.onAskEdge} />
       ) : null}
     </>
   );

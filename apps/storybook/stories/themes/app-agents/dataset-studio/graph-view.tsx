@@ -10,6 +10,7 @@ import {
   GraphCanvas,
   GraphLayer,
   HoverActivateBehaviour,
+  HoverElementPreviewBehaviour,
   LabelCollisionBehaviour,
   NodeLabelLODBehaviour,
   TextResolutionLODBehaviour,
@@ -42,6 +43,9 @@ export interface ViewEdge {
   target: string;
   type: string;
 }
+
+/** What a click picked on the canvas: a node, or an edge (by its view id). */
+export type GraphPick = { kind: 'node' | 'edge'; id: string };
 
 export interface GraphViewHandle {
   relayout: () => void;
@@ -89,11 +93,13 @@ function useThemeVersion() {
   return version;
 }
 
-/** Reports the selection to the host; a click on nothing clears it. */
-function SelectionBridge({ onChange }: { onChange: (id: string | null) => void }) {
-  const { selectedNodeIds } = useSelection({ clickSelectId: 'select' });
-  const first = selectedNodeIds[0] ?? null;
-  React.useEffect(() => onChange(first), [first, onChange]);
+/** Reports the selection to the host — a node, else an edge; a click on nothing clears it. */
+function SelectionBridge({ onChange }: { onChange: (pick: GraphPick | null) => void }) {
+  const { selectedNodeIds, selectedEdgeIds } = useSelection({ clickSelectId: 'select' });
+  const node = selectedNodeIds[0];
+  const edge = selectedEdgeIds[0];
+  const key = node ? `node:${node}` : edge ? `edge:${edge}` : '';
+  React.useEffect(() => onChange(node ? { kind: 'node', id: node } : edge ? { kind: 'edge', id: edge } : null), [key]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }
 
@@ -104,20 +110,27 @@ export const GraphView = React.forwardRef<
     edges: ViewEdge[];
     /** A node type's colour, as CSS — `var(--color-data-1)`. */
     palette: Record<string, string>;
-    onSelect?: (id: string | null) => void;
+    onSelect?: (pick: GraphPick | null) => void;
     /** Draw every edge's type, not only when hovered — a schema. */
     edgeLabels?: boolean;
+    /** A glance at a hovered node or edge, by id — a card that follows it as the camera moves. */
+    preview?: (pick: GraphPick) => React.ReactNode;
   }
->(function GraphView({ nodes, edges, palette, onSelect, edgeLabels = false }, ref) {
+>(function GraphView({ nodes, edges, palette, onSelect, edgeLabels = false, preview }, ref) {
   const engine = React.useRef<GraphEngine>(null);
   React.useImperativeHandle(ref, () => ({ relayout: () => void engine.current?.runActiveLayout({ fitCamera: true }) }), []);
   const theme = useThemeVersion();
 
-  // The palette in the theme's colours.
+  // The palette, and the marks of hover and selection, in the theme's colours: the engine's own
+  // are fixed (a near-black hovered edge, a white ring), which vanish on one theme or the other.
   const colours = React.useMemo(() => {
     void theme;
     return Object.fromEntries(Object.entries(palette).map(([type, css]) => [type, toHex(css)]));
   }, [palette, theme]);
+  const marks = React.useMemo(() => {
+    void theme;
+    return { ink: toHex('var(--color-foreground)'), accent: toHex('var(--color-primary)') };
+  }, [theme]);
   const node: GraphLayerProps['node'] = React.useMemo(
     () => ({
       style: {
@@ -130,8 +143,18 @@ export const GraphView = React.forwardRef<
         labelOffsetY: 6,
         labelFontSize: 11,
       },
+      // The canonical slots by id, so these replace the engine's rings rather than add to them.
+      state: {
+        hovered: { decorations: [{ kind: 'ring', id: 'canonical-hover-ring', color: marks.ink, width: 1.5, gap: 3, alpha: 0.85 }] },
+        selected: {
+          decorations: [
+            { kind: 'ring', id: 'canonical-select-ring', color: marks.accent, width: 2, gap: 4, alpha: 1 },
+            { kind: 'glow', id: 'canonical-select-halo', color: marks.accent, strokeWidth: 18, innerAlpha: 0.3, layers: 3 },
+          ],
+        },
+      },
     }),
-    [colours],
+    [colours, marks],
   );
   const edge: GraphLayerProps['edge'] = React.useMemo(
     () => ({
@@ -140,8 +163,12 @@ export const GraphView = React.forwardRef<
         arrowTargetShape: 'triangle',
         ...(edgeLabels ? { labelText: (e: GraphEdge) => e.type, labelFontSize: 10 } : {}),
       },
+      state: {
+        hovered: { strokeColor: marks.ink, arrowTargetColor: marks.ink, strokeWidth: 2 },
+        selected: { strokeColor: marks.accent, arrowTargetColor: marks.accent, strokeWidth: 2.5 },
+      },
     }),
-    [edgeLabels],
+    [edgeLabels, marks],
   );
   // The data's identity is its ids — a new list of the same nodes keeps the layout.
   const signature = nodes.map((n) => `${n.id}:${n.label}`).join('|') + '#' + edges.map((e) => e.id).join('|');
@@ -153,7 +180,7 @@ export const GraphView = React.forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [signature],
   );
-  const select = React.useCallback((id: string | null) => onSelect?.(id), [onSelect]);
+  const select = React.useCallback((pick: GraphPick | null) => onSelect?.(pick), [onSelect]);
 
   // A layer's style is set when it is made, and the behaviours hold the layer they were given,
   // so a new theme draws the whole canvas afresh rather than only its layer.
@@ -162,7 +189,8 @@ export const GraphView = React.forwardRef<
       <BackgroundLayer id="bg" type="pattern" patternType="dots" />
       <ThemeBehaviour id="theme" />
       <CanvasThemeSync />
-      <GraphLayer key={String(edgeLabels)} id="graph" data={data} node={node} edge={edge} />
+      {/* An edge is a few px wide: picking it falls back to the nearest within 8px. */}
+      <GraphLayer key={String(edgeLabels)} id="graph" data={data} node={node} edge={edge} hitFloorPx={8} />
       <D3ForceLayout id="force" targetLayerId="graph" />
       <DragPanBehaviour id="pan" />
       <WheelZoomBehaviour id="wheel" />
@@ -174,6 +202,16 @@ export const GraphView = React.forwardRef<
       {edgeLabels ? <EdgeLabelLODBehaviour id="edge-labels" targetLayerId="graph" zoomGrowth={0.5} minFontPx={9} maxFontPx={12} /> : null}
       <LabelCollisionBehaviour id="label-collision" targetLayerId="graph" />
       {onSelect ? <SelectionBridge onChange={select} /> : null}
+      {preview ? (
+        <HoverElementPreviewBehaviour
+          id="preview"
+          targetLayerId="graph"
+          enabled
+          openDelay={300}
+          renderNode={(n) => <>{preview({ kind: 'node', id: n.id })}</>}
+          renderEdge={(e) => <>{preview({ kind: 'edge', id: e.id })}</>}
+        />
+      ) : null}
     </GraphCanvas>
   );
 });
