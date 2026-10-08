@@ -1008,7 +1008,9 @@ export interface BlockProps<K extends BlockKind = BlockKind> {
   /**
    * Set into running text: a table's outer cells sit flush with the words
    * around it. Only the assistant sets it; everywhere else a table keeps its
-   * cell padding.
+   * cell padding. Only the table block reads it — grid, scope, proposal and
+   * confirm are always seamless, since unset each would draw a box inside
+   * the frame that already holds it.
    */
   seamless?: boolean
 }

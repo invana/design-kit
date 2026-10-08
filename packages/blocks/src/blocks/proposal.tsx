@@ -19,7 +19,6 @@ export function ProposalBlock({ spec, onAction }: BlockProps<"proposal">) {
   return (
     <ProposalCard
       flush
-      seamless
       title={spec.heading}
       done={spec.done?.label}
       consequence={spec.consequence}

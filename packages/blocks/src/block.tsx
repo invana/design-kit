@@ -16,7 +16,7 @@ export interface BlockComponentProps {
   /**
    * Set into running text: the outer cells of a table sit flush with the words
    * around it. The assistant sets it; a board panel or a page section does not,
-   * so its tables keep their padding.
+   * so its tables keep their padding. Only the table block reads it.
    */
   seamless?: boolean
   /**
