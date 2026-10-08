@@ -1004,6 +1004,12 @@ export interface BlockProps<K extends BlockKind = BlockKind> {
   value?: unknown
   /** Names its form and fields. Unset, one is made. */
   id?: string
+  /**
+   * Set into running text: a table's outer cells sit flush with the words
+   * around it. Only the assistant sets it; everywhere else a table keeps its
+   * cell padding.
+   */
+  seamless?: boolean
 }
 
 // The options map and the kinds list must name the same kinds.

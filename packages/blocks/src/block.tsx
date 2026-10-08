@@ -14,6 +14,12 @@ export interface BlockComponentProps {
   value?: unknown
   id?: string
   /**
+   * Set into running text: the outer cells of a table sit flush with the words
+   * around it. The assistant sets it; a board panel or a page section does not,
+   * so its tables keep their padding.
+   */
+  seamless?: boolean
+  /**
    * Patches to `spec` as they arrive — the block draws `spec` with them
    * applied, and a new `spec` starts over from it. See `useBlockStream`.
    */

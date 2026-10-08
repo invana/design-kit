@@ -77,10 +77,16 @@ export interface TableBaseProps<TData extends RowData> {
   /**
    * No box, and nothing wasted on its outside: only the rules between rows are
    * drawn, and the first and last columns sit flush with the text around the
-   * table. For a table inside a card, a panel or an answer, whose edge already
-   * frames it — a second border a few pixels in reads as a box inside a box.
+   * table. For a table set into running text — an assistant's answer — whose
+   * columns should start where the sentence above it does.
    */
   seamless?: boolean;
+  /**
+   * Draw the box. Off for a table inside a card or a panel, whose edge already
+   * frames it — a second border a few pixels in reads as a box inside a box —
+   * while its cells keep their padding. `seamless` draws no box either way.
+   */
+  bordered?: boolean;
   /**
    * How deep this row sits under another — a child run under the run that
    * spawned it. Indents the **first** cell only, so the shape of the list is
@@ -180,6 +186,7 @@ export type TableViewProps<TData extends RowData> = Pick<
   | "renderGroupHeader"
   | "density"
   | "seamless"
+  | "bordered"
   | "rowIndent"
   | "isRowSelected"
   | "isRowHighlighted"
@@ -209,6 +216,7 @@ export function pickViewProps<TData extends RowData>(
     renderGroupHeader: props.renderGroupHeader,
     density: props.density,
     seamless: props.seamless,
+    bordered: props.bordered,
     rowIndent: props.rowIndent,
     isRowSelected: props.isRowSelected,
     isRowHighlighted: props.isRowHighlighted,

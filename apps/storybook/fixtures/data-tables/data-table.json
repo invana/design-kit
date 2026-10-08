@@ -241,6 +241,19 @@
     ]
   },
   {
+    "caption": "In A Card · Unbordered",
+    "wide": true,
+    "columns": "ceilings",
+    "frame": "card",
+    "props": { "bordered": false, "enableSorting": false },
+    "data": [
+      { "key": "max_concurrent_runs", "value": "3", "bounds": "runs at once" },
+      { "key": "max_fanout", "value": "200", "bounds": "lanes in one map" },
+      { "key": "max_children", "value": "0", "bounds": "agents spawned per run" },
+      { "key": "max_depth", "value": "0", "bounds": "levels of delegation" }
+    ]
+  },
+  {
     "caption": "Metadata Grid",
     "wide": true,
     "columns": "fields",

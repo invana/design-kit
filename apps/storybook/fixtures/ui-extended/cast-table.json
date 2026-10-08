@@ -27,9 +27,18 @@
     }
   },
   {
-    "caption": "Seamless, inside a card",
+    "caption": "Unbordered, inside a card",
     "width": 620,
     "card": true,
+    "props": {
+      "cast": { "decide": "llm/anthropic-prod/claude-opus-5", "extract": "llm/ollama-local/llama-3.1-8b" },
+      "readOnly": true,
+      "bordered": false
+    }
+  },
+  {
+    "caption": "Seamless, in an answer",
+    "width": 620,
     "props": {
       "cast": { "decide": "llm/anthropic-prod/claude-opus-5", "extract": "llm/ollama-local/llama-3.1-8b" },
       "readOnly": true,

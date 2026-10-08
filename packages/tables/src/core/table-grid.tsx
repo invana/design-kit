@@ -216,6 +216,7 @@ export function TableGrid<TData extends RowData>({
   renderGroupHeader,
   density = "default",
   seamless = false,
+  bordered = true,
   rowIndent,
   isRowSelected,
   isRowHighlighted,
@@ -271,7 +272,7 @@ export function TableGrid<TData extends RowData>({
       onDragEnd={handleDragEnd}
     >
       <div
-        className={cn("relative overflow-auto", !seamless && "rounded-md border")}
+        className={cn("relative overflow-auto", bordered && !seamless && "rounded-md border")}
         aria-busy={loading || undefined}
       >
         {loading && (

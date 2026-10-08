@@ -63,6 +63,8 @@ function answerBlock<K extends AnswerKind>(kind: K): BlockRenderer<K> {
       <Renderer
         // The same map, indexed generically: TypeScript cannot see AnswerOptionsByKind[K] is BlockOptionsByKind[K].
         spec={block as unknown as BlockProps<K>["spec"]}
+        // An answer is running text: its tables sit flush with the sentences.
+        seamless
         onAction={(action, value) => {
           const event = toEvent(turn.id, action, value, index)
           if (event) onEvent(event)
@@ -84,6 +86,7 @@ function askBlock<K extends AskKind>(kind: K): AskRenderer<K> {
         state={turn.state}
         value={turn.value}
         id={turn.id}
+        seamless
         onAction={(action, value) => {
           const event = toEvent(turn.id, action, value, -1)
           if (event) onEvent(event)

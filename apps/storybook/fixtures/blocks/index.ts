@@ -46,6 +46,8 @@ export interface BlockVariant<K extends BlockKind> {
   width?: number;
   /** Take the grid's whole row — a strip or a table fitted to a board's width. */
   wide?: boolean;
+  /** Drawn as the assistant draws it — set into running text, outer cells flush. */
+  seamless?: boolean;
   spec: BlockOptionsByKind[K];
   /**
    * The block live: block patches to `spec`, each at its ms from the start, as the API streams

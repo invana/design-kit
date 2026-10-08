@@ -196,6 +196,25 @@
     }
   },
   {
+    "caption": "In an answer · seamless",
+    "seamless": true,
+    "turn": { "id": "seamless", "label": "answer" },
+    "spec": {
+      "columns": [
+        { "key": "store", "label": "Store" },
+        { "key": "margin", "label": "Margin", "align": "right" },
+        { "key": "delta", "label": "Δ pts", "align": "right" }
+      ],
+      "rows": [
+        { "store": "North Mall", "margin": "11.4%", "delta": { "value": "−3.1", "tone": "bad" } },
+        { "store": "Northgate", "margin": "12.0%", "delta": { "value": "−2.6", "tone": "bad" } },
+        { "store": "Riverside", "margin": "15.8%", "delta": { "value": "+0.4", "tone": "good" } }
+      ],
+      "total": 214,
+      "noun": "stores"
+    }
+  },
+  {
     "caption": "Selectable",
     "turn": { "id": "selectable", "label": "answer" },
     "spec": {

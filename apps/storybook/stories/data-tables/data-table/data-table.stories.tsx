@@ -40,6 +40,7 @@ interface TableVariant extends Variant {
   props?: {
     density?: TableDensity;
     seamless?: boolean;
+    bordered?: boolean;
     enableSorting?: boolean;
     defaultSorting?: SortingState;
     enableColumnPinning?: boolean;
@@ -369,6 +370,7 @@ function source(v: TableVariant) {
 
   if (props.density && v.toolbar !== 'density') call.density = { literal: props.density };
   if (props.seamless) call.seamless = 'true';
+  if (props.bordered === false) call.bordered = 'false';
   if (props.enableSorting === false) call.enableSorting = 'false';
   if (props.defaultSorting) call.defaultSorting = JSON.stringify(props.defaultSorting);
   if (props.enableColumnPinning) call.enableColumnPinning = 'true';
@@ -506,7 +508,7 @@ type Story = StoryObj<Args>;
  * pinned / resized / reordered columns, cells edited in place (a save that takes a moment and
  * refuses a schedule under five minutes), a click that picks a cell (`onCellClick`, drawn with
  * `isCellHighlighted`) while a double-click edits it (`editTrigger="dblclick"`), rows under rows, detail under a row, a preview with
- * `Open all`, a replayed stream (prepend, and upsert by id), the three densities, `seamless`
+ * `Open all`, a replayed stream (prepend, and upsert by id), the three densities, `seamless`, `bordered={false}`
  * inside a card, a grid of always-on controls, and the journal with its selection and indent.
  *
  * Heavy, so the `variant` select draws one at a time. Every callback is in the Actions panel and

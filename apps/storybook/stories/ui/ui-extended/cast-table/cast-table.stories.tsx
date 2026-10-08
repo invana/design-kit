@@ -7,9 +7,9 @@ import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
 import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 
 interface CastVariant extends Variant {
-  /** Inside a card, where `seamless` lets the card be the frame. */
+  /** Inside a card, where `bordered={false}` lets the card be the frame. */
   card?: boolean;
-  props: Pick<CastTableProps, 'cast' | 'resolved' | 'readOnly' | 'seamless'>;
+  props: Pick<CastTableProps, 'cast' | 'resolved' | 'readOnly' | 'seamless' | 'bordered'>;
 }
 
 const VARIANTS = VARIANTS_JSON as CastVariant[];
@@ -29,12 +29,13 @@ const meta = {
           snippets(
             ["import { Card, CardContent, CastTable } from '@invana/ui';"],
             picked.map((v) => {
-              const { cast, resolved, readOnly, seamless } = v.props;
+              const { cast, resolved, readOnly, seamless, bordered } = v.props;
               const table = jsx('CastTable', {
                 cast: cast ? 'cast' : undefined,
                 resolved: resolved ? 'resolved' : undefined,
                 readOnly: readOnly ? 'true' : undefined,
                 seamless: seamless ? 'true' : undefined,
+                bordered: bordered === false ? 'false' : undefined,
               });
               return {
                 comment: v.caption,
@@ -71,7 +72,8 @@ type Story = StoryObj<Args>;
  * then the resolved address is checked against the effective rules and refused by name if
  * denied. The resolved `decide` row is that refusal — under `Nothing leaves` only a local model
  * may be reached, so a plan asking for a hosted one is refused **before the run opens**, naming
- * the rule. `seamless` inside a card draws no box of its own, only the rules between rows.
+ * the rule. Inside a card, `bordered={false}` draws no box of its own and keeps the cell padding;
+ * `seamless` also sets the outer columns flush, for a cast in an assistant's answer.
  */
 export const CastTable: Story = {
   render: ({ variant }) => (

@@ -24,9 +24,9 @@ const Table = React.forwardRef<
     /**
      * No box, and nothing wasted on its outside: only the rules between rows
      * are drawn, and the first and last columns sit flush with the text around
-     * the table. For a table inside a card, a panel or an answer, whose edge
-     * already frames it — a second border a few pixels in reads as a box
-     * inside a box.
+     * the table. For a table set into running text — an assistant's answer.
+     * A table inside a card or a panel keeps its cell padding and drops only
+     * the box, with `bordered={false}`.
      */
     seamless?: boolean
     /**

@@ -26,7 +26,7 @@ function LiveTable({ variant, onAction, log }: { variant: BlockVariant<'table'>;
     log('onAction', value === undefined ? [action] : [action, value]);
     if (action === 'select') setSelected(String(value));
   };
-  return <TableBlock spec={{ ...variant.spec, selected }} onAction={act} />;
+  return <TableBlock spec={{ ...variant.spec, selected }} onAction={act} seamless={variant.seamless} />;
 }
 
 const meta = {
@@ -46,6 +46,8 @@ const meta = {
               call: jsx('TableBlock', {
                 spec: 'spec',
                 onAction: 'onAction',
+                // The assistant sets it; a board panel or a page section does not.
+                seamless: v.seamless ? 'true' : undefined,
               }),
             })),
           ),

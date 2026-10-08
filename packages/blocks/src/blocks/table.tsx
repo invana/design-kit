@@ -47,7 +47,7 @@ function CellText({ cell }: { cell: Cell }) {
  * total sits under the rows in bold. With a `rowKey`, picking a row sends
  * `select` with its key, and the `selected` row is drawn picked.
  */
-export function TableBlock({ spec, onAction }: BlockProps<"table">) {
+export function TableBlock({ spec, onAction, seamless }: BlockProps<"table">) {
   const truncated = spec.total != null && spec.total > spec.rows.length
   const highlighted = new Set(spec.highlight?.map((i) => spec.rows[i]))
   const data = spec.totals ? [...spec.rows, spec.totals] : spec.rows
@@ -71,7 +71,9 @@ export function TableBlock({ spec, onAction }: BlockProps<"table">) {
       columns={columns}
       data={data}
       density="compact"
-      seamless
+      // The shell frames a block, so the table draws no box of its own.
+      bordered={false}
+      seamless={seamless}
       enableSorting={false}
       enableColumnVisibility={false}
       minWidth={spec.columns.length > FITS ? spec.columns.length * COLUMN_MIN : undefined}
