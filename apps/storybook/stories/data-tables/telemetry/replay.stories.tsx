@@ -86,8 +86,8 @@ function Live({ log, onRowClick, onSpeedChange }: Args & { log: Log }) {
   const { now, replay, seek } = useRunClock(Number(speed));
 
   const seen = eventsUntil(now);
-  const tasks = React.useMemo(() => ganttTasks(now), [now]);
-  const lanes = React.useMemo(() => slotLaneTasks(now), [now]);
+  const tasks = ganttTasks(now);
+  const lanes = slotLaneTasks(now);
   const tail = seen.slice(-TAIL).reverse();
   const next = EVENTS.find((e) => e.offsetMs > now);
 

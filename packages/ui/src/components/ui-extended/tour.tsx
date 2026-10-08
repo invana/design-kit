@@ -84,10 +84,13 @@ export function useTour(options: UseTourOptions): TourController {
   const lastIndex = Math.max(total - 1, 0)
   const clamped = Math.min(Math.max(current, 0), lastIndex)
 
-  // The step the handlers read: the latest render's, so a callback fires once
+  // The step the handlers read: the latest commit's, so a callback fires once
   // per move — never from inside a state updater, which React may run twice.
+  // Synced in a layout effect, before any event can reach a handler.
   const at = React.useRef(clamped)
-  at.current = clamped
+  React.useLayoutEffect(() => {
+    at.current = clamped
+  }, [clamped])
 
   const move = React.useCallback(
     (to: number) => {

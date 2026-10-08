@@ -119,17 +119,17 @@ function view(saved: Model | null, values: Model | undefined, version: number, t
 
 function Live({ onAction }: Args) {
   const [sent, record] = useSent(onAction);
-  const [saved, setSaved] = React.useState<Model | null>(null);
   const [version, setVersion] = React.useState(1);
   const [tab, setTab] = React.useState(SPEC.tab ?? 'details');
   const loaded = useLoaded(page.record);
+  // What was saved: the record as it loaded, until a save writes over it.
+  const [written, setSaved] = React.useState<Model | null>(null);
+  const saved = written ?? loaded;
   const form = useForm<{ record: Model }>();
   const values = useWatch({ control: form.control, name: 'record' });
 
   React.useEffect(() => {
-    if (!loaded) return;
-    setSaved(loaded);
-    form.reset({ record: loaded });
+    if (loaded) form.reset({ record: loaded });
   }, [loaded, form]);
 
   const save = form.handleSubmit(({ record: next }) => {

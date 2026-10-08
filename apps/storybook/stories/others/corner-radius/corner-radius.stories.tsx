@@ -223,7 +223,9 @@ function DialPanel({ dials, update }: { dials: Dials; update: (next: Partial<Dia
   const gui = React.useRef<GUI | null>(null);
   const model = React.useRef<Dials>({ ...dials });
   const send = React.useRef(update);
-  send.current = update;
+  React.useLayoutEffect(() => {
+    send.current = update;
+  }, [update]);
 
   React.useEffect(() => {
     const g = new GUI({ container: host.current!, title: 'Corner radius', width: 280 });

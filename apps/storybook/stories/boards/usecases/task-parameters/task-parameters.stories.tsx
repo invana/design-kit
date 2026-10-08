@@ -111,14 +111,17 @@ function view(params: Param[] | null, changed: string[], version: number): Spec 
 function Live({ onAction }: Args) {
   const [sent, record] = useSent(onAction);
   const loaded = useLoaded(PARAMS);
-  const [saved, setSaved] = React.useState<Param[] | null>(null);
-  const [params, setParams] = React.useState<Param[] | null>(null);
+  // The saved parameters and the draft both start as the loaded ones, until a save or an edit.
+  const [written, setSaved] = React.useState<Param[] | null>(null);
+  const [edited, setParams] = React.useState<Param[] | null>(null);
+  const saved = written ?? loaded;
+  const params = edited ?? loaded;
   const [version, setVersion] = React.useState(1);
-
-  React.useEffect(() => {
-    setSaved(loaded);
-    setParams(loaded);
-  }, [loaded]);
+  const edit = (change: (ps: Param[]) => Param[]) =>
+    setParams((ps) => {
+      const draft = ps ?? loaded;
+      return draft && change(draft);
+    });
 
   const changed =
     params && saved ? params.filter((p, i) => p.value !== saved[i].value || p.source !== saved[i].source).map((p) => p.name) : [];
@@ -134,16 +137,15 @@ function Live({ onAction }: Args) {
           record(id, ctx);
           if (id === 'edit-param' && ctx?.param) {
             const { name, source, value } = ctx.param;
-            setParams(
-              (ps) =>
-                ps?.map((p) =>
-                  p.name === name ? { ...p, source: source as Param['source'], value, invalid: REQUIRED.has(name) && !value.trim() } : p,
-                ) ?? ps,
+            edit((ps) =>
+              ps.map((p) =>
+                p.name === name ? { ...p, source: source as Param['source'], value, invalid: REQUIRED.has(name) && !value.trim() } : p,
+              ),
             );
           }
           if (id === 'revert-one' && ctx?.itemId && saved) {
             const was = saved.find((p) => p.name === ctx.itemId);
-            setParams((ps) => ps?.map((p) => (p.name === ctx.itemId && was ? was : p)) ?? ps);
+            edit((ps) => ps.map((p) => (p.name === ctx.itemId && was ? was : p)));
           }
           if (id === 'revert') setParams(saved);
           if (id === 'save') {

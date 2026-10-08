@@ -250,7 +250,7 @@ function source(v: GanttVariant) {
     comment: v.caption,
     data: {
       ...(v.steps ? { origin: v.origin, steps: v.steps } : {}),
-      ...(v.tasks ? { tasks: v.tasks.map(({ chart, action, ...t }) => (chart ? { ...t, detail: '<GanttDetailCard … BarChartH />' } : t)) } : {}),
+      ...(v.tasks ? { tasks: v.tasks.map(({ chart, action: _action, ...t }) => (chart ? { ...t, detail: '<GanttDetailCard … BarChartH />' } : t)) } : {}),
       ...(v.brackets ? { brackets: v.brackets } : {}),
       ...(v.seams ? { seams: v.seams } : {}),
     },
