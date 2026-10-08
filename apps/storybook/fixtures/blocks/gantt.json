@@ -757,6 +757,48 @@
     }
   },
   {
+    "caption": "Layer access · a short plan, ticks left to the steps",
+    "useCase": "layers",
+    "wide": true,
+    "turn": { "id": "g7b", "label": "gantt", "title": "triage v1 · what it will reach", "aside": "declared · 2 layers · 3 steps" },
+    "spec": {
+      "scale": "seq",
+      "labelWidth": 200,
+      "durationWidth": 72,
+      "palette": { "llm": "bg-data-7", "graph_data": "bg-data-1" },
+      "tasks": [
+        {
+          "key": "llm",
+          "summary": "1 role",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "role: decide",
+              "segments": [
+                { "key": "classify", "label": "classify", "startMs": 0, "durationMs": 1, "group": "llm", "variant": "dashed" },
+                { "key": "route", "label": "route", "startMs": 2, "durationMs": 1, "group": "llm", "variant": "dashed" }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "graph_data",
+          "label": "graph data",
+          "summary": "1 model",
+          "open": true,
+          "subtasks": [
+            {
+              "key": "model/Tickets@v1",
+              "segments": [
+                { "key": "lookup", "label": "lookup", "startMs": 1, "durationMs": 1, "group": "graph_data", "variant": "dashed", "note": "${ticket_id}" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "caption": "Layer access · what a rule refused",
     "useCase": "layers",
     "wide": true,

@@ -27,6 +27,30 @@ const toBar = ({ chip, ...bar }: GanttSpecBar) => ({
 const STEP_TICK = (n: number) => `step ${Math.round(n)}`
 const STEPS = (n: number) => (Math.round(n) === 1 ? "1 step" : `${Math.round(n)} steps`)
 
+/** Where the spec's drawing ends — every bar, attempt, gate and the now line. */
+const lastEnd = (spec: BlockProps<"gantt">["spec"]): number => {
+  const end = (b: { startMs?: number; durationMs?: number }) => (b.startMs ?? 0) + (b.durationMs ?? 0)
+  const ends = (tasks: GanttSpecRow[]): number[] =>
+    tasks.flatMap((t) => [
+      ...(t.startMs != null ? [end(t)] : []),
+      ...(t.attempts ?? []).map(end),
+      ...(t.segments ?? []).map(end),
+      ...ends(t.subtasks ?? []),
+    ])
+  return Math.max(spec.nowMs ?? 0, ...ends(spec.tasks), ...(spec.seams ?? []).map(end))
+}
+
+/**
+ * A plan's clock in whole steps: one tick per step while that fits, else the
+ * most intervals (up to 8) that divide the span evenly, so no two ticks name
+ * the same step.
+ */
+const stepTicks = (span: number): number => {
+  if (span <= 8) return span
+  for (let n = 8; n > 1; n--) if (span % n === 0) return n
+  return 1
+}
+
 /**
  * The spec's words as the Gantt's: a task is a row, its `subtasks` the rows it
  * opens into, its `segments` the bars it holds — the open flag left behind.
@@ -75,6 +99,11 @@ export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
     }
   }
   const rows = React.useMemo(() => spec.tasks.map(toRow), [spec.tasks])
+  // A plan counts whole steps: its span rounds up to one, and its ticks fall on them.
+  const seq = spec.scale === "seq"
+  const steps = seq ? (spec.spanMs ?? Math.max(Math.ceil(lastEnd(spec)), 1)) : undefined
+  const span = steps ?? spec.spanMs
+  const ticks = spec.ticks ?? (steps != null ? stepTicks(steps) : undefined)
   const pick = (key: string) => {
     setSelected(key)
     onAction?.("select", key)
@@ -83,12 +112,12 @@ export function GanttBlock({ spec, onAction }: BlockProps<"gantt">) {
   return (
     <Gantt
       rows={rows}
-      spanMs={spec.spanMs}
+      spanMs={span}
       nowMs={spec.nowMs}
       openEnded={spec.openEnded}
-      ticks={spec.ticks}
-      formatTick={spec.scale === "seq" ? STEP_TICK : undefined}
-      formatDuration={spec.scale === "seq" ? STEPS : undefined}
+      ticks={ticks}
+      formatTick={seq ? STEP_TICK : undefined}
+      formatDuration={seq ? STEPS : undefined}
       labelWidth={spec.labelWidth}
       durationWidth={spec.durationWidth}
       palette={spec.palette}

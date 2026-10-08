@@ -87,6 +87,10 @@ export const LayerAccess: Story = {
     await step('A plan counts steps, not seconds', async () => {
       await expect(plan.getByText('step 3')).toBeInTheDocument();
     });
+    const short = within(canvas.getByRole('group', { name: 'Layer access · a short plan, ticks left to the steps' }));
+    await step('A plan with no ticks set marks each step once', async () => {
+      for (const n of [0, 1, 2, 3]) await expect(short.getAllByText(`step ${n}`)).toHaveLength(1);
+    });
     const live = within(canvas.getByRole('group', { name: 'Layer access · live' }));
     await step('The live run reaches every layer', async () => {
       await waitFor(() => expect(live.getByRole('status')).not.toHaveTextContent(/^0 \//), { timeout: 3000 });

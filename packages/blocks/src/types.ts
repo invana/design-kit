@@ -737,7 +737,7 @@ export interface GanttOptions {
   nowMs?: number
   /** The run has not decided its length yet: the last tick reads `8s+`. */
   openEnded?: boolean
-  /** Intervals on the axis. `4` by default. */
+  /** Intervals on the axis. `4` by default; on `seq`, one per step (or an even divisor of a long plan). */
   ticks?: number
   /** The key column, in px. Defaults to the longest key, up to 40%. */
   labelWidth?: number
