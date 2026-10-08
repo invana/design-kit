@@ -41,7 +41,8 @@
           "status": "succeeded",
           "result": {
             "valid": 1204,
-            "rejected": 47
+            "rejected": 47,
+            "rejected_by": { "missing_account": 31, "negative_qty": 16 }
           }
         },
         {
@@ -65,7 +66,8 @@
           "status": "failed",
           "error": {
             "code": "channel_closed",
-            "message": "#ops-imports no longer exists"
+            "message": "#ops-imports no longer exists",
+            "detail": "archived on 2 Oct; point the announce step at another channel"
           }
         }
       ]

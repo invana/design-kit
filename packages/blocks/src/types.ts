@@ -694,8 +694,8 @@ export interface GanttSpecBar {
   chip?: { label: string; tone?: Tone }
   /** The bar's own hover card. Any one of these opens it. */
   summary?: string
-  result?: Record<string, string | number>
-  error?: { code?: string; message?: string }
+  result?: Record<string, unknown>
+  error?: { code?: string; message?: string; detail?: string }
   log?: string
 }
 
@@ -719,9 +719,10 @@ export interface GanttSpecRow {
   summary?: string
   /** What it said last — the card's foot. */
   log?: string
-  error?: { code?: string; message?: string }
-  /** What it produced, as label/value pairs on the card — `{ rows: 412 }`. */
-  result?: Record<string, string | number>
+  /** Why it failed — `detail` is the longer account under the message. */
+  error?: { code?: string; message?: string; detail?: string }
+  /** What it produced, as label/value pairs on the card — `{ rows: 412 }`; nested values read as JSON. */
+  result?: Record<string, unknown>
   /** The tasks it split into, indented under it. A task with no timing draws their stretch. */
   subtasks?: GanttSpecRow[]
   /** Drawn open. The reader can open and close it either way. */

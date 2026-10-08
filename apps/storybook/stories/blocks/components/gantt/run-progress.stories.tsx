@@ -79,6 +79,18 @@ export const RunProgress: Story = {
     await step('Every variant draws', async () => {
       for (const v of VARIANTS) await expect(canvas.getByRole('group', { name: v.caption })).toBeVisible();
     });
+    const run = within(canvas.getByRole('group', { name: 'A run · a retry, a skip, a failure' }));
+    const page = within(document.body);
+    await step("A failure's card carries its detail", async () => {
+      await userEvent.hover(run.getByRole('button', { name: /^announce/ }));
+      await expect(await page.findByText(/archived on 2 Oct/)).toBeVisible();
+      await userEvent.unhover(run.getByRole('button', { name: /^announce/ }));
+    });
+    await step('A nested result reads as JSON', async () => {
+      await userEvent.hover(run.getByRole('button', { name: /^validate_records/ }));
+      await expect(await page.findByText(/"missing_account": 31/)).toBeVisible();
+      await userEvent.unhover(run.getByRole('button', { name: /^validate_records/ }));
+    });
     const nested = within(canvas.getByRole('group', { name: 'Nested · the plan opened' }));
     await step('analyse opens into its two subtasks', async () => {
       await expect(nested.queryByText('analyse.risk')).toBeNull();
