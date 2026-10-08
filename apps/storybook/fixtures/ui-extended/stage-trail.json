@@ -1,0 +1,35 @@
+[
+  {
+    "caption": "At the dataset",
+    "width": 640,
+    "steps": [
+      { "id": "research", "label": "Research", "state": "done" },
+      { "id": "dataset", "label": "Dataset", "state": "current" },
+      { "id": "model", "label": "Model", "state": "todo" },
+      { "id": "import", "label": "Import", "state": "todo" },
+      { "id": "explore", "label": "Explore", "state": "todo" }
+    ]
+  },
+  {
+    "caption": "Every stage done but the last",
+    "width": 640,
+    "steps": [
+      { "id": "research", "label": "Research", "state": "done" },
+      { "id": "dataset", "label": "Dataset", "state": "done" },
+      { "id": "model", "label": "Model", "state": "done" },
+      { "id": "import", "label": "Import", "state": "done" },
+      { "id": "explore", "label": "Explore", "state": "current" }
+    ]
+  },
+  {
+    "caption": "Narrow — only the current stage is named",
+    "narrow": true,
+    "steps": [
+      { "id": "research", "label": "Research", "state": "done" },
+      { "id": "dataset", "label": "Dataset", "state": "done" },
+      { "id": "model", "label": "Model", "state": "current" },
+      { "id": "import", "label": "Import", "state": "todo" },
+      { "id": "explore", "label": "Explore", "state": "todo" }
+    ]
+  }
+]

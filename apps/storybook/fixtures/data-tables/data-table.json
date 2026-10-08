@@ -70,6 +70,22 @@
     ]
   },
   {
+    "caption": "Cell Click and Double-Click Edit",
+    "wide": true,
+    "columns": "schedules",
+    "rowId": "id",
+    "cellClick": { "row": "s1", "column": "name" },
+    "footer": "cell",
+    "props": { "enableSorting": false, "editTrigger": "dblclick" },
+    "data": [
+      { "id": "s1", "name": "Refresh orders_daily", "owner": "finance", "everyMinutes": 15, "lastRun": "12:04" },
+      { "id": "s2", "name": "Rebuild supplier graph", "owner": "ops", "everyMinutes": 60, "lastRun": "11:00" },
+      { "id": "s3", "name": "Pull fx_rates", "owner": "finance", "everyMinutes": 5, "lastRun": "12:10" },
+      { "id": "s4", "name": "Scan new filings", "owner": "research", "everyMinutes": null, "lastRun": "—" },
+      { "id": "s5", "name": "Score news mentions", "owner": "research", "everyMinutes": 30, "lastRun": "11:45" }
+    ]
+  },
+  {
     "caption": "Nested Rows",
     "wide": true,
     "columns": "catalog",

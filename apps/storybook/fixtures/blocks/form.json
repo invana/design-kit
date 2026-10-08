@@ -105,6 +105,72 @@
     }
   },
   {
+    "caption": "Save a dataset",
+    "turn": { "id": "save", "stage": "act" },
+    "spec": {
+      "question": "Save these rows as a dataset",
+      "fields": [
+        { "name": "name", "label": "Name", "type": "text", "default": "Q3 margin by region", "required": true },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "rows": 3,
+          "placeholder": "What's in it, and what it's for",
+          "hint": "Shown on the dataset's page"
+        },
+        { "name": "citations", "label": "Keep citations with the rows", "type": "checkbox", "default": true }
+      ],
+      "submit": "Save dataset"
+    }
+  },
+  {
+    "caption": "Import settings",
+    "turn": { "id": "import", "stage": "scope" },
+    "spec": {
+      "question": "How should I import the file?",
+      "heading": true,
+      "labels": "top",
+      "fields": [
+        {
+          "name": "format",
+          "label": "Format",
+          "type": "select",
+          "default": "csv",
+          "options": [
+            { "value": "csv", "label": "CSV" },
+            { "value": "parquet", "label": "Parquet" },
+            { "value": "json", "label": "JSON lines" }
+          ]
+        },
+        { "name": "source", "label": "Source", "type": "text", "default": "s3://finance/exports/q3.csv", "disabled": true },
+        {
+          "name": "duplicates",
+          "label": "Duplicates",
+          "type": "radio",
+          "default": "skip",
+          "options": [
+            { "value": "skip", "label": "Skip duplicates", "description": "Rows already in the dataset are left as they are" },
+            { "value": "replace", "label": "Replace duplicates", "description": "The imported row wins, matched on the key column" },
+            { "value": "merge", "label": "Merge fields", "description": "Needs a key column on both sides", "disabled": true }
+          ]
+        },
+        {
+          "name": "header",
+          "label": "Header",
+          "type": "radio",
+          "required": true,
+          "options": [
+            { "value": "first", "label": "First row", "description": "Column names come from the file" },
+            { "value": "none", "label": "No header", "description": "Columns are named col_1, col_2, …" }
+          ]
+        }
+      ],
+      "hint": "Header has no default, so Import waits for it",
+      "submit": "Import"
+    }
+  },
+  {
     "caption": "Answered",
     "turn": { "id": "answered", "stage": "analyse", "answeredAt": "2026-09-29T10:00:20Z" },
     "now": "2026-09-29T10:00:45Z",
@@ -124,6 +190,49 @@
         { "name": "starts", "label": "Starts", "type": "date", "default": "1 Nov 2026" }
       ],
       "submit": "Run scenario"
+    }
+  },
+  {
+    "caption": "Answered · checkbox and choices",
+    "turn": { "id": "answered-choices", "stage": "scope", "answeredAt": "2026-09-29T10:00:20Z" },
+    "now": "2026-09-29T10:00:45Z",
+    "state": "answered",
+    "value": { "format": "parquet", "duplicates": "replace", "header": "first", "citations": false },
+    "spec": {
+      "question": "How should I import the file?",
+      "labels": "top",
+      "fields": [
+        {
+          "name": "format",
+          "label": "Format",
+          "type": "select",
+          "options": [
+            { "value": "csv", "label": "CSV" },
+            { "value": "parquet", "label": "Parquet" },
+            { "value": "json", "label": "JSON lines" }
+          ]
+        },
+        {
+          "name": "duplicates",
+          "label": "Duplicates",
+          "type": "radio",
+          "options": [
+            { "value": "skip", "label": "Skip duplicates" },
+            { "value": "replace", "label": "Replace duplicates" }
+          ]
+        },
+        {
+          "name": "header",
+          "label": "Header",
+          "type": "radio",
+          "options": [
+            { "value": "first", "label": "First row" },
+            { "value": "none", "label": "No header" }
+          ]
+        },
+        { "name": "citations", "label": "Keep citations", "type": "checkbox" }
+      ],
+      "submit": "Import"
     }
   },
   {

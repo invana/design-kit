@@ -189,6 +189,7 @@ Tables cannot import charts, because charts depends on tables. In-row marks such
 | DataTable column scale (on DataTable) | `packages/tables/src/data-table.tsx` | extend | partial | today |
 | Cell highlight (`isCellHighlighted`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
 | Control cells (`meta.control`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
+| Cell click + double-click edit (`onCellClick`, `editTrigger`, all three tables) | `packages/tables/src/core/table-grid.tsx` | extend | done | today |
 | Filter chips (`filters`: in memory on PaginatedTable, sent to `fetchPage` on RemotePaginatedTable) | `packages/tables/src/core/filters.ts` | extend | done | today |
 
 ### New
@@ -278,6 +279,7 @@ Fourteen components move to assistant; the folder shown is where they are today.
 | @invana/forms | FormField.Period, FormField.Weights | `packages/forms/src/form-field.tsx` | extend | partial | next |
 | @invana/forms | FieldConfig `unit` and `aside`, typed number | `packages/forms/src/types.ts` | extend | done | next |
 | @invana/forms | `xs` tier at 28px, muted field labels | `packages/forms/src/form-field.tsx` | extend | done | today |
+| @invana/forms | FieldConfig `disabled`; option `description` and `disabled` (radio, select); a checkbox's description | `packages/forms/src/types.ts`, `form-field.tsx` | extend | done | next |
 | @invana/boards | Every block kind is a panel kind (`table`, `grid`, `record` replace `table`, `metrics`, `properties`) | `packages/boards/src/panels/block.tsx` | extend | done | today |
 | @invana/boards | `RecordDescription`, `StagedBar`, `AttemptClock` move from ui: only the board draws them | `packages/boards/src/parts/` | move | done | today |
 | @invana/boards | One trace: `RUN_PANELS`' `trace` and the `trace` block are one idea in two shapes; the registered one wins today | `packages/boards/src/panels/run.tsx` | change | todo | next |
@@ -306,7 +308,7 @@ One renderer file per kind in `blocks/src/blocks/`. `proposed` ids get a spec pa
 | entity | `id[]` | RichSelect + SearchInput · ui | `blocks/entity.tsx` | todo | next | 4 |
 | scale | `1–5` | RatingControl · ui | `blocks/scale.tsx` | todo | today | – |
 | multistep | `Record<askId, value>` | Questionnaire · ui; each step is an ask | `blocks/multistep.tsx` | done | today | 1 |
-| form | `Record<field, value>` | ObjectField · forms | `blocks/form.tsx` | done | next | 1 |
+| form | `Record<field, value>` — number, text, date, select, textarea, checkbox (`boolean`), radio; `required`, `disabled` | ObjectField · forms | `blocks/form.tsx` | done | next | 1 |
 | weights | `Record<objective, 0–100>` | WeightControl · ui | `blocks/weights.tsx` | todo | today | 4 |
 | approval | `approve \| reject` | ProposalCard · ui | `blocks/approval.tsx` | todo | today | – |
 | interpretation (proposed) | `Record<slot, value>` | InterpretationStrip · blocks | `blocks/interpretation.tsx` | todo | today | 5 |

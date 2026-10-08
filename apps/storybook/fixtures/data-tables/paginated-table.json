@@ -36,5 +36,11 @@
     "caption": "Fixed Page Size",
     "wide": true,
     "props": { "pageSize": 20, "pageSizeOptions": false }
+  },
+  {
+    "caption": "Cell Click and Double-Click Edit",
+    "wide": true,
+    "props": { "editTrigger": "dblclick" },
+    "cellClick": { "row": "u-1", "column": "name" }
   }
 ]

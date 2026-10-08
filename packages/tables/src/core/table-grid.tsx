@@ -225,6 +225,7 @@ export function TableGrid<TData extends RowData>({
   headerRowClassName,
   minWidth,
   onRowClick,
+  onCellClick,
   getSubRows,
   renderExpanded,
   expandOnRowClick = false,
@@ -426,6 +427,25 @@ export function TableGrid<TData extends RowData>({
                           <TableCell
                             key={cell.id}
                             data-highlighted={highlighted || undefined}
+                            onClick={
+                              onCellClick
+                                ? (event) => {
+                                    const target = event.target as Node;
+                                    // React bubbles through portals: a pick in
+                                    // an open select's list is not a cell click.
+                                    if (!event.currentTarget.contains(target))
+                                      return;
+                                    // Nor is a click in the cell's open editor.
+                                    if (
+                                      event.currentTarget.querySelector(
+                                        "[data-cell-editing]",
+                                      )
+                                    )
+                                      return;
+                                    onCellClick(row.original, column.id);
+                                  }
+                                : undefined
+                            }
                             style={{
                               width: cell.column.getSize(),
                               ...(indent

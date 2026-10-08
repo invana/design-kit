@@ -1,0 +1,183 @@
+{
+  "title": "Funding watch",
+  "steps": [
+    {
+      "at": 4200,
+      "step": {
+        "id": "s1",
+        "title": "Acme leads by ARR and raised a Series C",
+        "actor": "assistant",
+        "turn": "a1",
+        "narration": "Acme Robotics is the largest account by ARR, and it raised the largest round of the last 90 days.",
+        "calls": [
+          {
+            "target": "top-accounts",
+            "op": "mark",
+            "args": {
+              "marks": [
+                {
+                  "row": "Acme Robotics",
+                  "tone": "info"
+                }
+              ]
+            }
+          },
+          {
+            "target": "funding",
+            "op": "mark",
+            "args": {
+              "marks": [
+                {
+                  "row": "Acme Robotics",
+                  "tone": "info"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "at": 6200,
+      "step": {
+        "id": "s2",
+        "title": "Initech is shrinking at Q3 close",
+        "actor": "assistant",
+        "turn": "a1",
+        "narration": "Q3 closed Initech Cloud at −7% growth, down from −4% — the only account in the top five shrinking.",
+        "calls": [
+          {
+            "target": "top-accounts",
+            "op": "setCell",
+            "args": {
+              "row": "Initech Cloud",
+              "column": "growth",
+              "value": {
+                "value": "-7%",
+                "tone": "bad"
+              }
+            }
+          },
+          {
+            "target": "top-accounts",
+            "op": "mark",
+            "args": {
+              "marks": [
+                {
+                  "row": "Initech Cloud",
+                  "column": "growth",
+                  "tone": "destructive",
+                  "open": true,
+                  "note": "Down from −4% at Q2 close — the only account in the top five shrinking."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "at": 8200,
+      "step": {
+        "id": "s3",
+        "title": "Initech raised a bridge round",
+        "actor": "assistant",
+        "turn": "a1",
+        "narration": "Initech took an $8M bridge eight weeks after its growth turned negative.",
+        "calls": [
+          {
+            "target": "funding",
+            "op": "upsertRows",
+            "args": {
+              "rows": [
+                {
+                  "account": "Initech Cloud",
+                  "round": "Bridge",
+                  "amount": "$8M",
+                  "date": "2026-09-30"
+                }
+              ]
+            }
+          },
+          {
+            "target": "funding",
+            "op": "mark",
+            "args": {
+              "marks": [
+                {
+                  "row": "Initech Cloud",
+                  "tone": "warning",
+                  "open": true,
+                  "note": "A bridge eight weeks after growth turned negative — worth a call."
+                }
+              ]
+            }
+          },
+          {
+            "target": "funding",
+            "op": "unmark",
+            "args": {
+              "row": "Acme Robotics"
+            }
+          },
+          {
+            "target": "top-accounts",
+            "op": "unmark",
+            "args": {
+              "row": "Acme Robotics"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "at": 9200,
+      "step": {
+        "id": "s4",
+        "title": "Add Initech to the pipeline",
+        "actor": "assistant",
+        "turn": "a1",
+        "calls": [
+          {
+            "target": "pipeline",
+            "op": "upsertRows",
+            "args": {
+              "rows": [
+                {
+                  "account": "Initech Cloud",
+                  "stage": "At risk"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "at": 10200,
+      "step": {
+        "id": "s5",
+        "title": "Who owns Initech",
+        "actor": "assistant",
+        "turn": "a1",
+        "narration": "Daniel Okafor owns Initech Cloud — the call to make this week.",
+        "calls": [
+          {
+            "target": "owners",
+            "op": "mark",
+            "args": {
+              "marks": [
+                {
+                  "row": "Daniel Okafor",
+                  "tone": "warning",
+                  "open": true,
+                  "note": "Owns Initech Cloud: −7% growth, $8M bridge."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

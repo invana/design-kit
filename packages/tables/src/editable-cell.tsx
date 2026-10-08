@@ -18,6 +18,11 @@ export interface EditableCellProps<TData> {
   options?: EditOption[];
   align?: 'left' | 'center' | 'right';
   onCellEdit?: CellEditHandler<TData>;
+  /**
+   * What opens the editor: a click (and `Enter`), or a double-click (and
+   * `F2`) — which leaves a single click to the table's `onCellClick`.
+   */
+  trigger?: 'click' | 'dblclick';
 }
 
 /**
@@ -41,7 +46,8 @@ type Save =
   | { state: 'failed'; message: string };
 
 /**
- * A cell that edits in place: click it (or `Enter` on it), type, and `Enter`
+ * A cell that edits in place: click it (or `Enter` on it) — or, with
+ * `trigger="dblclick"`, double-click it (or `F2`) — type, and `Enter`
  * or leaving the field saves; `Escape` puts it back. Focus returns to the
  * cell either way, so a keyboard reader can walk on with `Tab`.
  *
@@ -55,6 +61,7 @@ export function EditableCell<TData>({
   options,
   align = 'left',
   onCellEdit,
+  trigger = 'click',
 }: EditableCellProps<TData>) {
   const initial = ctx.getValue();
   const [editing, setEditing] = React.useState(false);
@@ -75,6 +82,12 @@ export function EditableCell<TData>({
   const close = (focusCell: boolean) => {
     refocus.current = focusCell;
     setEditing(false);
+  };
+
+  const open = () => {
+    cancelled.current = false;
+    setSave({ state: 'idle' });
+    setEditing(true);
   };
 
   const commit = (next: unknown, focusCell: boolean) => {
@@ -141,11 +154,17 @@ export function EditableCell<TData>({
       <button
         ref={displayRef}
         type="button"
-        onClick={() => {
-          cancelled.current = false;
-          setSave({ state: 'idle' });
-          setEditing(true);
-        }}
+        onClick={trigger === 'click' ? open : undefined}
+        onDoubleClick={trigger === 'dblclick' ? open : undefined}
+        onKeyDown={
+          trigger === 'dblclick'
+            ? (e) => {
+                if (e.key !== 'F2') return;
+                e.preventDefault();
+                open();
+              }
+            : undefined
+        }
         aria-busy={save.state === 'saving' || undefined}
         aria-invalid={save.state === 'failed' || undefined}
         title={save.state === 'failed' ? save.message : undefined}
@@ -154,7 +173,9 @@ export function EditableCell<TData>({
           READ,
           // Rings, not borders: a box-shadow adds no pixel, so marking the
           // cell never moves its text.
-          'flex cursor-text items-center hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+          // A single click edits only when the click is the trigger.
+          trigger === 'click' ? 'cursor-text' : 'cursor-default',
+          'flex items-center hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
           save.state === 'saving' && 'text-muted-foreground',
           save.state === 'failed' &&
             'bg-destructive/5 ring-1 ring-destructive/60',
@@ -178,7 +199,7 @@ export function EditableCell<TData>({
           if (!open) close(true);
         }}
       >
-        <SelectTrigger className={cn(FIELD, EDIT)}>
+        <SelectTrigger data-cell-editing="" className={cn(FIELD, EDIT)}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -194,6 +215,7 @@ export function EditableCell<TData>({
 
   return (
     <Input
+      data-cell-editing=""
       autoFocus
       type={editType === 'number' ? 'number' : 'text'}
       defaultValue={initial == null ? '' : String(initial)}

@@ -1,0 +1,20 @@
+[
+  {
+    "caption": "Account and project",
+    "width": 420,
+    "brand": "Invana",
+    "crumbs": [
+      { "label": "ravi-merugu", "href": "#" },
+      { "label": "chickpea-breeding", "href": "#" }
+    ]
+  },
+  {
+    "caption": "Narrow — the trail truncates, the brand stays",
+    "width": 200,
+    "brand": "Invana",
+    "crumbs": [
+      { "label": "ravi-merugu", "href": "#" },
+      { "label": "chickpea-breeding-trials-2026", "href": "#" }
+    ]
+  }
+]

@@ -19,9 +19,10 @@ import people from '../../../fixtures/data-tables/people.json';
 import evaluationFeed from '../../../fixtures/data-tables/evaluation-feed.json';
 import sessionFeed from '../../../fixtures/data-tables/session-feed.json';
 import { ReplayFrame, useReplay } from '../../_story/replay';
-import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
+import { ALL, jsx, snippets, sourceFor, variantArg } from '../../_story/source';
 import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 import { COLUMN_SETS, columnsSource, fieldColumns, type ColumnSetName, type Columns, type Field } from '../columns';
+import { PickedCell } from '../picked-cell';
 import { EVALUATIONS, SESSIONS } from '../usecases/fixtures';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- each variant's rows have their own shape
@@ -50,6 +51,7 @@ interface TableVariant extends Variant {
     streamMode?: StreamMode;
     maxRows?: number;
     preview?: { total?: number; noun?: string };
+    editTrigger?: 'click' | 'dblclick';
   };
   /** `getRowId` reads this field. */
   rowId?: string;
@@ -67,8 +69,10 @@ interface TableVariant extends Variant {
   detail?: { fields: string[]; unless?: { column: string; equals: unknown } };
   /** `preview.onOpen` — the `Open all` link. */
   open?: boolean;
+  /** `onCellClick` picks a cell — this one to start — and `isCellHighlighted` draws it. */
+  cellClick?: { row: string; column: string };
   toolbar?: 'density';
-  footer?: 'edit' | 'fields';
+  footer?: 'edit' | 'fields' | 'cell';
   /** The stand-in server `onCellEdit` saves to: how long it takes, and the smallest number it takes. */
   save?: { delayMs: number; min: number; message: string };
   /** Drawn inside a card. */
@@ -78,6 +82,8 @@ interface TableVariant extends Variant {
 }
 
 const VARIANTS = variants as unknown as TableVariant[];
+/** The variant the play clicks and double-clicks. */
+const CELL_CLICK = 'Cell Click and Double-Click Edit';
 
 const SHARED = { stores, people, evaluations: EVALUATIONS, sessions: SESSIONS } as Record<string, Row[]>;
 
@@ -115,6 +121,7 @@ interface Args {
   onSortingChange: (sorting: SortingState) => void;
   onCellEdit: (edit: ReturnType<typeof editPayload>) => void;
   onRowClick: (rowId: string) => void;
+  onCellClick: (cell: { rowId: string; columnId: string }) => void;
   onExpandedChange: (expanded: ExpandedState) => void;
   onOpen: () => void;
   onFieldChange: (id: string, changes: Partial<Field>) => void;
@@ -127,6 +134,7 @@ function LiveTable({ v, log, on }: { v: TableVariant; log: Log; on: Callbacks })
   const [rows, setRows] = React.useState(() => rowsOf(v));
   const [density, setDensity] = React.useState<TableDensity>(v.props?.density ?? 'default');
   const [selected, setSelected] = React.useState(v.selected);
+  const [picked, setPicked] = React.useState(v.cellClick);
   const [last, setLast] = React.useState<{ edit: CellEdit<Row>; outcome: string } | null>(null);
 
   // The table owns sorting and expansion; the story keeps the last state it reported, to log
@@ -199,8 +207,20 @@ function LiveTable({ v, log, on }: { v: TableVariant; log: Log; on: Callbacks })
             }
           : undefined
       }
+      onCellClick={
+        v.cellClick
+          ? (r, column) => {
+              const cell = { rowId: r[id!], columnId: column };
+              on.onCellClick(cell);
+              log('onCellClick', cell);
+              setPicked({ row: r[id!], column });
+            }
+          : undefined
+      }
       isCellHighlighted={
-        v.highlight?.cells
+        v.cellClick
+          ? (r, column) => r[id!] === picked?.row && column === picked?.column
+          : v.highlight?.cells
           ? (r, column) => v.highlight!.cells!.some((c) => c.column === column && r[column] < c.below)
           : undefined
       }
@@ -270,6 +290,8 @@ function LiveTable({ v, log, on }: { v: TableVariant; log: Log; on: Callbacks })
           ) : (
             'Edit a cell — what onCellEdit receives shows here.'
           )
+        ) : v.footer === 'cell' ? (
+          <PickedCell rowId={picked?.row} row={rows.find((r) => r[id!] === picked?.row)} column={picked?.column} />
         ) : v.footer === 'fields' ? (
           `${rows.length} fields · ${rows.filter((r) => r.semanticType === 'metric').length} metric · 1 filter`
         ) : undefined
@@ -358,6 +380,7 @@ function source(v: TableVariant) {
   if (v.indent) call.rowIndent = `(r) => r.${v.indent}`;
   if (props.defaultExpanded) call.defaultExpanded = JSON.stringify(props.defaultExpanded);
   if (props.expandOnRowClick) call.expandOnRowClick = 'true';
+  if (props.editTrigger) call.editTrigger = { literal: props.editTrigger };
 
   if (props.enableSorting !== false) {
     setup.push('// The new sort, or an updater of the last one: [{ id: "margin", desc: false }]', 'const onSortingChange = (sorting) => {};');
@@ -378,6 +401,14 @@ function source(v: TableVariant) {
   if (v.subRows || v.detail) {
     setup.push('// Which rows are open, by row id: { "finance": true }', 'const onExpandedChange = (expanded) => {};');
     call.onExpandedChange = 'onExpandedChange';
+  }
+  if (v.cellClick) {
+    setup.push(
+      '// A single click picks a cell (the row, and the column id); a double-click edits it.',
+      `const [picked, setPicked] = React.useState(${JSON.stringify(v.cellClick)});`,
+    );
+    call.onCellClick = `(row, columnId) => setPicked({ row: row.${v.rowId}, column: columnId })`;
+    call.isCellHighlighted = `(row, columnId) => row.${v.rowId} === picked.row && columnId === picked.column`;
   }
   if (v.highlight?.cells) {
     const rules = v.highlight.cells.map((c) => `(columnId === "${c.column}" && row.${c.column} < ${c.below})`);
@@ -457,6 +488,7 @@ const meta = {
     onSortingChange: fn(),
     onCellEdit: fn(),
     onRowClick: fn(),
+    onCellClick: fn(),
     onExpandedChange: fn(),
     onOpen: fn(),
     onFieldChange: fn(),
@@ -472,7 +504,8 @@ type Story = StoryObj<Args>;
  * line (that is `PaginatedTable`, or `RemotePaginatedTable` when the server holds the rows).
  * One variant per feature, from `fixtures/data-tables/data-table.json`: sorting, highlighting,
  * pinned / resized / reordered columns, cells edited in place (a save that takes a moment and
- * refuses a schedule under five minutes), rows under rows, detail under a row, a preview with
+ * refuses a schedule under five minutes), a click that picks a cell (`onCellClick`, drawn with
+ * `isCellHighlighted`) while a double-click edits it (`editTrigger="dblclick"`), rows under rows, detail under a row, a preview with
  * `Open all`, a replayed stream (prepend, and upsert by id), the three densities, `seamless`
  * inside a card, a grid of always-on controls, and the journal with its selection and indent.
  *
@@ -486,7 +519,31 @@ export const DataTableStory: Story = {
       {(v, log) => <LiveTable v={v} log={log} on={on} />}
     </VariantGrid>
   ),
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ mount, canvasElement, args, step }) => {
+    // The select draws one variant, so the play also draws the one whose clicks it checks.
+    const { variant, ...on } = args;
+    await mount(
+      <VariantGrid variants={VARIANTS.filter((v) => v.caption === variant || v.caption === CELL_CLICK)} variant={ALL}>
+        {(v, log) => <LiveTable v={v} log={log} on={on} />}
+      </VariantGrid>,
+    );
+    const picks = within(within(canvasElement).getByRole('group', { name: CELL_CLICK }));
+    await step('A click picks the cell and does not edit it', async () => {
+      await userEvent.click(picks.getByRole('button', { name: 'Pull fx_rates' }));
+      await expect(args.onCellClick).toHaveBeenLastCalledWith({ rowId: 's3', columnId: 'name' });
+      await expect(picks.queryByRole('textbox')).toBeNull();
+      await expect(picks.getByRole('button', { name: 'Pull fx_rates' }).closest('td')).toHaveAttribute('data-highlighted');
+      await expect(picks.getByRole('list', { name: 'Events' })).toHaveTextContent('"rowId": "s3"');
+    });
+    await step('A double-click opens the editor; Escape puts it back', async () => {
+      await userEvent.dblClick(picks.getByRole('button', { name: 'Pull fx_rates' }));
+      const field = picks.getByRole('textbox');
+      await expect(field).toHaveValue('Pull fx_rates');
+      await userEvent.keyboard('{Escape}');
+      await expect(picks.queryByRole('textbox')).toBeNull();
+      await expect(args.onCellEdit).not.toHaveBeenCalled();
+    });
+    if (variant !== 'Default') return;
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));
     await step('Sort by store', async () => {
       await userEvent.click(cell.getByRole('button', { name: 'Store' }));

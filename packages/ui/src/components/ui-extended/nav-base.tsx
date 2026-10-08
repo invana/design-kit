@@ -154,28 +154,31 @@ const VARIANT = {
     item: "h-full rounded-none px-3 py-2",
     hover: "hover:text-foreground",
     open: "data-[state=open]:text-foreground",
-    active: "bg-primary/10 text-primary border-b-2 border-primary mb-[-1px]",
+    active: "bg-primary/10 text-primary border-b-2 border-primary translate-y-px",
     strip: "items-stretch",
   },
   /**
    * The workbook tab: boxed on top / left / right with an *open bottom*, so it
-   * punches through the strip's own rule — the classic folder-tab notch.
+   * punches through the strip's own rule — the classic folder-tab notch. The
+   * box wears the rule's own colour and the body's fill, so the active tab and
+   * its page read as one surface; the accent is the label plus a 2px line on
+   * the tab's outer edge.
    */
   folder: {
     item: "h-full rounded-none px-3 py-2 gap-1.5",
     hover: "hover:text-foreground",
     open: "data-[state=open]:text-foreground",
     active:
-      "mb-[-1px] rounded-t-md border border-b-0 border-primary text-primary",
+      "z-10 translate-y-px rounded-t-md border border-b-0 border-border bg-card text-primary shadow-[inset_0_2px_0_var(--color-primary)]",
     strip: "items-stretch",
   },
-  /** The folder tab turned over, for a strip under its pages: open at the top, rounded below. */
+  /** The folder tab turned over, for a strip under its pages: open at the top, rounded below, accent line underneath. */
   "folder-bottom": {
     item: "h-full rounded-none px-3 py-2 gap-1.5",
     hover: "hover:text-foreground",
     open: "data-[state=open]:text-foreground",
     active:
-      "mt-[-1px] rounded-b-md border border-t-0 border-primary text-primary",
+      "z-10 mt-[-1px] rounded-b-md border border-t-0 border-border bg-card text-primary shadow-[inset_0_-2px_0_var(--color-primary)]",
     strip: "items-stretch",
   },
 } as const;
@@ -733,11 +736,13 @@ export const NavBase: React.FC<BaseNavProps> = ({
     ? "flex flex-col items-center gap-1"
     : "flex items-center gap-1 ";
 
+  // Horizontally the bar never grows past its parent: the start and centre give
+  // up width (a crumb truncates, a trail folds) and the end keeps its controls.
   return (
     <nav className={containerClass}>
       {sections.start?.content && (
         <div
-          className={`${sectionWrapperClass} ${sections.start.className || ""}`}
+          className={`${sectionWrapperClass} ${isVertical ? "" : "min-w-0 shrink"} ${sections.start.className || ""}`}
         >
           {sections.start.content}
         </div>
@@ -745,7 +750,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.center?.content ? (
         <div
-          className={`flex-1 ${isVertical ? "" : "flex justify-center items-center gap-1"} ${sections.center.className || ""}`}
+          className={`flex-1 ${isVertical ? "" : "flex min-w-0 justify-center items-center gap-1"} ${sections.center.className || ""}`}
         >
           {sections.center.content}
         </div>
@@ -756,7 +761,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.end?.content && (
         <div
-          className={`${sectionWrapperClass} ${isVertical ? "" : "ml-auto"} ${sections.end.className || ""}`}
+          className={`${sectionWrapperClass} ${isVertical ? "" : "ml-auto shrink-0"} ${sections.end.className || ""}`}
         >
           {sections.end.content}
         </div>

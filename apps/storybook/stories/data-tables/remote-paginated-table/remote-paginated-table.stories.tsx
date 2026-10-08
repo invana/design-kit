@@ -15,9 +15,10 @@ import { Badge } from '@invana/ui';
 
 import variants from '../../../fixtures/data-tables/remote-paginated-table.json';
 import warehouse from '../../../fixtures/data-tables/warehouse-datasets.json';
-import { jsx, snippets, sourceFor, variantArg } from '../../_story/source';
+import { ALL, jsx, snippets, sourceFor, variantArg } from '../../_story/source';
 import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
 import { columnsSource } from '../columns';
+import { PickedCell } from '../picked-cell';
 
 type Dataset = { name: string; rows: number; owner: string };
 type Product = { id: number; title: string; brand: string; category: string; price: number; rating: number; stock: number };
@@ -27,11 +28,21 @@ type Row = any;
 interface RemoteVariant extends Variant {
   /** Where pages come from: a stand-in server over JSON, or dummyjson.com over the network. */
   server: { rows: 'warehouse' | 'dummyjson'; delayMs: number; failFirst?: string };
-  props: { searchable?: boolean; searchPlaceholder?: string; noun?: string; emptyState?: string };
+  props: {
+    searchable?: boolean;
+    searchPlaceholder?: string;
+    noun?: string;
+    emptyState?: string;
+    editTrigger?: 'click' | 'dblclick';
+  };
   filters?: TableFilter<Row>[];
+  /** `onCellClick` picks a cell — this one to start — `isCellHighlighted` draws it, and the footer shows it. */
+  cellClick?: { row: string; column: string };
 }
 
 const VARIANTS = variants as RemoteVariant[];
+/** The variant the play clicks and double-clicks. */
+const CELL_CLICK = 'Cell Click and Double-Click Edit';
 const WAREHOUSE = warehouse as Dataset[];
 
 const WAREHOUSE_COLUMNS: ColumnDef<Dataset, unknown>[] = [
@@ -132,6 +143,7 @@ interface Args {
   variant: string;
   fetchPage: (query: Omit<RemotePageQuery, 'signal'>) => void;
   onCellEdit: (edit: { rowId: string; field?: string; value: unknown }) => void;
+  onCellClick: (cell: { rowId: string; columnId: string }) => void;
   onSortingChange: (sorting: SortingState) => void;
   onSearchChange: (search: string) => void;
   onFiltersChange: (values: FilterValues) => void;
@@ -145,6 +157,10 @@ function Live({ v, log, on }: { v: RemoteVariant; log: Log; on: Omit<Args, 'vari
   const attempts = React.useRef(0);
   const sorting = React.useRef<SortingState>([]);
   const products = v.server.rows === 'dummyjson';
+  const idOf = (r: Row) => String(products ? r.id : r.name);
+  const [picked, setPicked] = React.useState(v.cellClick);
+  // The page on screen, so the footer can show the picked cell's value.
+  const [pageRows, setPageRows] = React.useState<Row[]>([]);
 
   const fetchPage = async (query: RemotePageQuery): Promise<RemotePage<Row>> => {
     on.fetchPage(queryOf(query));
@@ -164,6 +180,7 @@ function Live({ v, log, on }: { v: RemoteVariant; log: Log; on: Omit<Args, 'vari
         page = await warehousePage(query, 0);
       }
       log('page', { rows: page.rows.length, total: page.total });
+      setPageRows(page.rows);
       return page;
     } catch (error) {
       if (!query.signal.aborted) log('rejected', (error as Error).message);
@@ -176,6 +193,7 @@ function Live({ v, log, on }: { v: RemoteVariant; log: Log; on: Omit<Args, 'vari
   const onCellEdit: CellEditHandler<Row> = async ({ rowId, field, value }) => {
     on.onCellEdit({ rowId, field, value });
     log('onCellEdit', { rowId, field, value });
+    if (field) setPageRows((all) => all.map((r) => (idOf(r) === rowId ? { ...r, [field]: value } : r)));
     if (!products || !field) return;
     const res = await fetch(`https://dummyjson.com/products/${rowId}`, {
       method: 'PATCH',
@@ -190,8 +208,24 @@ function Live({ v, log, on }: { v: RemoteVariant; log: Log; on: Omit<Args, 'vari
       {...v.props}
       columns={products ? PRODUCT_COLUMNS : WAREHOUSE_COLUMNS}
       fetchPage={fetchPage}
-      getRowId={(r) => String(products ? r.id : r.name)}
+      getRowId={idOf}
       onCellEdit={onCellEdit}
+      onCellClick={
+        v.cellClick
+          ? (r, column) => {
+              const cell = { rowId: idOf(r), columnId: column };
+              on.onCellClick(cell);
+              log('onCellClick', cell);
+              setPicked({ row: idOf(r), column });
+            }
+          : undefined
+      }
+      isCellHighlighted={v.cellClick ? (r, column) => idOf(r) === picked?.row && column === picked?.column : undefined}
+      footer={
+        v.cellClick ? (
+          <PickedCell rowId={picked?.row} row={pageRows.find((r) => idOf(r) === picked?.row)} column={picked?.column} />
+        ) : undefined
+      }
       filters={v.filters}
       onSortingChange={(next) => {
         sorting.current = resolve(next, sorting.current);
@@ -252,12 +286,25 @@ const meta = {
                 columns: columnsSource(v.server.rows === 'dummyjson' ? PRODUCT_COLUMNS : WAREHOUSE_COLUMNS),
                 ...(v.filters ? { filters: v.filters } : {}),
               },
-              setup: FETCH[v.server.rows].join('\n'),
+              setup: [
+                ...FETCH[v.server.rows],
+                ...(v.cellClick
+                  ? [
+                      '// A single click picks a cell (the row, and the column id); a double-click edits it.',
+                      `const [picked, setPicked] = React.useState(${JSON.stringify(v.cellClick)});`,
+                    ]
+                  : []),
+              ].join('\n'),
               call: jsx('RemotePaginatedTable', {
                 columns: 'columns',
                 fetchPage: 'fetchPage',
                 getRowId: v.server.rows === 'dummyjson' ? '(p) => String(p.id)' : '(d) => d.name',
                 onCellEdit: 'onCellEdit',
+                editTrigger: v.props.editTrigger ? { literal: v.props.editTrigger } : undefined,
+                onCellClick: v.cellClick ? '(row, columnId) => setPicked({ row: row.name, column: columnId })' : undefined,
+                isCellHighlighted: v.cellClick
+                  ? '(row, columnId) => row.name === picked.row && columnId === picked.column'
+                  : undefined,
                 filters: v.filters ? 'filters' : undefined,
                 searchable: v.props.searchable === false ? 'false' : undefined,
                 searchPlaceholder: v.props.searchPlaceholder ? { literal: v.props.searchPlaceholder } : undefined,
@@ -274,6 +321,7 @@ const meta = {
     variant: VARIANTS[0]!.caption,
     fetchPage: fn(),
     onCellEdit: fn(),
+    onCellClick: fn(),
     onSortingChange: fn(),
     onSearchChange: fn(),
     onFiltersChange: fn(),
@@ -296,6 +344,9 @@ type Story = StoryObj<Args>;
  *   network: the story turns the query into the URL, and an edit sends a `PATCH`.
  * - **Failure** — the first request fails: its message is said in the table with a `Retry`,
  *   which asks for the same page again and succeeds.
+ * - **Cell Click and Double-Click Edit** — `editTrigger="dblclick"`: a click is `onCellClick`
+ *   (the picked cell drawn with `isCellHighlighted`, its details in the footer), a double-click
+ *   or `F2` opens the editor.
  */
 export const RemotePaginatedTableStory: Story = {
   name: 'RemotePaginatedTable',
@@ -304,7 +355,32 @@ export const RemotePaginatedTableStory: Story = {
       {(v, log) => <Live v={v} log={log} on={on} />}
     </VariantGrid>
   ),
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ mount, canvasElement, args, step }) => {
+    // The select draws one variant, so the play also draws the one whose clicks it checks.
+    const { variant, ...on } = args;
+    await mount(
+      <VariantGrid variants={VARIANTS.filter((v) => v.caption === variant || v.caption === CELL_CLICK)} variant={ALL}>
+        {(v, log) => <Live v={v} log={log} on={on} />}
+      </VariantGrid>,
+    );
+    const picks = within(within(canvasElement).getByRole('group', { name: CELL_CLICK }));
+    const rowsOf = async (name: string) =>
+      within((await picks.findByRole('cell', { name }, { timeout: 3000 })).closest('tr')!).getByRole('button');
+    await step('A click picks the cell and does not edit it', async () => {
+      await userEvent.click(await rowsOf('dataset_02'));
+      await expect(args.onCellClick).toHaveBeenLastCalledWith({ rowId: 'dataset_02', columnId: 'rows' });
+      await expect(picks.queryByDisplayValue('24960')).toBeNull();
+      await expect((await rowsOf('dataset_02')).closest('td')).toHaveAttribute('data-highlighted');
+      await expect(picks.getByRole('list', { name: 'Events' })).toHaveTextContent('"rowId": "dataset_02"');
+    });
+    await step('A double-click opens the editor; Escape puts it back', async () => {
+      await userEvent.dblClick(await rowsOf('dataset_02'));
+      await expect(picks.getByDisplayValue('24960')).toBeInTheDocument();
+      await userEvent.keyboard('{Escape}');
+      await expect(picks.queryByDisplayValue('24960')).toBeNull();
+      await expect(args.onCellEdit).not.toHaveBeenCalled();
+    });
+    if (variant !== 'Default') return;
     const cell = within(within(canvasElement).getByRole('group', { name: 'Default' }));
     await step('The first page is asked for and arrives', async () => {
       await expect(args.fetchPage).toHaveBeenCalledWith({ pageIndex: 0, pageSize: 10, sorting: [], search: '', filters: {} });

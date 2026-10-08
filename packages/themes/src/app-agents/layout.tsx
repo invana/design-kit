@@ -96,7 +96,7 @@ export const AppLayoutAgents: React.FC<AppLayoutAgentsProps> = ({
               {mainSection.content}
               {overlay ? (
                 // Only the panels take the pointer: the gaps between them are still the work.
-                <div className="pointer-events-none absolute inset-y-2 right-2 flex w-[min(480px,calc(100%-1rem))] flex-col items-stretch gap-2 [&>*]:pointer-events-auto">
+                <div className="pointer-events-none absolute inset-y-2 right-2 z-10 flex w-[min(480px,calc(100%-1rem))] flex-col items-stretch gap-2 [&>*]:pointer-events-auto">
                   {overlay}
                 </div>
               ) : null}

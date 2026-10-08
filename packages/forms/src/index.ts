@@ -19,6 +19,7 @@ export {
 export type {
   BooleanControl,
   FieldBadge,
+  FieldOption,
   FieldConfig,
   FieldOrientation,
   FieldSize,

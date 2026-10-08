@@ -33,6 +33,18 @@
       "colSpan": 2
     },
     {
+      "name": "dedupe",
+      "type": "radio",
+      "label": "Radio · descriptions",
+      "description": "an option's `description` is a line under it · `disabled` on an option",
+      "options": [
+        { "label": "Keep the first", "value": "first", "description": "The earliest row wins; later copies are dropped" },
+        { "label": "Keep the latest", "value": "latest", "description": "The newest row wins, by its load time" },
+        { "label": "Merge fields", "value": "merge", "description": "Needs a key column on both sides", "disabled": true }
+      ],
+      "colSpan": 2
+    },
+    {
       "name": "scopes",
       "type": "checkbox",
       "label": "Checkbox group",
@@ -47,6 +59,8 @@
     },
     { "name": "readOnly", "type": "boolean", "label": "Boolean · switch", "description": "boolean · the default control" },
     { "name": "abstract", "type": "boolean", "control": "checkbox", "label": "Boolean · checkbox" },
+    { "name": "citations", "type": "boolean", "control": "checkbox", "label": "Boolean · checkbox · description", "description": "boolean · the line sits under the label" },
+    { "name": "source", "type": "text", "label": "Disabled", "description": "string · `disabled`: shown, still submitted", "disabled": true },
     {
       "name": "accent",
       "type": "color",
@@ -70,9 +84,12 @@
       "share": 30,
       "leadTime": 17,
       "validation": "inherit",
+      "dedupe": "first",
       "scopes": ["read"],
       "readOnly": false,
       "abstract": false,
+      "citations": true,
+      "source": "warehouse.sales_daily",
       "accent": "#3b82f6",
       "icon": ""
     }

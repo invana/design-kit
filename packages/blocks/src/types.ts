@@ -333,6 +333,13 @@ export interface MultistepOptions {
   /** Show the answers for a last look, each with Edit, before they are sent. */
   review?: boolean
 }
+/** One choice of a form field's `select` or `radio`. */
+export interface FormOption {
+  value: string
+  label: string
+  description?: string
+  disabled?: boolean
+}
 export interface FormOptions extends AskText {
   /**
    * `side` sets each label in a column at the left; `top` sets it over its
@@ -343,9 +350,28 @@ export interface FormOptions extends AskText {
   fields: {
     name: string
     label: string
-    type: "number" | "text" | "date" | "select"
+    /**
+     * `textarea` is several lines of text; `checkbox` a yes/no with its label
+     * beside the box; `radio` one of `options` drawn as a list, `select` one
+     * of them in a menu.
+     */
+    type: "number" | "text" | "date" | "select" | "textarea" | "checkbox" | "radio"
     unit?: string
-    default?: string | number
+    /** A `checkbox` takes `true`/`false`; `select` and `radio` an option's `value`. */
+    default?: string | number | boolean
+    /**
+     * The choices of a `select` or `radio`. A `description` is a muted line
+     * under a radio's label; a `disabled` choice shows but can't be picked.
+     */
+    options?: FormOption[]
+    /** A `textarea`'s visible lines. */
+    rows?: number
+    /** Text shown in an empty `text` or `textarea`. */
+    placeholder?: string
+    /** Must be answered — for a `checkbox`, ticked. Holds the submit back until it is. */
+    required?: boolean
+    /** Shown with its value but not changeable; the value is still sent. */
+    disabled?: boolean
     /** Shown beside the value — `quoted 14 d`. */
     aside?: string
     /** A line under the field — `From last year's promotions`. */

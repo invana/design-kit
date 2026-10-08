@@ -85,6 +85,10 @@ export const AllFields: Story = {
       await userEvent.type(cell.getByRole('textbox', { name: 'Text' }), 'Margins');
       await userEvent.click(cell.getByRole('button', { name: 'Submit' }));
     });
+    await step('A disabled field and a disabled choice show but cannot be changed', async () => {
+      await expect(cell.getByRole('textbox', { name: 'Disabled' })).toBeDisabled();
+      await expect(cell.getByRole('radio', { name: /^Merge fields/ })).toBeDisabled();
+    });
     await step('The whole object is handed over', async () => {
       const values = { all: { ...spec.defaultValues.all, name: 'Margins' } };
       await expect(args.onSubmit).toHaveBeenCalledWith(values);

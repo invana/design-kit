@@ -35,13 +35,16 @@ export interface EyebrowProps extends React.HTMLAttributes<HTMLDivElement> {
  * `tone="accent"` is for a label that names something the reader is being
  * *taught* rather than something they are scanning — a callout's kind, a
  * concept's name. Use it rarely; muted is the default for a reason.
+ *
+ * The label and the aside are centred on each other, not set on one baseline:
+ * an aside is often badges or buttons, and a baseline drops them below the label.
  */
 export const Eyebrow = React.forwardRef<HTMLDivElement, EyebrowProps>(
   ({ aside, tone = "muted", className, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "flex items-baseline gap-2 text-sm font-semibold uppercase tracking-wide",
+        "flex items-center gap-2 text-sm font-semibold uppercase tracking-wide",
         tone === "muted" && "text-muted-foreground",
         tone === "foreground" && "text-foreground",
         tone === "accent" && "text-primary",
