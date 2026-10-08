@@ -1,6 +1,6 @@
 {
   "name": "@invana/boards",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "Invana Design System - JSON-driven boards assembled from design-kit panels",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
