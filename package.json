@@ -1,0 +1,45 @@
+{
+  "name": "@invana/blocks",
+  "version": "0.0.34",
+  "description": "Invana Design System - Blocks: reusable drawings from a JSON spec, shared by conversations, boards and pages",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invana/design-kit.git",
+    "directory": "packages/blocks"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": null,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit -p tsconfig.lib.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@invana/charts": "^0.0.34",
+    "@invana/forms": "^0.0.34",
+    "@invana/styling": "^0.0.34",
+    "@invana/tables": "^0.0.34",
+    "@invana/ui": "^0.0.34",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19",
+    "react-hook-form": "^7"
+  }
+}
