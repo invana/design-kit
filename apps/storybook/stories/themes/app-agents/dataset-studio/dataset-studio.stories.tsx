@@ -75,7 +75,7 @@ function Restartable(args: Args) {
  * Every change to the work is a **playbook** step, the assistant's and the reader's alike: open
  * the playbook from the header and step back to replay the work. `New canvas` starts a session;
  * `Branch` (or `Branch from here` on an answer) copies the session and its canvas. The graph is
- * drawn by the canvas repo's `GraphCanvas`, linked locally. Pick a `stage` to start further along.
+ * drawn by the canvas repo's `GraphCanvas` (`@invana/canvas-react`). Pick a `stage` to start further along.
  */
 export const DatasetStudio: Story = {
   render: function Render(args) {

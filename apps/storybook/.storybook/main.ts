@@ -49,10 +49,10 @@ const config: StorybookConfig = {
       '@invana/assistant/*': resolve(__dirname, '../../../packages/assistant/src/*'),
 
     };
-    // The graph canvas is linked from the local canvas repo (`link:` in package.json). It brings
-    // its own React and `@invana/themes`: one React for both, and — a linked package is source to
-    // Vite, not a pre-bundled dep — its themes import goes through the alias above to this repo's
-    // source, so `CanvasThemeSync` reads the same ThemeProvider as the stories.
+    // The graph canvas (`@invana/canvas-react` from npm) brings its own React and `@invana/themes`:
+    // one React for both, and its themes import goes through the alias above to this repo's
+    // source, so `CanvasThemeSync` reads the same ThemeProvider as the stories. Its optional
+    // layers and layouts are devDependencies here because canvas-react imports them eagerly.
     config.resolve.dedupe = [...(config.resolve.dedupe ?? []), 'react', 'react-dom'];
 
     return config;
