@@ -112,9 +112,10 @@ export interface NavItemConfig {
    */
   menuTrigger?: "item" | "caret";
   /**
-   * Draws an inline `×` inside the item — a tab that is closed rather than
-   * managed. The body still selects; only the `×` closes. Like the caret, it
-   * makes the item host a button, so the item itself renders as a `<div>`.
+   * Draws an inline `×` on the item — a tab that is closed rather than
+   * managed. The body still selects; only the `×` closes. The `×` is a sibling
+   * of the item's control inside one box, not a child of it, so a tab's
+   * accessible name stays its label and no button is nested in it.
    */
   onClose?: () => void;
   /**
@@ -358,7 +359,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
     const isActive = key === currentKey;
     const hasMenu = !item.href && Boolean(item.menuItems?.length);
     const asCaret = hasMenu && item.menuTrigger === "caret";
-    const hostsButton = asCaret || Boolean(item.onClose);
+    const hostsButton = asCaret;
     // Static items (no href/onClick/menu) are plain text — no hover affordance.
     const isInteractive = Boolean(
       item.href || item.onClick || hasMenu || isTabs,
@@ -448,8 +449,8 @@ export const NavItems: React.FC<NavItemsProps> = ({
     );
 
     const close = item.onClose && (
-      <span
-        role="button"
+      <button
+        type="button"
         tabIndex={-1}
         aria-label={`Close ${item.name}`}
         onClick={(e) => {
@@ -460,7 +461,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
           rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
       >
         <X className="size-3" />
-      </span>
+      </button>
     );
 
     const inner = (
@@ -468,14 +469,39 @@ export const NavItems: React.FC<NavItemsProps> = ({
         {icon}
         {label}
         {caret}
-        {close}
         {badge}
       </>
     );
 
-    // A caret or close item hosts a button, so it cannot itself be one — nested
-    // buttons are invalid, and the browser resolves the click to the outer control.
-    const control = hostsButton ? (
+    // A closable item is one box holding two controls side by side: the item
+    // itself (the tab, carrying its name, selection and roving focus) and the
+    // `×`. The box wears the item's look, so the pair reads as one tab; it is
+    // what the overflow measures, while focus lands on the inner control.
+    const control = close ? (
+      <div
+        ref={itemRef(index)}
+        style={item.style}
+        onClick={() => select(item)}
+        className={cn(
+          itemClass,
+          "has-[[role=tab]:focus-visible]:ring-2 has-[[role=tab]:focus-visible]:ring-ring",
+        )}
+      >
+        <div
+          ref={(el) => {
+            nodes.current[key] = el;
+          }}
+          {...tabProps}
+          {...a11y}
+          className="inline-flex items-center gap-[inherit] focus-visible:outline-none"
+        >
+          {inner}
+        </div>
+        {close}
+      </div>
+    ) : hostsButton ? (
+      // A caret item hosts a button, so it cannot itself be one — nested
+      // buttons are invalid, and the browser resolves the click to the outer control.
       <div
         ref={setNode}
         {...tabProps}

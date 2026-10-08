@@ -207,6 +207,13 @@ export const Workbook: Story = {
       await expect(args.onSelect).toHaveBeenCalledWith('accounts');
       await expect(cell.getByRole('tab', { name: /Accounts/ })).toHaveAttribute('aria-selected', 'true');
     });
+    await step('A closable tab is named by its label alone, its × by its own name', async () => {
+      const cell = within(canvas.getByRole('group', { name: 'Closable pages' }));
+      const tab = cell.getByRole('tab', { name: 'Funding' });
+      await expect(tab).toHaveAttribute('aria-selected', 'true');
+      const close = cell.getByRole('button', { name: 'Close Funding' });
+      await expect(tab).not.toContainElement(close);
+    });
     await step('A closable tab closes, and its neighbour takes the selection', async () => {
       const cell = within(canvas.getByRole('group', { name: 'Closable pages' }));
       await userEvent.click(cell.getByRole('button', { name: /Close Funding/ }));
