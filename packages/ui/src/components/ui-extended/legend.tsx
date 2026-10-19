@@ -34,6 +34,19 @@ export interface LegendItemProps
   label: React.ReactNode
   /** Trailing count — `1,912`, `52,100`. */
   count?: React.ReactNode
+  /**
+   * Make the row a toggle for what it stands for — click it to hide that type
+   * on the canvas, again to show it. The row becomes a button with a hover
+   * state and `aria-pressed`.
+   */
+  onToggle?: () => void
+  /** With {@link onToggle}: whether what the row stands for is shown. Default `true`. */
+  pressed?: boolean
+  /**
+   * Draw the row muted — dimmed swatch, struck-through label — for something
+   * the canvas isn't showing. Defaults to `pressed === false` on a toggle.
+   */
+  muted?: boolean
 }
 
 export interface LegendProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -152,20 +165,46 @@ export const Legend = React.forwardRef<HTMLDivElement, LegendProps>(
 )
 Legend.displayName = "Legend"
 
+/**
+ * One entry: the swatch, what it means, and how many. Pass `onToggle` and the
+ * entry becomes the switch for its type — the legend is where a reader already
+ * looks to find a type, so it is where they hide one.
+ */
 export const LegendItem = React.forwardRef<HTMLDivElement, LegendItemProps>(
-  ({ kind, color, label, count, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="listitem"
-      className={cn("flex min-w-0 items-center gap-1.5", className)}
-      {...props}
-    >
-      <Swatch kind={kind} color={color} />
-      <span className="truncate">{label}</span>
-      {count != null ? (
-        <span className="shrink-0 text-muted-foreground">{count}</span>
-      ) : null}
-    </div>
-  ),
+  ({ kind, color, label, count, onToggle, pressed = true, muted, className, ...props }, ref) => {
+    const dim = muted ?? (onToggle !== undefined && !pressed)
+    const content = (
+      <>
+        <span className={cn("flex shrink-0", dim && "opacity-40")}>
+          <Swatch kind={kind} color={color} />
+        </span>
+        <span className={cn("truncate", dim && "text-muted-foreground line-through")}>{label}</span>
+        {count != null ? (
+          <span className="shrink-0 text-muted-foreground">{count}</span>
+        ) : null}
+      </>
+    )
+    return (
+      <div
+        ref={ref}
+        role="listitem"
+        className={cn("flex min-w-0 items-center gap-1.5", className)}
+        {...props}
+      >
+        {onToggle ? (
+          <button
+            type="button"
+            aria-pressed={pressed}
+            onClick={onToggle}
+            className="-mx-1 flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded-sm px-1 text-left hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            {content}
+          </button>
+        ) : (
+          content
+        )}
+      </div>
+    )
+  },
 )
 LegendItem.displayName = "LegendItem"
