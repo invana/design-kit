@@ -7,13 +7,30 @@
       "question": "Cooling by which measure? The graph holds both.",
       "value": "velocity",
       "options": [
-        { "value": "velocity", "label": "Theme velocity, 5 sessions", "detail": "Theme.velocity_5d" },
-        { "value": "price", "label": "Price against the 20-day average", "detail": "Bar.close" },
-        { "value": "both", "label": "Both, ranked separately", "detail": "two emissions" }
+        {
+          "value": "velocity",
+          "label": "Theme velocity, 5 sessions",
+          "detail": "Theme.velocity_5d"
+        },
+        {
+          "value": "price",
+          "label": "Price against the 20-day average",
+          "detail": "Bar.close"
+        },
+        {
+          "value": "both",
+          "label": "Both, ranked separately",
+          "detail": "two emissions"
+        }
       ],
       "footnote": "Options are the measures the model declares. Nothing here was generated."
     },
-    "actions": [{ "id": "answer", "label": "Answer" }]
+    "actions": [
+      {
+        "id": "answer",
+        "label": "Answer"
+      }
+    ]
   },
   {
     "caption": "Answered",
@@ -23,8 +40,16 @@
       "question": "“Apex” matches two suppliers. Which one?",
       "value": "apex-components",
       "options": [
-        { "value": "apex-components", "label": "Apex Components, Shenzhen", "detail": "142 open POs" },
-        { "value": "apex-metals", "label": "Apex Metals, Pune", "detail": "9 open POs" }
+        {
+          "value": "apex-components",
+          "label": "Apex Components, Shenzhen",
+          "detail": "142 open POs"
+        },
+        {
+          "value": "apex-metals",
+          "label": "Apex Metals, Pune",
+          "detail": "9 open POs"
+        }
       ],
       "actionsAlign": "end"
     }
@@ -38,14 +63,24 @@
       "question": "“Apex” matches two suppliers. Which one?",
       "value": "apex-components",
       "options": [
-        { "value": "apex-components", "label": "Apex Components, Shenzhen", "detail": "142 open POs" },
-        { "value": "apex-metals", "label": "Apex Metals, Pune", "detail": "9 open POs" }
+        {
+          "value": "apex-components",
+          "label": "Apex Components, Shenzhen",
+          "detail": "142 open POs"
+        },
+        {
+          "value": "apex-metals",
+          "label": "Apex Metals, Pune",
+          "detail": "9 open POs"
+        }
       ]
     }
   },
   {
     "caption": "In steps",
-    "props": { "step": "scope" },
+    "props": {
+      "step": "scope"
+    },
     "steps": [
       {
         "name": "environment",
@@ -53,9 +88,22 @@
         "required": true,
         "title": "Which environment is the new line for?",
         "options": [
-          { "value": "semi-arid", "label": "Semi-arid, under 400 mm", "detail": "3 sites", "checked": true },
-          { "value": "rainfed", "label": "Rainfed, 400–700 mm", "detail": "2 sites" },
-          { "value": "irrigated", "label": "Irrigated", "detail": "1 site" }
+          {
+            "value": "semi-arid",
+            "label": "Semi-arid, under 400 mm",
+            "detail": "3 sites",
+            "checked": true
+          },
+          {
+            "value": "rainfed",
+            "label": "Rainfed, 400–700 mm",
+            "detail": "2 sites"
+          },
+          {
+            "value": "irrigated",
+            "label": "Irrigated",
+            "detail": "1 site"
+          }
         ]
       },
       {
@@ -71,11 +119,160 @@
         "kind": "multi",
         "title": "Which traits must it keep?",
         "options": [
-          { "value": "rust", "label": "Rust ≥ 6", "checked": true },
-          { "value": "maturity", "label": "Maturity ≤ 115 d", "checked": true },
-          { "value": "pod", "label": "Pod ≥ 28 mm" }
+          {
+            "value": "rust",
+            "label": "Rust ≥ 6",
+            "checked": true
+          },
+          {
+            "value": "maturity",
+            "label": "Maturity ≤ 115 d",
+            "checked": true
+          },
+          {
+            "value": "pod",
+            "label": "Pod ≥ 28 mm"
+          }
         ]
       }
     ]
+  },
+  {
+    "caption": "Inline · waiting",
+    "props": {
+      "variant": "inline",
+      "collapsible": true,
+      "step": "understand",
+      "question": "By what measure should I rank the top 10 airports?",
+      "options": [
+        {
+          "value": "routes",
+          "label": "Most routes, flights in and out",
+          "description": "Flights in and out, each route counted once. Ranks the hubs."
+        },
+        {
+          "value": "runways",
+          "label": "Most runways",
+          "description": "How many runways the airport lists. Favours large fields."
+        },
+        {
+          "value": "longest",
+          "label": "Longest runway",
+          "description": "The length of its longest runway, in feet. Favours long-haul fields."
+        }
+      ]
+    },
+    "typeInstead": true
+  },
+  {
+    "caption": "Inline · answered",
+    "props": {
+      "variant": "inline",
+      "collapsible": true,
+      "state": "answered",
+      "question": "By what measure should I rank the top 10 airports?",
+      "value": "routes",
+      "options": [
+        {
+          "value": "routes",
+          "label": "Most routes, flights in and out"
+        },
+        {
+          "value": "runways",
+          "label": "Most runways"
+        },
+        {
+          "value": "longest",
+          "label": "Longest runway"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Inline · answered, open",
+    "props": {
+      "variant": "inline",
+      "collapsible": true,
+      "defaultOpen": true,
+      "state": "answered",
+      "question": "By what measure should I rank the top 10 airports?",
+      "value": "routes",
+      "options": [
+        {
+          "value": "routes",
+          "label": "Most routes, flights in and out",
+          "description": "Flights in and out, each route counted once. Ranks the hubs."
+        },
+        {
+          "value": "runways",
+          "label": "Most runways",
+          "description": "How many runways the airport lists. Favours large fields."
+        },
+        {
+          "value": "longest",
+          "label": "Longest runway",
+          "description": "The length of its longest runway, in feet. Favours long-haul fields."
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Inline · typed answer",
+    "props": {
+      "variant": "inline",
+      "collapsible": true,
+      "defaultOpen": true,
+      "state": "answered",
+      "question": "By what measure should I rank the top 10 airports?",
+      "answer": "Busiest by passengers in 2025",
+      "options": [
+        {
+          "value": "routes",
+          "label": "Most routes, flights in and out"
+        },
+        {
+          "value": "runways",
+          "label": "Most runways"
+        },
+        {
+          "value": "longest",
+          "label": "Longest runway"
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Inline · several questions",
+    "props": {
+      "variant": "inline",
+      "collapsible": true,
+      "defaultOpen": true,
+      "state": "answered",
+      "kind": "questions",
+      "questions": [
+        {
+          "question": "By what measure should I rank the top 10 airports?",
+          "value": "routes",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes, flights in and out"
+            },
+            {
+              "value": "runways",
+              "label": "Most runways"
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway"
+            }
+          ]
+        },
+        {
+          "question": "Which country, if any?",
+          "answer": "Only the United States"
+        }
+      ]
+    }
   }
 ]

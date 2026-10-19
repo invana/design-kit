@@ -21,6 +21,13 @@ export type {
   ClarifyCardProps,
   ClarifyFootnoteProps,
   ClarifyOption,
+  ClarifyQuestion,
   ClarifyState,
 } from "@invana/ui"
+export {
+  ClarifyCardGroup,
+  type ClarifyAnswers,
+  type ClarifyCardGroupProps,
+  type ClarifyGroupQuestion,
+} from "./clarify-card-group"
 export { ConfirmCard, SuggestionChips, type ConfirmCardProps, type ConfirmCost, type SuggestionChipsProps } from "@invana/blocks"

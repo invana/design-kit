@@ -49,6 +49,8 @@ interface ClarifyVariant {
   actions?: { id: string; label: string }[];
   /** Several asks sent as one request, a step at a time. */
   steps?: Step[];
+  /** Offers to answer in words — the last row while it waits. */
+  typeInstead?: boolean;
 }
 
 // JSON widens `"answered"` to `string`; the shapes are the card's own.
@@ -61,6 +63,7 @@ interface Args {
   onSelect: (value: string) => void;
   onAction: (id: string) => void;
   onAnswers: (answers: Answers) => void;
+  onTypeInstead: () => void;
 }
 
 /** Every value of every item, so a multiple choice comes back as a list. */
@@ -123,6 +126,14 @@ function LiveCard({ variant, args, log }: { variant: ClarifyVariant; args: Args;
       {...variant.props}
       value={value}
       onSelect={variant.props.options && !variant.props.state ? select : undefined}
+      onTypeInstead={
+        variant.typeInstead
+          ? () => {
+              args.onTypeInstead();
+              log('onTypeInstead', undefined);
+            }
+          : undefined
+      }
       actions={variant.actions?.map((a) => (
         <Button
           key={a.id}
@@ -194,6 +205,7 @@ const meta = {
                 ...Object.entries(rest).map(([k, x]) => attr(k, x)),
                 ...(options ? ['options={options}'] : []),
                 ...(live ? ['value={value}', 'onSelect={setValue}'] : value ? [attr('value', value)] : []),
+                ...(v.typeInstead ? ['onTypeInstead={() => composer.focus()}'] : []),
                 ...(v.actions
                   ? [`actions={${v.actions.map((a) => `<Button size="xs" onClick={() => onAction("${a.id}")}>${a.label}</Button>`).join('')}}`]
                   : []),
@@ -215,7 +227,7 @@ const meta = {
       },
     },
   },
-  args: { variant: 'All', onSelect: fn(), onAction: fn(), onAnswers: fn() },
+  args: { variant: 'All', onSelect: fn(), onAction: fn(), onAnswers: fn(), onTypeInstead: fn() },
   argTypes: { variant: variantArg(VARIANTS) },
 } satisfies Meta<Args>;
 
@@ -227,6 +239,10 @@ type Story = StoryObj<Args>;
  * Settled, the header says so and the choice stays drawn with the options not taken; `time` says
  * when. Several related asks go as one request, in steps: Skip, Next and Previous move between
  * them, and Submit on the last sends the answers.
+ *
+ * `inline` is the ask as a conversation reads it: no box, a title line, light rows. Settled and
+ * `collapsible`, it folds to *Answered · Most routes* and opens to the question with the options
+ * not taken dimmed; a typed answer is the chosen row. Several asks share one card.
  */
 export const ClarifyCard: Story = {
   render: (args) => (
@@ -242,6 +258,17 @@ export const ClarifyCard: Story = {
       await expect(args.onSelect).toHaveBeenCalledWith('price');
       await expect(c.getByRole('radio', { name: /Price against/ })).toBeChecked();
       await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('"price"');
+    });
+    await step('Inline: answer in words', async () => {
+      const c = cell('Inline · waiting');
+      await userEvent.click(c.getByText('Something else — let me type'));
+      await expect(args.onTypeInstead).toHaveBeenCalled();
+    });
+    await step('Inline: a settled ask opens to its question', async () => {
+      const c = cell('Inline · answered');
+      await expect(c.queryByText('Most runways')).toBeNull();
+      await userEvent.click(c.getByRole('button', { name: /Answered/ }));
+      await expect(c.getByText('Most runways')).toBeVisible();
     });
     await step('Walk the steps and submit the answers', async () => {
       const c = cell('In steps');

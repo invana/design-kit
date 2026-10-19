@@ -1,0 +1,313 @@
+[
+  {
+    "caption": "Waiting",
+    "props": {
+      "step": "understand",
+      "questions": [
+        {
+          "name": "measure",
+          "title": "Measure",
+          "question": "By what measure should I rank the top 10 airports?",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes"
+            },
+            {
+              "value": "runways",
+              "label": "Most runways"
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway"
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "title": "Country",
+          "question": "Which country, if any?",
+          "options": [
+            {
+              "value": "any",
+              "label": "Anywhere"
+            },
+            {
+              "value": "US",
+              "label": "United States"
+            },
+            {
+              "value": "IN",
+              "label": "India"
+            }
+          ]
+        },
+        {
+          "name": "draw",
+          "title": "Draw",
+          "question": "Should I draw their routes on the canvas?",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes, with their routes"
+            },
+            {
+              "value": "no",
+              "label": "No, just the table"
+            }
+          ],
+          "required": false
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Partly answered",
+    "props": {
+      "step": "understand",
+      "questions": [
+        {
+          "name": "measure",
+          "title": "Measure",
+          "question": "By what measure should I rank the top 10 airports?",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes"
+            },
+            {
+              "value": "runways",
+              "label": "Most runways"
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway"
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "title": "Country",
+          "question": "Which country, if any?",
+          "options": [
+            {
+              "value": "any",
+              "label": "Anywhere"
+            },
+            {
+              "value": "US",
+              "label": "United States"
+            },
+            {
+              "value": "IN",
+              "label": "India"
+            }
+          ]
+        },
+        {
+          "name": "draw",
+          "title": "Draw",
+          "question": "Should I draw their routes on the canvas?",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes, with their routes"
+            },
+            {
+              "value": "no",
+              "label": "No, just the table"
+            }
+          ],
+          "required": false
+        }
+      ],
+      "answers": {
+        "measure": "routes"
+      }
+    }
+  },
+  {
+    "caption": "With descriptions",
+    "props": {
+      "step": "understand",
+      "questions": [
+        {
+          "name": "measure",
+          "title": "Measure",
+          "question": "By what measure should I rank the top 10 airports?",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes",
+              "description": "Flights in and out, each route counted once. Ranks the hubs."
+            },
+            {
+              "value": "runways",
+              "label": "Most runways",
+              "description": "How many runways the airport lists. Favours large fields."
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway",
+              "description": "Its longest runway, in feet. Favours long-haul fields."
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "title": "Country",
+          "question": "Which country, if any?",
+          "options": [
+            {
+              "value": "any",
+              "label": "Anywhere"
+            },
+            {
+              "value": "US",
+              "label": "United States"
+            },
+            {
+              "value": "IN",
+              "label": "India"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "caption": "Submitted",
+    "props": {
+      "state": "answered",
+      "questions": [
+        {
+          "name": "measure",
+          "title": "Measure",
+          "question": "By what measure should I rank the top 10 airports?",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes"
+            },
+            {
+              "value": "runways",
+              "label": "Most runways"
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway"
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "title": "Country",
+          "question": "Which country, if any?",
+          "options": [
+            {
+              "value": "any",
+              "label": "Anywhere"
+            },
+            {
+              "value": "US",
+              "label": "United States"
+            },
+            {
+              "value": "IN",
+              "label": "India"
+            }
+          ]
+        },
+        {
+          "name": "draw",
+          "title": "Draw",
+          "question": "Should I draw their routes on the canvas?",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes, with their routes"
+            },
+            {
+              "value": "no",
+              "label": "No, just the table"
+            }
+          ],
+          "required": false
+        }
+      ],
+      "answers": {
+        "measure": "routes",
+        "country": "Only airports in Europe",
+        "draw": "yes"
+      }
+    }
+  },
+  {
+    "caption": "Submitted, open",
+    "props": {
+      "state": "answered",
+      "defaultOpen": true,
+      "questions": [
+        {
+          "name": "measure",
+          "title": "Measure",
+          "question": "By what measure should I rank the top 10 airports?",
+          "options": [
+            {
+              "value": "routes",
+              "label": "Most routes"
+            },
+            {
+              "value": "runways",
+              "label": "Most runways"
+            },
+            {
+              "value": "longest",
+              "label": "Longest runway"
+            }
+          ]
+        },
+        {
+          "name": "country",
+          "title": "Country",
+          "question": "Which country, if any?",
+          "options": [
+            {
+              "value": "any",
+              "label": "Anywhere"
+            },
+            {
+              "value": "US",
+              "label": "United States"
+            },
+            {
+              "value": "IN",
+              "label": "India"
+            }
+          ]
+        },
+        {
+          "name": "draw",
+          "title": "Draw",
+          "question": "Should I draw their routes on the canvas?",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes, with their routes"
+            },
+            {
+              "value": "no",
+              "label": "No, just the table"
+            }
+          ],
+          "required": false
+        }
+      ],
+      "answers": {
+        "measure": "routes",
+        "country": "Only airports in Europe",
+        "draw": "yes"
+      }
+    }
+  }
+]
