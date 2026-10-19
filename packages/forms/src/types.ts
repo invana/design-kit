@@ -22,7 +22,17 @@ export type FieldType =
   | 'radio'
   | 'color'
   | 'select'
-  | 'icon';
+  | 'icon'
+  | 'keyvalue';
+
+/**
+ * One row of a `keyvalue` field. The field's value is an array of these — not a
+ * map — so a blank or repeated key survives while it is being typed.
+ */
+export type KeyValueEntry = {
+  key: string;
+  value: string;
+};
 
 /** Widget used to render a single `boolean` field. Defaults to `switch`. */
 export type BooleanControl = 'switch' | 'checkbox';
@@ -101,6 +111,13 @@ export type FieldConfig = {
    * `string[]` for a multi-select `checkbox` group.
    */
   defaultValue?: string | number | boolean | string[];
+  /** Placeholders of a `keyvalue` row's two inputs. Default `Key` / `Value`. */
+  keyPlaceholder?: string;
+  valuePlaceholder?: string;
+  /** The `keyvalue` field's add button. Default `Add`. */
+  addLabel?: string;
+  /** Shown by an empty `keyvalue` field. Default `None yet.` */
+  emptyLabel?: string;
   /** Number of visible rows for `textarea` fields. */
   rows?: number;
   /**

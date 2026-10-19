@@ -14,6 +14,7 @@ export {
   ColorField,
   NumberField,
   IconField,
+  KeyValueField,
 } from './form-field';
 
 export type {
@@ -29,6 +30,7 @@ export type {
   ObjectFieldProps,
   ColorPreset,
   FieldType,
+  KeyValueEntry,
 } from './types';
 
 export { SettingsPanel } from './settings-panel';

@@ -1,0 +1,25 @@
+{
+  "name": "element",
+  "fields": [
+    { "name": "label", "type": "text", "label": "Label", "placeholder": "What the canvas draws", "colSpan": 2 },
+    { "name": "type", "type": "text", "label": "Type", "placeholder": "character", "colSpan": 2 },
+    {
+      "name": "properties",
+      "type": "keyvalue",
+      "label": "Properties",
+      "keyPlaceholder": "Name",
+      "valuePlaceholder": "Value",
+      "addLabel": "Add property",
+      "emptyLabel": "No properties yet.",
+      "colSpan": 2
+    }
+  ],
+  "initial": {
+    "label": "Valjean",
+    "type": "character",
+    "properties": [
+      { "key": "born", "value": "1769" },
+      { "key": "alias", "value": "Monsieur Madeleine" }
+    ]
+  }
+}

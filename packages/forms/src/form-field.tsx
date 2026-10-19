@@ -6,9 +6,11 @@ import {
   AccordionItem,
   AccordionTrigger,
   Badge,
+  Button,
   cn,
   Eyebrow,
 } from '@invana/ui';
+import { Plus, X } from 'lucide-react';
 import {
   FormField as FormFieldBase,
   FormControl,
@@ -47,6 +49,7 @@ import type {
   FieldOrientation,
   FieldSize,
   GroupConfig,
+  KeyValueEntry,
   LabelPosition,
   ObjectFieldProps,
   RowConfig,
@@ -88,6 +91,11 @@ interface BaseFieldProps {
   unit?: string;
   /** Note at the end of a text or number input, after the unit. */
   aside?: string;
+  /** A `keyvalue` row's placeholders, its add button and its empty line. */
+  keyPlaceholder?: string;
+  valuePlaceholder?: string;
+  addLabel?: string;
+  emptyLabel?: string;
 }
 
 /**
@@ -746,6 +754,89 @@ export const IconField: React.FC<BaseFieldProps> = ({
   </FormItem>
 );
 
+/**
+ * A list of key → value rows — an element's properties, a request's headers.
+ * Each row is two inputs and a remove button; *Add* appends a blank row. The
+ * value is a `KeyValueEntry[]` in row order, blank and repeated keys included,
+ * so the consumer decides what a blank key means when it saves.
+ *
+ * The rows need the width, so the label always sits above them, whatever
+ * `labelPosition` the form uses.
+ */
+export const KeyValueField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  value,
+  onChange,
+  size = 'sm',
+  labelClassName,
+  badge,
+  className,
+  disabled,
+  keyPlaceholder = 'Key',
+  valuePlaceholder = 'Value',
+  addLabel = 'Add',
+  emptyLabel = 'None yet.',
+}) => {
+  const rows: KeyValueEntry[] = Array.isArray(value) ? value : [];
+  const set = (i: number, patch: Partial<KeyValueEntry>) =>
+    onChange?.(rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+  const remove = (i: number) => onChange?.(rows.filter((_, j) => j !== i));
+  const add = () => onChange?.([...rows, { key: '', value: '' }]);
+  return (
+    <FormItem className={itemClasses('top', size, className)}>
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+      <div className={SIZE[size].stack}>
+        <FormControl>
+          <div className={SIZE[size].stack}>
+            {rows.length === 0 && <p className={cn(SIZE[size].desc, 'text-muted-foreground')}>{emptyLabel}</p>}
+            {rows.map((row, i) => (
+              <div key={i} className={cn('flex items-center', SIZE[size].sideGap)}>
+                <Input
+                  className={cn(SIZE[size].input, 'min-w-0 flex-1')}
+                  placeholder={keyPlaceholder}
+                  aria-label={`${keyPlaceholder} ${i + 1}`}
+                  disabled={disabled}
+                  value={row.key}
+                  onChange={(e) => set(i, { key: e.target.value })}
+                />
+                <Input
+                  className={cn(SIZE[size].input, 'min-w-0 flex-1')}
+                  placeholder={valuePlaceholder}
+                  aria-label={`${valuePlaceholder} ${i + 1}`}
+                  disabled={disabled}
+                  value={row.value}
+                  onChange={(e) => set(i, { value: e.target.value })}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Remove ${row.key || `row ${i + 1}`}`}
+                  disabled={disabled}
+                  onClick={() => remove(i)}
+                >
+                  <X />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </FormControl>
+        <div>
+          <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={add}>
+            <Plus />
+            {addLabel}
+          </Button>
+        </div>
+        {description && (
+          <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+        )}
+        <FormMessage className={SIZE[size].desc} />
+      </div>
+    </FormItem>
+  );
+};
+
 export const Field = {
   Input: InputField,
   Password: PasswordField,
@@ -757,6 +848,7 @@ export const Field = {
   Number: NumberField,
   Select: SelectField,
   Icon: IconField,
+  KeyValue: KeyValueField,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -831,6 +923,16 @@ function renderField(
             return <SelectField {...common} />;
           case 'icon':
             return <IconField {...common} />;
+          case 'keyvalue':
+            return (
+              <KeyValueField
+                {...common}
+                keyPlaceholder={field.keyPlaceholder}
+                valuePlaceholder={field.valuePlaceholder}
+                addLabel={field.addLabel}
+                emptyLabel={field.emptyLabel}
+              />
+            );
           case 'textarea':
             return (
               <TextareaField
@@ -1112,6 +1214,7 @@ interface FormFieldExtensions {
   Number: typeof NumberField;
   Select: typeof SelectField;
   Icon: typeof IconField;
+  KeyValue: typeof KeyValueField;
 }
 
 type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
@@ -1128,6 +1231,7 @@ export const FormField = Object.assign(FormFieldBase, {
   Number: NumberField,
   Select: SelectField,
   Icon: IconField,
+  KeyValue: KeyValueField,
 }) as FormFieldType;
 
 // Also export ObjectField directly for consumers who prefer a flat import.
@@ -1140,6 +1244,7 @@ export type {
   FieldOrientation,
   FieldSize,
   FieldType,
+  KeyValueEntry,
   RowConfig,
   LabelPosition,
   ObjectFieldProps,
