@@ -91,6 +91,8 @@ interface BaseFieldProps {
   unit?: string;
   /** Note at the end of a text or number input, after the unit. */
   aside?: string;
+  /** Put the caret in this field when it mounts. */
+  autoFocus?: boolean;
   /** A `keyvalue` row's placeholders, its add button and its empty line. */
   keyPlaceholder?: string;
   valuePlaceholder?: string;
@@ -283,6 +285,8 @@ export const InputField: React.FC<BaseFieldProps> = ({
   placeholder,
   value,
   onChange,
+  options,
+  autoFocus,
   unit,
   aside,
   labelPosition = 'side',
@@ -291,28 +295,45 @@ export const InputField: React.FC<BaseFieldProps> = ({
   badge,
   className,
   disabled,
-}) => (
-  <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
-    <div className={inputWrapper(labelPosition, size)}>
-      <FormControl>
-        <AffixedInput
-          className={SIZE[size].input}
-          unit={unit}
-          aside={aside}
-          placeholder={placeholder}
-          disabled={disabled}
-          value={value ?? ''}
-          onChange={(e) => onChange?.(e.target.value)}
-        />
-      </FormControl>
-      {description && (
-        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
-      )}
-      <FormMessage className={SIZE[size].desc} />
-    </div>
-  </FormItem>
-);
+}) => {
+  // A text field's options are suggestions, not a limit: any value may be typed.
+  const listId = React.useId();
+  const suggest = options && options.length > 0;
+  return (
+    <FormItem className={itemClasses(labelPosition, size, className)}>
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+      <div className={inputWrapper(labelPosition, size)}>
+        <FormControl>
+          <AffixedInput
+            className={SIZE[size].input}
+            unit={unit}
+            aside={aside}
+            placeholder={placeholder}
+            disabled={disabled}
+            autoFocus={autoFocus}
+            autoComplete={suggest ? 'off' : undefined}
+            list={suggest ? listId : undefined}
+            value={value ?? ''}
+            onChange={(e) => onChange?.(e.target.value)}
+          />
+        </FormControl>
+        {suggest && (
+          <datalist id={listId}>
+            {options.map((o) => (
+              <option key={o.value} value={o.value} disabled={o.disabled}>
+                {o.label !== o.value ? o.label : undefined}
+              </option>
+            ))}
+          </datalist>
+        )}
+        {description && (
+          <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+        )}
+        <FormMessage className={SIZE[size].desc} />
+      </div>
+    </FormItem>
+  );
+};
 
 export const PasswordField: React.FC<BaseFieldProps> = ({
   label,
@@ -896,6 +917,7 @@ function renderField(
           badge: field.badge,
           unit: field.unit,
           aside: field.aside,
+          autoFocus: field.autoFocus,
           labelPosition,
           size,
           value: rhf.value,

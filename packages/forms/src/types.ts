@@ -75,6 +75,10 @@ export type FieldConfig = {
   label?: string;
   description?: string;
   placeholder?: string;
+  /**
+   * The choices of a `select`, `radio` or `checkbox` field. On a `text` field
+   * they are suggestions offered as the value is typed; any value may still be entered.
+   */
   options?: FieldOption[];
   /**
    * Shows the field and its value but stops it being changed. The value is
@@ -130,6 +134,8 @@ export type FieldConfig = {
    * unit — `quoted 14 d` beside an observed lead time. Display only.
    */
   aside?: string;
+  /** Put the caret in this field when it mounts — the one field a new record cannot do without. */
+  autoFocus?: boolean;
   /**
    * How many grid columns the field spans on `md+` screens. Defaults to `1`.
    * The grid is two columns by default (see `ObjectField`'s `columns`), so

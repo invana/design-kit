@@ -1,0 +1,21 @@
+{
+  "name": "element",
+  "fields": [
+    {
+      "name": "type",
+      "type": "text",
+      "label": "Type",
+      "placeholder": "Pick or type a type",
+      "autoFocus": true,
+      "options": [
+        { "label": "character", "value": "character" },
+        { "label": "place", "value": "place" },
+        { "label": "event", "value": "event" }
+      ],
+      "rules": { "required": "A new node needs a type" },
+      "colSpan": 2
+    },
+    { "name": "label", "type": "text", "label": "Label", "placeholder": "What the canvas draws", "colSpan": 2 }
+  ],
+  "initial": { "type": "", "label": "" }
+}
