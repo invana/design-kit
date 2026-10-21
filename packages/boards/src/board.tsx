@@ -70,12 +70,15 @@ function Panel({
   onAction,
   icons,
   gap,
+  fill,
 }: {
   panel: AnyPanel
   registry: PanelRegistry
   onAction: (id: string, ctx?: ActionContext) => void
   icons: Record<string, React.ComponentType<{ className?: string }>>
   gap: number
+  /** The row fills the board's height, so the panel's body does too. */
+  fill?: boolean
 }) {
   const Renderer = registry[panel.kind]
 
@@ -126,6 +129,7 @@ function Panel({
         )
       }
       flush={panel.flush || panel.absent != null}
+      fill={fill}
       style={style}
     >
       {body}
@@ -159,6 +163,7 @@ function Row({
           onAction={onAction}
           icons={icons}
           gap={gap}
+          fill={!!row.fill}
         />
       ))}
     </div>
