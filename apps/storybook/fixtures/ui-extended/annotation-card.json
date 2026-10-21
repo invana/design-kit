@@ -1,0 +1,49 @@
+[
+  {
+    "caption": "On a record",
+    "card": { "text": "Terminal 3 works run to March, so slots are capped", "color": "amber", "author": { "name": "Priya Nair", "tone": "success" }, "meta": "2 Oct" }
+  },
+  {
+    "caption": "On a value that changed since",
+    "card": {
+      "text": "Slipping since the summer schedule",
+      "color": "red",
+      "value": { "prop": "on_time", "now": "64%", "then": "71%" },
+      "author": { "name": "Priya Nair", "tone": "success" },
+      "meta": "2 Oct"
+    }
+  },
+  {
+    "caption": "The assistant's, this session only",
+    "actions": true,
+    "card": {
+      "text": "Leads every route out of LHR",
+      "color": "blue",
+      "value": { "prop": "growth_qoq", "now": "+14%", "then": "+14%" },
+      "author": { "name": "Assistant", "kind": "assistant" },
+      "meta": "Answer 1",
+      "sessionTag": "Session"
+    }
+  },
+  {
+    "caption": "A gap the graph cannot fill",
+    "actions": true,
+    "card": {
+      "text": "3 of BOM's routes have no seats_week this quarter. They are left out, not estimated.",
+      "color": "grey",
+      "gap": true,
+      "author": { "name": "Assistant", "kind": "assistant" },
+      "meta": "Answer 5",
+      "sessionTag": "Session"
+    }
+  },
+  {
+    "caption": "Being written",
+    "editing": true,
+    "card": { "text": "Slots are cap", "color": "amber", "author": { "name": "You", "initials": "Y" }, "meta": "just now" }
+  },
+  {
+    "caption": "Selected",
+    "card": { "text": "Codeshare renewal is due in Q1", "color": "green", "author": { "name": "Sam Okafor", "tone": "warning" }, "meta": "11 Sep", "selected": true }
+  }
+]

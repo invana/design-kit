@@ -1,0 +1,20 @@
+[
+  {
+    "caption": "On this board",
+    "width": 316,
+    "rows": [
+      { "id": "g1", "kind": "group", "color": "blue", "text": "Gulf — where the growth lands", "where": "7 records", "author": { "name": "You", "initials": "Y" }, "meta": "today", "step": "Step 2" },
+      { "id": "c1", "kind": "value", "color": "blue", "text": "Leads every route out of LHR", "where": "LHR–DXB · growth_qoq", "author": { "name": "Assistant", "kind": "assistant" }, "meta": "Answer 1", "sessionTag": "This session" },
+      { "id": "c2", "kind": "value", "color": "red", "text": "Slipping since the summer schedule", "where": "DXB · on_time", "author": { "name": "Priya Nair", "tone": "success" }, "meta": "2 Oct", "changed": true, "step": "Step 5" },
+      { "id": "h1", "kind": "highlight", "color": "amber", "text": "The onward path: London, Dubai, Mumbai", "where": "3 records", "author": { "name": "You", "initials": "Y" }, "meta": "today" }
+    ]
+  },
+  {
+    "caption": "Elsewhere, and gone",
+    "width": 316,
+    "rows": [
+      { "id": "e1", "kind": "note", "color": "amber", "text": "Competes for the same onward seats", "where": "AUH", "author": { "name": "Priya Nair", "tone": "success" }, "meta": "4 Oct", "dimmed": true, "load": true },
+      { "id": "o1", "kind": "note", "color": "amber", "text": "The source for the March slot cap", "where": "A-099", "author": { "name": "Priya Nair", "tone": "success" }, "meta": "1 Oct", "gone": true }
+    ]
+  }
+]

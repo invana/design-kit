@@ -1,0 +1,19 @@
+[
+  {
+    "caption": "People and the assistant",
+    "marks": [
+      { "name": "Priya Nair", "tone": "success" },
+      { "name": "Sam Okafor", "tone": "warning" },
+      { "name": "You", "initials": "Y", "tone": "primary" },
+      { "name": "Assistant", "kind": "assistant" }
+    ]
+  },
+  {
+    "caption": "At md, beside a heading",
+    "size": "md",
+    "marks": [
+      { "name": "Priya Nair", "tone": "success" },
+      { "name": "Assistant", "kind": "assistant" }
+    ]
+  }
+]
