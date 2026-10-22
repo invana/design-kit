@@ -17,6 +17,9 @@ interface Item {
   label: string;
   icon?: IconName;
   shortcut?: string;
+  disabled?: boolean;
+  destructive?: boolean;
+  separator?: boolean;
   children?: Item[];
 }
 
@@ -39,6 +42,9 @@ function itemCode(item: Item, indent = ''): string {
     `label: "${item.label}"`,
     item.icon ? `icon: ${ICON_NAMES[item.icon]}` : '',
     item.shortcut ? `shortcut: "${item.shortcut}"` : '',
+    item.disabled ? 'disabled: true' : '',
+    item.destructive ? 'destructive: true' : '',
+    item.separator ? 'separator: true' : '',
     `onClick: () => onClick("${item.id}")`,
     item.children ? `children: [\n${item.children.map((c) => inner + '  ' + itemCode(c, inner + '  ')).join(',\n')},\n${inner}]` : '',
   ].filter(Boolean);

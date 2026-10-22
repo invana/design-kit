@@ -13,6 +13,12 @@ export interface MenuItem {
   href?: string
   onClick?: () => void
   children?: MenuItem[]
+  /** Shown but not actionable — dimmed, skipped by the pointer. */
+  disabled?: boolean
+  /** Removes or deletes something: drawn in the destructive colour. */
+  destructive?: boolean
+  /** A dividing line between groups instead of a row; `label` is not drawn. */
+  separator?: boolean
 }
 
 export interface MenuItemProps extends MenuItem {
@@ -31,7 +37,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   className,
   level = 0,
   href,
-  onClick
+  onClick,
+  disabled,
+  destructive,
+  separator,
 }) => {
   const hasChildren = !!children && children.length > 0
   const [open, setOpen] = React.useState(false)
@@ -39,7 +48,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   const list = React.useRef<HTMLUListElement>(null)
   const ButtonOrLink = href ? 'a' : 'button'
 
-  const clickTrigger = href ? { href: href } : { onClick: onClick }
+  const clickTrigger = disabled
+    ? href ? { 'aria-disabled': true } : { disabled: true }
+    : href ? { href: href } : { onClick: onClick }
 
   // Opened from the keyboard: the list is shown first, so its first row can take focus.
   const openInto = () => {
@@ -51,6 +62,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     setOpen(false)
     row.current?.focus()
   }
+
+  if (separator) return <li role="separator" className="my-1 h-px bg-border" />
 
   return (
     <li
@@ -72,6 +85,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           "flex w-full items-center justify-between  px-4 py-2 ",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none",
+          destructive && "text-destructive hover:text-destructive focus-visible:text-destructive",
+          disabled && "pointer-events-none opacity-50",
           className,
           level === 0 ? "font-medium" : "font-normal",
         )}

@@ -8,15 +8,79 @@
       "icon": "settings",
       "shortcut": "⌘,",
       "children": [
-        { "id": "account", "label": "Account", "icon": "users", "shortcut": "⌘A" },
-        { "id": "security", "label": "Security", "icon": "shield", "shortcut": "⌘L" },
-        { "id": "notifications", "label": "Notifications", "icon": "bell" }
+        {
+          "id": "account",
+          "label": "Account",
+          "icon": "users",
+          "shortcut": "⌘A"
+        },
+        {
+          "id": "security",
+          "label": "Security",
+          "icon": "shield",
+          "shortcut": "⌘L"
+        },
+        {
+          "id": "notifications",
+          "label": "Notifications",
+          "icon": "bell"
+        }
       ]
     }
   },
   {
     "caption": "A plain row",
     "width": 240,
-    "item": { "id": "notifications", "label": "Notifications", "icon": "bell" }
+    "item": {
+      "id": "notifications",
+      "label": "Notifications",
+      "icon": "bell"
+    }
+  },
+  {
+    "caption": "A disabled row",
+    "width": 240,
+    "item": {
+      "id": "paste",
+      "label": "Paste",
+      "shortcut": "⌘V",
+      "disabled": true
+    }
+  },
+  {
+    "caption": "A destructive row",
+    "width": 240,
+    "item": {
+      "id": "delete",
+      "label": "Delete",
+      "shortcut": "⌫",
+      "destructive": true
+    }
+  },
+  {
+    "caption": "Groups split by a separator",
+    "width": 240,
+    "item": {
+      "id": "edit",
+      "label": "Edit",
+      "children": [
+        {
+          "id": "copy",
+          "label": "Copy",
+          "shortcut": "⌘C"
+        },
+        {
+          "id": "line",
+          "label": "",
+          "separator": true
+        },
+        {
+          "id": "remove",
+          "label": "Delete",
+          "shortcut": "⌫",
+          "destructive": true
+        }
+      ]
+    }
   }
 ]

@@ -46,6 +46,25 @@
         }
       ],
       "fixed": true
+    },
+    {
+      "caption": "With its own actions",
+      "width": 480,
+      "title": "Legend",
+      "aside": "7 types",
+      "actions": [
+        "Show all"
+      ],
+      "rows": [
+        {
+          "label": "airport",
+          "value": "58"
+        },
+        {
+          "label": "country",
+          "value": "12"
+        }
+      ]
     }
   ]
 }

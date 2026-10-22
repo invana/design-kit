@@ -14,6 +14,8 @@ export interface FloatingPanelProps
   onCollapsedChange?: (collapsed: boolean) => void
   /** What a folded panel still says — `● 3 · 4 layers`. */
   summary?: React.ReactNode
+  /** The panel's own controls in its bar, before fold and close — *Show all*, undo · redo. */
+  actions?: React.ReactNode
   /** Shows a close control at the end of the bar. */
   onClose?: () => void
   /** Under the body, above the edge — a total, a link out. */
@@ -68,6 +70,7 @@ export const FloatingPanel = React.forwardRef<HTMLDivElement, FloatingPanelProps
       collapsed = false,
       onCollapsedChange,
       summary,
+      actions,
       onClose,
       footer,
       className,
@@ -90,6 +93,7 @@ export const FloatingPanel = React.forwardRef<HTMLDivElement, FloatingPanelProps
         <div className="flex min-w-0 flex-1 items-center gap-2 text-sm text-muted-foreground">
           {collapsed && summary != null ? <span className="min-w-0 truncate">{summary}</span> : aside}
         </div>
+        {actions != null && !collapsed ? <div className="flex shrink-0 items-center gap-0.5">{actions}</div> : null}
         {onCollapsedChange ? (
           <button
             type="button"

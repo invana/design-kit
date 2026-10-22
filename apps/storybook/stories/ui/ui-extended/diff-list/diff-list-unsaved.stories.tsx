@@ -62,8 +62,8 @@ export const DiffListUnsaved: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: /DOH/ }));
-    await expect(canvas.getByRole('button', { name: /DOH/ }).closest('li')).toHaveAttribute('aria-current', 'true');
+    await userEvent.click(canvas.getByRole('button', { name: /^Added DOH/ }));
+    await expect(canvas.getByRole('button', { name: /^Added DOH/ }).closest('li')).toHaveAttribute('aria-current', 'true');
     await userEvent.click(canvas.getByRole('button', { name: 'Revert MUC' }));
     await expect(canvas.queryByText('MUC')).not.toBeInTheDocument();
   }

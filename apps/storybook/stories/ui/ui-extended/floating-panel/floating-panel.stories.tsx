@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { FloatingPanel as Component, PropertyList, PropertyRow } from '@invana/ui';
+import { Button, FloatingPanel as Component, PropertyList, PropertyRow } from '@invana/ui';
 
 import DATA from '../../../../fixtures/ui-extended/floating-panel.json';
 import { jsxWith, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -12,6 +12,8 @@ interface PanelVariant extends Variant {
   aside?: string;
   summary?: string;
   footer?: string;
+  /** Labels of the panel's own bar controls. */
+  actions?: string[];
   collapsed?: boolean;
   /** No fold, no close: a panel the host keeps open. */
   fixed?: boolean;
@@ -49,6 +51,7 @@ const meta = {
                   aside: v.aside ? { literal: v.aside } : undefined,
                   summary: v.summary ? { literal: v.summary } : undefined,
                   footer: v.footer ? { literal: v.footer } : undefined,
+                  actions: v.actions ? `<>${v.actions.map((a) => `<Button variant="ghost" size="xs">${a}</Button>`).join('')}</>` : undefined,
                   collapsed: v.fixed ? undefined : 'collapsed',
                   onCollapsedChange: v.fixed ? undefined : 'onCollapsedChange',
                   onClose: v.fixed ? undefined : 'onClose',
@@ -76,6 +79,11 @@ function Panel({ v, args, log }: { v: PanelVariant; args: Args; log: Log }) {
       aside={v.aside}
       summary={v.summary}
       footer={v.footer}
+      actions={v.actions?.map((a) => (
+        <Button key={a} variant="ghost" size="xs" onClick={() => log('action', a)}>
+          {a}
+        </Button>
+      ))}
       collapsed={collapsed}
       onCollapsedChange={
         v.fixed
