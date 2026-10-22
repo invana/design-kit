@@ -8,6 +8,11 @@ import {
   Badge,
   Button,
   cn,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Eyebrow,
 } from '@invana/ui';
 import { Plus, X } from 'lucide-react';
@@ -98,6 +103,8 @@ interface BaseFieldProps {
   valuePlaceholder?: string;
   addLabel?: string;
   emptyLabel?: string;
+  /** A `keyvalue` field takes only the keys in `options`. */
+  strictKeys?: boolean;
 }
 
 /**
@@ -775,11 +782,60 @@ export const IconField: React.FC<BaseFieldProps> = ({
   </FormItem>
 );
 
+/** The index of every row whose key repeats one above it — blank keys never count. */
+function repeatedKeys(rows: KeyValueEntry[]): Set<number> {
+  const seen = new Set<string>();
+  const out = new Set<number>();
+  rows.forEach((r, i) => {
+    const k = r.key.trim();
+    if (!k) return;
+    if (seen.has(k)) out.add(i);
+    seen.add(k);
+  });
+  return out;
+}
+
+/**
+ * The `keyvalue` field's own rule: each key once. Merged into the field's
+ * `rules` by `ObjectField`, so a form with a repeated key does not submit.
+ */
+export function uniqueKeys(value: unknown): true | string {
+  const rows: KeyValueEntry[] = Array.isArray(value) ? value : [];
+  const [first] = [...repeatedKeys(rows)];
+  return first === undefined ? true : `${rows[first]!.key.trim()} is set twice — one value per key.`;
+}
+
+/** A tag after a key: `new` (not among the known keys), `not in the model`. */
+function KeyTag({ children, tone }: { children: React.ReactNode; tone: 'warning' | 'muted' }) {
+  return (
+    <span
+      className={cn(
+        'pointer-events-none absolute top-1/2 right-7 -translate-y-1/2 rounded-sm px-1 text-xs leading-4',
+        tone === 'warning' ? 'bg-warning/15 text-foreground' : 'bg-muted text-muted-foreground',
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
 /**
  * A list of key → value rows — an element's properties, a request's headers.
- * Each row is two inputs and a remove button; *Add* appends a blank row. The
- * value is a `KeyValueEntry[]` in row order, blank and repeated keys included,
- * so the consumer decides what a blank key means when it saves.
+ * Each row is a key, a value and a remove button. The value is a
+ * `KeyValueEntry[]` in row order, blank keys included, so the consumer decides
+ * what a blank key means when it saves.
+ *
+ * **Each key once.** A key that repeats one above it is refused at its row, and
+ * the field's rule (`uniqueKeys`) keeps the form from submitting.
+ *
+ * **Known keys.** `options` are the keys this list expects — a type's keys in a
+ * schema — each `description` the kind of value it takes, shown as the value's
+ * placeholder. *Add* then lists the known keys not set yet. Without
+ * `strictKeys` a key is typed, the known ones offered as it is, and *Add* ends
+ * with *A key of your own*; a key outside `options` is tagged `new`. With
+ * `strictKeys` a key is picked from `options` only (none listed: nothing can be
+ * added), and a key already on the value that `options` lacks stays, tagged
+ * `not in the model`.
  *
  * The rows need the width, so the label always sits above them, whatever
  * `labelPosition` the form uses.
@@ -789,6 +845,8 @@ export const KeyValueField: React.FC<BaseFieldProps> = ({
   description,
   value,
   onChange,
+  options = [],
+  strictKeys = false,
   size = 'sm',
   labelClassName,
   badge,
@@ -799,11 +857,63 @@ export const KeyValueField: React.FC<BaseFieldProps> = ({
   addLabel = 'Add',
   emptyLabel = 'None yet.',
 }) => {
+  const listId = React.useId();
   const rows: KeyValueEntry[] = Array.isArray(value) ? value : [];
   const set = (i: number, patch: Partial<KeyValueEntry>) =>
     onChange?.(rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
   const remove = (i: number) => onChange?.(rows.filter((_, j) => j !== i));
-  const add = () => onChange?.([...rows, { key: '', value: '' }]);
+  const append = (key = '') => onChange?.([...rows, { key, value: '' }]);
+  const known = new Map(options.map((o) => [o.value, o]));
+  const used = new Set(rows.map((r) => r.key.trim()));
+  const free = options.filter((o) => !used.has(o.value) && !o.disabled);
+  const repeated = repeatedKeys(rows);
+
+  const keyCell = (row: KeyValueEntry, i: number) => {
+    const k = row.key.trim();
+    const name = `${keyPlaceholder} ${i + 1}`;
+    if (strictKeys && (known.has(k) || k === '')) {
+      return (
+        <Select value={k} onValueChange={(next) => set(i, { key: next })} disabled={disabled}>
+          <SelectTrigger aria-label={name} aria-invalid={repeated.has(i) || undefined} className={cn(SIZE[size].select, 'w-full font-mono')}>
+            <SelectValue placeholder={keyPlaceholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((o) => (
+              <SelectItem key={o.value} value={o.value} disabled={o.disabled || (o.value !== k && used.has(o.value))}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+    const tag = !k || options.length === 0 || known.has(k) ? null : strictKeys ? 'not in the model' : 'new';
+    return (
+      <span className="relative block">
+        <Input
+          className={cn(SIZE[size].input, 'w-full font-mono', tag && 'pr-28')}
+          placeholder={keyPlaceholder}
+          aria-label={name}
+          aria-invalid={repeated.has(i) || undefined}
+          disabled={disabled}
+          readOnly={strictKeys}
+          list={!strictKeys && options.length ? listId : undefined}
+          autoComplete={options.length ? 'off' : undefined}
+          value={row.key}
+          onChange={(e) => set(i, { key: e.target.value })}
+        />
+        {tag && <KeyTag tone={strictKeys ? 'muted' : 'warning'}>{tag}</KeyTag>}
+      </span>
+    );
+  };
+
+  const addButton = (
+    <Button type="button" variant="outline" size="sm" disabled={disabled || (strictKeys && free.length === 0)}>
+      <Plus />
+      {addLabel}
+    </Button>
+  );
+
   return (
     <FormItem className={itemClasses('top', size, className)}>
       <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
@@ -812,42 +922,69 @@ export const KeyValueField: React.FC<BaseFieldProps> = ({
           <div className={SIZE[size].stack}>
             {rows.length === 0 && <p className={cn(SIZE[size].desc, 'text-muted-foreground')}>{emptyLabel}</p>}
             {rows.map((row, i) => (
-              <div key={i} className={cn('flex items-center', SIZE[size].sideGap)}>
-                <Input
-                  className={cn(SIZE[size].input, 'min-w-0 flex-1')}
-                  placeholder={keyPlaceholder}
-                  aria-label={`${keyPlaceholder} ${i + 1}`}
-                  disabled={disabled}
-                  value={row.key}
-                  onChange={(e) => set(i, { key: e.target.value })}
-                />
-                <Input
-                  className={cn(SIZE[size].input, 'min-w-0 flex-1')}
-                  placeholder={valuePlaceholder}
-                  aria-label={`${valuePlaceholder} ${i + 1}`}
-                  disabled={disabled}
-                  value={row.value}
-                  onChange={(e) => set(i, { value: e.target.value })}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Remove ${row.key || `row ${i + 1}`}`}
-                  disabled={disabled}
-                  onClick={() => remove(i)}
-                >
-                  <X />
-                </Button>
+              <div key={i} className="flex flex-col gap-1">
+                <div className={cn('flex items-center', SIZE[size].sideGap)}>
+                  <div className="min-w-0 flex-1">{keyCell(row, i)}</div>
+                  <Input
+                    className={cn(SIZE[size].input, 'min-w-0 flex-1')}
+                    placeholder={known.get(row.key.trim())?.description ?? valuePlaceholder}
+                    aria-label={`${valuePlaceholder} ${i + 1}`}
+                    disabled={disabled}
+                    value={row.value}
+                    onChange={(e) => set(i, { value: e.target.value })}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={`Remove ${row.key || `row ${i + 1}`}`}
+                    disabled={disabled}
+                    onClick={() => remove(i)}
+                  >
+                    <X />
+                  </Button>
+                </div>
+                {repeated.has(i) && (
+                  <p role="alert" className={cn(SIZE[size].desc, 'text-destructive')}>
+                    <span className="font-mono">{row.key.trim()}</span> is already set above — one value per key.
+                  </p>
+                )}
               </div>
             ))}
+            {!strictKeys && options.length > 0 && (
+              <datalist id={listId}>
+                {free.map((o) => (
+                  <option key={o.value} value={o.value} />
+                ))}
+              </datalist>
+            )}
           </div>
         </FormControl>
         <div>
-          <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={add}>
-            <Plus />
-            {addLabel}
-          </Button>
+          {options.length === 0 ? (
+            <Button type="button" variant="outline" size="sm" disabled={disabled || strictKeys} onClick={() => append()}>
+              <Plus />
+              {addLabel}
+            </Button>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>{addButton}</DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-56">
+                {free.map((o) => (
+                  <DropdownMenuItem key={o.value} onSelect={() => append(o.value)} className="font-mono">
+                    <span className="flex-1">{o.label}</span>
+                    {o.description && <span className="text-muted-foreground font-sans text-xs">{o.description}</span>}
+                  </DropdownMenuItem>
+                ))}
+                {!strictKeys && (
+                  <>
+                    {free.length > 0 && <DropdownMenuSeparator />}
+                    <DropdownMenuItem onSelect={() => append()}>A key of your own</DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
         {description && (
           <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
@@ -883,6 +1020,14 @@ function humanize(name: string): string {
     .trim();
 }
 
+/** A `keyvalue` field's rules with `uniqueKeys` added to whatever `validate` it already has. */
+function withUniqueKeys(rules: FieldConfig['rules']): FieldConfig['rules'] {
+  const own = rules?.validate;
+  const validate: Record<string, (value: unknown) => ReturnType<typeof uniqueKeys> | Promise<unknown>> =
+    typeof own === 'function' ? { own: own as (value: unknown) => true | string, uniqueKeys } : { ...(own ?? {}), uniqueKeys };
+  return { ...rules, validate } as FieldConfig['rules'];
+}
+
 function renderField(
   field: FieldConfig,
   parentName: string,
@@ -897,7 +1042,7 @@ function renderField(
       control={control}
       name={`${parentName}.${field.name}`}
       defaultValue={field.defaultValue as AnyValue}
-      rules={field.rules}
+      rules={field.type === 'keyvalue' ? withUniqueKeys(field.rules) : field.rules}
       render={({ field: rhf }) => {
         const common: BaseFieldProps = {
           label: field.label ?? humanize(field.name),
@@ -942,13 +1087,19 @@ function renderField(
           case 'number':
             return <NumberField {...common} />;
           case 'select':
-            return <SelectField {...common} />;
+            return (
+              <SelectField
+                {...common}
+                {...(field.placeholder ? { placeholder: field.placeholder } : {})}
+              />
+            );
           case 'icon':
             return <IconField {...common} />;
           case 'keyvalue':
             return (
               <KeyValueField
                 {...common}
+                strictKeys={field.strictKeys}
                 keyPlaceholder={field.keyPlaceholder}
                 valuePlaceholder={field.valuePlaceholder}
                 addLabel={field.addLabel}

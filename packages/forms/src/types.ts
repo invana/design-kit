@@ -78,6 +78,8 @@ export type FieldConfig = {
   /**
    * The choices of a `select`, `radio` or `checkbox` field. On a `text` field
    * they are suggestions offered as the value is typed; any value may still be entered.
+   * On a `keyvalue` field they are the known keys, each `description` the kind
+   * of value it takes (see `strictKeys`).
    */
   options?: FieldOption[];
   /**
@@ -122,6 +124,11 @@ export type FieldConfig = {
   addLabel?: string;
   /** Shown by an empty `keyvalue` field. Default `None yet.` */
   emptyLabel?: string;
+  /**
+   * A `keyvalue` field takes only the keys in `options` — a type's keys in a
+   * schema. Without it, `options` are offered and any key may be typed.
+   */
+  strictKeys?: boolean;
   /** Number of visible rows for `textarea` fields. */
   rows?: number;
   /**

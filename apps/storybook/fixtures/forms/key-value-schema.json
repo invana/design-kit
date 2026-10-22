@@ -1,0 +1,22 @@
+{
+  "name": "element",
+  "keys": [
+    { "label": "code", "value": "code", "description": "text" },
+    { "label": "city", "value": "city", "description": "text" },
+    { "label": "country", "value": "country", "description": "text" },
+    { "label": "runways", "value": "runways", "description": "number" },
+    { "label": "iata", "value": "iata", "description": "text" },
+    { "label": "timezone", "value": "timezone", "description": "text" }
+  ],
+  "initial": {
+    "properties": [
+      { "key": "code", "value": "DXB" },
+      { "key": "city", "value": "Dubai" },
+      { "key": "runways", "value": "2" }
+    ]
+  },
+  "variants": [
+    { "caption": "Strict", "width": 380, "strictKeys": true },
+    { "caption": "Open", "width": 380, "strictKeys": false }
+  ]
+}

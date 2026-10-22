@@ -15,6 +15,7 @@ export {
   NumberField,
   IconField,
   KeyValueField,
+  uniqueKeys,
 } from './form-field';
 
 export type {
