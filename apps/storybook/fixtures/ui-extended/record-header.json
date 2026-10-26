@@ -42,5 +42,29 @@
     "crumbs": ["run:7d3184f1"],
     "chips": [{ "badge": "succeeded" }],
     "actions": [{ "label": "Open run", "variant": "outline" }]
+  },
+  {
+    "caption": "A detail page's head — section icon, a link back, the name as title",
+    "wide": true,
+    "variant": "page",
+    "icon": "agent",
+    "crumbs": ["Agents", "Fare Analyst"],
+    "links": 1,
+    "chips": [{ "badge": "v4" }, { "badge": "running" }],
+    "actions": [
+      { "label": "Run", "variant": "default" },
+      { "label": "More", "variant": "ghost", "icon": "more" }
+    ]
+  },
+  {
+    "caption": "A page head, tinted for its section — a policy",
+    "wide": true,
+    "variant": "page",
+    "icon": "policy",
+    "iconTone": "info",
+    "crumbs": ["Policies", "analysts-read-eu"],
+    "links": 1,
+    "chips": [{ "badge": "draft" }],
+    "actions": [{ "label": "Test access", "variant": "outline" }]
   }
 ]

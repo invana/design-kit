@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { Bot, ChevronLeft, ChevronRight, MoreHorizontal, ShieldCheck } from 'lucide-react';
 import {
   Badge,
   BoundChip,
@@ -23,8 +23,13 @@ interface Variant {
   wide?: boolean;
   width?: number;
   size?: string;
-  tone: string;
+  variant?: string;
+  tone?: string;
+  icon?: string;
+  iconTone?: string;
   crumbs: string[];
+  /** How many leading crumbs are links back. */
+  links?: number;
   chips: { bound?: string; badge?: string }[];
   views?: { value: string; label: string }[];
   view?: string;
@@ -40,10 +45,12 @@ interface Args {
   onAction: (label: string) => void;
   /** The view switch moved — the view's value. */
   onViewChange: (value: string) => void;
+  /** A crumb was followed back — its label. */
+  onNavigate: (label: string) => void;
 }
 
 /** Icons are code; the JSON names them. */
-const ICONS = { more: <MoreHorizontal />, previous: <ChevronLeft />, next: <ChevronRight /> };
+const ICONS = { more: <MoreHorizontal />, previous: <ChevronLeft />, next: <ChevronRight />, agent: <Bot />, policy: <ShieldCheck /> };
 type IconName = keyof typeof ICONS;
 
 const chipJsx = (c: { bound?: string; badge?: string }) =>
@@ -53,7 +60,10 @@ function code(v: Variant) {
   const lines = [
     '<RecordHeader',
     ...(v.size ? [`  size="${v.size}"`] : []),
-    `  tone="${v.tone}"`,
+    ...(v.variant ? [`  variant="${v.variant}"`] : []),
+    ...(v.tone ? [`  tone="${v.tone}"`] : []),
+    ...(v.icon ? [`  icon={${v.icon === 'agent' ? '<Bot />' : '<ShieldCheck />'}}`] : []),
+    ...(v.iconTone ? [`  iconTone="${v.iconTone}"`] : []),
     '  crumbs={crumbs}',
     `  chips={<>${v.chips.map(chipJsx).join('')}</>}`,
     '  actions={<>',
@@ -83,11 +93,15 @@ const meta = {
           snippets(
             [
               "import { Badge, BoundChip, Button, ButtonGroup, RecordHeader, ToggleGroup, ToggleGroupItem } from '@invana/ui';",
-              "import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';",
+              "import { Bot, ChevronLeft, ChevronRight, MoreHorizontal, ShieldCheck } from 'lucide-react';",
             ],
             picked.map((v) => ({
               comment: v.caption,
-              data: { crumbs: v.crumbs },
+              data: {
+                crumbs: v.links
+                  ? [...v.crumbs.slice(0, v.links).map((label) => ({ label, href: `/${label.toLowerCase()}` })), ...v.crumbs.slice(v.links)]
+                  : v.crumbs,
+              },
               setup: [
                 ...(v.views ? [`const [view, setView] = React.useState('${v.view}');`, '// onViewChange receives the view\'s value — "yml".', 'const onViewChange = (value) => value && setView(value);'] : []),
                 '// onAction receives the pressed button\'s label — "Cancel".',
@@ -100,7 +114,7 @@ const meta = {
       },
     },
   },
-  args: { variant: 'All', onAction: fn(), onViewChange: fn() },
+  args: { variant: 'All', onAction: fn(), onViewChange: fn(), onNavigate: fn() },
   argTypes: { variant: variantArg(VARIANTS) },
 } satisfies Meta<Args>;
 
@@ -108,7 +122,7 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /** Holds the view a consumer holds, and reports every press. */
-function Live({ v, log, onAction, onViewChange }: { v: Variant; log: Log } & Omit<Args, 'variant'>) {
+function Live({ v, log, onAction, onViewChange, onNavigate }: { v: Variant; log: Log } & Omit<Args, 'variant'>) {
   const [view, setView] = React.useState(v.view);
   const press = (label: string) => () => {
     onAction(label);
@@ -117,8 +131,21 @@ function Live({ v, log, onAction, onViewChange }: { v: Variant; log: Log } & Omi
   return (
     <RecordHeader
       size={v.size as RecordHeaderProps['size']}
+      variant={v.variant as RecordHeaderProps['variant']}
       tone={v.tone as RecordHeaderProps['tone']}
-      crumbs={v.crumbs}
+      icon={v.icon ? ICONS[v.icon as IconName] : undefined}
+      iconTone={v.iconTone as RecordHeaderProps['iconTone']}
+      crumbs={v.crumbs.map((label, i) =>
+        i < (v.links ?? 0)
+          ? {
+              label,
+              onClick: () => {
+                onNavigate(label);
+                log('onNavigate', label);
+              },
+            }
+          : label,
+      )}
       chips={
         <>
           {v.chips.map((c) =>
@@ -189,15 +216,16 @@ function Live({ v, log, onAction, onViewChange }: { v: Variant; log: Log } & Omi
  * Which record you are looking at, across the top of the surface showing it, from
  * `fixtures/ui-extended/record-header.json`. The **last** crumb is the record and is set solid;
  * the ones before it are the path, muted. Not a `ContextBar` — that describes the *view*; this
- * names the *record*. `lg` by default (a control's 40px, holding `sm` chips and buttons); `md`
+ * names the *record*. `variant="page"` is a detail page's head — the section's `icon` in a tile, a
+ * crumb that links back, the name as the title, in the UI face rather than mono. `lg` by default (a control's 40px, holding `sm` chips and buttons); `md`
  * sits level with a `PanelBox` header, for a record in a panel or drawer. Switch the view or press
  * a button: each is logged with what it carries.
  */
 export const RecordHeaderStory: Story = {
   name: 'RecordHeader',
-  render: ({ variant, onAction, onViewChange }) => (
+  render: ({ variant, onAction, onViewChange, onNavigate }) => (
     <VariantGrid variants={VARIANTS} variant={variant}>
-      {(v, log) => <Live v={v} log={log} onAction={onAction} onViewChange={onViewChange} />}
+      {(v, log) => <Live v={v} log={log} onAction={onAction} onViewChange={onViewChange} onNavigate={onNavigate} />}
     </VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
@@ -211,6 +239,12 @@ export const RecordHeaderStory: Story = {
       await userEvent.click(cell.getByRole('button', { name: 'Cancel' }));
       await expect(args.onAction).toHaveBeenCalledWith('Cancel');
       await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('"Cancel"');
+    });
+    const page = within(within(canvasElement).getByRole('group', { name: VARIANTS[4].caption }));
+    await step('Follow the page head back to its section', async () => {
+      await expect(page.getByText('Fare Analyst')).toHaveAttribute('aria-current', 'page');
+      await userEvent.click(page.getByRole('link', { name: 'Agents' }));
+      await expect(args.onNavigate).toHaveBeenCalledWith('Agents');
     });
   },
 };
