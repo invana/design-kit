@@ -1,0 +1,72 @@
+/*
+ * The categorical data palette.
+ *
+ * Node and edge types, chart series, legends and list dots all read this one
+ * scale, so a colour means the same thing wherever it appears — the dot beside
+ * `Observation` in a panel is the colour the canvas paints that node
+ * (design-kit-coverage.md D2).
+ *
+ * **Both modes are selected, not flipped.** The dark column is the same eight
+ * hues re-stepped for a dark surface. Validated with the dataviz validator
+ * against the kit's own card surfaces (`#fffdf7` light, `#1a1a1a` dark): the
+ * lightness band, chroma floor, adjacent-pair CVD separation and normal-vision
+ * floor all pass in both modes.
+ *
+ * Light mode carries a contrast WARN on aqua, yellow and magenta (below 3:1 on
+ * a near-white card). That is admissible **only** because every use in this
+ * system names the thing beside its swatch — a legend row has its type name, a
+ * chart series has a legend, a canvas node has its label. Colour is never the
+ * only carrier of identity here. Do not use these as a lone status colour, and
+ * do not put a value on a chart in series colour: text wears text tokens.
+ *
+ * Deliberately eight, in a fixed order. Slot 1 is the first series on every
+ * chart, not "whichever came back first from the query" — colour follows the
+ * entity, never its rank.
+ */
+
+@theme {
+  /* Light — the default, matching the base tokens in index.css. */
+  --color-data-1: #2a78d6; /* blue */
+  --color-data-2: #eb6834; /* orange */
+  --color-data-3: #1baf7a; /* aqua */
+  --color-data-4: #eda100; /* yellow */
+  --color-data-5: #e87ba4; /* magenta */
+  --color-data-6: #008300; /* green */
+  --color-data-7: #4a3aa7; /* violet */
+  --color-data-8: #e34948; /* red */
+}
+
+/*
+ * Dark — every dark theme, whatever its brand accent. The data palette is not a
+ * brand palette: a chart series does not change hue because the shell went from
+ * Gold to Ocean, or the same data would look like different data.
+ */
+[data-theme="default-dark"],
+[data-theme="tailwind-dark"],
+[data-theme="vite-dark"],
+[data-theme="gold-dark"],
+[data-theme="ocean-dark"],
+[data-theme="forest-dark"],
+[data-theme="rose-dark"],
+[data-theme="minimal-dark"],
+/* The generic hook every dark theme also stamps — this is what catches a theme
+   added after this file was written. The explicit ids above stay so the palette
+   works even where the class is not applied. */
+.dark,
+.theme-default-dark,
+.theme-tailwind-dark,
+.theme-vite-dark,
+.theme-gold-dark,
+.theme-ocean-dark,
+.theme-forest-dark,
+.theme-rose-dark,
+.theme-minimal-dark {
+  --color-data-1: #3987e5;
+  --color-data-2: #d95926;
+  --color-data-3: #199e70;
+  --color-data-4: #c98500;
+  --color-data-5: #d55181;
+  --color-data-6: #008300;
+  --color-data-7: #9085e9;
+  --color-data-8: #e66767;
+}
