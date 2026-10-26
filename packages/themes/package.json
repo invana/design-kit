@@ -1,6 +1,6 @@
 {
   "name": "@invana/themes",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "Invana Design System - App layout themes and components",
   "homepage": "https://github.com/invana/design-kit#readme",
   "type": "module",
