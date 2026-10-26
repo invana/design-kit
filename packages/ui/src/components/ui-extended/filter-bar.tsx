@@ -51,6 +51,12 @@ export interface FilterChipProps
   onRemove?: () => void
   /** What the × is called, for a screen reader. Defaults to `Clear <label>`. */
   removeLabel?: string
+  /**
+   * A filter already applied, shown rather than picked: the chip is text, not a
+   * button — no caret, no menu, the value in medium weight on a primary tint —
+   * and the × is its only control. What `AppliedFilters` draws.
+   */
+  readOnly?: boolean
 }
 
 /**
@@ -92,8 +98,34 @@ FilterBar.displayName = "FilterBar"
  * beside it.
  */
 export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
-  ({ label, value, active, onRemove, removeLabel, className, ...props }, ref) => {
-    const chip = (
+  ({ label, value, active, onRemove, removeLabel, readOnly, className, ...props }, ref) => {
+    const parts = (
+      <>
+        <span className={cn(value != null && "text-muted-foreground")}>{label}</span>
+        {value != null ? (
+          <span className={cn("truncate", readOnly && "font-medium")}>{value}</span>
+        ) : null}
+        {readOnly ? null : (
+          <span aria-hidden className="text-muted-foreground">
+            ▾
+          </span>
+        )}
+      </>
+    )
+    const chip = readOnly ? (
+      <Button
+        asChild
+        variant="outline"
+        size="sm"
+        className={cn(
+          "cursor-default gap-1 border-primary/40 bg-primary/5 px-1.5 font-normal hover:bg-primary/5 hover:text-foreground",
+          onRemove && "rounded-r-none border-r-0",
+          className,
+        )}
+      >
+        <span>{parts}</span>
+      </Button>
+    ) : (
       <Button
         ref={ref}
         type="button"
@@ -108,11 +140,7 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         )}
         {...props}
       >
-        <span className={cn(value != null && "text-muted-foreground")}>{label}</span>
-        {value != null ? <span className="truncate">{value}</span> : null}
-        <span aria-hidden className="text-muted-foreground">
-          ▾
-        </span>
+        {parts}
       </Button>
     )
 
@@ -132,7 +160,8 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
           }
           className={cn(
             "rounded-l-none px-1 font-normal text-muted-foreground hover:text-foreground",
-            active && "border-primary/40",
+            (active || readOnly) && "border-primary/40",
+            readOnly && "bg-primary/5",
           )}
         >
           <span aria-hidden>×</span>

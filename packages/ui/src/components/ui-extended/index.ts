@@ -5,6 +5,7 @@ export * from './agent-header';
 export * from './annotation-card';
 export * from './annotation-row';
 export * from './app-status-bar';
+export * from './applied-filters';
 export * from './artifact-table';
 export * from './author-mark';
 export * from './bound-chip';

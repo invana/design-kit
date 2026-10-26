@@ -1,0 +1,25 @@
+[
+  {
+    "caption": "Set by the assistant",
+    "width": 760,
+    "setBy": "the assistant",
+    "filters": [
+      { "field": "agent", "title": "agent", "value": "route-auditor", "label": "Route Auditor" },
+      { "field": "status", "title": "status", "value": "not_served", "label": "not served" },
+      { "field": "since", "title": "since", "value": "30d", "label": "30 days" }
+    ]
+  },
+  {
+    "caption": "Set by the reader",
+    "width": 760,
+    "filters": [
+      { "field": "q", "title": "name", "value": "fare", "label": "fare" },
+      { "field": "kind", "title": "kind", "value": "authored,spawned", "label": "authored · spawned" },
+      { "field": "ephemeral", "title": "ephemeral", "value": "true", "label": "shown" }
+    ]
+  },
+  {
+    "caption": "Nothing filtered — draws nothing",
+    "filters": []
+  }
+]
