@@ -5,3 +5,35 @@
   href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
   rel="stylesheet"
 />
+
+<!-- Paint the theme before the first frame. The toolbar decorator applies it from
+     a layout effect, which still runs after the bundle has loaded — until then the
+     :root defaults (light) would show. Mirrors applyTheme() for the default
+     theme + "system" variant, or whatever `?globals=theme:…;variant:…` names. -->
+<script>
+  (function () {
+    try {
+      var g = {};
+      (new URLSearchParams(location.search).get("globals") || "").split(";").forEach(function (kv) {
+        var i = kv.indexOf(":");
+        if (i > 0) g[kv.slice(0, i)] = kv.slice(i + 1);
+      });
+      var theme = g.theme || "default";
+      var variant = g.variant || "system";
+      var mode = variant === "system"
+        ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        : variant;
+      var id = theme + "-" + mode;
+      var root = document.documentElement;
+      root.setAttribute("data-theme", id);
+      root.classList.add("theme-" + id, mode);
+    } catch (e) {}
+  })();
+</script>
+
+<!-- Storybook's own "preparing story" overlay is hard-coded white; under a dark
+     theme it would flash white between the page and the story. -->
+<style>
+  html.dark .sb-preparing-story,
+  html.dark .sb-preparing-docs { background-color: #0e0f11; }
+</style>

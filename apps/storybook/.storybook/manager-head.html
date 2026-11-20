@@ -1,0 +1,8 @@
+<!-- The manager and its preview frame are white until their bundles load; under a
+     dark OS, paint them dark so the first frames aren't a white flash. -->
+<style>
+  @media (prefers-color-scheme: dark) {
+    html, body { background: #1b1c1d; }
+    #storybook-preview-iframe, div:has(> #preview-loader) { background: #0e0f11 !important; }
+  }
+</style>
