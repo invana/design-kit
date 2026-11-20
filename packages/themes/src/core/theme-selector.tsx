@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useIsoLayoutEffect } from './use-iso-layout-effect';
+import React, { useMemo, useState } from 'react';
 import {
   RichSelect,
   ToggleGroup,
@@ -217,7 +218,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
 
   // Standalone: apply theme + mode to the document root ourselves (the provider
   // does this when present).
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     if (hasProvider) return;
     const id = mode === 'system' ? `${theme}-${isDark ? 'dark' : 'light'}` : `${theme}-${mode}`;
     applyTheme(getThemeVariantById(id) ? id : 'default-light');

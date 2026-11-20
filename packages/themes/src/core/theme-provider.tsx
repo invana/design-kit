@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useIsoLayoutEffect } from './use-iso-layout-effect';
 import {
   themes,
   applyTheme,
@@ -159,8 +160,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const systemDark = useSystemDark();
   const isDark = mode === 'system' ? systemDark : mode === 'dark';
 
-  // Apply theme to DOM whenever theme / mode / isDark changes.
-  useEffect(() => {
+  // Apply theme to DOM whenever theme / mode / isDark changes. A layout effect,
+  // so it lands before first paint and before any child's passive effect.
+  useIsoLayoutEffect(() => {
     const variantId = buildVariantId(theme, mode, isDark);
     // Validate the variant exists before applying
     const resolved = getThemeVariantById(variantId);
