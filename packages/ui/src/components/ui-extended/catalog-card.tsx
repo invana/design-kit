@@ -4,12 +4,12 @@ import { Plus } from "lucide-react"
 import { cn } from "../../lib/utils"
 
 export interface CatalogCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
-  /** The logo on the left — a `BrandMark` at `lg`, usually. */
+  /** The logo left of the title — a `BrandMark` at `lg`, usually. */
   media?: React.ReactNode
   title: React.ReactNode
-  /** What it does, in a sentence; clamped to two lines. */
+  /** What it does, in a sentence, under the logo at the card's full width; clamped to two lines. */
   description?: React.ReactNode
-  /** One line under the description; its parts are joined with " · ". */
+  /** One line under the title, beside the logo; its parts are joined with " · ". */
   meta?: React.ReactNode[]
 }
 
@@ -27,27 +27,29 @@ export const CatalogCard = React.forwardRef<HTMLButtonElement, CatalogCardProps>
         type="button"
         data-slot="catalog-card"
         className={cn(
-          "group/card relative flex w-full items-start gap-3 rounded-md p-3 text-left outline-none transition-colors",
+          "group/card relative flex w-full flex-col gap-2 rounded-md p-3 text-left outline-none transition-colors",
           "hover:bg-accent/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
           className
         )}
         {...props}
       >
-        {media}
-        <span className="flex min-w-0 flex-1 flex-col gap-0.5 pr-8">
-          <span className="font-medium">{title}</span>
-          {description && <span className="line-clamp-2 text-muted-foreground">{description}</span>}
-          {parts.length > 0 && (
-            <span className="truncate text-sm text-muted-foreground">
-              {parts.map((part, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <span aria-hidden> · </span>}
-                  {part}
-                </React.Fragment>
-              ))}
-            </span>
-          )}
+        <span className="flex min-w-0 items-center gap-3 pr-8">
+          {media}
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="truncate font-medium">{title}</span>
+            {parts.length > 0 && (
+              <span className="truncate text-sm text-muted-foreground">
+                {parts.map((part, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <span aria-hidden> · </span>}
+                    {part}
+                  </React.Fragment>
+                ))}
+              </span>
+            )}
+          </span>
         </span>
+        {description && <span className="line-clamp-2 text-muted-foreground">{description}</span>}
         <span
           aria-hidden
           className="absolute right-3 top-3 flex size-control-sm items-center justify-center rounded-control border border-border bg-background opacity-0 transition-opacity group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [&_svg]:size-4"
