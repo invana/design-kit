@@ -1,0 +1,67 @@
+[
+  {
+    "caption": "Monograms",
+    "marks": [
+      {
+        "name": "Neo4j"
+      },
+      {
+        "name": "TinkerGraph"
+      },
+      {
+        "name": "Memgraph"
+      },
+      {
+        "name": "ArcadeDB"
+      }
+    ],
+    "size": "md"
+  },
+  {
+    "caption": "Sizes",
+    "marks": [
+      {
+        "name": "Neo4j",
+        "size": "sm"
+      },
+      {
+        "name": "Neo4j",
+        "size": "md"
+      },
+      {
+        "name": "Neo4j",
+        "size": "lg"
+      }
+    ]
+  },
+  {
+    "caption": "With a logo",
+    "marks": [
+      {
+        "name": "Graph",
+        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PGNpcmNsZSBjeD0nNicgY3k9JzEyJyByPSc0JyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PSc2JyByPSczJyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PScxOCcgcj0nMycgZmlsbD0nIzJhN2ZhNScvPjxwYXRoIGQ9J002IDEyTDE4IDZNNiAxMkwxOCAxOCcgc3Ryb2tlPScjMmE3ZmE1JyBzdHJva2Utd2lkdGg9JzEuNScvPjwvc3ZnPg==",
+        "size": "sm"
+      },
+      {
+        "name": "Graph",
+        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PGNpcmNsZSBjeD0nNicgY3k9JzEyJyByPSc0JyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PSc2JyByPSczJyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PScxOCcgcj0nMycgZmlsbD0nIzJhN2ZhNScvPjxwYXRoIGQ9J002IDEyTDE4IDZNNiAxMkwxOCAxOCcgc3Ryb2tlPScjMmE3ZmE1JyBzdHJva2Utd2lkdGg9JzEuNScvPjwvc3ZnPg==",
+        "size": "md"
+      },
+      {
+        "name": "Graph",
+        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PGNpcmNsZSBjeD0nNicgY3k9JzEyJyByPSc0JyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PSc2JyByPSczJyBmaWxsPScjMmE3ZmE1Jy8+PGNpcmNsZSBjeD0nMTgnIGN5PScxOCcgcj0nMycgZmlsbD0nIzJhN2ZhNScvPjxwYXRoIGQ9J002IDEyTDE4IDZNNiAxMkwxOCAxOCcgc3Ryb2tlPScjMmE3ZmE1JyBzdHJva2Utd2lkdGg9JzEuNScvPjwvc3ZnPg==",
+        "size": "lg"
+      }
+    ]
+  },
+  {
+    "caption": "A logo that fails to load",
+    "marks": [
+      {
+        "name": "Neo4j",
+        "src": "data:image/png;base64,broken",
+        "size": "lg"
+      }
+    ]
+  }
+]

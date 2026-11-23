@@ -1,0 +1,34 @@
+[
+  {
+    "caption": "Checking",
+    "width": 380,
+    "status": "checking"
+  },
+  {
+    "caption": "Connected",
+    "width": 380,
+    "status": "ok",
+    "details": [
+      "Neo4j/5.26.0",
+      "12 ms"
+    ]
+  },
+  {
+    "caption": "Failed",
+    "width": 380,
+    "status": "failed",
+    "error": "Nothing answered at graph-1:7688. Check the address and port, then test again.",
+    "action": "Check again"
+  },
+  {
+    "caption": "A saved connection's last check",
+    "width": 380,
+    "status": "ok",
+    "title": "Reachable",
+    "details": [
+      "Neo4j/5.26.0",
+      "12 ms",
+      "2 min ago"
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "caption": "A connection's actions",
+    "label": "More for airways",
+    "items": [
+      {
+        "key": "open",
+        "label": "Open"
+      },
+      {
+        "key": "check",
+        "label": "Check"
+      },
+      {
+        "key": "edit",
+        "label": "Edit"
+      },
+      {
+        "key": "delete",
+        "label": "Delete",
+        "destructive": true,
+        "separatorBefore": true
+      }
+    ]
+  },
+  {
+    "caption": "A member's actions",
+    "label": "More for fraud-rings",
+    "items": [
+      {
+        "key": "open",
+        "label": "Open"
+      },
+      {
+        "key": "check",
+        "label": "Check"
+      },
+      {
+        "key": "edit",
+        "label": "Edit",
+        "disabled": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "caption": "A connection",
+    "width": 420,
+    "mark": "Neo4j",
+    "title": "airways",
+    "status": "success",
+    "statusLabel": "Reachable",
+    "meta": [
+      "Neo4j",
+      "bolt://graph-1:7687"
+    ],
+    "opens": true,
+    "menu": [
+      "Open",
+      "Check",
+      "Edit",
+      "Delete"
+    ]
+  },
+  {
+    "caption": "An unreachable connection",
+    "width": 420,
+    "mark": "Neo4j",
+    "title": "staging",
+    "status": "error",
+    "statusLabel": "Unreachable",
+    "meta": [
+      "Neo4j",
+      "unreachable \u00b7 2 min ago"
+    ],
+    "opens": true,
+    "menu": [
+      "Open",
+      "Check",
+      "Edit",
+      "Delete"
+    ]
+  },
+  {
+    "caption": "A connector with an action",
+    "width": 420,
+    "mark": "TinkerGraph",
+    "title": "TinkerGraph",
+    "meta": [
+      "Graph database",
+      "Gremlin",
+      "By Invana"
+    ],
+    "action": "Connect"
+  },
+  {
+    "caption": "Small, nested",
+    "width": 420,
+    "size": "sm",
+    "title": "tinker-local",
+    "status": "success",
+    "statusLabel": "Reachable",
+    "meta": [
+      "ws://localhost:8182"
+    ],
+    "opens": true,
+    "menu": [
+      "Open",
+      "Check"
+    ]
+  },
+  {
+    "caption": "A long name truncates",
+    "width": 280,
+    "mark": "Neo4j",
+    "title": "customer-360-production-graph-eu-west",
+    "meta": [
+      "Neo4j",
+      "bolt://customer-360.eu-west.internal:7687"
+    ],
+    "opens": true,
+    "menu": [
+      "Open"
+    ]
+  }
+]

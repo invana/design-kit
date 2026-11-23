@@ -1,0 +1,52 @@
+[
+  {
+    "caption": "Connectors",
+    "width": 420,
+    "cards": [
+      {
+        "key": "neo4j",
+        "title": "Neo4j",
+        "description": "Neo4j 5 and later, over Bolt.",
+        "meta": [
+          "Cypher",
+          "By Invana",
+          "4 connected"
+        ]
+      },
+      {
+        "key": "tinkergraph",
+        "title": "TinkerGraph",
+        "description": "Apache TinkerPop's in-memory graph, behind a Gremlin Server.",
+        "meta": [
+          "Gremlin",
+          "By Invana",
+          "1 connected"
+        ]
+      },
+      {
+        "key": "memgraph",
+        "title": "Memgraph",
+        "description": "Memgraph 2 and later, over Bolt.",
+        "meta": [
+          "Cypher",
+          "By Invana"
+        ]
+      }
+    ]
+  },
+  {
+    "caption": "A long description clamps",
+    "width": 320,
+    "cards": [
+      {
+        "key": "janusgraph",
+        "title": "JanusGraph",
+        "description": "A distributed graph database over Gremlin Server, storing on Cassandra, HBase or ScyllaDB and indexing with Elasticsearch or Solr.",
+        "meta": [
+          "Gremlin",
+          "By Invana"
+        ]
+      }
+    ]
+  }
+]
