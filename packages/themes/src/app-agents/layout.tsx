@@ -5,7 +5,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@invana/ui";
-import { cn } from '@invana/ui/lib/utils';
+import { cn } from '@invana/ui';
 import { AppLayoutBase } from '../app-base';
 import type { MainSectionConfig, SectionConfig } from '../app-v2';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TooltipProvider, NavHorizontal, type NavHorizontalProps } from "@invana/ui";
-import { cn } from '@invana/ui/lib/utils';
+import { cn } from '@invana/ui';
 
 /**
  * The chrome surface. Header and footer are one frame around `main`, so they

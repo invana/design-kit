@@ -1,8 +1,7 @@
-/* 1. Import Tailwind first */
-@import "tailwindcss";
-
-/* 2. Define YOUR app's source paths */
-@source "../**/*.{js,ts,jsx,tsx}";
-
-/* 3. Import the shared theme */
-@import "@invana/styling/index.css";
+/*
+ * @invana/themes/styles.css — no utilities ship here.
+ *
+ * An app compiles the kit's classes in its own Tailwind build, so its variants
+ * win over the kit's base classes. The app must @source the kit's dist, e.g.
+ *   @source "../node_modules/@invana/themes/dist";
+ */

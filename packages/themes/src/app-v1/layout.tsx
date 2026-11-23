@@ -5,7 +5,7 @@ import {
   type NavVerticalProps, 
   type NavHorizontalProps }
 from "@invana/ui";
-import { cn } from '@invana/ui/lib/utils';
+import { cn } from '@invana/ui';
 
 export interface AppLayoutV1Props {
   /**

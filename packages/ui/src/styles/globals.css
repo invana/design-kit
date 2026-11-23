@@ -1,19 +1,15 @@
-/* 1. Import Tailwind first */
-@import "tailwindcss";
-
-/* 2. Import the shared theme */
-@import "@invana/styling";
-
-/* 3. Define YOUR app's source paths */
-@source "../components/**/*.{js,ts,jsx,tsx}";
-
-@custom-variant dark (&:is(.dark *));
+/*
+ * @invana/ui/styles.css — only what Tailwind cannot generate for an app.
+ *
+ * No utilities ship here. An app compiles the kit's classes in its own
+ * Tailwind build, so its variants (`lg:block`, `hover:…`) win over the kit's
+ * base classes in one utilities layer. The app must:
+ *   1. @import "tailwindcss" and "@invana/styling" (the theme)
+ *   2. @source the kit's dist, e.g. @source "../node_modules/@invana/ui/dist";
+ */
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
   }
 }
