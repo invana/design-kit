@@ -1,0 +1,80 @@
+[
+  {
+    "caption": "Settings",
+    "trigger": { "label": "Settings", "variant": "outline", "icon": "settings" },
+    "title": "Settings",
+    "description": "How this workspace is set up.",
+    "groups": [
+      {
+        "items": [
+          { "key": "account", "label": "Account", "icon": "user" },
+          { "key": "appearance", "label": "Appearance", "icon": "palette" },
+          { "key": "notifications", "label": "Notifications", "icon": "bell" }
+        ]
+      },
+      {
+        "label": "Admin",
+        "items": [
+          { "key": "access", "label": "Access record", "icon": "lock" },
+          { "key": "billing", "label": "Billing", "icon": "credit-card" }
+        ]
+      }
+    ],
+    "sections": {
+      "account": [
+        { "properties": [
+          { "label": "Name", "value": "Ada Lovelace" },
+          { "label": "Username", "value": "ada", "mono": true },
+          { "label": "Role", "value": "Admin" }
+        ] }
+      ],
+      "appearance": [
+        { "muted": "How Studio looks on this device." },
+        { "switches": [{ "id": "compact", "label": "Compact rows", "checked": false }] }
+      ],
+      "notifications": [
+        { "muted": "What reaches you, and where." },
+        { "switches": [
+          { "id": "runs", "label": "A run finishes", "checked": true },
+          { "id": "mentions", "label": "Someone mentions you", "checked": true }
+        ] }
+      ],
+      "access": [
+        { "muted": "Every sign-in, key and refusal, newest first." },
+        { "items": [
+          { "title": "Signed in", "description": "ada · password · 2 minutes ago", "icon": "check-circle" },
+          { "title": "Sign-in failed", "description": "grace · password · 1 hour ago", "icon": "alert-triangle" }
+        ] }
+      ],
+      "billing": [
+        { "metric": { "label": "This month", "value": "1.2M tokens", "caption": "of 5M", "meter": 24 } }
+      ]
+    },
+    "footer": { "label": "API keys", "variant": "ghost" }
+  },
+  {
+    "caption": "No search",
+    "trigger": { "label": "Project settings", "variant": "outline", "icon": "settings-2" },
+    "title": "Project settings",
+    "searchable": false,
+    "groups": [
+      {
+        "items": [
+          { "key": "general", "label": "General", "icon": "settings" },
+          { "key": "members", "label": "Members", "icon": "user-plus" }
+        ]
+      }
+    ],
+    "sections": {
+      "general": [
+        { "fields": [{ "id": "project-name", "label": "Name", "value": "chickpea-breeding" }] }
+      ],
+      "members": [
+        { "items": [
+          { "title": "Ada Lovelace", "description": "Owner", "icon": "user" },
+          { "title": "Grace Hopper", "description": "Editor", "icon": "user" }
+        ] }
+      ]
+    }
+  }
+]

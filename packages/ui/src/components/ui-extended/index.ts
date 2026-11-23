@@ -41,6 +41,7 @@ export * from './match-preview';
 export * from './menu-item';
 export * from './metric-tile';
 export * from './nav-base';
+export * from './nav-dialog';
 export * from './nav-horizontal';
 export * from './nav-vertical';
 export * from './nested-menu';
