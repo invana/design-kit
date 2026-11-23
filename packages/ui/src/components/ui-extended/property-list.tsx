@@ -24,6 +24,8 @@ export interface PropertyRowProps
   children?: React.ReactNode
   /** Renders the value in the mono face — an id, a key, a query fragment. */
   mono?: boolean
+  /** A muted fact about the value, right-aligned after it — what wrote it, and when. */
+  meta?: React.ReactNode
 }
 
 /**
@@ -64,7 +66,7 @@ export const PropertyList = React.forwardRef<HTMLDListElement, PropertyListProps
 PropertyList.displayName = "PropertyList"
 
 export const PropertyRow = React.forwardRef<HTMLDivElement, PropertyRowProps>(
-  ({ label, mono, className, children, ...props }, ref) => (
+  ({ label, mono, meta, className, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -78,8 +80,15 @@ export const PropertyRow = React.forwardRef<HTMLDivElement, PropertyRowProps>(
       <dt className="shrink-0 truncate text-sm text-muted-foreground [width:var(--property-label-width,78px)] group-data-[label-width=auto]/property-list:w-auto">
         {label}
       </dt>
-      <dd className={cn("min-w-0 flex-1", mono && "font-mono text-sm")}>
-        {children}
+      <dd className={cn("min-w-0 flex-1", meta != null && "flex items-baseline gap-2")}>
+        {meta != null ? (
+          <>
+            <span className={cn("min-w-0 flex-1", mono && "font-mono text-sm")}>{children}</span>
+            <span className="shrink-0 text-sm text-muted-foreground">{meta}</span>
+          </>
+        ) : (
+          <span className={cn(mono && "font-mono text-sm")}>{children}</span>
+        )}
       </dd>
     </div>
   ),

@@ -40,6 +40,7 @@ export type { SettingsPanelProps } from './settings-panel';
 export { ColorSwatches } from './fields/color-swatches';
 export { SliderNumber } from './fields/slider-number';
 export { IconInput } from './fields/icon-input';
+export { FileDrop, type FileDropProps } from './fields/file-drop';
 
 export * from './components';
 

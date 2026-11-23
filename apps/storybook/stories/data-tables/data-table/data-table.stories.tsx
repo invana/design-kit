@@ -6,12 +6,14 @@ import {
   DataTable,
   type CellEdit,
   type CellEditHandler,
+  type ColumnDef,
   type ExpandedState,
   type SortingState,
   type StreamMode,
   type TableStream,
 } from '@invana/tables';
-import { Card, CardContent, PropertyList, PropertyRow, SegmentedControl, type TableDensity } from '@invana/ui';
+import { Checkbox } from '@invana/forms';
+import { Button, Card, CardContent, PropertyList, PropertyRow, SegmentedControl, type TableDensity } from '@invana/ui';
 
 import variants from '../../../fixtures/data-tables/data-table.json';
 import stores from '../../../fixtures/data-tables/stores.json';
@@ -555,6 +557,85 @@ export const DataTableStory: Story = {
       const rows = cell.getAllByRole('row');
       await expect(rows[1]).toHaveTextContent('Airport');
       await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('[{ "id": "store", "desc": false }]');
+    });
+  },
+};
+
+interface Store {
+  store: string;
+  region: string;
+  revenue: number;
+}
+
+/** Stores to pick from: a checkbox per row, and the selection bar once any is picked. */
+function SelectionDemo({ onRowClick }: { onRowClick: (rowId: string) => void }) {
+  const rows = (stores as Store[]).slice(0, 6);
+  const [picked, setPicked] = React.useState<Set<string>>(new Set());
+  const toggle = (name: string) =>
+    setPicked((now) => {
+      const next = new Set(now);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  const columns: ColumnDef<Store>[] = [
+    {
+      id: 'pick',
+      header: '',
+      cell: ({ row }) => (
+        <Checkbox
+          aria-label={`Pick ${row.original.store}`}
+          checked={picked.has(row.original.store)}
+          onCheckedChange={() => toggle(row.original.store)}
+        />
+      ),
+    },
+    { accessorKey: 'store', header: 'Store' },
+    { accessorKey: 'region', header: 'Region' },
+    { accessorKey: 'revenue', header: 'Revenue' },
+  ];
+  return (
+    <DataTable
+      data={rows}
+      columns={columns}
+      getRowId={(row) => row.store}
+      toolbar={<span className="text-muted-foreground">{rows.length} stores</span>}
+      selection={{
+        count: picked.size,
+        actions: (
+          <>
+            <Button size="sm" variant="outline" onClick={() => onRowClick([...picked].join(', '))}>
+              Fix
+            </Button>
+            <Button size="sm" variant="outline" disabled={picked.size < 2}>
+              Merge
+            </Button>
+          </>
+        ),
+        onClear: () => setPicked(new Set()),
+      }}
+    />
+  );
+}
+
+/**
+ * The selection bar: the caller counts the picked rows and passes `selection` with `count`,
+ * `actions` and `onClear`. With any picked, the toolbar reads *n picked*, then the actions, then
+ * Clear, in place of its search and filters; Clear returns them.
+ */
+export const Selection: Story = {
+  render: ({ onRowClick }) => <SelectionDemo onRowClick={onRowClick} />,
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    await step('Picking rows shows the bar with their count', async () => {
+      await userEvent.click(canvas.getByRole('checkbox', { name: 'Pick North Mall' }));
+      await expect(canvas.getByRole('region', { name: 'Picked rows' })).toHaveTextContent('1 picked');
+    });
+    await step('An action gets the pick; Clear empties it', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Fix' }));
+      await expect(args.onRowClick).toHaveBeenCalledWith('North Mall');
+      await userEvent.click(canvas.getByRole('button', { name: 'Clear' }));
+      await expect(canvas.queryByRole('region', { name: 'Picked rows' })).toBeNull();
     });
   },
 };

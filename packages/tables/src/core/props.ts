@@ -10,6 +10,17 @@ import type { TableDensity } from "@invana/ui";
 import type { CellEditHandler, FilterValues, TableFilter } from "../types";
 
 /**
+ * Picked rows, as the caller counts them. With `count` above 0 the toolbar
+ * shows *n picked*, the `actions` (Fix, Merge), and Clear, in place of its
+ * search and filters, so what can be done to the pick is where the eye is.
+ */
+export interface TableSelection {
+  count: number;
+  actions?: React.ReactNode;
+  onClear: () => void;
+}
+
+/**
  * Everything a table reads the same way whether it shows every row, pages
  * them itself or asks a server for each page. `DataTable`, `PaginatedTable`
  * and `RemotePaginatedTable` each take all of this, and add only their own
@@ -50,6 +61,8 @@ export interface TableBaseProps<TData extends RowData> {
   editTrigger?: "click" | "dblclick";
   /** Anything beside the table's own controls, at the start of the toolbar. */
   toolbar?: React.ReactNode;
+  /** Rows the caller has picked; with any, the toolbar becomes the selection bar. */
+  selection?: TableSelection;
   /** Content rendered as a sticky summary bar inside the table's bordered container, below the rows. */
   footer?: React.ReactNode;
   className?: string;

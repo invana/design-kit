@@ -276,6 +276,7 @@ export function RemotePaginatedTable<TData extends RowData>(
         table={table}
         enableColumnVisibility={enableColumnVisibility}
         enableColumnPinning={enableColumnPinning}
+        selection={props.selection}
         search={
           searchable
             ? { value: typed, onChange: setTyped, placeholder: searchPlaceholder }

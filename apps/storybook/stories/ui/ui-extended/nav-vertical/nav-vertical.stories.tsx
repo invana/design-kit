@@ -1,7 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { NavVertical, PanelBox, StatusDot, TypographyMuted, type StatusDotProps } from '@invana/ui';
+import { Cable, Database, Network, Plus, Rows3, ShieldCheck } from 'lucide-react';
+import { ButtonWithTooltip, NavVertical, PanelBox, StatusDot, TypographyMuted, type StatusDotProps } from '@invana/ui';
 
 import VARIANTS from '../../../../fixtures/ui-extended/nav-vertical.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -109,6 +110,78 @@ export const NavVerticalStory: Story = {
       await userEvent.click(within(document.body).getByRole('menuitem', { name: /New query/ }));
       await expect(args.onSelect).toHaveBeenCalledWith('New', 'query');
       await expect(cell.getByRole('list', { name: 'Events' })).toHaveTextContent('["New", "query"]');
+    });
+  },
+};
+
+const VIEW_GROUPS = [
+  {
+    items: [
+      { key: 'model', name: 'Global model', icon: Network, count: 12 },
+      { key: 'stitches', name: 'Stitches', icon: Cable, count: 4 },
+      { key: 'guardrails', name: 'Guardrails', icon: ShieldCheck },
+    ],
+  },
+  {
+    label: 'Data',
+    items: [
+      { key: 'database', name: 'Database', icon: Database, count: 3 },
+      { key: 'records', name: 'Records', icon: Rows3, count: '24 k' },
+    ],
+  },
+];
+
+/** The views column, open and folded to its rail, sharing one open view. */
+function ViewsColumnDemo({ onClick }: { onClick: (key: string) => void }) {
+  const [open, setOpen] = React.useState('model');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const groups = VIEW_GROUPS.map((g) => ({
+    ...g,
+    items: g.items.map((item) => ({
+      ...item,
+      onClick: () => {
+        setOpen(item.key);
+        onClick(item.key);
+      },
+    })),
+  }));
+  return (
+    <PanelBox flush style={{ height: 360, width: 'fit-content' }} bodyClassName="h-full">
+      <NavVertical
+        groups={groups}
+        activeKey={open}
+        collapsed={collapsed}
+        onCollapsedChange={setCollapsed}
+        header={{
+          title: 'Model',
+          actions: <ButtonWithTooltip tooltip="New model" variant="ghost" size="icon-sm" aria-label="New model"><Plus /></ButtonWithTooltip>,
+          below: <TypographyMuted className="px-2">AirRoutes · v12 published</TypographyMuted>,
+        }}
+      />
+    </PanelBox>
+  );
+}
+
+/**
+ * The views column: pass `groups` and `NavVertical` draws a head (`header.title`, `actions`, and
+ * `below` for a picker card), labelled groups, and each view with its icon and `count`. With
+ * `onCollapsedChange` the head carries a collapse button; `collapsed` folds it to a 56px rail whose
+ * icons take their labels as tooltips. `activeKey` lights the open view.
+ */
+export const ViewsColumn: Story = {
+  render: ({ onClick }) => <ViewsColumnDemo onClick={onClick} />,
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    await step('A view reports its key and becomes the open one', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: /Stitches/ }));
+      await expect(args.onClick).toHaveBeenCalledWith('stitches');
+      await expect(canvas.getByRole('button', { name: /Stitches/ })).toHaveAttribute('aria-current', 'page');
+    });
+    await step('Collapse folds it to its rail, and Expand opens it again', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Collapse' }));
+      await expect(canvas.queryByText('Global model')).not.toBeInTheDocument();
+      await userEvent.click(canvas.getByRole('button', { name: 'Expand' }));
+      await expect(canvas.getByText('Global model')).toBeInTheDocument();
     });
   },
 };

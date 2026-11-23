@@ -155,6 +155,7 @@ export function PaginatedTable<TData extends RowData>(
         table={table}
         enableColumnVisibility={enableColumnVisibility}
         enableColumnPinning={enableColumnPinning}
+        selection={props.selection}
         search={
           searchable
             ? { value: search, onChange: setSearch, placeholder: searchPlaceholder }

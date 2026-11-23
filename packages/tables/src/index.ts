@@ -4,7 +4,7 @@ export {
   RemotePaginatedTable,
   type RemotePaginatedTableProps,
 } from './remote-paginated-table';
-export type { TableBaseProps, TableFilterProps } from './core/props';
+export type { TableBaseProps, TableFilterProps, TableSelection } from './core/props';
 export type {
   StreamMode,
   TableStream,

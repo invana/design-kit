@@ -2,6 +2,8 @@
 import * as React from "react"
 import { ChevronRight } from 'lucide-react'
 import { cn } from "../../lib/utils"
+import { StatusDot, type StatusDotProps } from "../ui/status-dot"
+import { Eyebrow } from "./eyebrow"
 import { SearchInput } from "./search-input"
 
 export interface TreeItem {
@@ -11,6 +13,12 @@ export interface TreeItem {
   onClick?: (id: string | number, label: string) => void
   isExpanded?: boolean
   children?: TreeItem[]
+  /** A count or short fact, right-aligned. */
+  meta?: React.ReactNode
+  /** A status dot before the meta. */
+  tone?: StatusDotProps["tone"]
+  /** On a top-level item: drawn under this header with the others that share it, in first-seen order. */
+  group?: string
 }
 
 export interface TreeViewProps {
@@ -91,13 +99,29 @@ export const TreeView: React.FC<TreeViewProps> = ({ searchable = false, ...props
 
         {/* <h2 className="text-lg font-semibold px-2 mb-2">Left Side</h2> */}
         <div className="space-y-0.5">
-          {filteredItems.map((item) => (
-            <TreeItem key={item.id} item={item} />
+          {groupsOf(filteredItems).map(({ group, items }) => (
+            <div key={group ?? ""} className={cn("space-y-0.5", group && "pt-2")}>
+              {group ? <Eyebrow className="px-2 pb-1">{group}</Eyebrow> : null}
+              {items.map((item) => (
+                <TreeItem key={item.id} item={item} />
+              ))}
+            </div>
           ))}
         </div>
       </div>
     </div>
   )
+}
+
+/** Top-level items in runs by `group`, in the order each group is first seen; ungrouped ones form their own run. */
+function groupsOf(items: TreeItem[]): { group?: string; items: TreeItem[] }[] {
+  const runs: { group?: string; items: TreeItem[] }[] = []
+  for (const item of items) {
+    const run = runs.find((r) => r.group === item.group)
+    if (run) run.items.push(item)
+    else runs.push({ group: item.group, items: [item] })
+  }
+  return runs
 }
 
 export const TreeItem: React.FC<{ item: TreeItem }> = ({ item }) => {
@@ -124,7 +148,11 @@ export const TreeItem: React.FC<{ item: TreeItem }> = ({ item }) => {
           />
         )}
         {item.icon}
-        <span className="truncate">{item.label}</span>
+        <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
+        {item.tone ? <StatusDot tone={item.tone} /> : null}
+        {item.meta != null ? (
+          <span className="shrink-0 text-sm font-normal text-muted-foreground">{item.meta}</span>
+        ) : null}
       </button>
       {hasChildren && isExpanded && (
         <div className="ml-4 pl-4 relative">

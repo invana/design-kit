@@ -20,11 +20,23 @@
                 "label": "Child 1-1",
                 "icon": "folder",
                 "children": [
-                  { "id": "1-1-1", "label": "Clickable Grandchild 1-1-1", "icon": "file" },
-                  { "id": "1-1-2", "label": "Grandchild 1-1-2", "icon": "file" }
+                  {
+                    "id": "1-1-1",
+                    "label": "Clickable Grandchild 1-1-1",
+                    "icon": "file"
+                  },
+                  {
+                    "id": "1-1-2",
+                    "label": "Grandchild 1-1-2",
+                    "icon": "file"
+                  }
                 ]
               },
-              { "id": "1-2", "label": "Child 1-2", "icon": "file" }
+              {
+                "id": "1-2",
+                "label": "Child 1-2",
+                "icon": "file"
+              }
             ]
           },
           {
@@ -32,8 +44,16 @@
             "label": "Root 2",
             "icon": "folder",
             "children": [
-              { "id": "2-1", "label": "Child 2-1", "icon": "file" },
-              { "id": "2-2", "label": "Child 2-2", "icon": "file" }
+              {
+                "id": "2-1",
+                "label": "Child 2-1",
+                "icon": "file"
+              },
+              {
+                "id": "2-2",
+                "label": "Child 2-2",
+                "icon": "file"
+              }
             ]
           }
         ]
@@ -43,7 +63,10 @@
   {
     "caption": "Header",
     "searchable": true,
-    "header": { "title": "Workspace files", "count": "2 folders · 6 files" },
+    "header": {
+      "title": "Workspace files",
+      "count": "2 folders · 6 files"
+    },
     "items": [
       {
         "id": 0,
@@ -62,11 +85,23 @@
                 "label": "Child 1-1",
                 "icon": "folder",
                 "children": [
-                  { "id": "1-1-1", "label": "Clickable Grandchild 1-1-1", "icon": "file" },
-                  { "id": "1-1-2", "label": "Grandchild 1-1-2", "icon": "file" }
+                  {
+                    "id": "1-1-1",
+                    "label": "Clickable Grandchild 1-1-1",
+                    "icon": "file"
+                  },
+                  {
+                    "id": "1-1-2",
+                    "label": "Grandchild 1-1-2",
+                    "icon": "file"
+                  }
                 ]
               },
-              { "id": "1-2", "label": "Child 1-2", "icon": "file" }
+              {
+                "id": "1-2",
+                "label": "Child 1-2",
+                "icon": "file"
+              }
             ]
           },
           {
@@ -74,11 +109,65 @@
             "label": "Root 2",
             "icon": "folder",
             "children": [
-              { "id": "2-1", "label": "Child 2-1", "icon": "file" },
-              { "id": "2-2", "label": "Child 2-2", "icon": "file" }
+              {
+                "id": "2-1",
+                "label": "Child 2-1",
+                "icon": "file"
+              },
+              {
+                "id": "2-2",
+                "label": "Child 2-2",
+                "icon": "file"
+              }
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "caption": "Grouped, with counts and status",
+    "searchable": true,
+    "items": [
+      {
+        "id": "airport",
+        "label": "Airport",
+        "icon": "node",
+        "group": "Node types",
+        "meta": "3,512",
+        "tone": "success"
+      },
+      {
+        "id": "country",
+        "label": "Country",
+        "icon": "node",
+        "group": "Node types",
+        "meta": "241",
+        "tone": "success"
+      },
+      {
+        "id": "continent",
+        "label": "Continent",
+        "icon": "node",
+        "group": "Node types",
+        "meta": "7",
+        "tone": "warning"
+      },
+      {
+        "id": "route",
+        "label": "route",
+        "icon": "edge",
+        "group": "Relationship types",
+        "meta": "50,640",
+        "tone": "success"
+      },
+      {
+        "id": "contains",
+        "label": "contains",
+        "icon": "edge",
+        "group": "Relationship types",
+        "meta": "6,964",
+        "tone": "muted"
       }
     ]
   }

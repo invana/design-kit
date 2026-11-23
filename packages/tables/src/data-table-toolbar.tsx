@@ -18,6 +18,7 @@ import {
 } from '@invana/ui';
 import { Settings2 } from 'lucide-react';
 import type { Column, Table } from '@tanstack/react-table';
+import type { TableSelection } from './core/props';
 import type { FilterValues, TableFilter, TableFilterOption } from './types';
 
 export interface DataTableToolbarProps<TData> {
@@ -41,6 +42,8 @@ export interface DataTableToolbarProps<TData> {
   };
   /** What the filters left — `23 of 91 events`. Only drawn with `filters`. */
   summary?: React.ReactNode;
+  /** Picked rows: with any, the row is the selection bar instead. */
+  selection?: TableSelection;
   children?: React.ReactNode;
 }
 
@@ -63,6 +66,7 @@ export function DataTableToolbar<TData>({
   search,
   filters,
   summary,
+  selection,
   children,
 }: DataTableToolbarProps<TData>) {
   const leafColumns = table.getAllLeafColumns();
@@ -76,7 +80,8 @@ export function DataTableToolbar<TData>({
   // Nothing to put in it: no row at all, or its padding opens a gap above
   // the header.
   const chips = filters?.items.length ? filters.items : null;
-  if (!children && !showMenu && !search && !chips) return null;
+  const picked = selection && selection.count > 0 ? selection : null;
+  if (!children && !showMenu && !search && !chips && !picked) return null;
 
   const searchBox = search ? (
     <SearchInput
@@ -151,6 +156,27 @@ export function DataTableToolbar<TData>({
       </DropdownMenuContent>
     </DropdownMenu>
   ) : null;
+
+  // Rows picked: the bar says how many, offers what can be done to them, and
+  // Clear; search and filters wait until the pick is cleared.
+  if (picked) {
+    return (
+      <div
+        role="region"
+        aria-label="Picked rows"
+        className="flex h-control-md items-center gap-2 rounded-control bg-primary/10 px-2"
+      >
+        <span className="shrink-0 font-medium">
+          {picked.count.toLocaleString()} picked
+        </span>
+        <div className="flex min-w-0 flex-1 items-center gap-1">{picked.actions}</div>
+        <Button variant="ghost" size="sm" onClick={picked.onClear}>
+          Clear
+        </Button>
+        {menu}
+      </div>
+    );
+  }
 
   // With filters, one `FilterBar`: the search, a chip per filter, what the
   // caller passes, and the count of what is left hard right; the column

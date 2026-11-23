@@ -61,6 +61,7 @@ export function DataTable<TData extends RowData>(props: DataTableProps<TData>) {
         table={table}
         enableColumnVisibility={enableColumnVisibility}
         enableColumnPinning={enableColumnPinning}
+        selection={props.selection}
       >
         {toolbar}
       </DataTableToolbar>

@@ -50,6 +50,18 @@ The designs are on the Invana design canvas (Model, Explore, Tools and access, S
 | A connection check | `CheckResult` | reuse |
 | Empty, loading, failed | `EmptyState`, `Skeleton`, `Alert` | reuse |
 
+## The extensions
+
+What each *extend* and *new* row above adds. Every piece ships with its own story in the same change.
+
+| Component | Adds | Shape |
+|---|---|---|
+| `NavVertical` | an icon rail, a header, groups, counts | `collapsed` + `onCollapsedChange`: 56px wide, icons only, each label in a tooltip · `header: { title, actions, below }`: the title, its buttons (New, collapse) and a slot under it for a picker card · `groups: { label?, items }[]` in place of `topNavItems`, a label drawn over each group · `count` on an item, right-aligned, hidden when collapsed |
+| `TreeView` | meta, a status tone, group headers | `meta` on an item (a count, right-aligned) · `tone` on an item (a `StatusDot` tone), a status dot before the meta · `group` on a top-level item: items sharing one are drawn under its header, in first-seen order |
+| `DataTableToolbar` | a selection bar | `selection: { count, actions, onClear }`: with `count` above 0 the toolbar shows *n picked*, then the actions, then Clear, in place of its filters |
+| `PropertyRow` | a meta slot | `meta`: right-aligned and muted after the value, such as what wrote it |
+| `FileDrop` (new, `@invana/forms`) | an upload drop area | `accept` (as `<input accept>`), `multiple`, `maxBytes`, `onFiles(files)`, `disabled`; dropping and clicking both pick; a file refused for its type or size is named under the area and never reaches `onFiles` |
+
 ## Overlap to settle
 
 | Components | Overlap | Lean |

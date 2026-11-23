@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { SectionHeader, TreeView, TypographyMuted, type TreeItem } from '@invana/ui';
-import { File, Folder } from 'lucide-react';
+import { ArrowRight, Circle, File, Folder } from 'lucide-react';
 
 import VARIANTS from '../../../../fixtures/ui-extended/tree-view.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
@@ -12,6 +12,8 @@ import { VariantGrid, type Log } from '../../../_story/variant-grid';
 const ICONS: Record<string, React.ReactNode> = {
   folder: <Folder size={16} aria-hidden />,
   file: <File size={16} aria-hidden />,
+  node: <Circle size={16} aria-hidden />,
+  edge: <ArrowRight size={16} aria-hidden />,
 };
 
 interface ItemJson extends Omit<TreeItem, 'icon' | 'children' | 'onClick'> {
@@ -95,7 +97,9 @@ function Live({ v, log, onClick }: { v: (typeof VARIANTS)[number]; log: Log; onC
 /**
  * A nested list of folders and files, guided by rules, with an optional search box that keeps
  * every ancestor of a match — from `fixtures/ui-extended/tree-view.json`. A `header` sits above
- * the search. Click a row: it reports `(id, label)` and a folder folds; type to filter.
+ * the search. Click a row: it reports `(id, label)` and a folder folds; type to filter. An item's
+ * `meta` is a right-aligned count, its `tone` a status dot, and top-level items sharing a `group`
+ * sit under that header.
  */
 export const TreeViewStory: Story = {
   name: 'TreeView',
@@ -115,6 +119,11 @@ export const TreeViewStory: Story = {
       await userEvent.type(cell.getByRole('textbox'), 'Root 2');
       await expect(cell.queryByRole('button', { name: /Root 1/ })).toBeNull();
       await expect(cell.getByRole('button', { name: /Root 2/ })).toBeInTheDocument();
+    });
+    await step('Grouped items sit under their header, each with its count', async () => {
+      const grouped = within(within(canvasElement).getByRole('group', { name: 'Grouped, with counts and status' }));
+      await expect(grouped.getByText('Relationship types')).toBeInTheDocument();
+      await expect(grouped.getByRole('button', { name: /route.*50,640/ })).toBeInTheDocument();
     });
   },
 };

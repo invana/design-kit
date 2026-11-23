@@ -26,7 +26,7 @@ const meta = {
               call: [
                 `<PropertyList${v.labelWidth ? ` labelWidth="${v.labelWidth}"` : ''}${v.variant ? ` variant="${v.variant}"` : ''}>`,
                 '  {rows.map((r) => (',
-                '    <PropertyRow key={r.label} label={r.label} mono={r.mono}>{r.value}</PropertyRow>',
+                '    <PropertyRow key={r.label} label={r.label} mono={r.mono} meta={r.meta}>{r.value}</PropertyRow>',
                 '  ))}',
                 '</PropertyList>',
               ].join('\n'),
@@ -46,7 +46,8 @@ type Story = StoryObj<Args>;
 /**
  * One label column for the whole list, so values line up down the panel — from
  * `fixtures/ui-extended/property-list.json`. `labelWidth="auto"` sizes the column to the widest
- * label; `variant="summary"` sets the rows tight, for a settled answer read at a glance.
+ * label; `variant="summary"` sets the rows tight, for a settled answer read at a glance. `meta` sets a
+ * muted fact after the value, right-aligned: what wrote it, and when.
  */
 export const PropertyListStory: Story = {
   name: 'PropertyList',
@@ -58,7 +59,7 @@ export const PropertyListStory: Story = {
           variant={v.variant as 'summary' | undefined}
         >
           {v.rows.map((r) => (
-            <PropertyRow key={r.label} label={r.label} mono={r.mono}>
+            <PropertyRow key={r.label} label={r.label} mono={r.mono} meta={(r as { meta?: string }).meta}>
               {r.value}
             </PropertyRow>
           ))}

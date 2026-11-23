@@ -2,22 +2,57 @@
   {
     "caption": "Default",
     "rows": [
-      { "label": "kind", "value": "thesis" },
-      { "label": "direction", "value": "long" },
-      { "label": "horizon", "value": "intraday" },
-      { "label": "confidence", "value": "0.72" },
-      { "label": "agent", "value": "Intraday Analyst" },
-      { "label": "thinking", "value": "7e21", "mono": true }
+      {
+        "label": "kind",
+        "value": "thesis"
+      },
+      {
+        "label": "direction",
+        "value": "long"
+      },
+      {
+        "label": "horizon",
+        "value": "intraday"
+      },
+      {
+        "label": "confidence",
+        "value": "0.72"
+      },
+      {
+        "label": "agent",
+        "value": "Intraday Analyst"
+      },
+      {
+        "label": "thinking",
+        "value": "7e21",
+        "mono": true
+      }
     ]
   },
   {
     "caption": "Auto label width",
     "labelWidth": "auto",
     "rows": [
-      { "label": "Report", "value": "Mondays, 08:00", "mono": true },
-      { "label": "To", "value": "You, Procurement lead", "mono": true },
-      { "label": "Alert", "value": "55%", "mono": true },
-      { "label": "Until", "value": "End of Q1 2027", "mono": true }
+      {
+        "label": "Report",
+        "value": "Mondays, 08:00",
+        "mono": true
+      },
+      {
+        "label": "To",
+        "value": "You, Procurement lead",
+        "mono": true
+      },
+      {
+        "label": "Alert",
+        "value": "55%",
+        "mono": true
+      },
+      {
+        "label": "Until",
+        "value": "End of Q1 2027",
+        "mono": true
+      }
     ]
   },
   {
@@ -25,10 +60,51 @@
     "labelWidth": "auto",
     "variant": "summary",
     "rows": [
-      { "label": "Report", "value": "Mondays, 08:00", "mono": true },
-      { "label": "To", "value": "You, Procurement lead", "mono": true },
-      { "label": "Alert", "value": "55%", "mono": true },
-      { "label": "Until", "value": "End of Q1 2027", "mono": true }
+      {
+        "label": "Report",
+        "value": "Mondays, 08:00",
+        "mono": true
+      },
+      {
+        "label": "To",
+        "value": "You, Procurement lead",
+        "mono": true
+      },
+      {
+        "label": "Alert",
+        "value": "55%",
+        "mono": true
+      },
+      {
+        "label": "Until",
+        "value": "End of Q1 2027",
+        "mono": true
+      }
+    ]
+  },
+  {
+    "caption": "With meta",
+    "rows": [
+      {
+        "label": "iata",
+        "value": "LHR",
+        "meta": "airports.csv · load 14"
+      },
+      {
+        "label": "city",
+        "value": "London",
+        "meta": "fixed by Priya · 2 days ago"
+      },
+      {
+        "label": "runways",
+        "value": "2",
+        "meta": "airports.csv · load 14"
+      },
+      {
+        "label": "id",
+        "value": "4:9f1c…:212",
+        "mono": true
+      }
     ]
   }
 ]
