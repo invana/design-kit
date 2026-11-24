@@ -62,6 +62,7 @@ export * from './record-pager';
 export * from './refusal-card';
 export * from './repair-note';
 export * from './retry-note';
+export * from './product-menu';
 export * from './rich-select';
 export * from './rule-row';
 export * from './run-row';
