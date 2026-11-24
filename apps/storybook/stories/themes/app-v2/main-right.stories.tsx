@@ -4,6 +4,7 @@ import {
   Files, Search, GitBranch, Bug, Package,
   Settings, User, Terminal as TerminalIcon,
 } from "lucide-react";
+import { RAIL_TOGGLE } from '../../_story/rail-toggle';
 
 const meta: Meta<typeof AppLayoutV2> = {
   title: 'Themes/AppV2/Bottom Span Main Right',
@@ -66,6 +67,7 @@ export const BottomSpanMainRight: Story = {
         ),
       },
       leftNav: {
+        toggle: RAIL_TOGGLE,
         topNavItems: [
           { name: "Explorer", icon: Files, tooltip: "Explorer" },
           { name: "Search", icon: Search, tooltip: "Search" },

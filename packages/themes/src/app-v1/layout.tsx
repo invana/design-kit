@@ -28,7 +28,9 @@ const hasNavContent = (nav?: NavVerticalProps): nav is NavVerticalProps =>
     nav.topNavItems?.length ||
     nav.middle ||
     nav.bottom ||
-    nav.bottomNavItems?.length
+    nav.bottomNavItems?.length ||
+    nav.groups?.length ||
+    nav.toggle
   );
 
 export const AppLayoutV1: React.FC<AppLayoutV1Props> = (props) => {
@@ -42,12 +44,8 @@ export const AppLayoutV1: React.FC<AppLayoutV1Props> = (props) => {
         <div className="relative h-full flex flex-1">
           {showLeftNav && (
             <NavVertical
+              {...props.leftNav}
               className={cn('border-r', CHROME_SURFACE, props.leftNav?.className)}
-              top={props.leftNav?.top}
-              topNavItems={props.leftNav?.topNavItems}
-              middle={props.leftNav?.middle}
-              bottom={props.leftNav?.bottom}
-              bottomNavItems={props.leftNav?.bottomNavItems}
             />
           )}
           <main className="w-full">

@@ -130,6 +130,12 @@ export interface NavItemConfig {
    * bare number — anything longer belongs in the tooltip.
    */
   badge?: React.ReactNode;
+  /**
+   * How many things the item holds, right-aligned after its label. Drawn only
+   * where the strip shows labels — an `expanded` vertical rail; folded to its
+   * icons, the rail drops it.
+   */
+  count?: React.ReactNode;
 }
 
 /**
@@ -233,6 +239,13 @@ export interface NavItemsProps {
   overflow?: boolean;
   /** Accessible name and tooltip for the overflow trigger. */
   overflowLabel?: string;
+  /**
+   * Vertical only. The same items, stretched to the rail's width with their
+   * label (`label`, else `name`) and `count` beside the icon. Icon, padding,
+   * hover and active state are the folded rail's, so opening the rail moves
+   * nothing but the text in; the tooltip goes, as the label now says it.
+   */
+  expanded?: boolean;
   /** Classes for the strip container. Only rendered when the strip needs one —
    *  see the note on the return value in {@link NavItems}. */
   className?: string;
@@ -267,9 +280,11 @@ export const NavItems: React.FC<NavItemsProps> = ({
   panelId,
   overflow = false,
   overflowLabel = "More",
+  expanded = false,
   className,
 }) => {
   const isVertical = orientation === "vertical";
+  const showLabels = expanded && isVertical;
   const isTabs = selectionMode === "tabs";
   const V = VARIANT[variant];
 
@@ -364,8 +379,14 @@ export const NavItems: React.FC<NavItemsProps> = ({
     const isInteractive = Boolean(
       item.href || item.onClick || hasMenu || isTabs,
     );
+    // An expanded rail keeps the icon-only padding, so its icons sit where the
+    // folded rail's do and the rows keep their height.
     const padding =
-      variant === "nav" ? (item.label ? "px-3 py-1.5" : "px-2 py-2") : "";
+      variant === "nav"
+        ? item.label && !showLabels
+          ? "px-3 py-1.5"
+          : "px-2 py-2"
+        : "";
 
     const itemClass = cn(
       `relative inline-flex border-0 items-center justify-center gap-2
@@ -377,6 +398,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
       hasMenu && !asCaret && V.open,
       item.disabled && "pointer-events-none opacity-50",
       isActive && cn(V.active, item.activeClass),
+      showLabels && "w-full justify-start",
       item.className,
     );
 
@@ -386,8 +408,23 @@ export const NavItems: React.FC<NavItemsProps> = ({
         className={item.iconClassName || iconClassName}
       />
     );
-    const label = item.label && (
-      <span className={item.labelClassName}>{item.label}</span>
+    const text = showLabels ? (item.label ?? item.name) : item.label;
+    const label = text && (
+      <span
+        className={cn(
+          // `leading-5` is the icon's own height (`w-5 h-5`), so the label
+          // adds no height and the row — and its icon — sit as when folded.
+          showLabels && "min-w-0 flex-1 truncate text-left leading-5",
+          item.labelClassName,
+        )}
+      >
+        {text}
+      </span>
+    );
+    const count = showLabels && item.count != null && (
+      <span className="shrink-0 text-sm leading-5 text-muted-foreground">
+        {item.count}
+      </span>
     );
     // An icon-only item has no text node, so its control has no accessible
     // name: the name lives in a `TooltipContent` that is not rendered until
@@ -468,6 +505,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
       <>
         {icon}
         {label}
+        {count}
         {caret}
         {badge}
       </>
@@ -547,15 +585,16 @@ export const NavItems: React.FC<NavItemsProps> = ({
       </div>
     );
 
-    const withTooltip = (
+    const trigger =
+      hasMenu && !asCaret ? (
+        <DropdownMenuTrigger asChild>{control}</DropdownMenuTrigger>
+      ) : (
+        control
+      );
+    // With its label showing, an item's tooltip would only repeat it.
+    const withTooltip = showLabels ? trigger : (
       <Tooltip>
-        <TooltipTrigger asChild>
-          {hasMenu && !asCaret ? (
-            <DropdownMenuTrigger asChild>{control}</DropdownMenuTrigger>
-          ) : (
-            control
-          )}
-        </TooltipTrigger>
+        <TooltipTrigger asChild>{trigger}</TooltipTrigger>
         <TooltipContent side={item.tooltipSide || tooltipSide}>
           {item.tooltip || item.name}
         </TooltipContent>
@@ -755,12 +794,12 @@ export const NavBase: React.FC<BaseNavProps> = ({
   const isVertical = orientation === "vertical";
 
   const containerClass = isVertical
-    ? `flex flex-col items-center h-full ${className}`
-    : `flex items-center   w-full ${className}`;
+    ? cn("flex flex-col items-center h-full", className)
+    : cn("flex items-center w-full", className);
 
   const sectionWrapperClass = isVertical
     ? "flex flex-col items-center gap-1"
-    : "flex items-center gap-1 ";
+    : "flex items-center gap-1";
 
   // Horizontally the bar never grows past its parent: the start and centre give
   // up width (a crumb truncates, a trail folds) and the end keeps its controls.
@@ -768,7 +807,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
     <nav className={containerClass}>
       {sections.start?.content && (
         <div
-          className={`${sectionWrapperClass} ${isVertical ? "" : "min-w-0 shrink"} ${sections.start.className || ""}`}
+          className={cn(sectionWrapperClass, !isVertical && "min-w-0 shrink", sections.start.className)}
         >
           {sections.start.content}
         </div>
@@ -776,7 +815,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.center?.content ? (
         <div
-          className={`flex-1 ${isVertical ? "" : "flex min-w-0 justify-center items-center gap-1"} ${sections.center.className || ""}`}
+          className={cn("flex-1", !isVertical && "flex min-w-0 justify-center items-center gap-1", sections.center.className)}
         >
           {sections.center.content}
         </div>
@@ -787,7 +826,7 @@ export const NavBase: React.FC<BaseNavProps> = ({
 
       {sections.end?.content && (
         <div
-          className={`${sectionWrapperClass} ${isVertical ? "" : "ml-auto shrink-0"} ${sections.end.className || ""}`}
+          className={cn(sectionWrapperClass, !isVertical && "ml-auto shrink-0", sections.end.className)}
         >
           {sections.end.content}
         </div>

@@ -41,6 +41,7 @@ import {
   Wand2,
   Wrench,
 } from "lucide-react";
+import { RAIL_TOGGLE } from '../../_story/rail-toggle';
 
 const meta: Meta<typeof AppLayoutV2> = {
   title: 'Themes/AppV2/Chat',
@@ -54,6 +55,7 @@ const meta: Meta<typeof AppLayoutV2> = {
 
 // ---------- Activity rail ----------
 const leftNav: NavVerticalProps = {
+  toggle: RAIL_TOGGLE,
   className: "",
   topNavItems: [
     { name: "Sessions", icon: MessageSquare, onClick: () => {}, tooltip: "Sessions" },

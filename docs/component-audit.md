@@ -28,7 +28,7 @@ The designs are on the Invana design canvas (Model, Explore, Tools and access, S
 | Need | Component | Decision |
 |---|---|---|
 | Two-column left side, header, status bar, right region | `AppLayoutV2` (`leftNav`, `leftSection`, `rightSection`, `header`, `footer`) | reuse |
-| Views column: title, New, collapse, a picker card, views with icon and count, group labels, a 56px icon rail | `NavVertical` | extend: icon-only collapsed mode, counts, group labels, a slot under the title |
+| Views column: title, New, collapse, a picker card, views with icon and count, group labels, an icon rail | `NavVertical` | extend: an expanded mode over the icon rail, counts, group labels, a slot under the title |
 | Tree column: rows with icon, count and status dot, group headers, a filter | `TreeView` | extend: `meta`, a status tone, group headers |
 | World or graph picker | `RichSelect` | reuse |
 | Status bar | `AppStatusBar` | reuse |
@@ -56,7 +56,7 @@ What each *extend* and *new* row above adds. Every piece ships with its own stor
 
 | Component | Adds | Shape |
 |---|---|---|
-| `NavVertical` | an icon rail, a header, groups, counts | `collapsed` + `onCollapsedChange`: 56px wide, icons only, each label in a tooltip · `header: { title, actions, below }`: the title, its buttons (New, collapse) and a slot under it for a picker card · `groups: { label?, items }[]` in place of `topNavItems`, a label drawn over each group · `count` on an item, right-aligned, hidden when collapsed |
+| `NavVertical` | an icon rail, a header, groups, counts | `expanded`: the same 45px rail opened to 240px, each item drawn by the same `NavItems` with its label and `count` beside an unchanged icon (folded, labels are tooltips) · the toggle is a caller's item, not a built-in button · `header: { title, actions, below }`: the title, its buttons and a slot under it for a picker card, shown when expanded · `groups: { label?, items }[]` after `topNavItems`, a label over each group when expanded · `count` on an item (`NavItemConfig`), right-aligned, shown only when expanded |
 | `TreeView` | meta, a status tone, group headers | `meta` on an item (a count, right-aligned) · `tone` on an item (a `StatusDot` tone), a status dot before the meta · `group` on a top-level item: items sharing one are drawn under its header, in first-seen order |
 | `DataTableToolbar` | a selection bar | `selection: { count, actions, onClear }`: with `count` above 0 the toolbar shows *n picked*, then the actions, then Clear, in place of its filters |
 | `PropertyRow` | a meta slot | `meta`: right-aligned and muted after the value, such as what wrote it |

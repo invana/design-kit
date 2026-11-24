@@ -1,5 +1,4 @@
 import React from "react"
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
 
 import { cn } from "../../lib/utils"
 import { Eyebrow } from "./eyebrow"
@@ -26,18 +25,31 @@ import { NavBase, NavItems, type NavItemConfig, type NavItemsProps } from './nav
  * ];
  * ```
  */
-export type NavVerticalItem = NavItemConfig & {
-  /** How many things the view holds, right-aligned; hidden when collapsed. */
-  count?: React.ReactNode
-};
+export type NavVerticalItem = NavItemConfig;
 
-/** Views under one optional label, in the views column. */
+/** Items under one optional label; the label shows only when the rail is expanded. */
 export interface NavVerticalGroup {
   label?: React.ReactNode
   items: NavVerticalItem[]
 }
 
-/** The views column's head: its title, its buttons, and a slot under them (a picker card). */
+/**
+ * The rail's own expand / collapse switcher, drawn as the last item at its foot
+ * by the same `NavItems` as every other item. Icons are the caller's, so the
+ * kit names no icon library.
+ */
+export interface NavVerticalToggle {
+  /** Shown while folded: the item that opens the rail. */
+  expandIcon: React.ElementType
+  /** Shown while open: the item that folds it. */
+  collapseIcon: React.ElementType
+  /** Defaults to "Expand". */
+  expandLabel?: string
+  /** Defaults to "Collapse". */
+  collapseLabel?: string
+}
+
+/** The expanded rail's head: its title, its buttons, and a slot under them (a picker card). */
 export interface NavVerticalHeader {
   title: React.ReactNode
   actions?: React.ReactNode
@@ -109,24 +121,32 @@ export interface NavVerticalProps {
   /** Additional CSS classes for the navigation container */
   className?: string;
   /**
-   * Views in groups, each with an optional label. Passing them makes this the
-   * views column: 240px wide with labels and counts, or a 56px icon rail when
-   * `collapsed`. `topNavItems` is ignored then.
+   * Items in groups, after `topNavItems`. Expanded, each group's `label` is
+   * drawn over it; folded, groups are split by a rule.
    */
   groups?: NavVerticalGroup[];
-  /** The views column's title, buttons and the slot under them. */
+  /** The expanded rail's title, its buttons and a slot under them; hidden when folded. */
   header?: NavVerticalHeader;
-  /** The views column folded to its icon rail; each label moves to a tooltip. */
-  collapsed?: boolean;
-  /** Given, the header draws a collapse button that calls it. */
-  onCollapsedChange?: (collapsed: boolean) => void;
-  /** The open view's key (`key ?? name`). */
+  /**
+   * The rail opened to show each item's label and `count` beside its icon.
+   * Every item is drawn by the same `NavItems` either way, so icon, padding,
+   * hover and active state do not change — only the width and the text.
+   * Passing it makes the rail controlled; omit it and the rail keeps its own
+   * state, starting at `defaultExpanded`.
+   */
+  expanded?: boolean;
+  /** Where an uncontrolled rail starts. Defaults to folded. */
+  defaultExpanded?: boolean;
+  /** Fires with the new state whenever the switcher flips it. */
+  onExpandedChange?: (expanded: boolean) => void;
+  /** Draws the expand / collapse switcher as the rail's last item. */
+  toggle?: NavVerticalToggle;
+  /** The lit item's key (`key ?? name`), across every list on the rail. */
   activeKey?: string;
 }
 
-
 export const NavVertical: React.FC<NavVerticalProps> = ({
-  className = '',
+  className,
   top,
   topNavItems,
   middle,
@@ -134,142 +154,89 @@ export const NavVertical: React.FC<NavVerticalProps> = ({
   bottomNavItems,
   groups,
   header,
-  collapsed = false,
-  onCollapsedChange,
+  expanded: expandedProp,
+  defaultExpanded = false,
+  onExpandedChange,
+  toggle,
   activeKey,
 }) => {
-  if (groups) {
-    return (
-      <ViewsColumn
-        className={className}
-        groups={groups}
-        header={header}
-        collapsed={collapsed}
-        onCollapsedChange={onCollapsedChange}
-        activeKey={activeKey}
-        bottom={bottom}
-      />
-    )
+  const [ownExpanded, setOwnExpanded] = React.useState(defaultExpanded)
+  const expanded = expandedProp ?? ownExpanded
+  const setExpanded = (next: boolean) => {
+    if (expandedProp === undefined) setOwnExpanded(next)
+    onExpandedChange?.(next)
   }
+  const items = (list: NavVerticalItem[]) => (
+    <NavVerticalItems items={list} activeKey={activeKey} expanded={expanded} />
+  )
+  // Expanded, sections stretch so each row fills the rail. Both states share
+  // the rail's padding (`px-2.5`), so an icon's x is that padding plus the
+  // item's own — the same whether the rail is folded or open. Folded, the rail
+  // is exactly padding + one item + padding (`w-fit`), so nothing is centred
+  // and a border cannot shift the icon by a fraction.
+  const section = expanded ? "items-stretch" : undefined
+  const hasStart = top || header || topNavItems || groups?.length
+
   return (
     <NavBase
       orientation="vertical"
-      className={`w-[45px]  h-full  flex flex-col items-center ${className}`}
+      className={cn("shrink-0 px-2.5", expanded ? "w-60 items-stretch" : "w-fit", className)}
       sections={{
-        start: (top || topNavItems) ? {
+        start: hasStart ? {
+          className: section,
           content: (
             <>
               {top}
-              {topNavItems && <NavVerticalItems items={topNavItems} />}
+              {expanded && header ? (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1">
+                    <span className="min-w-0 flex-1 truncate px-2 font-semibold">{header.title}</span>
+                    {header.actions}
+                  </div>
+                  {header.below}
+                </div>
+              ) : null}
+              {topNavItems && items(topNavItems)}
+              {groups?.map((group, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "flex flex-col gap-1",
+                    !expanded && "items-center",
+                    !expanded && (i > 0 || Boolean(topNavItems?.length)) && "border-t border-border pt-1",
+                  )}
+                >
+                  {expanded && group.label ? <Eyebrow className="px-2 pt-2">{group.label}</Eyebrow> : null}
+                  {items(group.items)}
+                </div>
+              ))}
             </>
-          )
+          ),
         } : undefined,
         center: middle ? { content: middle } : undefined,
-        end: (bottom || bottomNavItems) ? {
+        end: (bottom || bottomNavItems || toggle) ? {
+          className: section,
           content: (
             <>
-              {bottomNavItems && <NavVerticalItems items={bottomNavItems} />}
+              {bottomNavItems && items(bottomNavItems)}
               {bottom}
+              {toggle ? (
+                // Its own list, held at no selection: a switcher is never the lit item.
+                <NavVerticalItems
+                  activeKey=""
+                  expanded={expanded}
+                  items={[{
+                    key: "nav-vertical-toggle",
+                    name: expanded ? (toggle.collapseLabel ?? "Collapse") : (toggle.expandLabel ?? "Expand"),
+                    icon: expanded ? toggle.collapseIcon : toggle.expandIcon,
+                    onClick: () => setExpanded(!expanded),
+                  }]}
+                />
+              ) : null}
             </>
-          )
+          ),
         } : undefined,
       }}
     />
-  );
-}
-
-const row =
-  "flex h-control-sm w-full items-center gap-2 rounded-control px-2 text-left text-foreground outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground"
-const activeRow = "bg-accent shadow-[inset_2px_0_0_var(--color-primary)]"
-
-/** One view: its icon, label and count, as a link or a button. */
-function ViewRow({ item, active }: { item: NavVerticalItem; active: boolean }) {
-  const Icon = item.icon
-  const body = (
-    <>
-      {Icon ? <Icon aria-hidden /> : null}
-      <span className="min-w-0 flex-1 truncate">{item.label ?? item.name}</span>
-      {item.count != null ? (
-        <span className="shrink-0 text-sm text-muted-foreground">{item.count}</span>
-      ) : null}
-    </>
-  )
-  const className = cn(row, active && activeRow, item.disabled && "pointer-events-none opacity-50", item.className)
-  return item.href ? (
-    <a href={item.href} onClick={item.onClick} aria-current={active ? "page" : undefined} className={className}>
-      {body}
-    </a>
-  ) : (
-    <button type="button" onClick={item.onClick} disabled={item.disabled} aria-current={active ? "page" : undefined} className={className}>
-      {body}
-    </button>
-  )
-}
-
-/**
- * The views column: a head (title, buttons, a slot under them), then the views
- * in groups, each a row with an icon, a label and a count. Collapsed, it is a
- * 56px icon rail: the same views as icons, their labels in tooltips.
- */
-function ViewsColumn({
-  className,
-  groups,
-  header,
-  collapsed,
-  onCollapsedChange,
-  activeKey,
-  bottom,
-}: Required<Pick<NavVerticalProps, "groups" | "collapsed">> &
-  Pick<NavVerticalProps, "className" | "header" | "onCollapsedChange" | "activeKey" | "bottom">) {
-  const toggle = onCollapsedChange ? (
-    <button
-      type="button"
-      aria-label={collapsed ? "Expand" : "Collapse"}
-      onClick={() => onCollapsedChange(!collapsed)}
-      className="flex size-control-sm shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground [&_svg]:size-4"
-    >
-      {collapsed ? <PanelLeftOpen aria-hidden /> : <PanelLeftClose aria-hidden />}
-    </button>
-  ) : null
-
-  if (collapsed) {
-    return (
-      <nav aria-label="Views" className={cn("flex h-full w-14 flex-col items-center gap-2 py-2", className)}>
-        {toggle}
-        {groups.map((group, i) => (
-          <div key={i} className={cn("flex flex-col items-center gap-1", i > 0 && "border-t border-border pt-2")}>
-            <NavVerticalItems items={group.items} activeKey={activeKey} />
-          </div>
-        ))}
-      </nav>
-    )
-  }
-
-  return (
-    <nav aria-label="Views" className={cn("flex h-full w-60 flex-col gap-3 p-2", className)}>
-      {header || toggle ? (
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-1">
-            <span className="min-w-0 flex-1 truncate px-2 font-semibold">{header?.title}</span>
-            {header?.actions}
-            {toggle}
-          </div>
-          {header?.below}
-        </div>
-      ) : null}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
-        {groups.map((group, i) => (
-          <div key={i} className="flex flex-col gap-0.5">
-            {group.label ? (
-              <Eyebrow className="px-2 pb-1">{group.label}</Eyebrow>
-            ) : null}
-            {group.items.map((item) => (
-              <ViewRow key={item.key ?? item.name} item={item} active={activeKey === (item.key ?? item.name)} />
-            ))}
-          </div>
-        ))}
-      </div>
-      {bottom}
-    </nav>
   )
 }

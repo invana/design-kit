@@ -18,6 +18,7 @@ import {
   Menu, Plus, RefreshCw, X, Maximize2, Minimize2, Copy, Filter, Trash2,
   Camera
 } from "lucide-react";
+import { RAIL_TOGGLE } from '../../_story/rail-toggle';
 
 const meta: Meta<typeof AppLayoutV2> = {
   title: 'Themes/AppV2/Default',
@@ -486,6 +487,7 @@ const AppV2Demo = ({ bottomSpan }: Pick<AppLayoutV2Props, 'bottomSpan'>) => {
   // Activity Bar (Left Nav - icon only navigation). Each icon selects the
   // matching sidebar panel; every item maps to an entry in LEFT_PANELS.
   const leftNav: NavVerticalProps = {
+    toggle: RAIL_TOGGLE,
     className: "",
     topNavItems: [
       { name: "Explorer", icon: Folder, onClick: () => openPanel('Explorer'), tooltip: "Explorer" },

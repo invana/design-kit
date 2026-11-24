@@ -80,6 +80,7 @@ import {
   ZoomOut,
 } from 'lucide-react';
 import { useState } from 'react';
+import { RAIL_TOGGLE } from '../../_story/rail-toggle';
 
 const meta: Meta<typeof AppLayoutV2> = {
   title: 'Themes/AppV2/Explorer Shell',
@@ -342,6 +343,7 @@ function ExplorerShellDemo() {
     },
 
     leftNav: {
+      toggle: RAIL_TOGGLE,
       topNavItems: [
         railItem('explorer', 'Explorer', Compass),
         railItem('model', 'Model', ListTree),

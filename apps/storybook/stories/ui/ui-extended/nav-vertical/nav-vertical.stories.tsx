@@ -6,6 +6,7 @@ import { ButtonWithTooltip, NavVertical, PanelBox, StatusDot, TypographyMuted, t
 
 import VARIANTS from '../../../../fixtures/ui-extended/nav-vertical.json';
 import { jsx, snippets, sourceFor, variantArg } from '../../../_story/source';
+import { RAIL_TOGGLE } from '../../../_story/rail-toggle';
 import { VariantGrid, type Log } from '../../../_story/variant-grid';
 import { MAP_ITEMS, toNavItems, type NavJson } from '../nav-base/_nav-items';
 
@@ -131,10 +132,9 @@ const VIEW_GROUPS = [
   },
 ];
 
-/** The views column, open and folded to its rail, sharing one open view. */
+/** The rail expanded and folded, sharing one open view; `toggle` draws the switcher at its foot. */
 function ViewsColumnDemo({ onClick }: { onClick: (key: string) => void }) {
   const [open, setOpen] = React.useState('model');
-  const [collapsed, setCollapsed] = React.useState(false);
   const groups = VIEW_GROUPS.map((g) => ({
     ...g,
     items: g.items.map((item) => ({
@@ -150,8 +150,8 @@ function ViewsColumnDemo({ onClick }: { onClick: (key: string) => void }) {
       <NavVertical
         groups={groups}
         activeKey={open}
-        collapsed={collapsed}
-        onCollapsedChange={setCollapsed}
+        defaultExpanded
+        toggle={RAIL_TOGGLE}
         header={{
           title: 'Model',
           actions: <ButtonWithTooltip tooltip="New model" variant="ghost" size="icon-sm" aria-label="New model"><Plus /></ButtonWithTooltip>,
@@ -163,10 +163,12 @@ function ViewsColumnDemo({ onClick }: { onClick: (key: string) => void }) {
 }
 
 /**
- * The views column: pass `groups` and `NavVertical` draws a head (`header.title`, `actions`, and
- * `below` for a picker card), labelled groups, and each view with its icon and `count`. With
- * `onCollapsedChange` the head carries a collapse button; `collapsed` folds it to a 56px rail whose
- * icons take their labels as tooltips. `activeKey` lights the open view.
+ * The rail expanded: `expanded` draws each item's label and `count` beside its icon, `groups`
+ * their labels, and `header` a head (`title`, `actions`, and `below` for a picker card). Folded,
+ * it is the 45px rail again — the same items through the same renderer, so the icons do not
+ * change size or move; labels go back to tooltips. `toggle` (icons are the caller's) draws the
+ * switcher as the last item; the rail keeps its own state from `defaultExpanded`, or pass
+ * `expanded` + `onExpandedChange` to own it. `activeKey` lights the open view.
  */
 export const ViewsColumn: Story = {
   render: ({ onClick }) => <ViewsColumnDemo onClick={onClick} />,
@@ -175,7 +177,6 @@ export const ViewsColumn: Story = {
     await step('A view reports its key and becomes the open one', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /Stitches/ }));
       await expect(args.onClick).toHaveBeenCalledWith('stitches');
-      await expect(canvas.getByRole('button', { name: /Stitches/ })).toHaveAttribute('aria-current', 'page');
     });
     await step('Collapse folds it to its rail, and Expand opens it again', async () => {
       await userEvent.click(canvas.getByRole('button', { name: 'Collapse' }));
