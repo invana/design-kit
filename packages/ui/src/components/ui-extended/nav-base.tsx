@@ -401,6 +401,8 @@ export const NavItems: React.FC<NavItemsProps> = ({
       hasMenu && !asCaret && V.open,
       item.disabled && "pointer-events-none opacity-50",
       isActive && cn(V.active, item.activeClass),
+      // A rail's open view also carries a bar on its leading edge.
+      isActive && isVertical && variant === "nav" && "shadow-[inset_2px_0_0_var(--color-primary)]",
       showLabels && "w-full justify-start",
       item.className,
     );
@@ -423,6 +425,14 @@ export const NavItems: React.FC<NavItemsProps> = ({
       >
         {text}
       </span>
+    );
+    // Folded, a toned count (`3 drift`, a draft open) is a dot on the icon, so the
+    // rail still says something wants a look; a muted count says nothing.
+    const dot = isVertical && !showLabels && item.count != null && item.countTone && item.countTone !== "muted" && (
+      <span
+        aria-hidden
+        className={cn("absolute right-1 top-1 size-1.5 rounded-full bg-current ring-2 ring-chrome", toneText[item.countTone])}
+      />
     );
     const count = showLabels && item.count != null && (
       <span className={cn("shrink-0 text-sm leading-5", toneText[item.countTone ?? "muted"])}>
@@ -509,6 +519,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
         {icon}
         {label}
         {count}
+        {dot}
         {caret}
         {badge}
       </>

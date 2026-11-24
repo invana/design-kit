@@ -186,3 +186,54 @@ export const ViewsColumn: Story = {
     });
   },
 };
+
+const LABELLED_GROUPS = [
+  {
+    label: 'Model',
+    items: [
+      { key: 'global', name: 'Global model', icon: Network },
+      { key: 'models', name: 'Models', icon: Cable, count: 4, countTone: 'warning' as const },
+    ],
+  },
+  {
+    label: 'Data',
+    items: [
+      { key: 'records', name: 'Records', icon: Rows3, count: '13 types' },
+      { key: 'loads', name: 'Loads', icon: Plus, count: 11 },
+    ],
+  },
+  {
+    label: 'Health',
+    items: [{ key: 'database', name: 'Database', icon: Database, count: '15 drift', countTone: 'warning' as const }],
+  },
+];
+
+/**
+ * The same rail open and folded side by side. Each group's head is one height in both states —
+ * its label open, a short rule folded — so every icon sits at the same height in both; a toned
+ * count (`15 drift`) folds to a dot on its icon, a muted one says nothing. The open view also
+ * carries a bar on its leading edge.
+ */
+export const OpenAndFolded: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+      {[true, false].map((expanded) => (
+        <PanelBox key={String(expanded)} flush style={{ height: 320, width: 'fit-content' }} bodyClassName="h-full">
+          <div data-rail={expanded ? 'open' : 'folded'} className="h-full">
+            <NavVertical groups={LABELLED_GROUPS} activeKey="global" expanded={expanded} />
+          </div>
+        </PanelBox>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const tops = (rail: string) =>
+      [...canvasElement.querySelectorAll(`[data-rail="${rail}"] svg`)].map((svg) =>
+        Math.round(svg.getBoundingClientRect().top),
+      );
+    await step('Every icon sits at the same height open and folded', async () => {
+      await expect(tops('open')).toHaveLength(5);
+      await expect(tops('folded')).toEqual(tops('open'));
+    });
+  },
+};

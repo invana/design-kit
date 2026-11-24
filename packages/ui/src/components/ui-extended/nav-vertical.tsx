@@ -121,8 +121,10 @@ export interface NavVerticalProps {
   /** Additional CSS classes for the navigation container */
   className?: string;
   /**
-   * Items in groups, after `topNavItems`. Expanded, each group's `label` is
-   * drawn over it; folded, groups are split by a rule.
+   * Items in groups, after `topNavItems`. Each group has a head of one height:
+   * its `label` when expanded, a short rule when folded (or when it has no
+   * label), so the icons keep their place as the rail flips. Folded, an item
+   * whose `count` has a `countTone` shows a dot of that tone on its icon.
    */
   groups?: NavVerticalGroup[];
   /** The expanded rail's title, its buttons and a slot under them; hidden when folded. */
@@ -197,19 +199,26 @@ export const NavVertical: React.FC<NavVerticalProps> = ({
                 </div>
               ) : null}
               {topNavItems && items(topNavItems)}
-              {groups?.map((group, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "flex flex-col gap-1",
-                    !expanded && "items-center",
-                    !expanded && (i > 0 || Boolean(topNavItems?.length)) && "border-t border-border pt-1",
-                  )}
-                >
-                  {expanded && group.label ? <Eyebrow className="px-2 pt-2">{group.label}</Eyebrow> : null}
-                  {items(group.items)}
-                </div>
-              ))}
+              {groups?.map((group, i) => {
+                // A group's head is one height open or folded: its label open, a short
+                // rule folded (or open when it has no label). So no icon moves up or
+                // down when the rail flips — only the text comes and goes.
+                const head = group.label != null || i > 0 || Boolean(topNavItems?.length)
+                return (
+                  <div key={i} className="flex flex-col gap-1">
+                    {head ? (
+                      <div aria-hidden={!expanded || group.label == null} className="flex h-6 shrink-0 items-end px-2 pb-1">
+                        {expanded && group.label != null ? (
+                          <Eyebrow className="truncate">{group.label}</Eyebrow>
+                        ) : (
+                          <span className="mb-1 h-px w-5 bg-border" />
+                        )}
+                      </div>
+                    ) : null}
+                    {items(group.items)}
+                  </div>
+                )
+              })}
             </>
           ),
         } : undefined,
