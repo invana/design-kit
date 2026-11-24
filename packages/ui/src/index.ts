@@ -1,5 +1,6 @@
 // Export utilities
 export { cn } from './lib/utils';
+export { toneText, type TextTone } from './lib/tone-text';
 export * from './components/ui'
 export * from './components/ui-extended'
 export * from './components/typography'

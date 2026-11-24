@@ -126,7 +126,7 @@ const VIEW_GROUPS = [
   {
     label: 'Data',
     items: [
-      { key: 'database', name: 'Database', icon: Database, count: 3 },
+      { key: 'database', name: 'Database', icon: Database, count: '3 drift', countTone: 'warning' as const },
       { key: 'records', name: 'Records', icon: Rows3, count: '24 k' },
     ],
   },

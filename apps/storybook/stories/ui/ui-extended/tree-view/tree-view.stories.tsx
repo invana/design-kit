@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { SectionHeader, TreeView, TypographyMuted, type TreeItem } from '@invana/ui';
+import { SectionHeader, TreeView, TypographyMuted, type ExpandedKeys, type TreeItem } from '@invana/ui';
 import { ArrowRight, Circle, File, Folder } from 'lucide-react';
 
 import VARIANTS from '../../../../fixtures/ui-extended/tree-view.json';
@@ -124,6 +124,114 @@ export const TreeViewStory: Story = {
       const grouped = within(within(canvasElement).getByRole('group', { name: 'Grouped, with counts and status' }));
       await expect(grouped.getByText('Relationship types')).toBeInTheDocument();
       await expect(grouped.getByRole('button', { name: /route.*50,640/ })).toBeInTheDocument();
+    });
+  },
+};
+
+const MODEL_TREE: TreeItem[] = [
+  {
+    id: 'AirRoutes',
+    label: 'AirRoutes',
+    icon: <Circle size={12} className="text-data-1" aria-hidden />,
+    meta: 'v1 · v2 draft',
+    metaTone: 'warning',
+    group: 'airways · Neo4j',
+    children: [
+      {
+        id: 'nodes',
+        label: 'Node types',
+        meta: 3,
+        children: [
+          { id: 'airport', label: 'airport', icon: ICONS.node, meta: '3,504', tone: 'warning', title: '2 properties changed in the draft', href: '#airport' },
+          { id: 'country', label: 'country', icon: ICONS.node, meta: '237', href: '#country' },
+        ],
+      },
+      {
+        id: 'indexes',
+        label: 'Indexes',
+        meta: '1 · 2 staged',
+        metaTone: 'warning',
+        children: [
+          { id: 'ix-code', label: 'airport.code', meta: 'unique' },
+          { id: 'ix-icao', label: 'airport.icao', meta: 'unique · staged', metaTone: 'warning' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'Deals',
+    label: 'Deals',
+    icon: <Circle size={12} className="text-data-4" aria-hidden />,
+    meta: 'v1',
+    group: 'airways · Neo4j',
+    title: '4 node · 4 edge types',
+    children: [{ id: 'sponsor', label: 'Sponsor.version ≡ AirRoutes', meta: 'end gone', metaTone: 'destructive' }],
+  },
+];
+
+/** The tree column: the open row and the open branches are the caller's. */
+function ColumnDemo({ onClick }: { onClick: Args['onClick'] }) {
+  const [active, setActive] = React.useState<string | number>('airport');
+  const [open, setOpen] = React.useState<ExpandedKeys>({ AirRoutes: true, nodes: true });
+  const wire = (items: TreeItem[]): TreeItem[] =>
+    items.map((i) => ({
+      ...i,
+      onClick: (id, label, event) => {
+        event.preventDefault();
+        setActive(id);
+        onClick(id, label);
+      },
+      children: i.children && wire(i.children),
+    }));
+  return (
+    <div style={{ width: 280, height: 420 }} className="border-r">
+      <TreeView
+        variant="column"
+        items={wire(MODEL_TREE)}
+        searchable
+        searchPlaceholder="Filter models and types"
+        groupMeta={{ 'airways · Neo4j': '2 models' }}
+        activeId={active}
+        expanded={open}
+        onExpandedChange={setOpen}
+      />
+    </div>
+  );
+}
+
+/**
+ * `variant="column"` fills a left-side column: flat, full height, rows indented 14px a level.
+ * `activeId` lights the open row; `expanded` with `onExpandedChange` holds which branches are
+ * open — by id, the same shape as a `DataTable`'s or a `Gantt`'s. A typed filter shows every branch open, so no match hides in a shut one. An item's `metaTone` colours its meta (amber *staged*, red *end gone*), `title` is its
+ * tooltip and `href` draws it as a link. `groupMeta` puts a fact on a group's header, and
+ * `searchPlaceholder` names the filter.
+ */
+export const Column: Story = {
+  render: ({ onClick }) => <ColumnDemo onClick={onClick} />,
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    await step('The open row is lit, and the filter is named', async () => {
+      await expect(canvas.getByRole('link', { name: /airport/ })).toHaveAttribute('aria-current', 'page');
+      await expect(canvas.getByRole('textbox', { name: 'Filter models and types' })).toBeInTheDocument();
+      await expect(canvas.getByText('2 models')).toBeInTheDocument();
+    });
+    await step('A link row reports its click and becomes the open one', async () => {
+      await userEvent.click(canvas.getByRole('link', { name: /country/ }));
+      await expect(args.onClick).toHaveBeenCalledWith('country', 'country');
+      await expect(canvas.getByRole('link', { name: /country/ })).toHaveAttribute('aria-current', 'page');
+    });
+    await step('A filter shows a match inside a shut branch, and clearing it shuts the branch again', async () => {
+      const filter = canvas.getByRole('textbox', { name: 'Filter models and types' });
+      await userEvent.type(filter, 'Sponsor');
+      await expect(canvas.getByText('end gone')).toBeInTheDocument();
+      await userEvent.clear(filter);
+      await expect(canvas.queryByText('end gone')).toBeNull();
+    });
+    await step('Opening a branch goes through onExpandedChange', async () => {
+      await expect(canvas.queryByText('end gone')).toBeNull();
+      await userEvent.click(canvas.getByRole('button', { name: /Deals/ }));
+      await expect(canvas.getByRole('button', { name: /Deals/ })).toHaveAttribute('aria-expanded', 'true');
+      await expect(canvas.getByText('end gone')).toHaveClass('text-destructive');
     });
   },
 };

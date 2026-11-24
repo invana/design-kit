@@ -44,7 +44,7 @@ const VIEW_GROUPS: NavVerticalGroup[] = [
       { key: 'stitches', name: 'Stitches', icon: Share2, count: 6 },
       { key: 'worlds', name: 'Worlds', icon: Compass, count: 4 },
       { key: 'guardrails', name: 'Guardrails', icon: ShieldCheck, count: 6 },
-      { key: 'database', name: 'Database', icon: Database, count: '15 drift' },
+      { key: 'database', name: 'Database', icon: Database, count: '15 drift', countTone: 'warning' },
     ],
   },
 ];
@@ -62,6 +62,7 @@ const MODEL_TREE: TreeItem[] = [
     id: 'AirRoutes',
     label: 'AirRoutes',
     meta: 'v1 · v2 draft',
+    metaTone: 'warning',
     group: 'airways · Neo4j',
     children: [
       {
@@ -69,7 +70,7 @@ const MODEL_TREE: TreeItem[] = [
         label: 'Node types',
         meta: 3,
         children: [
-          { id: 'airport', label: 'airport', icon: node, meta: '3,504', tone: 'warning' },
+          { id: 'airport', label: 'airport', icon: node, meta: '3,504', tone: 'warning', title: '2 properties changed in the draft' },
           { id: 'country', label: 'country', icon: node, meta: '237' },
           { id: 'continent', label: 'continent', icon: node, meta: '7' },
         ],
@@ -79,7 +80,7 @@ const MODEL_TREE: TreeItem[] = [
         label: 'Edge types',
         meta: 3,
         children: [
-          { id: 'route', label: 'route · airport → airport', icon: edge, meta: '50,637', tone: 'warning' },
+          { id: 'route', label: 'route · airport → airport', icon: edge, meta: '50,637', tone: 'warning', title: 'dist: int → float in the draft' },
           { id: 'contains', label: 'contains · continent → airport', icon: edge, meta: '7,008' },
         ],
       },
@@ -138,7 +139,16 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
           ? undefined
           : {
               defaultSize: '280px',
-              content: <TreeView items={MODEL_TREE} searchable className="w-full rounded-none border-0 shadow-none" />,
+              content: (
+                <TreeView
+                  variant="column"
+                  items={MODEL_TREE}
+                  searchable
+                  searchPlaceholder="Filter models and types"
+                  groupMeta={{ 'airways · Neo4j': '3 models' }}
+                  activeId="airport"
+                />
+              ),
             }
       }
       mainSection={{

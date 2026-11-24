@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { cn } from "../../lib/utils";
+import { toneText, type TextTone } from "../../lib/tone-text";
 import { useOverflowItems } from "../../hooks/use-overflow-items";
 import type { LucideIcon } from "lucide-react";
 
@@ -136,6 +137,8 @@ export interface NavItemConfig {
    * icons, the rail drops it.
    */
   count?: React.ReactNode;
+  /** The count's colour — `warning` for "15 drift". Muted by default. */
+  countTone?: TextTone;
 }
 
 /**
@@ -422,7 +425,7 @@ export const NavItems: React.FC<NavItemsProps> = ({
       </span>
     );
     const count = showLabels && item.count != null && (
-      <span className="shrink-0 text-sm leading-5 text-muted-foreground">
+      <span className={cn("shrink-0 text-sm leading-5", toneText[item.countTone ?? "muted"])}>
         {item.count}
       </span>
     );
