@@ -189,7 +189,13 @@ function Row({
 }) {
   return (
     <div
-      className={cn("flex min-w-0 items-stretch", row.fill && row.height == null && "min-h-board-fill flex-1")}
+      // A row with a height keeps it when the board scrolls; without `shrink-0` a tall
+      // board squeezes it, and a body with no height of its own (a canvas) to nothing.
+      className={cn(
+        "flex min-w-0 items-stretch",
+        row.fill && row.height == null && "min-h-board-fill flex-1",
+        row.height != null && "shrink-0",
+      )}
       style={{ gap: row.gap ?? gap, height: row.height }}
     >
       {row.panels.filter((panel) => !isDropped(panel as AnyPanel)).map((panel, i) => (
