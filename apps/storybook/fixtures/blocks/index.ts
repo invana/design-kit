@@ -8,10 +8,12 @@ import caveat from './caveat.json';
 import citations from './citations.json';
 import confirm from './confirm.json';
 import files from './files.json';
+import filters from './filters.json';
 import form from './form.json';
 import gantt from './gantt.json';
 import grid from './grid.json';
 import heatstrip from './heatstrip.json';
+import markdown from './markdown.json';
 import method from './method.json';
 import metric from './metric.json';
 import multi from './multi.json';
@@ -79,10 +81,12 @@ export const BLOCK_VARIANTS = {
   citations: as('citations', citations),
   confirm: as('confirm', confirm),
   files: as('files', files),
+  filters: as('filters', filters),
   form: as('form', form),
   gantt: as('gantt', gantt),
   grid: as('grid', grid),
   heatstrip: as('heatstrip', heatstrip),
+  markdown: as('markdown', markdown),
   method: as('method', method),
   metric: as('metric', metric),
   multi: as('multi', multi),

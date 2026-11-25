@@ -1,0 +1,31 @@
+[
+  {
+    "caption": "Lists and code",
+    "turn": { "id": "lists", "label": "answer" },
+    "spec": {
+      "text": "**airport** has 10 properties. Three would help a flight-ops team:\n\n1. `iata` — the three-letter code, split out of `code`\n2. `icao` — required; 11 airports have none\n3. a text index on `name`, for *contains* filters\n\nThe query I would run:\n\n```cypher\nMATCH (a:airport) WHERE a.icao IS NULL RETURN count(a)\n```"
+    }
+  },
+  {
+    "caption": "A table and a link",
+    "turn": { "id": "table", "label": "answer" },
+    "spec": {
+      "text": "Two models are stitched:\n\n| From | To | On |\n|---|---|---|\n| Twitter.Hashtag | AirRoutes.airport | tag ≡ code |\n| NewsArticles.Place | AirRoutes.airport | name = city |\n\n- Each is crossable in Explore\n- See [the stitch docs](https://example.org/stitches) for how a join is checked\n\n> Nothing changes until you accept a step."
+    }
+  },
+  {
+    "caption": "Raw HTML is dropped",
+    "turn": { "id": "html", "label": "answer" },
+    "spec": {
+      "text": "Before <b>the tag</b><script>alert(1)</script> and after."
+    }
+  },
+  {
+    "caption": "At 280px",
+    "narrow": true,
+    "turn": { "id": "narrow", "label": "answer" },
+    "spec": {
+      "text": "Hashtag.tag matches `airport.code` in any case: **214 of 2,000** sampled tags.\n\n- `#dub` ≡ `DUB`\n- `airport.name` matches none"
+    }
+  }
+]

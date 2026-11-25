@@ -96,6 +96,12 @@ export function validate(spec: ConversationSpec, options: ValidateOptions = {}):
       error(`Composer control "${control.id}" defaults to "${control.default}", which is not one of its options.`)
     }
   }
+  const contextIds = new Set<string>()
+  for (const chip of spec?.composer?.context ?? []) {
+    if (!chip?.id) error("A composer context chip has no id.")
+    else if (contextIds.has(chip.id)) error(`Composer context id "${chip.id}" is used twice.`)
+    else contextIds.add(chip.id)
+  }
   if (!Array.isArray(spec?.turns)) {
     error("The conversation has no turns array.")
     return issues

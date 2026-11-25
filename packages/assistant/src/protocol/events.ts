@@ -2,12 +2,13 @@
  * Everything the analyst can do, as data. The component never acts on a
  * conversation itself: it reports an event, and the API answers with patches.
  *
- * Every event but `prompt`, `stop` and `setting` names the turn it came from.
+ * Every event but `prompt`, `stop`, `setting` and `remove-context` names the turn it came from.
  */
 export type ConversationEvent =
   /**
    * A prompt. `settings` is what the composer's controls held — `{ mode: "nl",
-   * model: "qwen" }`; `files` what was attached, as the browser gave them.
+   * model: "qwen" }`; `files` what was attached, as the browser gave them;
+   * `context` the ids of the composer's context chips.
    */
   | { type: "prompt"; text: string; context?: string[]; settings?: Record<string, string>; files?: File[] }
   /** An ask was answered. `value` has the type its block fixes. */
@@ -44,6 +45,8 @@ export type ConversationEvent =
   | { type: "copy"; turn: string; text: string }
   /** An answer's steps were opened or folded. */
   | { type: "toggle-steps"; turn: string; open: boolean }
+  /** A context chip's × was clicked: the host takes it out of `composer.context`. */
+  | { type: "remove-context"; id: string }
 
 export type ConversationEventType = ConversationEvent["type"]
 
@@ -65,4 +68,5 @@ export const EVENT_TYPES = [
   "setting",
   "copy",
   "toggle-steps",
+  "remove-context",
 ] as const satisfies readonly ConversationEventType[]

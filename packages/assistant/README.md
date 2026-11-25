@@ -53,9 +53,11 @@ A trace step carries its record — `startedAt` and `duration`, `attempt` of `at
 `thinking`, and `io` (what went in, what came out) — and the answer its `startedAt`, `at`,
 `duration`, `meta` line and `outcome` (what the run produced, with its actions).
 
-Every action comes back as one `ConversationEvent` — `prompt` (with the composer's `settings` and
-`files`), `reply`, `skip`, `change`, `action`, `scope`, `open`, `template`, `refine`, `rate`,
-`stop`, `retry`, `open-run`, `setting`, `copy`, `toggle-steps`. The component changes nothing itself.
+Every action comes back as one `ConversationEvent` — `prompt` (with the composer's `settings`,
+`files` and the ids of its `context` chips), `reply`, `skip`, `change`, `action`, `scope`, `open`,
+`template`, `refine`, `rate`, `stop`, `retry`, `open-run`, `setting`, `copy`, `toggle-steps`,
+`remove-context`. The component changes nothing itself: a chip's × asks the host to take it out of
+`composer.context`.
 
 Beside each settled answer's time sit its actions, chosen by the `actions` prop — the built-ins by
 name (`retry`, `copy`, `steps`, `rate`) and your own as `{ id, label, icon }`, sent as `action`:

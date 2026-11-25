@@ -10,13 +10,13 @@ import type { AnswerKind } from "@invana/blocks"
  * drawing, and several intents may share one block with different options.
  */
 export const ANSWER_INTENTS = [
-  { id: "say", name: "Say it in words", kinds: ["narrative"] },
+  { id: "say", name: "Say it in words", kinds: ["narrative", "markdown"] },
   { id: "figure", name: "One number, or a few", kinds: ["metric", "grid"] },
   { id: "trend", name: "Change over time", kinds: ["timeseries", "control"] },
   { id: "compare", name: "Groups side by side", kinds: ["bars", "dumbbell", "matrix", "funnel"] },
   { id: "rank", name: "Leaders and laggards", kinds: ["ranked", "pareto", "tornado"] },
   { id: "explain-change", name: "What moved the total", kinds: ["waterfall", "decomposition"] },
-  { id: "records", name: "Rows, or one entity", kinds: ["table", "record", "attr", "pivot", "profile"] },
+  { id: "records", name: "Rows, or one entity", kinds: ["table", "record", "attr", "pivot", "profile", "filters"] },
   { id: "sequence", name: "What happened when", kinds: ["timeline", "heatstrip"] },
   { id: "spread", name: "The shape of the values", kinds: ["histogram", "box", "quantiles", "survival"] },
   { id: "relate", name: "How things connect", kinds: ["scatter", "correlation", "subgraph"] },

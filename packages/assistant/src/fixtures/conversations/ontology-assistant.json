@@ -1,0 +1,76 @@
+{
+  "id": "ontology-assistant",
+  "title": "Terminals for AirRoutes",
+  "composer": {
+    "placeholder": "Ask, or say what to change; I propose, you accept",
+    "context": [
+      { "id": "type:AirRoutes.airport", "kind": "type", "label": "AirRoutes.airport" },
+      { "id": "stitch:hashtag-airport", "kind": "stitch", "label": "Hashtag.tag ≡ airport.code" }
+    ]
+  },
+  "turns": [
+    {
+      "id": "u1",
+      "role": "analyst",
+      "text": "Airports have terminals, and each terminal has gates. Add that to AirRoutes.",
+      "context": ["AirRoutes.airport"],
+      "at": "2026-11-25T10:12:00.000Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "startedAt": "2026-11-25T10:12:00.000Z",
+      "at": "2026-11-25T10:12:03.100Z",
+      "duration": 3100,
+      "trace": [
+        { "id": "s1", "label": "read_model", "key": "read_model", "detail": "AirRoutes, v2 draft", "state": "done", "duration": 42 },
+        { "id": "s2", "label": "read_type", "key": "read_type", "detail": "airport", "state": "done", "duration": 18 },
+        { "id": "s3", "label": "propose", "key": "propose", "detail": "3 steps, checked", "state": "done", "duration": 61 }
+      ],
+      "blocks": [
+        {
+          "kind": "markdown",
+          "text": "Here is a **Terminal** type joined to `airport` by `AT`, and a count on airport:\n\n- `Terminal` keyed by `code`, with `gates: int`\n- `AT` from Terminal to airport\n\nAccepting adds each to the AirRoutes v2 draft; the database changes only when you publish."
+        },
+        {
+          "kind": "proposal",
+          "heading": "Terminals for AirRoutes",
+          "steps": [
+            { "id": "1", "kind": "node_type.add", "what": "AirRoutes.Terminal", "note": "code (key), name, gates: int", "state": "accepted" },
+            { "id": "2", "kind": "edge_type.add", "what": "AT · Terminal → airport", "note": "each Terminal is AT one airport", "state": "open" },
+            { "id": "3", "kind": "property.add", "what": "airport.terminals: int", "note": "how many terminals, from the data", "state": "open" }
+          ],
+          "consequence": "Lands in the AirRoutes v2 draft",
+          "actions": []
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "role": "analyst",
+      "text": "German airports with 3 runways",
+      "at": "2026-11-25T10:14:00.000Z"
+    },
+    {
+      "id": "a2",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "complete",
+      "startedAt": "2026-11-25T10:14:00.000Z",
+      "at": "2026-11-25T10:14:01.400Z",
+      "duration": 1400,
+      "blocks": [
+        {
+          "kind": "filters",
+          "target": "AirRoutes.airport",
+          "filters": ["country = DE", "runways = 3"],
+          "note": "19 match",
+          "actions": [{ "id": "apply", "label": "Apply to Records", "variant": "primary" }]
+        },
+        { "kind": "markdown", "text": "**19** airports match. The rows are in Records; I did not read their values." }
+      ]
+    }
+  ]
+}

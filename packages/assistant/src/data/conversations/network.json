@@ -136,7 +136,9 @@
               { "id": "third", "label": "Third party", "short": "3rd party", "rate": "—", "off": true, "cells": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] }
             ],
             "hint": "**Graph** carried the run · the model only at the start and the end"
-          }
+          },
+          {"kind": "filters", "target": "Airline", "filters": ["hub = FRA", "countries > 20"], "note": "14 match", "actions": [{"id": "apply", "label": "Apply to Records", "variant": "primary"}]},
+          {"kind": "markdown", "text": "How it was counted:\n\n1. each `Route` FROM Frankfurt, by its `Airline`\n2. the `Country` of each destination `Airport`\n3. distinct countries per airline, kept above 20"}
         ],
         "meta": "local · qwen3-27b · 14 rows · LLM 0.9s · query 1.4s",
         "envelope": {

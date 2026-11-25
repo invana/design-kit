@@ -360,9 +360,25 @@ export interface ComposerControl {
   quiet?: boolean
 }
 
+/** Something the analyst added for the assistant to look at — a type, a stitch — as a chip above the composer. */
+export interface ComposerContext {
+  /** Sent with each prompt's `context`, and with `remove-context`. */
+  id: string
+  /** What the chip says — `airport`, `Hashtag.tag ≡ airport.code`. */
+  label: string
+  /** What it is, muted before the label — `type`, `stitch`. */
+  kind?: string
+}
+
 export interface ComposerSpec {
   placeholder?: string
   controls?: ComposerControl[]
+  /**
+   * What the next prompt is about, as removable chips above the composer.
+   * Their ids go with the prompt as `context`; a chip's × sends
+   * `remove-context`. The host adds and removes them: the chips are its state.
+   */
+  context?: ComposerContext[]
   /** Offer attaching files; `accept` is the input's accept list. */
   attach?: boolean | { accept?: string; multiple?: boolean }
   /** Keyboard hints under the composer — `↵ send`, `esc stop`. @default true */

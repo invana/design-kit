@@ -551,11 +551,38 @@ export interface CitationsOptions {
   note?: string
 }
 
+/** Where a step of a proposal stands. `stale` no longer fits what it was proposed against; nothing was applied. */
+export type ProposalStepState = "open" | "accepted" | "rejected" | "stale"
+
+/** One change of a proposal, accepted or rejected on its own. */
+export interface ProposalStep {
+  /** Sent with the step's `accept` and `reject`. */
+  id: string
+  /** The kind of change, in mono — `node_type.add`. */
+  kind: string
+  /** What it changes, in mono — `AirRoutes.Terminal`, `airport.iata: string`. */
+  what: string
+  /** A line under it — what it sets, or, once stale, why. */
+  note?: string
+  /** What was found wrong when it was proposed, each a warning under the note. */
+  issues?: string[]
+  state: ProposalStepState
+  /** Accepting or rejecting it is on its way: its buttons wait. */
+  busy?: boolean
+}
+
 export interface ProposalOptions {
   /** Where it came from, on the card's header — `from this answer`. */
   title?: string
   /** What it proposes, in one line above the draft. */
   heading?: string
+  /**
+   * Changes decided one by one, each a row with its kind, what it changes, a
+   * note, and Accept and Reject while open — sent as `accept` and `reject`
+   * with the step's id. More than one open draws `Accept all`, sent as
+   * `accept-all`. `consequence` then says where accepting lands.
+   */
+  steps?: ProposalStep[]
   /** The draft, label by label. */
   rows?: { label: string; value: string }[]
   /** What writing it does, as figures — `Rules 1`, `Recipients 214`. */
@@ -565,6 +592,27 @@ export interface ProposalOptions {
   actions: ActionOption[]
   /** Written: the stamp that says so, and when, on the header. */
   done?: { label: string; at?: string }
+}
+
+export interface MarkdownOptions {
+  /**
+   * Markdown as a model writes it — paragraphs, lists, code, tables, links.
+   * Raw HTML in it is dropped, never run.
+   */
+  text: string
+}
+
+export interface FiltersOptions {
+  /** What the filters narrow — `AirRoutes.airport`. */
+  target: string
+  /** Each filter as it reads — `country = DE`, `contains “Dub”`. */
+  filters: string[]
+  /** Where the filters stand, already worded — `19 match`, `Applied to Records · 19 of 3,504`. */
+  note?: string
+  /** `good` once applied. */
+  noteTone?: Tone
+  /** Apply, Clear — each sent as an `action` event with its id. */
+  actions: ActionOption[]
 }
 
 export interface CannotOptions {
@@ -884,6 +932,8 @@ export interface AnswerOptionsByKind extends SharedAnswerOptions {
     download?: boolean
   }
   proposal: ProposalOptions
+  markdown: MarkdownOptions
+  filters: FiltersOptions
   cannot: CannotOptions
   caveat: CaveatOptions
   scope: ScopeOptions

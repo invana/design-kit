@@ -7,10 +7,12 @@ import { CaveatBlock } from "./blocks/caveat"
 import { CitationsBlock } from "./blocks/citations"
 import { ConfirmAsk } from "./blocks/confirm"
 import { FilesBlock } from "./blocks/files"
+import { FiltersBlock } from "./blocks/filters"
 import { FormAsk } from "./blocks/form"
 import { GanttBlock } from "./blocks/gantt"
 import { GridBlock } from "./blocks/grid"
 import { HeatStripBlock } from "./blocks/heatstrip"
+import { MarkdownBlock } from "./blocks/markdown"
 import { MethodBlock } from "./blocks/method"
 import { MetricBlock } from "./blocks/metric"
 import { MultiAsk } from "./blocks/multi"
@@ -56,6 +58,7 @@ export const BLOCK_RENDERERS: BlockRenderers = {
   range: null,
   suggestions: SuggestionsAsk,
   narrative: NarrativeBlock,
+  markdown: MarkdownBlock,
   metric: MetricBlock,
   grid: GridBlock,
   table: TableBlock,
@@ -77,6 +80,7 @@ export const BLOCK_RENDERERS: BlockRenderers = {
   cannot: CannotBlock,
   caveat: CaveatBlock,
   scope: ScopeBlock,
+  filters: FiltersBlock,
   checks: null,
   trace: TraceBlock,
   activity: ActivityBlock,

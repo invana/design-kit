@@ -3,6 +3,7 @@ import type { ConversationSpec } from "../protocol/types"
 import agentConsole from "./conversations/agent-console.json"
 import graphExpansions from "./conversations/graph-expansions.json"
 import methodDisclosure from "./conversations/method-disclosure.json"
+import ontologyAssistant from "./conversations/ontology-assistant.json"
 import streaming from "./conversations/streaming.json"
 import streamingScript from "./conversations/streaming.script.json"
 import taskBoard from "./conversations/task-board.json"
@@ -67,6 +68,7 @@ export const CONVERSATIONS = {
   streaming: streaming as unknown as ConversationSpec,
   methodDisclosure: methodDisclosure as unknown as ConversationSpec,
   turnLabels: turnLabels as unknown as ConversationSpec,
+  ontologyAssistant: ontologyAssistant as unknown as ConversationSpec,
 }
 
 export type ConversationId = keyof typeof CONVERSATIONS

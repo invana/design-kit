@@ -102,7 +102,9 @@ type Story = StoryObj<Args>;
  * console with work in flight, a parked question and a running agent pinned above the composer.
  * Every background task on the Tasks view. A reply that writes itself in from a recorded
  * `stream`. An answer's `envelope.method` as a bare `▸ method` line. And who is speaking over
- * each turn. Every interaction lands in the Actions panel through its own callback, then
+ * each turn. The ontology assistant: context chips above the composer (`composer.context`, each
+ * sent with the prompt and removed by the host on `remove-context`), a Markdown answer, a proposal
+ * decided step by step, and filters to apply elsewhere. Every interaction lands in the Actions panel through its own callback, then
  * `onEvent`, and in the cell's log.
  */
 export const ChatSession: Story = {
@@ -134,6 +136,31 @@ export const ChatSession: Story = {
       await expect(args.onRate).toHaveBeenCalledWith(expect.objectContaining({ type: 'rate', value: 1 }));
       await expect(args.onEvent).toHaveBeenCalledWith(expect.objectContaining({ type: 'rate', value: 1 }));
       await expect(c.getByRole('list', { name: 'Events' })).toHaveTextContent('"type": "rate"');
+    });
+  },
+};
+
+/**
+ * The ontology assistant: context chips above the composer go with each prompt as `context`, and
+ * a chip's × sends `remove-context` for the host to take it out of `composer.context`. A proposal
+ * decided step by step sends `accept` and `reject` with the step's id on its turn.
+ */
+export const ContextAndProposals: Story = {
+  ...ChatSession,
+  args: { variant: 'Context and proposals' },
+  play: async ({ canvasElement, args, step }) => {
+    const o = within(within(canvasElement).getByRole('group', { name: 'Context and proposals' }));
+    await step('A context chip goes with the prompt, and its × asks the host to remove it', async () => {
+      await userEvent.type(o.getByRole('textbox'), 'Which airports have no icao?{Enter}');
+      await expect(args.onPrompt).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'prompt', context: ['type:AirRoutes.airport', 'stitch:hashtag-airport'] }),
+      );
+      await userEvent.click(o.getByRole('button', { name: 'Remove AirRoutes.airport' }));
+      await expect(args.onRemoveContext).toHaveBeenCalledWith({ type: 'remove-context', id: 'type:AirRoutes.airport' });
+    });
+    await step('A step is accepted by its id, on its turn', async () => {
+      await userEvent.click(o.getByRole('button', { name: 'Accept airport.terminals: int' }));
+      await expect(args.onAction).toHaveBeenCalledWith({ type: 'action', turn: 'a1', action: 'accept', value: '3' });
     });
   },
 };

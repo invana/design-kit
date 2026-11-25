@@ -2,8 +2,8 @@ import * as React from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@invana/forms"
 import { cn } from "@invana/ui"
 
-import { ChatSessionComposer } from "../../conversations/thread"
-import type { ComposerControl, ComposerSpec } from "../../protocol/types"
+import { ChatSessionComposer, ChatSessionContextChip } from "../../conversations/thread"
+import type { ComposerContext, ComposerControl, ComposerSpec } from "../../protocol/types"
 import { useChatSessionContext } from "./context"
 
 /** A 16×16 stroked icon from its path data, as the API sends one. */
@@ -81,6 +81,20 @@ export function AttachmentChip({ name, onRemove }: { name: string; onRemove?: ()
   )
 }
 
+/** What the next prompt is about, removable: its × sends `remove-context`. */
+export function ContextChip({ chip, onRemove }: { chip: ComposerContext; onRemove: () => void }) {
+  return (
+    <ChatSessionContextChip
+      className="max-w-56 flex-none rounded-control"
+      onDismiss={onRemove}
+      dismissLabel={`Remove ${chip.label}`}
+    >
+      {chip.kind ? <span className="text-muted-foreground">{chip.kind} </span> : null}
+      {chip.label}
+    </ChatSessionContextChip>
+  )
+}
+
 /** Every control's value: what was picked, else its default, else its first option. */
 export function initialSettings(composer: ComposerSpec | undefined): Record<string, string> {
   const out: Record<string, string> = {}
@@ -94,15 +108,16 @@ export interface ComposerBarProps {
 }
 
 /**
- * The composer, drawn from the spec's `composer`: the prompt, the toolbar's
- * controls at the start and end, attach, and send — or stop while a run is in
- * flight. The same in every variant. A pick that sets a placeholder or mono
+ * The composer, drawn from the spec's `composer`: the context chips, the
+ * prompt, the toolbar's controls at the start and end, attach, and send — or
+ * stop while a run is in flight. The same in every variant. A pick that sets a placeholder or mono
  * type (a query language) changes the prompt box to match.
  */
 export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
   const { spec, emit, icons, setComposer } = useChatSessionContext()
   const composer = spec.composer
   const controls = composer?.controls ?? []
+  const context = composer?.context ?? []
   const [draft, setDraft] = React.useState("")
   const [files, setFiles] = React.useState<File[]>([])
   // Only what the analyst picked is held; every other control reads its
@@ -131,6 +146,7 @@ export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
     emit({
       type: "prompt",
       text,
+      ...(context.length ? { context: context.map((c) => c.id) } : {}),
       ...(controls.length ? { settings } : {}),
       ...(files.length ? { files } : {}),
     })
@@ -166,15 +182,20 @@ export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
         stopIcon={icons.stop}
         sendDisabled={isRunning || (!draft.trim() && !files.length)}
         attachments={
-          files.length
-            ? files.map((f, i) => (
+          context.length || files.length ? (
+            <>
+              {context.map((c) => (
+                <ContextChip key={c.id} chip={c} onRemove={() => emit({ type: "remove-context", id: c.id })} />
+              ))}
+              {files.map((f, i) => (
                 <AttachmentChip
                   key={`${f.name}-${i}`}
                   name={f.name}
                   onRemove={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
                 />
-              ))
-            : undefined
+              ))}
+            </>
+          ) : undefined
         }
         // The last start control takes the free width: it is the one that truncates.
         toolbarStart={start.length ? <>{start.map((c, i) => select(c, i === start.length - 1))}</> : undefined}
