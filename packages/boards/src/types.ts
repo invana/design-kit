@@ -432,7 +432,8 @@ export interface RowSpec<X extends ExtraPanels = Record<never, never>> {
   height?: number
   /**
    * Take the height the tab has left — a canvas, which has no content height
-   * and no one right height either. Ignored with {@link height}.
+   * and no one right height either. Never less than `--spacing-board-fill`;
+   * on a shorter board the body scrolls. Ignored with {@link height}.
    */
   fill?: boolean
   /** Gap between panels in px. Defaults to the board's `gap`. */

@@ -152,7 +152,7 @@ function Row({
 }) {
   return (
     <div
-      className={cn("flex min-w-0 items-stretch", row.fill && row.height == null && "min-h-0 flex-1")}
+      className={cn("flex min-w-0 items-stretch", row.fill && row.height == null && "min-h-board-fill flex-1")}
       style={{ gap: row.gap ?? gap, height: row.height }}
     >
       {row.panels.filter((panel) => !isDropped(panel as AnyPanel)).map((panel, i) => (
@@ -187,6 +187,11 @@ function Row({
  * **It owns one scroller.** The body scrolls; no band does. A `PanelBox` is
  * content-height by construction, which is what keeps twenty of them in a
  * column from becoming twenty scroll regions.
+ *
+ * **It takes the space it is given.** The board is the full height and width
+ * of its parent, never of the window: a shell's region between its header and
+ * footer, or a page that is the whole viewport. A `fill` row takes what the
+ * other rows leave, down to `--spacing-board-fill`; below that the body scrolls.
  */
 export function Board<X extends ExtraPanels = Record<never, never>>({
   spec: given,
@@ -263,7 +268,7 @@ export function Board<X extends ExtraPanels = Record<never, never>>({
   )
 
   return (
-    <div className={cn("flex min-h-0 flex-col bg-background", className)} {...props}>
+    <div className={cn("flex h-full min-h-0 w-full min-w-0 flex-col bg-background", className)} {...props}>
       {spec.header ? <SpecHeader header={spec.header} onAction={emit} icons={icons} /> : null}
       {spec.header?.description != null || spec.header?.details?.length ? (
         <RecordDescription description={spec.header.description} details={spec.header.details} />

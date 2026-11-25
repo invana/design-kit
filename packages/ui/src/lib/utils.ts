@@ -27,7 +27,7 @@ import { extendTailwindMerge } from "tailwind-merge"
 const twMerge = extendTailwindMerge({
   extend: {
     theme: {
-      spacing: ["control-xs", "control-sm", "control-md", "control-lg"],
+      spacing: ["control-xs", "control-sm", "control-md", "control-lg", "board-fill"],
       radius: ["control", "surface"],
     },
   },
