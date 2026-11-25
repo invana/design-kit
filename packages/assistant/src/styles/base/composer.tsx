@@ -177,6 +177,7 @@ export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
         onStop={onStop}
         isRunning={isRunning}
         placeholder={placeholder}
+        textareaLabel={composer?.label}
         textareaClassName={cn("h-[72px] min-h-14", mono && "font-mono")}
         sendIcon={icons.send}
         stopIcon={icons.stop}

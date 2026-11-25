@@ -48,7 +48,8 @@ export const AppLayoutV1: React.FC<AppLayoutV1Props> = (props) => {
               className={cn('border-r', CHROME_SURFACE, props.leftNav?.className)}
             />
           )}
-          <main className="w-full">
+          {/* min-w-0: a wide page (a table) scrolls inside main rather than widening the row past the screen. */}
+          <main className="w-full min-w-0">
             {props.main}
           </main>
         </div>

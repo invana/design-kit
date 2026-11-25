@@ -151,7 +151,7 @@ export const ContextAndProposals: Story = {
   play: async ({ canvasElement, args, step }) => {
     const o = within(within(canvasElement).getByRole('group', { name: 'Context and proposals' }));
     await step('A context chip goes with the prompt, and its × asks the host to remove it', async () => {
-      await userEvent.type(o.getByRole('textbox'), 'Which airports have no icao?{Enter}');
+      await userEvent.type(o.getByRole('textbox', { name: 'Ask the assistant' }), 'Which airports have no icao?{Enter}');
       await expect(args.onPrompt).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'prompt', context: ['type:AirRoutes.airport', 'stitch:hashtag-airport'] }),
       );

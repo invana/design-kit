@@ -3,6 +3,7 @@
   "title": "Terminals for AirRoutes",
   "composer": {
     "placeholder": "Ask, or say what to change; I propose, you accept",
+    "label": "Ask the assistant",
     "context": [
       { "id": "type:AirRoutes.airport", "kind": "type", "label": "AirRoutes.airport" },
       { "id": "stitch:hashtag-airport", "kind": "stitch", "label": "Hashtag.tag ≡ airport.code" }

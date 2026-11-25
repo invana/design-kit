@@ -15,6 +15,8 @@ export interface ChatSessionComposerProps {
   /** Disables the textarea and send button. */
   disabled?: boolean;
   placeholder?: string;
+  /** The text box's accessible name — `Ask the assistant`. @default "Message" */
+  textareaLabel?: string;
   /** Left-aligned toolbar slot — mode/model selects, etc. Grows to fill and truncates. */
   toolbarStart?: React.ReactNode;
   /** Toolbar slot between the start controls and the send button — timeout, attach, … */
@@ -51,6 +53,7 @@ export function ChatSessionComposer({
   isRunning = false,
   disabled = false,
   placeholder = "Ask anything…",
+  textareaLabel = "Message",
   toolbarStart,
   toolbarEnd,
   attachments,
@@ -85,6 +88,7 @@ export function ChatSessionComposer({
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={placeholder}
+          aria-label={textareaLabel}
           className={cn(
             "block w-full min-h-16 h-24 max-h-64 bg-transparent p-2 text-foreground outline-none resize-y placeholder:text-muted-foreground",
             textareaClassName,

@@ -372,6 +372,8 @@ export interface ComposerContext {
 
 export interface ComposerSpec {
   placeholder?: string
+  /** The text box's accessible name — `Ask the assistant`. @default "Message" */
+  label?: string
   controls?: ComposerControl[]
   /**
    * What the next prompt is about, as removable chips above the composer.
