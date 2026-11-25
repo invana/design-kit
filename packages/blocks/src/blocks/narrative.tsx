@@ -1,5 +1,5 @@
 import type * as React from "react"
-import { CitationMarker } from "@invana/ui"
+import { CitationMarker, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@invana/ui"
 
 import { prose } from "../prose"
 import type { BlockProps } from "../types"
@@ -30,9 +30,30 @@ export function NarrativeBlock({ spec, active = spec.active, onActiveChange, tra
       {n}
     </CitationMarker>
   )
+  const figure = (n: number) => {
+    const found = spec.figures?.[n - 1]
+    if (!found || found.value === null) return <span className="text-muted-foreground">—</span>
+    const chip = (
+      <strong
+        tabIndex={found.source ? 0 : undefined}
+        className="rounded-sm underline decoration-dotted decoration-muted-foreground/60 underline-offset-2"
+      >
+        {found.value}
+      </strong>
+    )
+    if (!found.source) return chip
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{chip}</TooltipTrigger>
+          <TooltipContent>{found.source}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }
   return (
     <p>
-      {prose(spec.text, marker)}
+      {prose(spec.text, marker, figure)}
       {spec.cites?.map(marker)}
       {trailing}
     </p>

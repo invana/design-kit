@@ -37,6 +37,12 @@ export interface NarrativeOptions {
   cites?: number[]
   /** The source the reader is on: its marker is lit, as is its row in the citations. */
   active?: number
+  /**
+   * Figures another panel holds, placed with `{n}` (1-based) where the text writes them: the
+   * value already worded, and where it came from, shown on hover. A shell that reads panels
+   * fills these in; a figure it could not read is `value: null`, drawn as a muted `—`.
+   */
+  figures?: { value: string | null; source?: string }[]
 }
 
 export interface MetricOptions {
