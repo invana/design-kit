@@ -254,6 +254,12 @@
   --spacing-control-md: calc(32rem / 13);
   --spacing-control-lg: calc(40rem / 13);
 
+  /* The least a board's `fill` row shrinks to, 320px at the 13px root: below
+     it the board scrolls inside itself, so a canvas in that row never
+     collapses on a short window. A floor, never a size — the board itself
+     takes whatever its parent gives (`min-h-board-fill`). */
+  --spacing-board-fill: calc(320rem / 13);
+
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
