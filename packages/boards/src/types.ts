@@ -355,6 +355,14 @@ export interface PanelBase {
    */
   mark?: "added" | "changed"
   /**
+   * This panel is the subject: the others on its board step back, readable and
+   * still live. Nothing changes on the panel itself — a record or a bar inside
+   * it is called out with the kind's own `highlight`, and the two combine. Any
+   * number of panels may be focused; with none, the board draws as it always
+   * has.
+   */
+  focus?: boolean
+  /**
    * Its data is on its way: skeleton lines stand in for the body, and the
    * renderer is not mounted until it is. For a first read; a re-read keeps the
    * old body and says so in `footer`.
