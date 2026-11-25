@@ -7,7 +7,7 @@ import { applyPatch, ChatSession, type ConversationEvent, type ConversationSpec,
 import { GitBranch, ListOrdered, Network, RotateCcw, Shapes, ShieldCheck, Table, Users } from 'lucide-react';
 
 import { CHAT_ICONS, logEvent } from '../../../assistant/chat-kit';
-import { appendStep, PlaybookProvider, usePlaybook, type Playbook, type Step } from '../playbook/playbook';
+import { appendStep, PlaybookProvider, useWorkPlaybook, type Playbook, type Step } from '../playbook/playbook';
 import { PlaybookPanel, type Refused } from '../playbook/playbook-panel';
 import { SessionMenu, stagesOf, ThemeMenu } from './chrome';
 import { COPY, DATA, say, type GraphModel, type Value } from './data';
@@ -126,7 +126,7 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
   });
   const playbookRef = React.useRef(playbook);
   const [refused, setRefused] = React.useState<Refused[]>([]);
-  const playbackControls = usePlaybook(playbook);
+  const playbackControls = useWorkPlaybook(playbook);
   const [showPlaybook, setShowPlaybook] = React.useState(false);
   const [playbookFolded, setPlaybookFolded] = React.useState(false);
 

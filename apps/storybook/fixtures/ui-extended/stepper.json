@@ -1,0 +1,31 @@
+[
+  {
+    "caption": "Held by the stepper — controls and dots",
+    "steps": ["The network", "The busiest hub", "The next three", "The long tail", "What changed"]
+  },
+  {
+    "caption": "Before the first step — a playbook not yet played",
+    "before": true,
+    "steps": ["Draw 25 airports", "Expand Atlanta", "Focus on the hubs"]
+  },
+  {
+    "caption": "A slow move — busy until it settles",
+    "moveMs": 900,
+    "steps": ["Lay out", "Glide to the hub", "Light its routes", "Fit"]
+  },
+  {
+    "caption": "Plays — any key or click stops it",
+    "playEvery": 1200,
+    "steps": ["The network", "The busiest hub", "The next three", "The long tail"]
+  },
+  {
+    "caption": "A move that fails — its error shown",
+    "failsAt": 2,
+    "steps": ["Draw", "Expand", "A step on a panel that is gone", "Fit"]
+  },
+  {
+    "caption": "With a close — leaving the walk",
+    "closable": true,
+    "steps": ["One", "Two", "Three"]
+  }
+]

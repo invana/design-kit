@@ -13,7 +13,7 @@ import shell from '../../../fixtures/themes/app-agents.json';
 import steps from '../../../fixtures/themes/playbook.json';
 import { CHAT_ICONS, logEvent } from '../../assistant/chat-kit';
 import { PlayableTablePanel } from './playbook/playable-table';
-import { appendStep, panelsOf, PlaybookProvider, usePlaybook, type Playbook as Script, type Step } from './playbook/playbook';
+import { appendStep, panelsOf, PlaybookProvider, useWorkPlaybook, type Playbook as Script, type Step } from './playbook/playbook';
 import { PlaybookPanel, type Refused } from './playbook/playbook-panel';
 import { tableOps } from './playbook/table-ops';
 
@@ -114,7 +114,7 @@ function Conversation({ onRunStart }: { onRunStart: () => void }) {
  */
 function PlaybookApp(args: AppLayoutAgentsProps) {
   const agent = useAgentSteps();
-  const play = usePlaybook(agent.playbook);
+  const play = useWorkPlaybook(agent.playbook);
   const [show, setShow] = React.useState(true);
   const [folded, setFolded] = React.useState(false);
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { BoardPagesSpec } from '@invana/boards';
+import { useStepper } from '@invana/ui';
 
 /**
  * A story-only prototype of the playbook (RFC `feat-2026-10-05-the-work-cannot-be-played-step-by-step`,
@@ -173,8 +174,12 @@ export function PlaybookProvider({ router, children }: { router: Router; childre
   return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>;
 }
 
-/** The position over the host's script. Headless: the host draws the controls. */
-export function usePlaybook(playbook: Playbook, { follow = true } = {}) {
+/**
+ * The position over the host's script, as a kit `Stepper` (`stepper`) — the same moves, keys
+ * and busy rule as every stepped walk in the kit. Headless: the host draws the controls.
+ * Named apart from canvas's `usePlaybook`, which is the canvas engine's playbook.
+ */
+export function useWorkPlaybook(playbook: Playbook, { follow = true } = {}) {
   const { steps } = playbook;
   // "latest" follows new steps; a step id holds still; null is before the first.
   const [at, setAt] = React.useState<'latest' | string | null>(follow ? 'latest' : (steps.at(-1)?.id ?? null));
@@ -183,25 +188,22 @@ export function usePlaybook(playbook: Playbook, { follow = true } = {}) {
   // Before paint, so a target never shows a step it is not at.
   React.useLayoutEffect(() => router.update(steps, index), [router, steps, index]);
   const go = (to: number) => setAt(follow && to === steps.length - 1 ? 'latest' : (steps[to]?.id ?? null));
+  const stepper = useStepper({ count: steps.length, index, before: true, onMove: go });
   const current = steps[index];
   return {
     router,
     steps,
-    index,
     current,
+    stepper,
     atLatest: index === steps.length - 1,
-    canNext: index + 1 < steps.length,
-    canPrevious: index >= 0,
-    next: () => go(Math.min(index + 1, steps.length - 1)),
-    previous: () => go(index - 1),
-    goTo: (id: string | null) => go(id === null ? -1 : steps.findIndex((s) => s.id === id)),
     latest: () => go(steps.length - 1),
+    goTo: (id: string | null) => void stepper.goTo(id === null ? -1 : steps.findIndex((s) => s.id === id)),
     /** The current step's targets — what the host brings into view. */
     targets: [...new Set(current?.calls.map((c) => c.target) ?? [])],
   };
 }
 
-export type PlaybookControls = ReturnType<typeof usePlaybook>;
+export type WorkPlaybookControls = ReturnType<typeof useWorkPlaybook>;
 
 /** The calls for `id` up to the position, and the step the playbook is at. Outside a provider: none. */
 export function usePlayable(id: string | undefined): { received: Received[]; current: string | null } {

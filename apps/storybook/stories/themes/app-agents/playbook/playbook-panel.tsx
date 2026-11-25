@@ -1,7 +1,6 @@
-import { Button, Eyebrow, FloatingPanel, Stack, StatusDot, TimelineEntry, TimelineList } from '@invana/ui';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button, Eyebrow, FloatingPanel, Stack, StatusDot, StepperControls, TimelineEntry, TimelineList } from '@invana/ui';
 
-import type { PlaybookControls, Step } from './playbook';
+import type { Step, WorkPlaybookControls } from './playbook';
 
 /** A step the playbook refused, and why. */
 export interface Refused {
@@ -21,13 +20,14 @@ export function PlaybookPanel({
   onCollapsedChange,
   onClose,
 }: {
-  play: PlaybookControls;
+  play: WorkPlaybookControls;
   refused: Refused[];
   collapsed: boolean;
   onCollapsedChange: (collapsed: boolean) => void;
   onClose: () => void;
 }) {
-  const { steps, index, current } = play;
+  const { steps, current } = play;
+  const { index } = play.stepper;
   return (
     <FloatingPanel
       title="Playbook"
@@ -39,12 +39,7 @@ export function PlaybookPanel({
       bodyClassName="p-3"
       footer={
         <Stack direction="row" gap="xs">
-          <Button variant="ghost" size="icon-sm" aria-label="Previous step" disabled={!play.canPrevious} onClick={play.previous}>
-            <ChevronLeft />
-          </Button>
-          <Button variant="ghost" size="icon-sm" aria-label="Next step" disabled={!play.canNext} onClick={play.next}>
-            <ChevronRight />
-          </Button>
+          <StepperControls stepper={play.stepper} />
           {!play.atLatest ? (
             <Button variant="ghost" size="sm" onClick={play.latest}>
               Latest
