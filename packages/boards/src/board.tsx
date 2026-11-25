@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
   PanelBox,
   RecordHeader,
+  Skeleton,
   StatusDot,
   TabbedPanel,
   cn,
@@ -83,11 +84,14 @@ function Panel({
   const Renderer = registry[panel.kind]
 
   // Absence outranks the renderer: a band nobody recorded says which kind of
-  // nothing it is, and never draws an empty one of itself.
+  // nothing it is, and never draws an empty one of itself. A panel still
+  // reading draws skeleton lines, and mounts no renderer, until its data is in.
   const body = panel.absent ? (
     <AbsenceNote reason={panel.absent.reason} label={panel.absent.label}>
       {panel.absent.note}
     </AbsenceNote>
+  ) : panel.reading ? (
+    <PanelReading fill={fill} />
   ) : panel.render ?? (
     Renderer ? (
       <Renderer
@@ -106,12 +110,7 @@ function Panel({
     ? { width: panel.width, flexShrink: 0 }
     : { flexGrow: panel.grow ?? 1, flexBasis: 0, minWidth: 0 }
 
-  // Every panel is framed, as an answer card frames every block: the same JSON
-  // draws the same in either shell. `title` adds the label bar, nothing more.
-  return (
-    <PanelBox
-      title={panel.title}
-      aside={
+  const asideOf = () =>
         panel.actions?.length ? (
           <span className="flex items-center gap-2">
             {panel.asideChip ? <SpecChip chip={panel.asideChip} /> : panel.aside}
@@ -127,13 +126,48 @@ function Panel({
         ) : (
           panel.aside
         )
+
+  // Every panel is framed, as an answer card frames every block: the same JSON
+  // draws the same in either shell. `title` adds the label bar, nothing more.
+  return (
+    <PanelBox
+      title={panel.title}
+      aside={
+        panel.mark ? (
+          <span className="flex items-center gap-2">
+            <SpecChip chip={{ label: MARK_LABEL[panel.mark], tone: "info" }} />
+            {asideOf()}
+          </span>
+        ) : (
+          asideOf()
+        )
       }
-      flush={panel.flush || panel.absent != null}
+      footer={panel.footer}
+      flush={(panel.flush && !panel.reading) || panel.absent != null}
       fill={fill}
+      // In a fill row the box stretches to the row, its body growing into it: a
+      // percentage height cannot resolve against a row sized by flex-grow, and
+      // any set height would switch the row's stretch off.
+      className={cn(fill && "h-auto", panel.mark && "border-info")}
       style={style}
     >
       {body}
     </PanelBox>
+  )
+}
+
+const MARK_LABEL = { added: "Added", changed: "Changed" } as const
+
+/** Skeleton lines for a panel whose data is on its way; in a fill row they take its height. */
+function PanelReading({ fill }: { fill?: boolean }) {
+  return fill ? (
+    <Skeleton className="min-h-0 flex-1" aria-label="Reading" />
+  ) : (
+    <div className="flex flex-col gap-2" aria-label="Reading">
+      <Skeleton className="h-3 w-3/4" />
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-5/6" />
+    </div>
   )
 }
 

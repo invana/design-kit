@@ -343,6 +343,24 @@ export interface PanelBase {
   /** Drop the box padding, so a table or a canvas meets the border. */
   flush?: boolean
   /**
+   * One muted line under the panel — when its data was read, where, how long
+   * it took (`10:42 · EU · H1 2026 · 41 ms`). The host words it; the board
+   * draws it.
+   */
+  footer?: string
+  /**
+   * The panel just arrived or just changed — a follow-up added it, or rewrote
+   * it. Drawn as a chip in the header and an accent edge. The host clears it
+   * once it is no longer news.
+   */
+  mark?: "added" | "changed"
+  /**
+   * Its data is on its way: skeleton lines stand in for the body, and the
+   * renderer is not mounted until it is. For a first read; a re-read keeps the
+   * old body and says so in `footer`.
+   */
+  reading?: boolean
+  /**
    * Where a block that returns a value stands — a `form`, a `confirm` — and the
    * value given. The consumer moves it on `reply`, as the API patches an ask
    * turn; unset, the block is open.
