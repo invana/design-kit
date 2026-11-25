@@ -46,5 +46,17 @@
       { "label": "Rows", "value": "1,880", "caption": "so far" },
       { "label": "Failed", "value": "1", "caption": "execute", "captionTone": "error", "flagged": true }
     ]
+  },
+  {
+    "caption": "A footer: when the band was read, where, how long",
+    "width": 560,
+    "title": "Most routes out",
+    "aside": "top 3",
+    "footer": "10:42 · EU · H1 2026 · 41 ms",
+    "properties": [
+      { "label": "IST", "value": "279" },
+      { "label": "FRA", "value": "262" },
+      { "label": "AMS", "value": "255" }
+    ]
   }
 ]

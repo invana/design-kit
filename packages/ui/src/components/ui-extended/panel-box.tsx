@@ -31,6 +31,12 @@ export interface PanelBoxProps
    * of its own and would otherwise draw at 0.
    */
   fill?: boolean
+  /**
+   * A line under the body — where a band's facts about itself sit: when it was
+   * read, from where, how long it took (`10:42 · EU · H1 2026 · 41 ms`). Muted,
+   * one line, never actions.
+   */
+  footer?: React.ReactNode
   children?: React.ReactNode
   headerClassName?: string
   bodyClassName?: string
@@ -58,7 +64,7 @@ export interface PanelBoxProps
  */
 export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
   (
-    { title, aside, flush, fill, className, headerClassName, bodyClassName, children, ...props },
+    { title, aside, flush, fill, footer, className, headerClassName, bodyClassName, children, ...props },
     ref,
   ) => (
     <Card
@@ -99,6 +105,15 @@ export const PanelBox = React.forwardRef<HTMLDivElement, PanelBoxProps>(
       >
         {children}
       </div>
+      {footer != null ? (
+        <div
+          // Lighter than the label bar: the smallest control height, on the card's
+          // own ground under a rule, so it reads as a note on the band, not a bar.
+          className="flex h-control-xs shrink-0 items-center truncate border-t border-border px-2.5 text-xs text-muted-foreground"
+        >
+          {footer}
+        </div>
+      ) : null}
     </Card>
   ),
 )

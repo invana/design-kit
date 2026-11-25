@@ -37,6 +37,7 @@ function open(v: Variant) {
     v.aside ? `aside="${v.aside}"` : '',
     v.badge ? `aside={<Badge variant="outline">${v.badge}</Badge>}` : '',
     v.flush ? 'flush' : '',
+    v.footer ? `footer="${v.footer}"` : '',
   ].filter(Boolean);
   return `<PanelBox${attrs.length ? ' ' + attrs.join(' ') : ''}>`;
 }
@@ -136,7 +137,8 @@ function Body({ v }: { v: Variant }) {
  * One band of a board, from `fixtures/ui-extended/panel-box.json`. The column scrolls; a band
  * never does. `aside` is the fact on the right — a count, a provenance note, a badge — never a
  * toolbar (a band that wants icon buttons is a panel, `PanelContent`). `flush` drops the body
- * padding so a table's header rule meets the border. With no `title` there is no label bar: the
+ * padding so a table's header rule meets the border. `footer` is one muted line under the body — when
+ * the band was read, where, how long. With no `title` there is no label bar: the
  * box frames a seamless strip of figures as an answer card does.
  */
 export const PanelBoxStory: Story = {
@@ -148,6 +150,7 @@ export const PanelBoxStory: Story = {
           title={v.title}
           aside={v.badge ? <Badge variant="outline">{v.badge}</Badge> : v.aside}
           flush={v.flush}
+          footer={v.footer}
         >
           <Body v={v} />
         </PanelBox>
@@ -158,5 +161,8 @@ export const PanelBoxStory: Story = {
     const canvas = within(canvasElement);
     for (const v of VARIANTS) await expect(canvas.getByRole('group', { name: v.caption })).toBeInTheDocument();
     await expect(within(canvas.getByRole('group', { name: VARIANTS[2].caption })).getByRole('table')).toBeInTheDocument();
+    await expect(
+      within(canvas.getByRole('group', { name: VARIANTS[4].caption })).getByText('10:42 · EU · H1 2026 · 41 ms'),
+    ).toBeInTheDocument();
   },
 };
