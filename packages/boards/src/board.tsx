@@ -150,6 +150,9 @@ function Panel({
       // any set height would switch the row's stretch off.
       className={cn(fill && "h-auto", panel.mark && "border-info")}
       style={style}
+      data-focusable=""
+      data-focused={panel.focus ? "" : undefined}
+      aria-current={panel.focus ? "step" : undefined}
     >
       {body}
     </PanelBox>
@@ -258,6 +261,8 @@ export function Board<X extends ExtraPanels = Record<never, never>>({
 
   const body = (rows: AnyRow[], flush?: boolean) => (
     <div
+      // The scope of a focus: a focused panel here recedes the others here, never another board's.
+      data-focus-scope=""
       className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", !flush && "p-3")}
       style={{ gap }}
     >

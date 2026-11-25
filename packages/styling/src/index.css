@@ -297,6 +297,9 @@
   --warning: 38 92% 42%;
   --info: 210 90% 45%;
 
+  /* How far a surface steps back while a sibling is the subject (`data-focus-scope`). */
+  --recede: 0.42;
+
   --surface-alpha: 1; /* opaque → identical to current look */
   --glass-blur: none; /* no backdrop blur */
 }
@@ -311,6 +314,26 @@
 [data-theme$="-dark"],
 .dark {
   --color-edge: hsl(210 6% 30%);
+}
+
+/*
+ * Focus. A scope (`data-focus-scope`) holding a `data-focused` item draws every
+ * other `data-focusable` in it receded: readable and still live. With nothing
+ * focused the selector cannot match, so a surface that never sets the attributes
+ * is untouched. An item inside the focused one is not receded.
+ */
+[data-focus-scope]:has([data-focused]) [data-focusable]:not([data-focused]):not([data-focused] *) {
+  opacity: var(--recede);
+}
+
+[data-focusable] {
+  transition: opacity 0.18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-focusable] {
+    transition: none;
+  }
 }
 
 [data-glass="true"] {
