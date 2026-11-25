@@ -1,0 +1,43 @@
+[
+  {
+    "caption": "Deck — a board's story",
+    "steps": [
+      { "id": "size", "title": "The network", "narration": "3,502 airports joined by 50,605 routes; most of them small." },
+      { "id": "top", "title": "The busiest hub", "narration": "Frankfurt leads with 239 routes, ahead of every other airport." },
+      { "id": "next", "title": "The next three", "narration": "Paris, Amsterdam and Istanbul follow, each above 200." },
+      { "id": "tail", "title": "The long tail", "narration": "Half the airports have fewer than 5 routes." }
+    ]
+  },
+  {
+    "caption": "Deck that plays, with a close",
+    "playEvery": 1500,
+    "closable": true,
+    "steps": [
+      { "id": "a", "title": "Draw 25 airports", "narration": "A first look at the busiest airports." },
+      { "id": "b", "title": "Expand Atlanta", "narration": "Its routes open around it." },
+      { "id": "c", "title": "Focus on the hubs", "narration": "The rest dims; the camera follows." }
+    ]
+  },
+  {
+    "caption": "Deck before the first step — a playbook not yet played",
+    "before": true,
+    "steps": [
+      { "id": "a", "title": "Draw 25 airports", "narration": "A first look at the busiest airports." },
+      { "id": "b", "title": "Expand Atlanta", "narration": "Its routes open around it." }
+    ]
+  },
+  {
+    "caption": "Compact — the moves live in a toolbar",
+    "variant": "compact",
+    "withControls": true,
+    "steps": [
+      { "id": "q1", "title": "Which airports are hubs?", "narration": "The ones with over 200 routes: Frankfurt, Paris, Amsterdam, Istanbul." },
+      { "id": "q2", "title": "How do they connect?", "narration": "Each pair shares at least one direct route." },
+      { "id": "q3", "title": "Where is the gap?", "narration": "No hub reaches the Pacific islands directly." }
+    ]
+  },
+  {
+    "caption": "Empty — nothing to present",
+    "steps": []
+  }
+]

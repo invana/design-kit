@@ -7,6 +7,7 @@ import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import { Separator } from "../ui/separator"
 import { ErrorBoundary } from "./error-boundary"
+import { useStepper } from "./stepper"
 
 /**
  * A single clickable/displayed reference shown in a step's
@@ -49,6 +50,8 @@ export interface TourController {
   prev: () => void
   goTo: (index: number) => void
   exit: () => void
+  /** ← → and PageUp / PageDown step while focus is inside the tour. */
+  onKeyDown?: (event: React.KeyboardEvent) => void
 }
 
 export interface UseTourOptions {
@@ -65,58 +68,13 @@ export interface UseTourOptions {
 }
 
 /**
- * Headless controller for a {@link Tour}. Owns the current step index and
- * exposes navigation handlers. Pass the result to `<Tour controller={...} />`,
- * or let `<Tour steps={...} />` manage its own controller internally.
+ * Headless controller for a {@link Tour}: a `useStepper` over its steps, holding the position.
+ * Pass the result to `<Tour controller={...} />`, or let `<Tour steps={...} />` manage its own
+ * controller internally.
  */
 export function useTour(options: UseTourOptions): TourController {
-  const {
-    steps,
-    initialStep = 0,
-    loop = false,
-    onStepChange,
-    onComplete,
-    onExit,
-  } = options
-
-  const [current, setCurrent] = React.useState(initialStep)
-  const total = steps.length
-  const lastIndex = Math.max(total - 1, 0)
-  const clamped = Math.min(Math.max(current, 0), lastIndex)
-
-  // The step the handlers read: the latest commit's, so a callback fires once
-  // per move — never from inside a state updater, which React may run twice.
-  // Synced in a layout effect, before any event can reach a handler.
-  const at = React.useRef(clamped)
-  React.useLayoutEffect(() => {
-    at.current = clamped
-  }, [clamped])
-
-  const move = React.useCallback(
-    (to: number) => {
-      if (to === at.current) return
-      at.current = to
-      setCurrent(to)
-      onStepChange?.(to)
-    },
-    [onStepChange]
-  )
-
-  const goTo = React.useCallback(
-    (index: number) => move(Math.min(Math.max(index, 0), lastIndex)),
-    [lastIndex, move]
-  )
-
-  const next = React.useCallback(() => {
-    if (at.current < lastIndex) return move(at.current + 1)
-    if (loop && total > 0) return move(0)
-    onComplete?.()
-  }, [lastIndex, total, loop, onComplete, move])
-
-  const prev = React.useCallback(() => {
-    if (at.current > 0) return move(at.current - 1)
-    if (loop && total > 0) move(lastIndex)
-  }, [lastIndex, total, loop, move])
+  const { steps, initialStep = 0, loop = false, onStepChange, onComplete, onExit } = options
+  const stepper = useStepper({ count: steps.length, initial: initialStep, loop, onMove: onStepChange, onComplete })
 
   const exit = React.useCallback(() => {
     onExit?.()
@@ -124,17 +82,18 @@ export function useTour(options: UseTourOptions): TourController {
 
   return React.useMemo<TourController>(
     () => ({
-      step: steps[clamped],
-      current: clamped,
-      total,
-      isFirst: clamped <= 0,
-      isLast: clamped >= lastIndex,
-      next,
-      prev,
-      goTo,
+      step: steps[stepper.index],
+      current: stepper.index,
+      total: steps.length,
+      isFirst: stepper.isFirst,
+      isLast: stepper.isLast,
+      next: () => void stepper.next(),
+      prev: () => void stepper.previous(),
+      goTo: (index: number) => void stepper.goTo(index),
       exit,
+      onKeyDown: stepper.onKeyDown,
     }),
-    [steps, clamped, total, lastIndex, next, prev, goTo, exit]
+    [steps, stepper, exit]
   )
 }
 
@@ -230,6 +189,7 @@ export function Tour({
         )}
         role="dialog"
         aria-label={typeof badgeLabel === "string" ? badgeLabel : undefined}
+        onKeyDown={ctrl.onKeyDown}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
           <div className="flex items-center gap-2">

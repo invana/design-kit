@@ -81,6 +81,8 @@ export * from './terminal';
 export * from './timeline-list';
 export * from './toolbar';
 export * from './touch-strip';
+export * from './presenter';
+export * from './stepper';
 export * from './tour';
 export * from './trace-list';
 export * from './tree-view';
