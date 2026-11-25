@@ -21,6 +21,18 @@
     }
   },
   {
+    "caption": "Figures from other panels",
+    "turn": { "id": "figures", "label": "prose" },
+    "spec": {
+      "text": "Istanbul has the most routes out, {1}, ahead of Frankfurt {2}. A third figure could not be read: {3}.",
+      "figures": [
+        { "value": "1,204", "source": "Most routes out · row 1 · read 14:02" },
+        { "value": "1,011", "source": "Most routes out · row 2 · read 14:02" },
+        { "value": null }
+      ]
+    }
+  },
+  {
     "caption": "Streaming",
     "turn": { "id": "streaming", "label": "prose", "state": "running" },
     "spec": {
