@@ -65,7 +65,7 @@ export interface BoundChipProps
   /** What to call it, when the identifier is not what this surface says. */
   label?: React.ReactNode
   /**
-   * This chip's swatch class, given directly — `bg-data-7`, `bg-violet-500`.
+   * This chip's swatch class, given directly — `bg-data-violet`, `bg-violet-500`.
    * The shortest path when a call site draws one chip and knows its bound.
    * Wins over {@link BoundChipProps.palette}.
    */

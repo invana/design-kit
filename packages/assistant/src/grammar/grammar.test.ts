@@ -57,6 +57,6 @@ describe("the grammar is internally consistent", () => {
       answerIntents: ANSWER_INTENTS.length,
       patterns: PATTERNS.length,
       events: EVENT_TYPES.length,
-    }).toEqual({ stages: 7, flows: 26, askKinds: 21, answerKinds: 46, asks: 29, answerIntents: 15, patterns: 26, events: 17 })
+    }).toEqual({ stages: 7, flows: 26, askKinds: 21, answerKinds: 46, asks: 29, answerIntents: 15, patterns: 26, events: 20 })
   })
 })

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppLayoutV1 } from '../app-v1';
 import {
+  type NavVerticalItem,
   type NavVerticalProps,
   type NavHorizontalProps,
   ResizablePanelGroup,
@@ -45,7 +46,24 @@ export interface AppLayoutV2Props {
    * is hidden and the workspace stretches to the full width. See `AppLayoutV1`.
    */
   leftNav?: NavVerticalProps;
+  /**
+   * The tree column beside the rail. While the rail is open (`leftNav.expanded`
+   * not `false`) it is a resizable column. While the rail is folded
+   * (`leftNav.expanded === false`) it still opens, in the same place: activating a
+   * view on the rail (not a `bottomNavItems` action) shows it beside the rail and main gives way, Escape or the lit item
+   * again closes it, and the rail's expand control keeps it open. On the open rail the
+   * lit item again hides the column and any item shows it. The rail holds the
+   * selection and the expanded state in both modes, so a folded rail is the
+   * compact form of the same control, never a second behaviour.
+   */
   leftSection?: SectionConfig;
+  /**
+   * Whether the open rail's tree column is put away. Optional: left out, the layout keeps it
+   * itself; given, the caller owns it (a per-browser choice) and hears changes in
+   * `onTreeHiddenChange`.
+   */
+  treeHidden?: boolean;
+  onTreeHiddenChange?: (hidden: boolean) => void;
   mainSection: MainSectionConfig;
   bottomSection?: SectionConfig;
   rightSection?: SectionConfig;
@@ -86,6 +104,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   mainClassName,
   leftNav,
   leftSection,
+  treeHidden: treeHiddenProp,
+  onTreeHiddenChange,
   mainSection,
   bottomSection,
   rightSection,
@@ -100,6 +120,52 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   const ns = idPrefix ?? `app-v2-${generatedId}`;
   const panelId = (name: string) => `${ns}-${name}`;
 
+  // A folded rail (controlled, `expanded === false`) opens `leftSection` in the same
+  // column, beside the rail, when an item is activated; main gives way as it does for
+  // the open rail. Escape or the active item again closes it; Expand keeps it.
+  const folded = Boolean(leftNav) && leftNav?.expanded === false;
+  const [peekOpen, setPeekOpen] = React.useState(false);
+  // The open rail's tree can be put away too: the lit item again hides it, any item shows it.
+  const [treeHiddenState, setTreeHiddenState] = React.useState(false);
+  const treeHidden = treeHiddenProp ?? treeHiddenState;
+  const setTreeHidden = (next: boolean) => {
+    setTreeHiddenState(next);
+    onTreeHiddenChange?.(next);
+  };
+  React.useEffect(() => {
+    if (!folded || !leftSection) setPeekOpen(false);
+  }, [folded, leftSection]);
+  React.useEffect(() => {
+    if (!peekOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPeekOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [peekOpen]);
+  // Every view on the rail (`topNavItems` and `groups`) also opens the column, and the lit one toggles it.
+  // `bottomNavItems` are actions (Settings, the account): they never open or close it.
+  const opens = (item: NavVerticalItem): NavVerticalItem =>
+    item.disabled || item.href
+      ? item
+      : {
+          ...item,
+          onClick: () => {
+            const lit = (item.key ?? item.name) === leftNav?.activeKey;
+            item.onClick?.();
+            if (folded) setPeekOpen(lit ? !peekOpen : true);
+            else setTreeHidden(lit ? !treeHidden : false);
+          },
+        };
+  const railNav: NavVerticalProps | undefined =
+    leftNav && leftSection
+      ? {
+          ...leftNav,
+          topNavItems: leftNav.topNavItems?.map(opens),
+          groups: leftNav.groups?.map((g) => ({ ...g, items: g.items.map(opens) })),
+        }
+      : leftNav;
+
   // The sidebar (left) panel. `preserve-pixel-size` holds its width when the
   // surrounding group grows (e.g. the right/auxiliary or bottom collapsing), so
   // the editor absorbs the freed space instead of the sidebar widening.
@@ -107,7 +173,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // a card inside it: the panel re-points `card` at `chrome`, so a TabbedPanel
   // or a list placed there takes the panel's surface and only the editor comes
   // forward. Portalled menus and dialogs are outside it and keep their own.
-  const sidebarPanel = leftSection ? (
+  const sidebarPanel = leftSection && (folded ? peekOpen : !treeHidden) ? (
     <ResizablePanel
       id={panelId("sidebar-panel")}
       defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize}
@@ -294,7 +360,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       className={className}
       header={header}
       mainClassName={mainClassName}
-      leftNav={leftNav}
+      leftNav={railNav}
       footer={footer ?? { className: '' }}
       main={<div className="flex-1 h-full">{layout}</div>}
     />

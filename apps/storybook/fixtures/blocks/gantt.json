@@ -425,7 +425,7 @@
       "ticks": 6,
       "labelWidth": 200,
       "durationWidth": 72,
-      "palette": { "network": "bg-data-3", "ingest": "bg-data-1", "work_write": "bg-data-6" },
+      "palette": { "network": "bg-data-aqua", "ingest": "bg-data-blue", "work_write": "bg-data-green" },
       "seams": [{ "after": "Order@v2 · lane 3", "label": "approval", "startMs": 5600, "durationMs": 300, "note": "held for approval" }],
       "tasks": [
         {
@@ -611,9 +611,9 @@
       "labelWidth": 200,
       "durationWidth": 72,
       "palette": {
-        "network": "bg-data-3",
-        "ingest": "bg-data-1",
-        "work_write": "bg-data-6"
+        "network": "bg-data-aqua",
+        "ingest": "bg-data-blue",
+        "work_write": "bg-data-green"
       },
       "tasks": [
         {
@@ -670,7 +670,7 @@
       "ticks": 6,
       "labelWidth": 200,
       "durationWidth": 72,
-      "palette": { "llm": "bg-data-7", "graph_data": "bg-data-1", "human": "bg-data-6", "third_party": "bg-data-4" },
+      "palette": { "llm": "bg-data-violet", "graph_data": "bg-data-blue", "human": "bg-data-green", "third_party": "bg-data-yellow" },
       "tasks": [
         {
           "key": "llm",
@@ -767,7 +767,7 @@
       "scale": "seq",
       "labelWidth": 200,
       "durationWidth": 72,
-      "palette": { "llm": "bg-data-7", "graph_data": "bg-data-1" },
+      "palette": { "llm": "bg-data-violet", "graph_data": "bg-data-blue" },
       "tasks": [
         {
           "key": "llm",
@@ -810,7 +810,7 @@
       "ticks": 4,
       "labelWidth": 200,
       "durationWidth": 72,
-      "palette": { "llm": "bg-data-7", "graph_data": "bg-data-1", "third_party": "bg-data-4" },
+      "palette": { "llm": "bg-data-violet", "graph_data": "bg-data-blue", "third_party": "bg-data-yellow" },
       "tasks": [
         {
           "key": "graph_data",

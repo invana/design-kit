@@ -8,6 +8,9 @@ import {
   PropertyList,
   PropertyRow,
 } from "@invana/ui"
+import * as React from "react"
+
+import { humanWait } from "../format"
 import type { BlockProps, ProposalStep, ProposalStepState } from "../types"
 
 import { ActionRow } from "../parts/actions"
@@ -17,6 +20,22 @@ const STATE_TONE: Record<ProposalStepState, "info" | "success" | "muted" | "warn
   accepted: "success",
   rejected: "muted",
   stale: "warning",
+}
+
+/** How long an open step has waited, ticking each second; the row's far right. */
+function WaitingTimer({ since }: { since: string }) {
+  const [now, setNow] = React.useState(() => Date.now())
+  React.useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+  const then = Date.parse(since)
+  if (Number.isNaN(then)) return null
+  return (
+    <span className="ml-1 shrink-0 text-sm tabular-nums text-muted-foreground" title="Waiting for your decision">
+      {humanWait(now - then)}
+    </span>
+  )
 }
 
 /** One step: its kind and what it changes, Reject and Accept while open, else its state; the note and issues under it. */
@@ -63,6 +82,7 @@ function StepRow({
             >
               Accept
             </Button>
+            {step.waitingSince ? <WaitingTimer since={step.waitingSince} /> : null}
           </>
         ) : (
           <Badge variant="soft" size="xs" tone={STATE_TONE[step.state]}>

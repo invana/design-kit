@@ -108,7 +108,7 @@ export const GraphView = React.forwardRef<
   {
     nodes: ViewNode[];
     edges: ViewEdge[];
-    /** A node type's colour, as CSS — `var(--color-data-1)`. */
+    /** A node type's colour, as CSS — `var(--color-data-blue)`. */
     palette: Record<string, string>;
     onSelect?: (pick: GraphPick | null) => void;
     /** Draw every edge's type, not only when hovered — a schema. */

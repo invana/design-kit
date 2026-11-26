@@ -101,7 +101,7 @@
       { "from": "Variety", "type": "DERIVED_FROM", "to": "ParentLine" }
     ]
   },
-  "palette": { "Variety": "var(--color-data-1)", "Institution": "var(--color-data-2)", "Trait": "var(--color-data-3)", "Zone": "var(--color-data-4)", "ParentLine": "var(--color-data-5)" },
+  "palette": { "Variety": "var(--color-data-blue)", "Institution": "var(--color-data-orange)", "Trait": "var(--color-data-aqua)", "Zone": "var(--color-data-yellow)", "ParentLine": "var(--color-data-magenta)" },
   "suggestions": {
     "0": ["List all chickpea varieties with who developed them, yield, seed size, maturity and disease resistance"],
     "1": [],

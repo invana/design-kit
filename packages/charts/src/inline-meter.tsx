@@ -37,7 +37,7 @@ export interface InlineMeterProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** How the value is written. Default: a whole percentage of 1 — `32%`. */
   format?: (value: number) => string
   tone?: InlineMeterTone
-  /** An entity's colour, as CSS — `var(--color-data-2)`. Overrides `tone`. */
+  /** An entity's colour, as CSS — `var(--color-data-orange)`. Overrides `tone`. */
   color?: string
   /** What is being measured, for assistive tech — `share of queries`. */
   label?: string

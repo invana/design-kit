@@ -28,7 +28,7 @@ export interface LegendItemProps
   kind?: LegendSwatchKind
   /**
    * The mark's colour — a CSS colour or, preferably, a data-palette token:
-   * `var(--color-data-3)`. Defaults to the current text colour.
+   * `var(--color-data-aqua)`. Defaults to the current text colour.
    */
   color?: string
   label: React.ReactNode

@@ -5,9 +5,6 @@ import type { ConversationEvent, ConversationEventType } from "../protocol/event
 import type { PatchSource } from "../protocol/stream"
 import type { AnswerState, ConversationSpec } from "../protocol/types"
 
-/** `cli` is the console: caret prompts, status-dotted replies, step rows, a Tasks view. `web` is the chat: labelled turns, answer cards. */
-export type ChatSessionVariant = "cli" | "web"
-
 /** The event of one type — `ChatSessionEventOf<"reply">` is `{ type: "reply"; turn; value }`. */
 export type ChatSessionEventOf<T extends ConversationEventType> = Extract<ConversationEvent, { type: T }>
 
@@ -28,6 +25,8 @@ export type ChatSessionHandlers = {
  * (`{ send: <ArrowUp /> }`); anything left out falls back to a text glyph.
  */
 export interface ChatSessionIcons {
+  /** Before the title in the header. */
+  session: React.ReactNode
   send: React.ReactNode
   stop: React.ReactNode
   attach: React.ReactNode
@@ -35,6 +34,12 @@ export interface ChatSessionIcons {
   retry: React.ReactNode
   copy: React.ReactNode
   steps: React.ReactNode
+  /** The header's History: back to the list of conversations. */
+  history: React.ReactNode
+  /** The header's New conversation. */
+  newChat: React.ReactNode
+  /** The answer's run report, beside Steps. */
+  report: React.ReactNode
   rateUp: React.ReactNode
   rateDown: React.ReactNode
 }
@@ -42,9 +47,10 @@ export interface ChatSessionIcons {
 /**
  * The actions on a settled answer, beside its time. `retry` is sent as
  * `retry`, `copy` as `copy` (and written to the clipboard), `steps` as
- * `toggle-steps`, `rate` as `rate`.
+ * `toggle-steps`, `report` as `open-run` (drawn only when the host handles
+ * `onOpenRun`), `rate` as `rate`.
  */
-export type ChatSessionBuiltInAction = "retry" | "copy" | "steps" | "rate"
+export type ChatSessionBuiltInAction = "retry" | "copy" | "steps" | "report" | "rate"
 
 /** An action of your own on a settled answer, sent as an `action` event with its `id`. */
 export interface ChatSessionCustomAction {
@@ -58,10 +64,7 @@ export interface ChatSessionCustomAction {
 
 export type ChatSessionAnswerAction = ChatSessionBuiltInAction | ChatSessionCustomAction
 
-export const DEFAULT_ANSWER_ACTIONS: ChatSessionAnswerAction[] = ["retry", "copy", "steps", "rate"]
-
-/** What the CLI variant shows: the thread, or every step of every reply. */
-export type ChatSessionView = "chat" | "tasks"
+export const DEFAULT_ANSWER_ACTIONS: ChatSessionAnswerAction[] = ["retry", "copy", "steps", "report", "rate"]
 
 export interface ChatSessionProps extends ChatSessionHandlers {
   /**
@@ -70,8 +73,6 @@ export interface ChatSessionProps extends ChatSessionHandlers {
    * hand the patches over as `stream`.
    */
   spec: ConversationSpec
-  /** @default "web" */
-  variant?: ChatSessionVariant
   /**
    * Every event, whatever its type, after its own callback — the one place to
    * forward everything to an API.
@@ -98,7 +99,7 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /**
    * The actions beside a settled answer's time, in order — the built-ins by
    * name, yours as `{ id, label, icon }`. `[]` shows none.
-   * @default ["retry", "copy", "steps", "rate"]
+   * @default ["retry", "copy", "steps", "report", "rate"]
    */
   actions?: ChatSessionAnswerAction[]
   /**
@@ -109,18 +110,14 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /** Shows a close control in the header. */
   onClose?: () => void
   /**
-   * The header. `true` draws the session's own — title, turn count, close;
+   * The header. `true` draws the session's own — title, the World, History
+   * (when `onHistory` is set), New (`onNewConversation`) and close;
    * `false` draws none; any node is drawn in its place, so a host composes
    * its own header from whatever it needs. @default true when the spec has a title
    */
   header?: boolean | React.ReactNode
   /** Shown when the spec has no turns yet. */
   emptyState?: React.ReactNode
-  /** The CLI's view, controlled. */
-  view?: ChatSessionView
-  /** @default "chat" */
-  defaultView?: ChatSessionView
-  onViewChange?: (view: ChatSessionView) => void
   className?: string
 }
 
@@ -132,7 +129,6 @@ export interface ChatSessionHandle {
   showSteps: (turnId: string, open?: boolean) => void
   /** Open one step's record — what went in and came out. */
   openStep: (turnId: string, stepId: string) => void
-  setView: (view: ChatSessionView) => void
   /** Focus the composer. */
   focusComposer: () => void
 }

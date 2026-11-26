@@ -1,7 +1,7 @@
 /**
  * The tokens a canvas draws in, resolved to concrete values.
  *
- * A canvas cannot read `var()`: `ctx.fillStyle = "var(--color-data-1)"` is
+ * A canvas cannot read `var()`: `ctx.fillStyle = "var(--color-data-blue)"` is
  * silently ignored. So every colour and size a uPlot chart uses is read off the
  * live document here, through a probe element that sits inside the chart — a
  * theme scoped to a subtree resolves the same as one on the root.
@@ -9,9 +9,10 @@
  * Read on every redraw rather than cached: a redraw happens on a theme,
  * density or size change, which is exactly when a cache would be stale.
  */
+import { dataVar } from "@invana/styling/color"
 
 export interface ChartTheme {
-  /** `--color-data-1…8`, in slot order. Index 0 is slot 1. */
+  /** `--color-data-<hue>`, in slot order. Index 0 is slot 1. */
   data: string[]
   success: string
   warning: string
@@ -86,7 +87,7 @@ export function readChartTheme(host: HTMLElement): ChartTheme {
   }
   return {
     data: Array.from({ length: DATA_SLOTS }, (_, i) =>
-      resolveColor(host, `var(--color-data-${i + 1}, var(--color-muted-foreground))`),
+      resolveColor(host, dataVar(i + 1, "var(--color-muted-foreground)")),
     ),
     success: color("--color-success"),
     warning: color("--color-warning"),

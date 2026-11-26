@@ -88,8 +88,6 @@ function baseSpec(id: string, name: string, turns: Turn[] = []): ConversationSpe
   return {
     id,
     title: name,
-    analyst: 'You',
-    assistant: DATA.agent.name,
     agent: DATA.agent,
     budget: DATA.budget,
     composer: {
@@ -638,7 +636,6 @@ export function DatasetStudio({ stage = 0, onRestart, ...layout }: StudioProps &
               <ChatSession
                 key={current}
                 spec={session.spec}
-                variant="cli"
                 icons={CHAT_ICONS}
                 actions={[
                   'copy',

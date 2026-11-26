@@ -17,7 +17,7 @@ export interface BarDatum {
   value: number
   /**
    * Overrides the series colour for this bar. Use a data-palette token
-   * (`var(--color-data-3)`) when the bar's identity is an entity — a node type,
+   * (`var(--color-data-aqua)`) when the bar's identity is an entity — a node type,
    * a theme — so it matches that entity everywhere else it appears.
    */
   color?: string
@@ -77,7 +77,7 @@ export const BarChartH = React.forwardRef<HTMLDivElement, BarChartHProps>(
       data,
       max,
       labelWidth,
-      color = "var(--color-data-1)",
+      color = "var(--color-data-blue)",
       caption,
       variant = "tips",
       negativeColor = "var(--color-destructive)",

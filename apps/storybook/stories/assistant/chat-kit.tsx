@@ -4,10 +4,14 @@ import { fn } from 'storybook/test';
 import { EVENT_TYPES, type ChatSessionProps, type ChatSessionIcons, type ConversationEvent } from '@invana/assistant';
 import {
   ArrowUp,
+  ChartColumn,
   Copy,
+  History,
   List,
+  MessageSquare,
   Paperclip,
   Pin,
+  Plus,
   RotateCw,
   Square,
   ThumbsDown,
@@ -20,13 +24,17 @@ import {
 // sets it in a panel the size of the Studio rail it stands for.
 
 export const CHAT_ICONS: ChatSessionIcons = {
+  session: <MessageSquare className="size-3.5" />,
   send: <ArrowUp className="size-4" />,
   stop: <Square className="size-3 fill-current" />,
   attach: <Paperclip className="size-4" />,
   close: <X className="size-3.5" />,
   retry: <RotateCw className="size-3" />,
   copy: <Copy className="size-3" />,
-  steps: <List className="size-3" />,
+  steps: <List className="size-[15px]" />,
+  history: <History className="size-3.5" />,
+  newChat: <Plus className="size-3.5" />,
+  report: <ChartColumn className="size-[15px]" />,
   rateUp: <ThumbsUp className="size-3" />,
   rateDown: <ThumbsDown className="size-3" />,
 };
@@ -61,7 +69,6 @@ export function chatCallbacks(): Partial<ChatSessionProps> {
     onEvent: fn().mockName('onEvent'),
     onClose: fn().mockName('onClose'),
     onStreamEnd: fn().mockName('onStreamEnd'),
-    onViewChange: fn().mockName('onViewChange'),
   };
 }
 

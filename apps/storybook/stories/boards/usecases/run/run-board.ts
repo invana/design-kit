@@ -94,13 +94,13 @@ export function pick(trace: Trace, key: string): Selection | null {
 
 /** Layers in the order they are read; the Gantt paints each call by its own. */
 const PALETTE: Record<Layer, string> = {
-  model: 'bg-data-1',
-  'graph.model': 'bg-data-2',
-  'graph.data': 'bg-data-3',
-  dataset: 'bg-data-4',
-  skill: 'bg-data-5',
+  model: 'bg-data-blue',
+  'graph.model': 'bg-data-orange',
+  'graph.data': 'bg-data-aqua',
+  dataset: 'bg-data-yellow',
+  skill: 'bg-data-magenta',
   connector: 'bg-muted-foreground',
-  web: 'bg-data-7',
+  web: 'bg-data-violet',
 };
 
 const TONE = { succeeded: 'success', running: 'running', failed: 'error', refused: 'error', needs_input: 'warning', skipped: 'muted', queued: 'queued' } as const;

@@ -19,21 +19,26 @@
  * only carrier of identity here. Do not use these as a lone status colour, and
  * do not put a value on a chart in series colour: text wears text tokens.
  *
- * Deliberately eight, in a fixed order. Slot 1 is the first series on every
+ * Named by hue (`--color-data-blue` …), not by number: a name reads in CSS, a story
+and a screenshot review. `@invana/styling/color` holds the slot order (`DATA_HUES`,
+`dataVar(slot)`). `@theme static` emits every hue though no class names it:
+code builds the name at run time, and Tailwind 4 would drop an unused variable.
+
+Deliberately eight, in a fixed order. Slot 1 is the first series on every
  * chart, not "whichever came back first from the query" — colour follows the
  * entity, never its rank.
  */
 
-@theme {
+@theme static {
   /* Light — the default, matching the base tokens in index.css. */
-  --color-data-1: #2a78d6; /* blue */
-  --color-data-2: #eb6834; /* orange */
-  --color-data-3: #1baf7a; /* aqua */
-  --color-data-4: #eda100; /* yellow */
-  --color-data-5: #e87ba4; /* magenta */
-  --color-data-6: #008300; /* green */
-  --color-data-7: #4a3aa7; /* violet */
-  --color-data-8: #e34948; /* red */
+  --color-data-blue: #2a78d6; /* blue */
+  --color-data-orange: #eb6834; /* orange */
+  --color-data-aqua: #1baf7a; /* aqua */
+  --color-data-yellow: #eda100; /* yellow */
+  --color-data-magenta: #e87ba4; /* magenta */
+  --color-data-green: #008300; /* green */
+  --color-data-violet: #4a3aa7; /* violet */
+  --color-data-red: #e34948; /* red */
 }
 
 /*
@@ -61,12 +66,12 @@
 .theme-forest-dark,
 .theme-rose-dark,
 .theme-minimal-dark {
-  --color-data-1: #3987e5;
-  --color-data-2: #d95926;
-  --color-data-3: #199e70;
-  --color-data-4: #c98500;
-  --color-data-5: #d55181;
-  --color-data-6: #008300;
-  --color-data-7: #9085e9;
-  --color-data-8: #e66767;
+  --color-data-blue: #3987e5;
+  --color-data-orange: #d95926;
+  --color-data-aqua: #199e70;
+  --color-data-yellow: #c98500;
+  --color-data-magenta: #d55181;
+  --color-data-green: #008300;
+  --color-data-violet: #9085e9;
+  --color-data-red: #e66767;
 }

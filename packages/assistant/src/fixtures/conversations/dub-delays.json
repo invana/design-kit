@@ -1,0 +1,97 @@
+{
+  "id": "dub-delays",
+  "title": "DUB delays and engine findings",
+  "access": {
+    "kind": "world",
+    "label": "EU ops"
+  },
+  "agent": {
+    "name": "Ops analyst",
+    "model": "claude-opus-5-5"
+  },
+  "budget": {
+    "used": 30100,
+    "limit": 100000
+  },
+  "composer": {
+    "label": "Ask a follow-up",
+    "placeholder": "Ask a follow-up",
+    "controls": [
+      {
+        "id": "model",
+        "label": "Models this World allows",
+        "default": "opus",
+        "note": "Applies to your next question. Manage models in Settings › Connections.",
+        "options": [
+          {
+            "value": "opus",
+            "label": "claude-opus-5-5",
+            "group": "anthropic-main",
+            "hint": "cloud"
+          },
+          {
+            "value": "sonnet",
+            "label": "claude-sonnet-5-5",
+            "group": "anthropic-main",
+            "hint": "cloud"
+          },
+          {
+            "value": "haiku",
+            "label": "claude-haiku-5-5",
+            "group": "anthropic-main",
+            "hint": "cloud"
+          },
+          {
+            "value": "qwen",
+            "label": "qwen3.6-35b",
+            "group": "lm-studio-local",
+            "hint": "inside your network"
+          },
+          {
+            "value": "llama",
+            "label": "llama-3.2-1b",
+            "group": "lm-studio-local",
+            "hint": "no tools, can not run the assistant",
+            "disabled": true
+          }
+        ]
+      },
+      {
+        "id": "agent",
+        "label": "Agents this World allows",
+        "icon": "M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 14c0-2.5 2.5-4 5.5-4s5.5 1.5 5.5 4",
+        "default": "ops",
+        "note": "Applies to your next question.",
+        "options": [
+          {
+            "value": "ops",
+            "label": "Ops analyst",
+            "hint": "Reads airways and flight-db"
+          },
+          {
+            "value": "maint",
+            "label": "Maintenance reviewer",
+            "hint": "Reads flight-logs only"
+          }
+        ]
+      }
+    ]
+  },
+  "turns": [
+    {
+      "id": "q1",
+      "role": "analyst",
+      "text": "Which operators had the most delayed departures from Dublin in Q3, and do any of their aircraft have engine findings logged?",
+      "at": "2026-11-26T09:00:00Z"
+    },
+    {
+      "id": "a1",
+      "role": "assistant",
+      "kind": "answer",
+      "state": "running",
+      "startedAt": "2026-11-26T09:00:01Z",
+      "trace": [],
+      "blocks": []
+    }
+  ]
+}

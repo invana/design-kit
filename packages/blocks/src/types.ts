@@ -575,6 +575,8 @@ export interface ProposalStep {
   state: ProposalStepState
   /** Accepting or rejecting it is on its way: its buttons wait. */
   busy?: boolean
+  /** When it was proposed, as an ISO 8601 time. An open step counts how long it has waited, at the row's far right. */
+  waitingSince?: string
 }
 
 export interface ProposalOptions {
@@ -801,7 +803,7 @@ export interface GanttOptions {
   density?: "compact" | "comfortable"
   /** The task picked — a restored view. Picking one sends `select` with its key. */
   selected?: string
-  /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-1" }`. */
+  /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-blue" }`. */
   palette?: Record<string, string>
   /** Gates — a moment the run held and spent nothing — ruled under the row they follow. */
   seams?: GanttSpecSeam[]
@@ -989,6 +991,8 @@ export interface TraceIoRow {
   value: string
   /** Set the value as code, keeping its line breaks — a query, a formula. */
   code?: boolean
+  /** The whole value when `value` is a part of it: `Show all` opens it. */
+  full?: string
 }
 
 /**
@@ -1020,8 +1024,15 @@ export interface TraceStep {
   attempts?: number
   /** The model's reasoning, streamed under the step while it runs. */
   thinking?: string
+  /** What it came to, after its detail on the row — `14 rows`, `no match`. */
+  result?: string
   /** What went in and what came out — the step's audit record. */
   io?: { input?: TraceIoRow[]; output?: TraceIoRow[] }
+  /**
+   * A `waiting` step held on the analyst's approval: what it asks, why, and
+   * since when (ISO 8601) — drawn under the steps with Approve once and Stop the run.
+   */
+  wait?: { title: string; text?: string; since?: string }
 }
 
 

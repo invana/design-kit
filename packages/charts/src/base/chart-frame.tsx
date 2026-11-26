@@ -45,7 +45,7 @@ export interface ChartReference {
 export interface LegendEntry {
   key: string
   label: string
-  /** The series colour, as CSS — `var(--color-data-3)`. */
+  /** The series colour, as CSS — `var(--color-data-aqua)`. */
   color: string
   kind?: LegendSwatchKind
 }

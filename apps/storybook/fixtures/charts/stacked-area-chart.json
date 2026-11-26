@@ -37,9 +37,9 @@
         { "label": "today", "values": { "airroutes": 54120, "news": 38700, "twitter": 35300, "deals": 0 } }
       ],
       "series": [
-        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-1)" },
-        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-2)" },
-        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-3)" }
+        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-blue)" },
+        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-orange)" },
+        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-aqua)" }
       ],
       "ticks": [1, 8, 15, 22, 29]
     }
@@ -82,10 +82,10 @@
         { "label": "today", "values": { "route": 37020, "airport": 12650, "country": 3100, "contains": 1350 } }
       ],
       "series": [
-        { "key": "route", "label": "route", "color": "var(--color-data-1)" },
-        { "key": "airport", "label": "airport", "color": "var(--color-data-2)" },
-        { "key": "country", "label": "country", "color": "var(--color-data-3)" },
-        { "key": "contains", "label": "contains", "color": "var(--color-data-4)" }
+        { "key": "route", "label": "route", "color": "var(--color-data-blue)" },
+        { "key": "airport", "label": "airport", "color": "var(--color-data-orange)" },
+        { "key": "country", "label": "country", "color": "var(--color-data-aqua)" },
+        { "key": "contains", "label": "contains", "color": "var(--color-data-yellow)" }
       ],
       "ticks": [1, 8, 15, 22, 29],
       "marks": [{ "index": 24, "label": "stitch commit" }]
@@ -129,10 +129,10 @@
         { "label": "today", "values": { "airroutes": 54120, "news": 38700, "twitter": 35300, "deals": 0 } }
       ],
       "series": [
-        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-1)" },
-        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-2)" },
-        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-3)" },
-        { "key": "deals", "label": "Deals", "color": "var(--color-data-4)" }
+        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-blue)" },
+        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-orange)" },
+        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-aqua)" },
+        { "key": "deals", "label": "Deals", "color": "var(--color-data-yellow)" }
       ],
       "ticks": [1, 8, 15, 22, 29]
     }
@@ -175,10 +175,10 @@
         { "label": "today", "values": { "airroutes": 54120, "news": 38700, "twitter": 35300, "deals": 0 } }
       ],
       "series": [
-        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-1)" },
-        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-2)" },
-        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-3)" },
-        { "key": "deals", "label": "Deals", "color": "var(--color-data-4)" }
+        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-blue)" },
+        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-orange)" },
+        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-aqua)" },
+        { "key": "deals", "label": "Deals", "color": "var(--color-data-yellow)" }
       ],
       "ticks": [1, 8, 15, 22, 29],
       "marks": [
@@ -229,9 +229,9 @@
         { "label": "today", "values": { "airroutes": 54120, "news": 38700, "twitter": 35300, "deals": 0 } }
       ],
       "series": [
-        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-1)" },
-        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-2)" },
-        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-3)" }
+        { "key": "airroutes", "label": "AirRoutes", "color": "var(--color-data-blue)" },
+        { "key": "news", "label": "NewsArticles", "color": "var(--color-data-orange)" },
+        { "key": "twitter", "label": "Twitter", "color": "var(--color-data-aqua)" }
       ],
       "ticks": [1, 8, 15, 22, 29]
     },

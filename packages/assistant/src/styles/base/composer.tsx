@@ -1,10 +1,10 @@
 import * as React from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@invana/forms"
-import { cn } from "@invana/ui"
+import { Button, cn, Popover, PopoverContent, PopoverTrigger } from "@invana/ui"
+import { colorVarByString } from "@invana/styling/color"
 
-import { ChatSessionComposer, ChatSessionContextChip } from "../../conversations/thread"
 import type { ComposerContext, ComposerControl, ComposerSpec } from "../../protocol/types"
 import { useChatSessionContext } from "./context"
+import { LABEL } from "./steps"
 
 /** A 16×16 stroked icon from its path data, as the API sends one. */
 export function PathIcon({ path, className }: { path: string; className?: string }) {
@@ -21,44 +21,6 @@ export function PathIcon({ path, className }: { path: string; className?: string
     >
       <path d={path} />
     </svg>
-  )
-}
-
-export interface ComposerSelectProps {
-  control: ComposerControl
-  value: string
-  onValueChange: (value: string) => void
-  /** Let the select take the free width and truncate — the model name. */
-  grow?: boolean
-}
-
-/**
- * A select that sits in the composer's toolbar: borderless, compact, the
- * value alone until opened. `quiet` mutes it — a setting rather than the mode.
- */
-export function ComposerSelect({ control, value, onValueChange, grow }: ComposerSelectProps) {
-  return (
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger
-        aria-label={control.label}
-        title={control.label}
-        className={cn(
-          "h-control-sm gap-1 border-0 bg-transparent px-2 shadow-none hover:bg-accent",
-          grow ? "w-full min-w-0" : "w-auto shrink-0",
-          control.quiet && "text-muted-foreground",
-        )}
-      >
-        {control.icon ? <PathIcon path={control.icon} /> : null}
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {control.options.map((o) => (
-          <SelectItem key={o.value} value={o.value}>
-            {o.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   )
 }
 
@@ -81,17 +43,115 @@ export function AttachmentChip({ name, onRemove }: { name: string; onRemove?: ()
   )
 }
 
-/** What the next prompt is about, removable: its × sends `remove-context`. */
+/** What the next prompt is about, removable: its dot, what it is, its name, and × to send `remove-context`. */
 export function ContextChip({ chip, onRemove }: { chip: ComposerContext; onRemove: () => void }) {
   return (
-    <ChatSessionContextChip
-      className="max-w-56 flex-none rounded-control"
-      onDismiss={onRemove}
-      dismissLabel={`Remove ${chip.label}`}
-    >
-      {chip.kind ? <span className="text-muted-foreground">{chip.kind} </span> : null}
-      {chip.label}
-    </ChatSessionContextChip>
+    <span className="inline-flex max-w-full items-center gap-1.5 rounded-control border border-border bg-card py-px pr-0.5 pl-2 text-sm">
+      <span aria-hidden className="size-2 shrink-0 rounded-full" style={{ background: colorVarByString(chip.kind ?? chip.label) }} />
+      {chip.kind ? <span className="text-muted-foreground">{chip.kind}</span> : null}
+      <span className="min-w-0 truncate font-mono font-semibold">{chip.label}</span>
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Remove ${chip.label}`}
+        title="Remove from the context"
+        className="inline-flex size-[18px] shrink-0 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent hover:text-foreground"
+      >
+        ×
+      </button>
+    </span>
+  )
+}
+
+export interface ControlMenuProps {
+  control: ComposerControl
+  value: string
+  onValueChange: (value: string) => void
+  /** Held shut: a run is live, and the pick is fixed until it ends. */
+  disabled?: boolean
+}
+
+/**
+ * A composer setting as a quiet button — the model in mono, an agent behind
+ * its icon — that opens its list upward, over the thread: the control's label
+ * as the heading, each option with what it is under it, and the control's
+ * note at the foot.
+ */
+export function ControlMenu({ control, value, onValueChange, disabled }: ControlMenuProps) {
+  const [open, setOpen] = React.useState(false)
+  const picked = control.options.find((o) => o.value === value)
+  const many = control.options.filter((o) => !o.disabled).length > 1
+  const mono = !control.icon
+  return (
+    <Popover open={open && !disabled} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          aria-label={control.label}
+          aria-haspopup="listbox"
+          disabled={disabled}
+          title={disabled ? "Fixed while a question runs. Change it for the next one." : control.label}
+          className="-ml-1.5 inline-flex min-w-0 items-center gap-1.5 rounded-control px-1.5 py-0.5 text-muted-foreground enabled:hover:bg-accent enabled:hover:text-foreground disabled:opacity-55"
+        >
+          {control.icon ? <PathIcon path={control.icon} className="size-3" /> : null}
+          <span className={cn("truncate text-xs", mono && "font-mono")}>{picked?.label ?? control.placeholder}</span>
+          {many ? <span aria-hidden className="text-[10px]">▴</span> : null}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent side="top" align="start" sideOffset={8} className="flex w-72 flex-col p-0">
+        <span className={cn(LABEL, "px-2.5 pt-2 pb-1")}>{control.label}</span>
+        <div role="listbox" aria-label={control.label} className="flex flex-col">
+          {control.options.map((o) => {
+            const selected = o.value === value
+            const sub = [o.group, o.hint].filter(Boolean).join(" · ")
+            return (
+              <button
+                key={o.value}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                aria-disabled={o.disabled}
+                disabled={o.disabled}
+                onClick={() => {
+                  onValueChange(o.value)
+                  setOpen(false)
+                }}
+                className={cn(
+                  "grid grid-cols-[16px_minmax(0,1fr)] gap-x-2 gap-y-0.5 px-2.5 py-[7px] text-left disabled:cursor-not-allowed disabled:opacity-45",
+                  selected ? "bg-secondary" : "enabled:hover:bg-accent",
+                )}
+              >
+                <span className="text-xs leading-[18px]">{selected ? "✓" : ""}</span>
+                <span className="flex min-w-0 flex-col">
+                  <span className={cn("font-semibold", mono ? "font-mono text-xs" : "text-base")}>{o.label}</span>
+                  {sub ? <span className="text-sm text-muted-foreground">{sub}</span> : null}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+        {control.note ? (
+          <span className="border-t border-border px-2.5 py-1.5 text-sm text-muted-foreground">{control.note}</span>
+        ) : null}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+/** Tokens spent in the session, of its budget: a thin bar and the words. */
+function Budget({ used, limit }: { used: number; limit: number }) {
+  const share = limit ? Math.min(used / limit, 1) : 0
+  return (
+    <span className="inline-flex items-center gap-2 text-sm text-muted-foreground tabular-nums">
+      <span
+        role="img"
+        aria-label="Token budget used"
+        className="inline-block h-1 w-16 overflow-hidden rounded-full bg-secondary @md:w-[120px]"
+      >
+        <span className="block h-full bg-primary" style={{ width: `${(share * 100).toFixed(1)}%` }} />
+      </span>
+      {(used / 1000).toFixed(1)}k of {Math.round(limit / 1000)}k tokens
+    </span>
   )
 }
 
@@ -110,7 +170,7 @@ export interface ComposerBarProps {
 /**
  * The composer, drawn from the spec's `composer`: the context chips, the
  * prompt, the toolbar's controls at the start and end, attach, and send — or
- * stop while a run is in flight. The same in every variant. A pick that sets a placeholder or mono
+ * stop while a run is in flight. A pick that sets a placeholder or mono
  * type (a query language) changes the prompt box to match.
  */
 export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
@@ -128,6 +188,7 @@ export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
   for (const c of controls) {
     const pick = picks[c.id]
     if (pick !== undefined && c.options.some((o) => o.value === pick)) settings[c.id] = pick
+    if (c.value !== undefined) settings[c.id] = c.value
   }
   const fileInput = React.useRef<HTMLInputElement>(null)
 
@@ -156,84 +217,100 @@ export function ComposerBar({ isRunning, onStop }: ComposerBarProps) {
 
   const attach = composer?.attach
   const attachOptions = typeof attach === "object" ? attach : {}
-  const select = (c: ComposerControl, grow?: boolean) => (
-    <ComposerSelect
-      key={c.id}
-      control={c}
-      value={settings[c.id] ?? ""}
-      onValueChange={(v) => setting(c.id, v)}
-      grow={grow}
-    />
-  )
-  const start = controls.filter((c) => (c.align ?? "start") === "start")
-  const end = controls.filter((c) => c.align === "end")
+  const label = composer?.label ?? "Message"
 
   return (
-    <div ref={setComposer}>
-      <ChatSessionComposer
-        value={draft}
-        onChange={setDraft}
-        onSend={send}
-        onStop={onStop}
-        isRunning={isRunning}
+    <div ref={setComposer} className="relative flex shrink-0 flex-col gap-2 border-t border-border px-3 py-3 @md:px-6">
+      {context.length || files.length ? (
+        <div className="flex max-h-16 flex-wrap items-center gap-1.5 overflow-y-auto">
+          {context.map((c) => (
+            <ContextChip key={c.id} chip={c} onRemove={() => emit({ type: "remove-context", id: c.id })} />
+          ))}
+          {files.map((f, i) => (
+            <AttachmentChip
+              key={`${f.name}-${i}`}
+              name={f.name}
+              onRemove={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
+            />
+          ))}
+          {context.length > 1 ? (
+            <button
+              type="button"
+              className="text-sm text-info hover:text-foreground"
+              onClick={() => {
+                for (const c of context) emit({ type: "remove-context", id: c.id })
+              }}
+            >
+              Clear all
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      <textarea
+        aria-label={label}
         placeholder={placeholder}
-        textareaLabel={composer?.label}
-        textareaClassName={cn("h-[72px] min-h-14", mono && "font-mono")}
-        sendIcon={icons.send}
-        stopIcon={icons.stop}
-        sendDisabled={isRunning || (!draft.trim() && !files.length)}
-        attachments={
-          context.length || files.length ? (
-            <>
-              {context.map((c) => (
-                <ContextChip key={c.id} chip={c} onRemove={() => emit({ type: "remove-context", id: c.id })} />
-              ))}
-              {files.map((f, i) => (
-                <AttachmentChip
-                  key={`${f.name}-${i}`}
-                  name={f.name}
-                  onRemove={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
-                />
-              ))}
-            </>
-          ) : undefined
-        }
-        // The last start control takes the free width: it is the one that truncates.
-        toolbarStart={start.length ? <>{start.map((c, i) => select(c, i === start.length - 1))}</> : undefined}
-        toolbarEnd={
-          end.length || attach ? (
-            <>
-              {end.map((c) => select(c))}
-              {attach ? (
-                <>
-                  <input
-                    ref={fileInput}
-                    type="file"
-                    hidden
-                    accept={attachOptions.accept}
-                    multiple={attachOptions.multiple ?? true}
-                    onChange={(e) => {
-                      const list = e.target.files
-                      if (list?.length) setFiles((prev) => [...prev, ...Array.from(list)])
-                      // Reset, so choosing the same file again still fires.
-                      e.target.value = ""
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => fileInput.current?.click()}
-                    title="Attach files"
-                    aria-label="Attach files"
-                    className="inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent"
-                  >
-                    {icons.attach}
-                  </button>
-                </>
-              ) : null}
-            </>
-          ) : undefined
-        }
+        rows={2}
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+            e.preventDefault()
+            if (!isRunning) send()
+          }
+        }}
+        className={cn(
+          "w-full resize-none rounded-control border border-input bg-card px-2.5 py-2 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+          mono && "font-mono",
+        )}
       />
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        {controls.map((c) => (
+          <ControlMenu
+            key={c.id}
+            control={c}
+            value={settings[c.id] ?? ""}
+            onValueChange={(v) => setting(c.id, v)}
+            disabled={isRunning}
+          />
+        ))}
+        {attach ? (
+          <>
+            <input
+              ref={fileInput}
+              type="file"
+              hidden
+              accept={attachOptions.accept}
+              multiple={attachOptions.multiple ?? true}
+              onChange={(e) => {
+                const list = e.target.files
+                if (list?.length) setFiles((prev) => [...prev, ...Array.from(list)])
+                // Reset, so choosing the same file again still fires.
+                e.target.value = ""
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              title="Attach files"
+              aria-label="Attach files"
+              className="inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent"
+            >
+              {icons.attach}
+            </button>
+          </>
+        ) : null}
+        <span className="grow" />
+        {spec.budget ? <Budget used={spec.budget.used} limit={spec.budget.limit} /> : null}
+        {isRunning ? (
+          <Button size="sm" variant="outline" onClick={onStop}>
+            Stop
+          </Button>
+        ) : (
+          <Button size="sm" onClick={send} disabled={!draft.trim() && !files.length}>
+            Send
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

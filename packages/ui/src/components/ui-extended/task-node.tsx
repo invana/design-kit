@@ -17,7 +17,7 @@ export interface TaskNodeProps
   taskKey: React.ReactNode
   /** What it may spend. */
   bound: Bound
-  /** The bound's swatch class, given directly — `bg-data-7`. */
+  /** The bound's swatch class, given directly — `bg-data-violet`. */
   boundSwatch?: string
   /** The bounds' palette, when a caller would rather state the map once. */
   boundPalette?: BoundPalette

@@ -1,4 +1,4 @@
-// The conversation, driven by JSON: <ChatSession spec variant="cli" | "web" />.
+// The conversation, driven by JSON: <ChatSession spec />.
 export * from "./styles"
 
 // The registry, the thread's parts and what every variant shares.

@@ -1,7 +1,6 @@
 import * as React from "react"
 
 import { type RegistryOverrides, resolveRegistry } from "../../conversations/registry"
-import { ChatSessionMessage } from "../../conversations/thread"
 import type { ConversationEvent } from "../../protocol/events"
 import type { Turn } from "../../protocol/types"
 import { AskView } from "../base/ask"
@@ -17,8 +16,8 @@ export interface ChatSessionTurnProps {
 }
 
 /**
- * One turn on its own, as the web variant draws it — the analyst's prompt,
- * an ask in its frame, or an answer's cards — without the thread around it.
+ * One turn on its own, as the session draws it — the analyst's prompt,
+ * an ask in its frame, or an answer's steps and blocks — without the thread around it.
  * For a block's board, where each cell is one turn.
  */
 export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTurnProps) {
@@ -33,6 +32,8 @@ export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTur
     icons: DEFAULT_ICONS,
     now: now ?? clock,
     opensRuns: false,
+    canHistory: false,
+    canNew: false,
     stepsOpen: view.stepsOpen,
     toggleSteps: view.toggleSteps,
     setSteps: (turnId, open) => {
@@ -40,12 +41,12 @@ export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTur
       emit({ type: "toggle-steps", turn: turnId, open })
     },
     actions: [],
+    reportOpen: view.reportOpen,
+    toggleReport: view.toggleReport,
     recordOpen: view.recordOpen,
     toggleRecord: view.toggleRecord,
     rating: view.rating,
     rate: view.setRating,
-    view: "chat",
-    setView: () => {},
     scrollToTurn: () => {},
     focusComposer: () => {},
     setComposer: () => {},
@@ -53,7 +54,7 @@ export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTur
   return (
     <ChatSessionContext.Provider value={context}>
       {turn.role === "analyst" ? (
-        <ChatSessionMessage role="user">{turn.text}</ChatSessionMessage>
+        <div className="w-fit max-w-full rounded-control border border-border bg-card px-3.5 py-2.5 whitespace-pre-wrap">{turn.text}</div>
       ) : turn.kind === "ask" ? (
         <AskView turn={turn} registry={resolved} onEvent={emit} now={context.now} />
       ) : (

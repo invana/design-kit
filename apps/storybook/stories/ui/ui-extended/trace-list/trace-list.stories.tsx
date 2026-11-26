@@ -66,11 +66,11 @@ const VARIANTS = DATA as TraceVariant[];
 
 /** The hues are the caller's — the kit ships none. Matching the Gantt's Layer access. */
 const LAYER_PALETTE: LayerPalette = {
-  graph_data: { swatch: 'bg-data-1', text: 'text-data-1' },
-  llm: { swatch: 'bg-data-7', text: 'text-data-7' },
-  third_party: { swatch: 'bg-data-8', text: 'text-data-8' },
-  cache: { swatch: 'bg-data-3', text: 'text-data-3' },
-  human: { swatch: 'bg-data-6', text: 'text-data-6' },
+  graph_data: { swatch: 'bg-data-blue', text: 'text-data-blue' },
+  llm: { swatch: 'bg-data-violet', text: 'text-data-violet' },
+  third_party: { swatch: 'bg-data-red', text: 'text-data-red' },
+  cache: { swatch: 'bg-data-aqua', text: 'text-data-aqua' },
+  human: { swatch: 'bg-data-green', text: 'text-data-green' },
 };
 
 // ── The live cell: `fixtures/runs/variance-run.json` streamed as step events ──

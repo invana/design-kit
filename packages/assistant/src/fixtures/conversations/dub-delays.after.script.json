@@ -1,0 +1,933 @@
+[
+ {
+  "at": 0,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s5",
+   "fields": {
+    "state": "running",
+    "detail": "engine findings in the Q3 logs"
+   }
+  }
+ },
+ {
+  "at": 0,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s5",
+   "fields": {
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "{ \"prefix\": \"maintenance/2026/Q3/\",\n  \"contains\": \"ENGINE\",\n  \"tails\": [212 tails] }",
+       "code": true
+      },
+      {
+       "label": "policy",
+       "value": "Over the 500 MB read limit, so it asked you."
+      },
+      {
+       "label": "policy",
+       "value": "You approved reading 1.4 GB, once."
+      }
+     ],
+     "output": []
+    }
+   }
+  }
+ },
+ {
+  "at": 2400,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s5",
+   "fields": {
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "{ \"prefix\": \"maintenance/2026/Q3/\",\n  \"contains\": \"ENGINE\",\n  \"tails\": [212 tails] }",
+       "code": true
+      },
+      {
+       "label": "policy",
+       "value": "Over the 500 MB read limit, so it asked you."
+      },
+      {
+       "label": "policy",
+       "value": "You approved reading 1.4 GB, once."
+      }
+     ],
+     "output": [
+      {
+       "label": "came back",
+       "value": "EI-DVN.jsonl  3 findings\nEI-DVK.jsonl  2 findings\nEI-DVP.jsonl  2 findings",
+       "code": true
+      },
+      {
+       "label": "came back",
+       "value": "3 files · 1.4 GB read · 7 findings kept"
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 2400,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s5",
+   "fields": {
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "{ \"prefix\": \"maintenance/2026/Q3/\",\n  \"contains\": \"ENGINE\",\n  \"tails\": [212 tails] }",
+       "code": true
+      },
+      {
+       "label": "policy",
+       "value": "Over the 500 MB read limit, so it asked you."
+      },
+      {
+       "label": "policy",
+       "value": "You approved reading 1.4 GB, once."
+      }
+     ],
+     "output": [
+      {
+       "label": "came back",
+       "value": "EI-DVN.jsonl  3 findings\nEI-DVK.jsonl  2 findings\nEI-DVP.jsonl  2 findings",
+       "code": true
+      },
+      {
+       "label": "came back",
+       "value": "3 files · 1.4 GB read · 7 findings kept"
+      },
+      {
+       "label": "the llm saw",
+       "value": "The text of 7 findings and 3 tail numbers, as stored. The rest of the 1.4 GB: not sent."
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 2400,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s5",
+   "fields": {
+    "state": "done",
+    "result": "7 findings in 3 files",
+    "duration": 2400,
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "{ \"prefix\": \"maintenance/2026/Q3/\",\n  \"contains\": \"ENGINE\",\n  \"tails\": [212 tails] }",
+       "code": true
+      },
+      {
+       "label": "policy",
+       "value": "Over the 500 MB read limit, so it asked you."
+      },
+      {
+       "label": "policy",
+       "value": "You approved reading 1.4 GB, once."
+      }
+     ],
+     "output": [
+      {
+       "label": "came back",
+       "value": "EI-DVN.jsonl  3 findings\nEI-DVK.jsonl  2 findings\nEI-DVP.jsonl  2 findings",
+       "code": true
+      },
+      {
+       "label": "came back",
+       "value": "3 files · 1.4 GB read · 7 findings kept"
+      },
+      {
+       "label": "the llm saw",
+       "value": "The text of 7 findings and 3 tail numbers, as stored. The rest of the 1.4 GB: not sent."
+      },
+      {
+       "label": "tokens",
+       "value": "↑ 1,500 in · ↓ 140 out. The model turn that chose this step, plus the result fed back."
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 2650,
+  "patch": {
+   "op": "add-trace-step",
+   "turn": "a1",
+   "step": {
+    "id": "s6",
+    "label": "answer",
+    "state": "running"
+   }
+  }
+ },
+ {
+  "at": 2650,
+  "patch": {
+   "op": "add-block",
+   "turn": "a1",
+   "block": {
+    "kind": "narrative",
+    "text": ""
+   }
+  }
+ },
+ {
+  "at": 2700,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "I "
+  }
+ },
+ {
+  "at": 2770,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "have "
+  }
+ },
+ {
+  "at": 2840,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "the "
+  }
+ },
+ {
+  "at": 2910,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "counts, "
+  }
+ },
+ {
+  "at": 2980,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "the "
+  }
+ },
+ {
+  "at": 3050,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "tails "
+  }
+ },
+ {
+  "at": 3120,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "and "
+  }
+ },
+ {
+  "at": 3190,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "the "
+  }
+ },
+ {
+  "at": 3260,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "findings. "
+  }
+ },
+ {
+  "at": 3330,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "Writing "
+  }
+ },
+ {
+  "at": 3400,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "the "
+  }
+ },
+ {
+  "at": 3470,
+  "patch": {
+   "op": "append-thinking",
+   "turn": "a1",
+   "step": "s6",
+   "text": "answer. "
+  }
+ },
+ {
+  "at": 3690,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s6",
+   "fields": {
+    "state": "running",
+    "detail": "write the answer"
+   }
+  }
+ },
+ {
+  "at": 3690,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s6",
+   "fields": {
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "Your question, the counts from step 3, the 3 tail numbers and 7 findings from step 5."
+      }
+     ],
+     "output": []
+    }
+   }
+  }
+ },
+ {
+  "at": 3690,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Ryanair "
+  }
+ },
+ {
+  "at": 3740,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "and "
+  }
+ },
+ {
+  "at": 3790,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Aer "
+  }
+ },
+ {
+  "at": 3840,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Lingus "
+  }
+ },
+ {
+  "at": 3890,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "had "
+  }
+ },
+ {
+  "at": 3940,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "the "
+  }
+ },
+ {
+  "at": 3990,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "most "
+  }
+ },
+ {
+  "at": 4040,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "delayed "
+  }
+ },
+ {
+  "at": 4090,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "departures "
+  }
+ },
+ {
+  "at": 4140,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "from "
+  }
+ },
+ {
+  "at": 4190,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Dublin "
+  }
+ },
+ {
+  "at": 4240,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "in "
+  }
+ },
+ {
+  "at": 4290,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Q3 "
+  }
+ },
+ {
+  "at": 4340,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "2026: "
+  }
+ },
+ {
+  "at": 4390,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "1,284 "
+  }
+ },
+ {
+  "at": 4440,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "of "
+  }
+ },
+ {
+  "at": 4490,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "9,880 "
+  }
+ },
+ {
+  "at": 4540,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "and "
+  }
+ },
+ {
+  "at": 4590,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "902 "
+  }
+ },
+ {
+  "at": 4640,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "of "
+  }
+ },
+ {
+  "at": 4690,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "6,410 "
+  }
+ },
+ {
+  "at": 4740,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "left "
+  }
+ },
+ {
+  "at": 4790,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "more "
+  }
+ },
+ {
+  "at": 4840,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "than "
+  }
+ },
+ {
+  "at": 4890,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "15 "
+  }
+ },
+ {
+  "at": 4940,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "minutes "
+  }
+ },
+ {
+  "at": 4990,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "late."
+  }
+ },
+ {
+  "at": 5040,
+  "patch": {
+   "op": "add-block",
+   "turn": "a1",
+   "block": {
+    "kind": "narrative",
+    "text": ""
+   }
+  }
+ },
+ {
+  "at": 5090,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Three "
+  }
+ },
+ {
+  "at": 5140,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Aer "
+  }
+ },
+ {
+  "at": 5190,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Lingus "
+  }
+ },
+ {
+  "at": 5240,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "A320neos "
+  }
+ },
+ {
+  "at": 5290,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "have "
+  }
+ },
+ {
+  "at": 5340,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "engine "
+  }
+ },
+ {
+  "at": 5390,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "findings "
+  }
+ },
+ {
+  "at": 5440,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "logged "
+  }
+ },
+ {
+  "at": 5490,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "in "
+  }
+ },
+ {
+  "at": 5540,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "the "
+  }
+ },
+ {
+  "at": 5590,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "quarter: "
+  }
+ },
+ {
+  "at": 5640,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "EI-DVN, "
+  }
+ },
+ {
+  "at": 5690,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "EI-DVK "
+  }
+ },
+ {
+  "at": 5740,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "and "
+  }
+ },
+ {
+  "at": 5790,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "EI-DVP, "
+  }
+ },
+ {
+  "at": 5840,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "7 "
+  }
+ },
+ {
+  "at": 5890,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "findings "
+  }
+ },
+ {
+  "at": 5940,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "in "
+  }
+ },
+ {
+  "at": 5990,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "all. "
+  }
+ },
+ {
+  "at": 6040,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "No "
+  }
+ },
+ {
+  "at": 6090,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "Ryanair "
+  }
+ },
+ {
+  "at": 6140,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "aircraft "
+  }
+ },
+ {
+  "at": 6190,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "has "
+  }
+ },
+ {
+  "at": 6240,
+  "patch": {
+   "op": "append-text",
+   "turn": "a1",
+   "text": "one."
+  }
+ },
+ {
+  "at": 6290,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s6",
+   "fields": {
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "Your question, the counts from step 3, the 3 tail numbers and 7 findings from step 5."
+      }
+     ],
+     "output": [
+      {
+       "label": "came back",
+       "value": "The two paragraphs of the answer."
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 6290,
+  "patch": {
+   "op": "update-trace-step",
+   "turn": "a1",
+   "step": "s6",
+   "fields": {
+    "state": "done",
+    "result": "",
+    "duration": 2600,
+    "io": {
+     "input": [
+      {
+       "label": "went in",
+       "value": "Your question, the counts from step 3, the 3 tail numbers and 7 findings from step 5."
+      }
+     ],
+     "output": [
+      {
+       "label": "came back",
+       "value": "The two paragraphs of the answer."
+      },
+      {
+       "label": "tokens",
+       "value": "↑ 1,200 in · ↓ 260 out. The model turn that chose this step, plus the result fed back."
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 6490,
+  "patch": {
+   "op": "update-turn",
+   "turn": "a1",
+   "fields": {
+    "at": "2026-11-26T09:00:17Z",
+    "duration": 16070,
+    "meta": "Read 3 connections · 42,118 rows · sent to the LLM: counts and 7 findings",
+    "report": {
+     "id": "7c3e10",
+     "final": true,
+     "calls": 5,
+     "reads": 5,
+     "writes": 0,
+     "failed": 1,
+     "approved": 1,
+     "rows": 42118,
+     "files": 3,
+     "llmCalls": 6,
+     "tokens": {
+      "in": 6900,
+      "out": 960
+     },
+     "duration": 16070,
+     "captions": {
+      "calls": "1 failed, retried",
+      "reads": "across 3 connections",
+      "writes": "read only run",
+      "failed": "fixed on retry",
+      "approved": "1.4 GB read",
+      "files": "1.4 GB",
+      "connections": "touched",
+      "tokensIn": "sent to the LLM",
+      "tokensOut": "written by the LLM"
+     },
+     "connections": [
+      {
+       "name": "airways",
+       "calls": 2,
+       "reads": 2,
+       "writes": 0,
+       "failed": 0,
+       "rows": 212,
+       "returned": 212
+      },
+      {
+       "name": "flight-db",
+       "calls": 2,
+       "reads": 1,
+       "writes": 0,
+       "failed": 1,
+       "rows": 41906,
+       "returned": 10
+      },
+      {
+       "name": "flight-logs",
+       "calls": 1,
+       "reads": 1,
+       "writes": 0,
+       "failed": 0,
+       "rows": 0,
+       "files": 3,
+       "returned": 7
+      },
+      {
+       "name": "anthropic-main",
+       "calls": 6,
+       "rows": 0,
+       "tokens": {
+        "in": 6900,
+        "out": 960
+       }
+      }
+     ],
+     "issues": [
+      {
+       "tone": "error",
+       "text": "Failed: sql.query on flight-db, column dep_delay does not exist. The model fixed the name and ran it again: ok.",
+       "step": "s2"
+      },
+      {
+       "tone": "success",
+       "text": "You approved reading 1.4 GB from flight-logs, over the 500 MB limit, once.",
+       "step": "s5"
+      }
+     ],
+     "sent": [
+      {
+       "label": "Your question"
+      },
+      {
+       "label": "The names of 3 labels and their properties"
+      },
+      {
+       "label": "Counts for 10 operators"
+      },
+      {
+       "label": "3 tail numbers"
+      },
+      {
+       "label": "The text of 7 engine findings"
+      }
+     ],
+     "notSent": [
+      "41,906 departure rows: counted in Postgres",
+      "212 aircraft rows: stayed in Invana",
+      "Log files beyond the 7 findings"
+     ],
+     "untouched": [
+      "flight-metrics",
+      "news-docs",
+      "github-core"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "at": 6490,
+  "patch": {
+   "op": "set-state",
+   "turn": "a1",
+   "state": "complete"
+  }
+ }
+]

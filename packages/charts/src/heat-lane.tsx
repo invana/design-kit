@@ -24,7 +24,7 @@ export interface HeatLaneProps
   /** What each cell's title says — `4.25–4.50 s`. Defaults to its index. */
   cellLabel?: (at: number) => string
   /**
-   * The lit cells' fill, as a class — `bg-info`, `bg-data-3`. The lane's
+   * The lit cells' fill, as a class — `bg-info`, `bg-data-aqua`. The lane's
    * busyness is the cell's opacity, so one hue carries the whole lane.
    * @default "bg-info"
    */

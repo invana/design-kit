@@ -10,7 +10,7 @@
       "options": {
         "selectAction": "select-step",
         "selectedId": null,
-        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "human": { "swatch": "bg-data-6" } },
+        "palette": { "graph_data": { "swatch": "bg-data-blue" }, "llm": { "swatch": "bg-data-violet" }, "human": { "swatch": "bg-data-green" } },
         "entries": [
           { "id": "parse_intent", "seq": 1, "name": "parse_intent", "layer": "llm", "role": "decide", "duration": "1.2s" },
           { "kind": "gate", "label": "asked the analyst", "note": "two readings of “exposed”", "tone": "warning" },
@@ -146,7 +146,7 @@
       "title": "What it touched",
       "aside": "declared 4 · touched 3 · refused 1",
       "options": {
-        "palette": { "graph_data": { "swatch": "bg-data-1" }, "llm": { "swatch": "bg-data-7" }, "third_party": { "swatch": "bg-data-8" }, "cache": { "swatch": "bg-data-3" } },
+        "palette": { "graph_data": { "swatch": "bg-data-blue" }, "llm": { "swatch": "bg-data-violet" }, "third_party": { "swatch": "bg-data-red" }, "cache": { "swatch": "bg-data-aqua" } },
         "items": [
           { "layer": "llm", "note": "3 calls" },
           { "layer": "graph_data", "note": "1,284 rows" },
@@ -200,7 +200,7 @@
       "title": "What the world allowed",
       "options": {
         "selectAction": "select-lens",
-        "palette": { "graph_data": { "swatch": "bg-data-1", "text": "text-data-1" }, "third_party": { "swatch": "bg-data-8", "text": "text-data-8" } },
+        "palette": { "graph_data": { "swatch": "bg-data-blue", "text": "text-data-blue" }, "third_party": { "swatch": "bg-data-red", "text": "text-data-red" } },
         "sections": [
           {
             "layer": "graph_data",

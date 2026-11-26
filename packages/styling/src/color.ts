@@ -16,12 +16,28 @@
  * | Function | Returns | For |
  * |---|---|---|
  * | `colorSlotByString` | `1`…`8` | storing or binding the slot itself |
- * | `colorVarByString` | `var(--color-data-N)` | anything that takes CSS |
+ * | `colorVarByString` | `var(--color-data-<hue>)` | anything that takes CSS |
  * | `colorByString` | `rgb(…)`, resolved live | a canvas that needs a concrete value |
  */
 
+/**
+ * The data palette's hues, in slot order: `--color-data-<hue>`. Slot 1 is the
+ * first series on every chart. A theme may re-step a hue's lightness, never its
+ * hue; a different palette is a different file, not a rename.
+ */
+export const DATA_HUES = ['blue', 'orange', 'aqua', 'yellow', 'magenta', 'green', 'violet', 'red'] as const;
+
+/** One of the palette's hue names. */
+export type DataHue = (typeof DATA_HUES)[number];
+
 /** How many slots the data palette defines. */
-export const DATA_PALETTE_SLOTS = 8;
+export const DATA_PALETTE_SLOTS = DATA_HUES.length;
+
+/** The token of a 1-based slot as a CSS value: `dataVar(3)` → `var(--color-data-aqua)`. Wraps past the eighth. */
+export function dataVar(slot: number, fallback?: string): string {
+  const hue = DATA_HUES[(((Math.trunc(slot) - 1) % DATA_PALETTE_SLOTS) + DATA_PALETTE_SLOTS) % DATA_PALETTE_SLOTS];
+  return fallback ? `var(--color-data-${hue}, ${fallback})` : `var(--color-data-${hue})`;
+}
 
 /** Neutral stand-in when a slot will not resolve (older styling, no theme yet). */
 const FALLBACK_VAR = '--color-muted-foreground';
@@ -36,7 +52,7 @@ export function colorSlotByString(value: string | null | undefined): number {
 
 /** The slot's token as a CSS value, with a neutral fallback baked in. */
 export function colorVarByString(value: string | null | undefined): string {
-  return `var(--color-data-${colorSlotByString(value)}, var(${FALLBACK_VAR}))`;
+  return dataVar(colorSlotByString(value), `var(${FALLBACK_VAR})`);
 }
 
 /*

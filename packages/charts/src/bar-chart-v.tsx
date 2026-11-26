@@ -11,6 +11,7 @@
 import * as React from "react"
 
 import { cn, Legend, LegendItem } from "@invana/ui"
+import { dataVar } from "@invana/styling/color"
 
 interface ColumnBase {
   /** The period or group — `wk 36`, `F`, `paid`. */
@@ -42,7 +43,7 @@ export type ColumnDatum = SingleColumnDatum | GroupedColumnDatum
 export interface BarSeries {
   /** What the series is — `before 2 Jun`. Named in the legend. */
   name: React.ReactNode
-  /** Defaults to the data palette in order: `--color-data-1`, `-2`, … */
+  /** Defaults to the data palette in order: `--color-data-blue`, `-orange`, … */
   color?: string
 }
 
@@ -130,7 +131,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
       gridlines = [],
       target,
       height = 160,
-      color = "var(--color-data-1)",
+      color = "var(--color-data-blue)",
       highlightColor,
       highlightIndex,
       labelMode = "last",
@@ -144,7 +145,7 @@ export const BarChartV = React.forwardRef<HTMLDivElement, BarChartVProps>(
   ) => {
     const grouped = data.some(isGrouped)
     const seriesColor = (k: number) =>
-      series?.[k]?.color ?? (k === 0 ? color : `var(--color-data-${k + 1})`)
+      series?.[k]?.color ?? (k === 0 ? color : dataVar(k + 1))
 
     const emphasis =
       highlightIndex === undefined

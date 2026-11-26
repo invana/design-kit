@@ -10,9 +10,9 @@ const VARIANTS = DATA as { caption: string; props: Omit<TaskNodeProps, 'boundPal
 
 /** The hues are the caller's — the kit ships none. */
 const BOUNDS: BoundPalette = {
-  llm: 'bg-data-7',
-  graph_read: 'bg-data-1',
-  network: 'bg-data-8',
+  llm: 'bg-data-violet',
+  graph_read: 'bg-data-blue',
+  network: 'bg-data-red',
   none: 'bg-muted-foreground',
 };
 

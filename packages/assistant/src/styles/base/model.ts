@@ -10,7 +10,7 @@ import { isLive } from "../../protocol/stream"
 import { elapsedSince } from "./format"
 
 /**
- * The view model both variants draw from. Nothing here knows a kind: it
+ * The view model the session draws from. Nothing here knows a kind: it
  * reads only the protocol's own fields — roles, kinds, states, the trace —
  * so an ask or a block of your own flows through exactly like a built-in.
  */
@@ -83,12 +83,6 @@ export function runOutcome(answer: AnswerTurn): RunOutcome {
   return "done"
 }
 
-/** `4 of 4 steps` — how far the run got. */
-export function stepCount(answer: AnswerTurn): { done: number; total: number } {
-  const steps = answer.trace ?? []
-  return { done: steps.filter((s) => s.state === "done").length, total: steps.length }
-}
-
 /**
  * Whether an ask holds the thread until it is answered. The session passes
  * the registry's answer — an ask drawn in the question card does; bare
@@ -141,5 +135,5 @@ export function plainText(answer: AnswerTurn): string {
     .replace(/\[(\d+)\]/g, "")
 }
 
-/** The DOM id a turn is drawn under, so a variant can scroll to it. */
+/** The DOM id a turn is drawn under, so the session can scroll to it. */
 export const turnDomId = (spec: ConversationSpec, turnId: string) => `chat-${spec.id}-${turnId}`

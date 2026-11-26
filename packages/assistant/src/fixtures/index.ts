@@ -1,13 +1,9 @@
 import type { PatchScript } from "../protocol/stream"
 import type { ConversationSpec } from "../protocol/types"
-import agentConsole from "./conversations/agent-console.json"
-import graphExpansions from "./conversations/graph-expansions.json"
-import methodDisclosure from "./conversations/method-disclosure.json"
+import dubDelays from "./conversations/dub-delays.json"
+import dubDelaysAfter from "./conversations/dub-delays.after.script.json"
+import dubDelaysBefore from "./conversations/dub-delays.before.script.json"
 import ontologyAssistant from "./conversations/ontology-assistant.json"
-import streaming from "./conversations/streaming.json"
-import streamingScript from "./conversations/streaming.script.json"
-import taskBoard from "./conversations/task-board.json"
-import turnLabels from "./conversations/turn-labels.json"
 import breeder from "../data/conversations/breeder.json"
 import dataScientist from "../data/conversations/data-scientist.json"
 import financeAnalyst from "../data/conversations/finance-analyst.json"
@@ -57,23 +53,23 @@ export type SessionId = keyof typeof SESSIONS
 
 /*
  * The conversation stories' data: each a whole thread as the API would send
- * it, drawn by <ChatSession>. `streaming` is sent part-written; its words
- * arrive as `STREAMING_SCRIPT`, a recorded run of `append-text` patches.
- * Validated like the sessions, by `fixtures.test.ts`.
+ * it, drawn by <ChatSession>. `dubDelays` is sent with its answer just begun;
+ * its run arrives as two recorded scripts, `DUB_DELAYS_RUN.before` up to the
+ * step that waits on the analyst's approval and `DUB_DELAYS_RUN.after` once
+ * it is given. A wait's `since` of `$NOW` is stamped when it plays. Validated
+ * like the sessions, by `fixtures.test.ts`.
  */
 export const CONVERSATIONS = {
-  graphExpansions: graphExpansions as unknown as ConversationSpec,
-  agentConsole: agentConsole as unknown as ConversationSpec,
-  taskBoard: taskBoard as unknown as ConversationSpec,
-  streaming: streaming as unknown as ConversationSpec,
-  methodDisclosure: methodDisclosure as unknown as ConversationSpec,
-  turnLabels: turnLabels as unknown as ConversationSpec,
+  dubDelays: dubDelays as unknown as ConversationSpec,
   ontologyAssistant: ontologyAssistant as unknown as ConversationSpec,
 }
 
 export type ConversationId = keyof typeof CONVERSATIONS
 
-export const STREAMING_SCRIPT = streamingScript as unknown as PatchScript
+export const DUB_DELAYS_RUN = {
+  before: dubDelaysBefore as unknown as PatchScript,
+  after: dubDelaysAfter as unknown as PatchScript,
+}
 
 /*
  * Recorded runs, as the API would stream them, built from a user's data, and

@@ -1,11 +1,9 @@
 # @invana/assistant
 
-The analyst assistant, driven by JSON. `<ChatSession spec variant />` renders a whole conversation
+The analyst assistant, driven by JSON. `<ChatSession spec />` renders a whole conversation
 — the analyst's questions, what the assistant asks back, its answers, and the run behind each —
-from a `ConversationSpec`, the way `@invana/boards` renders a `BoardSpec`. Two variants draw
-the same spec: `cli`, the console (caret prompts, status-dotted replies, step rows, a Tasks view),
-and `web`, the chat (labelled turns, answer cards, `Answered in 1.4 s`). The composer is the same in
-both, configured by the spec's `composer`.
+from a `ConversationSpec`, the way `@invana/boards` renders a `BoardSpec`: labelled turns, answer
+cards, steps as rows, `Answered in 1.4 s`. The composer is configured by the spec's `composer`.
 
 The contract is the [Design Kit Spec](https://claude.ai/artifact/VcN3AYgmbdCpHbxXZjMir5): 29 ask
 intents on 21 blocks that return a value, 14 answer intents on 41 blocks that show data, and 26 answer patterns. Its ids
@@ -24,7 +22,6 @@ import { ChatSession, fromNdjson, useChatSession } from '@invana/assistant';
 const chat = useChatSession(initial);
 
 <ChatSession
-  variant="web"
   spec={chat.spec}
   // One typed callback per event, then `onEvent` for all of them.
   onPrompt={async (e) => chat.stream(fromNdjson(await fetch('/ask', { method: 'POST', body: JSON.stringify(e) })))}

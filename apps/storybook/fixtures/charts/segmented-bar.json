@@ -6,10 +6,10 @@
     "columns": ["Model", "Queries", "By caller"],
     "props": {
       "series": [
-        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
-        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
-        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
-        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+        { "key": "agent", "label": "agent", "color": "var(--color-data-violet)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-magenta)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-green)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-yellow)" }
       ],
       "rows": [
         {
@@ -34,10 +34,10 @@
     "columns": ["Model", "Queries", "By caller"],
     "props": {
       "series": [
-        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
-        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
-        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
-        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+        { "key": "agent", "label": "agent", "color": "var(--color-data-violet)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-magenta)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-green)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-yellow)" }
       ],
       "rows": [
         { "model": "AirRoutes", "total": 21, "values": { "explorer": 21 } },
@@ -53,10 +53,10 @@
     "columns": ["Model", "Queries", "By caller"],
     "props": {
       "series": [
-        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
-        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
-        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
-        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+        { "key": "agent", "label": "agent", "color": "var(--color-data-violet)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-magenta)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-green)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-yellow)" }
       ],
       "rows": [
         { "model": "AirRoutes", "total": 400, "values": { "agent": 232, "plan": 100, "explorer": 56, "api": 12 } },

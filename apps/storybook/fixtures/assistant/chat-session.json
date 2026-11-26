@@ -1,74 +1,9 @@
-[
-  {
-    "caption": "Graph expansions",
-    "conversation": "graphExpansions",
-    "width": 440,
-    "props": {
-      "variant": "web",
-      "actions": [
-        "retry",
-        "copy",
-        "steps",
-        {
-          "id": "pin",
-          "label": "Pin to report",
-          "icon": "pin"
-        },
-        "rate"
-      ]
-    }
-  },
-  {
-    "caption": "Agent console",
-    "conversation": "agentConsole",
-    "width": 440,
-    "props": {
-      "variant": "cli"
-    }
-  },
-  {
-    "caption": "Task board",
-    "conversation": "taskBoard",
-    "width": 440,
-    "props": {
-      "variant": "cli",
-      "defaultView": "tasks"
-    }
-  },
-  {
-    "caption": "Streaming",
-    "conversation": "streaming",
-    "width": 440,
-    "stream": "streaming",
-    "props": {
-      "variant": "web"
-    }
-  },
-  {
-    "caption": "Method disclosure",
-    "conversation": "methodDisclosure",
-    "width": 440,
-    "height": 480,
-    "props": {
-      "variant": "web"
-    }
-  },
-  {
-    "caption": "Turn labels",
-    "conversation": "turnLabels",
-    "width": 420,
-    "height": 560,
-    "props": {
-      "variant": "web"
-    }
-  },
-  {
-    "caption": "Context and proposals",
-    "conversation": "ontologyAssistant",
-    "width": 420,
-    "height": 760,
-    "props": {
-      "variant": "web"
-    }
-  }
-]
+{
+  "board": [
+    { "id": "dvn", "label": "EI-DVN", "kind": "Aircraft" },
+    { "id": "dvk", "label": "EI-DVK", "kind": "Aircraft" },
+    { "id": "ei", "label": "Aer Lingus", "kind": "Operator" },
+    { "id": "dub", "label": "DUB", "kind": "Airport" },
+    { "id": "pw", "label": "PW1127G", "kind": "Engine" }
+  ]
+}
