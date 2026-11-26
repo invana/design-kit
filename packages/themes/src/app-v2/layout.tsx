@@ -57,6 +57,13 @@ export interface AppLayoutV2Props {
    * compact form of the same control, never a second behaviour.
    */
   leftSection?: SectionConfig;
+  /**
+   * Whether the open rail's tree column is put away. Optional: left out, the layout keeps it
+   * itself; given, the caller owns it (a per-browser choice) and hears changes in
+   * `onTreeHiddenChange`.
+   */
+  treeHidden?: boolean;
+  onTreeHiddenChange?: (hidden: boolean) => void;
   mainSection: MainSectionConfig;
   bottomSection?: SectionConfig;
   rightSection?: SectionConfig;
@@ -97,6 +104,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   mainClassName,
   leftNav,
   leftSection,
+  treeHidden: treeHiddenProp,
+  onTreeHiddenChange,
   mainSection,
   bottomSection,
   rightSection,
@@ -117,7 +126,12 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   const folded = Boolean(leftNav) && leftNav?.expanded === false;
   const [peekOpen, setPeekOpen] = React.useState(false);
   // The open rail's tree can be put away too: the lit item again hides it, any item shows it.
-  const [treeHidden, setTreeHidden] = React.useState(false);
+  const [treeHiddenState, setTreeHiddenState] = React.useState(false);
+  const treeHidden = treeHiddenProp ?? treeHiddenState;
+  const setTreeHidden = (next: boolean) => {
+    setTreeHiddenState(next);
+    onTreeHiddenChange?.(next);
+  };
   React.useEffect(() => {
     if (!folded || !leftSection) setPeekOpen(false);
   }, [folded, leftSection]);

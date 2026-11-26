@@ -476,7 +476,8 @@ export const NavItems: React.FC<NavItemsProps> = ({
               }
             : undefined,
         }
-      : {};
+      : // The lit item of any other nav is the current one, for assistive tech and tests.
+        { "aria-current": isActive ? ("page" as const) : undefined };
 
     const setNode = (el: HTMLElement | null): void => {
       nodes.current[key] = el;
