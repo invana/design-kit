@@ -132,8 +132,9 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // Every view on the rail (`topNavItems` and `groups`) also opens the column, and the lit one toggles it.
   // `bottomNavItems` are actions (Settings, the account): they never open or close it.
   const opens = (item: NavVerticalItem): NavVerticalItem =>
-    item.onClick
-      ? {
+    item.disabled || item.href
+      ? item
+      : {
           ...item,
           onClick: () => {
             const lit = (item.key ?? item.name) === leftNav?.activeKey;
@@ -141,8 +142,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
             if (folded) setPeekOpen(lit ? !peekOpen : true);
             else setTreeHidden(lit ? !treeHidden : false);
           },
-        }
-      : item;
+        };
   const railNav: NavVerticalProps | undefined =
     leftNav && leftSection
       ? {
