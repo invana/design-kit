@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppLayoutV1 } from '../app-v1';
 import {
+  type NavVerticalItem,
   type NavVerticalProps,
   type NavHorizontalProps,
   ResizablePanelGroup,
@@ -45,6 +46,15 @@ export interface AppLayoutV2Props {
    * is hidden and the workspace stretches to the full width. See `AppLayoutV1`.
    */
   leftNav?: NavVerticalProps;
+  /**
+   * The tree column beside the rail. While the rail is open (`leftNav.expanded`
+   * not `false`) it is a resizable column. While the rail is folded
+   * (`leftNav.expanded === false`) it is a **flyout**: activating any rail item
+   * opens it over the main area beside the rail, Escape or a click outside
+   * closes it, and the rail's expand control pins it open. The rail holds the
+   * selection and the expanded state in both modes, so a folded rail is the
+   * compact form of the same control, never a second behaviour.
+   */
   leftSection?: SectionConfig;
   mainSection: MainSectionConfig;
   bottomSection?: SectionConfig;
@@ -100,6 +110,45 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   const ns = idPrefix ?? `app-v2-${generatedId}`;
   const panelId = (name: string) => `${ns}-${name}`;
 
+  // A folded rail (controlled, `expanded === false`) shows `leftSection` as a flyout.
+  const folded = Boolean(leftNav) && leftNav?.expanded === false;
+  const flyoutSection = folded ? leftSection : undefined;
+  const [flyoutOpen, setFlyoutOpen] = React.useState(false);
+  const flyoutRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!flyoutSection) setFlyoutOpen(false);
+  }, [flyoutSection]);
+  React.useEffect(() => {
+    if (!flyoutOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFlyoutOpen(false);
+    };
+    const onDown = (e: PointerEvent) => {
+      const t = e.target as Node | null;
+      // A menu or picker inside the flyout is portalled out of it: a click there is not outside.
+      const inPortal = t instanceof Element && t.closest('[data-radix-popper-content-wrapper],[role="listbox"],[role="menu"],[role="dialog"]');
+      if (t && !inPortal && !flyoutRef.current?.contains(t)) setFlyoutOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onDown);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('pointerdown', onDown);
+    };
+  }, [flyoutOpen]);
+  // Every rail item (not the expand control) also opens the flyout.
+  const opens = (item: NavVerticalItem): NavVerticalItem =>
+    item.onClick ? { ...item, onClick: () => { item.onClick?.(); setFlyoutOpen(true); } } : item;
+  const railNav: NavVerticalProps | undefined =
+    leftNav && flyoutSection
+      ? {
+          ...leftNav,
+          topNavItems: leftNav.topNavItems?.map(opens),
+          bottomNavItems: leftNav.bottomNavItems?.map(opens),
+          groups: leftNav.groups?.map((g) => ({ ...g, items: g.items.map(opens) })),
+        }
+      : leftNav;
+
   // The sidebar (left) panel. `preserve-pixel-size` holds its width when the
   // surrounding group grows (e.g. the right/auxiliary or bottom collapsing), so
   // the editor absorbs the freed space instead of the sidebar widening.
@@ -107,7 +156,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // a card inside it: the panel re-points `card` at `chrome`, so a TabbedPanel
   // or a list placed there takes the panel's surface and only the editor comes
   // forward. Portalled menus and dialogs are outside it and keep their own.
-  const sidebarPanel = leftSection ? (
+  const sidebarPanel = leftSection && !folded ? (
     <ResizablePanel
       id={panelId("sidebar-panel")}
       defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize}
@@ -294,9 +343,24 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       className={className}
       header={header}
       mainClassName={mainClassName}
-      leftNav={leftNav}
+      leftNav={railNav}
       footer={footer ?? { className: '' }}
-      main={<div className="flex-1 h-full">{layout}</div>}
+      main={
+        <div className="relative flex-1 h-full">
+          {layout}
+          {flyoutSection && flyoutOpen ? (
+            <div
+              ref={flyoutRef}
+              role="region"
+              aria-label="Tree"
+              className="absolute inset-y-0 left-0 z-30 flex flex-col overflow-hidden border-r bg-chrome shadow-lg [--color-card:var(--color-chrome)]"
+              style={{ width: flyoutSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize, maxWidth: '85%' }}
+            >
+              <div className="min-h-0 flex-1 overflow-auto">{flyoutSection.content}</div>
+            </div>
+          ) : null}
+        </div>
+      }
     />
   );
 };

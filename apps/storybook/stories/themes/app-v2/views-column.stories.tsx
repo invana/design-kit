@@ -45,6 +45,7 @@ const VIEW_GROUPS: NavVerticalGroup[] = [
       { key: 'worlds', name: 'Worlds', icon: Compass, count: 4 },
       { key: 'guardrails', name: 'Guardrails', icon: ShieldCheck, count: 6 },
       { key: 'database', name: 'Database', icon: Database, count: '15 drift', countTone: 'warning' },
+      { key: 'settings', name: 'Settings', icon: Settings },
     ],
   },
 ];
@@ -54,8 +55,8 @@ const GRAPHS = [
   { value: 'fraud', label: 'fraud', description: 'Memgraph' },
 ];
 
-const node = <Circle className="size-3 shrink-0 text-data-1" aria-hidden />;
-const edge = <ArrowRight className="size-3 shrink-0 text-data-1" aria-hidden />;
+const node = <Circle className="size-3 shrink-0 text-data-blue" aria-hidden />;
+const edge = <ArrowRight className="size-3 shrink-0 text-data-blue" aria-hidden />;
 
 const MODEL_TREE: TreeItem[] = [
   {
@@ -90,7 +91,24 @@ const MODEL_TREE: TreeItem[] = [
   { id: 'Twitter', label: 'Twitter', meta: 'v1', group: 'airways · Neo4j', isExpanded: false, children: [] },
 ];
 
-/** The signed-in frame with the views column open or folded; folding it folds the tree column too. */
+const flat = (ids: string[]): TreeItem[] => ids.map((id) => ({ id, label: id }));
+
+/** What each view's tree column holds; a view with none (Settings) has no tree column. */
+const TREES: Record<string, { items: TreeItem[]; placeholder: string; activeId?: string } | undefined> = {
+  global: { items: flat(['AirRoutes', 'NewsArticles', 'Twitter']), placeholder: 'Filter models', activeId: 'AirRoutes' },
+  models: { items: MODEL_TREE, placeholder: 'Filter models and types', activeId: 'airport' },
+  stitches: { items: flat(['airport ↔ news', 'country ↔ tweet']), placeholder: 'Filter stitches' },
+  worlds: { items: flat(['Default', 'Auditors', 'Analysts', 'Fraud team']), placeholder: 'Filter worlds', activeId: 'Default' },
+  guardrails: { items: flat(['All guardrails', 'Mask email', 'Keep salary in']), placeholder: 'Filter guardrails' },
+  database: { items: flat(['2 properties changed', '13 unmodelled labels']), placeholder: 'Filter drift' },
+  settings: undefined,
+};
+
+/**
+ * One frame, one control. The views column holds the selection and whether it is open;
+ * the tree column is the open view's tree. Folded, the same column becomes a flyout
+ * beside the rail, so a click on a view always shows its tree.
+ */
 function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
   const [collapsed, setCollapsed] = React.useState(initiallyCollapsed);
   const [view, setView] = React.useState('models');
@@ -100,6 +118,7 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
     ...g,
     items: g.items.map((item) => ({ ...item, onClick: () => setView(item.key ?? item.name) })),
   }));
+  const tree = TREES[view];
 
   return (
     <AppLayoutV2
@@ -132,24 +151,23 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
             />
           ),
         },
-        bottomNavItems: [{ key: 'settings', name: 'Settings', icon: Settings }],
       }}
       leftSection={
-        collapsed
-          ? undefined
-          : {
+        tree
+          ? {
               defaultSize: '280px',
               content: (
                 <TreeView
                   variant="column"
-                  items={MODEL_TREE}
+                  items={tree.items}
                   searchable
-                  searchPlaceholder="Filter models and types"
-                  groupMeta={{ 'airways · Neo4j': '3 models' }}
-                  activeId="airport"
+                  searchPlaceholder={tree.placeholder}
+                  activeId={tree.activeId}
+                  groupMeta={view === 'models' ? { 'airways · Neo4j': '3 models' } : undefined}
                 />
               ),
             }
+          : undefined
       }
       mainSection={{
         content: (
@@ -175,37 +193,73 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
 }
 
 /**
- * The views column open: its head (title, New, Collapse), the Graph picker under it, the
- * views with their counts, and the tree column beside it. Collapse folds both columns to
- * the 45px rail; Expand opens them again.
+ * 1 · Open. A click on a view makes it the open one and swaps its tree in at once; there
+ * is one highlight, held by the views column.
  */
 export const Expanded: Story = {
   render: () => <Shell initiallyCollapsed={false} />,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    await step('A view becomes the open one', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: /Stitches/ }));
-      await expect(canvas.getByText('Open view: stitches. The views column is open.')).toBeInTheDocument();
-    });
-    await step('Collapse folds the views and the tree column', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: 'Collapse' }));
-      await expect(canvas.queryByText('Global model')).not.toBeInTheDocument();
+    await step('A view becomes the open one and its tree replaces the last', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: /Worlds/ }));
+      await expect(canvas.getByText('Open view: worlds. The views column is open.')).toBeInTheDocument();
+      await expect(canvas.getByText('Auditors')).toBeInTheDocument();
       await expect(canvas.queryByText('Node types')).not.toBeInTheDocument();
     });
-    await step('Expand opens both again', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: 'Expand' }));
-      await expect(canvas.getByText('Global model')).toBeInTheDocument();
-      await expect(canvas.getByText('Node types')).toBeInTheDocument();
+    await step('Global model and Models are two views, each with its own tree', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: /Global model/ }));
+      await expect(canvas.getByPlaceholderText('Filter models')).toBeInTheDocument();
+      await userEvent.click(canvas.getByRole('button', { name: /^Models/ }));
+      await expect(canvas.getByPlaceholderText('Filter models and types')).toBeInTheDocument();
     });
   },
 };
 
-/** The views column folded to its 45px icon rail; each view's label is its tooltip and the tree column is hidden. */
+/**
+ * 2 · Folded. The rail is the compact form of the same control: a click on a view opens its
+ * tree as a flyout beside the rail; Escape closes it.
+ */
 export const Collapsed: Story = {
+  render: () => <Shell initiallyCollapsed />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    await step('Nothing is open until a view is clicked', async () => {
+      await expect(canvas.queryByPlaceholderText('Filter worlds')).not.toBeInTheDocument();
+      await expect(canvas.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
+    });
+    await step('A click on a view shows its tree at once, without expanding the rail', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: /Worlds/ }));
+      await expect(canvas.getByPlaceholderText('Filter worlds')).toBeInTheDocument();
+      await expect(canvas.getByText('Open view: worlds. The views column is folded to its rail.')).toBeInTheDocument();
+    });
+    await step('Escape closes the flyout; the view stays selected', async () => {
+      await userEvent.keyboard('{Escape}');
+      await expect(canvas.queryByPlaceholderText('Filter worlds')).not.toBeInTheDocument();
+      await expect(canvas.getByText(/Open view: worlds/)).toBeInTheDocument();
+    });
+  },
+};
+
+/** 3 · Pinned. Expand on a folded rail with the flyout open keeps that view's tree as the column. */
+export const Pinned: Story = {
   render: () => <Shell initiallyCollapsed />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.queryByText('Global model')).not.toBeInTheDocument();
-    await expect(canvas.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: /Guardrails/ }));
+    await expect(canvas.getByPlaceholderText('Filter guardrails')).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Expand' }));
+    await expect(canvas.getByText('Open view: guardrails. The views column is open.')).toBeInTheDocument();
+    await expect(canvas.getByPlaceholderText('Filter guardrails')).toBeInTheDocument();
+  },
+};
+
+/** 4 · A view with no tree. Settings has none: the rail stays, no flyout opens and no empty column is left. */
+export const NoTree: Story = {
+  render: () => <Shell initiallyCollapsed />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: /Settings/ }));
+    await expect(canvas.getByText(/Open view: settings/)).toBeInTheDocument();
+    await expect(canvas.queryByRole('region', { name: 'Tree' })).not.toBeInTheDocument();
   },
 };
