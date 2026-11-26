@@ -49,9 +49,10 @@ export interface AppLayoutV2Props {
   /**
    * The tree column beside the rail. While the rail is open (`leftNav.expanded`
    * not `false`) it is a resizable column. While the rail is folded
-   * (`leftNav.expanded === false`) it is a **flyout**: activating any rail item
-   * opens it over the main area beside the rail, Escape or a click outside
-   * closes it, and the rail's expand control pins it open. The rail holds the
+   * (`leftNav.expanded === false`) it still opens, in the same place: activating a
+   * rail item shows it beside the rail and main gives way, Escape or the lit item
+   * again closes it, and the rail's expand control keeps it open. On the open rail the
+   * lit item again hides the column and any item shows it. The rail holds the
    * selection and the expanded state in both modes, so a folded rail is the
    * compact form of the same control, never a second behaviour.
    */
@@ -110,37 +111,39 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   const ns = idPrefix ?? `app-v2-${generatedId}`;
   const panelId = (name: string) => `${ns}-${name}`;
 
-  // A folded rail (controlled, `expanded === false`) shows `leftSection` as a flyout.
+  // A folded rail (controlled, `expanded === false`) opens `leftSection` in the same
+  // column, beside the rail, when an item is activated; main gives way as it does for
+  // the open rail. Escape or the active item again closes it; Expand keeps it.
   const folded = Boolean(leftNav) && leftNav?.expanded === false;
-  const flyoutSection = folded ? leftSection : undefined;
-  const [flyoutOpen, setFlyoutOpen] = React.useState(false);
-  const flyoutRef = React.useRef<HTMLDivElement>(null);
+  const [peekOpen, setPeekOpen] = React.useState(false);
+  // The open rail's tree can be put away too: the lit item again hides it, any item shows it.
+  const [treeHidden, setTreeHidden] = React.useState(false);
   React.useEffect(() => {
-    if (!flyoutSection) setFlyoutOpen(false);
-  }, [flyoutSection]);
+    if (!folded || !leftSection) setPeekOpen(false);
+  }, [folded, leftSection]);
   React.useEffect(() => {
-    if (!flyoutOpen) return;
+    if (!peekOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setFlyoutOpen(false);
-    };
-    const onDown = (e: PointerEvent) => {
-      const t = e.target as Node | null;
-      // A menu or picker inside the flyout is portalled out of it: a click there is not outside.
-      const inPortal = t instanceof Element && t.closest('[data-radix-popper-content-wrapper],[role="listbox"],[role="menu"],[role="dialog"]');
-      if (t && !inPortal && !flyoutRef.current?.contains(t)) setFlyoutOpen(false);
+      if (e.key === 'Escape') setPeekOpen(false);
     };
     window.addEventListener('keydown', onKey);
-    window.addEventListener('pointerdown', onDown);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('pointerdown', onDown);
-    };
-  }, [flyoutOpen]);
-  // Every rail item (not the expand control) also opens the flyout.
+    return () => window.removeEventListener('keydown', onKey);
+  }, [peekOpen]);
+  // Every rail item (not the expand control) also opens the column; the lit one toggles it.
   const opens = (item: NavVerticalItem): NavVerticalItem =>
-    item.onClick ? { ...item, onClick: () => { item.onClick?.(); setFlyoutOpen(true); } } : item;
+    item.onClick
+      ? {
+          ...item,
+          onClick: () => {
+            const lit = (item.key ?? item.name) === leftNav?.activeKey;
+            item.onClick?.();
+            if (folded) setPeekOpen(lit ? !peekOpen : true);
+            else setTreeHidden(lit ? !treeHidden : false);
+          },
+        }
+      : item;
   const railNav: NavVerticalProps | undefined =
-    leftNav && flyoutSection
+    leftNav && leftSection
       ? {
           ...leftNav,
           topNavItems: leftNav.topNavItems?.map(opens),
@@ -156,7 +159,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
   // a card inside it: the panel re-points `card` at `chrome`, so a TabbedPanel
   // or a list placed there takes the panel's surface and only the editor comes
   // forward. Portalled menus and dialogs are outside it and keep their own.
-  const sidebarPanel = leftSection && !folded ? (
+  const sidebarPanel = leftSection && (folded ? peekOpen : !treeHidden) ? (
     <ResizablePanel
       id={panelId("sidebar-panel")}
       defaultSize={leftSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize}
@@ -345,22 +348,7 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       mainClassName={mainClassName}
       leftNav={railNav}
       footer={footer ?? { className: '' }}
-      main={
-        <div className="relative flex-1 h-full">
-          {layout}
-          {flyoutSection && flyoutOpen ? (
-            <div
-              ref={flyoutRef}
-              role="region"
-              aria-label="Tree"
-              className="absolute inset-y-0 left-0 z-30 flex flex-col overflow-hidden border-r bg-chrome shadow-lg [--color-card:var(--color-chrome)]"
-              style={{ width: flyoutSection.defaultSize ?? DEFAULT_SIDEBAR.defaultSize, maxWidth: '85%' }}
-            >
-              <div className="min-h-0 flex-1 overflow-auto">{flyoutSection.content}</div>
-            </div>
-          ) : null}
-        </div>
-      }
+      main={<div className="flex-1 h-full">{layout}</div>}
     />
   );
 };

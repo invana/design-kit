@@ -106,8 +106,8 @@ const TREES: Record<string, { items: TreeItem[]; placeholder: string; activeId?:
 
 /**
  * One frame, one control. The views column holds the selection and whether it is open;
- * the tree column is the open view's tree. Folded, the same column becomes a flyout
- * beside the rail, so a click on a view always shows its tree.
+ * the tree column is the open view's tree. Folded, a click on a view opens
+ * that same column beside the rail, and main gives way as it does when the rail is open.
  */
 function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
   const [collapsed, setCollapsed] = React.useState(initiallyCollapsed);
@@ -206,6 +206,12 @@ export const Expanded: Story = {
       await expect(canvas.getByText('Auditors')).toBeInTheDocument();
       await expect(canvas.queryByText('Node types')).not.toBeInTheDocument();
     });
+    await step('The lit view again puts the tree away; a click on it shows it again', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: /Worlds/ }));
+      await expect(canvas.queryByPlaceholderText('Filter worlds')).not.toBeInTheDocument();
+      await userEvent.click(canvas.getByRole('button', { name: /Worlds/ }));
+      await expect(canvas.getByPlaceholderText('Filter worlds')).toBeInTheDocument();
+    });
     await step('Global model and Models are two views, each with its own tree', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /Global model/ }));
       await expect(canvas.getByPlaceholderText('Filter models')).toBeInTheDocument();
@@ -217,7 +223,7 @@ export const Expanded: Story = {
 
 /**
  * 2 · Folded. The rail is the compact form of the same control: a click on a view opens its
- * tree as a flyout beside the rail; Escape closes it.
+ * tree in the column beside the rail, and main gives way; Escape (or the lit view again) closes it.
  */
 export const Collapsed: Story = {
   render: () => <Shell initiallyCollapsed />,
@@ -232,7 +238,7 @@ export const Collapsed: Story = {
       await expect(canvas.getByPlaceholderText('Filter worlds')).toBeInTheDocument();
       await expect(canvas.getByText('Open view: worlds. The views column is folded to its rail.')).toBeInTheDocument();
     });
-    await step('Escape closes the flyout; the view stays selected', async () => {
+    await step('Escape closes the column; the view stays selected', async () => {
       await userEvent.keyboard('{Escape}');
       await expect(canvas.queryByPlaceholderText('Filter worlds')).not.toBeInTheDocument();
       await expect(canvas.getByText(/Open view: worlds/)).toBeInTheDocument();
@@ -240,7 +246,7 @@ export const Collapsed: Story = {
   },
 };
 
-/** 3 · Pinned. Expand on a folded rail with the flyout open keeps that view's tree as the column. */
+/** 3 · Pinned. Expand on a folded rail with the tree open keeps that view's tree as the column. */
 export const Pinned: Story = {
   render: () => <Shell initiallyCollapsed />,
   play: async ({ canvasElement }) => {
@@ -253,13 +259,13 @@ export const Pinned: Story = {
   },
 };
 
-/** 4 · A view with no tree. Settings has none: the rail stays, no flyout opens and no empty column is left. */
+/** 4 · A view with no tree. Settings has none: the rail stays and no empty column opens. */
 export const NoTree: Story = {
   render: () => <Shell initiallyCollapsed />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: /Settings/ }));
     await expect(canvas.getByText(/Open view: settings/)).toBeInTheDocument();
-    await expect(canvas.queryByRole('region', { name: 'Tree' })).not.toBeInTheDocument();
+    await expect(canvas.queryByPlaceholderText(/^Filter/)).not.toBeInTheDocument();
   },
 };
