@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { applyPatches } from "../protocol/reduce"
 import type { AnswerTurn } from "../protocol/types"
 import { validate } from "../protocol/validate"
-import { CONVERSATIONS, SESSIONS, STREAMING_SCRIPT } from "./index"
+import { CONVERSATIONS, DUB_DELAYS_RUN, SESSIONS } from "./index"
 
 /**
  * Where a session's answer does not match its pattern. Each line is real drift
@@ -65,13 +65,21 @@ describe.each(Object.entries(CONVERSATIONS))("conversation %s", (_, spec) => {
   })
 })
 
-describe("the streaming script", () => {
-  it("writes the answer whole and settles it", () => {
-    const patches = STREAMING_SCRIPT.flatMap((s) => (Array.isArray(s.patch) ? s.patch : [s.patch]))
-    const done = applyPatches(CONVERSATIONS.streaming, patches)
+describe("the D14 run", () => {
+  it("waits on the approval, then writes the answer whole and settles it", () => {
+    const patchesOf = (script: typeof DUB_DELAYS_RUN.before) =>
+      script.flatMap((s) => (Array.isArray(s.patch) ? s.patch : [s.patch]))
+    const held = applyPatches(CONVERSATIONS.dubDelays, patchesOf(DUB_DELAYS_RUN.before))
+    const waiting = held.turns.find((t) => t.id === "a1") as AnswerTurn
+    expect(waiting.trace?.find((s) => s.state === "waiting")?.wait?.title).toMatch(/^It needs you/)
+    const done = applyPatches(held, patchesOf(DUB_DELAYS_RUN.after))
     const answer = done.turns.find((t) => t.id === "a1") as AnswerTurn
     expect(validate(done)).toEqual([])
     expect(answer.state).toBe("complete")
-    expect((answer.blocks[0] as { text: string }).text).toMatch(/^Your graph has \*\*8,412 nodes\*\*.*Singapore\.$/)
+    expect(answer.report?.connections).toHaveLength(4)
+    const words = answer.blocks.map((b) => (b as { text: string }).text)
+    expect(words).toHaveLength(2)
+    expect(words[0]).toMatch(/^Ryanair and Aer Lingus .* late\.$/)
+    expect(words[1]).toMatch(/^Three Aer Lingus .* No Ryanair aircraft has one\.$/)
   })
 })

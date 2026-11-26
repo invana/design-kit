@@ -99,7 +99,6 @@ function Conversation({ onRunStart }: { onRunStart: () => void }) {
   return (
     <ChatSession
       spec={chat.spec}
-      variant="cli"
       icons={CHAT_ICONS}
       header={<AgentHeader title={chat.spec.title} agent={chat.spec.agent} budget={chat.spec.budget} />}
       onEvent={onEvent}

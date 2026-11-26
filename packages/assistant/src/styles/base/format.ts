@@ -22,29 +22,10 @@ export function elapsedSince(iso: string | undefined, now: number): number | und
   return Number.isNaN(then) ? undefined : Math.max(0, now - then)
 }
 
-/** `09:02` — the time a turn was sent, on a 24-hour clock. */
+/** `09:02` — the time an answer settled, on a 24-hour clock. */
 export function clockTime(iso: string | undefined): string | undefined {
   if (!iso) return undefined
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return undefined
   return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false })
-}
-
-const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
-
-/** Whether two ISO times fall on the same local day. */
-export function sameDay(a: string | undefined, b: string | undefined): boolean {
-  if (!a || !b) return true
-  return dayKey(new Date(a)) === dayKey(new Date(b))
-}
-
-/** `Today · Wed 30 Sep`, `Yesterday · Tue 29 Sep`, `Mon 28 Sep`. */
-export function dayLabel(iso: string, now: number): string {
-  const date = new Date(iso)
-  const written = date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })
-  const today = new Date(now)
-  if (dayKey(date) === dayKey(today)) return `Today · ${written}`
-  const yesterday = new Date(now - 86_400_000)
-  if (dayKey(date) === dayKey(yesterday)) return `Yesterday · ${written}`
-  return written
 }

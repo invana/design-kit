@@ -21,6 +21,9 @@ export interface StreamOptions<S, P> {
   stopPatches?: (spec: S) => P[]
 }
 
+/** Patches arriving within this many ms are drawn together. */
+const FRAME_MS = 16
+
 /**
  * The spec as drawn: the one given, with `stream`'s patches applied by `apply`
  * as they arrive. A new spec starts over from it; `stop()` ends the stream and
@@ -61,10 +64,29 @@ export function useStreamedSpec<S, P>(
     void (async () => {
       try {
         const source = typeof stream === "function" ? stream(controller.signal) : stream
+        // Patches that arrive within one frame are applied together: one redraw, not one per patch.
+        let pending: P[] = []
+        let frame: ReturnType<typeof setTimeout> | undefined
+        const flush = () => {
+          if (frame !== undefined) clearTimeout(frame)
+          frame = undefined
+          if (!pending.length || controller.signal.aborted) return
+          const batch = pending
+          pending = []
+          try {
+            set(latest.current.apply(current.current, batch))
+          } catch (error) {
+            controller.abort()
+            latest.current.onError?.(error)
+          }
+        }
+        controller.signal.addEventListener("abort", () => frame !== undefined && clearTimeout(frame))
         for await (const batch of patchesOf(source)) {
           if (controller.signal.aborted) return
-          set(latest.current.apply(current.current, batch))
+          pending.push(...batch)
+          frame ??= setTimeout(flush, FRAME_MS)
         }
+        flush()
         if (!controller.signal.aborted) latest.current.onEnd?.(current.current)
       } catch (error) {
         if (!controller.signal.aborted) latest.current.onError?.(error)

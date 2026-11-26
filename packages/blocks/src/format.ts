@@ -53,3 +53,25 @@ export function gaugeProps(gauge: MetricOptions["gauge"]) {
     },
   }
 }
+
+/**
+ * How long something has waited, in its two largest units: `12s`, `1m 2s`,
+ * `1h 3m`, `1d 1h`. A whole unit alone is written alone — `2m`, `1d`.
+ */
+export function humanWait(ms: number): string {
+  const total = Number.isFinite(ms) && ms > 0 ? Math.floor(ms / 1000) : 0
+  const units: [string, number][] = [
+    ["d", 86_400],
+    ["h", 3_600],
+    ["m", 60],
+    ["s", 1],
+  ]
+  const at = units.findIndex(([, size]) => total >= size)
+  if (at < 0) return "0s"
+  const [unit, size] = units[at]
+  const rest = total - Math.floor(total / size) * size
+  const next = units[at + 1]
+  const small = next ? Math.floor(rest / next[1]) : 0
+  const head = `${Math.floor(total / size)}${unit}`
+  return next && small ? `${head} ${small}${next[0]}` : head
+}

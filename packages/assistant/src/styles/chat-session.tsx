@@ -14,8 +14,7 @@ import {
   useViewState,
 } from "./base/context"
 import { isAnswer, runOutcome, turnDomId } from "./base/model"
-import { CliSession } from "./cli/cli-session"
-import { type ChatSessionHandle, type ChatSessionProps, type ChatSessionView, DEFAULT_ANSWER_ACTIONS } from "./types"
+import { type ChatSessionHandle, type ChatSessionProps, DEFAULT_ANSWER_ACTIONS } from "./types"
 import { WebSession } from "./web/web-session"
 
 /** `open-run` → `onOpenRun`: the callback prop an event goes to. */
@@ -23,8 +22,7 @@ const handlerName = (type: string) =>
   `on${type.replace(/(^|-)([a-z])/g, (_, __, c: string) => c.toUpperCase())}`
 
 /**
- * A conversation with the assistant, drawn from JSON alone, in one of two
- * variants: `cli`, the console, or `web`, the chat.
+ * A conversation with the assistant, drawn from JSON alone.
  *
  * The API sends a {@link ConversationSpec}, then patches — pass the patched
  * spec, or the patches themselves as `stream`. Every ask and block is drawn by
@@ -39,7 +37,6 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
 ) {
   const {
     spec,
-    variant = "web",
     stream,
     onStreamEnd,
     onStreamError,
@@ -49,8 +46,6 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
     onClose,
     header,
     emptyState,
-    view: controlledView,
-    defaultView = "chat",
     actions = DEFAULT_ANSWER_ACTIONS,
     className,
   } = props
@@ -64,12 +59,12 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
   // A run held on the analyst's answer is not in flight: the composer takes
   // their words, and there is nothing to stop.
   const running = live.turns.some((t) => isAnswer(t) && runOutcome(t) === "live")
-  const now = useClock(fixedNow, running)
+  // The clock also ticks while a run waits on the analyst, so the wait is counted.
+  const waiting = live.turns.some((t) => isAnswer(t) && runOutcome(t) === "waiting")
+  const now = useClock(fixedNow, running || waiting)
   const resolved = React.useMemo(() => resolveRegistry(registry), [registry])
   const resolvedIcons = React.useMemo(() => ({ ...DEFAULT_ICONS, ...icons }), [icons])
   const viewState = useViewState()
-  const [uncontrolledView, setUncontrolledView] = React.useState<ChatSessionView>(defaultView)
-  const view = controlledView ?? uncontrolledView
   const root = React.useRef<HTMLDivElement>(null)
   const composer = React.useRef<HTMLDivElement | null>(null)
   const setComposer = React.useCallback((element: HTMLDivElement | null) => {
@@ -95,14 +90,6 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
   }, [stopStream, emit])
   useStopKey(running, stop)
 
-  const setView = React.useCallback(
-    (next: ChatSessionView) => {
-      if (latest.current.view === undefined) setUncontrolledView(next)
-      latest.current.onViewChange?.(next)
-    },
-    [],
-  )
-
   const scrollToTurn = React.useCallback((turnId: string) => {
     // After the frame's own follow-the-bottom, which a step list opening would trigger.
     setTimeout(() => {
@@ -126,10 +113,9 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
         viewState.toggleRecord(turnId, stepId, true)
         scrollToTurn(turnId)
       },
-      setView,
       focusComposer,
     }),
-    [scrollToTurn, setView, focusComposer, viewState],
+    [scrollToTurn, focusComposer, viewState],
   )
 
   const context: ChatSessionContextValue = {
@@ -148,12 +134,12 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
       emit({ type: "toggle-steps", turn: turnId, open })
     },
     actions,
+    reportOpen: viewState.reportOpen,
+    toggleReport: viewState.toggleReport,
     recordOpen: viewState.recordOpen,
     toggleRecord: viewState.toggleRecord,
     rating: viewState.rating,
     rate: viewState.setRating,
-    view,
-    setView,
     scrollToTurn,
     focusComposer,
     setComposer,
@@ -169,8 +155,8 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
   }
   return (
     <ChatSessionContext.Provider value={context}>
-      <div ref={root} data-variant={variant} className="contents">
-        {variant === "cli" ? <CliSession {...shared} /> : <WebSession {...shared} />}
+      <div ref={root} className="contents">
+        <WebSession {...shared} />
       </div>
     </ChatSessionContext.Provider>
   )

@@ -28,7 +28,7 @@ export interface ConversationListProps {
 }
 
 const BUTTON =
-  "inline-flex size-[22px] shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
 
 /**
  * The list of conversations: what `ChatSession`'s History goes back one step
@@ -48,11 +48,13 @@ export function ConversationList({
   now,
   className,
 }: ConversationListProps) {
-  const clock = now ?? Date.now()
+  // The time of the first render, unless given: read once, not on every render.
+  const [mounted] = React.useState(() => Date.now())
+  const clock = now ?? mounted
   return (
-    <div className={cn("flex h-full min-h-0 flex-col bg-background", className)}>
-      <div className="flex h-[34px] shrink-0 items-center gap-2 border-b border-border px-3">
-        <span className="min-w-0 truncate font-medium">{title}</span>
+    <div className={cn("@container flex h-full min-h-0 flex-col bg-chrome", className)}>
+      <header className="flex h-10 shrink-0 items-center gap-2 border-b border-border pr-3 pl-3 @md:pl-6">
+        <span className="min-w-0 truncate font-semibold">{title}</span>
         <span className="ml-auto flex shrink-0 items-center gap-0.5">
           <button
             type="button"
@@ -69,7 +71,7 @@ export function ConversationList({
             </button>
           ) : null}
         </span>
-      </div>
+      </header>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {items.length ? (
           <ul className="m-0 flex list-none flex-col p-0">
@@ -83,11 +85,11 @@ export function ConversationList({
                     aria-current={item.id === activeId ? "true" : undefined}
                     onClick={() => onEvent?.({ type: "open-conversation", id: item.id })}
                     className={cn(
-                      "flex w-full min-w-0 flex-col items-start gap-0.5 px-3 py-2 text-left hover:bg-accent",
-                      item.id === activeId && "bg-accent",
+                      "flex w-full min-w-0 flex-col items-start gap-0.5 px-3 py-2 text-left hover:bg-accent/40 @md:px-6",
+                      item.id === activeId && "bg-secondary",
                     )}
                   >
-                    <span className="w-full truncate">{item.title || "Untitled"}</span>
+                    <span className="w-full truncate font-semibold">{item.title || "Untitled"}</span>
                     {line ? <span className="w-full truncate text-sm text-muted-foreground">{line}</span> : null}
                   </button>
                 </li>
@@ -98,7 +100,7 @@ export function ConversationList({
           (emptyState ?? <p className="m-0 px-3 py-6 text-center text-muted-foreground">No conversations yet</p>)
         )}
       </div>
-      {note ? <div className="shrink-0 border-t border-border px-3 py-2 text-sm text-muted-foreground">{note}</div> : null}
+      {note ? <div className="shrink-0 border-t border-border px-3 py-2 text-sm text-muted-foreground @md:px-6">{note}</div> : null}
     </div>
   )
 }

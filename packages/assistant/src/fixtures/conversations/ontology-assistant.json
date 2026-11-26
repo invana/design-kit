@@ -5,8 +5,63 @@
     "placeholder": "Ask, or say what to change; I propose, you accept",
     "label": "Ask the assistant",
     "context": [
-      { "id": "type:AirRoutes.airport", "kind": "type", "label": "AirRoutes.airport" },
-      { "id": "stitch:hashtag-airport", "kind": "stitch", "label": "Hashtag.tag ≡ airport.code" }
+      {
+        "id": "type:AirRoutes.airport",
+        "kind": "type",
+        "label": "AirRoutes.airport"
+      },
+      {
+        "id": "stitch:hashtag-airport",
+        "kind": "stitch",
+        "label": "Hashtag.tag ≡ airport.code"
+      }
+    ],
+    "controls": [
+      {
+        "id": "agent",
+        "label": "Agent",
+        "icon": "M8 2v3M3 7h10v6H3zM6 10h.01M10 10h.01",
+        "align": "start",
+        "value": "modeller",
+        "options": [
+          {
+            "value": "modeller",
+            "label": "Modeller"
+          },
+          {
+            "value": "reviewer",
+            "label": "Reviewer"
+          }
+        ]
+      },
+      {
+        "id": "model",
+        "label": "LLM",
+        "align": "start",
+        "value": "ollama|qwen2.5:7b",
+        "note": "LLMs in use that your role may use. One that takes no tools cannot run the assistant.",
+        "options": [
+          {
+            "value": "ollama|qwen2.5:7b",
+            "label": "qwen2.5:7b",
+            "group": "ollama",
+            "hint": "the default · tools"
+          },
+          {
+            "value": "ollama|llama3:8b",
+            "label": "llama3:8b",
+            "group": "ollama",
+            "hint": "no tools",
+            "disabled": true
+          },
+          {
+            "value": "anthropic|claude-sonnet-5-5",
+            "label": "claude-sonnet-5-5",
+            "group": "anthropic",
+            "hint": "tools"
+          }
+        ]
+      }
     ]
   },
   "turns": [
@@ -14,7 +69,9 @@
       "id": "u1",
       "role": "analyst",
       "text": "Airports have terminals, and each terminal has gates. Add that to AirRoutes.",
-      "context": ["AirRoutes.airport"],
+      "context": [
+        "AirRoutes.airport"
+      ],
       "at": "2026-11-25T10:12:00.000Z"
     },
     {
@@ -26,9 +83,65 @@
       "at": "2026-11-25T10:12:03.100Z",
       "duration": 3100,
       "trace": [
-        { "id": "s1", "label": "read_model", "key": "read_model", "detail": "AirRoutes, v2 draft", "state": "done", "duration": 42 },
-        { "id": "s2", "label": "read_type", "key": "read_type", "detail": "airport", "state": "done", "duration": 18 },
-        { "id": "s3", "label": "propose", "key": "propose", "detail": "3 steps, checked", "state": "done", "duration": 61 }
+        {
+          "id": "s1",
+          "label": "read_model",
+          "key": "read_model",
+          "detail": "AirRoutes, v2 draft",
+          "state": "done",
+          "duration": 42,
+          "result": "2 types",
+          "io": {
+            "input": [
+              {
+                "label": "went in",
+                "value": "model AirRoutes · draft v2",
+                "code": false
+              },
+              {
+                "label": "parsed",
+                "value": "model: AirRoutes"
+              },
+              {
+                "label": "policy",
+                "value": "read · allowed for your role"
+              }
+            ],
+            "output": [
+              {
+                "label": "came back",
+                "value": "2 types · 7 properties"
+              },
+              {
+                "label": "the LLM saw",
+                "value": "AirRoutes: airport (iata, icao, city …",
+                "full": "AirRoutes: airport (iata, icao, city, country, lat, lon, elevation), route (distance)"
+              },
+              {
+                "label": "tokens",
+                "value": "412 in · 0 out"
+              }
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "label": "read_type",
+          "key": "read_type",
+          "detail": "airport",
+          "state": "done",
+          "duration": 18,
+          "result": "7 properties"
+        },
+        {
+          "id": "s3",
+          "label": "propose",
+          "key": "propose",
+          "detail": "3 steps, checked",
+          "state": "done",
+          "duration": 61,
+          "result": "3 steps"
+        }
       ],
       "blocks": [
         {
@@ -39,14 +152,70 @@
           "kind": "proposal",
           "heading": "Terminals for AirRoutes",
           "steps": [
-            { "id": "1", "kind": "node_type.add", "what": "AirRoutes.Terminal", "note": "code (key), name, gates: int", "state": "accepted" },
-            { "id": "2", "kind": "edge_type.add", "what": "AT · Terminal → airport", "note": "each Terminal is AT one airport", "state": "open" },
-            { "id": "3", "kind": "property.add", "what": "airport.terminals: int", "note": "how many terminals, from the data", "state": "open" }
+            {
+              "id": "1",
+              "kind": "node_type.add",
+              "what": "AirRoutes.Terminal",
+              "note": "code (key), name, gates: int",
+              "state": "accepted"
+            },
+            {
+              "id": "2",
+              "kind": "edge_type.add",
+              "what": "AT · Terminal → airport",
+              "note": "each Terminal is AT one airport",
+              "state": "open",
+              "waitingSince": "2026-11-25T10:12:03.100Z"
+            },
+            {
+              "id": "3",
+              "kind": "property.add",
+              "what": "airport.terminals: int",
+              "note": "how many terminals, from the data",
+              "state": "open",
+              "waitingSince": "2026-11-25T10:12:03.100Z"
+            }
           ],
           "consequence": "Lands in the AirRoutes v2 draft",
           "actions": []
         }
-      ]
+      ],
+      "report": {
+        "calls": 3,
+        "reads": 2,
+        "writes": 1,
+        "failed": 0,
+        "approved": 1,
+        "rows": 0,
+        "tokens": {
+          "in": 1840,
+          "out": 312
+        },
+        "connections": [
+          {
+            "name": "AirRoutes graph",
+            "calls": 2,
+            "rows": 0
+          },
+          {
+            "name": "ollama",
+            "calls": 1,
+            "rows": 0
+          }
+        ],
+        "sent": [
+          {
+            "label": "Model overview",
+            "count": 2,
+            "chars": 1180
+          },
+          {
+            "label": "Type airport",
+            "count": 7,
+            "chars": 640
+          }
+        ]
+      }
     },
     {
       "id": "u2",
@@ -66,11 +235,23 @@
         {
           "kind": "filters",
           "target": "AirRoutes.airport",
-          "filters": ["country = DE", "runways = 3"],
+          "filters": [
+            "country = DE",
+            "runways = 3"
+          ],
           "note": "19 match",
-          "actions": [{ "id": "apply", "label": "Apply to Records", "variant": "primary" }]
+          "actions": [
+            {
+              "id": "apply",
+              "label": "Apply to Records",
+              "variant": "primary"
+            }
+          ]
         },
-        { "kind": "markdown", "text": "**19** airports match. The rows are in Records; I did not read their values." }
+        {
+          "kind": "markdown",
+          "text": "**19** airports match. The rows are in Records; I did not read their values."
+        }
       ]
     }
   ]

@@ -13,7 +13,7 @@ export { Placeholder, type PlaceholderProps } from "./placeholder"
 export * from "./stream"
 
 // Writing figures and prose the way every block does.
-export { figureText, metricValue, CAPTION_TONE, BADGE_TONE } from "./format"
+export { figureText, metricValue, humanWait, CAPTION_TONE, BADGE_TONE } from "./format"
 export { prose, strong } from "./prose"
 
 // Parts more than one block draws with.

@@ -122,7 +122,6 @@ function Conversation({
   return (
     <ChatSession
       spec={chat.spec}
-      variant="cli"
       icons={CHAT_ICONS}
       header={
         // The session's header is the host's: here, the agent header, fed from the spec the API

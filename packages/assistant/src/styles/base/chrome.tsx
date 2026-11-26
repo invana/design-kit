@@ -1,32 +1,35 @@
 import * as React from "react"
 import { cn } from "@invana/ui"
 
-import { ChatSessionMessageOptions, type ChatSessionMessageAction } from "../../conversations/thread"
 import type { AnswerTurn } from "../../protocol/types"
 import type { ChatSessionBuiltInAction } from "../types"
 import { useChatSessionContext } from "./context"
 import { isAnswer, plainText, runOutcome } from "./model"
 
 const HEADER_BUTTON =
-  "inline-flex size-[22px] shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
 
 /**
- * The session's title bar: what the thread is about, how long it is, and at
- * the right History (one step back, to the list of conversations), New and
- * close — each drawn only when the host handles it (`onHistory`,
- * `onNewConversation`, `onClose`).
+ * The session's title bar: what the thread is about and, on a wide panel, the
+ * World it reads; at the right History (one step back, to the list of
+ * conversations), New and close — each drawn only when the host handles it
+ * (`onHistory`, `onNewConversation`, `onClose`).
  */
 export function SessionHeader({ onClose, className }: { onClose?: () => void; className?: string }) {
   const ctx = useChatSessionContext()
-  const prompts = ctx.spec.turns.filter((t) => t.role === "analyst").length
+  const world = ctx.spec.access?.kind === "world" ? ctx.spec.access.label : undefined
   return (
-    <div className={cn("flex h-[34px] shrink-0 items-center gap-2 border-b border-border px-3", className)}>
-      <span className="min-w-0 truncate font-medium">{ctx.spec.title}</span>
-      {prompts ? (
-        <span className="shrink-0 text-muted-foreground tabular-nums">
-          · {prompts} {prompts === 1 ? "question" : "questions"}
-        </span>
-      ) : null}
+    <header
+      className={cn(
+        "flex h-10 shrink-0 items-center gap-2 border-b border-border pr-3 pl-3 @md:pl-6",
+        className,
+      )}
+    >
+      <span aria-hidden className="inline-flex shrink-0 [&_svg]:size-3.5">
+        {ctx.icons.session}
+      </span>
+      <span className="min-w-0 truncate font-semibold">{ctx.spec.title}</span>
+      {world ? <span className="hidden shrink-0 text-sm text-muted-foreground @md:inline">World · {world}</span> : null}
       <span className="ml-auto flex shrink-0 items-center gap-0.5">
         {ctx.canHistory ? (
           <button
@@ -56,8 +59,18 @@ export function SessionHeader({ onClose, className }: { onClose?: () => void; cl
           </button>
         ) : null}
       </span>
-    </div>
+    </header>
   )
+}
+
+/** One action beside a settled answer. */
+interface AnswerAction {
+  icon: React.ReactNode
+  label: string
+  onClick: () => void
+  active?: boolean
+  activeClassName?: string
+  disabled?: boolean
 }
 
 const SETTLED_RATEABLE = new Set(["complete", "partial"])
@@ -79,7 +92,7 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
     ctx.rate(turn.id, next)
     ctx.emit({ type: "rate", turn: turn.id, value: next })
   }
-  const built: Record<ChatSessionBuiltInAction, () => ChatSessionMessageAction[]> = {
+  const built: Record<ChatSessionBuiltInAction, () => AnswerAction[]> = {
     retry: () => [
       {
         icon: ctx.icons.retry,
@@ -104,12 +117,23 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
     steps: () => {
       if (!turn.trace?.length) return []
       const open = ctx.stepsOpen(turn.id, false)
-      return [{ icon: ctx.icons.steps, label: "Steps", active: open, onClick: () => ctx.setSteps(turn.id, !open) }]
+      return [{ icon: ctx.icons.steps, label: "Open every step", active: open, onClick: () => ctx.setSteps(turn.id, !open) }]
     },
-    report: () =>
-      ctx.opensRuns && turn.trace?.length
-        ? [{ icon: ctx.icons.report, label: "Run report", onClick: () => ctx.emit({ type: "open-run", turn: turn.id }) }]
-        : [],
+    report: () => {
+      if (!turn.report && !(ctx.opensRuns && turn.trace?.length)) return []
+      const open = ctx.reportOpen(turn.id)
+      return [
+        {
+          icon: ctx.icons.report,
+          label: "Run report",
+          active: open,
+          onClick: () => {
+            if (turn.report) ctx.toggleReport(turn.id, !open)
+            if (ctx.opensRuns) ctx.emit({ type: "open-run", turn: turn.id })
+          },
+        },
+      ]
+    },
     rate: () =>
       SETTLED_RATEABLE.has(turn.state)
         ? [
@@ -130,7 +154,7 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
           ]
         : [],
   }
-  const actions = ctx.actions.flatMap((a): ChatSessionMessageAction[] =>
+  const actions = ctx.actions.flatMap((a): AnswerAction[] =>
     typeof a === "string"
       ? built[a]()
       : !a.states || a.states.includes(turn.state)
@@ -138,46 +162,27 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
         : [],
   )
   if (!actions.length) return null
-  // All at the end: the row's start is the answer's time. Small and quiet — they
-  // sit on a line of metadata, not beside the answer's words; whatever size the
-  // host's icons are, they draw at 11px, and come up to full strength on hover.
+  // Square toggles at the line's end; a pressed one is lit.
   return (
-    <ChatSessionMessageOptions
-      actions={actions.map((a) => ({
-        ...a,
-        align: "end",
-        className: cn(
-          "size-5 hover:bg-transparent [&_svg]:!size-[11px]",
-          !a.active && "text-muted-foreground/60 hover:text-foreground",
-        ),
-      }))}
-    />
-  )
-}
-
-/** A settled answer's line: what it says at the left, its actions at the right. */
-export function AnswerLine({ turn, children }: { turn: AnswerTurn; children?: React.ReactNode }) {
-  return (
-    <div className="flex min-w-0 items-center gap-2">
-      {children ? <div className="min-w-0 shrink truncate">{children}</div> : null}
-      <div className="min-w-0 flex-1">
-        <AnswerActions turn={turn} />
-      </div>
-    </div>
-  )
-}
-
-/** The keys that work now: send and newline, or stop while a run is in flight. */
-export function KeyHints({ running }: { running: boolean }) {
-  return running ? (
-    <>
-      <span>esc stop</span>
-    </>
-  ) : (
-    <>
-      <span>↵ send</span>
-      <span>⇧↵ newline</span>
-    </>
+    <span className="ml-auto flex shrink-0 items-center gap-2">
+      {actions.map((a) => (
+        <button
+          key={a.label}
+          type="button"
+          aria-label={a.label}
+          title={a.label}
+          aria-pressed={a.active === undefined ? undefined : a.active}
+          disabled={a.disabled}
+          onClick={a.onClick}
+          className={cn(
+            "inline-flex size-7 items-center justify-center rounded-control border text-foreground disabled:opacity-50 [&_svg]:size-[15px]",
+            a.active ? cn("border-primary bg-secondary", a.activeClassName) : "border-border hover:bg-accent",
+          )}
+        >
+          {a.icon}
+        </button>
+      ))}
+    </span>
   )
 }
 

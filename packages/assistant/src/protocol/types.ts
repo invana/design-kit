@@ -237,8 +237,85 @@ export interface AnswerTurn {
   meta?: string
   /** What the run produced, outside the thread, and what can be done with it. */
   outcome?: Outcome
+  /** The run in counters. Its report icon shows them under the answer. */
+  report?: RunReport
   /** How the analyst rated it — `1` good, `-1` not what they wanted. Sent as a `rate` event. */
   rating?: number
+}
+
+/**
+ * What a run did, counted by the API as it settles — the session only words
+ * these. Drawn inline under the answer when its report is opened.
+ */
+export interface RunReport {
+  /** The run's id — `7c3e10`. */
+  id?: string
+  /** Settled, or still counting. @default true */
+  final?: boolean
+  /** Tool calls made. */
+  calls: number
+  /** Of them, the ones that only read. */
+  reads: number
+  /** Of them, the ones that proposed or wrote. */
+  writes: number
+  failed: number
+  /** Proposed changes and over-limit reads the analyst approved. */
+  approved: number
+  /** Rows read from the data. */
+  rows: number
+  /** Files read from the data. */
+  files?: number
+  /** Calls to the LLM. */
+  llmCalls?: number
+  tokens: { in: number; out: number }
+  /** How long the run took, in ms. */
+  duration?: number
+  /** Of it, how long the run waited on the analyst, in ms. */
+  waited?: number
+  /** The line under a figure, by its name — `{ failed: "fixed on retry" }`. */
+  captions?: Partial<Record<RunFigure, string>>
+  /** The same, per connection the run reached; the LLM's provider among them. */
+  connections?: RunConnection[]
+  /** What went wrong or needed the analyst, each pointing at its step. */
+  issues?: { tone: "error" | "warning" | "success"; text: string; step?: string }[]
+  /** What left for the LLM, by what it was — and, when counted, `chars` of `count` values. */
+  sent?: { label: string; count?: number; chars?: number }[]
+  /** What the run read and kept back from the LLM — `41,906 departure rows: counted in Postgres`. */
+  notSent?: string[]
+  /** Connections the session may reach that the run did not touch. */
+  untouched?: string[]
+}
+
+/** The figures a run report shows, by name. */
+export type RunFigure =
+  | "calls"
+  | "reads"
+  | "writes"
+  | "failed"
+  | "approved"
+  | "rows"
+  | "files"
+  | "connections"
+  | "llmCalls"
+  | "tokensIn"
+  | "tokensOut"
+  | "duration"
+
+/** One connection's part in a run. */
+export interface RunConnection {
+  name: string
+  calls: number
+  /** Of the calls, the ones that only read; and the ones that wrote. */
+  reads?: number
+  writes?: number
+  failed?: number
+  /** Rows read, or files when `files` is set. */
+  rows: number
+  files?: number
+  /** Rows or values handed back to the run. */
+  returned?: number
+  /** For the LLM's provider: tokens in and out, in place of rows. */
+  tokens?: { in: number; out: number }
 }
 
 /**
@@ -267,14 +344,6 @@ export interface ConversationSummary {
 export interface ConversationSpec {
   id: string
   title?: string
-  /**
-   * What the analyst is called in this thread — `Planner`, `Researcher`. When
-   * set, their prompts and the assistant's asks are labelled with who is
-   * speaking; answers are cards and need no label.
-   */
-  analyst?: string
-  /** What the assistant is called in this thread — `Analyst`. Labels its turns where speakers are labelled. */
-  assistant?: string
   /** Scope carried by the whole thread, until a turn changes it. */
   scope?: Record<string, string>
   /**
@@ -350,6 +419,12 @@ export interface ComposerOption {
   placeholder?: string
   /** Set the prompt in mono while this is picked — a query language. */
   mono?: boolean
+  /** Options sharing a group are listed under its heading — the LLMs of one provider. */
+  group?: string
+  /** Muted after the label — `the default · tools`. */
+  hint?: string
+  /** Listed, but not to be picked. */
+  disabled?: boolean
 }
 
 /**
@@ -363,12 +438,18 @@ export interface ComposerControl {
   options: ComposerOption[]
   /** Picked at first. Defaults to the first option. */
   default?: string
+  /** The host holds the value: what is shown, whatever was picked. A pick is still sent as `setting`. */
+  value?: string
   /** `start` sits with the text controls; `end` beside send. @default "start" */
   align?: "start" | "end"
   /** An icon before the value: the path data of a 16×16 stroked icon. */
   icon?: string
   /** Muted: a setting, not the mode. */
   quiet?: boolean
+  /** A line at the top of the open list — what the choice means. */
+  note?: string
+  /** What the trigger says when nothing matches the value. */
+  placeholder?: string
 }
 
 /** Something the analyst added for the assistant to look at — a type, a stitch — as a chip above the composer. */
@@ -394,6 +475,4 @@ export interface ComposerSpec {
   context?: ComposerContext[]
   /** Offer attaching files; `accept` is the input's accept list. */
   attach?: boolean | { accept?: string; multiple?: boolean }
-  /** Keyboard hints under the composer — `↵ send`, `esc stop`. @default true */
-  hints?: boolean
 }
