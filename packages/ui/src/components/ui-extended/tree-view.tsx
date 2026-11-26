@@ -130,7 +130,7 @@ export const TreeView: React.FC<TreeViewProps> = ({
   return (
     <Ctx.Provider value={ctx}>
       {column ? (
-        <div className={cn("flex h-full w-full flex-col bg-background text-foreground", props.className)} style={props.style}>
+        <div className={cn("flex h-full w-full flex-col text-foreground", props.className)} style={props.style}>
           {props.header || search ? (
             <div className="shrink-0 px-3 pt-1.5 pb-2">
               {props.header}
