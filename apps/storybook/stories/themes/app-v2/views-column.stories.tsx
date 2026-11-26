@@ -23,6 +23,7 @@ import {
   Settings,
   Share2,
   ShieldCheck,
+  User,
 } from 'lucide-react';
 import { RAIL_TOGGLE } from '../../_story/rail-toggle';
 
@@ -113,6 +114,7 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
   const [collapsed, setCollapsed] = React.useState(initiallyCollapsed);
   const [view, setView] = React.useState('models');
   const [graph, setGraph] = React.useState('airways');
+  const [accountClicks, setAccountClicks] = React.useState(0);
 
   const groups = VIEW_GROUPS.map((g) => ({
     ...g,
@@ -132,6 +134,7 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
         expanded: !collapsed,
         onExpandedChange: (open) => setCollapsed(!open),
         toggle: RAIL_TOGGLE,
+        bottomNavItems: [{ key: 'account', name: 'Account', icon: User, onClick: () => setAccountClicks((n) => n + 1) }],
         header: {
           title: 'Model',
           actions: (
@@ -173,7 +176,7 @@ function Shell({ initiallyCollapsed }: { initiallyCollapsed: boolean }) {
         content: (
           <div className="p-4">
             <TypographyMuted>
-              Open view: {view}. The views column is {collapsed ? 'folded to its rail' : 'open'}.
+              Open view: {view}. The views column is {collapsed ? 'folded to its rail' : 'open'}.{accountClicks ? ` Account clicked ${accountClicks}.` : ''}
             </TypographyMuted>
           </div>
         ),
@@ -256,6 +259,17 @@ export const Pinned: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Expand' }));
     await expect(canvas.getByText('Open view: guardrails. The views column is open.')).toBeInTheDocument();
     await expect(canvas.getByPlaceholderText('Filter guardrails')).toBeInTheDocument();
+  },
+};
+
+/** 5 · A bottom action (Account) is not a view: it never opens or closes the tree. */
+export const BottomAction: Story = {
+  render: () => <Shell initiallyCollapsed />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: /Account/ }));
+    await expect(canvas.getByText(/Account clicked 1/)).toBeInTheDocument();
+    await expect(canvas.queryByPlaceholderText(/^Filter/)).not.toBeInTheDocument();
   },
 };
 

@@ -50,7 +50,7 @@ export interface AppLayoutV2Props {
    * The tree column beside the rail. While the rail is open (`leftNav.expanded`
    * not `false`) it is a resizable column. While the rail is folded
    * (`leftNav.expanded === false`) it still opens, in the same place: activating a
-   * rail item shows it beside the rail and main gives way, Escape or the lit item
+   * view on the rail (not a `bottomNavItems` action) shows it beside the rail and main gives way, Escape or the lit item
    * again closes it, and the rail's expand control keeps it open. On the open rail the
    * lit item again hides the column and any item shows it. The rail holds the
    * selection and the expanded state in both modes, so a folded rail is the
@@ -129,7 +129,8 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [peekOpen]);
-  // Every rail item (not the expand control) also opens the column; the lit one toggles it.
+  // Every view on the rail (`topNavItems` and `groups`) also opens the column, and the lit one toggles it.
+  // `bottomNavItems` are actions (Settings, the account): they never open or close it.
   const opens = (item: NavVerticalItem): NavVerticalItem =>
     item.onClick
       ? {
@@ -147,7 +148,6 @@ export const AppLayoutV2: React.FC<AppLayoutV2Props> = ({
       ? {
           ...leftNav,
           topNavItems: leftNav.topNavItems?.map(opens),
-          bottomNavItems: leftNav.bottomNavItems?.map(opens),
           groups: leftNav.groups?.map((g) => ({ ...g, items: g.items.map(opens) })),
         }
       : leftNav;
