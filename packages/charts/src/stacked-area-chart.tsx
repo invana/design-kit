@@ -27,7 +27,7 @@ import { useLatest } from "./base/use-latest"
 export interface AreaSeries {
   key: string
   label: string
-  /** A token — `var(--color-data-1)`. */
+  /** A token — `var(--color-data-blue)`. */
   color: string
 }
 

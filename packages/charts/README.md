@@ -35,7 +35,7 @@ The charts use kit tokens and Tailwind utilities, so your stylesheet must compil
 2. Then your `@source` globs, with this package among them.
 3. Then `@invana/styling`.
 
-Importing `@invana/styling` is what gives you `--color-data-1…8`, the status tokens and the
+Importing `@invana/styling` is what gives you `--color-data-blue` … `--color-data-red` (eight hues, in slot order), the status tokens and the
 `--text-*` type ladder. The charts read all three. No uPlot stylesheet is needed: the few rules
 uPlot needs are installed once at runtime.
 
@@ -99,7 +99,7 @@ import { LineChart, StackedBarChartV, StackedAreaChart } from '@invana/charts';
 />;
 ```
 
-Colours are always tokens (`var(--color-data-3)`, `var(--color-success)`), never literal
+Colours are always tokens (`var(--color-data-aqua)`, `var(--color-success)`), never literal
 values. The status tokens are only for series that *are* a status.
 
 ## The chart base
@@ -109,7 +109,7 @@ Every uPlot chart sits on one internal frame, which does the following:
 - **Sizes to its container** with a `ResizeObserver` and draws at its real width, so axis text
   is never stretched.
 - **Resolves tokens** with `getComputedStyle`, since a canvas cannot read `var()`. It resolves:
-  - `--color-data-1…8`
+  - `--color-data-blue` … `--color-data-red` (eight hues, in slot order)
   - `--color-success`, `--color-warning`, `--color-destructive`
   - `--color-foreground`, `--color-muted-foreground`, `--color-border`, `--color-card`
   - the `--text-*` sizes

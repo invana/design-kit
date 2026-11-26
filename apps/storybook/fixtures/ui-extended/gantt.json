@@ -182,7 +182,7 @@
     "spanMs": 6000,
     "ticks": 6,
     "labelWidth": 120,
-    "palette": { "network": "bg-data-3", "ingest": "bg-data-1", "work_write": "bg-data-6" },
+    "palette": { "network": "bg-data-aqua", "ingest": "bg-data-blue", "work_write": "bg-data-green" },
     "tasks": [
       {
         "key": "network",

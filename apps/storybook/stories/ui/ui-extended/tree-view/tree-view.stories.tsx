@@ -132,7 +132,7 @@ const MODEL_TREE: TreeItem[] = [
   {
     id: 'AirRoutes',
     label: 'AirRoutes',
-    icon: <Circle size={12} className="text-data-1" aria-hidden />,
+    icon: <Circle size={12} className="text-data-blue" aria-hidden />,
     meta: 'v1 · v2 draft',
     metaTone: 'warning',
     group: 'airways · Neo4j',
@@ -161,7 +161,7 @@ const MODEL_TREE: TreeItem[] = [
   {
     id: 'Deals',
     label: 'Deals',
-    icon: <Circle size={12} className="text-data-4" aria-hidden />,
+    icon: <Circle size={12} className="text-data-yellow" aria-hidden />,
     meta: 'v1',
     group: 'airways · Neo4j',
     title: '4 node · 4 edge types',

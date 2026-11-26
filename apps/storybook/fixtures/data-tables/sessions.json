@@ -3,32 +3,32 @@
     {
       "id": "graph",
       "label": "Graph",
-      "swatch": "bg-data-1"
+      "swatch": "bg-data-blue"
     },
     {
       "id": "models",
       "label": "Data models",
-      "swatch": "bg-data-2"
+      "swatch": "bg-data-orange"
     },
     {
       "id": "skills",
       "label": "Skills",
-      "swatch": "bg-data-3"
+      "swatch": "bg-data-aqua"
     },
     {
       "id": "llm",
       "label": "LLM",
-      "swatch": "bg-data-4"
+      "swatch": "bg-data-yellow"
     },
     {
       "id": "third",
       "label": "Third party",
-      "swatch": "bg-data-5"
+      "swatch": "bg-data-magenta"
     },
     {
       "id": "cache",
       "label": "Cache",
-      "swatch": "bg-data-6"
+      "swatch": "bg-data-green"
     }
   ],
   "sessions": [

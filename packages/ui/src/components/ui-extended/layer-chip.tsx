@@ -50,7 +50,7 @@ export const layerLabel = (layer: Layer): string => layer.replace(/_/g, " ")
  * component's.
  *
  * Both are class strings rather than colours, so a surface spends whatever
- * palette its own Tailwind build already has: `bg-data-7` from
+ * palette its own Tailwind build already has: `bg-data-violet` from
  * `@invana/styling`, a brand token, a plain `bg-violet-500`. A component that
  * held the map would force every consumer onto the kit's palette *and* onto a
  * stylesheet that defines it — which is how `bg-data-*` came to be dead in the
@@ -72,11 +72,11 @@ export const layerLabel = (layer: Layer): string => layer.replace(/_/g, " ")
  *   makes a legible 6px dot is often not the one that makes legible 13px mono.
  */
 export interface LayerPaint {
-  /** The solid mark — `bg-data-7`. */
+  /** The solid mark — `bg-data-violet`. */
   swatch?: string
-  /** The wash, ground and edge — `border-data-7/35 bg-data-7/10`. */
+  /** The wash, ground and edge — `border-data-violet/35 bg-data-violet/10`. */
   tint?: string
-  /** The hue as type, for an address that should read as its layer — `text-data-7`. */
+  /** The hue as type, for an address that should read as its layer — `text-data-violet`. */
   text?: string
 }
 
@@ -136,7 +136,7 @@ export interface LayerChipProps
    */
   dim?: boolean
   /**
-   * This chip's swatch class, given directly — `bg-data-7`, `bg-violet-500`.
+   * This chip's swatch class, given directly — `bg-data-violet`, `bg-violet-500`.
    * The shortest path when a call site draws one chip and knows its layer.
    * Wins over {@link LayerChipProps.palette}.
    */

@@ -801,7 +801,7 @@ export interface GanttOptions {
   density?: "compact" | "comfortable"
   /** The task picked — a restored view. Picking one sends `select` with its key. */
   selected?: string
-  /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-1" }`. */
+  /** A segment's `group` → the class that paints it — `{ "ingest": "bg-data-blue" }`. */
   palette?: Record<string, string>
   /** Gates — a moment the run held and spent nothing — ruled under the row they follow. */
   seams?: GanttSpecSeam[]

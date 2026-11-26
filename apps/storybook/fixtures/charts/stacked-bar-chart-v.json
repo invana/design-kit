@@ -82,10 +82,10 @@
         { "label": "today", "values": { "agent": 880, "plan": 308, "explorer": 185, "api": 27 } }
       ],
       "series": [
-        { "key": "agent", "label": "agent", "color": "var(--color-data-7)" },
-        { "key": "plan", "label": "plan", "color": "var(--color-data-5)" },
-        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-6)" },
-        { "key": "api", "label": "API", "color": "var(--color-data-4)" }
+        { "key": "agent", "label": "agent", "color": "var(--color-data-violet)" },
+        { "key": "plan", "label": "plan", "color": "var(--color-data-magenta)" },
+        { "key": "explorer", "label": "Explorer", "color": "var(--color-data-green)" },
+        { "key": "api", "label": "API", "color": "var(--color-data-yellow)" }
       ],
       "ticks": [1, 8, 15, 22, 29],
       "height": 140

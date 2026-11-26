@@ -16,7 +16,7 @@ const VERDICT: Record<Verdict, { row?: string; text: string }> = {
   egress: { row: 'bg-destructive/5 hover:bg-destructive/10', text: 'text-destructive' },
   warn: { row: 'bg-warning/10 hover:bg-warning/15', text: 'text-warning' },
   approved: { row: 'bg-success/10 hover:bg-success/15', text: 'text-success' },
-  masked: { text: 'text-data-7' },
+  masked: { text: 'text-data-violet' },
   allow: { text: 'text-success' },
 };
 

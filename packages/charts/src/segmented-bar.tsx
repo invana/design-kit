@@ -30,7 +30,7 @@ import {
 export interface SegmentSeries {
   key: string
   label: string
-  /** A token — `var(--color-data-7)`. */
+  /** A token — `var(--color-data-violet)`. */
   color: string
 }
 

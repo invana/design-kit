@@ -24,7 +24,7 @@
       { "type": "step", "seq": 9, "name": "deliver", "description": "Rows and summary handed to the canvas", "layer": "agent", "role": "spine", "duration": "0.1s", "note": "done" }
     ],
     "legend": [
-      { "kind": "stripe", "color": "var(--color-data-1)", "label": "the stripe is the layer — a step touches exactly one" },
+      { "kind": "stripe", "color": "var(--color-data-blue)", "label": "the stripe is the layer — a step touches exactly one" },
       { "kind": "bracket", "color": "var(--color-warning)", "label": "a bounded repetition contains its rounds" },
       { "kind": "rule", "color": "var(--color-destructive)", "label": "a gate lies between rows — above it, nothing is spent" }
     ]

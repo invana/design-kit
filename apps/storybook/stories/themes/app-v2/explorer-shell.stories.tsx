@@ -98,19 +98,19 @@ type Story = StoryObj<typeof meta>;
 // are independent here too.
 
 const NODE_TYPES = [
-  { name: 'Stock', color: 'var(--color-data-1)', count: 512 },
-  { name: 'Article', color: 'var(--color-data-2)', count: 21390 },
-  { name: 'Observation', color: 'var(--color-data-3)', count: 1912 },
-  { name: 'Learning', color: 'var(--color-data-4)', count: 640 },
-  { name: 'Pattern', color: 'var(--color-data-5)', count: 9 },
-  { name: 'Filing', color: 'var(--color-data-6)', count: null },
+  { name: 'Stock', color: 'var(--color-data-blue)', count: 512 },
+  { name: 'Article', color: 'var(--color-data-orange)', count: 21390 },
+  { name: 'Observation', color: 'var(--color-data-aqua)', count: 1912 },
+  { name: 'Learning', color: 'var(--color-data-yellow)', count: 640 },
+  { name: 'Pattern', color: 'var(--color-data-magenta)', count: 9 },
+  { name: 'Filing', color: 'var(--color-data-green)', count: null },
 ];
 
 const EDGE_TYPES = [
-  { name: 'MENTIONS', color: 'var(--color-data-2)', count: 48210 },
-  { name: 'SUPPORTS', color: 'var(--color-data-3)', count: 2104 },
-  { name: 'DERIVED_FROM', color: 'var(--color-data-4)', count: 913 },
-  { name: 'CONTRADICTS', color: 'var(--color-data-5)', count: 61 },
+  { name: 'MENTIONS', color: 'var(--color-data-orange)', count: 48210 },
+  { name: 'SUPPORTS', color: 'var(--color-data-aqua)', count: 2104 },
+  { name: 'DERIVED_FROM', color: 'var(--color-data-yellow)', count: 913 },
+  { name: 'CONTRADICTS', color: 'var(--color-data-magenta)', count: 61 },
 ];
 
 const RESULT_ROWS = [
@@ -464,7 +464,7 @@ function ExplorerShellDemo() {
                                     <div className="flex items-baseline gap-2">
                                       <span
                                         aria-hidden
-                                        style={{ color: 'var(--color-data-3)' }}
+                                        style={{ color: 'var(--color-data-aqua)' }}
                                         className="size-2 shrink-0 rounded-full bg-current"
                                       />
                                       <span className="truncate font-mono text-sm">

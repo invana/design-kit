@@ -12,10 +12,10 @@ interface Args {
 
 /** The hues are the caller's — the kit ships none. */
 const PALETTE: LayerPalette = {
-  graph_data: { swatch: 'bg-data-1' },
-  llm: { swatch: 'bg-data-7' },
-  third_party: { swatch: 'bg-data-8' },
-  human: { swatch: 'bg-data-6' },
+  graph_data: { swatch: 'bg-data-blue' },
+  llm: { swatch: 'bg-data-violet' },
+  third_party: { swatch: 'bg-data-red' },
+  human: { swatch: 'bg-data-green' },
 };
 
 const meta = {
@@ -31,7 +31,7 @@ const meta = {
             picked.map((v) => ({
               comment: v.caption,
               data: { sections: v.sections },
-              setup: "const palette: LayerPalette = { graph_data: { swatch: 'bg-data-1' }, llm: { swatch: 'bg-data-7' }, third_party: { swatch: 'bg-data-8' } };",
+              setup: "const palette: LayerPalette = { graph_data: { swatch: 'bg-data-blue' }, llm: { swatch: 'bg-data-violet' }, third_party: { swatch: 'bg-data-red' } };",
               call: [
                 `<PanelBox title="${v.title}" aside="${v.aside}">`,
                 '  {sections.map((s) => (',

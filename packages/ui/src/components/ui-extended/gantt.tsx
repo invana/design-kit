@@ -189,7 +189,7 @@ export interface GanttProps
   /** Gates, ruled across the time they held. */
   seams?: GanttSeam[]
   /**
-   * What each bar `group` is painted with — `{ ingest: "bg-data-1" }`. The
+   * What each bar `group` is painted with — `{ ingest: "bg-data-blue" }`. The
    * kit ships no hues: a group nobody painted keeps its status fill.
    */
   palette?: Record<string, string>

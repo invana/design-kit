@@ -16,11 +16,11 @@ import { VariantGrid, type Variant } from '../../../_story/variant-grid';
 const PALETTE: BoundPalette = {
   network: 'bg-warning',
   graph_read: 'bg-success',
-  graph_write: 'bg-data-2',
-  schema_write: 'bg-data-4',
+  graph_write: 'bg-data-orange',
+  schema_write: 'bg-data-yellow',
   ingest: 'bg-info',
-  llm: 'bg-data-7',
-  plan_write: 'bg-data-5',
+  llm: 'bg-data-violet',
+  plan_write: 'bg-data-magenta',
   work_write: 'bg-destructive',
 };
 

@@ -24,7 +24,7 @@ export interface ChipSpec {
   /** Renders a `BoundChip` instead of a `Badge`. Set `label` or this, not both. */
   bound?: Bound
   /**
-   * The bound's swatch class — `bg-data-7`. `BoundChip` ships no hues, so a
+   * The bound's swatch class — `bg-data-violet`. `BoundChip` ships no hues, so a
    * spec that names a bound and no swatch draws in the neutral.
    */
   swatch?: string

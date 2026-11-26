@@ -44,7 +44,7 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
       values,
       width = 72,
       height = 20,
-      color = "var(--color-data-1)",
+      color = "var(--color-data-blue)",
       area,
       strokeWidth = 2,
       endMarker = true,

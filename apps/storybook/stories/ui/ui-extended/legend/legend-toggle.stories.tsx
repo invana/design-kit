@@ -12,8 +12,8 @@ export default meta;
 type Story = StoryObj;
 
 const TYPES = [
-  { label: 'character', kind: 'dot' as const, color: 'var(--color-data-1)', count: '77' },
-  { label: 'location', kind: 'dot' as const, color: 'var(--color-data-2)', count: '12' },
+  { label: 'character', kind: 'dot' as const, color: 'var(--color-data-blue)', count: '77' },
+  { label: 'location', kind: 'dot' as const, color: 'var(--color-data-orange)', count: '12' },
   { label: 'co-appears-with', kind: 'line' as const, count: '254' }
 ];
 

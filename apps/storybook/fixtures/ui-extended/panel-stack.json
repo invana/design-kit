@@ -371,10 +371,10 @@
         "body": {
           "kind": "legend",
           "items": [
-            { "label": "Stock", "color": "var(--color-data-1)" },
-            { "label": "Article", "color": "var(--color-data-2)" },
-            { "label": "Observation", "color": "var(--color-data-3)" },
-            { "label": "Learning", "color": "var(--color-data-4)" }
+            { "label": "Stock", "color": "var(--color-data-blue)" },
+            { "label": "Article", "color": "var(--color-data-orange)" },
+            { "label": "Observation", "color": "var(--color-data-aqua)" },
+            { "label": "Learning", "color": "var(--color-data-yellow)" }
           ]
         }
       },

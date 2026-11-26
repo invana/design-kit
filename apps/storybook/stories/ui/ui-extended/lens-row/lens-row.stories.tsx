@@ -9,11 +9,11 @@ import { VariantGrid, type Log, type Variant } from '../../../_story/variant-gri
 
 /** The hues are the caller's — these components ship none. */
 const PALETTE: LayerPalette = {
-  graph_data: { swatch: 'bg-data-1' },
-  llm: { swatch: 'bg-data-7' },
-  third_party: { swatch: 'bg-data-8' },
-  cache: { swatch: 'bg-data-3' },
-  human: { swatch: 'bg-data-6' },
+  graph_data: { swatch: 'bg-data-blue' },
+  llm: { swatch: 'bg-data-violet' },
+  third_party: { swatch: 'bg-data-red' },
+  cache: { swatch: 'bg-data-aqua' },
+  human: { swatch: 'bg-data-green' },
 };
 
 interface LensRowVariant extends Variant {
