@@ -4,10 +4,13 @@ import { fn } from 'storybook/test';
 import { EVENT_TYPES, type ChatSessionProps, type ChatSessionIcons, type ConversationEvent } from '@invana/assistant';
 import {
   ArrowUp,
+  ChartColumn,
   Copy,
+  History,
   List,
   Paperclip,
   Pin,
+  Plus,
   RotateCw,
   Square,
   ThumbsDown,
@@ -27,6 +30,9 @@ export const CHAT_ICONS: ChatSessionIcons = {
   retry: <RotateCw className="size-3" />,
   copy: <Copy className="size-3" />,
   steps: <List className="size-3" />,
+  history: <History className="size-3.5" />,
+  newChat: <Plus className="size-3.5" />,
+  report: <ChartColumn className="size-3" />,
   rateUp: <ThumbsUp className="size-3" />,
   rateDown: <ThumbsDown className="size-3" />,
 };

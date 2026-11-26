@@ -33,6 +33,8 @@ export function ChatSessionTurn({ turn, onEvent, registry, now }: ChatSessionTur
     icons: DEFAULT_ICONS,
     now: now ?? clock,
     opensRuns: false,
+    canHistory: false,
+    canNew: false,
     stepsOpen: view.stepsOpen,
     toggleSteps: view.toggleSteps,
     setSteps: (turnId, open) => {

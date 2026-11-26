@@ -253,6 +253,17 @@ export interface Outcome {
 
 export type Turn = AnalystTurn | AskTurn | AnswerTurn
 
+/** One conversation in the host's list of conversations — JSON, like everything else. */
+export interface ConversationSummary {
+  id: string
+  /** What it was about — the first question, or the title the host gave it. */
+  title: string
+  /** When it was last used, as an ISO 8601 time. Shown as `2 min ago`. */
+  at?: string
+  /** What else to say under the title — `claude-sonnet-5-5 · 4 questions`. */
+  meta?: string
+}
+
 export interface ConversationSpec {
   id: string
   title?: string

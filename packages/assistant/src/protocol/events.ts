@@ -2,7 +2,8 @@
  * Everything the analyst can do, as data. The component never acts on a
  * conversation itself: it reports an event, and the API answers with patches.
  *
- * Every event but `prompt`, `stop`, `setting` and `remove-context` names the turn it came from.
+ * Every event but `prompt`, `stop`, `setting`, `remove-context`, `history`, `new-conversation` and
+ * `open-conversation` names the turn it came from.
  */
 export type ConversationEvent =
   /**
@@ -47,6 +48,12 @@ export type ConversationEvent =
   | { type: "toggle-steps"; turn: string; open: boolean }
   /** A context chip's × was clicked: the host takes it out of `composer.context`. */
   | { type: "remove-context"; id: string }
+  /** The header's History was clicked: the host shows its list of conversations, one step back. */
+  | { type: "history" }
+  /** The header's New, or the list's, was clicked: the host starts an empty conversation. */
+  | { type: "new-conversation" }
+  /** A conversation was picked from the list: the host opens it. */
+  | { type: "open-conversation"; id: string }
 
 export type ConversationEventType = ConversationEvent["type"]
 
@@ -69,4 +76,7 @@ export const EVENT_TYPES = [
   "copy",
   "toggle-steps",
   "remove-context",
+  "history",
+  "new-conversation",
+  "open-conversation",
 ] as const satisfies readonly ConversationEventType[]

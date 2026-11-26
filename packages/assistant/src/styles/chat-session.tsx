@@ -139,6 +139,8 @@ export const ChatSession = React.forwardRef<ChatSessionHandle, ChatSessionProps>
     icons: resolvedIcons,
     now,
     opensRuns: typeof props.onOpenRun === "function",
+    canHistory: typeof props.onHistory === "function",
+    canNew: typeof props.onNewConversation === "function",
     stepsOpen: viewState.stepsOpen,
     toggleSteps: viewState.toggleSteps,
     setSteps: (turnId, open) => {

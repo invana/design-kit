@@ -18,6 +18,10 @@ export interface ChatSessionContextValue {
   now: number
   /** Whether the host opens runs itself (`onOpenRun`); if not, the time opens the steps in place. */
   opensRuns: boolean
+  /** The host shows a list of conversations (`onHistory`): the header draws History. */
+  canHistory: boolean
+  /** The host starts conversations (`onNewConversation`): the header draws New. */
+  canNew: boolean
   /** An answer's steps shown, or folded to one line. Unset follows the run: open while it runs. */
   stepsOpen: (turnId: string, live: boolean) => boolean
   toggleSteps: (turnId: string, open?: boolean) => void
@@ -55,6 +59,9 @@ export const DEFAULT_ICONS: ChatSessionIcons = {
   retry: "↻",
   copy: "⧉",
   steps: "≡",
+  history: "⟲",
+  newChat: "+",
+  report: "▤",
   rateUp: "+1",
   rateDown: "−1",
 }

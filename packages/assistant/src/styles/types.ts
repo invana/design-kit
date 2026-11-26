@@ -35,6 +35,12 @@ export interface ChatSessionIcons {
   retry: React.ReactNode
   copy: React.ReactNode
   steps: React.ReactNode
+  /** The header's History: back to the list of conversations. */
+  history: React.ReactNode
+  /** The header's New conversation. */
+  newChat: React.ReactNode
+  /** The answer's run report, beside Steps. */
+  report: React.ReactNode
   rateUp: React.ReactNode
   rateDown: React.ReactNode
 }
@@ -42,9 +48,10 @@ export interface ChatSessionIcons {
 /**
  * The actions on a settled answer, beside its time. `retry` is sent as
  * `retry`, `copy` as `copy` (and written to the clipboard), `steps` as
- * `toggle-steps`, `rate` as `rate`.
+ * `toggle-steps`, `report` as `open-run` (drawn only when the host handles
+ * `onOpenRun`), `rate` as `rate`.
  */
-export type ChatSessionBuiltInAction = "retry" | "copy" | "steps" | "rate"
+export type ChatSessionBuiltInAction = "retry" | "copy" | "steps" | "report" | "rate"
 
 /** An action of your own on a settled answer, sent as an `action` event with its `id`. */
 export interface ChatSessionCustomAction {
@@ -58,7 +65,7 @@ export interface ChatSessionCustomAction {
 
 export type ChatSessionAnswerAction = ChatSessionBuiltInAction | ChatSessionCustomAction
 
-export const DEFAULT_ANSWER_ACTIONS: ChatSessionAnswerAction[] = ["retry", "copy", "steps", "rate"]
+export const DEFAULT_ANSWER_ACTIONS: ChatSessionAnswerAction[] = ["retry", "copy", "steps", "report", "rate"]
 
 /** What the CLI variant shows: the thread, or every step of every reply. */
 export type ChatSessionView = "chat" | "tasks"
@@ -98,7 +105,7 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /**
    * The actions beside a settled answer's time, in order — the built-ins by
    * name, yours as `{ id, label, icon }`. `[]` shows none.
-   * @default ["retry", "copy", "steps", "rate"]
+   * @default ["retry", "copy", "steps", "report", "rate"]
    */
   actions?: ChatSessionAnswerAction[]
   /**
@@ -109,7 +116,8 @@ export interface ChatSessionProps extends ChatSessionHandlers {
   /** Shows a close control in the header. */
   onClose?: () => void
   /**
-   * The header. `true` draws the session's own — title, turn count, close;
+   * The header. `true` draws the session's own — title, turn count, History
+   * (when `onHistory` is set), New (`onNewConversation`) and close;
    * `false` draws none; any node is drawn in its place, so a host composes
    * its own header from whatever it needs. @default true when the spec has a title
    */

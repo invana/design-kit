@@ -7,7 +7,15 @@ import type { ChatSessionBuiltInAction } from "../types"
 import { useChatSessionContext } from "./context"
 import { isAnswer, plainText, runOutcome } from "./model"
 
-/** The session's title bar: what the thread is about, how long it is, and close. */
+const HEADER_BUTTON =
+  "inline-flex size-[22px] shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
+
+/**
+ * The session's title bar: what the thread is about, how long it is, and at
+ * the right History (one step back, to the list of conversations), New and
+ * close — each drawn only when the host handles it (`onHistory`,
+ * `onNewConversation`, `onClose`).
+ */
 export function SessionHeader({ onClose, className }: { onClose?: () => void; className?: string }) {
   const ctx = useChatSessionContext()
   const prompts = ctx.spec.turns.filter((t) => t.role === "analyst").length
@@ -19,17 +27,35 @@ export function SessionHeader({ onClose, className }: { onClose?: () => void; cl
           · {prompts} {prompts === 1 ? "question" : "questions"}
         </span>
       ) : null}
-      {onClose ? (
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close the session"
-          title="Close"
-          className="ml-auto inline-flex size-[22px] shrink-0 items-center justify-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
-        >
-          {ctx.icons.close}
-        </button>
-      ) : null}
+      <span className="ml-auto flex shrink-0 items-center gap-0.5">
+        {ctx.canHistory ? (
+          <button
+            type="button"
+            onClick={() => ctx.emit({ type: "history" })}
+            aria-label="History"
+            title="History"
+            className={HEADER_BUTTON}
+          >
+            {ctx.icons.history}
+          </button>
+        ) : null}
+        {ctx.canNew ? (
+          <button
+            type="button"
+            onClick={() => ctx.emit({ type: "new-conversation" })}
+            aria-label="New conversation"
+            title="New conversation"
+            className={HEADER_BUTTON}
+          >
+            {ctx.icons.newChat}
+          </button>
+        ) : null}
+        {onClose ? (
+          <button type="button" onClick={onClose} aria-label="Close the session" title="Close" className={HEADER_BUTTON}>
+            {ctx.icons.close}
+          </button>
+        ) : null}
+      </span>
     </div>
   )
 }
@@ -80,6 +106,10 @@ export function AnswerActions({ turn }: { turn: AnswerTurn }) {
       const open = ctx.stepsOpen(turn.id, false)
       return [{ icon: ctx.icons.steps, label: "Steps", active: open, onClick: () => ctx.setSteps(turn.id, !open) }]
     },
+    report: () =>
+      ctx.opensRuns && turn.trace?.length
+        ? [{ icon: ctx.icons.report, label: "Run report", onClick: () => ctx.emit({ type: "open-run", turn: turn.id }) }]
+        : [],
     rate: () =>
       SETTLED_RATEABLE.has(turn.state)
         ? [
