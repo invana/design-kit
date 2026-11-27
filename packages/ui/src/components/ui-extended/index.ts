@@ -79,6 +79,7 @@ export * from './task-node';
 export * from './template-picker';
 export * from './terminal';
 export * from './timeline-list';
+export * from './tool-call-card';
 export * from './toolbar';
 export * from './touch-strip';
 export * from './presenter';
