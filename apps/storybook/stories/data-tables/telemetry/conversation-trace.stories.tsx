@@ -21,7 +21,7 @@ import {
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
 
-/** Thinking is blue and idle grey; a call's green, red and the approval's amber outline are the Gantt's own. */
+/** Thinking is blue and idle grey; a call's green, red and the approval's outline are the Gantt's own. */
 const PALETTE = { thinking: 'bg-info', idle: 'bg-muted-foreground/30' };
 
 const SPAN_MS = 74_000;
@@ -154,7 +154,7 @@ function Live({ log, onSelectRow }: Args & { log: Log }) {
           <LegendItem kind="box" color="var(--color-info)" label="Thinking: the LLM working out what to do" />
           <LegendItem kind="box" color="var(--color-success)" label="Tool call: a tool running" />
           <LegendItem kind="box" color="var(--color-destructive)" label="Failed or refused" />
-          <LegendItem kind="outline" color="var(--color-warning)" label="Approval: you deciding on a step" />
+          <LegendItem kind="outline" color="color-mix(in srgb, var(--color-foreground) 40%, transparent)" label="Approval: you deciding on a step" />
           <LegendItem kind="box" color="color-mix(in srgb, var(--color-muted-foreground) 30%, transparent)" label="Idle: nothing happening" />
         </Legend>
         <Gantt
@@ -229,7 +229,7 @@ type Story = StoryObj<Args>;
  *
  * - **Thinking** (blue): the LLM working out what to do next, one row for each time it was asked.
  * - **Tool call** (green; red when it failed or was refused): a tool running.
- * - **Approval** (amber outline): how long the person took to decide on a proposed step. An outline
+ * - **Approval** (an outline): how long the person took to decide on a proposed step. An outline
  *   is time held and not spent.
  * - **Idle** (grey): nothing happening, between one turn and the next.
  *
