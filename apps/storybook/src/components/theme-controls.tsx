@@ -96,12 +96,20 @@ const accentColorMap: Record<string, { light: string; dark: string }> = {
 /**
  * Hook for managing theme state and applying themes
  */
+// "system" follows the OS, so it must resolve to light or dark here rather than
+// read as light — otherwise the page flips to light after the toolbar set it dark.
+const isDarkVariant = (variant: string) =>
+  variant === 'dark' ||
+  (variant === 'system' &&
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches);
+
 export const useThemeControls = (
   storybookTheme = 'default',
   storybookVariant = 'light'
 ): UseThemeControlsResult => {
   const [currentTheme, setCurrentTheme] = useState(storybookTheme);
-  const [isDarkMode, setIsDarkMode] = useState(storybookVariant === 'dark');
+  const [isDarkMode, setIsDarkMode] = useState(isDarkVariant(storybookVariant));
   // null = no override → the active theme shows its OWN accent. Picking a swatch overrides it.
   const [currentAccent, setCurrentAccent] = useState<string | null>(null);
 
@@ -115,7 +123,7 @@ export const useThemeControls = (
   const [syncedVariant, setSyncedVariant] = useState(storybookVariant);
   if (storybookVariant !== syncedVariant) {
     setSyncedVariant(storybookVariant);
-    setIsDarkMode(storybookVariant === 'dark');
+    setIsDarkMode(isDarkVariant(storybookVariant));
   }
 
   // Reset the accent override when the theme changes, so each theme starts on its own accent.
