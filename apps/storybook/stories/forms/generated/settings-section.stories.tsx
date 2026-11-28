@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button, TabbedPanel } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type RowConfig } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type RowConfig, type FieldSize, type LabelPosition } from '@invana/forms';
 import { Bot, Info } from 'lucide-react';
 
 import spec from '../../../fixtures/forms/settings-section.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { indent, objectField } from '../form-source';
+import { indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
 /** JSON names a tab's icon; the story holds the component. */
 const ICONS = { info: Info, bot: Bot };
@@ -26,11 +26,13 @@ const SECTIONS = spec.sections as SectionSpec[];
 const VARIANTS = [{ caption: 'Settings Section', width: 440 }];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
 }
 
 /** One section: its own `useForm`, its own Save — the sections never save together. */
-function Section({ section, log, onSubmit }: { section: SectionSpec; log: Log } & Args) {
+function Section({ size, labelPosition, section, log, onSubmit }: { section: SectionSpec; log: Log } & Args) {
   const form = useForm<FieldValues>({ defaultValues: { [section.name]: section.initial } });
   const { isDirty } = form.formState;
   return (
@@ -49,8 +51,8 @@ function Section({ section, log, onSubmit }: { section: SectionSpec; log: Log } 
             name={section.name}
             fields={section.fields}
             rowConfig={section.rowConfig}
-            labelPosition="top"
-            size="md"
+            labelPosition={labelPosition}
+            size={size}
           />
           <Button type="submit" disabled={!isDirty}>
             {isDirty ? 'Save' : 'Saved'}
@@ -111,7 +113,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -128,7 +131,7 @@ type Story = StoryObj<Args>;
  */
 export const SettingsSection: Story = {
   name: 'Settings Section',
-  render: ({ onSubmit }) => (
+  render: ({ onSubmit, size, labelPosition }) => (
     <VariantGrid variants={VARIANTS}>
       {(_v, log) => (
         <TabbedPanel
@@ -137,7 +140,7 @@ export const SettingsSection: Story = {
             value: s.name,
             label: s.label,
             icon: ICONS[s.icon],
-            content: <Section section={s} log={log} onSubmit={onSubmit} />,
+            content: <Section size={size} labelPosition={labelPosition} section={s} log={log} onSubmit={onSubmit} />,
           }))}
         />
       )}

@@ -43,3 +43,21 @@ export function objectField(
 
 /** Indent every line of `code` but the first by `by`. */
 export const indent = (code: string, by = '  ') => code.replace(/\n/g, `\n${by}`);
+
+/**
+ * The two knobs every generated-form story hands the reader: a form draws at its default, and
+ * these restyle it live. `size` is the density tier (`md` by default); `labelPosition` puts the label over the
+ * control or beside it.
+ */
+export const FORM_ARG_TYPES = {
+  size: {
+    control: 'inline-radio',
+    options: ['xs', 'sm', 'md', 'lg'],
+    description: 'Density tier — control height, text and the gaps between label, control and help text.',
+  },
+  labelPosition: {
+    control: 'inline-radio',
+    options: ['top', 'side'],
+    description: 'Label over the control, or beside it.',
+  },
+} as const;

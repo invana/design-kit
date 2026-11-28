@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldConfig, type FieldOption, type FieldValues } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldOption, type FieldValues, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/key-value-schema.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log, type Variant } from '../../_story/variant-grid';
-import { objectField } from '../form-source';
+import { objectField, FORM_ARG_TYPES } from '../form-source';
 
 interface SchemaVariant extends Variant {
   strictKeys: boolean;
@@ -21,11 +21,13 @@ const fieldsFor = (strictKeys: boolean): FieldConfig[] => [
 ];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
 }
 
 /** An airport's properties, its keys from the airport type. */
-function Editor({ strictKeys, log, onSubmit }: Args & { strictKeys: boolean; log: Log }) {
+function Editor({ size, labelPosition, strictKeys, log, onSubmit }: Args & { strictKeys: boolean; log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: { [spec.name]: spec.initial } });
   return (
     <Form {...form}>
@@ -36,8 +38,8 @@ function Editor({ strictKeys, log, onSubmit }: Args & { strictKeys: boolean; log
         })}
       >
         <FieldGroup>
-          <FormField.ObjectField control={form.control} name={spec.name} fields={fieldsFor(strictKeys)} labelPosition="top" size="xs" />
-          <Button type="submit" size="sm" className="self-end">
+          <FormField.ObjectField control={form.control} name={spec.name} fields={fieldsFor(strictKeys)} labelPosition={labelPosition} size={size} />
+          <Button type="submit">
             Apply
           </Button>
         </FieldGroup>
@@ -63,7 +65,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -81,8 +84,8 @@ type Story = StoryObj<Args>;
  */
 export const KeyValueSchema: Story = {
   name: 'Key Value Schema',
-  render: ({ onSubmit }) => (
-    <VariantGrid variants={VARIANTS}>{(v, log) => <Editor strictKeys={v.strictKeys} log={log} onSubmit={onSubmit} />}</VariantGrid>
+  render: ({ onSubmit, size, labelPosition }) => (
+    <VariantGrid variants={VARIANTS}>{(v, log) => <Editor size={size} labelPosition={labelPosition} strictKeys={v.strictKeys} log={log} onSubmit={onSubmit} />}</VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const open = within(within(canvasElement).getByRole('group', { name: 'Open' }));

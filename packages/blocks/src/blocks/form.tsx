@@ -152,7 +152,7 @@ export function FormAsk({ spec, state = "pending", value: given, onAction }: Blo
           name="values"
           fields={spec.fields.map(toField)}
           labelPosition={top ? "top" : "side"}
-          size="xs"
+          size="sm"
           columns={top ? 2 : 1}
           fit="container"
           groupAs="section"
@@ -163,7 +163,7 @@ export function FormAsk({ spec, state = "pending", value: given, onAction }: Blo
         <Button
           type="submit"
           form={`${auto}-form`}
-          size="xs"
+          size="sm"
           className={top ? "ms-auto" : undefined}
           disabled={!form.formState.isValid}
         >

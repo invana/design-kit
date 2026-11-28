@@ -2,12 +2,12 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, screen, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
-import { SettingsPanel, type FieldConfig, type FieldValues, type GroupConfig } from '@invana/forms';
+import { SettingsPanel, type FieldConfig, type FieldValues, type GroupConfig, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/inspector.json';
 import { jsx, snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { withLists } from '../form-source';
+import { withLists, FORM_ARG_TYPES } from '../form-source';
 
 type ShapeKind = keyof typeof spec.geometryByKind;
 
@@ -29,10 +29,12 @@ const fieldsFor = (kind: ShapeKind): FieldConfig[] => [
 ];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onChange: (change: { name?: string; value: unknown }) => void;
 }
 
-function Live({ log, onChange }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onChange }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
   // Watch the shape kind so the Geometry section swaps its numerics live.
   const kind = form.watch(`${spec.name}.shapeKind`) as ShapeKind;
@@ -54,8 +56,8 @@ function Live({ log, onChange }: Args & { log: Log }) {
       name={spec.name}
       fields={fieldsFor(kind)}
       groupConfig={GROUPS}
-      labelPosition="top"
-      size="xs"
+      labelPosition={labelPosition}
+      size={size}
       columns={2}
     />
   );
@@ -100,7 +102,8 @@ const meta = {
       },
     },
   },
-  args: { onChange: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onChange: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -108,7 +111,7 @@ type Story = StoryObj<Args>;
 
 /**
  * A docked inspector: the dense side panel beside a canvas or a graph, built with
- * `SettingsPanel` at `size="xs"`, from `fixtures/forms/inspector.json`. The field set is the
+ * `SettingsPanel` at the default `md`; `size` restyles it, from `fixtures/forms/inspector.json`. The field set is the
  * real `NodeStyle` editor schema: grouped `FieldConfig`s across **Geometry**, **Background**,
  * **Stroke** and **Label**, mixing colour pickers with presets, numeric inputs with
  * `min`/`max`/`step`, selects and text.

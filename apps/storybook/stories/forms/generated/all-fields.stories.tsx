@@ -2,21 +2,23 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/all-fields.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { USE_FORM, indent, objectField } from '../form-source';
+import { USE_FORM, indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
 const VARIANTS = [{ caption: 'All Fields', width: 672 }];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
 }
 
-function Live({ log, onSubmit }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onSubmit }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
   return (
     <Form {...form}>
@@ -27,7 +29,7 @@ function Live({ log, onSubmit }: Args & { log: Log }) {
         })}
       >
         <FieldGroup>
-          <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition="top" size="md" />
+          <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition={labelPosition} size={size} />
           <Button type="submit">Submit</Button>
         </FieldGroup>
       </form>
@@ -65,7 +67,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn() },
 } satisfies Meta<Args>;
 
 export default meta;

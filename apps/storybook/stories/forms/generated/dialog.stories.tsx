@@ -12,12 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/dialog.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { indent, objectField } from '../form-source';
+import { indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
 type NodeType = typeof spec.empty;
 
@@ -34,11 +34,13 @@ function fieldsFor(editing: NodeType | null): FieldConfig[] {
 }
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (nodeType: NodeType) => void;
   onOpenChange: (open: boolean) => void;
 }
 
-function Live({ log, onSubmit, onOpenChange }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onSubmit, onOpenChange }: Args & { log: Log }) {
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<NodeType | null>(null);
   const form = useForm<FieldValues>({ defaultValues: { [spec.name]: spec.empty } });
@@ -93,8 +95,8 @@ function Live({ log, onSubmit, onOpenChange }: Args & { log: Log }) {
                   control={form.control}
                   name={spec.name}
                   fields={fieldsFor(editing)}
-                  labelPosition="top"
-                  size="md"
+                  labelPosition={labelPosition}
+                  size={size}
                 />
                 <DialogFooter>
                   <Button type="button" variant="outline" onClick={() => openChange(false)}>
@@ -155,7 +157,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn(), onOpenChange: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn(), onOpenChange: fn() },
 } satisfies Meta<Args>;
 
 export default meta;

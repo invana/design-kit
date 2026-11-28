@@ -4,13 +4,12 @@ export type LabelPosition = 'side' | 'top';
 
 /**
  * Field density.
- * - `xs` — ultra-dense property-panel look (small controls, tight rows, compact
- *   section headers). Use for inspector/side panels like the modeller diagram
- *   properties editor.
- * - `sm` — compact look, the default for backward compatibility.
- * - `md` — full-size fields for primary, page-level forms.
+ * - `xs` — the densest: 22px controls, for a field inside a chip or a table cell.
+ * - `sm` — dense: 26px controls, for an inspector or a side panel.
+ * - `md` — the default: 32px controls, for settings and most forms.
+ * - `lg` — roomy: 40px controls, for a primary create page.
  */
-export type FieldSize = 'xs' | 'sm' | 'md';
+export type FieldSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type FieldType =
   | 'text'
@@ -208,7 +207,7 @@ export interface ObjectFieldProps<T extends FieldValues = FieldValues> {
   /** Optional per-group header decoration (extra badges, label override). */
   groupConfig?: GroupConfig[];
   labelPosition?: LabelPosition;
-  /** Field density. Defaults to `sm` (compact) for backward compatibility. */
+  /** Field density. Defaults to `md`. */
   size?: FieldSize;
   /**
    * Number of columns in the field grid on `md+` screens. Defaults to `2`.

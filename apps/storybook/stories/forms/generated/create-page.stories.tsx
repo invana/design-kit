@@ -10,13 +10,12 @@ import {
   FormField,
   type FieldConfig,
   type FieldValues,
-  type RowConfig,
-} from '@invana/forms';
+  type RowConfig, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/create-page.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { USE_FORM, indent, objectField } from '../form-source';
+import { USE_FORM, indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
 const ROWS = spec.rowConfig as RowConfig[];
@@ -26,12 +25,14 @@ type TestState = keyof typeof spec.test.copy;
 type Connection = (typeof spec.defaultValues)['connection'];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
   onTest: (result: TestState) => void;
   onCancel: () => void;
 }
 
-function Live({ log, onSubmit, onTest, onCancel }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onSubmit, onTest, onCancel }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
   const [test, setTest] = React.useState<TestState>('untested');
 
@@ -83,8 +84,8 @@ function Live({ log, onSubmit, onTest, onCancel }: Args & { log: Log }) {
                 name={spec.name}
                 fields={FIELDS}
                 rowConfig={ROWS}
-                labelPosition="top"
-                size="md"
+                labelPosition={labelPosition}
+                size={size}
               />
               <FieldDescription role="status">{spec.test.copy[test]}</FieldDescription>
             </FieldGroup>
@@ -171,7 +172,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn(), onTest: fn(), onCancel: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn(), onTest: fn(), onCancel: fn() },
 } satisfies Meta<Args>;
 
 export default meta;

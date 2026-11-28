@@ -2,22 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/type-suggestions.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { objectField } from '../form-source';
+import { objectField, FORM_ARG_TYPES } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
 const VARIANTS = [{ caption: 'Type Suggestions', width: 360 }];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
 }
 
 /** A new node's editor: the type comes first, has the caret, and must be given. */
-function Editor({ log, onSubmit }: Args & { log: Log }) {
+function Editor({ size, labelPosition, log, onSubmit }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: { [spec.name]: spec.initial } });
   return (
     <Form {...form}>
@@ -28,8 +30,8 @@ function Editor({ log, onSubmit }: Args & { log: Log }) {
         })}
       >
         <FieldGroup>
-          <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition="top" size="xs" />
-          <Button type="submit" size="sm" className="self-end">
+          <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition={labelPosition} size={size} />
+          <Button type="submit">
             Add node
           </Button>
         </FieldGroup>
@@ -55,7 +57,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
@@ -71,8 +74,8 @@ type Story = StoryObj<Args>;
  */
 export const TypeSuggestions: Story = {
   name: 'Type Suggestions',
-  render: ({ onSubmit }) => (
-    <VariantGrid variants={VARIANTS}>{(_v, log) => <Editor log={log} onSubmit={onSubmit} />}</VariantGrid>
+  render: ({ onSubmit, size, labelPosition }) => (
+    <VariantGrid variants={VARIANTS}>{(_v, log) => <Editor size={size} labelPosition={labelPosition} log={log} onSubmit={onSubmit} />}</VariantGrid>
   ),
   play: async ({ canvasElement, args, step }) => {
     const cell = within(within(canvasElement).getByRole('group', { name: 'Type Suggestions' }));

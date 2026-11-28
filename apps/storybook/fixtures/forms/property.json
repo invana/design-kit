@@ -1,0 +1,21 @@
+{
+  "name": "property",
+  "owner": "Person",
+  "description": "Saved to the draft; nothing changes until it is published.",
+  "empty": { "name": "", "property": "", "range": "string", "index": "none", "values": "", "key": false, "unique": false, "required": false, "multiple": false },
+  "edit": { "name": "tier", "property": "tier", "range": "enum", "index": "none", "values": "free, team, enterprise", "key": false, "unique": false, "required": true, "multiple": false },
+  "ranges": ["string", "integer", "float", "boolean", "date", "datetime", "enum"],
+  "indexes": ["none", "range", "fulltext"],
+  "fields": [
+    { "name": "name", "type": "text", "label": "Name", "autoFocus": true },
+    { "name": "property", "type": "text", "label": "Property in DB", "placeholder": "same as name" },
+    { "name": "range", "type": "select", "label": "Range" },
+    { "name": "index", "type": "select", "label": "Index" },
+    { "name": "values", "type": "text", "label": "Values, comma separated", "colSpan": 2 },
+    { "name": "key", "type": "boolean", "control": "switch", "label": "Key" },
+    { "name": "unique", "type": "boolean", "control": "switch", "label": "Unique" },
+    { "name": "required", "type": "boolean", "control": "switch", "label": "Required" },
+    { "name": "multiple", "type": "boolean", "control": "switch", "label": "Multiple" }
+  ],
+  "required": { "name": "Name is required." }
+}

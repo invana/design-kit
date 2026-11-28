@@ -2,24 +2,26 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button, ButtonGroup, Card, CardContent, CardFooter, Tabs, TabsContent, TabsList, TabsTrigger } from '@invana/ui';
-import { FieldGroup, Form, FormField, type FieldValues, type RowConfig } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldValues, type RowConfig, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/groups.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { USE_FORM, indent, objectField, withLists } from '../form-source';
+import { USE_FORM, indent, objectField, withLists, FORM_ARG_TYPES } from '../form-source';
 
 const IMPORTANT = withLists(spec.important.fields, spec.lists);
 const TABS = spec.tabs.map((t) => ({ ...t, fields: withLists(t.fields, spec.lists), rowConfig: t.rowConfig as RowConfig[] }));
 const VARIANTS = [{ caption: 'Groups', width: 520 }];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
   onTabChange: (tab: string) => void;
   onReset: () => void;
 }
 
-function Live({ log, onSubmit, onTabChange, onReset }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onSubmit, onTabChange, onReset }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
   return (
     <Card>
@@ -38,7 +40,8 @@ function Live({ log, onSubmit, onTabChange, onReset }: Args & { log: Log }) {
                 name={spec.important.name}
                 fields={IMPORTANT}
                 rowConfig={spec.important.rowConfig}
-                labelPosition="top"
+                labelPosition={labelPosition}
+                size={size}
               />
               <Tabs
                 defaultValue={TABS[0]!.name}
@@ -61,7 +64,8 @@ function Live({ log, onSubmit, onTabChange, onReset }: Args & { log: Log }) {
                       name={t.name}
                       fields={t.fields}
                       rowConfig={t.rowConfig}
-                      labelPosition="top"
+                      labelPosition={labelPosition}
+                      size={size}
                     />
                   </TabsContent>
                 ))}
@@ -141,7 +145,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn(), onTabChange: fn(), onReset: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn(), onTabChange: fn(), onReset: fn() },
 } satisfies Meta<Args>;
 
 export default meta;

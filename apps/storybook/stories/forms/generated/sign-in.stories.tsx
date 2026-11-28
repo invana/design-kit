@@ -2,22 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { useForm } from 'react-hook-form';
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Link } from '@invana/ui';
-import { FieldDescription, FieldGroup, Form, FormField, type FieldConfig, type FieldValues } from '@invana/forms';
+import { FieldDescription, FieldGroup, Form, FormField, type FieldConfig, type FieldValues, type FieldSize, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/sign-in.json';
 import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
-import { USE_FORM, indent, objectField } from '../form-source';
+import { USE_FORM, indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
 const FIELDS = spec.fields as FieldConfig[];
 const VARIANTS = [{ caption: 'Sign In', width: 380 }];
 
 interface Args {
+  size: FieldSize;
+  labelPosition: LabelPosition;
   onSubmit: (values: FieldValues) => void;
   onLinkClick: (link: string) => void;
 }
 
-function Live({ log, onSubmit, onLinkClick }: Args & { log: Log }) {
+function Live({ size, labelPosition, log, onSubmit, onLinkClick }: Args & { log: Log }) {
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues, mode: 'onTouched' });
   const link = (name: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ function Live({ log, onSubmit, onLinkClick }: Args & { log: Log }) {
           </CardHeader>
           <CardContent>
             <FieldGroup>
-              <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition="top" size="md" />
+              <FormField.ObjectField control={form.control} name={spec.name} fields={FIELDS} labelPosition={labelPosition} size={size} />
               <Link href="#" variant="quiet" onClick={link('Forgot password?')}>
                 Forgot password?
               </Link>
@@ -99,7 +101,8 @@ const meta = {
       },
     },
   },
-  args: { onSubmit: fn(), onLinkClick: fn() },
+  argTypes: FORM_ARG_TYPES,
+  args: { size: 'md', labelPosition: 'top', onSubmit: fn(), onLinkClick: fn() },
 } satisfies Meta<Args>;
 
 export default meta;
