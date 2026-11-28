@@ -1,0 +1,89 @@
+[
+  {
+    "caption": "Type the name · a Graph",
+    "trigger": "Delete Graph",
+    "props": {
+      "title": "Delete Graph airways?",
+      "description": "Everything Invana keeps for it goes. The database’s own data stays.",
+      "goesWith": [
+        {
+          "kind": "Models and their versions",
+          "count": 3,
+          "names": "AirRoutes · Geo · Carriers"
+        },
+        {
+          "kind": "Worlds",
+          "count": 4,
+          "names": "EU · H1 2026 · Routes · +2"
+        },
+        {
+          "kind": "Boards",
+          "count": 12,
+          "names": "Routes by country · Hubs · +10"
+        },
+        {
+          "kind": "Assistant sessions",
+          "count": 9,
+          "names": "yours"
+        }
+      ],
+      "keep": "The 3,503 nodes and 46,771 edges in the Neo4j database are not touched.",
+      "confirmName": "airways"
+    }
+  },
+  {
+    "caption": "Blocked · a model that Worlds see",
+    "trigger": "Delete model",
+    "props": {
+      "title": "Delete model AirRoutes?",
+      "description": "Two Worlds see it. Let them go first, then it can be deleted.",
+      "blockedBy": [
+        {
+          "key": "w1",
+          "name": "World · EU · H1 2026",
+          "kind": "World",
+          "href": "#world-eu",
+          "fix": "Remove AirRoutes from it"
+        },
+        {
+          "key": "w2",
+          "name": "World · Routes",
+          "kind": "World",
+          "href": "#world-routes",
+          "fix": "Remove AirRoutes from it"
+        }
+      ],
+      "goesWith": [
+        {
+          "kind": "Versions",
+          "count": 2,
+          "names": "v1 active · v2 draft"
+        },
+        {
+          "kind": "Stitches",
+          "count": 2,
+          "names": "airport↔country · carrier↔route"
+        }
+      ],
+      "confirmName": "AirRoutes"
+    }
+  },
+  {
+    "caption": "Confirm · a board",
+    "trigger": "Delete board",
+    "props": {
+      "title": "Delete board Routes by country?",
+      "description": "Its panels and story are part of it, so they go with it. Shared with 3 people: they lose it too."
+    }
+  },
+  {
+    "caption": "Light · a panel",
+    "trigger": "Remove panel",
+    "props": {
+      "title": "Remove the Hubs table from this board?",
+      "description": "The board keeps its other panels.",
+      "light": true,
+      "label": "Remove"
+    }
+  }
+]

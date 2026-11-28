@@ -21,6 +21,7 @@ export * from './check-result';
 export * from './citation-list';
 export * from './clamped-text';
 export * from './clarify-card';
+export * from './confirm-delete';
 export * from './context-bar';
 export * from './data-reach';
 export * from './diagnosis-card';
