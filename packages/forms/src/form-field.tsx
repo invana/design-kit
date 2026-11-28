@@ -554,7 +554,7 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
   return (
     <FormItem className={SIZE[size].stack}>
       <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
-      <div className={cn('flex items-center justify-between', boxClass)}>
+      <div className={cn('flex items-center', boxClass)}>
         <FormControl>
           <Switch
             className={SIZE[size].switch || undefined}
@@ -563,12 +563,10 @@ export const BooleanField: React.FC<BaseFieldProps> = ({
             onCheckedChange={onChange}
           />
         </FormControl>
-        {description && (
-          <FormDescription className={cn('ml-2', SIZE[size].desc)}>
-            {description}
-          </FormDescription>
-        )}
       </div>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
     </FormItem>
   );
 };
