@@ -260,7 +260,7 @@ function StatusPill({ badge }: { badge: FieldBadge }) {
 
 /**
  * A field's `<FormLabel>` plus an optional trailing status pill. `FormLabel` is
- * already a `flex items-center gap-2` row, so the badge lines up beside the text
+ * is made a `gap-2` row when there is a badge, so the pill sits apart from the text
  * with no extra wrapper. Renders nothing when there is neither a label nor a
  * badge.
  */
@@ -280,7 +280,7 @@ function FieldLabel({
   if (!label && !badge) return null;
   return (
     <FormLabel
-      className={cn(SIZE[size].label, SIZE[size].fieldLabel, disabled && 'opacity-70', className)}
+      className={cn(SIZE[size].label, SIZE[size].fieldLabel, badge && 'inline-flex items-center gap-2', disabled && 'opacity-70', className)}
     >
       {label}
       {badge && <StatusPill badge={badge} />}
