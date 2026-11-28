@@ -15,11 +15,15 @@ export {
   NumberField,
   IconField,
   KeyValueField,
+  DateField,
+  FileField,
+  CustomField,
   uniqueKeys,
 } from './form-field';
 
 export type {
   BooleanControl,
+  CustomFieldProps,
   FieldBadge,
   FieldOption,
   FieldConfig,

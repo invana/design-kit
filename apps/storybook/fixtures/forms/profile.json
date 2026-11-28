@@ -1,28 +1,82 @@
 {
   "defaultValues": {
-    "about": { "firstName": "Ravi", "lastName": "Merugu", "displayName": "Ravi Merugu", "gender": "prefer-not", "pronouns": "he-him", "bio": "" },
-    "account": { "username": "rrmerugu", "email": "ravi@invana.io", "website": "" },
-    "locale": { "location": "Hyderabad, India", "timezone": "Asia/Kolkata", "language": "en", "publicProfile": true }
+    "about": {
+      "firstName": "Ravi",
+      "lastName": "Merugu",
+      "displayName": "Ravi Merugu",
+      "gender": "prefer-not",
+      "pronouns": "he-him",
+      "bio": "",
+      "birthday": "",
+      "photo": []
+    },
+    "account": {
+      "username": "rrmerugu",
+      "email": "ravi@invana.io",
+      "website": ""
+    },
+    "locale": {
+      "location": "Hyderabad, India",
+      "timezone": "Asia/Kolkata",
+      "language": "en",
+      "publicProfile": true
+    }
   },
-  "photo": { "accept": "image/*", "maxBytes": 2097152, "title": "Profile photo", "aside": "PNG or JPG, up to 2 MB." },
   "sections": [
     {
       "name": "about",
       "title": "About you",
       "aside": "How you appear to the people you work with.",
       "fields": [
-        { "name": "firstName", "type": "text", "label": "First name", "placeholder": "Ada" },
-        { "name": "lastName", "type": "text", "label": "Last name", "placeholder": "Lovelace" },
-        { "name": "displayName", "type": "text", "label": "Display name", "description": "Shown to others and in the access record.", "colSpan": 2 },
+        {
+          "name": "photo",
+          "type": "file",
+          "label": "Profile photo",
+          "accept": "image/*",
+          "maxBytes": 2097152,
+          "description": "PNG or JPG, up to 2 MB.",
+          "colSpan": 2
+        },
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "First name",
+          "placeholder": "Ada"
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Last name",
+          "placeholder": "Lovelace"
+        },
+        {
+          "name": "displayName",
+          "type": "text",
+          "label": "Display name",
+          "description": "Shown to others and in the access record.",
+          "colSpan": 2
+        },
         {
           "name": "gender",
           "type": "select",
           "label": "Gender",
           "options": [
-            { "label": "Woman", "value": "woman" },
-            { "label": "Man", "value": "man" },
-            { "label": "Non-binary", "value": "non-binary" },
-            { "label": "Prefer not to say", "value": "prefer-not" }
+            {
+              "label": "Woman",
+              "value": "woman"
+            },
+            {
+              "label": "Man",
+              "value": "man"
+            },
+            {
+              "label": "Non-binary",
+              "value": "non-binary"
+            },
+            {
+              "label": "Prefer not to say",
+              "value": "prefer-not"
+            }
           ]
         },
         {
@@ -30,10 +84,25 @@
           "type": "select",
           "label": "Pronouns",
           "options": [
-            { "label": "she / her", "value": "she-her" },
-            { "label": "he / him", "value": "he-him" },
-            { "label": "they / them", "value": "they-them" }
+            {
+              "label": "she / her",
+              "value": "she-her"
+            },
+            {
+              "label": "he / him",
+              "value": "he-him"
+            },
+            {
+              "label": "they / them",
+              "value": "they-them"
+            }
           ]
+        },
+        {
+          "name": "birthday",
+          "type": "date",
+          "label": "Date of birth",
+          "description": "Shown to nobody; used for nothing but your own reference."
         },
         {
           "name": "bio",
@@ -51,9 +120,25 @@
       "title": "Sign-in and contact",
       "aside": "How you sign in, and where people can find you.",
       "fields": [
-        { "name": "username", "type": "text", "label": "Username", "description": "You sign in with it. One change every 30 days." },
-        { "name": "email", "type": "text", "label": "Email", "description": "Invana sends no mail to it." },
-        { "name": "website", "type": "text", "label": "Website", "placeholder": "https://", "colSpan": 2 }
+        {
+          "name": "username",
+          "type": "text",
+          "label": "Username",
+          "description": "You sign in with it. One change every 30 days."
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email",
+          "description": "Invana sends no mail to it."
+        },
+        {
+          "name": "website",
+          "type": "text",
+          "label": "Website",
+          "placeholder": "https://",
+          "colSpan": 2
+        }
       ]
     },
     {
@@ -61,15 +146,30 @@
       "title": "Place and language",
       "aside": "Dates and times follow these.",
       "fields": [
-        { "name": "location", "type": "text", "label": "Location", "placeholder": "City, country", "colSpan": 2 },
+        {
+          "name": "location",
+          "type": "text",
+          "label": "Location",
+          "placeholder": "City, country",
+          "colSpan": 2
+        },
         {
           "name": "timezone",
           "type": "select",
           "label": "Time zone",
           "options": [
-            { "label": "India (UTC+5:30)", "value": "Asia/Kolkata" },
-            { "label": "London (UTC+0)", "value": "Europe/London" },
-            { "label": "New York (UTC-5)", "value": "America/New_York" }
+            {
+              "label": "India (UTC+5:30)",
+              "value": "Asia/Kolkata"
+            },
+            {
+              "label": "London (UTC+0)",
+              "value": "Europe/London"
+            },
+            {
+              "label": "New York (UTC-5)",
+              "value": "America/New_York"
+            }
           ]
         },
         {
@@ -77,12 +177,27 @@
           "type": "select",
           "label": "Language",
           "options": [
-            { "label": "English", "value": "en" },
-            { "label": "Español", "value": "es" },
-            { "label": "हिन्दी", "value": "hi" }
+            {
+              "label": "English",
+              "value": "en"
+            },
+            {
+              "label": "Español",
+              "value": "es"
+            },
+            {
+              "label": "हिन्दी",
+              "value": "hi"
+            }
           ]
         },
-        { "name": "publicProfile", "type": "boolean", "control": "switch", "label": "Show my profile to people in my graphs", "colSpan": 2 }
+        {
+          "name": "publicProfile",
+          "type": "boolean",
+          "control": "switch",
+          "label": "Show my profile to people in my graphs",
+          "colSpan": 2
+        }
       ]
     }
   ]

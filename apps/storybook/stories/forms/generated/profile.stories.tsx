@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, PanelBox } from '@invana/ui';
-import { FieldGroup, FileDrop, Form, FormField, type FieldConfig, type FieldSize, type FieldValues, type LabelPosition } from '@invana/forms';
+import { FieldGroup, Form, FormField, type FieldConfig, type FieldSize, type FieldValues, type LabelPosition } from '@invana/forms';
 
 import spec from '../../../fixtures/forms/profile.json';
 import { snippet } from '../../_story/source';
@@ -27,23 +26,18 @@ interface Args {
 }
 
 function Live({ size, labelPosition, log, onSubmit }: Args & { log: Log }) {
-  const [photo, setPhoto] = React.useState<File | null>(null);
   const form = useForm<FieldValues>({ defaultValues: spec.defaultValues });
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values) => {
-          const saved = { ...values, photo: photo?.name ?? null };
+          const photo = (values.about.photo as File[]).map((f) => f.name);
+          const saved = { ...values, about: { ...values.about, photo } };
           onSubmit(saved);
           log('onSubmit', saved);
         })}
       >
         <FieldGroup>
-          <PanelBox title={spec.photo.title} aside={photo ? photo.name : spec.photo.aside}>
-            <FileDrop accept={spec.photo.accept} maxBytes={spec.photo.maxBytes} onFiles={(files) => setPhoto(files[0] ?? null)}>
-              Drop a photo here, or click to pick
-            </FileDrop>
-          </PanelBox>
           {SECTIONS.map((s) => (
             <PanelBox key={s.name} title={s.title} aside={s.aside}>
               <FormField.ObjectField
@@ -72,19 +66,16 @@ const meta = {
         code: snippet({
           imports: [
             "import { useForm } from 'react-hook-form';",
-            "import { FieldGroup, FileDrop, Form, FormField } from '@invana/forms';",
+            "import { FieldGroup, Form, FormField } from '@invana/forms';",
             "import { Button, PanelBox } from '@invana/ui';",
           ],
-          comment: 'A photo (FileDrop) and three ObjectFields writing into one useForm, so one Save hands back one object',
+          comment: 'Three ObjectFields writing into one useForm, so one Save hands back one object; a `file` field holds the photo',
           data: Object.fromEntries(SECTIONS.map((s) => [`${s.name}Fields`, s.fields])),
           setup: USE_FORM,
           call: [
             '<Form {...form}>',
             '  <form onSubmit={onSubmit}>',
             '    <FieldGroup>',
-            '      <PanelBox title="Profile photo">',
-            '        <FileDrop accept="image/*" onFiles={(files) => setPhoto(files[0])} />',
-            '      </PanelBox>',
             ...SECTIONS.flatMap((s) => [
               `      <PanelBox title="${s.title}">`,
               `        ${indent(objectField(s.name, `${s.name}Fields`), '        ')}`,
@@ -107,11 +98,11 @@ export default meta;
 type Story = StoryObj<Args>;
 
 /**
- * **A profile a person edits about themselves** — from `fixtures/forms/profile.json`. A photo
- * (`FileDrop`, images up to 2 MB), then three sections: who they are (names, gender, pronouns,
- * about me), how they sign in and are reached (username, email, website), and place and language
- * (location, time zone, language, public profile). One `useForm`, one Save; the photo's file name
- * rides along in the saved object, written under the form.
+ * **A profile a person edits about themselves** — from `fixtures/forms/profile.json`. Three
+ * sections: who they are (photo, names, gender, pronouns, date of birth, about me), how they sign
+ * in and are reached (username, email, website), and place and language (location, time zone,
+ * language, public profile). One `useForm`, one Save. The photo is a `file` field and the date of
+ * birth a `date` field; the photo's file name comes back in the saved object, written under the form.
  */
 export const Profile: Story = {
   render: (args) => <VariantGrid variants={VARIANTS}>{(_v, log) => <Live {...args} log={log} />}</VariantGrid>,
@@ -127,8 +118,7 @@ export const Profile: Story = {
       const d = spec.defaultValues;
       await expect(args.onSubmit).toHaveBeenCalledWith({
         ...d,
-        about: { ...d.about, bio: 'I model graphs.' },
-        photo: 'ravi.png',
+        about: { ...d.about, bio: 'I model graphs.', photo: ['ravi.png'] },
       });
     });
   },

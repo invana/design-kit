@@ -43,11 +43,13 @@ import {
   SelectValue,
 } from './components/select';
 import { ColorSwatches } from './fields/color-swatches';
+import { FileDrop } from './fields/file-drop';
 import { SliderNumber } from './fields/slider-number';
 import { IconInput } from './fields/icon-input';
 import type {
   BooleanControl,
   ColorPreset,
+  CustomFieldProps,
   FieldBadge,
   FieldConfig,
   FieldOption,
@@ -99,6 +101,10 @@ interface BaseFieldProps {
   /** Put the caret in this field when it mounts. */
   autoFocus?: boolean;
   autoComplete?: string;
+  accept?: string;
+  maxBytes?: number;
+  multiple?: boolean;
+  render?: (props: CustomFieldProps) => React.ReactNode;
   /** A `keyvalue` row's placeholders, its add button and its empty line. */
   keyPlaceholder?: string;
   valuePlaceholder?: string;
@@ -114,7 +120,7 @@ interface BaseFieldProps {
  * boolean box padding, the switch scale and the group accordion header — so a
  * single `size` prop reshapes the whole form from airy (`md`) to a dense
  * inspector panel (`xs`). The control heights are the control scale from
- * `@invana/styling`, one step per tier: `xs` 26, `sm` 32, `md` 40.
+ * `@invana/styling`, one step per tier: `xs` 22, `sm` 26, `md` 32, `lg` 40.
  * the underlying components' natural full-size defaults.
  */
 const SIZE: Record<
@@ -779,6 +785,111 @@ export const NumberField: React.FC<BaseFieldProps> = ({
   </FormItem>
 );
 
+/** A calendar day, held as `YYYY-MM-DD` text. */
+export const DateField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  value,
+  onChange,
+  labelPosition = 'side',
+  size = 'md',
+  labelClassName,
+  badge,
+  className,
+  disabled,
+}) => (
+  <FormItem className={itemClasses(labelPosition, size, className)}>
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+    <div className={inputWrapper(labelPosition, size)}>
+      <FormControl>
+        <Input
+          type="date"
+          className={SIZE[size].input}
+          disabled={disabled}
+          value={typeof value === 'string' ? value : ''}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+      </FormControl>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
+    </div>
+  </FormItem>
+);
+
+/** A file drop area. The value is a `File[]`, whatever `multiple` says; the names show under it. */
+export const FileField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  value,
+  onChange,
+  accept,
+  maxBytes,
+  multiple,
+  labelPosition = 'side',
+  size = 'md',
+  labelClassName,
+  badge,
+  className,
+  disabled,
+}) => {
+  const files = Array.isArray(value) ? (value as File[]) : [];
+  return (
+    <FormItem className={itemClasses(labelPosition, size, className)}>
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+      <div className={inputWrapper(labelPosition, size)}>
+        <FormControl>
+          <FileDrop accept={accept} maxBytes={maxBytes} multiple={multiple} disabled={disabled} onFiles={(picked) => onChange?.(picked)} />
+        </FormControl>
+        {files.length > 0 && (
+          <FormDescription className={SIZE[size].desc}>{files.map((f) => f.name).join(', ')}</FormDescription>
+        )}
+        {description && (
+          <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+        )}
+        <FormMessage className={SIZE[size].desc} />
+      </div>
+    </FormItem>
+  );
+};
+
+/** Any control the generator has no type for: its label, help text and error, around the `render` you give. */
+export const CustomField: React.FC<BaseFieldProps> = ({
+  label,
+  description,
+  value,
+  onChange,
+  render,
+  labelPosition = 'side',
+  size = 'md',
+  labelClassName,
+  badge,
+  className,
+  disabled,
+}) => (
+  <FormItem className={itemClasses(labelPosition, size, className)}>
+    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+    <div className={inputWrapper(labelPosition, size)}>
+      <FormControl>
+        {/* FormControl hands the label's id to this wrapper; `render` puts it on the control. */}
+        <CustomSlot render={render} value={value} onChange={onChange} disabled={disabled} />
+      </FormControl>
+      {description && (
+        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+      )}
+      <FormMessage className={SIZE[size].desc} />
+    </div>
+  </FormItem>
+);
+
+/** Receives the `id` FormControl gives it, and passes it on to the caller's widget. */
+const CustomSlot: React.FC<
+  Pick<BaseFieldProps, 'render' | 'value' | 'onChange' | 'disabled'> & { id?: string }
+> = ({ render, value, onChange, disabled, id }) => (
+  <>{render?.({ id, value, onChange: (v) => onChange?.(v as AnyValue), disabled })}</>
+);
+
 export const IconField: React.FC<BaseFieldProps> = ({
   label,
   description,
@@ -1119,6 +1230,12 @@ function renderField(
             );
           case 'icon':
             return <IconField {...common} />;
+          case 'date':
+            return <DateField {...common} />;
+          case 'file':
+            return <FileField {...common} accept={field.accept} maxBytes={field.maxBytes} multiple={field.multiple} />;
+          case 'custom':
+            return <CustomField {...common} render={field.render} />;
           case 'keyvalue':
             return (
               <KeyValueField
@@ -1412,6 +1529,9 @@ interface FormFieldExtensions {
   Select: typeof SelectField;
   Icon: typeof IconField;
   KeyValue: typeof KeyValueField;
+  Date: typeof DateField;
+  File: typeof FileField;
+  Custom: typeof CustomField;
 }
 
 type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
@@ -1429,6 +1549,9 @@ export const FormField = Object.assign(FormFieldBase, {
   Select: SelectField,
   Icon: IconField,
   KeyValue: KeyValueField,
+  Date: DateField,
+  File: FileField,
+  Custom: CustomField,
 }) as FormFieldType;
 
 // Also export ObjectField directly for consumers who prefer a flat import.

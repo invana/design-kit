@@ -9,7 +9,27 @@ import { snippet } from '../../_story/source';
 import { VariantGrid, type Log } from '../../_story/variant-grid';
 import { USE_FORM, indent, objectField, FORM_ARG_TYPES } from '../form-source';
 
-const FIELDS = spec.fields as FieldConfig[];
+/**
+ * `custom` takes a function, which JSON cannot carry: any control the generator has no type for,
+ * with its label, help text and error still drawn around it.
+ */
+const CUSTOM: FieldConfig = {
+  name: 'rating',
+  type: 'custom',
+  label: 'Custom',
+  description: 'any value · `render` draws the control and calls `onChange`',
+  render: ({ id, value, onChange, disabled }) => (
+    <div id={id} role="group" aria-label="Rating" className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Button key={n} type="button" size="sm" variant={value === n ? 'default' : 'outline'} disabled={disabled} onClick={() => onChange(n)}>
+          {n}
+        </Button>
+      ))}
+    </div>
+  ),
+};
+
+const FIELDS = [...(spec.fields as FieldConfig[]), CUSTOM];
 const VARIANTS = [{ caption: 'All Fields', width: 672 }];
 
 interface Args {

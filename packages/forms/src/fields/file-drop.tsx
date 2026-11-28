@@ -4,6 +4,8 @@ import { Upload } from 'lucide-react';
 import { cn } from '@invana/ui';
 
 export interface FileDropProps {
+  /** The file input's id, so a form label can point at it; one is made when omitted. */
+  id?: string;
   /** What may be picked, as `<input accept>` takes it: `.csv,.json`, `text/*`. */
   accept?: string;
   /** More than one file at a time. */
@@ -50,6 +52,7 @@ function matches(file: File, entry: string): boolean {
  * them is the caller's.
  */
 export const FileDrop: React.FC<FileDropProps> = ({
+  id: given,
   accept,
   multiple = false,
   maxBytes,
@@ -58,7 +61,8 @@ export const FileDrop: React.FC<FileDropProps> = ({
   children,
   className,
 }) => {
-  const id = React.useId();
+  const generated = React.useId();
+  const id = given ?? generated;
   const [over, setOver] = React.useState(false);
   const [refused, setRefused] = React.useState<string[]>([]);
 

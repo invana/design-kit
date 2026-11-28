@@ -1,9 +1,27 @@
 {
   "name": "all",
   "fields": [
-    { "name": "name", "type": "text", "label": "Text", "description": "string", "placeholder": "Customer analysis" },
-    { "name": "password", "type": "password", "label": "Password", "description": "string · reveal toggle" },
-    { "name": "summary", "type": "textarea", "label": "Textarea", "description": "string · `rows` sets the height", "rows": 3, "colSpan": 2 },
+    {
+      "name": "name",
+      "type": "text",
+      "label": "Text",
+      "description": "string",
+      "placeholder": "Customer analysis"
+    },
+    {
+      "name": "password",
+      "type": "password",
+      "label": "Password",
+      "description": "string · reveal toggle"
+    },
+    {
+      "name": "summary",
+      "type": "textarea",
+      "label": "Textarea",
+      "description": "string · `rows` sets the height",
+      "rows": 3,
+      "colSpan": 2
+    },
     {
       "name": "connector",
       "type": "select",
@@ -11,14 +29,44 @@
       "description": "one string from `options`",
       "placeholder": "Select a connector",
       "options": [
-        { "label": "Neo4j", "value": "neo4j" },
-        { "label": "JanusGraph", "value": "janusgraph" },
-        { "label": "Amazon Neptune", "value": "neptune" }
+        {
+          "label": "Neo4j",
+          "value": "neo4j"
+        },
+        {
+          "label": "JanusGraph",
+          "value": "janusgraph"
+        },
+        {
+          "label": "Amazon Neptune",
+          "value": "neptune"
+        }
       ]
     },
-    { "name": "maxRuns", "type": "number", "label": "Number", "description": "number · `min` / `max` / `step`", "min": 1, "max": 32, "step": 1 },
-    { "name": "share", "type": "number", "label": "Number · unit", "description": "number · no `min` / `max`, so typed · `unit`", "unit": "%" },
-    { "name": "leadTime", "type": "number", "label": "Number · aside", "description": "number · `aside` after the unit", "unit": "d", "aside": "quoted 14 d" },
+    {
+      "name": "maxRuns",
+      "type": "number",
+      "label": "Number",
+      "description": "number · `min` / `max` / `step`",
+      "min": 1,
+      "max": 32,
+      "step": 1
+    },
+    {
+      "name": "share",
+      "type": "number",
+      "label": "Number · unit",
+      "description": "number · no `min` / `max`, so typed · `unit`",
+      "unit": "%"
+    },
+    {
+      "name": "leadTime",
+      "type": "number",
+      "label": "Number · aside",
+      "description": "number · `aside` after the unit",
+      "unit": "d",
+      "aside": "quoted 14 d"
+    },
     {
       "name": "validation",
       "type": "radio",
@@ -26,9 +74,18 @@
       "description": "one string, as a list · `orientation`",
       "orientation": "horizontal",
       "options": [
-        { "label": "Inherit", "value": "inherit" },
-        { "label": "Strict", "value": "strict" },
-        { "label": "Permissive", "value": "permissive" }
+        {
+          "label": "Inherit",
+          "value": "inherit"
+        },
+        {
+          "label": "Strict",
+          "value": "strict"
+        },
+        {
+          "label": "Permissive",
+          "value": "permissive"
+        }
       ],
       "colSpan": 2
     },
@@ -38,9 +95,22 @@
       "label": "Radio · descriptions",
       "description": "an option's `description` is a line under it · `disabled` on an option",
       "options": [
-        { "label": "Keep the first", "value": "first", "description": "The earliest row wins; later copies are dropped" },
-        { "label": "Keep the latest", "value": "latest", "description": "The newest row wins, by its load time" },
-        { "label": "Merge fields", "value": "merge", "description": "Needs a key column on both sides", "disabled": true }
+        {
+          "label": "Keep the first",
+          "value": "first",
+          "description": "The earliest row wins; later copies are dropped"
+        },
+        {
+          "label": "Keep the latest",
+          "value": "latest",
+          "description": "The newest row wins, by its load time"
+        },
+        {
+          "label": "Merge fields",
+          "value": "merge",
+          "description": "Needs a key column on both sides",
+          "disabled": true
+        }
       ],
       "colSpan": 2
     },
@@ -51,28 +121,88 @@
       "description": "string[] from `options`",
       "orientation": "horizontal",
       "options": [
-        { "label": "read", "value": "read" },
-        { "label": "write", "value": "write" },
-        { "label": "admin", "value": "admin" }
+        {
+          "label": "read",
+          "value": "read"
+        },
+        {
+          "label": "write",
+          "value": "write"
+        },
+        {
+          "label": "admin",
+          "value": "admin"
+        }
       ],
       "colSpan": 2
     },
-    { "name": "readOnly", "type": "boolean", "label": "Boolean · switch", "description": "boolean · the default control" },
-    { "name": "abstract", "type": "boolean", "control": "checkbox", "label": "Boolean · checkbox" },
-    { "name": "citations", "type": "boolean", "control": "checkbox", "label": "Boolean · checkbox · description", "description": "boolean · the line sits under the label" },
-    { "name": "source", "type": "text", "label": "Disabled", "description": "string · `disabled`: shown, still submitted", "disabled": true },
+    {
+      "name": "readOnly",
+      "type": "boolean",
+      "label": "Boolean · switch",
+      "description": "boolean · the default control"
+    },
+    {
+      "name": "abstract",
+      "type": "boolean",
+      "control": "checkbox",
+      "label": "Boolean · checkbox"
+    },
+    {
+      "name": "citations",
+      "type": "boolean",
+      "control": "checkbox",
+      "label": "Boolean · checkbox · description",
+      "description": "boolean · the line sits under the label"
+    },
+    {
+      "name": "source",
+      "type": "text",
+      "label": "Disabled",
+      "description": "string · `disabled`: shown, still submitted",
+      "disabled": true
+    },
     {
       "name": "accent",
       "type": "color",
       "label": "Color",
       "description": "string · `presetColors` for swatches",
       "presetColors": [
-        { "label": "Blue", "value": "#3b82f6" },
-        { "label": "Emerald", "value": "#10b981" },
-        { "label": "Amber", "value": "#f59e0b" }
+        {
+          "label": "Blue",
+          "value": "#3b82f6"
+        },
+        {
+          "label": "Emerald",
+          "value": "#10b981"
+        },
+        {
+          "label": "Amber",
+          "value": "#f59e0b"
+        }
       ]
     },
-    { "name": "icon", "type": "icon", "label": "Icon", "description": "string · an icon name" }
+    {
+      "name": "icon",
+      "type": "icon",
+      "label": "Icon",
+      "description": "string · an icon name"
+    },
+    {
+      "name": "since",
+      "type": "date",
+      "label": "Date",
+      "description": "string · `YYYY-MM-DD`"
+    },
+    {
+      "name": "attachments",
+      "type": "file",
+      "label": "File",
+      "description": "`File[]` · `accept`, `maxBytes` and `multiple` set what it takes",
+      "accept": ".csv,.json",
+      "maxBytes": 1048576,
+      "multiple": true
+    }
   ],
   "defaultValues": {
     "all": {
@@ -85,13 +215,17 @@
       "leadTime": 17,
       "validation": "inherit",
       "dedupe": "first",
-      "scopes": ["read"],
+      "scopes": [
+        "read"
+      ],
       "readOnly": false,
       "abstract": false,
       "citations": true,
       "source": "warehouse.sales_daily",
       "accent": "#3b82f6",
-      "icon": ""
+      "icon": "",
+      "since": "",
+      "attachments": []
     }
   }
 }

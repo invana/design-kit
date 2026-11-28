@@ -1,3 +1,4 @@
+import type * as React from 'react';
 import type { Control, FieldValues, RegisterOptions } from 'react-hook-form';
 
 export type LabelPosition = 'side' | 'top';
@@ -22,12 +23,27 @@ export type FieldType =
   | 'color'
   | 'select'
   | 'icon'
-  | 'keyvalue';
+  | 'keyvalue'
+  | 'date'
+  | 'file'
+  | 'custom';
 
 /**
  * One row of a `keyvalue` field. The field's value is an array of these — not a
  * map — so a blank or repeated key survives while it is being typed.
  */
+/**
+ * What a `custom` field's `render` receives: the field's value and a way to change it, wired to
+ * the form. The label, help text and error around it are the generator's; the widget is yours.
+ */
+export type CustomFieldProps = {
+  /** The id the label points at; put it on the control. */
+  id?: string;
+  value: unknown;
+  onChange: (value: unknown) => void;
+  disabled?: boolean;
+};
+
 export type KeyValueEntry = {
   key: string;
   value: string;
@@ -140,6 +156,14 @@ export type FieldConfig = {
    * unit — `quoted 14 d` beside an observed lead time. Display only.
    */
   aside?: string;
+  /** A `file` field: what may be picked, as `<input accept>` takes it — `image/*`, `.csv,.json`. */
+  accept?: string;
+  /** A `file` field: the most bytes one file may have. */
+  maxBytes?: number;
+  /** A `file` field: more than one file at a time. Its value is always a `File[]`. */
+  multiple?: boolean;
+  /** A `custom` field: draws the control. The value it holds goes through `onChange` like any other. */
+  render?: (props: CustomFieldProps) => React.ReactNode;
   /** Put the caret in this field when it mounts — the one field a new record cannot do without. */
   autoFocus?: boolean;
   /** The `autocomplete` token a `text` or `password` input hands the browser — `username`, `current-password`. */
