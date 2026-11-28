@@ -78,7 +78,7 @@ Used nowhere today and with no place in the designs so far. Each waits for the d
 | Runs and tasks | `RunRow`, `RunStatusText`, `TaskNode`, `LogCard`, `DiagnosisCard`, `RefusalCard`, `RetryNote`, `CastTable`, `GanttDetailCard` | the design of Work (projects, tasks, runs) |
 | Board panels for runs | `ArtifactsPanel`, `AttemptsPanel`, `ClarificationPanel`, `LensPanel`, `TouchedPanel`, `TracePanel` | the design of Work |
 | Assistant leftovers | `ClarifyCardGroup`, `ChatSessionTurn`, `MarkdownEditorBlock` | the design of the assistant |
-| Other extended pieces | `MatchPreview`, `HeaderTrail`, `TemplatePicker`, `Tour` | the design of the shell's first-run and search |
+| Other extended pieces | `MatchPreview`, `TemplatePicker`, `Tour` | the design of the shell's first-run and search |
 | Charts | `DivergingBar`, `InlineMeter`, `SegmentedBar`, `SegmentedBarLegend`, `StackedAreaChart`, `StackedBarChartV` | the design of dashboards |
 | Themes | `AppLayoutAgents`, `ThemeSettingsCard`, `ThemeSettingsActions`, `AppLayoutV1` | the design of Settings › Appearance |
 | Typography | `TypographyH1`, `H2`, `H4`, `H5`, `H6`, `Lead`, `Large`, `Small`, `P`, `List`, `Pre`, `InlineCode`, `Blockquote` | a decision on headings in the 13/12/11 type scale |

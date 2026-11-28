@@ -4,7 +4,8 @@ import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppLayoutAgents } from '@invana/themes/app-agents/layout';
 import { ThemeProvider, useTheme, type ThemeMode } from '@invana/themes';
-import { HeaderTrail } from '@invana/ui';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Separator } from '@invana/ui';
+import { Hexagon } from 'lucide-react';
 
 import { DATA } from './data';
 import { DatasetStudio as Studio } from './studio';
@@ -92,7 +93,26 @@ export const DatasetStudio: Story = {
   args: {
     stage: 0,
     header: {
-      left: <HeaderTrail brand="Invana" crumbs={[{ label: DATA.user, href: '#' }, { label: DATA.project, href: '#' }]} />,
+      left: (
+        <div className="flex min-w-0 items-center gap-2">
+          <Button asChild variant="ghost" size="sm" className="gap-1.5 px-2 font-bold">
+            <a href="#" aria-label="Invana, Home">
+              <Hexagon className="text-primary" />
+              Invana
+            </a>
+          </Button>
+          <Separator orientation="vertical" className="h-4" />
+          <Breadcrumb className="min-w-0">
+            <BreadcrumbList className="flex-nowrap gap-1.5 sm:gap-1.5">
+              <BreadcrumbItem className="gap-1.5 whitespace-nowrap">{DATA.user}</BreadcrumbItem>
+              <BreadcrumbItem className="gap-1.5 whitespace-nowrap">
+                <BreadcrumbSeparator />
+                <BreadcrumbPage className="font-semibold">{DATA.project}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      ),
     },
     mainSection: { content: null },
   },
