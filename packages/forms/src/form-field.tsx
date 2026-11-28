@@ -17,7 +17,7 @@ import {
 } from '@invana/ui';
 import { Plus, X } from 'lucide-react';
 import {
-  FormField as FormFieldBase,
+  FieldController,
   FormControl,
   FormDescription,
   FormItem,
@@ -1169,7 +1169,7 @@ function renderField(
   size: FieldSize
 ) {
   return (
-    <FormFieldBase
+    <FieldController
       key={field.name}
       control={control}
       name={`${parentName}.${field.name}`}
@@ -1559,9 +1559,9 @@ interface FormFieldExtensions {
   Custom: typeof CustomField;
 }
 
-type FormFieldType = typeof FormFieldBase & FormFieldExtensions;
+type FormFieldType = typeof FieldController & FormFieldExtensions;
 
-export const FormField = Object.assign(FormFieldBase, {
+export const FormField = Object.assign(FieldController, {
   ObjectField,
   Input: InputField,
   Password: PasswordField,

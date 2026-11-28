@@ -25,7 +25,8 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue
 )
 
-const FormField = <
+/** Binds one field of the form to a control and gives the pieces around it (label, help, message) its name. */
+const FieldController = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
@@ -46,7 +47,7 @@ const useFormField = () => {
   const fieldState = getFieldState(fieldContext.name, formState)
 
   if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>")
+    throw new Error("useFormField should be used within <FieldController>")
   }
 
   const { id } = itemContext
@@ -172,5 +173,5 @@ export {
   FormControl,
   FormDescription,
   FormMessage,
-  FormField,
+  FieldController,
 }
