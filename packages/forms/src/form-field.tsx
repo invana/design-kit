@@ -1097,7 +1097,7 @@ function renderField(
             return (
               <PasswordField
                 {...common}
-                placeholder={field.placeholder ?? `Enter ${field.name}`}
+                placeholder={field.placeholder}
               />
             );
           case 'boolean':
@@ -1134,7 +1134,7 @@ function renderField(
             return (
               <TextareaField
                 {...common}
-                placeholder={field.placeholder ?? `Enter ${field.name}`}
+                placeholder={field.placeholder}
               />
             );
           case 'text':
@@ -1142,7 +1142,7 @@ function renderField(
             return (
               <InputField
                 {...common}
-                placeholder={field.placeholder ?? `Enter ${field.name}`}
+                placeholder={field.placeholder}
               />
             );
         }

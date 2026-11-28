@@ -202,7 +202,7 @@ function GovernanceTab({ onSave }: { onSave: (values: FieldValues) => void }) {
             fields={fields}
             rowConfig={rowConfig}
             labelPosition="top"
-            size="lg"
+            size="md"
           />
           <Button type="submit" disabled={!isDirty}>
             {isDirty ? "Save" : "Saved"}
