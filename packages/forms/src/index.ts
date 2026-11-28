@@ -44,6 +44,9 @@ export { FileDrop, type FileDropProps } from './fields/file-drop';
 
 export * from './components';
 
+/** The form hook the generators read from, so a consumer and the kit share one `react-hook-form`. */
+export { useForm } from 'react-hook-form';
+
 export type {
   Control,
   DefaultValues,

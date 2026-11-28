@@ -98,6 +98,7 @@ interface BaseFieldProps {
   aside?: string;
   /** Put the caret in this field when it mounts. */
   autoFocus?: boolean;
+  autoComplete?: string;
   /** A `keyvalue` row's placeholders, its add button and its empty line. */
   keyPlaceholder?: string;
   valuePlaceholder?: string;
@@ -311,6 +312,7 @@ export const InputField: React.FC<BaseFieldProps> = ({
   onChange,
   options,
   autoFocus,
+  autoComplete,
   unit,
   aside,
   labelPosition = 'side',
@@ -335,7 +337,7 @@ export const InputField: React.FC<BaseFieldProps> = ({
             placeholder={placeholder}
             disabled={disabled}
             autoFocus={autoFocus}
-            autoComplete={suggest ? 'off' : undefined}
+            autoComplete={autoComplete ?? (suggest ? 'off' : undefined)}
             list={suggest ? listId : undefined}
             value={value ?? ''}
             onChange={(e) => onChange?.(e.target.value)}
@@ -365,6 +367,8 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
   placeholder,
   value,
   onChange,
+  autoFocus,
+  autoComplete,
   labelPosition = 'side',
   size = 'md',
   labelClassName,
@@ -380,6 +384,8 @@ export const PasswordField: React.FC<BaseFieldProps> = ({
           className={SIZE[size].input}
           placeholder={placeholder}
           disabled={disabled}
+          autoFocus={autoFocus}
+          autoComplete={autoComplete}
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         />
@@ -1080,6 +1086,7 @@ function renderField(
           unit: field.unit,
           aside: field.aside,
           autoFocus: field.autoFocus,
+          autoComplete: field.autoComplete,
           labelPosition,
           size,
           value: rhf.value,

@@ -142,6 +142,8 @@ export type FieldConfig = {
   aside?: string;
   /** Put the caret in this field when it mounts — the one field a new record cannot do without. */
   autoFocus?: boolean;
+  /** The `autocomplete` token a `text` or `password` input hands the browser — `username`, `current-password`. */
+  autoComplete?: string;
   /**
    * How many grid columns the field spans on `md+` screens. Defaults to `1`.
    * The grid is two columns by default (see `ObjectField`'s `columns`), so
