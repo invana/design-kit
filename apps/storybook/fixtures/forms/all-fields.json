@@ -26,16 +26,18 @@
       "name": "connector",
       "type": "select",
       "label": "Select",
-      "description": "one string from `options`",
+      "description": "one string from `options`; an option may carry a `description`, an `icon` and a `badge`",
       "placeholder": "Select a connector",
       "options": [
         {
           "label": "Neo4j",
-          "value": "neo4j"
+          "value": "neo4j",
+          "description": "Cypher, over Bolt"
         },
         {
           "label": "JanusGraph",
-          "value": "janusgraph"
+          "value": "janusgraph",
+          "description": "Gremlin, over WebSocket"
         },
         {
           "label": "Amazon Neptune",
@@ -202,6 +204,14 @@
       "accept": ".csv,.json",
       "maxBytes": 1048576,
       "multiple": true
+    },
+    {
+      "name": "filter",
+      "type": "text",
+      "label": "Filter",
+      "description": "`hideLabel` keeps the label for screen readers and hides it on screen",
+      "placeholder": "A filter, with no visible label",
+      "hideLabel": true
     }
   ],
   "defaultValues": {
@@ -225,7 +235,8 @@
       "accent": "#3b82f6",
       "icon": "",
       "since": "",
-      "attachments": []
+      "attachments": [],
+      "filter": ""
     }
   }
 }

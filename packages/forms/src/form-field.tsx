@@ -439,6 +439,23 @@ export const TextareaField: React.FC<BaseFieldProps> = ({
   </FormItem>
 );
 
+/** One choice of a `select`: its icon, label and trailing badge, and a muted description under them. */
+const SelectOptionBody: React.FC<{ option: FieldOption; withDescription: boolean }> = ({ option, withDescription }) => {
+  const Icon = option.icon;
+  return (
+    <span className="flex flex-col gap-0.5">
+      <span className="flex items-center gap-2">
+        {Icon && <Icon className="size-4 shrink-0" />}
+        <span>{option.label}</span>
+        {option.badge != null && <span className="ml-auto pl-2">{option.badge}</span>}
+      </span>
+      {withDescription && option.description && (
+        <span className="text-sm text-muted-foreground">{option.description}</span>
+      )}
+    </span>
+  );
+};
+
 export const SelectField: React.FC<BaseFieldProps> = ({
   label,
   description,
@@ -452,31 +469,37 @@ export const SelectField: React.FC<BaseFieldProps> = ({
   badge,
   className,
   disabled,
-}) => (
-  <FormItem className={itemClasses(labelPosition, size, className)}>
-    <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
-    <div className={inputWrapper(labelPosition, size)}>
-      <Select value={value ?? ''} onValueChange={onChange} disabled={disabled}>
-        <FormControl>
-          <SelectTrigger className={SIZE[size].select}>
-            <SelectValue placeholder={placeholder} />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          {options.map((o) => (
-            <SelectItem key={o.value} value={o.value} disabled={o.disabled}>
-              {o.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {description && (
-        <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
-      )}
-      <FormMessage className={SIZE[size].desc} />
-    </div>
-  </FormItem>
-);
+}) => {
+  const chosen = options.find((o) => o.value === value);
+  return (
+    <FormItem className={itemClasses(labelPosition, size, className)}>
+      <FieldLabel label={label} badge={badge} size={size} disabled={disabled} className={labelClassName} />
+      <div className={inputWrapper(labelPosition, size)}>
+        <Select value={value ?? ''} onValueChange={onChange} disabled={disabled}>
+          <FormControl>
+            <SelectTrigger className={SIZE[size].select}>
+              {/* The trigger shows the choice's icon and label, never its description. */}
+              <SelectValue placeholder={placeholder}>
+                {chosen ? <SelectOptionBody option={chosen} withDescription={false} /> : undefined}
+              </SelectValue>
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            {options.map((o) => (
+              <SelectItem key={o.value} value={o.value} disabled={o.disabled}>
+                <SelectOptionBody option={o} withDescription />
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {description && (
+          <FormDescription className={SIZE[size].desc}>{description}</FormDescription>
+        )}
+        <FormMessage className={SIZE[size].desc} />
+      </div>
+    </FormItem>
+  );
+};
 
 export const BooleanField: React.FC<BaseFieldProps> = ({
   label,
@@ -1214,7 +1237,7 @@ function FieldView({
           control: field.control,
           orientation: field.orientation,
           boxed: field.boxed,
-          labelClassName: field.labelClassName,
+          labelClassName: cn(field.labelClassName, field.hideLabel && 'sr-only'),
           badge: field.badge,
           unit: field.unit,
           aside: field.aside,

@@ -77,6 +77,10 @@ export type FieldOption = {
   value: string;
   description?: string;
   disabled?: boolean;
+  /** A `select` choice's leading icon. */
+  icon?: React.ElementType;
+  /** A `select` choice's trailing content — a count or a status — pushed to the right. */
+  badge?: React.ReactNode;
 };
 
 export type FieldBadge = {
@@ -164,6 +168,11 @@ export type FieldConfig = {
   multiple?: boolean;
   /** A `custom` field: draws the control. The value it holds goes through `onChange` like any other. */
   render?: (props: CustomFieldProps) => React.ReactNode;
+  /**
+   * Keep the label for screen readers and hide it on screen, for a control whose meaning is plain
+   * from where it stands — a cell of a table, a filter in a toolbar.
+   */
+  hideLabel?: boolean;
   /** Put the caret in this field when it mounts — the one field a new record cannot do without. */
   autoFocus?: boolean;
   /** The `autocomplete` token a `text` or `password` input hands the browser — `username`, `current-password`. */
