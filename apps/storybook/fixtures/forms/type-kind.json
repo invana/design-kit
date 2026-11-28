@@ -1,0 +1,38 @@
+{
+  "name": "kind",
+  "defaultValues": { "kind": { "extends": "none", "abstract": false, "lat": "none", "lon": "none" } },
+  "fields": [
+    {
+      "name": "extends",
+      "type": "select",
+      "label": "Extends",
+      "description": "A node type of the model. Reads of the parent include this type.",
+      "options": [
+        { "label": "No parent", "value": "none" },
+        { "label": "Person", "value": "Person" },
+        { "label": "Organization", "value": "Organization" }
+      ]
+    },
+    { "name": "abstract", "type": "boolean", "control": "switch", "label": "Abstract", "description": "No records of its own, only its subtypes'." },
+    {
+      "name": "lat",
+      "type": "select",
+      "label": "Latitude",
+      "options": [
+        { "label": "None", "value": "none" },
+        { "label": "lat", "value": "lat" },
+        { "label": "latitude", "value": "latitude" }
+      ]
+    },
+    {
+      "name": "lon",
+      "type": "select",
+      "label": "Longitude",
+      "options": [
+        { "label": "None", "value": "none" },
+        { "label": "lon", "value": "lon" },
+        { "label": "longitude", "value": "longitude" }
+      ]
+    }
+  ]
+}

@@ -1177,7 +1177,31 @@ function renderField(
       name={`${parentName}.${field.name}`}
       defaultValue={field.defaultValue as AnyValue}
       rules={field.type === 'keyvalue' ? withUniqueKeys(field.rules) : field.rules}
-      render={({ field: rhf }) => {
+      render={({ field: rhf }) => (
+        <FieldView field={field} rhf={rhf} labelPosition={labelPosition} size={size} />
+      )}
+    />
+  );
+}
+
+/** Tells an `ObjectField`'s `onFieldChange` which field a person just changed, and to what. */
+const FieldChangeContext = React.createContext<((name: string, value: unknown) => void) | undefined>(undefined);
+
+/** One generated field: its config turned into the control for its type, wired to the form. */
+function FieldView({
+  field,
+  rhf,
+  labelPosition,
+  size,
+}: {
+  field: FieldConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rhf: { value: any; onChange: (value: any) => void };
+  labelPosition: LabelPosition;
+  size: FieldSize;
+}) {
+  const notify = React.useContext(FieldChangeContext);
+
         const common: BaseFieldProps = {
           label: field.label ?? humanize(field.name),
           description: field.description,
@@ -1201,7 +1225,10 @@ function renderField(
           labelPosition,
           size,
           value: rhf.value,
-          onChange: rhf.onChange,
+          onChange: (value: AnyValue) => {
+            rhf.onChange(value);
+            notify?.(field.name, value);
+          },
         };
         switch (field.type) {
           case 'password':
@@ -1263,9 +1290,6 @@ function renderField(
               />
             );
         }
-      }}
-    />
-  );
 }
 
 /**
@@ -1414,6 +1438,7 @@ const ObjectField = <T extends FieldValues = FieldValues>({
   columns = 2,
   fit = 'viewport',
   groupAs = 'accordion',
+  onFieldChange,
 }: ObjectFieldProps<T>) => {
   const grouped = fields.reduce<Record<string, FieldConfig[]>>((acc, f) => {
     const key = f.group ?? '_ungrouped';
@@ -1429,8 +1454,9 @@ const ObjectField = <T extends FieldValues = FieldValues>({
   );
 
   return (
-    // A container has no width of its own, so one fitted to it takes its
-    // parent's: in a row beside a button it would otherwise shrink to nothing.
+    <FieldChangeContext.Provider value={onFieldChange}>
+    {/* A container has no width of its own, so one fitted to it takes its
+        parent's: in a row beside a button it would otherwise shrink to nothing. */}
     <div className={cn(SIZE[size].outer, fit === 'container' && 'w-full min-w-0')}>
       {ungrouped.length > 0 && (
         <div className={SIZE[size].section}>
@@ -1509,6 +1535,7 @@ const ObjectField = <T extends FieldValues = FieldValues>({
         </Accordion>
       )}
     </div>
+    </FieldChangeContext.Provider>
   );
 };
 

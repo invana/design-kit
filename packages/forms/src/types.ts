@@ -254,4 +254,9 @@ export interface ObjectFieldProps<T extends FieldValues = FieldValues> {
    * each under a small caps label and keeps it open — a short form in a card.
    */
   groupAs?: 'accordion' | 'section';
+  /**
+   * Called when a person changes a field — never when the form resets or sets a value in code —
+   * with the field's name and its new value. For a form that applies each change as it is made.
+   */
+  onFieldChange?: (name: string, value: unknown) => void;
 }
